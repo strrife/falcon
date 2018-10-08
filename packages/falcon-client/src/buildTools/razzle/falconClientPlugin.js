@@ -49,6 +49,18 @@ function excludeIcoFromFileLoader(config) {
   fileLoader.exclude.push(/\.(ico)$/);
 }
 
+function emitEslintWarningInDev(config, { /* target, */ dev }) {
+  if (dev) {
+    const eslintLoaderFinder = webpackConfigHelper.makeLoaderFinder('eslint-loader');
+
+    const eslintLoader = config.module.rules.find(eslintLoaderFinder).use.find(eslintLoaderFinder);
+    eslintLoader.options = {
+      ...eslintLoader.options,
+      emitWarning: true
+    };
+  }
+}
+
 function fixUrlLoaderFallback(config, target) {
   const urlLoaderFinder = webpackConfigHelper.makeLoaderFinder('url-loader');
   const urlLoader = config.module.rules.find(urlLoaderFinder);
@@ -236,7 +248,9 @@ module.exports = appConfig => (config, { target, dev }, webpackObject) => {
   extendBabelInclude([paths.falconClient.appSrc, /@deity\/falcon-client\//])(config);
   addToNodeExternals([/@deity\/falcon-client\//])(config, { target, dev });
 
+  emitEslintWarningInDev(config, { target, dev });
   addTypeScript(config, { target, dev }, webpackObject);
+
   fixUrlLoaderFallback(config, target);
   fixAssetsWebpackPlugin(config, target);
   addVendorsBundle([
