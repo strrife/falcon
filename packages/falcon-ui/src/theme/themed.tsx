@@ -12,7 +12,7 @@ import {
 } from './index';
 import { extractThemableProps } from './utils';
 import { defaultBaseTheme } from './theme';
-import { mappings, PropsMappings, ResponsivePropMapping } from './propsmapings';
+import { mappings, PropsMappings, ResponsivePropMapping } from './responsiveprops';
 
 const propsMappingKeys = Object.keys(mappings) as (keyof PropsMappings)[];
 

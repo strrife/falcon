@@ -1,7 +1,7 @@
 import CSS from 'csstype';
 import { defaultBaseTheme } from './theme';
 
-import { PropsMappings } from './propsmapings';
+import { PropsMappings } from './responsiveprops';
 import { mergeThemes } from './utils';
 
 export function createTheme(themeOverride: RecursivePartial<Theme> = {}): Theme {

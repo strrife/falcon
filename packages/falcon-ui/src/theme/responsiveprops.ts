@@ -1,14 +1,11 @@
 import CSS from 'csstype';
-import { Theme, CSSObject } from './';
+import { Theme, CSSObject } from '.';
 
 function propsMapping<T extends PropsMapping>(param: T) {
   return param;
 }
 
 export const mappings = propsMapping({
-  /**
-   * Themed margin
-   */
   m: {
     cssProp: 'margin',
     themeProp: 'spacing'
@@ -110,6 +107,14 @@ export const mappings = propsMapping({
     themeProp: 'colors'
   },
 
+  position: {
+    cssProp: 'position'
+  },
+  top: {},
+  right: {},
+  bottom: {},
+  left: {},
+
   width: {},
   height: {},
 
@@ -195,12 +200,7 @@ export const mappings = propsMapping({
     themeProp: 'boxShadows'
   },
 
-  opacity: {},
-  position: {},
-  top: {},
-  right: {},
-  bottom: {},
-  left: {}
+  opacity: {}
 });
 
 export type PropsMappings = typeof mappings;
