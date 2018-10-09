@@ -293,6 +293,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
         error.message = util.format(message.replace(/(%\d)/g, '%s'), ...parameters);
       } else if (typeof parameters === 'object') {
         error.message = util.format(message.replace(/(%\w+\b)/g, '%s'), ...Object.values(parameters));
+      } else {
+        error.message = message;
       }
     }
 
