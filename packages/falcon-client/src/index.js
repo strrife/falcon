@@ -30,16 +30,17 @@ function falconWebServer() {
 // passing `app` as an argument to `createServer` (or use `app#listen()` instead)
 // @see https://github.com/koajs/koa/blob/master/docs/api/index.md#appcallback
 
+const port = Number(process.env.PORT) || 3000;
 const server = falconWebServer();
 let currentWebServerHandler = server.callback();
 
 const httpServer = http.createServer(currentWebServerHandler);
-httpServer.listen(process.env.PORT || 3000, error => {
+httpServer.listen(port, error => {
   if (error) {
     Logger.error(error);
   }
 
-  Logger.log(`🚀  Client ready at http://localhost:${process.env.PORT}`);
+  Logger.log(`🚀  Client ready at http://localhost:${port}`);
   server.started();
 });
 
