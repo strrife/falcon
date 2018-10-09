@@ -243,7 +243,7 @@ In-app routing is based on [react-router](https://github.com/ReactTraining/react
 
 Falcon Client support async routes, more information can be found in [Code Splitting](#code-splitting) section.
 
-### Falcon Dynamic Routing 
+### Falcon Dynamic Routing
 
 [TODO]
 
@@ -299,17 +299,18 @@ const AsyncHome: asyncComponent({
 export default () => (
   <Switch>
     <Route exact path="/" component={AsyncHome} />
-    { 
+    {
       /// ...
     }
   </Switch>
 )
 ```
+
 For more information see [this](https://github.com/ctrlplusb/react-async-component)
 
 ### Vendors bundle
 
-`vendors.js` is javascript package chunk which combine only project dependencies into single file. As they should not change often, even between subsequent releases, it allows to turn on long term caching for rather big file.
+`vendors.js` is chunk which combine only common project dependencies into single file. As they should not change often, even between subsequent releases, it allows to turn on long term caching for rather big file.
 
 ## Internationalization
 
