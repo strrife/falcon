@@ -136,6 +136,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
     return data;
   }
+
   /**
    * Resolves url based on passed parameters
    * @param {object} req - request params
@@ -161,9 +162,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   async willSendRequest(req) {
     const { context } = req;
-    if (!context || !context.skipAuth) {
-      await this.authorizeRequest(req);
-    }
+    context.isAuthRequired = !context.skipAuth;
+    await super.willSendRequest(req);
   }
 
   /**
@@ -238,7 +238,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
-   * Process recived response data
+   * Process received response data
    * @param {Response} response - received response from the api
    * @return {object} processed response data
    */
@@ -281,42 +281,24 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    * @param {Error} error - error to process
    */
   didEncounterError(error) {
-    const { customerToken = {} } = this.context.magento2;
+    const { extensions } = error;
+    const { response } = extensions || {};
 
-    // eslint-disable-next-line no-underscore-dangle
-    if (!global.__DEVELOPMENT__) {
-      error.message = 'Internal Server Error';
-    }
+    // Re-formatting error message using provided response data from Magento
+    if (response) {
+      const { body } = response;
+      const { message, parameters } = body || {};
 
-    if (error.statusCode === 503) {
-      error.userMessage = true;
-      error.message = 'Shop is unreachable at the moment. Please try again later.';
-    }
-
-    // assume there's something wrong with the token - so UI can communicate that to end user
-    if (customerToken.token && error.statusCode === 401) {
-      error.code = 'CUSTOMER_TOKEN_INVALID';
-    }
-
-    if (error.responseText) {
-      try {
-        const errorData = JSON.parse(error.responseText);
-        let { message } = errorData;
-        const parameters = errorData.parameters || [];
-
-        if (parameters.length) {
-          message = util.format(message.replace(/(%\d)/g, '%s'), ...parameters);
-        } else if (typeof parameters === 'object') {
-          message = util.format(message.replace(/(%\w+\b)/g, '%s'), ...Object.values(parameters));
-        }
-
-        error.message = message || error.message;
-      } catch (eJson) {
-        Logger.debug(`Failed to parse JSON from error response: ${error.responseText}`);
+      if (Array.isArray(parameters)) {
+        error.message = util.format(message.replace(/(%\d)/g, '%s'), ...parameters);
+      } else if (typeof parameters === 'object') {
+        error.message = util.format(message.replace(/(%\w+\b)/g, '%s'), ...Object.values(parameters));
+      } else {
+        error.message = message;
       }
     }
 
-    throw error;
+    super.didEncounterError(error);
   }
 
   /**
@@ -457,7 +439,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       } else {
         Logger.warn(`Removing invalid user store code ${storeCode} from session.`);
         if (cart) {
-          Logger.warn(`Removing cart from session assuming it was create in non existing 
+          Logger.warn(`Removing cart from session assuming it was create in non existing
             store with code: ${storeCode}`);
           delete req.session.magento2.cart;
         }
