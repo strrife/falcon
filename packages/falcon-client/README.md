@@ -165,7 +165,7 @@ By default support for following is turned on:
 
 Please bear in mind that falcon Client plugin for Razzle provide its own configuration options and they are described in details later in documentation:
 
-- [internationalization](#Internationalization)
+- [internationalization](#internationalization)
 
 ### `falcon-client.config.js`
 
@@ -229,7 +229,9 @@ Falcon Client exposes set of hooks to which you can attache custom logic:
 - `process.env.PORT`- default is `3000`, unless changed
 - `process.env.HOST`- default is `0.0.0.0`
 
-## State Management [TODO]
+## State Management
+
+[TODO]
 
 ### Apollo Link State
 
@@ -241,7 +243,9 @@ In-app routing is based on [react-router](https://github.com/ReactTraining/react
 
 Falcon Client support async routes, more information can be found in [Code Splitting](#code-splitting) section.
 
-### Falcon Dynamic Routing [TODO]
+### Falcon Dynamic Routing 
+
+[TODO]
 
 ## PWA
 
@@ -275,9 +279,13 @@ For more information see [this](https://developer.mozilla.org/en-US/docs/Web/API
 
 ## Code Splitting
 
-This feature allows you to split your code into various bundles which can then be loaded on demand. It can be used to achieve smaller bundles and control resource load prioritization which, have a major impact on load time. To specify splitting point you need to import modules in asynchronous manner. To make it working with React, Falcon Client use [async component](#async-components).
+This feature splits your code into various bundles which are loaded on demand. It is used to achieve smaller bundles and control resource load prioritization which, have a major impact on load time. To specify splitting point you need to import modules in asynchronous manner. To make it working with React, Falcon Client use [async component](#async-components).
 
 ### Async components
+
+Async components is based on [react-async-component](https://github.com/ctrlplusb/react-async-component)
+
+It is highly recommended to have each page component asynchronous. Then page chunks does not impact them self, as they contain only necessary amount of code.
 
 To convert React Component into component which can be latter fetch on demand, you need to wrap it with `asyncComponent` function:
 
@@ -287,13 +295,21 @@ import { asyncComponent } from 'react-async-component';
 const AsyncHome: asyncComponent({
   resolve: () => import('./src/pages/Home')
 })
-```
 
+export default () => (
+  <Switch>
+    <Route exact path="/" component={AsyncHome} />
+    { 
+      /// ...
+    }
+  </Switch>
+)
+```
 For more information see [this](https://github.com/ctrlplusb/react-async-component)
 
 ### Vendors bundle
 
-`vendors.js` is special javascript package chunk which combine only project dependencies into single file. As your project dependencies should not change often, even between subsequent releases. Then it allows to turn on long term caching for rather big file.
+`vendors.js` is javascript package chunk which combine only project dependencies into single file. As they should not change often, even between subsequent releases, it allows to turn on long term caching for rather big file.
 
 ## Internationalization
 
