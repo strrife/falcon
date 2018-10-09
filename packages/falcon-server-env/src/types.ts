@@ -8,6 +8,16 @@ export interface FetchUrlResult {
   type: string;
   path: string;
 }
+
+export enum ApiUrlPriority {
+  HIGHEST = 1,
+  HIGH = 10,
+  NORMAL = 25,
+  LOW = 50,
+  LOWEST = 100,
+  OFF = 0
+}
+
 export interface ConfigurableConstructorParams<T = object> {
   config?: T;
   name?: string;
