@@ -8,7 +8,21 @@
     "test": "jest --watch",
     "test:coverage": "jest --ci --coverage"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "coverageReporters": [
+      "html",
+      "text",
+      "text-summary"
+    ],
+    "setupFiles": [
+      "../../test/nodeEnvSetupFile"
+    ]
+  },
   "dependencies": {
+    "@deity/falcon-errors": "0.0.1",
     "@deity/falcon-logger": "0.0.1",
     "@deity/falcon-server-env": "0.0.1",
     "apollo-datasource-rest": "^0.1.1",
