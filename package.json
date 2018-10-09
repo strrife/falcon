@@ -5,8 +5,6 @@
   "license": "OSL-3.0",
   "repository": "git@github.com:deity-io/falcon.git",
   "scripts": {
-    "prepush": "npm run test",
-    "precommit": "lint-staged",
     "test": "lerna run test:coverage",
     "prepublish": "lerna run --scope=@deity/falcon-ui --stream prepare",
     "prepare": "lerna run --stream prepare",
@@ -46,5 +44,10 @@
     "packages/falcon-dev-tools/falcon-i18n-webpack-plugin",
     "examples/shop-with-blog/client",
     "examples/shop-with-blog/server"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
 }
