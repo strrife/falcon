@@ -79,9 +79,6 @@ const config = {
       "options": {
         "apiKey": "Your Twitter API key"
       }
-    },
-    {
-      "package": "@deity/falcon-dynamic-route-extension"
     }
   ]
 };
