@@ -15,4 +15,6 @@ function printErrors(summary, errors) {
   });
 }
 
-module.exports = printErrors;
+module.exports = {
+  printErrors
+};
