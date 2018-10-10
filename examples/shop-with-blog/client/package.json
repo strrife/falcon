@@ -2,7 +2,7 @@
   "name": "@deity/example-shop-with-blog-client",
   "private": true,
   "license": "OSL-3.0",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "repository": "https://github.com/deity-io/falcon/tree/master/examples/shop-with-blog/client",
   "jest": {
     "coverageReporters": [
@@ -47,11 +47,11 @@
     "lint": "./node_modules/.bin/eslint ./"
   },
   "dependencies": {
-    "@deity/falcon-client": "~0.0.2",
-    "@deity/falcon-i18n": "0.0.1",
-    "@deity/falcon-theme-editor": "~0.0.1",
-    "@deity/falcon-ui": "~0.0.1",
-    "@deity/falcon-errors": "~0.0.1",
+    "@deity/falcon-client": "^0.0.6",
+    "@deity/falcon-errors": "^0.0.2",
+    "@deity/falcon-i18n": "^0.0.2",
+    "@deity/falcon-theme-editor": "^0.0.2",
+    "@deity/falcon-ui": "^0.0.2",
     "config": "^2.0.1",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.9.2",
@@ -67,8 +67,8 @@
     "react-router-dom": "^4.3.1"
   },
   "devDependencies": {
-    "@deity/eslint-config-falcon": "0.0.1",
-    "@deity/falcon-ecommerce-uikit": "0.0.1",
+    "@deity/eslint-config-falcon": "^0.0.2",
+    "@deity/falcon-ecommerce-uikit": "^0.0.2",
     "cross-env": "^5.2.0",
     "eslint": "^4.13.1",
     "jest-transform-graphql": "^2.1.0",
