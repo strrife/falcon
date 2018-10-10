@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
-
+const logger = require('@deity/falcon-logger');
 const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
@@ -9,7 +9,6 @@ const StartServerPlugin = require('start-server-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackBar = require('webpackbar');
-const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 
 const paths = require('./paths');
@@ -33,6 +32,31 @@ const postCssOptions = {
   ]
 };
 
+function getESLintLoaderOptions(eslintRcPath, dev) {
+  const options = {
+    eslintPath: require.resolve('eslint'),
+    formatter: require('react-dev-utils/eslintFormatter'),
+    ignore: false
+  };
+
+  const hasEslintRc = fs.existsSync(eslintRcPath);
+  if (hasEslintRc) {
+    options.useEslintrc = true;
+    logger.info('Using .eslintrc defined in your app root');
+  } else {
+    options.useEslintrc = false;
+    options.baseConfig = {
+      extends: [require.resolve('@deity/eslint-config-falcon')]
+    };
+  }
+
+  if (dev) {
+    options.emitWarning = true;
+  }
+
+  return options;
+}
+
 // This is the Webpack configuration factory. It's the juice!
 module.exports = (
   target = 'web',
@@ -55,22 +79,6 @@ module.exports = (
   const babelOptions = modifyBabelOptions ? modifyBabelOptions(mainBabelOptions) : mainBabelOptions;
   if (hasBabelRc && babelOptions.babelrc) {
     console.log('Using .babelrc defined in your app root');
-  }
-
-  const hasEslintRc = fs.existsSync(paths.appEslintRc);
-  const mainEslintOptions = {
-    formatter: eslintFormatter,
-    eslintPath: require.resolve('eslint'),
-
-    ignore: false,
-    useEslintrc: hasEslintRc
-  };
-  if (hasEslintRc) {
-    console.log('Using .eslintrc defined in your app root');
-  } else {
-    mainEslintOptions.baseConfig = {
-      extends: [require.resolve('@deity/eslint-config-falcon')]
-    };
   }
 
   // Define some useful shorthands.
@@ -124,8 +132,8 @@ module.exports = (
           enforce: 'pre',
           use: [
             {
-              options: mainEslintOptions,
-              loader: require.resolve('eslint-loader')
+              loader: require.resolve('eslint-loader'),
+              options: getESLintLoaderOptions(paths.appEslintRc, IS_DEV)
             }
           ],
           include: paths.appSrc
