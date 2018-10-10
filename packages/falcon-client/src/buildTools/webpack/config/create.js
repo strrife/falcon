@@ -33,8 +33,6 @@ const postCssOptions = {
   ]
 };
 
-/* eslint-disable */
-
 // This is the Webpack configuration factory. It's the juice!
 module.exports = (
   target = 'web',
@@ -42,14 +40,22 @@ module.exports = (
   { clearConsole = true, host = 'localhost', port = 3000, modify, plugins, modifyBabelOptions },
   webpackObject
 ) => {
-  // First we check to see if the user has a custom .babelrc file, otherwise
-  // we just use babel-preset-razzle.
-  const hasBabelRc = fs.existsSync(paths.appBabelRc);
   const mainBabelOptions = {
     babelrc: true,
     cacheDirectory: true,
     presets: []
   };
+  // First we check to see if the user has a custom .babelrc file, otherwise
+  // we just use babel-preset-razzle.
+  const hasBabelRc = fs.existsSync(paths.appBabelRc);
+  if (!hasBabelRc) {
+    mainBabelOptions.presets.push(require.resolve('@deity/babel-preset-falcon-client'));
+  }
+  // Allow app to override babel options
+  const babelOptions = modifyBabelOptions ? modifyBabelOptions(mainBabelOptions) : mainBabelOptions;
+  if (hasBabelRc && babelOptions.babelrc) {
+    console.log('Using .babelrc defined in your app root');
+  }
 
   const hasEslintRc = fs.existsSync(paths.appEslintRc);
   const mainEslintOptions = {
@@ -57,27 +63,14 @@ module.exports = (
     eslintPath: require.resolve('eslint'),
 
     ignore: false,
-    useEslintrc: true
+    useEslintrc: hasEslintRc
   };
-
-  if (!hasBabelRc) {
-    mainBabelOptions.presets.push(require.resolve('./babel'));
-  }
-
-  // Allow app to override babel options
-  const babelOptions = modifyBabelOptions ? modifyBabelOptions(mainBabelOptions) : mainBabelOptions;
-
-  if (hasBabelRc && babelOptions.babelrc) {
-    console.log('Using .babelrc defined in your app root');
-  }
-
   if (hasEslintRc) {
     console.log('Using .eslintrc defined in your app root');
   } else {
     mainEslintOptions.baseConfig = {
-      extends: [require.resolve('eslint-config-react-app')]
+      extends: [require.resolve('@deity/eslint-config-falcon')]
     };
-    mainEslintOptions.useEslintrc = false;
   }
 
   // Define some useful shorthands.
@@ -90,6 +83,8 @@ module.exports = (
   const dotenv = getClientEnv(target, { clearConsole, host, port });
 
   const devServerPort = parseInt(dotenv.raw.PORT, 10) + 1;
+
+  /* eslint-disable */
   // This is our base webpack config.
   let config = {
     // Set webpack mode:
