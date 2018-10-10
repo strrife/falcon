@@ -1,7 +1,7 @@
 const spawn = require('cross-spawn');
 
-function runScript(scriptName, scriptArgs) {
-  const result = spawn.sync('node', [require.resolve(`razzle/scripts/${scriptName}`)].concat(scriptArgs), {
+function runScript(scriptName, scriptArgs, packageName = 'razzle/scripts') {
+  const result = spawn.sync('node', [require.resolve(`${packageName}/${scriptName}`)].concat(scriptArgs), {
     stdio: 'inherit'
   });
 

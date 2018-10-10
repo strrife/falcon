@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const Logger = require('@deity/falcon-logger');
 const razzle = require('./../src/buildTools/razzle');
+// const webpack = require('./../src/buildTools/webpack');
 const workbox = require('./../src/buildTools/workbox');
 const { failIfAppEntryFilesNotFound, clearAppBuildDir } = require('./../src/buildTools');
 
@@ -15,7 +16,7 @@ const { failIfAppEntryFilesNotFound, clearAppBuildDir } = require('./../src/buil
       case 'start': {
         clearAppBuildDir();
 
-        razzle.runScript(script, args);
+        razzle.runScript(script, args, '@deity/falcon-client/src/buildTools/webpack');
         break;
       }
       case 'build': {
