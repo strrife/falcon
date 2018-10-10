@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon-server-env",
   "license": "OSL-3.0",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-server-env",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -44,26 +44,26 @@
     "test:coverage": "jest --ci --coverage"
   },
   "dependencies": {
-    "@deity/falcon-logger": "0.0.1",
+    "@deity/falcon-logger": "^0.0.2",
     "apollo-datasource": "0.1.3",
     "apollo-datasource-rest": "0.1.5",
     "apollo-server-env": "^2.0.3",
     "graphql": "^14.0.2",
     "html-entities": "^1.2.1",
-    "striptags": "^3.1.1",
-    "qs": "^6.5.2"
+    "qs": "^6.5.2",
+    "striptags": "^3.1.1"
   },
   "devDependencies": {
-    "@types/node": "10.11.4",
-    "@types/nock": "9.3.0",
-    "@types/koa-router": "7.0.32",
     "@types/graphql": "14.0.1",
     "@types/html-entities": "1.2.16",
     "@types/jest": "23.3.3",
+    "@types/koa-router": "7.0.32",
+    "@types/nock": "9.3.0",
+    "@types/node": "10.11.4",
     "@types/qs": "6.5.1",
-    "rimraf": "2.6.2",
     "koa-router": "7.4.0",
     "nock": "10.0.0",
+    "rimraf": "2.6.2",
     "ts-jest": "23.10.3"
   }
 }
