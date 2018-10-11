@@ -14,13 +14,13 @@ process.on('unhandledRejection', err => {
 require('./config/env');
 
 const fs = require('fs-extra');
-const logger = require('@deity/falcon-logger');
+// const logger = require('@deity/falcon-logger');
 const webpack = require('webpack');
 const chalk = require('chalk');
 
 const paths = require('./config/paths');
 const createConfig = require('./config/create');
-const { printErrors } = require('./tools');
+const { getBuildConfig, printErrors } = require('./tools');
 
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react-dev-utils/FileSizeReporter');
@@ -48,26 +48,11 @@ function copyPublicFolder() {
 }
 
 function build(previousFileSizes) {
-  // Check if razzle.config.js exists
-  let razzle = {};
-  try {
-    // eslint-disable-next-line
-    razzle = require(paths.appRazzleConfig);
-    // eslint-disable-next-line no-empty
-  } catch (e) {}
-
-  if (razzle.clearConsole === false || !!razzle.host || !!razzle.port) {
-    logger.warn(`Specifying options \`port\`, \`host\`, and \`clearConsole\` in razzle.config.js has been deprecated. 
-Please use a .env file instead.
-
-${razzle.host !== 'localhost' && `HOST=${razzle.host}`}
-${razzle.port !== '3000' && `PORT=${razzle.port}`}
-`);
-  }
+  const falconClientBuildConfig = getBuildConfig();
 
   // Create our production webpack configurations and pass in razzle options.
-  const clientConfig = createConfig('web', 'prod', razzle, webpack);
-  const serverConfig = createConfig('node', 'prod', razzle, webpack);
+  const clientConfig = createConfig('web', 'prod', falconClientBuildConfig, webpack);
+  const serverConfig = createConfig('node', 'prod', falconClientBuildConfig, webpack);
 
   process.noDeprecation = true; // turns off that loadQuery clutter.
 

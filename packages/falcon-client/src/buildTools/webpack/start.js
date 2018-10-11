@@ -7,9 +7,10 @@ const chalk = require('chalk');
 const logger = require('@deity/falcon-logger');
 const Webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server-speedy');
-const clearConsole = require('react-dev-utils/clearConsole');
+// const clearConsole = require('react-dev-utils/clearConsole');
 const { choosePort } = require('react-dev-utils/WebpackDevServerUtils');
 const paths = require('./config/paths');
+const { getBuildConfig } = require('./tools');
 const createConfig = require('./config/create');
 
 process.noDeprecation = true; // turns off that loadQuery clutter.
@@ -53,27 +54,15 @@ function main() {
   // FriendlyErrorsPlugin during compilation, so the user has immediate feedback.
   // clearConsole();
   logger.info(chalk`{hex('#a9cf38') Compiling...}`);
-  let razzle = {};
-
-  // Check for razzle.config.js file
-  if (fs.existsSync(paths.appRazzleConfig)) {
-    try {
-      // eslint-disable-next-line
-      razzle = require(paths.appRazzleConfig);
-    } catch (e) {
-      clearConsole();
-      logger.error('Invalid razzle.config.js file.', e);
-      process.exit(1);
-    }
-  }
+  const falconClientBuildConfig = getBuildConfig();
 
   // Delete assets.json to always have a manifest up to date
   fs.removeSync(paths.appManifest);
 
   // Create dev configs using our config factory, passing in razzle file as
   // options.
-  const clientConfig = createConfig('web', 'dev', razzle, Webpack);
-  const serverConfig = createConfig('node', 'dev', razzle, Webpack);
+  const clientConfig = createConfig('web', 'dev', falconClientBuildConfig, Webpack);
+  const serverConfig = createConfig('node', 'dev', falconClientBuildConfig, Webpack);
 
   // Compile our assets with webpack
   const clientCompiler = compile(clientConfig);
@@ -96,11 +85,14 @@ function main() {
   const clientDevServer = new WebpackDevServer(clientCompiler, clientConfig.devServer);
 
   // Start Webpack-dev-server
-  clientDevServer.listen((process.env.PORT && parseInt(process.env.PORT, 10) + 1) || razzle.port || 3001, err => {
-    if (err) {
-      logger.error(err);
+  clientDevServer.listen(
+    (process.env.PORT && parseInt(process.env.PORT, 10) + 1) || falconClientBuildConfig.port || 3001,
+    err => {
+      if (err) {
+        logger.error(err);
+      }
     }
-  });
+  );
 }
 
 setPorts()
