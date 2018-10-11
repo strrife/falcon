@@ -20,7 +20,7 @@ const { failIfAppEntryFilesNotFound, clearAppBuildDir } = require('./../src/buil
         break;
       }
       case 'build': {
-        razzle.runScript(script, args);
+        razzle.runScript(script, args, '@deity/falcon-client/src/buildTools/webpack');
         await workbox.injectManifest();
         break;
       }
