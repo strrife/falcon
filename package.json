@@ -5,12 +5,15 @@
   "license": "OSL-3.0",
   "repository": "git@github.com:deity-io/falcon.git",
   "scripts": {
+    "new-package": "node scripts/new-package.js",
     "test": "lerna run test:coverage",
     "prepublish": "lerna run --scope=@deity/falcon-ui --stream prepare",
     "prepare": "lerna run --stream prepare",
     "lint": "eslint ./"
   },
   "devDependencies": {
+    "chalk": "2.4.1",
+    "commander": "2.19.0",
     "eslint": "4.19.1",
     "eslint-plugin-prettier": "2.7.0",
     "husky": "1.1.1",
@@ -42,7 +45,8 @@
     "packages/falcon-dev-tools/eslint-config-falcon",
     "packages/falcon-dev-tools/falcon-i18n-webpack-plugin",
     "examples/shop-with-blog/client",
-    "examples/shop-with-blog/server"
+    "examples/shop-with-blog/server",
+    "packages/falcon-analytics-plugin"
   ],
   "husky": {
     "hooks": {

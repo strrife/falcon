@@ -70,7 +70,7 @@ Coming soon
 
 #### Connecting to them
 
-Inside ```server/config``` change ```apis.config``` to your instance's credentials
+Inside `server/config` change `apis.config` to your instance's credentials
 
 ## Customizing the theme
 
@@ -100,7 +100,7 @@ Yarn and Node are required for core development.
 
 #### Adding new dependency for single package
 
-```
+```bash
 cd package-name
 yarn add dependency-name
 ```
@@ -113,15 +113,14 @@ There are 2 main scripts available - `test` and `test:coverage`:
 - `test` in the module's package.json - runs Jest testing in "watch" mode (re-runs tests on every code change)
 - `test:coverage` in the module's package.json runs Jest testing with enabled Coverage option
 
-```
+```bash
 cd package-name
 yarn test
 yarn test:coverage
 ```
 
 ### TODO
+
 - jest for all packages
 - changelog generation? - https://github.com/lerna/lerna-changelog
-- learna publish packages to npm script?
-
-
+- Lerna publish packages to npm script?
