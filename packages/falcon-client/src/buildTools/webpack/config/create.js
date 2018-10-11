@@ -371,20 +371,14 @@ module.exports = (
 
   if (IS_WEB) {
     config.plugins = [
-      // Output our JS and CSS files in a manifest file called assets.json
-      // in the build directory.
+      // Emit assets json file
       new AssetsPlugin({
         path: paths.appBuild,
         filename: 'assets.json',
-        fileTypes: ['js', 'jpg', 'webmanifest'],
+        includeAllFileTypes: true,
         prettyPrint: true
       })
-      // Maybe we should move to this???
-      // new ManifestPlugin({
-      //   path: paths.appBuild,
-      //   writeToFileEmit: true,
-      //   filename: 'manifest.json',
-      // }),
+      // alternative new ManifestPlugin()
     ];
 
     if (IS_DEV) {

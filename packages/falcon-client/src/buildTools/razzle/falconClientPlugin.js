@@ -4,16 +4,10 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
 const razzlePluginTypescript = require('razzle-plugin-typescript');
 const WebpackConfigHelpers = require('razzle-dev-utils/WebpackConfigHelpers');
-const AssetsPlugin = require('assets-webpack-plugin');
 const NodeExternals = require('webpack-node-externals');
 const paths = require('./../paths');
 
 const webpackConfigHelper = new WebpackConfigHelpers(paths.razzle.appPath);
-function getPluginIndexByName(config, name) {
-  return webpackConfigHelper
-    .getPlugins(config)
-    .findIndex(x => x.plugin && x.plugin.constructor && x.plugin.constructor.name === name);
-}
 
 function setEntryToFalconClient(config, target) {
   if (target === 'web') {
@@ -153,23 +147,6 @@ function addFalconI18nPlugin({ resourcePackages = [], filter }) {
   };
 }
 
-/**
- * fixing issue https://github.com/ztoben/assets-webpack-plugin/issues/41
- * @param {object} config webpack config
- * @param {'web'|'node'} target webpack config
- */
-function fixAssetsWebpackPlugin(config, target) {
-  if (target === 'web') {
-    const indexOfAssetsWebpackPlugin = getPluginIndexByName(config, 'AssetsWebpackPlugin');
-    config.plugins[indexOfAssetsWebpackPlugin] = new AssetsPlugin({
-      path: paths.razzle.appBuild,
-      filename: 'assets.json',
-      includeAllFileTypes: true,
-      prettyPrint: true
-    });
-  }
-}
-
 function addWebManifest(config, target) {
   if (target === 'web') {
     const fileLoaderFinder = webpackConfigHelper.makeLoaderFinder('file-loader');
@@ -234,7 +211,6 @@ module.exports = appConfig => (config, { target, dev }, webpackObject) => {
   addTypeScript(config, { target, dev }, webpackObject);
 
   fixUrlLoaderFallback(config, target);
-  fixAssetsWebpackPlugin(config, target);
   addVendorsBundle([
     'apollo-cache-inmemory',
     'apollo-client',
