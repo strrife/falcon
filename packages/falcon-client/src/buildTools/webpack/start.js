@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 
 process.env.NODE_ENV = 'development';
+
 const fs = require('fs-extra');
 const chalk = require('chalk');
 const logger = require('@deity/falcon-logger');
@@ -22,11 +23,11 @@ async function setPorts() {
   const port = (process.env.PORT && parseInt(process.env.PORT, 10)) || 3000;
   const portDev = (process.env.PORT_DEV && parseInt(process.env.PORT_DEV, 10)) || port + 1;
 
-  const actualPort = await choosePort(process.env.HOST, port);
-  const actualPortDev = await choosePort(process.env.HOST, portDev);
+  const chosenPort = await choosePort(process.env.HOST, port);
+  const chosenPortDev = await choosePort(process.env.HOST, portDev);
 
-  process.env.PORT = actualPort;
-  process.env.PORT_DEV = actualPortDev;
+  process.env.PORT = chosenPort;
+  process.env.PORT_DEV = chosenPortDev;
 }
 
 // Webpack compile in a try-catch
@@ -51,7 +52,7 @@ function main() {
   // Optimistically, we make the console look exactly like the output of our
   // FriendlyErrorsPlugin during compilation, so the user has immediate feedback.
   // clearConsole();
-  logger.info('Compiling...');
+  logger.info(chalk`{hex('#a9cf38') Compiling...}`);
   let razzle = {};
 
   // Check for razzle.config.js file
