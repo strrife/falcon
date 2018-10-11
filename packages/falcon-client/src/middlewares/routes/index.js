@@ -17,13 +17,17 @@ import i18next from './i18nextMiddleware';
  */
 export function renderAppShell({ configuration, webpackAssets }) {
   const { config, configSchema } = configuration;
-  const { useWebManifest } = config;
+  const { useWebManifest, apolloClient = {} } = config;
 
   if (!useWebManifest) {
     webpackAssets.webmanifest = '';
   }
 
-  return [apolloClientProvider({ clientStates: { configSchema } }), helmet(), appShell({ webpackAssets })];
+  return [
+    apolloClientProvider({ ...apolloClient, clientStates: { configSchema } }),
+    helmet(),
+    appShell({ webpackAssets })
+  ];
 }
 
 /**
@@ -41,7 +45,7 @@ export function renderAppShell({ configuration, webpackAssets }) {
  */
 export function renderApp({ configuration, clientApolloSchema, App, webpackAssets }) {
   const { config, configSchema } = configuration;
-  const { i18n, serverSideRendering, useWebManifest } = config;
+  const { i18n, serverSideRendering, useWebManifest, apolloClient = {} } = config;
 
   if (!useWebManifest) {
     webpackAssets.webmanifest = '';
@@ -49,6 +53,7 @@ export function renderApp({ configuration, clientApolloSchema, App, webpackAsset
 
   return [
     apolloClientProvider({
+      ...apolloClient,
       clientStates: {
         configSchema,
         clientApolloSchema
