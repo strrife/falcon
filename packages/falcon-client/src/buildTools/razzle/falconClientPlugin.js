@@ -2,7 +2,7 @@
 const path = require('path');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
-const razzlePluginTypescript = require('razzle-plugin-typescript');
+// const razzlePluginTypescript = require('razzle-plugin-typescript');
 const WebpackConfigHelpers = require('razzle-dev-utils/WebpackConfigHelpers');
 const NodeExternals = require('webpack-node-externals');
 const paths = require('./../paths');
@@ -49,25 +49,25 @@ function extendBabelInclude(includePaths = []) {
   };
 }
 
-function addTypeScript(config, { target, dev }, webpackObject) {
-  razzlePluginTypescript(config, { target, dev }, webpackObject, {
-    useBabel: true,
-    useEslint: true,
-    forkTsChecker: {
-      tslint: false
-    }
-  });
+// function addTypeScript(config, { target, dev }, webpackObject) {
+//   razzlePluginTypescript(config, { target, dev }, webpackObject, {
+//     useBabel: true,
+//     useEslint: true,
+//     forkTsChecker: {
+//       tslint: false
+//     }
+//   });
 
-  // use latest ts-Loader
-  const tsLoaderFinder = webpackConfigHelper.makeLoaderFinder('ts-loader');
-  const tsRule = config.module.rules.find(tsLoaderFinder);
-  if (!tsRule) {
-    throw new Error(`'ts-loader' was erased from config, it is required to configure '@deity/falcon-client'`);
-  }
+//   // use latest ts-Loader
+//   const tsLoaderFinder = webpackConfigHelper.makeLoaderFinder('ts-loader');
+//   const tsRule = config.module.rules.find(tsLoaderFinder);
+//   if (!tsRule) {
+//     throw new Error(`'ts-loader' was erased from config, it is required to configure '@deity/falcon-client'`);
+//   }
 
-  const indexOfTsLoader = tsRule.use.findIndex(tsLoaderFinder);
-  tsRule.use[indexOfTsLoader].loader = require.resolve('ts-loader');
-}
+//   const indexOfTsLoader = tsRule.use.findIndex(tsLoaderFinder);
+//   tsRule.use[indexOfTsLoader].loader = require.resolve('ts-loader');
+// }
 
 function addVendorsBundle(modules = []) {
   const moduleFilter = new RegExp(
@@ -170,7 +170,7 @@ function addToNodeExternals(whitelist) {
  * @param {{i18n: i18nPluginConfig }} appConfig webpack config
  * @returns {object} razzle plugin
  */
-module.exports = appConfig => (config, { target, dev }, webpackObject) => {
+module.exports = appConfig => (config, { target, dev } /* , webpackObject */) => {
   config.resolve.alias = {
     ...(config.resolve.alias || {}),
     src: paths.razzle.appSrc,
@@ -182,8 +182,7 @@ module.exports = appConfig => (config, { target, dev }, webpackObject) => {
   extendBabelInclude([paths.falconClient.appSrc, /@deity\/falcon-client\//])(config);
   addToNodeExternals([/@deity\/falcon-client\//])(config, { target, dev });
 
-  // emitEslintWarningInDev(config, { target, dev });
-  addTypeScript(config, { target, dev }, webpackObject);
+  // addTypeScript(config, { target, dev }, webpackObject);
 
   addVendorsBundle([
     'apollo-cache-inmemory',
