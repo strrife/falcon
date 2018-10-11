@@ -104,21 +104,6 @@ function addVendorsBundle(modules = []) {
   };
 }
 
-function addGraphQLTagLoader(config) {
-  const fileLoaderFinder = webpackConfigHelper.makeLoaderFinder('file-loader');
-  const mediaFilesRule = config.module.rules.find(fileLoaderFinder);
-  if (mediaFilesRule) {
-    mediaFilesRule.exclude.push(/\.(graphql|gql)$/);
-  }
-
-  config.module.rules.push({
-    test: /\.(graphql|gql)$/,
-    include: [paths.falconClient.appSrc],
-    use: require.resolve('graphql-tag/loader')
-  });
-  config.resolve.extensions.push('.graphql', '.gql');
-}
-
 /**
  * @typedef {object} i18nPluginConfig
  * @property {string[]} resourcePackages npm modules with localization resources
@@ -237,7 +222,6 @@ module.exports = appConfig => (config, { target, dev }, webpackObject) => {
     'react-router-dom',
     'history'
   ])(config, { target, dev });
-  addGraphQLTagLoader(config);
   addFalconI18nPlugin(appConfig.i18n)(config, target);
   addWebManifest(config, target);
 

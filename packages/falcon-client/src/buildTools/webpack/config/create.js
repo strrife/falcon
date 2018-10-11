@@ -112,7 +112,7 @@ module.exports = (
         // It is guaranteed to exist because we tweak it in `env.js`
         nodePath.split(path.delimiter).filter(Boolean)
       ),
-      extensions: ['.mjs', '.jsx', '.js', '.json'],
+      extensions: ['.mjs', '.jsx', '.js', '.json', '.graphql', '.gql'],
       alias: {
         'webpack/hot/poll': require.resolve('webpack/hot/poll'), // This is required so symlinks work during development.
         // Support React Native Web
@@ -129,15 +129,15 @@ module.exports = (
         // Disable require.ensure as it's not a standard language feature.
         // { parser: { requireEnsure: false } },
         {
-          test: /\.(js|jsx|mjs)$/,
           enforce: 'pre',
+          test: /\.(js|jsx|mjs)$/,
+          include: paths.appSrc,
           use: [
             {
               loader: require.resolve('eslint-loader'),
               options: getESLintLoaderOptions(paths.appEslintRc, IS_DEV)
             }
-          ],
-          include: paths.appSrc
+          ]
         },
         // Avoid "require is not defined" errors
         {
@@ -157,15 +157,20 @@ module.exports = (
           ]
         },
         {
+          test: /\.(graphql|gql)$/,
+          use: [{ loader: require.resolve('graphql-tag/loader') }]
+        },
+        {
           exclude: [
-            /\.html$/,
             /\.(js|jsx|mjs)$/,
             /\.(ts|tsx)$/,
-            /\.(vue)$/,
+            /\.(graphql|gql)$/,
             /\.(less)$/,
-            /\.(re)$/,
             /\.(s?css|sass)$/,
             /\.json$/,
+            /\.html$/,
+            /\.(vue)$/,
+            /\.(re)$/,
             /\.bmp$/,
             /\.gif$/,
             /\.jpe?g$/,
