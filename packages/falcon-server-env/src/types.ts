@@ -11,10 +11,10 @@ export interface FetchUrlResult {
 
 export enum ApiUrlPriority {
   HIGHEST = 1,
-  HIGH = 10,
-  NORMAL = 25,
-  LOW = 50,
-  LOWEST = 100,
+  HIGH = 2,
+  NORMAL = 3,
+  LOW = 4,
+  LOWEST = 5,
   OFF = 0
 }
 
