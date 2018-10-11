@@ -101,10 +101,9 @@ module.exports = (
   /* eslint-disable */
   // This is our base webpack config.
   let config = {
-    // Set webpack mode:
     mode: IS_DEV ? 'development' : 'production',
     context: process.cwd(), // Set webpack context to the current command's directory
-    target, // either 'node' or 'web'
+    target,
     devtool: 'cheap-module-source-map',
     // We need to tell webpack how to resolve both Razzle's node_modules and
     // the users', so we use resolve and resolveLoader.
@@ -115,8 +114,7 @@ module.exports = (
       ),
       extensions: ['.mjs', '.jsx', '.js', '.json'],
       alias: {
-        // This is required so symlinks work during development.
-        'webpack/hot/poll': require.resolve('webpack/hot/poll'),
+        'webpack/hot/poll': require.resolve('webpack/hot/poll'), // This is required so symlinks work during development.
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web'
