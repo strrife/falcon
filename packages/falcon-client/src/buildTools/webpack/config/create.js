@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
-const logger = require('@deity/falcon-logger');
+// const logger = require('@deity/falcon-logger');
 const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
@@ -32,25 +32,35 @@ const postCssOptions = {
   ]
 };
 
-function getESLintLoaderOptions(eslintRcPath, isDev) {
+function getEsLintLoaderOptions(eslintRcPath, isDev) {
   const options = {
     eslintPath: require.resolve('eslint'),
     formatter: require('react-dev-utils/eslintFormatter'),
-    ignore: false
+    ignore: false,
+    useEslintrc: fs.existsSync(eslintRcPath),
+    emitWarning: isDev
   };
 
-  const hasEslintRc = fs.existsSync(eslintRcPath);
-  if (hasEslintRc) {
-    options.useEslintrc = true;
-    logger.info('Using .eslintrc defined in your app root');
-  } else {
-    options.useEslintrc = false;
+  if (options.useEslintrc === false) {
     options.baseConfig = {
       extends: [require.resolve('@deity/eslint-config-falcon')]
     };
   }
 
-  options.emitWarning = isDev;
+  return options;
+}
+
+function getBabelLoaderOptions(babelRcPath) {
+  const options = {
+    babelrc: true,
+    cacheDirectory: true,
+    presets: []
+  };
+
+  const hasBabelRc = fs.existsSync(babelRcPath);
+  if (!hasBabelRc) {
+    options.presets.push(require.resolve('@deity/babel-preset-falcon-client'));
+  }
 
   return options;
 }
@@ -65,26 +75,9 @@ function getESLintLoaderOptions(eslintRcPath, isDev) {
 module.exports = (
   target = 'web',
   env = 'dev',
-  { clearConsole = true, host = 'localhost', port = 3000, modify, plugins, modifyBabelOptions },
+  { clearConsole = true, host = 'localhost', port = 3000, modify, plugins },
   webpackInstance
 ) => {
-  const mainBabelOptions = {
-    babelrc: true,
-    cacheDirectory: true,
-    presets: []
-  };
-  // First we check to see if the user has a custom .babelrc file, otherwise
-  // we just use babel-preset-razzle.
-  const hasBabelRc = fs.existsSync(paths.appBabelRc);
-  if (!hasBabelRc) {
-    mainBabelOptions.presets.push(require.resolve('@deity/babel-preset-falcon-client'));
-  }
-  // Allow app to override babel options
-  const babelOptions = modifyBabelOptions ? modifyBabelOptions(mainBabelOptions) : mainBabelOptions;
-  if (hasBabelRc && babelOptions.babelrc) {
-    console.log('Using .babelrc defined in your app root');
-  }
-
   // Define some useful shorthands.
   const IS_NODE = target === 'node';
   const IS_WEB = target === 'web';
@@ -133,7 +126,7 @@ module.exports = (
           use: [
             {
               loader: require.resolve('eslint-loader'),
-              options: getESLintLoaderOptions(paths.appEslintRc, IS_DEV)
+              options: getEsLintLoaderOptions(paths.appEslintRc, IS_DEV)
             }
           ]
         },
@@ -149,7 +142,7 @@ module.exports = (
           use: [
             {
               loader: require.resolve('babel-loader'),
-              options: babelOptions
+              options: getBabelLoaderOptions(paths.appBabelRc)
             }
           ]
         },
