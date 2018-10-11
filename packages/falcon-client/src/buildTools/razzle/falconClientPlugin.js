@@ -43,12 +43,6 @@ function setEntryToFalconClient(config, target) {
   }
 }
 
-function excludeIcoFromFileLoader(config) {
-  const fileLoaderFinder = webpackConfigHelper.makeLoaderFinder('file-loader');
-  const fileLoader = config.module.rules.find(fileLoaderFinder);
-  fileLoader.exclude.push(/\.(ico)$/);
-}
-
 function fixUrlLoaderFallback(config, target) {
   const urlLoaderFinder = webpackConfigHelper.makeLoaderFinder('url-loader');
   const urlLoader = config.module.rules.find(urlLoaderFinder);
@@ -267,7 +261,6 @@ module.exports = appConfig => (config, { target, dev }, webpackObject) => {
     'react-router-dom',
     'history'
   ])(config, { target, dev });
-  excludeIcoFromFileLoader(config);
   addGraphQLTagLoader(config);
   addFalconI18nPlugin(appConfig.i18n)(config, target);
   addWebManifest(config, target);

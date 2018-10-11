@@ -168,7 +168,8 @@ module.exports = (
             /\.bmp$/,
             /\.gif$/,
             /\.jpe?g$/,
-            /\.png$/
+            /\.png$/,
+            /\.ico$/
           ],
           loader: require.resolve('file-loader'),
           options: {
@@ -357,7 +358,7 @@ module.exports = (
         ...config.plugins,
         // Add hot module replacement
         new webpack.HotModuleReplacementPlugin(),
-        // Supress errors to console (we use our own logger)
+        // Suppress errors to console (we use our own logger)
         new StartServerPlugin({
           name: 'server.js',
           nodeArgs
@@ -587,8 +588,9 @@ module.exports = (
       //   }:${dotenv.raw.PORT}`,
       // }),
       new WebpackBar({
-        color: target === 'web' ? '#f56be2' : '#c065f4',
-        name: target === 'web' ? 'client' : 'server'
+        color: '#cbde6e', // target === 'web' ? '#f56be2' : '#c065f4',
+        name: target === 'web' ? 'client' : 'server',
+        compiledIn: false
       })
     ];
   }
