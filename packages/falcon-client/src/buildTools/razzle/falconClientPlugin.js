@@ -37,16 +37,6 @@ function setEntryToFalconClient(config, target) {
   }
 }
 
-function fixUrlLoaderFallback(config, target) {
-  const urlLoaderFinder = webpackConfigHelper.makeLoaderFinder('url-loader');
-  const urlLoader = config.module.rules.find(urlLoaderFinder);
-  urlLoader.options.fallback = require.resolve('file-loader');
-
-  urlLoader.options.limit = -1; // always fallback to file-loader
-  urlLoader.options.emitFile = target === 'web';
-  urlLoader.test.push(/\.(ico)$/);
-}
-
 function extendBabelInclude(includePaths = []) {
   return config => {
     const babelLoaderFinder = webpackConfigHelper.makeLoaderFinder('babel-loader');
@@ -195,7 +185,6 @@ module.exports = appConfig => (config, { target, dev }, webpackObject) => {
   // emitEslintWarningInDev(config, { target, dev });
   addTypeScript(config, { target, dev }, webpackObject);
 
-  fixUrlLoaderFallback(config, target);
   addVendorsBundle([
     'apollo-cache-inmemory',
     'apollo-client',

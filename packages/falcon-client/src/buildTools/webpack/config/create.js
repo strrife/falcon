@@ -145,7 +145,6 @@ module.exports = (
           include: /node_modules/,
           type: 'javascript/auto'
         },
-        // Transform ES6 with Babel
         {
           test: /\.(js|jsx|mjs)$/,
           include: [paths.appSrc],
@@ -171,32 +170,13 @@ module.exports = (
             /\.html$/,
             /\.(vue)$/,
             /\.(re)$/,
-            /\.bmp$/,
-            /\.gif$/,
-            /\.jpe?g$/,
-            /\.png$/,
-            /\.ico$/
           ],
           loader: require.resolve('file-loader'),
           options: {
             name: 'static/media/[name].[hash:8].[ext]',
-            emitFile: true
+            emitFile: IS_WEB
           }
         },
-        // "url" loader works like "file" loader except that it embeds assets
-        // smaller than specified limit in bytes as data URLs to avoid requests.
-        // A missing `test` is equivalent to a match.
-        {
-          test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-          loader: require.resolve('url-loader'),
-          options: {
-            limit: 10000,
-            // name: 'static/media/[name].[hash:8].[ext]',
-            name: '[path][name].[ext]',
-            emitFile: true
-          }
-        },
-
         // "postcss" loader applies autoprefixer to our CSS.
         // "css" loader resolves paths in CSS and adds assets as dependencies.
         // "style" loader turns CSS into JS modules that inject <style> tags.
