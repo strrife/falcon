@@ -32,7 +32,7 @@ const postCssOptions = {
   ]
 };
 
-function getESLintLoaderOptions(eslintRcPath, dev) {
+function getESLintLoaderOptions(eslintRcPath, isDev) {
   const options = {
     eslintPath: require.resolve('eslint'),
     formatter: require('react-dev-utils/eslintFormatter'),
@@ -50,9 +50,7 @@ function getESLintLoaderOptions(eslintRcPath, dev) {
     };
   }
 
-  if (dev) {
-    options.emitWarning = true;
-  }
+  options.emitWarning = isDev;
 
   return options;
 }
@@ -169,7 +167,7 @@ module.exports = (
             /\.json$/,
             /\.html$/,
             /\.(vue)$/,
-            /\.(re)$/,
+            /\.(re)$/
           ],
           loader: require.resolve('file-loader'),
           options: {
