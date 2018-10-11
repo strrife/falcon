@@ -58,11 +58,17 @@ function getESLintLoaderOptions(eslintRcPath, dev) {
 }
 
 // This is the Webpack configuration factory. It's the juice!
+/**
+ * @param {'web' | 'node' } target target
+ * @param {'dev' | 'prod' } env environment
+ * @param {object} webpackInstance webpack instance
+ * @returns {object} webpack config
+ */
 module.exports = (
   target = 'web',
   env = 'dev',
   { clearConsole = true, host = 'localhost', port = 3000, modify, plugins, modifyBabelOptions },
-  webpackObject
+  webpackInstance
 ) => {
   const mainBabelOptions = {
     babelrc: true,
@@ -97,11 +103,8 @@ module.exports = (
   let config = {
     // Set webpack mode:
     mode: IS_DEV ? 'development' : 'production',
-    // Set webpack context to the current command's directory
-    context: process.cwd(),
-    // Specify target (either 'node' or 'web')
-    target,
-    // Controversially, decide on sourcemaps.
+    context: process.cwd(), // Set webpack context to the current command's directory
+    target, // either 'node' or 'web'
     devtool: 'cheap-module-source-map',
     // We need to tell webpack how to resolve both Razzle's node_modules and
     // the users', so we use resolve and resolveLoader.
@@ -592,14 +595,14 @@ module.exports = (
   // Apply razzle plugins, if they are present in razzle.config.js
   if (Array.isArray(plugins)) {
     plugins.forEach(plugin => {
-      config = runPlugin(plugin, config, { target, dev: IS_DEV }, webpackObject);
+      config = runPlugin(plugin, config, { target, dev: IS_DEV }, webpackInstance);
     });
   }
 
   // Check if razzle.config has a modify function. If it does, call it on the
   // configs we created.
   if (modify) {
-    config = modify(config, { target, dev: IS_DEV }, webpackObject);
+    config = modify(config, { target, dev: IS_DEV }, webpackInstance);
   }
 
   return config;
