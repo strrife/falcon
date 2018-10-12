@@ -1,9 +1,11 @@
 import http from 'http';
 import Logger from '@deity/falcon-logger';
+import clientAppConfiguration from './clientApp/configuration';
 
 function falconWebServer() {
   const server = require('./server').default;
-  const app = require('./clientApp');
+  // eslint-disable-next-line
+  const app = require('app-path');
   const configuration = require('./clientApp/configuration').default;
   // eslint-disable-next-line
   const assetsManifest = require(process.env.RAZZLE_ASSETS_MANIFEST);
@@ -30,24 +32,24 @@ function falconWebServer() {
 // passing `app` as an argument to `createServer` (or use `app#listen()` instead)
 // @see https://github.com/koajs/koa/blob/master/docs/api/index.md#appcallback
 
-const port = Number(process.env.PORT) || 3000;
+const { config } = clientAppConfiguration;
 const server = falconWebServer();
 let currentWebServerHandler = server.callback();
 
 const httpServer = http.createServer(currentWebServerHandler);
-httpServer.listen(port, error => {
+httpServer.listen(config.port, error => {
   if (error) {
     Logger.error(error);
   }
 
-  Logger.log(`🚀  Client ready at http://localhost:${port}`);
+  Logger.log(`🚀  Client ready at http://localhost:${config.port}`);
   server.started();
 });
 
 if (module.hot) {
   Logger.log('✅  Server-side HMR Enabled!');
 
-  module.hot.accept(['./server', './clientApp', './clientApp/configuration'], () => {
+  module.hot.accept(['./server', 'app-path', './clientApp/configuration'], () => {
     Logger.log('🔁  HMR Reloading server...');
 
     httpServer.removeListener('request', currentWebServerHandler);
