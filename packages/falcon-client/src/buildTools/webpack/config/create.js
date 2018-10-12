@@ -110,7 +110,9 @@ module.exports = (
         'webpack/hot/poll': require.resolve('webpack/hot/poll'), // This is required so symlinks work during development.
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-        'react-native': 'react-native-web'
+        'react-native': 'react-native-web',
+        src: paths.appSrc,
+        'app-path': paths.appPath
       }
     },
     resolveLoader: {
@@ -361,7 +363,6 @@ module.exports = (
         includeAllFileTypes: true,
         prettyPrint: true
       })
-      // alternative new ManifestPlugin()
     ];
 
     if (IS_DEV) {
