@@ -119,6 +119,20 @@ yarn test
 yarn test:coverage
 ```
 
+### Package naming conventions
+
+Back-end packages (`FalconServer`):
+
+- `falcon-X-extension` - represents a module that should be used within a FalconServer app in order
+to provide an abstract (higher-level) access to the data (shop, blog, CRM etc)
+- `falcon-X-api` - represents a module that should act as a "transport" layer between an extension
+and a certain back-end (REST API, remote GraphQL, service, database etc)
+
+Front-end packages (`FalconClient`):
+
+- `falcon-X-plugin` - represents a module that should be used within a FalconClient app in order to provide
+UI/UX (front-end) enhancements to the "client" application (analytics, maps, widgets etc)
+
 ### TODO
 
 - jest for all packages
