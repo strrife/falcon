@@ -13,7 +13,6 @@ const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware')
 
 const paths = require('./paths');
 const runPlugin = require('./runPlugin');
-const { getClientEnv, nodePath } = require('./env');
 
 const postCssOptions = {
   ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
@@ -68,18 +67,13 @@ function getBabelLoaderOptions(babelRcPath) {
 // This is the Webpack configuration factory. It's the juice!
 /**
  * @param {'web' | 'node' } target target
- * @param {'dev' | 'prod' } env environment
- * @param {{inspect: string}} props other props
+ * @param {{ env: ('dev' | 'prod'), host: string, port: number, inspect: string }} options environment
  * @param {object} webpackInstance webpack instance
  * @returns {object} webpack config
  */
-module.exports = (
-  target = 'web',
-  env = 'dev',
-  props,
-  { clearConsole = true, host = 'localhost', port = 3000, modify, plugins },
-  webpackInstance
-) => {
+module.exports = (target = 'web', options, { clearConsole = true, plugins, modify }, webpackInstance) => {
+  const { env, host, port, devServerPort } = options;
+
   // Define some useful shorthands.
   const IS_NODE = target === 'node';
   const IS_WEB = target === 'web';
@@ -87,9 +81,8 @@ module.exports = (
   const IS_DEV = env === 'dev';
   process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
 
+  const { getClientEnv, nodePath } = require('./env');
   const dotenv = getClientEnv(target, { clearConsole, host, port });
-
-  const devServerPort = parseInt(dotenv.raw.PORT, 10) + 1;
 
   /* eslint-disable */
   // This is our base webpack config.
@@ -316,7 +309,7 @@ module.exports = (
     // Specify webpack Node.js output path and filename
     config.output = {
       path: paths.appBuild,
-      publicPath: IS_DEV ? `http://${dotenv.raw.HOST}:${devServerPort}/` : '/',
+      publicPath: IS_DEV ? `http://${host}:${devServerPort}/` : '/',
       filename: 'server.js',
       libraryTarget: 'commonjs2'
     };
@@ -325,9 +318,7 @@ module.exports = (
       // We define environment variables that can be accessed globally in our
       new webpack.DefinePlugin(dotenv.stringified),
       // Prevent creating multiple chunks for the server
-      new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 1
-      })
+      new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })
     ];
 
     config.entry = [paths.appServerIndexJs];
@@ -346,7 +337,7 @@ module.exports = (
         // Suppress errors to console (we use our own logger)
         new StartServerPlugin({
           name: 'server.js',
-          nodeArgs: ['-r', 'source-map-support/register', props.inspect].filter(x => x)
+          nodeArgs: ['-r', 'source-map-support/register', options.inspect].filter(x => x)
         }),
         // Ignore assets.json to avoid infinite recompile bug
         new webpack.WatchIgnorePlugin([paths.appManifest])
@@ -382,7 +373,7 @@ module.exports = (
       // Configure our client bundles output. Not the public path is to 3001.
       config.output = {
         path: paths.appBuildPublic,
-        publicPath: `http://${dotenv.raw.HOST}:${devServerPort}/`,
+        publicPath: `http://${host}:${devServerPort}/`,
         pathinfo: true,
         libraryTarget: 'var',
         filename: 'static/js/bundle.js',
@@ -397,15 +388,13 @@ module.exports = (
         // Enable gzip compression of generated files.
         compress: true,
         // watchContentBase: true,
-        headers: {
-          'Access-Control-Allow-Origin': '*'
-        },
+        headers: { 'Access-Control-Allow-Origin': '*' },
         historyApiFallback: {
           // Paths with dots should still use the history fallback.
           // See https://github.com/facebookincubator/create-react-app/issues/387.
           disableDotRule: true
         },
-        host: dotenv.raw.HOST,
+        host: host,
         hot: true,
         noInfo: true,
         overlay: false,
@@ -425,9 +414,7 @@ module.exports = (
       // Add client-only development plugins
       config.plugins = [
         ...config.plugins,
-        new webpack.HotModuleReplacementPlugin({
-          multiStep: true
-        }),
+        new webpack.HotModuleReplacementPlugin({ multiStep: true }),
         new webpack.DefinePlugin(dotenv.stringified)
       ];
 
