@@ -43,3 +43,24 @@ In `debug` mode `true` and `trackingId` set properly - you will see all method
 calls in your browser's console:
 
 ![falcon-analytics-plugin](https://user-images.githubusercontent.com/1118933/46871259-2c7e6380-ce31-11e8-9f53-7cb90d568b02.png "Browser console view")
+
+## Extra features
+
+You can also send any custom events to Google Analytics with `trackEvent` method:
+
+```javascript
+import { trackEvent } from '@deity/falcon-analytics-plugin';
+
+export default Product {
+  processPurchase() {
+    trackEvent('Shop', 'Add to cart', this.props.productId);
+    // call the actual "purchase" process here...
+  }
+
+  render() {
+    return (
+      <button onClick={() => this.processPurchase()}>Add to cart</button>
+    );
+  }
+}
+```
