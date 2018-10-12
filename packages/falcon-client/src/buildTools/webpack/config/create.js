@@ -556,17 +556,9 @@ module.exports = (
   if (IS_DEV) {
     config.plugins = [
       ...config.plugins,
-      // Use our own FriendlyErrorsPlugin during development.
-      // new FriendlyErrorsPlugin({
-      //   verbose: dotenv.raw.VERBOSE,
-      //   target,
-      //   onSuccessMessage: `Your application is running at http://${
-      //     dotenv.raw.HOST
-      //   }:${dotenv.raw.PORT}`,
-      // }),
       new WebpackBar({
         color: '#cbde6e', // target === 'web' ? '#f56be2' : '#c065f4',
-        name: target === 'web' ? 'client' : 'server',
+        name: IS_WEB ? 'client' : 'server',
         compiledIn: true
       })
     ];
