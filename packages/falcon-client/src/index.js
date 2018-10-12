@@ -1,6 +1,5 @@
 import http from 'http';
 import Logger from '@deity/falcon-logger';
-import clientAppConfiguration from './clientApp/configuration';
 
 function falconWebServer() {
   const server = require('./server').default;
@@ -28,21 +27,20 @@ function falconWebServer() {
   });
 }
 
-// Use `app#callback()` method here instead of directly
-// passing `app` as an argument to `createServer` (or use `app#listen()` instead)
-// @see https://github.com/koajs/koa/blob/master/docs/api/index.md#appcallback
-
-const { config } = clientAppConfiguration;
 const server = falconWebServer();
 let currentWebServerHandler = server.callback();
 
+// Use `app#callback()` method here instead of directly
+// passing `app` as an argument to `createServer` (or use `app#listen()` instead)
+// @see https://github.com/koajs/koa/blob/master/docs/api/index.md#appcallback
 const httpServer = http.createServer(currentWebServerHandler);
-httpServer.listen(config.port, error => {
+const port = parseInt(process.env.PORT, 10) || 3000;
+httpServer.listen(port, error => {
   if (error) {
     Logger.error(error);
   }
 
-  Logger.log(`🚀  Client ready at http://localhost:${config.port}`);
+  Logger.log(`🚀  Client ready at http://localhost:${port}`);
   server.started();
 });
 

@@ -4,7 +4,6 @@ import configuration from 'app-path/falcon-client.config.js';
 const config = deepMerge(
   {
     __typename: 'Config',
-    port: 3000,
     logLevel: 'error',
     serverSideRendering: true,
     useWebManifest: true,
