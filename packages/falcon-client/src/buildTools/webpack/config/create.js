@@ -81,7 +81,7 @@ module.exports = (target = 'web', options, { clearConsole = true, plugins, modif
   const IS_DEV = env === 'dev';
   process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
 
-  const { getClientEnv, nodePath } = require('./env');
+  const { getClientEnv } = require('./env');
   const dotenv = getClientEnv(target, { clearConsole, host, port });
 
   /* eslint-disable */
@@ -96,7 +96,7 @@ module.exports = (target = 'web', options, { clearConsole = true, plugins, modif
     resolve: {
       modules: ['node_modules', paths.appNodeModules].concat(
         // It is guaranteed to exist because we tweak it in `env.js`
-        nodePath.split(path.delimiter).filter(Boolean)
+        paths.nodePath.split(path.delimiter).filter(Boolean)
       ),
       extensions: ['.mjs', '.jsx', '.js', '.json', '.graphql', '.gql'],
       alias: {
