@@ -49,9 +49,10 @@ calls in your browser's console:
 You can also send any custom events to Google Analytics with `trackEvent` method:
 
 ```javascript
+import React from 'react';
 import { trackEvent } from '@deity/falcon-analytics-plugin';
 
-export default Product {
+export default class Product extends React.Component {
   processPurchase() {
     trackEvent('Shop', 'Add to cart', this.props.productId);
     // call the actual "purchase" process here...
