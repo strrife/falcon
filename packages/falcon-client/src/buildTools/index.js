@@ -12,11 +12,6 @@ function failIfAppEntryFilesNotFound() {
   }
 }
 
-function clearAppBuildDir() {
-  fs.emptyDirSync(paths.razzle.appBuild);
-}
-
 module.exports = {
-  failIfAppEntryFilesNotFound,
-  clearAppBuildDir
+  failIfAppEntryFilesNotFound
 };

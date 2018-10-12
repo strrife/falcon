@@ -3,7 +3,7 @@ const Logger = require('@deity/falcon-logger');
 const razzle = require('./../src/buildTools/razzle');
 const webpack = require('./../src/buildTools/webpack');
 const workbox = require('./../src/buildTools/workbox');
-const { failIfAppEntryFilesNotFound, clearAppBuildDir } = require('./../src/buildTools');
+const { failIfAppEntryFilesNotFound } = require('./../src/buildTools');
 
 (async () => {
   const script = process.argv[2];
@@ -14,8 +14,6 @@ const { failIfAppEntryFilesNotFound, clearAppBuildDir } = require('./../src/buil
 
     switch (script) {
       case 'start': {
-        clearAppBuildDir();
-
         await webpack.startDevServer();
         break;
       }

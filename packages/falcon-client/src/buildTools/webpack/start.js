@@ -6,7 +6,9 @@ const logger = require('@deity/falcon-logger');
 const Webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server-speedy');
 const clearConsole = require('react-dev-utils/clearConsole');
+// const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const { choosePort } = require('react-dev-utils/WebpackDevServerUtils');
+
 const paths = require('./config/paths');
 const { getBuildConfig } = require('./tools');
 const createConfig = require('./config/create');
@@ -42,15 +44,12 @@ function compile(config) {
 
 function main() {
   const falconClientBuildConfig = getBuildConfig();
-
   if (falconClientBuildConfig.clearConsole) {
     clearConsole();
   }
 
   logger.info(chalk`{hex('#a9cf38') Compiling...}`);
-
-  // Delete assets.json to always have a manifest up to date
-  fs.removeSync(paths.appManifest);
+  fs.emptyDirSync(paths.appBuild);
 
   const props = {
     inspect: process.argv.find(x => x.match(/--inspect-brk(=|$)/) || x.match(/--inspect(=|$)/)) || undefined
