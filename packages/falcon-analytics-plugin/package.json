@@ -1,13 +1,61 @@
 {
   "name": "@deity/falcon-analytics-plugin",
   "license": "OSL-3.0",
-  "main": "index.js",
   "version": "0.0.1",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-analytics-plugin",
+  "main": "dist/falcon-analytics-plugin.cjs.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "source": "src/index.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "prepare": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:tsDeclarations && npm run size",
+    "build:tsDeclarations": "tsc",
+    "build:esm": "babel src -d dist -x .ts,.tsx -s",
+    "build:cjs": "rollup -c",
+    "size": "size-limit",
+    "watch": "babel src -d dist -x .ts,.tsx -s --watch"
+  },
   "dependencies": {
-    "react-ga": "2.5.3"
+    "@babel/runtime": "^7.0.0",
+    "react-ga": "2.5.3",
+    "react-with-analytics": "0.0.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.1.2",
+    "@babel/core": "7.1.2",
+    "@babel/plugin-proposal-class-properties": "7.1.0",
+    "@babel/plugin-proposal-object-rest-spread": "7.0.0",
+    "@babel/plugin-transform-runtime": "7.1.0",
+    "@babel/preset-env": "7.1.0",
+    "@babel/preset-react": "7.0.0",
+    "@babel/preset-typescript": "7.1.0",
+    "@types/react": "16.4.16",
+    "@types/react-dom": "16.0.8",
+    "babel-plugin-annotate-pure-calls": "0.4.0",
+    "babel-plugin-module-resolver": "3.1.1",
+    "react": "16.5.2",
+    "react-dom": "16.5.2",
+    "rimraf": "2.6.2",
+    "rollup": "0.66.4",
+    "rollup-plugin-babel": "4.0.3",
+    "rollup-plugin-node-resolve": "3.4.0",
+    "size-limit": "0.20.1",
+    "typescript": "3.1.1"
   },
   "peerDependencies": {
-    "react-router-dom": "^4.3.1"
-  }
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2"
+  },
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "gzip": true,
+      "limit": "5 KB"
+    }
+  ]
 }
