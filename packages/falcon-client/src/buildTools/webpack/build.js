@@ -54,8 +54,8 @@ function build(previousFileSizes) {
   const falconClientBuildConfig = getBuildConfig();
 
   // Create our production webpack configurations and pass in razzle options.
-  const clientConfig = createConfig('web', 'prod', falconClientBuildConfig, webpack);
-  const serverConfig = createConfig('node', 'prod', falconClientBuildConfig, webpack);
+  const clientConfig = createConfig('web', 'prod', {}, falconClientBuildConfig, webpack);
+  const serverConfig = createConfig('node', 'prod', {}, falconClientBuildConfig, webpack);
 
   process.noDeprecation = true; // turns off that loadQuery clutter.
 
@@ -122,35 +122,38 @@ function build(previousFileSizes) {
 
 // First, read the current file sizes in build directory.
 // This lets us display how much they changed later.
-measureFileSizesBeforeBuild(paths.appBuildPublic)
-  .then(previousFileSizes => {
-    // Remove all content but keep the directory so that
-    // if you're in it, you don't end up in Trash
-    fs.emptyDirSync(paths.appBuild);
+module.exports = () =>
+  measureFileSizesBeforeBuild(paths.appBuildPublic)
+    .then(previousFileSizes => {
+      // Remove all content but keep the directory so that
+      // if you're in it, you don't end up in Trash
+      fs.emptyDirSync(paths.appBuild);
 
-    // Merge with the public folder
-    copyPublicFolder();
+      // Merge with the public folder
+      copyPublicFolder();
 
-    // Start the webpack build
-    return build(previousFileSizes);
-  })
-  .then(
-    ({ stats, previousFileSizes, warnings }) => {
-      if (warnings.length) {
-        console.log(chalk.yellow('Compiled with warnings.\n'));
-        console.log(warnings.join('\n\n'));
-        console.log(`\nSearch for the ${chalk.underline(chalk.yellow('keywords'))} to learn more about each warning.`);
-        console.log(`To ignore, add ${chalk.cyan('// eslint-disable-next-line')} to the line before.\n`);
-      } else {
-        console.log(chalk.green('Compiled successfully.\n'));
+      // Start the webpack build
+      return build(previousFileSizes);
+    })
+    .then(
+      ({ stats, previousFileSizes, warnings }) => {
+        if (warnings.length) {
+          console.log(chalk.yellow('Compiled with warnings.\n'));
+          console.log(warnings.join('\n\n'));
+          console.log(
+            `\nSearch for the ${chalk.underline(chalk.yellow('keywords'))} to learn more about each warning.`
+          );
+          console.log(`To ignore, add ${chalk.cyan('// eslint-disable-next-line')} to the line before.\n`);
+        } else {
+          console.log(chalk.green('Compiled successfully.\n'));
+        }
+        console.log('File sizes after gzip:\n');
+        printFileSizesAfterBuild(stats, previousFileSizes, paths.appBuild);
+        console.log();
+      },
+      err => {
+        console.log(chalk.red('Failed to compile.\n'));
+        console.log(`${err.message || err}\n`);
+        process.exit(1);
       }
-      console.log('File sizes after gzip:\n');
-      printFileSizesAfterBuild(stats, previousFileSizes, paths.appBuild);
-      console.log();
-    },
-    err => {
-      console.log(chalk.red('Failed to compile.\n'));
-      console.log(`${err.message || err}\n`);
-      process.exit(1);
-    }
-  );
+    );

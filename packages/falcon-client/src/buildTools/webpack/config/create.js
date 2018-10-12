@@ -69,12 +69,14 @@ function getBabelLoaderOptions(babelRcPath) {
 /**
  * @param {'web' | 'node' } target target
  * @param {'dev' | 'prod' } env environment
+ * @param {{inspect: string}} props other props
  * @param {object} webpackInstance webpack instance
  * @returns {object} webpack config
  */
 module.exports = (
   target = 'web',
   env = 'dev',
+  props,
   { clearConsole = true, host = 'localhost', port = 3000, modify, plugins },
   webpackInstance
 ) => {
@@ -321,16 +323,6 @@ module.exports = (
 
       // Pretty format server errors
       config.entry.unshift('razzle-dev-utils/prettyNodeErrors');
-
-      const nodeArgs = ['-r', 'source-map-support/register'];
-
-      // Passthrough --inspect and --inspect-brk flags (with optional [host:port] value) to node
-      if (process.env.INSPECT_BRK) {
-        nodeArgs.push(process.env.INSPECT_BRK);
-      } else if (process.env.INSPECT) {
-        nodeArgs.push(process.env.INSPECT);
-      }
-
       config.plugins = [
         ...config.plugins,
         // Add hot module replacement
@@ -338,7 +330,11 @@ module.exports = (
         // Suppress errors to console (we use our own logger)
         new StartServerPlugin({
           name: 'server.js',
-          nodeArgs
+          nodeArgs: [
+            '-r',
+            'source-map-support/register',
+            props.inspect
+          ].filter(x => x)
         }),
         // Ignore assets.json to avoid infinite recompile bug
         new webpack.WatchIgnorePlugin([paths.appManifest])
@@ -561,7 +557,7 @@ module.exports = (
       new WebpackBar({
         color: '#cbde6e', // target === 'web' ? '#f56be2' : '#c065f4',
         name: target === 'web' ? 'client' : 'server',
-        compiledIn: false
+        compiledIn: true
       })
     ];
   }

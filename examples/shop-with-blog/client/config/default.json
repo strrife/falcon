@@ -1,6 +1,4 @@
 {
-  "serverSideRendering": true,
-  "useWebManifest": true,
   "i18n": {
     "ns": ["common", "shop", "post"]
   },

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const deepMerge = require('deepmerge');
 const clearConsole = require('react-dev-utils/clearConsole');
 const logger = require('@deity/falcon-logger');
 
@@ -20,16 +21,18 @@ function pathResolve() {
  * @returns {object} falcon-client build time config
  */
 function getBuildConfig(configName = 'falcon-client.build.config.js') {
-  let config = {};
+  let config = {
+    clearConsole: true
+  };
 
   const configPath = pathResolve()(configName);
   if (fs.existsSync(configPath)) {
     try {
       // eslint-disable-next-line
-      config = require(configPath);
+      config = deepMerge(config, require(configPath), { arrayMerge: (destination, source) => source });
     } catch (e) {
       clearConsole();
-      logger.error(`Invalid falcon-client build.config.js file, (${configName}).`, e);
+      logger.error(`Invalid falcon-client.build.config.js file, (${configName}).`, e);
       process.exit(1);
     }
   }

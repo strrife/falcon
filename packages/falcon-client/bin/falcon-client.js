@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const Logger = require('@deity/falcon-logger');
 const razzle = require('./../src/buildTools/razzle');
-// const webpack = require('./../src/buildTools/webpack');
+const webpack = require('./../src/buildTools/webpack');
 const workbox = require('./../src/buildTools/workbox');
 const { failIfAppEntryFilesNotFound, clearAppBuildDir } = require('./../src/buildTools');
 
@@ -16,11 +16,11 @@ const { failIfAppEntryFilesNotFound, clearAppBuildDir } = require('./../src/buil
       case 'start': {
         clearAppBuildDir();
 
-        razzle.runScript(script, args, '@deity/falcon-client/src/buildTools/webpack');
+        await webpack.startDevServer();
         break;
       }
       case 'build': {
-        razzle.runScript(script, args, '@deity/falcon-client/src/buildTools/webpack');
+        await webpack.build();
         await workbox.injectManifest();
         break;
       }
@@ -31,10 +31,10 @@ const { failIfAppEntryFilesNotFound, clearAppBuildDir } = require('./../src/buil
       default:
         Logger.log(`Unknown script "${script}".`);
         Logger.log('Perhaps you need to update @deity/falcon-client?');
+        process.exit();
+
         break;
     }
-
-    process.exit();
   } catch (error) {
     Logger.error(error);
     process.exit(1);

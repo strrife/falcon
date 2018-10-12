@@ -1,5 +1,3 @@
-#! /usr/bin/env node
-
 process.env.NODE_ENV = 'development';
 
 const fs = require('fs-extra');
@@ -7,17 +5,13 @@ const chalk = require('chalk');
 const logger = require('@deity/falcon-logger');
 const Webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server-speedy');
-// const clearConsole = require('react-dev-utils/clearConsole');
+const clearConsole = require('react-dev-utils/clearConsole');
 const { choosePort } = require('react-dev-utils/WebpackDevServerUtils');
 const paths = require('./config/paths');
 const { getBuildConfig } = require('./tools');
 const createConfig = require('./config/create');
 
 process.noDeprecation = true; // turns off that loadQuery clutter.
-// Capture any --inspect or --inspect-brk flags (with optional values) so that we
-// can pass them when we invoke nodejs
-process.env.INSPECT_BRK = process.argv.find(arg => arg.match(/--inspect-brk(=|$)/)) || '';
-process.env.INSPECT = process.argv.find(arg => arg.match(/--inspect(=|$)/)) || '';
 
 // Checks if PORT and PORT_DEV are available and suggests alternatives if not
 async function setPorts() {
@@ -47,19 +41,22 @@ function compile(config) {
 }
 
 function main() {
-  // Optimistically, we make the console look exactly like the output of our
-  // FriendlyErrorsPlugin during compilation, so the user has immediate feedback.
-  // clearConsole();
-  logger.info(chalk`{hex('#a9cf38') Compiling...}`);
   const falconClientBuildConfig = getBuildConfig();
+
+  if (falconClientBuildConfig.clearConsole) {
+    clearConsole();
+  }
+
+  logger.info(chalk`{hex('#a9cf38') Compiling...}`);
 
   // Delete assets.json to always have a manifest up to date
   fs.removeSync(paths.appManifest);
 
-  // Create dev configs using our config factory, passing in razzle file as
-  // options.
-  const clientConfig = createConfig('web', 'dev', falconClientBuildConfig, Webpack);
-  const serverConfig = createConfig('node', 'dev', falconClientBuildConfig, Webpack);
+  const props = {
+    inspect: process.argv.find(x => x.match(/--inspect-brk(=|$)/) || x.match(/--inspect(=|$)/)) || undefined
+  };
+  const clientConfig = createConfig('web', 'dev', props, falconClientBuildConfig, Webpack);
+  const serverConfig = createConfig('node', 'dev', props, falconClientBuildConfig, Webpack);
 
   // Compile our assets with webpack
   const clientCompiler = compile(clientConfig);
@@ -92,6 +89,7 @@ function main() {
   );
 }
 
-setPorts()
-  .then(main)
-  .catch(console.error);
+module.exports = () =>
+  setPorts()
+    .then(main)
+    .catch(logger.error);
