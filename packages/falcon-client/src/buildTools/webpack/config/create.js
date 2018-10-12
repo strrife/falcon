@@ -162,13 +162,27 @@ module.exports = (
             /\.json$/,
             /\.html$/,
             /\.(vue)$/,
-            /\.(re)$/
+            /\.(re)$/,
+            /\.(webmanifest|browserconfig)$/
           ],
           loader: require.resolve('file-loader'),
           options: {
             name: 'static/media/[name].[hash:8].[ext]',
             emitFile: IS_WEB
           }
+        },
+        IS_WEB && {
+          test: /(manifest\.webmanifest|browserconfig\.xml)$/,
+          use: [
+            {
+              loader: require.resolve('file-loader'),
+              options: {
+                name: 'static/[name].[hash:8].[ext]',
+                emitFile: true
+              }
+            },
+            { loader: require.resolve('app-manifest-loader') }
+          ]
         },
         // "postcss" loader applies autoprefixer to our CSS.
         // "css" loader resolves paths in CSS and adds assets as dependencies.
@@ -272,7 +286,7 @@ module.exports = (
                   }
                 ]
         }
-      ]
+      ].filter(x => x)
     }
   };
 
@@ -330,11 +344,7 @@ module.exports = (
         // Suppress errors to console (we use our own logger)
         new StartServerPlugin({
           name: 'server.js',
-          nodeArgs: [
-            '-r',
-            'source-map-support/register',
-            props.inspect
-          ].filter(x => x)
+          nodeArgs: ['-r', 'source-map-support/register', props.inspect].filter(x => x)
         }),
         // Ignore assets.json to avoid infinite recompile bug
         new webpack.WatchIgnorePlugin([paths.appManifest])

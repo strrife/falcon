@@ -122,30 +122,6 @@ function addFalconI18nPlugin({ resourcePackages = [], filter }) {
   };
 }
 
-function addWebManifest(config, target) {
-  if (target === 'web') {
-    const fileLoaderFinder = webpackConfigHelper.makeLoaderFinder('file-loader');
-    const mediaFilesRule = config.module.rules.find(fileLoaderFinder);
-    if (mediaFilesRule) {
-      mediaFilesRule.exclude.push(/\.(webmanifest|browserconfig)$/);
-    }
-
-    config.module.rules.push({
-      test: /(manifest\.webmanifest|browserconfig\.xml)$/,
-      use: [
-        {
-          loader: require.resolve('file-loader'),
-          options: {
-            name: 'static/[name].[hash:8].[ext]',
-            emitFile: true
-          }
-        },
-        { loader: require.resolve('app-manifest-loader') }
-      ]
-    });
-  }
-}
-
 function addToNodeExternals(whitelist) {
   return (config, { target, dev }) => {
     if (target === 'node') {
@@ -211,7 +187,6 @@ module.exports = appConfig => (config, { target, dev } /* , webpackObject */) =>
     'history'
   ])(config, { target, dev });
   addFalconI18nPlugin(appConfig.i18n)(config, target);
-  addWebManifest(config, target);
 
   if (target === 'web' && process.env.NODE_ANALYZE) {
     config.plugins.push(new BundleAnalyzerPlugin());
