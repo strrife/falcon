@@ -15,10 +15,12 @@ export default (Component: React.ReactType, trackPage: (page: string) => void) =
       trackPage(page);
     }
 
-    componentWillReceiveProps(nextProps: IAnalytics) {
+    componentDidUpdate(prevProps: IAnalytics) {
       const currentPage: string = this.props.location.pathname;
-      const nextPage: string = nextProps.location.pathname;
-      if (currentPage !== nextPage) trackPage(nextPage);
+      const prevPage: string = prevProps.location.pathname;
+      if (currentPage !== prevPage) {
+        trackPage(currentPage);
+      }
     }
 
     render() {
