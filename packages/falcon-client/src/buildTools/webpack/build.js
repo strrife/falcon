@@ -17,10 +17,11 @@ const fs = require('fs-extra');
 // const logger = require('@deity/falcon-logger');
 const webpack = require('webpack');
 const chalk = require('chalk');
+const logger = require('@deity/falcon-logger');
 
 const paths = require('./config/paths');
 const createConfig = require('./config/create');
-const { getBuildConfig, printErrors } = require('./tools');
+const { getBuildConfig } = require('./tools');
 
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react-dev-utils/FileSizeReporter');
@@ -31,7 +32,9 @@ function compile(config, cb) {
   try {
     compiler = webpack(config);
   } catch (e) {
-    printErrors('Failed to compile.', [e]);
+    logger.error(chalk.red('Failed to compile.'));
+    logger.error(e);
+
     process.exit(1);
   }
   compiler.run((err, stats) => {

@@ -1,23 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const chalk = require('chalk');
 const clearConsole = require('react-dev-utils/clearConsole');
 const logger = require('@deity/falcon-logger');
-
-/**
- * Print an array of errors to console.
- *
- * @param {string} summary Summary of error
- * @param {Array<Error>} errors Array of Errors
- */
-function printErrors(summary, errors) {
-  console.log(chalk.red(summary));
-  console.log();
-  errors.forEach(err => {
-    console.log(err.message || err);
-    console.log();
-  });
-}
 
 function pathResolve() {
   const appDirectory = fs.realpathSync(process.cwd());
@@ -55,6 +39,5 @@ function getBuildConfig(configName = 'falcon-client.build.config.js') {
 
 module.exports = {
   pathResolve: pathResolve(),
-  getBuildConfig,
-  printErrors
+  getBuildConfig
 };

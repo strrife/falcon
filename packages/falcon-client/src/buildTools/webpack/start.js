@@ -37,15 +37,12 @@ function compile(config) {
   try {
     compiler = Webpack(config);
   } catch (e) {
-    console.log(chalk.red('Failed to compile.'));
-    console.log();
-    [e].forEach(err => {
-      console.log(err.message || err);
-      console.log();
-    });
+    logger.error(chalk.red('Failed to compile.'));
+    logger.error(e);
 
     process.exit(1);
   }
+
   return compiler;
 }
 
