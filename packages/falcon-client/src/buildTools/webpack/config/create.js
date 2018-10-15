@@ -9,6 +9,7 @@ const StartServerPlugin = require('start-server-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackBar = require('webpackbar');
+const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 
 const paths = require('./paths');
@@ -64,15 +65,26 @@ function getBabelLoaderOptions(babelRcPath) {
   return options;
 }
 
+function getFalconI18nPlugin({ resourcePackages = [], filter }) {
+  return new FalconI18nLocalesPlugin({
+    mainSource: path.join(paths.appPath, 'i18n'),
+    defaultSources: resourcePackages.map(x => paths.resolvePackageDir(x)).map(x => path.join(x, 'i18n')),
+    output: 'build/i18n',
+    filter
+  });
+}
+
 // This is the Webpack configuration factory. It's the juice!
 /**
  * @param {'web' | 'node' } target target
  * @param {{ env: ('dev' | 'prod'), host: string, port: number, inspect: string }} options environment
+ * @param {object} buildConfig config
  * @param {object} webpackInstance webpack instance
  * @returns {object} webpack config
  */
-module.exports = (target = 'web', options, { clearConsole = true, plugins, modify }, webpackInstance) => {
+module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
   const { env, host, port, devServerPort } = options;
+  const { clearConsole, plugins, modify } = buildConfig;
 
   // Define some useful shorthands.
   const IS_NODE = target === 'node';
@@ -347,6 +359,7 @@ module.exports = (target = 'web', options, { clearConsole = true, plugins, modif
 
   if (IS_WEB) {
     config.plugins = [
+      getFalconI18nPlugin(buildConfig.i18n),
       // Emit assets json file
       new AssetsPlugin({
         path: paths.appBuild,

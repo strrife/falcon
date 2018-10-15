@@ -1,7 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-const path = require('path');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
 // const razzlePluginTypescript = require('razzle-plugin-typescript');
 const WebpackConfigHelpers = require('razzle-dev-utils/WebpackConfigHelpers');
 const NodeExternals = require('webpack-node-externals');
@@ -94,34 +92,6 @@ function addVendorsBundle(modules = []) {
   };
 }
 
-/**
- * @typedef {object} i18nPluginConfig
- * @property {string[]} resourcePackages npm modules with localization resources
- * @property {object{ lng, ns }} filter Initial configuration
- */
-
-/**
- * Adds FalconI18nPlugin into webpack configuration
- * @param {i18nPluginConfig} param configuration
- * @param {object} config webpack config
- * @param {boolean} dev is dev?
- * @returns {void}
- */
-function addFalconI18nPlugin({ resourcePackages = [], filter }) {
-  return (config, target) => {
-    if (target === 'web') {
-      config.plugins.unshift(
-        new FalconI18nLocalesPlugin({
-          mainSource: path.join(paths.razzle.appPath, 'i18n'),
-          defaultSources: resourcePackages.map(x => paths.resolvePackageDir(x)).map(x => path.join(x, 'i18n')),
-          output: 'build/i18n',
-          filter
-        })
-      );
-    }
-  };
-}
-
 function addToNodeExternals(whitelist) {
   return (config, { target, dev }) => {
     if (target === 'node') {
@@ -143,10 +113,9 @@ function addToNodeExternals(whitelist) {
 
 /**
  * falcon-client and razzle integration plugin
- * @param {{i18n: i18nPluginConfig }} appConfig webpack config
  * @returns {object} razzle plugin
  */
-module.exports = appConfig => (config, { target, dev } /* , webpackObject */) => {
+module.exports = () => (config, { target, dev } /* , webpackObject */) => {
   setEntryToFalconClient(config, target);
   // make sure that webpack handle @deity/falcon-client from shop directory
   extendBabelInclude([paths.falconClient.appSrc, /@deity\/falcon-client\//])(config);
@@ -166,7 +135,7 @@ module.exports = appConfig => (config, { target, dev } /* , webpackObject */) =>
     'node-fetch',
     'i18next',
     'i18next-xhr-backend',
-    'razzle/polyfills',
+    '@deity/falcon-client/src/buildTools/webpack/config/polyfills',
     'razzle',
     'react',
     'react-apollo',
@@ -180,7 +149,7 @@ module.exports = appConfig => (config, { target, dev } /* , webpackObject */) =>
     'react-router-dom',
     'history'
   ])(config, { target, dev });
-  addFalconI18nPlugin(appConfig.i18n)(config, target);
+  // addFalconI18nPlugin(appConfig.i18n)(config, target);
 
   if (target === 'web' && process.env.NODE_ANALYZE) {
     config.plugins.push(new BundleAnalyzerPlugin());

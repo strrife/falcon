@@ -23,6 +23,10 @@ const nodePath = (process.env.NODE_PATH || '')
   .map(folder => path.resolve(appDirectory, folder))
   .join(path.delimiter);
 
+function resolvePackageDir(name) {
+  return path.dirname(require.resolve(`${name}/package.json`));
+}
+
 module.exports = {
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
@@ -40,5 +44,6 @@ module.exports = {
   appEslintRc: resolveApp('.eslintrc'),
   nodePath,
   ownPath: resolveOwn('.'),
-  ownNodeModules: resolveOwn('node_modules')
+  ownNodeModules: resolveOwn('node_modules'),
+  resolvePackageDir
 };
