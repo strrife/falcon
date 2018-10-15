@@ -1,32 +1,10 @@
 const path = require('path');
 const fs = require('fs');
-const url = require('url');
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebookincubator/create-react-app/issues/637
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
-
-const envPublicUrl = process.env.PUBLIC_URL;
-
-function ensureEndingSlash(x, needsSlash) {
-  const hasSlash = x.endsWith('/');
-  if (hasSlash && !needsSlash) {
-    return x.substr(x, x.length - 1);
-  } else if (!hasSlash && needsSlash) {
-    return `${x}/`;
-  }
-  return x;
-}
-
-// eslint-disable-next-line
-const getPublicUrl = appPackageJson => envPublicUrl || require(appPackageJson).homepage;
-
-function getServedPath(appPackageJson) {
-  const publicUrl = getPublicUrl(appPackageJson);
-  const servedUrl = envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : '/');
-  return ensureEndingSlash(servedUrl, true);
-}
 
 const resolveOwn = relativePath => path.resolve(__dirname, '..', relativePath);
 
@@ -62,7 +40,5 @@ module.exports = {
   appEslintRc: resolveApp('.eslintrc'),
   nodePath,
   ownPath: resolveOwn('.'),
-  ownNodeModules: resolveOwn('node_modules'),
-  publicUrl: getPublicUrl(resolveApp('package.json')),
-  servedPath: getServedPath(resolveApp('package.json'))
+  ownNodeModules: resolveOwn('node_modules')
 };
