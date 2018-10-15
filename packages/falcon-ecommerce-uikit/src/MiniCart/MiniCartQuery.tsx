@@ -1,12 +1,22 @@
 import gql from 'graphql-tag';
 import { Query } from '../Query/Query';
 
-const GET_MINI_CART = gql`
+export const GET_MINI_CART = gql`
   query miniCart {
     miniCart @client {
       open
     }
-    basketItems @client
+    cart {
+      itemsQty
+      items {
+        itemId
+        sku
+        qty
+        name
+        price
+        thumbnailUrl
+      }
+    }
   }
 `;
 
@@ -14,7 +24,10 @@ export type MiniCartData = {
   miniCart: {
     open: boolean;
   };
-  basketItems: any[];
+  cart: {
+    itemsQty: number;
+    items: any[];
+  };
 };
 
 export class MiniCartQuery extends Query<MiniCartData> {

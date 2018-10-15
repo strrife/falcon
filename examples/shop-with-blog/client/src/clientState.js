@@ -29,19 +29,6 @@ const sortOrders = [
   }
 ];
 
-const basketItems = [
-  {
-    src: 'https://picsum.photos/600/600?image=824',
-    name: 'Zoku Round Pop Moulds',
-    price: 199
-  },
-  {
-    src: 'https://picsum.photos/600/600?image=493',
-    name: 'Fusionbrands Poachpod Egg Poacher',
-    price: 299
-  }
-];
-
 export default {
   defaults: {
     miniCart: {
@@ -52,8 +39,7 @@ export default {
   resolvers: {
     Query: {
       languages: () => languages,
-      sortOrders: () => sortOrders,
-      basketItems: () => basketItems
+      sortOrders: () => sortOrders
     },
 
     Mutation: {
