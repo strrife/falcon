@@ -4,7 +4,7 @@ import Logger from '@deity/falcon-logger';
 function falconWebServer() {
   const server = require('./server').default;
   // eslint-disable-next-line
-  const app = require('app-path');
+  const app = require('./clientApp');
   const configuration = require('./clientApp/configuration').default;
   // eslint-disable-next-line
   const assetsManifest = require(process.env.RAZZLE_ASSETS_MANIFEST);
@@ -47,14 +47,17 @@ httpServer.listen(port, error => {
 if (module.hot) {
   Logger.log('✅  Server-side HMR Enabled!');
 
-  module.hot.accept(['./server', 'app-path', './clientApp/configuration'], () => {
-    Logger.log('🔁  HMR Reloading server...');
+  module.hot.accept(['./server', './clientApp', './clientApp/configuration'], () => {
+    Logger.log('🔁  HMR: Reloading server...');
 
-    httpServer.removeListener('request', currentWebServerHandler);
-
-    const newHandler = falconWebServer().callback();
-
-    httpServer.on('request', newHandler);
-    currentWebServerHandler = newHandler;
+    try {
+      const newHandler = falconWebServer().callback();
+      httpServer.removeListener('request', currentWebServerHandler);
+      httpServer.on('request', newHandler);
+      currentWebServerHandler = newHandler;
+      Logger.log('✅  HMR: Server reloaded.');
+    } catch (error) {
+      Logger.log('🛑  HMR: Reloading server failed, syntax error!');
+    }
   });
 }
