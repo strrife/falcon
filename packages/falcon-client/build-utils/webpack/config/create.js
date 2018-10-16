@@ -76,6 +76,31 @@ function getFalconI18nPlugin({ resourcePackages = [], filter }) {
   });
 }
 
+function addVendorsBundle(modules = []) {
+  const moduleFilter = new RegExp(
+    `[\\\\/]node_modules[\\\\/](${modules.map(x => x.replace('/', '[\\\\/]')).join('|')})[\\\\/]`
+  );
+
+  return (config, { target, dev }) => {
+    if (target === 'web') {
+      config.output.filename = dev ? 'static/js/[name].js' : 'static/js/[name].[hash:8].js';
+
+      config.optimization = {
+        splitChunks: {
+          cacheGroups: {
+            vendor: {
+              name: 'vendors',
+              enforce: true,
+              chunks: 'initial',
+              test: moduleFilter
+            }
+          }
+        }
+      };
+    }
+  };
+}
+
 // This is the Webpack configuration factory. It's the juice!
 /**
  * @param {'web' | 'node' } target target
@@ -563,6 +588,32 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
       })
     ];
   }
+
+  addVendorsBundle([
+    'apollo-cache-inmemory',
+    'apollo-client',
+    'apollo-link',
+    'apollo-link-http',
+    'apollo-link-state',
+    'apollo-utilities',
+    'graphql',
+    'graphql-tag',
+    'node-fetch',
+    'i18next',
+    'i18next-xhr-backend',
+    '@deity/falcon-client/build-utils/polyfills',
+    'react',
+    'react-apollo',
+    'react-async-bootstrapper2',
+    'react-async-component',
+    'react-dom',
+    'react-google-tag-manager',
+    `react-helmet`,
+    'react-i18next',
+    'react-router',
+    'react-router-dom',
+    'history'
+  ])(config, { target, dev: IS_DEV });
 
   // Apply razzle plugins, if they are present in razzle.config.js
   if (Array.isArray(plugins)) {
