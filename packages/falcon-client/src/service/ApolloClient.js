@@ -25,15 +25,20 @@ import fetch from 'node-fetch';
  * @return {ApolloClient} ApolloClient instance
  */
 export default (config = {}) => {
+  // disabling 'addTypename' option to avoid manual setting "__typename" field
   const addTypename = false;
-  const {
-    extraLinks = [],
-    isBrowser = false,
-    initialState = {},
-    clientState = {},
-    serverUri = 'http://localhost:4000/graphql',
-    headers
-  } = config;
+  const { extraLinks = [], isBrowser = false, initialState = {}, clientState = {}, headers } = config;
+
+  let apolloConfig;
+  if (isBrowser) {
+    apolloConfig = initialState['$ROOT_QUERY.config.apolloClient'] || {};
+  } else {
+    const { defaults } = clientState || {};
+    const { config: clientStateConfig } = defaults || {};
+    ({ apolloClient: apolloConfig = {} } = clientStateConfig || {});
+  }
+
+  const { serverUri = 'http://localhost:4000/graphql' } = apolloConfig;
 
   const cache = new InMemoryCache({ addTypename }).restore(initialState || {});
   const linkState = withClientState({
