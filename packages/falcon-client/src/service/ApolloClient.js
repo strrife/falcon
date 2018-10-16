@@ -29,16 +29,16 @@ export default (config = {}) => {
   const addTypename = false;
   const { extraLinks = [], isBrowser = false, initialState = {}, clientState = {}, headers } = config;
 
-  let apolloConfig;
+  let apolloClient;
   if (isBrowser) {
-    apolloConfig = initialState['$ROOT_QUERY.config.apolloClient'] || {};
+    apolloClient = initialState['$ROOT_QUERY.config.apolloClient'] || {};
   } else {
     const { defaults } = clientState || {};
     const { config: clientStateConfig } = defaults || {};
-    ({ apolloClient: apolloConfig = {} } = clientStateConfig || {});
+    ({ apolloClient = {} } = clientStateConfig || {});
   }
 
-  const { serverUri = 'http://localhost:4000/graphql' } = apolloConfig;
+  const { serverUri = 'http://localhost:4000/graphql' } = apolloClient;
 
   const cache = new InMemoryCache({ addTypename }).restore(initialState || {});
   const linkState = withClientState({
