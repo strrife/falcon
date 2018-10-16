@@ -135,7 +135,7 @@ Then in `razzle.config.js` file you need to update `razzlePluginFalconClient` pl
 
 Imported package (like `@deity/falcon-i18n`) can contain more languages and/or namespaces than you are interested in. So if you don't want to use all of them (to save bundle size, or just not to use some namespace as it's not relevant to your project) you can filter them out by using `filter` option - that will instruct webpack to skip items not listed in the `filter` property.
 
-```
+```javascript
 razzlePluginFalconClient({
   i18n: {
     resourcePackages: ['@deity/falcon-i18n'],
@@ -171,7 +171,7 @@ Above example configuration will deliver to your project default `common` and `b
 
 example unit test with `FalconClientMock` :
 
-```
+```javascript
 import { FalconClientMock } from '@deity/falcon-client/test-utils';
 
 describe('<Component />', () => {
@@ -191,7 +191,7 @@ describe('<Component />', () => {
 
 ## Idea behind the `falcon-server` [TODO]
 
-`falcon-client` is a application host installed as npm module which cover all necessary configuration ad provide API for Magento, WordPress, Algolia or Elasitc Search. All what you need to do is
+`falcon-client` is an application host installed as npm module which cover all necessary configuration ad provide API for Magento, WordPress, Algolia or Elastic Search. All what you need to do is
 
 - install `falcon-client` in your project
 - create entry point file `./src/index.js` according to [API contract](#api-contract).
