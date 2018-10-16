@@ -8,33 +8,16 @@
     "falcon-client": "./bin/falcon-client.js"
   },
   "scripts": {
-    "test": "cross-env RAZZLE_PUBLIC_DIR=./test/static razzle test --env=jsdom",
-    "test:coverage": "cross-env RAZZLE_PUBLIC_DIR=./test/static razzle test --env=jsdom --ci --coverage"
+    "test": "cross-env RAZZLE_PUBLIC_DIR=./test/static node ./bin/falcon-client test --env=jsdom",
+    "test:coverage": "cross-env RAZZLE_PUBLIC_DIR=./test/static node ./bin/falcon-client test --env=jsdom --ci --coverage"
   },
   "jest": {
-    "coverageReporters": [
-      "html",
-      "text",
-      "text-summary"
-    ],
-    "transform": {
-      "^.+\\.(gql|graphql)$": "jest-transform-graphql",
-      "^.+\\.(ts|tsx)$": "ts-jest/preprocessor.js",
-      "^.+\\.(js|jsx|mjs)$": "razzle/config/jest/babelTransform.js",
-      "^.+\\.css$": "razzle/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|mjs|css|json)$)": "razzle/config/jest/fileTransform.js"
-    },
-    "testMatch": [
-      "<rootDir>/src/**/?(*.)(spec|test).(ts|js)?(x)"
-    ],
     "moduleFileExtensions": [
+      "js",
+      "jsx",
       "ts",
       "tsx",
-      "js",
       "json"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}"
     ],
     "setupFiles": [
       "../../test/setupFile"
@@ -65,7 +48,6 @@
     "koa-send": "5.0.0",
     "koa-static": "^5.0.0",
     "node-fetch": "^2.2.0",
-    "razzle": "^2.4.0",
     "razzle-dev-utils": "2.4.0",
     "react-async-bootstrapper2": "^2.1.2",
     "react-google-tag-manager": "2.2.1",
@@ -81,7 +63,6 @@
     "jest-transform-graphql": "^2.1.0",
     "jest-extended": "^0.11.0",
     "graphql-tools": "^4.0.0",
-    "razzle-plugin-typescript": "^2.4.0",
     "ts-jest": "^22.4.5",
     "ts-loader": "^5.2.0",
     "react-apollo": "^2.2.3",
@@ -108,11 +89,10 @@
     "babel-core": "6.25.0",
     "babel-jest": "20.0.3",
     "babel-loader": "7.1.4",
-    "babel-preset-razzle": "^2.0.0",
     "css-loader": "0.28.11",
     "eslint-loader": "^2.0.0",
     "file-loader": "^1.1.11",
-    "jest": "^23.1.0",
+    "jest": "^23.6.0",
     "postcss-loader": "^2.1.3",
     "react-error-overlay": "^2.0.0",
     "source-map-support": "^0.5.6",

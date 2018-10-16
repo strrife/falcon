@@ -14,25 +14,16 @@
       "^src(.*)$": "<rootDir>/src$1",
       "^public(.*)$": "<rootDir>/public$1"
     },
-    "transform": {
-      "^.+\\.(gql|graphql)$": "jest-transform-graphql",
-      "^.+\\.(ts|tsx)$": "ts-jest/preprocessor.js",
-      "^.+\\.(js|jsx|mjs)$": "razzle/config/jest/babelTransform.js",
-      "^.+\\.css$": "razzle/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|mjs|css|json)$)": "razzle/config/jest/fileTransform.js"
-    },
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.(ts|js)?(x)",
       "<rootDir>/src/**/?(*.)(spec|test).(ts|js)?(x)"
     ],
     "moduleFileExtensions": [
+      "js",
+      "jsx",
       "ts",
       "tsx",
-      "js",
       "json"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}"
     ]
   },
   "scripts": {
