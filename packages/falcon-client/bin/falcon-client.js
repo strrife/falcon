@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 const Logger = require('@deity/falcon-logger');
-// const razzle = require('./../src/buildTools/razzle');
 const webpack = require('./../src/buildTools/webpack');
 const workbox = require('./../src/buildTools/workbox');
 const jest = require('./../build-utils/jest/test');
@@ -25,7 +24,6 @@ const { failIfAppEntryFilesNotFound } = require('./../src/buildTools');
       }
       case 'test': {
         jest();
-        // razzle.runScript(script, args);
         break;
       }
       default:
