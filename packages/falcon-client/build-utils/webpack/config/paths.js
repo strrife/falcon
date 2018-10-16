@@ -1,12 +1,19 @@
 const path = require('path');
 const fs = require('fs');
 
-// Make sure any symlinks in the project folder are resolved:
-// https://github.com/facebookincubator/create-react-app/issues/637
 const appDirectory = fs.realpathSync(process.cwd());
-const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
+
+/**
+ * Make sure any symlinks in the project folder are resolved:
+ * https://github.com/facebookincubator/create-react-app/issues/637
+ * @param {string} appRelativePath path relative to app directory (process.cwd())
+ * @returns {string} absolute path
+ */
+const resolveApp = appRelativePath => path.resolve(appDirectory, appRelativePath);
 
 const resolveOwn = relativePath => path.resolve(__dirname, '..', relativePath);
+
+const resolvePackageDir = name => path.dirname(require.resolve(`${name}/package.json`));
 
 // We support resolving modules according to `NODE_PATH`.
 // This lets you use absolute paths in imports inside large monorepos:
@@ -22,10 +29,6 @@ const nodePath = (process.env.NODE_PATH || '')
   .filter(folder => folder && !path.isAbsolute(folder))
   .map(folder => path.resolve(appDirectory, folder))
   .join(path.delimiter);
-
-function resolvePackageDir(name) {
-  return path.dirname(require.resolve(`${name}/package.json`));
-}
 
 module.exports = {
   dotenv: resolveApp('.env'),
@@ -45,5 +48,6 @@ module.exports = {
   nodePath,
   ownPath: resolveOwn('.'),
   ownNodeModules: resolveOwn('node_modules'),
+  resolveApp,
   resolvePackageDir
 };
