@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const paths = require('./../../../src/buildTools/webpack/config/paths');
+const paths = require('./../../webpack/config/paths');
 
 module.exports = rootDir => {
   // Use this instead of `paths.testsSetup` to avoid putting

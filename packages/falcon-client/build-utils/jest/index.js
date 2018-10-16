@@ -14,9 +14,9 @@ module.exports = () => {
   });
 
   // Ensure environment variables are read.
-  require('./../../src/buildTools/webpack/config/env');
+  require('./../webpack/config/env');
 
-  const paths = require('./../../src/buildTools/webpack/config/paths');
+  const paths = require('./../webpack/config/paths');
   const createConfig = require('./config/create');
   const config = createConfig(path.resolve(paths.appSrc, '..'));
 

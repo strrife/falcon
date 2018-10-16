@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const Logger = require('@deity/falcon-logger');
-const webpack = require('./../src/buildTools/webpack');
+const webpack = require('./../build-utils/webpack');
 const workbox = require('./../src/buildTools/workbox');
 const jest = require('./../build-utils/jest');
 const { failIfAppEntryFilesNotFound } = require('./../src/buildTools');
