@@ -1,8 +1,8 @@
+const fs = require('fs-extra');
 const babelJest = require('babel-jest');
-// const paths = require('./../webpack/config/paths');
-// const fs = require('fs-extra');
+const paths = require('./../../paths');
 
-const hasBabelRc = false; // fs.existsSync(paths.appBabelRc);
+const hasBabelRc = fs.existsSync(paths.appBabelRc);
 
 const config = {
   presets: !hasBabelRc && [require.resolve('@deity/babel-preset-falcon-client')],

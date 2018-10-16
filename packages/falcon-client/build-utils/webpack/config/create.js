@@ -12,7 +12,7 @@ const WebpackBar = require('webpackbar');
 const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 
-const paths = require('./paths');
+const paths = require('./../../paths');
 const runPlugin = require('./runPlugin');
 
 const falconClientPolyfills = require.resolve('./../../polyfills');

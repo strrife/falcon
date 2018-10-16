@@ -1,4 +1,3 @@
-const path = require('path');
 const jest = require('jest');
 
 module.exports = () => {
@@ -16,9 +15,9 @@ module.exports = () => {
   // Ensure environment variables are read.
   require('./../webpack/config/env');
 
-  const paths = require('./../webpack/config/paths');
+  const paths = require('./../paths');
   const createConfig = require('./config/create');
-  const config = createConfig(path.resolve(paths.appSrc, '..'), paths);
+  const config = createConfig(paths);
 
   const argv = process.argv.slice(2);
   // Watch unless on CI or in coverage mode

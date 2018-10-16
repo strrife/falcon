@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-module.exports = (rootDir, paths) => {
+module.exports = paths => {
   // Use this instead of `paths.testsSetup` to avoid putting
   // an absolute filename into configuration after ejecting.
   const setupTestsFile = fs.existsSync(paths.testsSetup)
@@ -9,7 +9,7 @@ module.exports = (rootDir, paths) => {
     : require.resolve('./setupTests');
 
   let config = {
-    rootDir,
+    rootDir: paths.appPath,
     setupTestFrameworkScriptFile: setupTestsFile,
     testEnvironment: 'node',
     testURL: 'http://localhost',

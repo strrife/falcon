@@ -7,7 +7,7 @@ const clearConsole = require('react-dev-utils/clearConsole');
 // const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const { choosePort } = require('react-dev-utils/WebpackDevServerUtils');
 
-const paths = require('./config/paths');
+const paths = require('./../paths');
 const { getBuildConfig } = require('./tools');
 const createConfig = require('./config/create');
 

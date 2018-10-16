@@ -6,12 +6,11 @@ process.on('unhandledRejection', err => {
 });
 
 const fs = require('fs-extra');
-// const logger = require('@deity/falcon-logger');
-const webpack = require('webpack');
 const chalk = require('chalk');
 const logger = require('@deity/falcon-logger');
+const webpack = require('webpack');
 
-const paths = require('./config/paths');
+const paths = require('./../paths');
 const createConfig = require('./config/create');
 const { getBuildConfig } = require('./tools');
 
