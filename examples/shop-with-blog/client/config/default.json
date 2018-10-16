@@ -5,7 +5,10 @@
     "ns": ["common", "shop", "post"]
   },
   "apolloClient": {
-    "serverUri": "http://localhost:4000/graphql"
+    "httpLink": {
+      "uri": "http://localhost:4000/graphql"
+    },
+    "config": {}
   },
 
   "menus": {

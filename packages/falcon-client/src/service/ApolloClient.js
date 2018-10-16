@@ -6,6 +6,28 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import fetch from 'node-fetch';
 
 /**
+ * This method expands flatten Apollo cache value into a nested object
+ * @param {object} state Apollo state object
+ * @param {string} key Apollo state key
+ * @return {object} Expanded object
+ */
+const expandValue = (state, key) => {
+  const value = Object.assign({}, state[key]);
+  if (typeof value === 'object') {
+    Object.keys(value).forEach(vKey => {
+      const vValue = value[vKey];
+      if (typeof vValue === 'object' && vValue.generated && vValue.id) {
+        value[vKey] = expandValue(state, vValue.id);
+      }
+      if (vValue.type === 'json') {
+        value[vKey] = vValue.json;
+      }
+    });
+  }
+  return value;
+};
+
+/**
  * @typedef {object} FalconApolloLinkStateConfig
  * @property {object} defaults https://www.apollographql.com/docs/link/links/state.html#defaults
  * @property {object} resolvers https://www.apollographql.com/docs/link/links/state.html#resolver
@@ -31,14 +53,14 @@ export default (config = {}) => {
 
   let apolloClient;
   if (isBrowser) {
-    apolloClient = initialState['$ROOT_QUERY.config.apolloClient'] || {};
+    apolloClient = expandValue(initialState, '$ROOT_QUERY.config.apolloClient');
   } else {
     const { defaults } = clientState || {};
     const { config: clientStateConfig } = defaults || {};
     ({ apolloClient = {} } = clientStateConfig || {});
   }
 
-  const { serverUri = 'http://localhost:4000/graphql' } = apolloClient;
+  const { httpLink: httpLinkConfig = {}, config: clientConfig = {} } = apolloClient;
 
   const cache = new InMemoryCache({ addTypename }).restore(initialState || {});
   const linkState = withClientState({
@@ -46,13 +68,15 @@ export default (config = {}) => {
     ...clientState
   });
   const httpLink = createHttpLink({
-    uri: serverUri,
-    fetch,
+    uri: 'http://localhost:4000/graphql',
     credentials: 'include',
+    ...httpLinkConfig,
+    fetch,
     headers
   });
 
   return new ApolloClient({
+    ...clientConfig,
     cache,
     connectToDevTools: isBrowser && process.env.NODE_ENV !== 'production',
     ssrMode: !isBrowser,
