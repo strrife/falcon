@@ -12,13 +12,6 @@
     "test:coverage": "cross-env RAZZLE_PUBLIC_DIR=./test/static node ./bin/falcon-client test --env=jsdom --ci --coverage"
   },
   "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "ts",
-      "tsx",
-      "json"
-    ],
     "setupFiles": [
       "../../test/setupFile"
     ]

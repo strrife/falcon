@@ -4,28 +4,6 @@
   "license": "OSL-3.0",
   "version": "0.0.2",
   "repository": "https://github.com/deity-io/falcon/tree/master/examples/shop-with-blog/client",
-  "jest": {
-    "coverageReporters": [
-      "html",
-      "text",
-      "text-summary"
-    ],
-    "moduleNameMapper": {
-      "^src(.*)$": "<rootDir>/src$1",
-      "^public(.*)$": "<rootDir>/public$1"
-    },
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.(ts|js)?(x)",
-      "<rootDir>/src/**/?(*.)(spec|test).(ts|js)?(x)"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "ts",
-      "tsx",
-      "json"
-    ]
-  },
   "scripts": {
     "start": "falcon-client start",
     "start:dbg": "cross-env falcon-client start -- --inspect",

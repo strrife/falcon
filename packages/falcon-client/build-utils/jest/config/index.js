@@ -10,19 +10,15 @@ module.exports = rootDir => {
   // eslint-disable-next-line
   const packageJson = require(paths.appPackageJson);
 
-  // TODO: I don't know if it's safe or not to just use / as path separator
-  // in Jest configs. We need help from somebody with Windows to determine this.
   const config = {
     rootDir,
-    collectCoverageFrom: ['<rootDir>/src/**/*.{js,jsx,mjs,ts,tsx}'],
-    coverageReporters: ['html', 'text', 'text-summary'],
     setupTestFrameworkScriptFile: setupTestsFile,
-    testMatch: [
-      '<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs,ts,tsx}',
-      '<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs,,ts,tsx}'
-    ],
     testEnvironment: 'node',
     testURL: 'http://localhost',
+    testMatch: [
+      '<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs,ts,tsx}',
+      '<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs,ts,tsx}'
+    ],
     transform: {
       '^.+\\.(gql|graphql)$': 'jest-transform-graphql',
       '^.+\\.(ts|tsx)$': 'ts-jest/preprocessor.js',
@@ -31,10 +27,15 @@ module.exports = rootDir => {
       '^(?!.*\\.(js|jsx|mjs|css|json)$)': path.resolve(__dirname, 'fileTransform.js')
     },
     transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$'],
+    moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
     moduleNameMapper: {
+      '^src(.*)$': '<rootDir>/src$1',
       '^react-native$': 'react-native-web'
     },
-    ...packageJson.jest
+    collectCoverageFrom: ['<rootDir>/src/**/*.{js,jsx,mjs,ts,tsx}'],
+    coverageReporters: ['html', 'text', 'text-summary'],
+
+    ...(packageJson.jest || {})
   };
 
   return config;
