@@ -17,8 +17,8 @@ module.exports = () => {
   require('./../../src/buildTools/webpack/config/env');
 
   const paths = require('./../../src/buildTools/webpack/config/paths');
-  const createJestConfig = require('./config');
-  const config = createJestConfig(path.resolve(paths.appSrc, '..'));
+  const createConfig = require('./config');
+  const config = createConfig(path.resolve(paths.appSrc, '..'));
 
   const argv = process.argv.slice(2);
   // Watch unless on CI or in coverage mode
