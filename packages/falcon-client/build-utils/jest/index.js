@@ -17,7 +17,7 @@ module.exports = () => {
   require('./../../src/buildTools/webpack/config/env');
 
   const paths = require('./../../src/buildTools/webpack/config/paths');
-  const createConfig = require('./config');
+  const createConfig = require('./config/create');
   const config = createConfig(path.resolve(paths.appSrc, '..'));
 
   const argv = process.argv.slice(2);
