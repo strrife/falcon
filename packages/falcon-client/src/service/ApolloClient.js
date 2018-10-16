@@ -11,19 +11,17 @@ import fetch from 'node-fetch';
  * @param {string} key Apollo state key
  * @return {object} Expanded object
  */
-const expandValue = (state, key) => {
+export const expandValue = (state, key) => {
   const value = Object.assign({}, state[key]);
-  if (typeof value === 'object') {
-    Object.keys(value).forEach(vKey => {
-      const vValue = value[vKey];
-      if (typeof vValue === 'object' && vValue.generated && vValue.id) {
-        value[vKey] = expandValue(state, vValue.id);
-      }
-      if (vValue.type === 'json') {
-        value[vKey] = vValue.json;
-      }
-    });
-  }
+  Object.keys(value).forEach(vKey => {
+    const vValue = value[vKey];
+    if (typeof vValue === 'object' && vValue.generated && vValue.id) {
+      value[vKey] = expandValue(state, vValue.id);
+    }
+    if (vValue.type === 'json') {
+      value[vKey] = vValue.json;
+    }
+  });
   return value;
 };
 
