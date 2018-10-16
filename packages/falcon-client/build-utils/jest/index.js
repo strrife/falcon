@@ -18,7 +18,7 @@ module.exports = () => {
 
   const paths = require('./../webpack/config/paths');
   const createConfig = require('./config/create');
-  const config = createConfig(path.resolve(paths.appSrc, '..'));
+  const config = createConfig(path.resolve(paths.appSrc, '..'), paths);
 
   const argv = process.argv.slice(2);
   // Watch unless on CI or in coverage mode

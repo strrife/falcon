@@ -1,8 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const paths = require('./../../webpack/config/paths');
 
-module.exports = rootDir => {
+module.exports = (rootDir, paths) => {
   // Use this instead of `paths.testsSetup` to avoid putting
   // an absolute filename into configuration after ejecting.
   const setupTestsFile = fs.existsSync(paths.testsSetup)
