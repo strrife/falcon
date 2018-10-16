@@ -7,10 +7,7 @@ module.exports = rootDir => {
   // an absolute filename into configuration after ejecting.
   const setupTestsFile = fs.existsSync(paths.testsSetup) ? '<rootDir>/src/setupTests.js' : undefined;
 
-  // eslint-disable-next-line
-  const packageJson = require(paths.appPackageJson);
-
-  const config = {
+  let config = {
     rootDir,
     setupTestFrameworkScriptFile: setupTestsFile,
     testEnvironment: 'node',
@@ -33,10 +30,17 @@ module.exports = rootDir => {
       '^react-native$': 'react-native-web'
     },
     collectCoverageFrom: ['<rootDir>/src/**/*.{js,jsx,mjs,ts,tsx}'],
-    coverageReporters: ['html', 'text', 'text-summary'],
-
-    ...(packageJson.jest || {})
+    coverageReporters: ['html', 'text', 'text-summary']
   };
+
+  // eslint-disable-next-line
+  const packageJson = require(paths.appPackageJson);
+  if (packageJson.jest) {
+    config = {
+      ...config,
+      ...packageJson.jest
+    };
+  }
 
   return config;
 };
