@@ -1,13 +1,4 @@
-// @remove-on-eject-begin
-/**
- * Copyright (c) 2015-present, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- */
-// @remove-on-eject-end
+const path = require('path');
 
 module.exports = () => {
   // Do this as the first thing so that any code reading it knows the right env.
@@ -35,16 +26,10 @@ module.exports = () => {
     argv.push('--watch');
   }
 
-  const path = require('path');
   const createJestConfig = require('./config');
   const paths = require('./../../src/buildTools/webpack/config/paths');
 
-  argv.push(
-    '--config',
-    JSON.stringify(
-      createJestConfig(relativePath => path.resolve(__dirname, relativePath), path.resolve(paths.appSrc, '..'))
-    )
-  );
+  argv.push('--config', JSON.stringify(createJestConfig(path.resolve(paths.appSrc, '..'))));
 
   jest.run(argv);
 };

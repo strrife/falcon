@@ -2,7 +2,7 @@
 const Logger = require('@deity/falcon-logger');
 const webpack = require('./../src/buildTools/webpack');
 const workbox = require('./../src/buildTools/workbox');
-const jest = require('./../build-utils/jest/test');
+const jest = require('./../build-utils/jest');
 const { failIfAppEntryFilesNotFound } = require('./../src/buildTools');
 
 (async () => {

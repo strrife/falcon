@@ -1,13 +1,11 @@
 const fs = require('fs');
+const path = require('path');
 const chalk = require('chalk');
 const paths = require('./../../../src/buildTools/webpack/config/paths');
 
-/* eslint-disable */
+const resolve = relativePath => path.resolve(__dirname, relativePath);
 
-module.exports = (resolve, rootDir) => {
-  console.log(`resolve: ${resolve('.')}`);
-  console.log(`rootDir: ${rootDir}`);
-
+module.exports = rootDir => {
   // Use this instead of `paths.testsSetup` to avoid putting
   // an absolute filename into configuration after ejecting.
   const setupTestsFile = fs.existsSync(paths.testsSetup) ? '<rootDir>/src/setupTests.js' : undefined;
@@ -15,9 +13,9 @@ module.exports = (resolve, rootDir) => {
   // TODO: I don't know if it's safe or not to just use / as path separator
   // in Jest configs. We need help from somebody with Windows to determine this.
   const config = {
+    rootDir,
     collectCoverageFrom: ['<rootDir>/src/**/*.{js,jsx,mjs,ts,tsx}'],
     coverageReporters: ['html', 'text', 'text-summary'],
-
     setupTestFrameworkScriptFile: setupTestsFile,
     testMatch: [
       '<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs,ts,tsx}',
@@ -37,9 +35,9 @@ module.exports = (resolve, rootDir) => {
       '^react-native$': 'react-native-web'
     }
   };
-  if (rootDir) {
-    config.rootDir = rootDir;
-  }
+
+  /* eslint-disable */
+  
   const overrides = Object.assign({}, require(paths.appPackageJson).jest);
   const supportedKeys = [
     'collectCoverageFrom',
