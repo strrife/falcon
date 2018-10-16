@@ -11,11 +11,6 @@
     "test": "cross-env RAZZLE_PUBLIC_DIR=./test/static node ./bin/falcon-client test --env=jsdom",
     "test:coverage": "cross-env RAZZLE_PUBLIC_DIR=./test/static node ./bin/falcon-client test --env=jsdom --ci --coverage"
   },
-  "jest": {
-    "setupFiles": [
-      "../../test/setupFile"
-    ]
-  },
   "dependencies": {
     "@deity/babel-preset-falcon-client": "0.0.1",
     "@deity/falcon-logger": "0.0.2",
