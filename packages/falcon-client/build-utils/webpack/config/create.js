@@ -15,6 +15,8 @@ const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware')
 const paths = require('./paths');
 const runPlugin = require('./runPlugin');
 
+const falconClientPolyfills = require.resolve('./../../polyfills');
+
 const postCssOptions = {
   ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
   plugins: () => [
@@ -374,10 +376,8 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
       // specify our client entry point /client/index.js
       config.entry = {
         client: [
-          // We ship a few polyfills by default but only include them if React is being placed in
-          // the default path. If you are doing some vendor bundling, you'll need to require the razzle/polyfills
-          // on your own.
-          !dotenv.raw.REACT_BUNDLE_PATH && require.resolve('./polyfills'),
+          // We ship a few polyfills by default but only include them if React is being placed in the default path.
+          !dotenv.raw.REACT_BUNDLE_PATH && falconClientPolyfills,
           require.resolve('razzle-dev-utils/webpackHotDevClient'),
           paths.appClientIndexJs
         ].filter(Boolean)
@@ -446,10 +446,9 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
       // Specify production entry point (/client/index.js)
       config.entry = {
         client: [
-          // We ship a few polyfills by default but only include them if React is being placed in
-          // the default path. If you are doing some vendor bundling, you'll need to require the razzle/polyfills
-          // on your own.
-          !dotenv.raw.REACT_BUNDLE_PATH && require.resolve('./polyfills'),
+          // We ship a few polyfills by default but only include them if React is being placed in the default path.
+          // If you are doing some vendor bundling, you'll need to require the @deity/falcon-client/build-utils/polyfills on your own.
+          !dotenv.raw.REACT_BUNDLE_PATH && falconClientPolyfills,
           paths.appClientIndexJs
         ].filter(Boolean)
       };

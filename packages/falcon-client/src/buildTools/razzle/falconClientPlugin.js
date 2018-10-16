@@ -135,7 +135,7 @@ module.exports = () => (config, { target, dev } /* , webpackObject */) => {
     'node-fetch',
     'i18next',
     'i18next-xhr-backend',
-    '@deity/falcon-client/src/buildTools/webpack/config/polyfills',
+    '@deity/falcon-client/build-utils/polyfills',
     'razzle',
     'react',
     'react-apollo',
