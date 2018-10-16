@@ -1,7 +1,7 @@
 const path = require('path');
+const jest = require('jest');
 
 module.exports = () => {
-  // Do this as the first thing so that any code reading it knows the right env.
   process.env.BABEL_ENV = 'test';
   process.env.NODE_ENV = 'test';
   process.env.PUBLIC_URL = '';
@@ -14,22 +14,18 @@ module.exports = () => {
   });
 
   // Ensure environment variables are read.
-  // require('./../webpack/config/env');
   require('./../../src/buildTools/webpack/config/env');
 
-  const jest = require('jest');
+  const paths = require('./../../src/buildTools/webpack/config/paths');
+  const createJestConfig = require('./config');
+  const config = createJestConfig(path.resolve(paths.appSrc, '..'));
 
   const argv = process.argv.slice(2);
-
   // Watch unless on CI or in coverage mode
   if (!process.env.CI && argv.indexOf('--coverage') < 0) {
     argv.push('--watch');
   }
-
-  const createJestConfig = require('./config');
-  const paths = require('./../../src/buildTools/webpack/config/paths');
-
-  argv.push('--config', JSON.stringify(createJestConfig(path.resolve(paths.appSrc, '..'))));
+  argv.push('--config', JSON.stringify(config));
 
   jest.run(argv);
 };
