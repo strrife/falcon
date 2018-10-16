@@ -1,38 +1,27 @@
 const fs = require('fs');
-const path = require('path');
 const deepMerge = require('deepmerge');
 const clearConsole = require('react-dev-utils/clearConsole');
-const logger = require('@deity/falcon-logger');
-
-function pathResolve() {
-  const appDirectory = fs.realpathSync(process.cwd());
-  /**
-   * Make sure any symlinks in the project folder are resolved:
-   * https://github.com/facebookincubator/create-react-app/issues/637
-   * @param {string} appRelativePath sds
-   * @returns {string} path relative to `process.cwd()`
-   */
-  return appRelativePath => path.resolve(appDirectory, appRelativePath);
-}
+const Logger = require('@deity/falcon-logger');
+const paths = require('./../paths');
 
 /**
  * Get falcon-client build config
- * @param {string} configName='falcon-client.build.config.js' falcon-client build time config relative path
+ * @param {string} buildConfigFileName='falcon-client.build.config.js' falcon-client build time config relative path
  * @returns {object} falcon-client build time config
  */
-function getBuildConfig(configName = 'falcon-client.build.config.js') {
+function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {
   let config = {
     clearConsole: true
   };
 
-  const configPath = pathResolve()(configName);
-  if (fs.existsSync(configPath)) {
+  const buildConfigPath = paths.resolveApp(buildConfigFileName);
+  if (fs.existsSync(buildConfigPath)) {
     try {
       // eslint-disable-next-line
-      config = deepMerge(config, require(configPath), { arrayMerge: (destination, source) => source });
+      config = deepMerge(config, require(buildConfigPath), { arrayMerge: (destination, source) => source });
     } catch (e) {
       clearConsole();
-      logger.error(`Invalid falcon-client.build.config.js file, (${configName}).`, e);
+      Logger.error(`Invalid falcon-client.build.config.js file, (${buildConfigFileName}).`, e);
       process.exit(1);
     }
   }
@@ -40,7 +29,20 @@ function getBuildConfig(configName = 'falcon-client.build.config.js') {
   return config;
 }
 
+// function logAntThrowIfFileDesntExists(filePath,
+// function failIfAppEntryFilesNotFound() {
+//   if (fs.existsSync(path.join(paths.razzle.appPath, `index.js`)) === false) {
+//     Logger.logAndThrow(`There is no 'index.js' file in '${paths.razzle.appPath}' directory!`);
+//   }
+//   if (fs.existsSync(path.join(paths.razzle.appPath, `falcon-client.config.js`)) === false) {
+//     Logger.logAndThrow(`There is no 'falcon-client.config.js' file in '${paths.razzle.appPath}' directory!`);
+//   }
+// }
+
+// module.exports = {
+//   failIfAppEntryFilesNotFound
+// };
+
 module.exports = {
-  pathResolve: pathResolve(),
   getBuildConfig
 };
