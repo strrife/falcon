@@ -82,7 +82,13 @@ This is an application entry point which needs to export the following:
 - (TODO) `config: Object` - configuration object, with possible settings listed below
   - `serverSideRendering` - switch to control whether the Server Side Rendering is enabled, default is `true`
   - `usePwaManifest` - default is `true`
-  - `gtmCode` - Google Tag Manager code
+  - `apolloClient` - ApolloClient configuration object
+    - `apolloClient.httpLink` - configuration object that will be passed to the
+     `apollo-link-http` method which defines HTTP link the remote Falcon Server
+     ([available options](https://www.apollographql.com/docs/link/links/http.html#options))
+    - `apolloClient.config` - configuration object that will be passed to the
+    main `ApolloClient` constructor
+    ([available options](https://www.apollographql.com/docs/react/api/apollo-client.html#apollo-client))
 
 optionally you can export following configuration to inject your customization
 
