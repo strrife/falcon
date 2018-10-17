@@ -360,7 +360,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
       new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })
     ];
 
-    config.entry = [paths.appServerIndexJs];
+    config.entry = [paths.ownServerIndexJs];
 
     if (IS_DEV) {
       // Use watch mode
@@ -404,7 +404,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
           // We ship a few polyfills by default but only include them if React is being placed in the default path.
           !dotenv.raw.REACT_BUNDLE_PATH && falconClientPolyfills,
           require.resolve('razzle-dev-utils/webpackHotDevClient'),
-          paths.appClientIndexJs
+          paths.ownClientIndexJs
         ].filter(Boolean)
       };
 
@@ -474,7 +474,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
           // We ship a few polyfills by default but only include them if React is being placed in the default path.
           // If you are doing some vendor bundling, you'll need to require the @deity/falcon-client/build-utils/polyfills on your own.
           !dotenv.raw.REACT_BUNDLE_PATH && falconClientPolyfills,
-          paths.appClientIndexJs
+          paths.ownClientIndexJs
         ].filter(Boolean)
       };
 

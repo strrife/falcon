@@ -31,23 +31,30 @@ const nodePath = (process.env.NODE_PATH || '')
   .join(path.delimiter);
 
 module.exports = {
-  dotenv: resolveApp('.env'),
+  resolveApp,
+  resolvePackageDir,
+  nodePath,
+
   appPath: resolveApp('.'),
   appBuild: resolveApp('build'),
   appBuildPublic: resolveApp('build/public'),
   appManifest: resolveApp('build/assets.json'),
   appPublic: resolveApp('public'),
-  appNodeModules: resolveApp('node_modules'),
+
   appSrc: resolveApp('src'),
   appPackageJson: resolveApp('package.json'),
-  appServerIndexJs: resolveOwn('src/index'),
-  appClientIndexJs: resolveOwn('src/client'),
+  appIndexJs: resolveApp('index.js'),
+  appBootstrapJs: resolveOwn('bootstrap.js'),
+  appBuildConfigJs: resolveOwn('falcon-client.build.config.js'),
+
   testsSetup: resolveApp('src/setupTests.js'),
+  dotenv: resolveApp('.env'),
   appBabelRc: resolveApp('.babelrc'),
   appEslintRc: resolveApp('.eslintrc'),
-  nodePath,
+  appNodeModules: resolveApp('node_modules'),
+
   ownPath: resolveOwn('.'),
-  ownNodeModules: resolveOwn('node_modules'),
-  resolveApp,
-  resolvePackageDir
+  ownServerIndexJs: resolveOwn('src/index'),
+  ownClientIndexJs: resolveOwn('src/client'),
+  ownNodeModules: resolveOwn('node_modules')
 };

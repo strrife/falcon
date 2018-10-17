@@ -12,15 +12,15 @@ module.exports = {
   razzle: {
     appPath: resolveApp('.'),
     appBuild: resolveApp('build'),
-    appSrc: resolveApp('src'),
-    appServerIndexJs: resolveApp('src/'),
-    appClientIndexJs: resolveApp('src/client')
+    appSrc: resolveApp('src')
+    // appServerIndexJs: resolveApp('src/'),
+    // appClientIndexJs: resolveApp('src/client')
   },
   falconClient: {
     rootDir: resolvePackageDir('@deity/falcon-client'),
-    appSrc: path.join(resolvePackageDir('@deity/falcon-client'), 'src'),
-    appServerIndexJs: require.resolve('@deity/falcon-client/src/index'),
-    appClientIndexJs: require.resolve('@deity/falcon-client/src/client')
+    appSrc: path.join(resolvePackageDir('@deity/falcon-client'), 'src')
+    // appServerIndexJs: require.resolve('@deity/falcon-client/src/index'),
+    // appClientIndexJs: require.resolve('@deity/falcon-client/src/client')
   },
   resolvePackageDir
 };

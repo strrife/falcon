@@ -5,7 +5,7 @@ function falconWebServer() {
   const server = require('./server').default;
   // eslint-disable-next-line
   const app = require('./clientApp');
-  const configuration = require('./clientApp/configuration').default;
+  const bootstrap = require('./clientApp/bootstrap').default;
   // eslint-disable-next-line
   const assetsManifest = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
@@ -17,7 +17,7 @@ function falconWebServer() {
   return server({
     App: app.default,
     clientApolloSchema: app.clientApolloSchema,
-    configuration,
+    configuration: bootstrap,
     webpackAssets: {
       clientJs: assetsManifest.client.js,
       clientCss: assetsManifest.client.css,
@@ -47,7 +47,7 @@ httpServer.listen(port, error => {
 if (module.hot) {
   Logger.log('✅  Server-side HMR Enabled!');
 
-  module.hot.accept(['./server', './clientApp', './clientApp/configuration'], () => {
+  module.hot.accept(['./server', './clientApp', './clientApp/bootstrap'], () => {
     Logger.log('🔁  HMR: Reloading server...');
 
     try {
