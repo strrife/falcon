@@ -5,14 +5,15 @@ export const Button = themed({
 
   defaultTheme: {
     button: {
-      color: 'secondaryText',
-      bg: 'secondary',
-      py: 'sm',
-      px: 'md',
-      borderRadius: 'lg',
-      boxShadow: 'sm',
-      fontSize: 'md',
+      color: 'primaryText',
+      bg: 'primary',
+      borderRadius: 'medium',
+      fontSize: 'sm',
       lineHeight: 'small',
+      height: 'lg',
+      px: 'md',
+      transitionTimingFunction: 'easeIn',
+      transitionDuration: 'short',
 
       css: ({ theme }) => ({
         // basic reset styles
@@ -23,7 +24,6 @@ export const Button = themed({
         alignItems: 'center',
         textAlign: 'center',
         border: 'none',
-
         textDecoration: 'none',
         appearance: 'none',
         ':focus': {
@@ -31,24 +31,22 @@ export const Button = themed({
         },
         // define transform that scales on active
         transitionProperty: 'transform',
-        transitionTimingFunction: theme.easingFunctions.easeIn,
-        transitionDuration: theme.transitionDurations.short,
         ':active': {
-          transform: 'scale(0.9)'
+          transform: 'scale(0.95)'
         },
         ':hover': {
-          backgroundColor: theme.colors.secondaryLight
+          backgroundColor: theme.colors.primaryLight
         }
       }),
 
       variants: {
         secondary: {
-          bg: 'primary',
-          color: 'primaryText',
+          bg: 'secondary',
+          color: 'secondaryText',
 
           css: ({ theme }) => ({
             ':hover': {
-              backgroundColor: theme.colors.primaryLight
+              backgroundColor: theme.colors.secondaryLight
             }
           })
         }
