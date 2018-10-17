@@ -18,32 +18,53 @@ const paths = require('./../paths');
 const createConfig = require('./config/create');
 const { getBuildConfig } = require('./tools');
 
-// Wrap webpack compile in a try catch.
-function compile(config, cb) {
+function webpackCompiler(config) {
   let compiler;
   try {
     compiler = webpack(config);
-  } catch (e) {
+  } catch (error) {
     Logger.error(chalk.red('Failed to compile.'));
-    Logger.error(e);
+    Logger.error(error);
 
     process.exit(1);
   }
-  compiler.run((err, stats) => {
-    cb(err, stats);
+
+  return compiler;
+}
+
+function webpackCompileAsync(config, emitWarningsAsErrors = false) {
+  return new Promise((resolve, reject) => {
+    const compiler = webpackCompiler(config);
+    compiler.run((error, stats) => {
+      if (error) {
+        return reject(error);
+      }
+
+      const messages = formatWebpackMessages(stats.toJson({}, true));
+      if (messages.errors.length) {
+        return reject(new Error(messages.errors.join('\n\n')));
+      }
+      if (emitWarningsAsErrors && messages.warnings.length) {
+        Logger.warn(
+          chalk.yellow(
+            '\nTreating warnings as errors because process.env.CI = true.\nMost CI servers set it automatically.\n'
+          )
+        );
+        return reject(new Error(messages.warnings.join('\n\n')));
+      }
+
+      return resolve({
+        stats,
+        warnings: messages.warnings
+      });
+    });
   });
 }
 
-// Helper function to copy public directory to build/public
-function copyPublicFolder() {
-  fs.copySync(paths.appPublic, paths.appBuildPublic, {
-    dereference: true,
-    filter: file => file !== paths.appHtml
-  });
-}
-
-function build() {
+async function build() {
   process.env.NODE_ENV = 'production';
+
+  process.noDeprecation = true; // turns off that loadQuery clutter.
 
   // Ensure environment variables are read.
   require('./config/env');
@@ -57,70 +78,28 @@ function build() {
     env: process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
   };
 
-  // Create our production webpack configurations and pass in razzle options.
   const clientConfig = createConfig('web', options, falconConfig, webpack);
   const serverConfig = createConfig('node', options, falconConfig, webpack);
 
-  process.noDeprecation = true; // turns off that loadQuery clutter.
+  const emitWarningsAsErrors =
+    process.env.CI && (typeof process.env.CI !== 'string' || process.env.CI.toLowerCase() !== 'false');
 
-  console.log('Creating an optimized production build...');
-  console.log('Compiling client...');
-  // First compile the client. We need it to properly output assets.json (asset
-  // manifest file with the correct hashes on file names BEFORE we can start
-  // the server compiler.
-  return new Promise((resolve, reject) => {
-    compile(clientConfig, (err, clientStats) => {
-      if (err) {
-        reject(err);
-      }
-      const clientMessages = formatWebpackMessages(clientStats.toJson({}, true));
-      if (clientMessages.errors.length) {
-        return reject(new Error(clientMessages.errors.join('\n\n')));
-      }
-      if (
-        process.env.CI &&
-        (typeof process.env.CI !== 'string' || process.env.CI.toLowerCase() !== 'false') &&
-        clientMessages.warnings.length
-      ) {
-        console.log(
-          chalk.yellow(
-            '\nTreating warnings as errors because process.env.CI = true.\nMost CI servers set it automatically.\n'
-          )
-        );
-        return reject(new Error(clientMessages.warnings.join('\n\n')));
-      }
+  // First compile the client. We need it to properly output assets.json
+  // (asset manifest file with the correct hashes on file names BEFORE we can start the server compiler).
 
-      console.log(chalk.green('Compiled client successfully.'));
-      console.log('Compiling server...');
-      compile(serverConfig, (serverErr, serverStats) => {
-        if (serverErr) {
-          reject(serverErr);
-        }
-        const serverMessages = formatWebpackMessages(serverStats.toJson({}, true));
-        if (serverMessages.errors.length) {
-          return reject(new Error(serverMessages.errors.join('\n\n')));
-        }
-        if (
-          process.env.CI &&
-          (typeof process.env.CI !== 'string' || process.env.CI.toLowerCase() !== 'false') &&
-          serverMessages.warnings.length
-        ) {
-          console.log(
-            chalk.yellow(
-              '\nTreating warnings as errors because process.env.CI = true.\n' +
-                'Most CI servers set it automatically.\n'
-            )
-          );
-          return reject(new Error(serverMessages.warnings.join('\n\n')));
-        }
-        console.log(chalk.green('Compiled server successfully.'));
-        return resolve({
-          stats: clientStats,
-          warnings: Object.assign({}, clientMessages.warnings, serverMessages.warnings)
-        });
-      });
-    });
-  });
+  Logger.log('Compiling client...');
+  const clientCompilation = await webpackCompileAsync(clientConfig, emitWarningsAsErrors);
+  Logger.log(chalk.green('Compiled client successfully.'));
+
+  Logger.log('Compiling server...');
+  // ContextReplacementPlugin https://webpack.js.org/plugins/context-replacement-plugin/
+  /* const serverCompilation = */ await webpackCompileAsync(serverConfig, emitWarningsAsErrors);
+  Logger.log(chalk.green('Compiled server successfully.'));
+
+  return {
+    stats: clientCompilation.stats,
+    warnings: [...clientCompilation.warnings] // , ...serverCompilation.warnings]
+  };
 }
 
 module.exports = async () => {
@@ -128,10 +107,12 @@ module.exports = async () => {
     process.exit(1);
   }
 
+  Logger.log('Creating an optimized production build...');
+
   const previousBuildSizes = await measureFileSizesBeforeBuild(paths.appBuildPublic);
 
   fs.emptyDirSync(paths.appBuild);
-  copyPublicFolder();
+  fs.copySync(paths.appPublic, paths.appBuildPublic, { dereference: true });
 
   try {
     const { stats, warnings } = await build();
@@ -139,9 +120,6 @@ module.exports = async () => {
     if (warnings.length) {
       Logger.warn(chalk.yellow('\nCompiled with warnings.\n'));
       Logger.warn(warnings.join('\n\n'));
-
-      Logger.info(`\nSearch for the ${chalk.underline(chalk.yellow('keywords'))} to learn more about each warning.`);
-      Logger.info(`To ignore, add ${chalk.cyan('// eslint-disable-next-line')} to the line before.\n`);
     } else {
       Logger.log(chalk.green('\nCompiled successfully.\n'));
     }
