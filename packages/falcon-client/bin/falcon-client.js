@@ -1,4 +1,12 @@
 #!/usr/bin/env node
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.log('Unhandled Rejection at: Promise', promise, 'reason:', reason);
+});
+process.on('uncaughtException', ex => {
+  console.log('Uncaught Exception: ', ex);
+});
+
 const Logger = require('@deity/falcon-logger');
 const webpack = require('./../build-utils/webpack');
 const workbox = require('./../src/buildTools/workbox');
