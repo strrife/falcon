@@ -3,7 +3,6 @@ const Logger = require('@deity/falcon-logger');
 const webpack = require('./../build-utils/webpack');
 const workbox = require('./../src/buildTools/workbox');
 const jest = require('./../build-utils/jest');
-const { failIfAppEntryFilesNotFound } = require('./../src/buildTools');
 
 (async () => {
   const script = process.argv[2];
@@ -12,12 +11,10 @@ const { failIfAppEntryFilesNotFound } = require('./../src/buildTools');
   try {
     switch (script) {
       case 'start': {
-        failIfAppEntryFilesNotFound();
         await webpack.startDevServer();
         break;
       }
       case 'build': {
-        failIfAppEntryFilesNotFound();
         await webpack.build();
         await workbox.injectManifest();
         break;

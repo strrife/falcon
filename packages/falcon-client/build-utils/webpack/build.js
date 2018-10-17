@@ -9,13 +9,14 @@ const fs = require('fs-extra');
 const chalk = require('chalk');
 const logger = require('@deity/falcon-logger');
 const webpack = require('webpack');
+const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
+const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
+const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react-dev-utils/FileSizeReporter');
+const clearConsole = require('react-dev-utils/clearConsole');
 
 const paths = require('./../paths');
 const createConfig = require('./config/create');
 const { getBuildConfig } = require('./tools');
-
-const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
-const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react-dev-utils/FileSizeReporter');
 
 // Wrap webpack compile in a try catch.
 function compile(config, cb) {
@@ -47,15 +48,19 @@ function build(previousFileSizes) {
   // Ensure environment variables are read.
   require('./config/env');
 
-  const falconClientBuildConfig = getBuildConfig();
+  const falconConfig = getBuildConfig();
+
+  if (falconConfig.clearConsole) {
+    clearConsole();
+  }
 
   const options = {
     env: process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
   };
 
   // Create our production webpack configurations and pass in razzle options.
-  const clientConfig = createConfig('web', options, falconClientBuildConfig, webpack);
-  const serverConfig = createConfig('node', options, falconClientBuildConfig, webpack);
+  const clientConfig = createConfig('web', options, falconConfig, webpack);
+  const serverConfig = createConfig('node', options, falconConfig, webpack);
 
   process.noDeprecation = true; // turns off that loadQuery clutter.
 
@@ -120,40 +125,33 @@ function build(previousFileSizes) {
   });
 }
 
-// First, read the current file sizes in build directory.
-// This lets us display how much they changed later.
-module.exports = () =>
-  measureFileSizesBeforeBuild(paths.appBuildPublic)
-    .then(previousFileSizes => {
-      // Remove all content but keep the directory so that
-      // if you're in it, you don't end up in Trash
-      fs.emptyDirSync(paths.appBuild);
+module.exports = async () => {
+  if (!checkRequiredFiles([paths.appIndexJs])) {
+    process.exit(1);
+  }
 
-      // Merge with the public folder
-      copyPublicFolder();
+  const fileSizesBeforeBuild = await measureFileSizesBeforeBuild(paths.appBuildPublic);
 
-      // Start the webpack build
-      return build(previousFileSizes);
-    })
-    .then(
-      ({ stats, previousFileSizes, warnings }) => {
-        if (warnings.length) {
-          console.log(chalk.yellow('Compiled with warnings.\n'));
-          console.log(warnings.join('\n\n'));
-          console.log(
-            `\nSearch for the ${chalk.underline(chalk.yellow('keywords'))} to learn more about each warning.`
-          );
-          console.log(`To ignore, add ${chalk.cyan('// eslint-disable-next-line')} to the line before.\n`);
-        } else {
-          console.log(chalk.green('Compiled successfully.\n'));
-        }
-        console.log('File sizes after gzip:\n');
-        printFileSizesAfterBuild(stats, previousFileSizes, paths.appBuild);
-        console.log();
-      },
-      err => {
-        console.log(chalk.red('Failed to compile.\n'));
-        console.log(`${err.message || err}\n`);
-        process.exit(1);
-      }
-    );
+  fs.emptyDirSync(paths.appBuild);
+  copyPublicFolder();
+
+  try {
+    const { stats, previousFileSizes, warnings } = await build(fileSizesBeforeBuild);
+
+    if (warnings.length) {
+      console.log(chalk.yellow('Compiled with warnings.\n'));
+      console.log(warnings.join('\n\n'));
+      console.log(`\nSearch for the ${chalk.underline(chalk.yellow('keywords'))} to learn more about each warning.`);
+      console.log(`To ignore, add ${chalk.cyan('// eslint-disable-next-line')} to the line before.\n`);
+    } else {
+      console.log(chalk.green('Compiled successfully.\n'));
+    }
+    console.log('File sizes after gzip:\n');
+    printFileSizesAfterBuild(stats, previousFileSizes, paths.appBuild);
+    console.log();
+  } catch (error) {
+    console.log(chalk.red('Failed to compile.\n'));
+    console.log(`${error.message || error}\n`);
+    process.exit(1);
+  }
+};

@@ -5,7 +5,7 @@ const Logger = require('@deity/falcon-logger');
 const Webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server-speedy');
 const clearConsole = require('react-dev-utils/clearConsole');
-// const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
+const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const { choosePort } = require('react-dev-utils/WebpackDevServerUtils');
 
 const paths = require('./../paths');
@@ -34,6 +34,10 @@ function compile(config) {
 }
 
 module.exports = async () => {
+  if (!checkRequiredFiles([paths.appIndexJs])) {
+    process.exit(1);
+  }
+
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
   process.env.HOST = process.env.HOST || 'localhost';
   process.env.PORT = await choosePort(process.env.HOST, parseInt(process.env.PORT, 10) || 3000);

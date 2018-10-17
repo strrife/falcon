@@ -29,20 +29,6 @@ function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {
   return config;
 }
 
-// function logAntThrowIfFileDesntExists(filePath,
-// function failIfAppEntryFilesNotFound() {
-//   if (fs.existsSync(path.join(paths.razzle.appPath, `index.js`)) === false) {
-//     Logger.logAndThrow(`There is no 'index.js' file in '${paths.razzle.appPath}' directory!`);
-//   }
-//   if (fs.existsSync(path.join(paths.razzle.appPath, `falcon-client.config.js`)) === false) {
-//     Logger.logAndThrow(`There is no 'falcon-client.config.js' file in '${paths.razzle.appPath}' directory!`);
-//   }
-// }
-
-// module.exports = {
-//   failIfAppEntryFilesNotFound
-// };
-
 module.exports = {
   getBuildConfig
 };
