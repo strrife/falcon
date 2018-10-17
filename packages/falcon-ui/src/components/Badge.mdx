@@ -4,15 +4,20 @@ menu: Components
 ---
 
 import { Playground } from 'docz';
+import { ThemePreview } from '../../docs';
 import { Badge } from '../';
 
-# Badge
+<ThemePreview of={Badge} />
 
-### Basic usage
+`Badge` component's size can be easily adjusted via `size`, `height` or `width` theme based props, but it also accepts all the other [responsive, theme-based style props](/responsive-props).
+
+ ```javascript
+import { Badge } from '@deity/falcon-ui';
+```
 
 <Playground>
-  <Badge>0</Badge>
-  <Badge ml="sm" bg="secondaryLight">
+  <Badge>9</Badge>
+  <Badge ml="sm" size="xl" fontSize="md">
     12
   </Badge>
 </Playground>
