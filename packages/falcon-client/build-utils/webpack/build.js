@@ -7,7 +7,7 @@ process.on('unhandledRejection', err => {
 
 const fs = require('fs-extra');
 const chalk = require('chalk');
-const logger = require('@deity/falcon-logger');
+const Logger = require('@deity/falcon-logger');
 const webpack = require('webpack');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
@@ -24,8 +24,8 @@ function compile(config, cb) {
   try {
     compiler = webpack(config);
   } catch (e) {
-    logger.error(chalk.red('Failed to compile.'));
-    logger.error(e);
+    Logger.error(chalk.red('Failed to compile.'));
+    Logger.error(e);
 
     process.exit(1);
   }
@@ -42,14 +42,13 @@ function copyPublicFolder() {
   });
 }
 
-function build(previousFileSizes) {
+function build() {
   process.env.NODE_ENV = 'production';
 
   // Ensure environment variables are read.
   require('./config/env');
 
   const falconConfig = getBuildConfig();
-
   if (falconConfig.clearConsole) {
     clearConsole();
   }
@@ -117,7 +116,6 @@ function build(previousFileSizes) {
         console.log(chalk.green('Compiled server successfully.'));
         return resolve({
           stats: clientStats,
-          previousFileSizes,
           warnings: Object.assign({}, clientMessages.warnings, serverMessages.warnings)
         });
       });
@@ -130,28 +128,32 @@ module.exports = async () => {
     process.exit(1);
   }
 
-  const fileSizesBeforeBuild = await measureFileSizesBeforeBuild(paths.appBuildPublic);
+  const previousBuildSizes = await measureFileSizesBeforeBuild(paths.appBuildPublic);
 
   fs.emptyDirSync(paths.appBuild);
   copyPublicFolder();
 
   try {
-    const { stats, previousFileSizes, warnings } = await build(fileSizesBeforeBuild);
+    const { stats, warnings } = await build();
 
     if (warnings.length) {
-      console.log(chalk.yellow('Compiled with warnings.\n'));
-      console.log(warnings.join('\n\n'));
-      console.log(`\nSearch for the ${chalk.underline(chalk.yellow('keywords'))} to learn more about each warning.`);
-      console.log(`To ignore, add ${chalk.cyan('// eslint-disable-next-line')} to the line before.\n`);
+      Logger.warn(chalk.yellow('\nCompiled with warnings.\n'));
+      Logger.warn(warnings.join('\n\n'));
+
+      Logger.info(`\nSearch for the ${chalk.underline(chalk.yellow('keywords'))} to learn more about each warning.`);
+      Logger.info(`To ignore, add ${chalk.cyan('// eslint-disable-next-line')} to the line before.\n`);
     } else {
-      console.log(chalk.green('Compiled successfully.\n'));
+      Logger.log(chalk.green('\nCompiled successfully.\n'));
     }
-    console.log('File sizes after gzip:\n');
-    printFileSizesAfterBuild(stats, previousFileSizes, paths.appBuild);
-    console.log();
+
+    Logger.log('File sizes after gzip:\n');
+    printFileSizesAfterBuild(stats, previousBuildSizes, paths.appBuild);
+    Logger.log();
   } catch (error) {
-    console.log(chalk.red('Failed to compile.\n'));
-    console.log(`${error.message || error}\n`);
+    Logger.error(`${chalk.red('\nFailed to compile.\n')}`);
+    Logger.error(error);
+    Logger.log();
+
     process.exit(1);
   }
 };
