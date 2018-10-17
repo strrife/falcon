@@ -48,7 +48,6 @@ module.exports = {
   appBuildConfigJs: resolveOwn('falcon-client.build.config.js'),
 
   testsSetup: resolveApp('src/setupTests.js'),
-  dotenv: resolveApp('.env'),
   appBabelRc: resolveApp('.babelrc'),
   appEslintRc: resolveApp('.eslintrc'),
   appNodeModules: resolveApp('node_modules'),

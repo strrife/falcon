@@ -121,7 +121,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
   process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
 
   const { getClientEnv } = require('./env');
-  const dotenv = getClientEnv(target, { clearConsole, host, port });
+  const clientEnv = getClientEnv(target, { clearConsole, host, port });
 
   /* eslint-disable */
   // This is our base webpack config.
@@ -355,7 +355,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
     // Add some plugins...
     config.plugins = [
       // We define environment variables that can be accessed globally in our
-      new webpack.DefinePlugin(dotenv.stringified),
+      new webpack.DefinePlugin(clientEnv.stringified),
       // Prevent creating multiple chunks for the server
       new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })
     ];
@@ -402,7 +402,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
       config.entry = {
         client: [
           // We ship a few polyfills by default but only include them if React is being placed in the default path.
-          !dotenv.raw.REACT_BUNDLE_PATH && falconClientPolyfills,
+          !clientEnv.raw.REACT_BUNDLE_PATH && falconClientPolyfills,
           require.resolve('razzle-dev-utils/webpackHotDevClient'),
           paths.ownClientIndexJs
         ].filter(Boolean)
@@ -453,7 +453,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
       config.plugins = [
         ...config.plugins,
         new webpack.HotModuleReplacementPlugin({ multiStep: true }),
-        new webpack.DefinePlugin(dotenv.stringified)
+        new webpack.DefinePlugin(clientEnv.stringified)
       ];
 
       config.optimization = {
@@ -473,7 +473,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
         client: [
           // We ship a few polyfills by default but only include them if React is being placed in the default path.
           // If you are doing some vendor bundling, you'll need to require the @deity/falcon-client/build-utils/polyfills on your own.
-          !dotenv.raw.REACT_BUNDLE_PATH && falconClientPolyfills,
+          !clientEnv.raw.REACT_BUNDLE_PATH && falconClientPolyfills,
           paths.ownClientIndexJs
         ].filter(Boolean)
       };
@@ -483,7 +483,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
       // we will only be using one port in production.
       config.output = {
         path: paths.appBuildPublic,
-        publicPath: dotenv.raw.PUBLIC_PATH || '/',
+        publicPath: clientEnv.raw.PUBLIC_PATH || '/',
         filename: 'static/js/bundle.[chunkhash:8].js',
         chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
         libraryTarget: 'var'
@@ -492,7 +492,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
       config.plugins = [
         ...config.plugins,
         // Define production environment vars
-        new webpack.DefinePlugin(dotenv.stringified),
+        new webpack.DefinePlugin(clientEnv.stringified),
         // Extract our CSS into a files.
         new MiniCssExtractPlugin({
           filename: 'static/css/bundle.[contenthash:8].css',
