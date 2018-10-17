@@ -55,10 +55,6 @@ function webpackCompileAsync(config, emitWarningsAsErrors = false) {
 }
 
 async function build() {
-  process.env.NODE_ENV = 'production';
-
-  process.noDeprecation = true; // turns off that loadQuery clutter.
-
   // Ensure environment variables are read.
   require('./config/env');
 
@@ -99,6 +95,9 @@ module.exports = async () => {
   if (!checkRequiredFiles([paths.appIndexJs])) {
     process.exit(1);
   }
+
+  process.env.NODE_ENV = 'production';
+  process.noDeprecation = true; // turns off that loadQuery clutter.
 
   Logger.log('Creating an optimized production build...');
 
