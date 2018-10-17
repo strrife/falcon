@@ -1,4 +1,5 @@
 const fs = require('fs-extra');
+const path = require('path');
 const chalk = require('chalk');
 const Logger = require('@deity/falcon-logger');
 const Webpack = require('webpack');
@@ -10,6 +11,13 @@ const { choosePort } = require('react-dev-utils/WebpackDevServerUtils');
 const paths = require('./../paths');
 const { getBuildConfig } = require('./tools');
 const createConfig = require('./config/create');
+
+function removePreviousBuildAssets(appBuild, appBuildPublic) {
+  const productionPublicDirName = path.relative(appBuild, appBuildPublic);
+  fs.readdirSync(appBuild)
+    .filter(x => x !== productionPublicDirName)
+    .forEach(file => fs.removeSync(path.join(appBuild, file)));
+}
 
 function compile(config) {
   let compiler;
@@ -39,7 +47,7 @@ module.exports = async () => {
     }
 
     Logger.info(chalk`{hex('#a9cf38') Compiling...}`);
-    fs.emptyDirSync(paths.appBuild);
+    removePreviousBuildAssets(paths.appBuild, paths.appBuildPublic);
 
     const options = {
       env: process.env.NODE_ENV === 'development' ? 'dev' : 'prod',
