@@ -13,24 +13,20 @@ module.exports = paths => {
     setupTestFrameworkScriptFile: setupTestsFile,
     testEnvironment: 'node',
     testURL: 'http://localhost',
-    testMatch: [
-      '<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs,ts,tsx}',
-      '<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs,ts,tsx}'
-    ],
+    testMatch: ['<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}', '<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}'],
     transform: {
       '^.+\\.(gql|graphql)$': 'jest-transform-graphql',
-      '^.+\\.(ts|tsx)$': 'ts-jest/preprocessor.js',
       '^.+\\.(js|jsx|mjs)$': path.resolve(__dirname, 'babelTransform.js'),
       '^.+\\.css$': path.resolve(__dirname, 'cssTransform.js'),
       '^(?!.*\\.(js|jsx|mjs|css|json)$)': path.resolve(__dirname, 'fileTransform.js')
     },
     transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$'],
-    moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
+    moduleFileExtensions: ['js', 'jsx', 'json'],
     moduleNameMapper: {
       '^src(.*)$': '<rootDir>/src$1',
       '^react-native$': 'react-native-web'
     },
-    collectCoverageFrom: ['<rootDir>/src/**/*.{js,jsx,mjs,ts,tsx}'],
+    collectCoverageFrom: ['<rootDir>/src/**/*.{js,jsx,mjs}'],
     coverageReporters: ['html', 'text', 'text-summary']
   };
 

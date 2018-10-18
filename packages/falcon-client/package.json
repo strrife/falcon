@@ -51,8 +51,6 @@
     "jest-transform-graphql": "^2.1.0",
     "jest-extended": "^0.11.0",
     "graphql-tools": "^4.0.0",
-    "ts-jest": "^22.4.5",
-    "ts-loader": "^5.2.0",
     "react-apollo": "^2.2.3",
     "react-async-component": "^2.0.0",
     "react-dev-utils": "^6.0.4",
