@@ -13,10 +13,12 @@ const { getBuildConfig } = require('./tools');
 const createConfig = require('./config/create');
 
 function removePreviousBuildAssets(appBuild, appBuildPublic) {
-  const productionPublicDirName = path.relative(appBuild, appBuildPublic);
-  fs.readdirSync(appBuild)
-    .filter(x => x !== productionPublicDirName)
-    .forEach(file => fs.removeSync(path.join(appBuild, file)));
+  if (fs.existsSync(appBuild)) {
+    const productionPublicDirName = path.relative(appBuild, appBuildPublic);
+    fs.readdirSync(appBuild)
+      .filter(x => x !== productionPublicDirName)
+      .forEach(file => fs.removeSync(path.join(appBuild, file)));
+  }
 }
 
 function compile(config) {
