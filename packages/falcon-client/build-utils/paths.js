@@ -1,19 +1,25 @@
 const path = require('path');
 const fs = require('fs');
 
+/**
+ * @param {string} packageName npm package name
+ * @returns {string} absolute path
+ */
+const resolvePackageDir = packageName => path.dirname(require.resolve(`${packageName}/package.json`));
+const ownDirectory = resolvePackageDir('@deity/falcon-client');
 const appDirectory = fs.realpathSync(process.cwd());
 
 /**
- * Make sure any symlinks in the project folder are resolved:
- * https://github.com/facebookincubator/create-react-app/issues/637
+ * @param {string} ownRelativePath path relative to own directory (@deity/falcon-client)
+ * @returns {string} absolute path
+ */
+const resolveOwn = ownRelativePath => path.resolve(ownDirectory, ownRelativePath);
+
+/**
  * @param {string} appRelativePath path relative to app directory (process.cwd())
  * @returns {string} absolute path
  */
 const resolveApp = appRelativePath => path.resolve(appDirectory, appRelativePath);
-
-const resolveOwn = relativePath => path.resolve(__dirname, '..', relativePath);
-
-const resolvePackageDir = name => path.dirname(require.resolve(`${name}/package.json`));
 
 // We support resolving modules according to `NODE_PATH`.
 // This lets you use absolute paths in imports inside large monorepos:
@@ -53,6 +59,7 @@ module.exports = {
   appNodeModules: resolveApp('node_modules'),
 
   ownPath: resolveOwn('.'),
+  ownSrc: resolveOwn('src'),
   ownServerIndexJs: resolveOwn('src/index'),
   ownClientIndexJs: resolveOwn('src/client'),
   ownNodeModules: resolveOwn('node_modules')

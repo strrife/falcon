@@ -171,7 +171,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
         },
         {
           test: /\.(js|jsx|mjs)$/,
-          include: [paths.appSrc],
+          include: [paths.appSrc, paths.ownSrc],
           use: [
             {
               loader: require.resolve('babel-loader'),
@@ -181,6 +181,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
         },
         {
           test: /\.(graphql|gql)$/,
+          include: [paths.appSrc, paths.ownSrc],
           use: [{ loader: require.resolve('graphql-tag/loader') }]
         },
         {
@@ -204,6 +205,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
         },
         IS_WEB && {
           test: /(manifest\.webmanifest|browserconfig\.xml)$/,
+          include: [paths.appSrc],
           use: [
             {
               loader: require.resolve('file-loader'),
@@ -334,6 +336,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
       nodeExternals({
         whitelist: [
           IS_DEV ? 'webpack/hot/poll?300' : null,
+          /@deity\/falcon-client\//, // webpack needs to compile @deity/falcon-client
           /\.(eot|woff|woff2|ttf|otf)$/,
           /\.(svg|png|jpg|jpeg|gif|ico)$/,
           /\.(mp4|mp3|ogg|swf|webp)$/,
