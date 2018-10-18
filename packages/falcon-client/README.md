@@ -194,6 +194,13 @@ This is configuration object used to setup `@deity/falcon-client`
 - `googleTagManager: object` - Google Tag Manager configuration, [see the details](#google-tag-manager)
 - `i18n: object` - internationalization configuration, [see the details](#internationalization)
 - `menus: object` - menus configuration [TODO]
+- `apolloClient` - ApolloClient configuration object
+  - `apolloClient.httpLink` - configuration object that will be passed to the
+    `apollo-link-http` method which defines HTTP link the remote Falcon Server
+    ([available options](https://www.apollographql.com/docs/link/links/http.html#options))
+  - `apolloClient.config` - configuration object that will be passed to the
+  main `ApolloClient` constructor
+  ([available options](https://www.apollographql.com/docs/react/api/apollo-client.html#apollo-client))
 
 All configuration passed by `config` is accessible via `ApolloClient`, which mean you can access any of its property via graphQL query.
 
@@ -356,7 +363,7 @@ Then in `razzle.config.js` file you need to update `razzlePluginFalconClient` pl
 
 Imported package (like `@deity/falcon-i18n`) can contain more languages and/or namespaces than you are interested in. So if you don't want to use all of them (to save bundle size, or just not to use some namespace as it's not relevant to your project) you can filter them out by using `filter` option - that will instruct webpack to skip items not listed in the `filter` property.
 
-```js
+```javascript
 razzlePluginFalconClient({
   i18n: {
     resourcePackages: ['@deity/falcon-i18n'],
