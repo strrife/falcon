@@ -55,7 +55,7 @@ module.exports = async () => {
     removePreviousBuildAssets(paths.appBuild, paths.appBuildPublic);
 
     const options = {
-      env: process.env.NODE_ENV === 'development' ? 'dev' : 'prod',
+      env: process.env.NODE_ENV,
       host: process.env.HOST,
       port: parseInt(process.env.PORT, 10),
       devServerPort: parseInt(process.env.PORT, 10) + 1,

@@ -89,7 +89,7 @@ module.exports = async () => {
   process.noDeprecation = true; // turns off that loadQuery clutter.
 
   const options = {
-    env: process.env.NODE_ENV === 'development' ? 'dev' : 'prod',
+    env: process.env.NODE_ENV,
     publicPath: process.env.PUBLIC_PATH || '/'
   };
 

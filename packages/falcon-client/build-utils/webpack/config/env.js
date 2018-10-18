@@ -11,13 +11,13 @@ function getClientEnv(target, options, envToBuildIn) {
         return result;
       },
       {
-        NODE_ENV: env === 'prod' ? 'production' : 'development',
-        BABEL_ENV: env === 'prod' ? 'production' : 'development',
-        ...(env === 'dev' && { PORT: port }),
+        NODE_ENV: env,
+        BABEL_ENV: env,
+        PORT: env === 'development' ? port : undefined,
         BUILD_TARGET: target === 'web' ? 'client' : 'server',
-        ...(env === 'prod' && { PUBLIC_PATH: publicPath }),
+        PUBLIC_PATH: env === 'production' ? publicPath : undefined,
         RAZZLE_ASSETS_MANIFEST: paths.appManifest,
-        RAZZLE_PUBLIC_DIR: env === 'prod' ? paths.appBuildPublic : paths.appPublic
+        RAZZLE_PUBLIC_DIR: env === 'production' ? paths.appBuildPublic : paths.appPublic
       }
     );
 

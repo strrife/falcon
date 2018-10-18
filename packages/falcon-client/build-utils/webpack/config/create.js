@@ -105,7 +105,7 @@ function addVendorsBundle(modules = []) {
 // This is the Webpack configuration factory. It's the juice!
 /**
  * @param {'web' | 'node' } target target
- * @param {{ env: ('dev' | 'prod'), host: string, port: number, inspect: string, publicPath: string }} options environment
+ * @param {{ env: ('development' | 'production'), host: string, port: number, inspect: string, publicPath: string }} options environment
  * @param {object} buildConfig config
  * @param {object} webpackInstance webpack instance
  * @returns {object} webpack config
@@ -117,8 +117,8 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
   // Define some useful shorthands.
   const IS_NODE = target === 'node';
   const IS_WEB = target === 'web';
-  const IS_PROD = env === 'prod';
-  const IS_DEV = env === 'dev';
+  const IS_PROD = env === 'productions';
+  const IS_DEV = env === 'development';
   process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
 
   const clientEnv = getClientEnv(target, options, buildConfig.envToBuildIn);
@@ -133,10 +133,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
     // We need to tell webpack how to resolve both Razzle's node_modules and
     // the users', so we use resolve and resolveLoader.
     resolve: {
-      modules: ['node_modules', paths.appNodeModules].concat(
-        // It is guaranteed to exist because we tweak it in `env.js`
-        paths.nodePath.split(path.delimiter).filter(Boolean)
-      ),
+      modules: ['node_modules', paths.appNodeModules].concat(paths.nodePath.split(path.delimiter).filter(Boolean)),
       extensions: ['.mjs', '.jsx', '.js', '.json', '.graphql', '.gql'],
       alias: {
         'webpack/hot/poll': require.resolve('webpack/hot/poll'), // This is required so symlinks work during development.
