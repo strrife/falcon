@@ -68,7 +68,9 @@ function getBabelLoaderOptions(babelRcPath) {
   return options;
 }
 
-function getFalconI18nPlugin({ resourcePackages = [], filter }) {
+function getFalconI18nPlugin(options) {
+  const { resourcePackages = [], filter } = options || {};
+
   return new FalconI18nLocalesPlugin({
     mainSource: path.join(paths.appPath, 'i18n'),
     defaultSources: resourcePackages.map(x => paths.resolvePackageDir(x)).map(x => path.join(x, 'i18n')),

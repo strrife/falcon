@@ -12,7 +12,8 @@ const paths = require('./../paths');
 function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {
   let config = {
     clearConsole: true,
-    envToBuildIn: []
+    envToBuildIn: [],
+    i18n: {}
   };
 
   const buildConfigPath = paths.resolveApp(buildConfigFileName);
