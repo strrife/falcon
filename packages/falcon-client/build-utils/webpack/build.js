@@ -54,19 +54,7 @@ function webpackCompileAsync(config, emitWarningsAsErrors = false) {
   });
 }
 
-async function build() {
-  // Ensure environment variables are read.
-  require('./config/env');
-
-  const falconConfig = getBuildConfig();
-  if (falconConfig.clearConsole) {
-    clearConsole();
-  }
-
-  const options = {
-    env: process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
-  };
-
+async function build(options, falconConfig) {
   const clientConfig = createConfig('web', options, falconConfig, webpack);
   const serverConfig = createConfig('node', options, falconConfig, webpack);
 
@@ -97,21 +85,31 @@ module.exports = async () => {
   }
 
   process.env.NODE_ENV = 'production';
+  process.env.BABEL_ENV = process.env.NODE_ENV;
   process.noDeprecation = true; // turns off that loadQuery clutter.
 
+  const options = {
+    env: process.env.NODE_ENV === 'development' ? 'dev' : 'prod',
+    publicPath: process.env.PUBLIC_PATH || '/'
+  };
+
+  const falconConfig = getBuildConfig();
+  if (falconConfig.clearConsole) {
+    clearConsole();
+  }
+
   Logger.log('Creating an optimized production build...');
-
   const previousBuildSizes = await measureFileSizesBeforeBuild(paths.appBuildPublic);
-
   fs.emptyDirSync(paths.appBuild);
   fs.copySync(paths.appPublic, paths.appBuildPublic, { dereference: true });
 
   try {
-    const { stats, warnings } = await build();
+    const { stats, warnings } = await build(options, falconConfig);
 
     if (warnings.length) {
       Logger.warn(chalk.yellow('\nCompiled with warnings.\n'));
       Logger.warn(warnings.join('\n\n'));
+      Logger.log();
     } else {
       Logger.log(chalk.green('\nCompiled successfully.\n'));
     }

@@ -39,6 +39,7 @@ module.exports = async () => {
   }
 
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+  process.env.BABEL_ENV = process.env.NODE_ENV;
   process.env.HOST = process.env.HOST || 'localhost';
   process.env.PORT = await choosePort(process.env.HOST, parseInt(process.env.PORT, 10) || 3000);
 

@@ -13,6 +13,7 @@ const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 
 const paths = require('./../../paths');
+const { getClientEnv } = require('./env');
 const runPlugin = require('./runPlugin');
 
 const falconClientPolyfills = require.resolve('./../../polyfills');
@@ -104,14 +105,14 @@ function addVendorsBundle(modules = []) {
 // This is the Webpack configuration factory. It's the juice!
 /**
  * @param {'web' | 'node' } target target
- * @param {{ env: ('dev' | 'prod'), host: string, port: number, inspect: string }} options environment
+ * @param {{ env: ('dev' | 'prod'), host: string, port: number, inspect: string, publicPath: string }} options environment
  * @param {object} buildConfig config
  * @param {object} webpackInstance webpack instance
  * @returns {object} webpack config
  */
 module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
-  const { env, host, port, devServerPort } = options;
-  const { clearConsole, plugins, modify } = buildConfig;
+  const { env, host, devServerPort } = options;
+  const { plugins, modify } = buildConfig;
 
   // Define some useful shorthands.
   const IS_NODE = target === 'node';
@@ -120,8 +121,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
   const IS_DEV = env === 'dev';
   process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
 
-  const { getClientEnv } = require('./env');
-  const clientEnv = getClientEnv(target, { clearConsole, host, port });
+  const clientEnv = getClientEnv(target, options, buildConfig.envToBuildIn);
 
   /* eslint-disable */
   // This is our base webpack config.
@@ -483,7 +483,7 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
       // we will only be using one port in production.
       config.output = {
         path: paths.appBuildPublic,
-        publicPath: clientEnv.raw.PUBLIC_PATH || '/',
+        publicPath: options.publicPath,
         filename: 'static/js/bundle.[chunkhash:8].js',
         chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
         libraryTarget: 'var'
