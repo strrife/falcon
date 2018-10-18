@@ -4,12 +4,16 @@ menu: Components
 ---
 
 import { Playground } from 'docz';
-
+import { ThemePreview } from '../../docs';
 import { Divider } from '../';
 
-# Divider
+<ThemePreview of={Divider} />
 
-### Basic usage
+`Divider` component renders by default as `<hr/>` and accepts all of the [responsive, theme-based style props](/responsive-props).
+
+```javascript
+import { Divider } from '@deity/falcon-ui';
+```
 
 <Playground>
   <Divider />
