@@ -75,11 +75,19 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     Logger.info('Retrieving Magento token.');
 
     const response = await this.retrieveToken({ username: this.config.username, password: this.config.password });
-
-    Logger.info('Magento token found.');
+    
     // data available only if retrieveToken is not wrapped with cache.
     const tokenData = this.convertKeys(response.data || response);
     const { token, validTime } = tokenData;
+    if (token == undefined){
+        const noTokenError = new Error('Magento Admin token not found. did you install the falcon-magento2-module on magento?');
+
+        noTokenError.statusCode = 501;
+        noTokenError.code = 'CUSTOMER_TOKEN_NOT_FOUND';
+        throw noTokenError;
+    } else{
+       Logger.info('Magento token found.');
+    }
     this.token = token;
     this.tokenExpirationTime = null;
 
