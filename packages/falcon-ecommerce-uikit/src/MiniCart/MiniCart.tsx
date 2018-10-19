@@ -12,6 +12,7 @@ import {
   DefaultThemeProps,
   Image,
   Link,
+  Text,
   Divider,
   Button,
   NumberInput
@@ -64,24 +65,27 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
       )}
     </RemoveCartItemMutation>
     <UpdateCartItemMutation>
-      {updateCartItem => (
-        <NumberInput
-          gridArea={MiniCartProductArea.modify}
-          min="1"
-          name="qty"
-          defaultValue={String(product.qty)}
-          onChange={ev =>
-            updateCartItem({
-              variables: {
-                input: {
-                  itemId: product.itemId,
-                  sku: product.sku,
-                  qty: parseInt(ev.target.value, 10)
+      {(updateCartItem, { loading, error }) => (
+        <Box gridArea={MiniCartProductArea.modify}>
+          <NumberInput
+            disabled={loading}
+            min="1"
+            name="qty"
+            defaultValue={String(product.qty)}
+            onChange={ev =>
+              updateCartItem({
+                variables: {
+                  input: {
+                    itemId: product.itemId,
+                    sku: product.sku,
+                    qty: parseInt(ev.target.value, 10)
+                  }
                 }
-              }
-            })
-          }
-        />
+              })
+            }
+          />
+          {!!error && <Text color="error">{error.message}</Text>}
+        </Box>
       )}
     </UpdateCartItemMutation>
   </Box>
