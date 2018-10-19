@@ -10,6 +10,7 @@ const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react
 const paths = require('./../paths');
 const { getBuildConfig, removePreviousBuildAssets, webpackCompiler, webpackCompileAsync } = require('./tools');
 const createConfig = require('./config/create');
+const { generateSW } = require('./workbox');
 
 module.exports.startDevServer = async () => {
   if (!checkRequiredFiles([paths.appIndexJs])) {
@@ -121,6 +122,8 @@ module.exports.build = async () => {
     printFileSizesAfterBuild(stats, previousBuildSizes, paths.appBuild);
 
     Logger.log();
+
+    generateSW();
   } catch (error) {
     Logger.error(`${chalk.red('\nFailed to compile.\n')}`);
     Logger.error(error);
