@@ -9,6 +9,7 @@ const StartServerPlugin = require('start-server-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackBar = require('webpackbar');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 
@@ -506,6 +507,10 @@ module.exports = (target = 'web', options, buildConfig) => {
         new webpack.optimize.AggressiveMergingPlugin()
       ];
 
+      if (options.analyze) {
+        config.plugins.push(new BundleAnalyzerPlugin());
+      }
+
       config.optimization = {
         minimize: true,
         minimizer: [
@@ -579,16 +584,15 @@ module.exports = (target = 'web', options, buildConfig) => {
     }
   }
 
-  if (IS_DEV) {
-    config.plugins = [
-      ...config.plugins,
-      new WebpackBar({
-        color: '#cbde6e', // target === 'web' ? '#f56be2' : '#c065f4',
-        name: IS_WEB ? 'client' : 'server',
-        compiledIn: true
-      })
-    ];
-  }
+  config.plugins = [
+    ...config.plugins,
+    new WebpackBar({
+      minimal: options.isCI,
+      color: '#cbde6e',
+      name: IS_WEB ? 'client' : 'server',
+      compiledIn: true
+    })
+  ];
 
   addVendorsBundle([
     'apollo-cache-inmemory',
