@@ -54,31 +54,6 @@ function webpackCompileAsync(config, emitWarningsAsErrors = false) {
   });
 }
 
-async function build(options, falconConfig) {
-  const clientConfig = createConfig('web', options, falconConfig, webpack);
-  const serverConfig = createConfig('node', options, falconConfig, webpack);
-
-  const emitWarningsAsErrors =
-    process.env.CI && (typeof process.env.CI !== 'string' || process.env.CI.toLowerCase() !== 'false');
-
-  // First compile the client. We need it to properly output assets.json
-  // (asset manifest file with the correct hashes on file names BEFORE we can start the server compiler).
-
-  Logger.log('Compiling client...');
-  const clientCompilation = await webpackCompileAsync(clientConfig, emitWarningsAsErrors);
-  Logger.log(chalk.green('Compiled client successfully.'));
-
-  Logger.log('Compiling server...');
-  // ContextReplacementPlugin https://webpack.js.org/plugins/context-replacement-plugin/
-  /* const serverCompilation = */ await webpackCompileAsync(serverConfig, emitWarningsAsErrors);
-  Logger.log(chalk.green('Compiled server successfully.'));
-
-  return {
-    stats: clientCompilation.stats,
-    warnings: [...clientCompilation.warnings] // , ...serverCompilation.warnings]
-  };
-}
-
 module.exports = async () => {
   if (!checkRequiredFiles([paths.appIndexJs])) {
     process.exit(1);
@@ -104,7 +79,24 @@ module.exports = async () => {
   fs.copySync(paths.appPublic, paths.appBuildPublic, { dereference: true });
 
   try {
-    const { stats, warnings } = await build(options, falconConfig);
+    const emitWarningsAsErrors =
+      process.env.CI && (typeof process.env.CI !== 'string' || process.env.CI.toLowerCase() !== 'false');
+
+    // First compile the client. We need it to properly output assets.json
+    // (asset manifest file with the correct hashes on file names BEFORE we can start the server compiler).
+
+    Logger.log('Compiling client...');
+    const clientConfig = createConfig('web', options, falconConfig, webpack);
+    const clientCompilation = await webpackCompileAsync(clientConfig, emitWarningsAsErrors);
+    Logger.log(chalk.green('Compiled client successfully.'));
+
+    Logger.log('Compiling server...');
+    const serverConfig = createConfig('node', options, falconConfig, webpack);
+    // ContextReplacementPlugin https://webpack.js.org/plugins/context-replacement-plugin/
+    /* const serverCompilation = */ await webpackCompileAsync(serverConfig, emitWarningsAsErrors);
+    Logger.log(chalk.green('Compiled server successfully.'));
+
+    const warnings = [...clientCompilation.warnings]; // , ...serverCompilation.warnings]
 
     if (warnings.length) {
       Logger.warn(chalk.yellow('\nCompiled with warnings.\n'));
@@ -115,7 +107,9 @@ module.exports = async () => {
     }
 
     Logger.log('File sizes after gzip:\n');
+    const { stats } = clientCompilation;
     printFileSizesAfterBuild(stats, previousBuildSizes, paths.appBuild);
+
     Logger.log();
   } catch (error) {
     Logger.error(`${chalk.red('\nFailed to compile.\n')}`);
