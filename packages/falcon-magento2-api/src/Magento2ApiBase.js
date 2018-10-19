@@ -11,6 +11,8 @@ const isEmpty = require('lodash/isEmpty');
 
 const DEFAULT_KEY = '*';
 
+import { codes } from '@deity/falcon-errors';
+
 /**
  * Base API features (configuration fetching, response parsing, token management etc.) required for communication
  * with Magento2. Extracted to separate class to keep final class clean (only resolvers-related logic should be there).
@@ -85,7 +87,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       );
 
       noTokenError.statusCode = 501;
-      noTokenError.code = 'CUSTOMER_TOKEN_NOT_FOUND';
+      noTokenError.code = codes.CUSTOMER_TOKEN_NOT_FOUND;
       throw noTokenError;
     } else {
       Logger.info('Magento token found.');
@@ -209,7 +211,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       const sessionExpiredError = new Error('Session has expired');
 
       sessionExpiredError.statusCode = 401;
-      sessionExpiredError.code = 'CUSTOMER_TOKEN_EXPIRED';
+      sessionExpiredError.code = codes.CUSTOMER_TOKEN_EXPIRED;
       throw sessionExpiredError;
     }
   }
@@ -379,7 +381,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     if (!has(context, 'req.session')) {
       const noSessionError = new Error('No session in context passed to Magento2Api.createContextData()');
       noSessionError.statusCode = 501;
-      noSessionError.code = 'SESSION_NOT_FOUND';
+      noSessionError.code = codes.SESSION_NOT_FOUND;
       throw noSessionError;
     }
 
