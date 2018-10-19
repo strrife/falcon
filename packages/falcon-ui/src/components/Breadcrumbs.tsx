@@ -5,7 +5,7 @@ export const Breadcrumbs = themed({
 
   defaultTheme: {
     breadcrumbs: {
-      p: 'sm',
+      p: 'none',
       m: 'none',
 
       css: {
@@ -20,26 +20,26 @@ export const Breadcrumbs = themed({
 export const Breadcrumb = themed({
   tag: 'li',
 
-  defaultProps: {
-    current: false
-  },
-
   defaultTheme: {
     breadcrumb: {
-      css: ({ theme, current }) => ({
+      css: ({ theme }) => ({
         display: 'flex',
-        pointerEvents: current ? 'none' : 'initial',
-        color: current ? theme.colors.secondary : theme.colors.primaryText,
+        alignItems: 'center',
 
-        ':after': {
+        '::after': {
           content: '"→"',
           color: 'inherit',
-          paddingLeft: theme.spacing.sm,
-          paddingRight: theme.spacing.sm,
-          fontSize: theme.fontSizes.md,
-          lineHeight: theme.lineHeights.small,
-          fontWeight: theme.fontWeights.bold,
-          display: current ? 'none' : 'block'
+          paddingLeft: theme.spacing.xs,
+          paddingRight: theme.spacing.xs,
+          display: 'block'
+        },
+
+        ':last-child': {
+          pointerEvents: 'none',
+          color: theme.colors.primary,
+          '::after': {
+            display: 'none'
+          }
         }
       })
     }
