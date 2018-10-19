@@ -1,9 +1,13 @@
 import React from 'react';
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo';
+import { Formik, Form } from 'formik';
 import { themed, Box, Radio, Text, H3, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
 import { Breadcrumbs } from './Breadcrumbs';
 // import { ProductMeta } from './ProductMeta';
 import { ProductGallery } from './ProductGallery';
 import { ProductTranslations } from './ProductQuery';
+import { AddToCartMutation } from './MiniCart';
 
 export const ProductLayout = themed({
   tag: 'div',
@@ -110,6 +114,21 @@ const ProductDescriptionLayout = themed({
 });
 
 export class Product extends React.PureComponent<{ product: any; translations: ProductTranslations }> {
+  addToCartHandler(sku: String, addToCart: Function): Function {
+    return (values: any, props: any) => {
+      addToCart({
+        variables: {
+          input: {
+            sku,
+            ...values,
+            qty: parseInt(values.qty, 10)
+          }
+        }
+      });
+      props.setSubmitting(false);
+    };
+  }
+
   render() {
     const { product, translations } = this.props;
 
@@ -127,19 +146,36 @@ export class Product extends React.PureComponent<{ product: any; translations: P
           <Text fontSize="xxl" gridArea={Area.price}>
             {product.currency} {product.price}
           </Text>
-          <ProductOptions options={product.configurableOptions} />
-          <ProductDescriptionLayout
-            dangerouslySetInnerHTML={{ __html: product.description }}
-            gridArea={Area.description}
-          />
-
-          <FlexLayout alignItems="center" gridArea={Area.cta}>
-            <NumberInput defaultValue="1" mr="md" />
-            <Button>
-              <Icon src="cart" stroke="white" size={20} mr="sm" />
-              {translations.addToCart}
-            </Button>
-          </FlexLayout>
+          <AddToCartMutation>
+            {(addToCart, { error }) => (
+              <Formik initialValues={{ qty: 1 }} onSubmit={this.addToCartHandler(product.sku, addToCart) as any}>
+                {(props: any) => (
+                  <Form>
+                    <ProductOptions options={product.configurableOptions} />
+                    <ProductDescriptionLayout
+                      dangerouslySetInnerHTML={{ __html: product.description }}
+                      gridArea={Area.description}
+                    />
+                    <FlexLayout alignItems="center" gridArea={Area.cta}>
+                      <NumberInput
+                        mr="md"
+                        min="1"
+                        name="qty"
+                        disabled={props.isSubmitting}
+                        defaultValue={String(props.values.qty)}
+                        onChange={props.handleChange}
+                      />
+                      <Button type="submit">
+                        <Icon src="cart" stroke="white" size={20} mr="sm" />
+                        {translations.addToCart}
+                      </Button>
+                      {!!error && <Text color="error">{error.message}</Text>}
+                    </FlexLayout>
+                  </Form>
+                )}
+              </Formik>
+            )}
+          </AddToCartMutation>
           <Box gridArea={Area.meta} my="lg">
             {/* <ProductMeta meta={data.seo} /> */}
           </Box>
