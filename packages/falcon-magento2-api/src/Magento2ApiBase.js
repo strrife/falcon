@@ -75,18 +75,20 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     Logger.info('Retrieving Magento token.');
 
     const response = await this.retrieveToken({ username: this.config.username, password: this.config.password });
-    
+
     // data available only if retrieveToken is not wrapped with cache.
     const tokenData = this.convertKeys(response.data || response);
     const { token, validTime } = tokenData;
-    if (token == undefined){
-        const noTokenError = new Error('Magento Admin token not found. did you install the falcon-magento2-module on magento?');
+    if (token === undefined) {
+      const noTokenError = new Error(
+        'Magento Admin token not found. Did you install the falcon-magento2-module on magento?'
+      );
 
-        noTokenError.statusCode = 501;
-        noTokenError.code = 'CUSTOMER_TOKEN_NOT_FOUND';
-        throw noTokenError;
-    } else{
-       Logger.info('Magento token found.');
+      noTokenError.statusCode = 501;
+      noTokenError.code = 'CUSTOMER_TOKEN_NOT_FOUND';
+      throw noTokenError;
+    } else {
+      Logger.info('Magento token found.');
     }
     this.token = token;
     this.tokenExpirationTime = null;
@@ -375,7 +377,10 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   createContextData(context) {
     if (!has(context, 'req.session')) {
-      throw new Error('No session in context passed to Magento2Api.createContextData()');
+      const noSessionError = new Error('No session in context passed to Magento2Api.createContextData()');
+      noSessionError.statusCode = 501;
+      noSessionError.code = 'SESSION_NOT_FOUND';
+      throw noSessionError;
     }
 
     if (!has(context, 'req.session.magento2')) {
