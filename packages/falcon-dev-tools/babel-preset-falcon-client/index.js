@@ -1,5 +1,4 @@
-// eslint-disable-next-line
-module.exports = api => {
+module.exports = (/* api */) => {
   const preset = {
     presets: [
       [
@@ -40,23 +39,25 @@ module.exports = api => {
   }
 
   if (env === 'development' || env === 'test') {
-    preset.plugins.push.apply(preset.plugins, [
+    preset.plugins = [
+      ...preset.plugins,
       // Adds component stack to warning messages
       require.resolve('@babel/plugin-transform-react-jsx-source')
-    ]);
+    ];
   }
 
   if (env === 'test') {
-    preset.plugins.push.apply(preset.plugins, [
+    preset.plugins = [
+      ...preset.plugins,
       // Compiles import() to a deferred require()
       require.resolve('babel-plugin-dynamic-import-node'),
       // Transform ES modules to commonjs for Jest support
       [require.resolve('@babel/plugin-transform-modules-commonjs'), { loose: true }]
-    ]);
+    ];
   }
 
   if (env === 'production') {
-    preset.plugins.push.apply(preset.plugins, [require.resolve('git status')]);
+    preset.plugins = [...preset.plugins, require.resolve('babel-plugin-transform-react-remove-prop-types')];
   }
 
   return preset;
