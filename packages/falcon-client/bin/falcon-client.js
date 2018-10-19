@@ -6,22 +6,19 @@ process.on('unhandledRejection', (reason, promise) => {
 process.on('uncaughtException', ex => {
   console.log('Uncaught Exception: ', ex);
 });
-
 process.noDeprecation = true; // turns off that loadQuery clutter.
 
 const Logger = require('@deity/falcon-logger');
-const { startDevServer, build, size } = require('./../build-utils/webpack');
 const workbox = require('./../src/buildTools/workbox');
-const jest = require('./../build-utils/jest');
+const { start, build, size, test } = require('./../build-utils');
 
 (async () => {
   const script = process.argv[2];
-  // const args = process.argv.slice(3);
 
   try {
     switch (script) {
       case 'start': {
-        await startDevServer();
+        await start();
         break;
       }
 
@@ -36,7 +33,7 @@ const jest = require('./../build-utils/jest');
       }
 
       case 'test': {
-        jest();
+        test();
         break;
       }
 
