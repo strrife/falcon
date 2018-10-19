@@ -8,6 +8,7 @@ export const GET_MINI_CART = gql`
     }
     cart {
       itemsQty
+      quoteCurrency
       items {
         itemId
         sku
@@ -26,6 +27,7 @@ export type MiniCartData = {
   };
   cart: {
     itemsQty: number;
+    quoteCurrency: string;
     items: any[];
   };
 };
