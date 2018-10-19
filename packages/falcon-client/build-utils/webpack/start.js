@@ -1,6 +1,5 @@
 const chalk = require('chalk');
 const Logger = require('@deity/falcon-logger');
-const Webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server-speedy');
 const clearConsole = require('react-dev-utils/clearConsole');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
@@ -39,8 +38,8 @@ module.exports = async () => {
       inspect: process.argv.find(x => x.match(/--inspect-brk(=|$)/) || x.match(/--inspect(=|$)/)) || undefined
     };
 
-    const clientConfig = createConfig('web', options, falconConfig, Webpack);
-    const serverConfig = createConfig('node', options, falconConfig, Webpack);
+    const clientConfig = createConfig('web', options, falconConfig);
+    const serverConfig = createConfig('node', options, falconConfig);
 
     // Compile our assets with webpack
     const clientCompiler = webpackCompiler(clientConfig);

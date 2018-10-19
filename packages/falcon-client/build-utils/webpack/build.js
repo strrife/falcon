@@ -1,7 +1,6 @@
 const fs = require('fs-extra');
 const chalk = require('chalk');
 const Logger = require('@deity/falcon-logger');
-const webpack = require('webpack');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react-dev-utils/FileSizeReporter');
 const clearConsole = require('react-dev-utils/clearConsole');
@@ -42,12 +41,12 @@ module.exports = async () => {
     // (asset manifest file with the correct hashes on file names BEFORE we can start the server compiler).
 
     Logger.log('Compiling client...');
-    const clientConfig = createConfig('web', options, falconConfig, webpack);
+    const clientConfig = createConfig('web', options, falconConfig);
     const clientCompilation = await webpackCompileAsync(clientConfig, emitWarningsAsErrors);
     Logger.log(chalk.green('Compiled client successfully.'));
 
     Logger.log('Compiling server...');
-    const serverConfig = createConfig('node', options, falconConfig, webpack);
+    const serverConfig = createConfig('node', options, falconConfig);
     // ContextReplacementPlugin https://webpack.js.org/plugins/context-replacement-plugin/
     /* const serverCompilation = */ await webpackCompileAsync(serverConfig, emitWarningsAsErrors);
     Logger.log(chalk.green('Compiled server successfully.'));

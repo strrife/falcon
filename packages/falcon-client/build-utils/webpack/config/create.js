@@ -109,10 +109,9 @@ function addVendorsBundle(modules = []) {
  * @param {'web' | 'node' } target target
  * @param {{ env: ('development' | 'production'), host: string, port: number, inspect: string, publicPath: string }} options environment
  * @param {object} buildConfig config
- * @param {object} webpackInstance webpack instance
  * @returns {object} webpack config
  */
-module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
+module.exports = (target = 'web', options, buildConfig) => {
   const { env, host, devServerPort } = options;
   const { plugins, modify } = buildConfig;
 
@@ -620,14 +619,14 @@ module.exports = (target = 'web', options, buildConfig, webpackInstance) => {
   // Apply razzle plugins, if they are present in razzle.config.js
   if (Array.isArray(plugins)) {
     plugins.forEach(plugin => {
-      config = runPlugin(plugin, config, { target, dev: IS_DEV }, webpackInstance);
+      config = runPlugin(plugin, config, { target, dev: IS_DEV }, webpack);
     });
   }
 
   // Check if razzle.config has a modify function. If it does, call it on the
   // configs we created.
   if (modify) {
-    config = modify(config, { target, dev: IS_DEV }, webpackInstance);
+    config = modify(config, { target, dev: IS_DEV }, webpack);
   }
 
   return config;
