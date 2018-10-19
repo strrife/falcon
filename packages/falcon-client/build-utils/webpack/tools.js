@@ -1,8 +1,54 @@
 const fs = require('fs');
+const chalk = require('chalk');
 const deepMerge = require('deepmerge');
-const clearConsole = require('react-dev-utils/clearConsole');
+const webpack = require('webpack');
 const Logger = require('@deity/falcon-logger');
+const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
+const clearConsole = require('react-dev-utils/clearConsole');
 const paths = require('./../paths');
+
+function webpackCompiler(config) {
+  let compiler;
+  try {
+    compiler = webpack(config);
+  } catch (error) {
+    Logger.error(chalk.red('Failed to compile.'));
+    Logger.error(error);
+
+    process.exit(1);
+  }
+
+  return compiler;
+}
+
+function webpackCompileAsync(config, emitWarningsAsErrors = false) {
+  return new Promise((resolve, reject) => {
+    const compiler = webpackCompiler(config);
+    compiler.run((error, stats) => {
+      if (error) {
+        return reject(error);
+      }
+
+      const { errors, warnings } = formatWebpackMessages(stats.toJson({}, true));
+      if (errors.length) {
+        return reject(new Error(errors.join('\n\n')));
+      }
+      if (emitWarningsAsErrors && warnings.length) {
+        Logger.warn(
+          chalk.yellow(
+            '\nTreating warnings as errors because process.env.CI = true.\nMost CI servers set it automatically.\n'
+          )
+        );
+        return reject(new Error(warnings.join('\n\n')));
+      }
+
+      return resolve({
+        stats,
+        warnings
+      });
+    });
+  });
+}
 
 /**
  * Get falcon-client build config
@@ -32,5 +78,7 @@ function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {
 }
 
 module.exports = {
+  webpackCompiler,
+  webpackCompileAsync,
   getBuildConfig
 };

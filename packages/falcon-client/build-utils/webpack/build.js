@@ -3,56 +3,12 @@ const chalk = require('chalk');
 const Logger = require('@deity/falcon-logger');
 const webpack = require('webpack');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
-const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react-dev-utils/FileSizeReporter');
 const clearConsole = require('react-dev-utils/clearConsole');
 
 const paths = require('./../paths');
 const createConfig = require('./config/create');
-const { getBuildConfig } = require('./tools');
-
-function webpackCompiler(config) {
-  let compiler;
-  try {
-    compiler = webpack(config);
-  } catch (error) {
-    Logger.error(chalk.red('Failed to compile.'));
-    Logger.error(error);
-
-    process.exit(1);
-  }
-
-  return compiler;
-}
-
-function webpackCompileAsync(config, emitWarningsAsErrors = false) {
-  return new Promise((resolve, reject) => {
-    const compiler = webpackCompiler(config);
-    compiler.run((error, stats) => {
-      if (error) {
-        return reject(error);
-      }
-
-      const messages = formatWebpackMessages(stats.toJson({}, true));
-      if (messages.errors.length) {
-        return reject(new Error(messages.errors.join('\n\n')));
-      }
-      if (emitWarningsAsErrors && messages.warnings.length) {
-        Logger.warn(
-          chalk.yellow(
-            '\nTreating warnings as errors because process.env.CI = true.\nMost CI servers set it automatically.\n'
-          )
-        );
-        return reject(new Error(messages.warnings.join('\n\n')));
-      }
-
-      return resolve({
-        stats,
-        warnings: messages.warnings
-      });
-    });
-  });
-}
+const { getBuildConfig, webpackCompileAsync } = require('./tools');
 
 module.exports = async () => {
   if (!checkRequiredFiles([paths.appIndexJs])) {
