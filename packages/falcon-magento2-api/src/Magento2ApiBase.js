@@ -11,7 +11,7 @@ const isEmpty = require('lodash/isEmpty');
 
 const DEFAULT_KEY = '*';
 
-import { codes } from '@deity/falcon-errors';
+const { codes } = require('@deity/falcon-errors');
 
 /**
  * Base API features (configuration fetching, response parsing, token management etc.) required for communication
