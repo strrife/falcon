@@ -21,7 +21,7 @@ const config = deepMerge(
       debug: false
     }
   },
-  bootstrap.config,
+  bootstrap.config || {},
   { arrayMerge: (destination, source) => source }
 );
 
