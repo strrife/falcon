@@ -1,5 +1,3 @@
-const fs = require('fs-extra');
-const path = require('path');
 const chalk = require('chalk');
 const Logger = require('@deity/falcon-logger');
 const Webpack = require('webpack');
@@ -9,31 +7,8 @@ const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const { choosePort } = require('react-dev-utils/WebpackDevServerUtils');
 
 const paths = require('./../paths');
-const { getBuildConfig } = require('./tools');
+const { getBuildConfig, removePreviousBuildAssets, webpackCompiler } = require('./tools');
 const createConfig = require('./config/create');
-
-function removePreviousBuildAssets(appBuild, appBuildPublic) {
-  if (fs.existsSync(appBuild)) {
-    const productionPublicDirName = path.relative(appBuild, appBuildPublic);
-    fs.readdirSync(appBuild)
-      .filter(x => x !== productionPublicDirName)
-      .forEach(file => fs.removeSync(path.join(appBuild, file)));
-  }
-}
-
-function compile(config) {
-  let compiler;
-  try {
-    compiler = Webpack(config);
-  } catch (e) {
-    Logger.error(chalk.red('Failed to compile.'));
-    Logger.error(e);
-
-    process.exit(1);
-  }
-
-  return compiler;
-}
 
 module.exports = async () => {
   if (!checkRequiredFiles([paths.appIndexJs])) {
@@ -68,8 +43,8 @@ module.exports = async () => {
     const serverConfig = createConfig('node', options, falconConfig, Webpack);
 
     // Compile our assets with webpack
-    const clientCompiler = compile(clientConfig);
-    const serverCompiler = compile(serverConfig);
+    const clientCompiler = webpackCompiler(clientConfig);
+    const serverCompiler = webpackCompiler(serverConfig);
 
     // Start our server webpack instance in watch mode after assets compile
     clientCompiler.plugin('done', () => {
@@ -84,13 +59,10 @@ module.exports = async () => {
     });
 
     // Create a new instance of Webpack-dev-server for our client assets.
-    // This will actually run on a different port than the users app.
     const clientDevServer = new WebpackDevServer(clientCompiler, clientConfig.devServer);
-
-    // Start Webpack-dev-server
-    clientDevServer.listen(options.devServerPort, err => {
-      if (err) {
-        Logger.error(err);
+    clientDevServer.listen(options.devServerPort, error => {
+      if (error) {
+        Logger.error(error);
       }
     });
   } catch (error) {

@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const chalk = require('chalk');
 const deepMerge = require('deepmerge');
 const webpack = require('webpack');
@@ -50,6 +51,15 @@ function webpackCompileAsync(config, emitWarningsAsErrors = false) {
   });
 }
 
+function removePreviousBuildAssets(appBuild, appBuildPublic) {
+  if (fs.existsSync(appBuild)) {
+    const productionPublicDirName = path.relative(appBuild, appBuildPublic);
+    fs.readdirSync(appBuild)
+      .filter(x => x !== productionPublicDirName)
+      .forEach(file => fs.removeSync(path.join(appBuild, file)));
+  }
+}
+
 /**
  * Get falcon-client build config
  * @param {string} buildConfigFileName='falcon-client.build.config.js' falcon-client build time config relative path
@@ -78,7 +88,8 @@ function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {
 }
 
 module.exports = {
+  getBuildConfig,
+  removePreviousBuildAssets,
   webpackCompiler,
-  webpackCompileAsync,
-  getBuildConfig
+  webpackCompileAsync
 };
