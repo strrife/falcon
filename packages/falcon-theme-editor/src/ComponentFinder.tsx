@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Portal, ThemedComponentPropsWithVariants } from '@deity/falcon-ui';
+import { Box, Portal } from '@deity/falcon-ui';
+import { ComponentWithDefaultTheme } from './ThemeEditorState';
 
 function throttle(callback: Function, wait: number, context: Object) {
   let timeout: number | undefined;
@@ -18,19 +19,15 @@ function throttle(callback: Function, wait: number, context: Object) {
   };
 }
 
-type ComponentLocatorState = {
+type ComponentFinderState = {
   locatedComponent?: {
     rect: ClientRect;
-    defaultTheme: ThemedComponentPropsWithVariants;
+    defaultTheme: ComponentWithDefaultTheme;
   };
 };
 
-type ComponentLocatorProps = {
-  onClick?: (
-    component: {
-      defaultTheme: ThemedComponentPropsWithVariants;
-    }
-  ) => void;
+type ComponentFinderProps = {
+  onChange: (components: ComponentWithDefaultTheme[]) => void;
 };
 
 function getNearestThemableComponentForElement(el: Element) {
@@ -40,17 +37,32 @@ function getNearestThemableComponentForElement(el: Element) {
 
   while (currentTraversal < maxElementHierarchyTraversal) {
     if (!elementToCheck) return;
-
-    // based on https://stackoverflow.com/a/50204915/105206
+    // __reactInternalInstance trick based on https://stackoverflow.com/a/50204915/105206
+    // eslint-disable-next-line
     for (const key in elementToCheck) {
       if (key.startsWith('__reactInternalInstance$')) {
         const fiberNode = (elementToCheck as any)[key];
+        // eslint-disable-next-line
         const component = fiberNode && fiberNode._debugOwner;
         const defaultTheme = component && component.memoizedProps && component.memoizedProps.defaultTheme;
+
         if (defaultTheme) {
           return {
-            defaultTheme: defaultTheme as ThemedComponentPropsWithVariants,
+            defaultTheme: defaultTheme as ComponentWithDefaultTheme,
             rect: elementToCheck.getBoundingClientRect() as ClientRect
+          };
+        }
+
+        // some themed components render via another component, like checkbox
+        // so we need to search for parent's defaultTheme prop as well
+        // eslint-disable-next-line
+        const parentComponent = component._debugOwner;
+        const parentDefaultTheme =
+          parentComponent && parentComponent.memoizedProps && parentComponent.memoizedProps.defaultTheme;
+        if (parentDefaultTheme && elementToCheck.parentElement) {
+          return {
+            defaultTheme: parentDefaultTheme as ComponentWithDefaultTheme,
+            rect: elementToCheck.parentElement.getBoundingClientRect() as ClientRect
           };
         }
       }
@@ -60,15 +72,17 @@ function getNearestThemableComponentForElement(el: Element) {
     currentTraversal++;
   }
 
-  return;
+  return undefined;
 }
 
 // based on https://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
 function getHashCode(val: string) {
   let hash = 0;
-  if (val.length == 0) return hash;
+  if (val.length === 0) return hash;
   for (let i = 0; i < val.length; i++) {
+    // eslint-disable-next-line
     hash = val.charCodeAt(i) + ((hash << 5) - hash);
+    // eslint-disable-next-line
     hash &= hash;
   }
   return hash;
@@ -79,22 +93,19 @@ function getHSLA(hash: number) {
   return `hsla(${shortened}, 90%, 30%, 0.2)`;
 }
 
-export class ComponentLocator extends React.Component<ComponentLocatorProps, ComponentLocatorState> {
-  readonly state: ComponentLocatorState = {};
-
-  throttledOnChange?: Function = undefined;
-  currentElementFromPoint?: Element = undefined;
+export class ComponentFinder extends React.Component<ComponentFinderProps, ComponentFinderState> {
+  readonly state: ComponentFinderState = {};
 
   componentDidMount() {
     this.throttledOnChange = throttle(this.onChange, 50, this);
     window.addEventListener('mousemove', this.throttledOnChange as any);
-    window.addEventListener('click', this.onClick);
+    window.addEventListener('click', this.onClick, true);
     window.addEventListener('scroll', this.onScroll);
   }
 
   componentWillUnmount() {
     window.removeEventListener('mousemove', this.throttledOnChange as any);
-    window.removeEventListener('click', this.onClick);
+    window.removeEventListener('click', this.onClick, true);
     window.addEventListener('scroll', this.onScroll);
     this.currentElementFromPoint = undefined;
     this.throttledOnChange = undefined;
@@ -106,6 +117,7 @@ export class ComponentLocator extends React.Component<ComponentLocatorProps, Com
     if (this.currentElementFromPoint === elementFromPoint) return;
 
     this.currentElementFromPoint = elementFromPoint;
+
     const nearestThemableComponent = getNearestThemableComponentForElement(this.currentElementFromPoint);
 
     requestAnimationFrame(() => {
@@ -115,13 +127,18 @@ export class ComponentLocator extends React.Component<ComponentLocatorProps, Com
     });
   }
 
-  onClick = () => {
-    if (!this.props.onClick) return;
+  onClick = (e: MouseEvent) => {
+    if (!this.props.onChange) return;
     if (!this.state.locatedComponent) return;
 
-    this.props.onClick({
-      defaultTheme: this.state.locatedComponent.defaultTheme
-    });
+    this.props.onChange([
+      {
+        defaultTheme: this.state.locatedComponent.defaultTheme
+      }
+    ]);
+
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   onScroll = () => {
@@ -130,6 +147,9 @@ export class ComponentLocator extends React.Component<ComponentLocatorProps, Com
       locatedComponent: undefined
     });
   };
+
+  currentElementFromPoint?: Element = undefined;
+  throttledOnChange?: Function = undefined;
 
   renderOverlay() {
     const { locatedComponent } = this.state;
@@ -160,7 +180,7 @@ export class ComponentLocator extends React.Component<ComponentLocatorProps, Com
   render() {
     return (
       <Portal>
-        <Box position="fixed" top="0" left="0" height="100%" width="100%" css={{ pointerEvents: 'none' }}>
+        <Box position="fixed" top="0" left="0" css={{ pointerEvents: 'none', height: 100, width: 100 }}>
           {this.renderOverlay()}
         </Box>
       </Portal>

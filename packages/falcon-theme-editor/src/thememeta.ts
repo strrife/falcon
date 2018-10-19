@@ -144,7 +144,7 @@ export const themeMeta: ThemeMeta = {
   }
 };
 
-type ThemeCategories = {
+export type ThemeCategories = {
   [name: string]: {
     name: string;
     themeSections: (keyof Theme)[];
