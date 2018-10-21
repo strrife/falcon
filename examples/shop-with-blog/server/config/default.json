@@ -1,6 +1,8 @@
 {
   "debug": false,
   "port": 4000,
+  "logLevel": "info",
+  "verboseEvents": false,
   "apis": [
     {
       "name": "api-wordpress",

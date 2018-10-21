@@ -18,6 +18,8 @@ import {
   PaginationData
 } from '../types';
 
+import Logger = require('@deity/falcon-logger');
+
 export type PaginationValue = number | string | null;
 
 export default abstract class ApiDataSource<TContext = any> extends RESTDataSource<TContext> {
@@ -48,6 +50,10 @@ export default abstract class ApiDataSource<TContext = any> extends RESTDataSour
 
     this.fetchUrlPriority = fetchUrlPriority || this.fetchUrlPriority;
     this.perPage = perPage || this.perPage;
+
+    // FIXME: nasty way of overriding "private" method and avoiding TSC errors.
+    // Remove once there's an option for using an external logger.
+    this['trace'] = this.traceLog.bind(this);
   }
 
   /**
@@ -180,6 +186,26 @@ export default abstract class ApiDataSource<TContext = any> extends RESTDataSour
     }
     if (typeof init.cacheOptions === 'object') {
       (init.cacheOptions as ContextCacheOptions).context = init.context;
+    }
+  }
+
+  /**
+   * This is a temporary solution to override Apollo's own "trace" method to use external Logger
+   * @param {string} label Trace label
+   * @param {function} fn Callback to trace
+   * @return {Promise<TResult>} Result
+   */
+  private async traceLog<TResult>(label: string, fn: () => Promise<TResult>): Promise<TResult> {
+    if (process && process.env && process.env.NODE_ENV === 'development') {
+      const startTime = Date.now();
+      try {
+        return await fn();
+      } finally {
+        const duration = Date.now() - startTime;
+        Logger.debug(`${this.name}: ${label} (${duration}ms)`);
+      }
+    } else {
+      return fn();
     }
   }
 
