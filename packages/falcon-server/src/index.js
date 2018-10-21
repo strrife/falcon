@@ -61,7 +61,7 @@ class FalconServer {
 
     if (verboseEvents) {
       this.eventEmitter.onAny(event => {
-        Logger.trace(`Triggering "${event}" event listener...`);
+        Logger.debug(`Triggering "${event}" event listener...`);
       });
     }
   }
