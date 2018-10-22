@@ -82,7 +82,8 @@ This is an application entry point which needs to export the following:
 - (TODO) `config: Object` - configuration object, with possible settings listed below
   - `serverSideRendering` - switch to control whether the Server Side Rendering is enabled, default is `true`
   - `usePwaManifest` - default is `true`
-  - `gtmCode` - Google Tag Manager code
+  - `googleAnalytics`:
+    - `trackerID` - Google Analytics tracking code
 
 optionally you can export following configuration to inject your customization
 
