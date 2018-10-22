@@ -45,8 +45,7 @@
     "packages/falcon-dev-tools/eslint-config-falcon",
     "packages/falcon-dev-tools/falcon-i18n-webpack-plugin",
     "examples/shop-with-blog/client",
-    "examples/shop-with-blog/server",
-    "packages/falcon-analytics-plugin"
+    "examples/shop-with-blog/server"
   ],
   "husky": {
     "hooks": {
