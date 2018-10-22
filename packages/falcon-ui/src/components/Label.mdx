@@ -4,15 +4,18 @@ menu: Components
 ---
 
 import { Playground } from 'docz';
+import { ThemePreview } from '../../docs';
 import { Label, Input, Box } from '../';
 
-# Label
+<ThemePreview of={Label} />
 
-### Basic usage
+`Label` component renders as an `<label>` and accepts all of the `<label>` props (`htmlFor`, `onClick` etc) as well as all of the [responsive, theme-based style props](/responsive-props).
+
+```javascript
+import { Label } from '@deity/falcon-ui';
+```
 
 <Playground>
-  <Box>
-    <Label htmlFor="name">Name</Label>
-    <Input id="name" type="text" />
-  </Box>
+  <Label ml="xs" htmlFor="name">Name</Label>
+  <Input id="name" type="text" />
 </Playground>
