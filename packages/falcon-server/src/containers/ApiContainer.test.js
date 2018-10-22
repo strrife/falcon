@@ -1,11 +1,19 @@
+const { EventEmitter2 } = require('eventemitter2');
 const ApiContainer = require('./ApiContainer');
 
 const apis = [{ package: 'fake-backend-api', name: 'fake-api' }];
 
 describe('ApiContainer', () => {
-  it('Should register provided API DataSources', () => {
+  let ee;
+
+  beforeEach(() => {
+    ee = new EventEmitter2();
+  });
+
+  it('Should register provided API DataSources', async () => {
     /** @type {ApiContainer} */
-    const container = new ApiContainer(apis);
+    const container = new ApiContainer(ee);
+    await container.registerApis(apis);
     expect(container.dataSources.size).toBe(1);
     expect(container.endpoints).toHaveLength(1);
 
@@ -17,14 +25,16 @@ describe('ApiContainer', () => {
     expect(endpoint.path).toBe('/info');
   });
 
-  it('Should do nothing for an empty API list', () => {
-    const container = new ApiContainer();
+  it('Should do nothing for an empty API list', async () => {
+    const container = new ApiContainer(ee);
+    await container.registerApis();
     expect(container.dataSources.size).toBe(0);
     expect(container.endpoints).toHaveLength(0);
   });
 
-  it('Should not fail for missing API DataSource package', () => {
-    const container = new ApiContainer([{ package: 'foo-bar' }]);
+  it('Should not fail for missing API DataSource package', async () => {
+    const container = new ApiContainer(ee);
+    await container.registerApis([{ package: 'foo-bar' }]);
 
     expect(container.dataSources.size).toBe(0);
   });
