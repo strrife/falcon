@@ -115,6 +115,10 @@ Builds the app for production, and outputs to the `./build` folder.
 
 The build is minified and the filenames include the hashes. Your app is ready to be deployed!
 
+### `falcon-client size`
+
+Runs an interactive zoomable treemap of output files to visualize their size. Report will be automatically open in default browser at `http://localhost:8888`.
+
 ## API contract
 
 Application needs to have the following files `index.js`, `razzle.config.js`, and optionally `falcon-client.config.js`. Each of them should be placed in application root directory.
