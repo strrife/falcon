@@ -8,8 +8,8 @@
     "falcon-client": "./bin/falcon-client.js"
   },
   "scripts": {
-    "test": "cross-env RAZZLE_PUBLIC_DIR=./test/static node ./bin/falcon-client test --env=jsdom",
-    "test:coverage": "cross-env RAZZLE_PUBLIC_DIR=./test/static node ./bin/falcon-client test --env=jsdom --ci --coverage"
+    "test": "cross-env node ./bin/falcon-client test --env=jsdom",
+    "test:coverage": "cross-env node ./bin/falcon-client test --env=jsdom --ci --coverage"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "./../../test/setupTests.js"

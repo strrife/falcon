@@ -16,8 +16,8 @@ function getClientEnv(target, options, envToBuildIn) {
         PORT: env === 'development' ? port : undefined,
         BUILD_TARGET: target === 'web' ? 'client' : 'server',
         PUBLIC_PATH: env === 'production' ? publicPath : undefined,
-        RAZZLE_ASSETS_MANIFEST: paths.appManifest,
-        RAZZLE_PUBLIC_DIR: env === 'production' ? paths.appBuildPublic : paths.appPublic
+        ASSETS_MANIFEST: paths.appManifest,
+        PUBLIC_DIR: env === 'production' ? paths.appBuildPublic : paths.appPublic
       }
     );
 

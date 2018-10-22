@@ -6,8 +6,8 @@ module.exports = () => {
   process.env.PORT = 3000;
   process.env.PUBLIC_PATH = '/';
   process.env.BUILD_TARGET = '';
-  process.env.RAZZLE_ASSETS_MANIFEST = 'assets/manifest.json';
-  process.env.RAZZLE_PUBLIC_DIR = 'public/dir';
+  process.env.ASSETS_MANIFEST = 'assets/manifest.json';
+  process.env.PUBLIC_DIR = 'public/dir';
 
   const paths = require('./../paths');
   const createConfig = require('./config/create');

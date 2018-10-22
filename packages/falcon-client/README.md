@@ -143,37 +143,34 @@ export { clientApolloSchema };
 
 For more information se [this](#state-management)
 
-### `razzle.config.js` (required)
+### `falcon-client.build.config.js`
 
-This is an build time configuration file which is based on [razzle](https://github.com/jaredpalmer/razzle). `razzlePluginFalconClient` is used to setting up entire build process:
+This is an optional build time configuration file which is used to setting up entire build process.
+By default support for following is turned on:
+
+- Latest JavaScript achieved via babel 7 compiler
+- [HMR](https://webpack.js.org/concepts/hot-module-replacement/) - page auto-reload if you make edits (on both backend and frontend)
+- ESLint with [Prettier](https://github.com/prettier/prettier) - to keep your code base clean and consistent, [see presets](https://github.com/deity-io/falcon/tree/master/packages/falcon-dev-tools/eslint-config-falcon)
+
+Here is example of `falcon-client.build.config.js` file content with defaults:
 
 ```js
-const { razzlePluginFalconClient } = require('@deity/falcon-client');
-
 module.exports = {
-  plugins: [razzlePluginFalconClient()]
+  clearConsole: true,
+  i18n: {}
+  envToBuildIn: [],
+  plugins: [],
 };
 ```
 
-In order to customize it please install razzle plugin or write your own according to [razzle](https://github.com/jaredpalmer/razzle#customization) documentation.
+- `clearConsole: boolean` - (default: `true`) determines whether console should be cleared when starting script
+- `i18n: object` - (default: `{}`) internationalization configuration, [see the details](#internationalization)
+- `envToBuildIn` - (default: `[]`) an array of environment variable names which should be build in into bundle, [see the details](#environment-variables)
+- `plugins` - (default: `[]`) an array of plugins which can modify underlying webpack configuration. Plugins API is `razzle` compatible [see the details](https://github.com/jaredpalmer/razzle#plugins)
 
-It is recommended to have `razzlePluginFalconClient` on first place in `plugins` array.
+### `bootstrap.js`
 
-#### razzlePluginFalconClient
-
-By default support for following is turned on:
-
-- [HMR](https://webpack.js.org/concepts/hot-module-replacement/) - page auto-reload if you make edits (on both backend and frontend)
-- TypeScript - you can (it is not mandatory) to write your code in TypeScript
-- ESLint with [Prettier](https://github.com/prettier/prettier) - to keep your code base clean and consistent, [see presets](https://github.com/deity-io/falcon/tree/master/packages/falcon-dev-tools/eslint-config-falcon)
-
-Please bear in mind that falcon Client plugin for Razzle provide its own configuration options and they are described in details later in documentation:
-
-- [internationalization](#internationalization)
-
-### `falcon-client.config.js`
-
-This is an runtime configuration file (fully optional).
+This is an optional runtime configuration file.
 
 ```js
 const config = require('config');
@@ -203,8 +200,8 @@ This is configuration object used to setup `@deity/falcon-client`
     `apollo-link-http` method which defines HTTP link the remote Falcon Server
     ([available options](https://www.apollographql.com/docs/link/links/http.html#options))
   - `apolloClient.config` - configuration object that will be passed to the
-  main `ApolloClient` constructor
-  ([available options](https://www.apollographql.com/docs/react/api/apollo-client.html#apollo-client))
+    main `ApolloClient` constructor
+    ([available options](https://www.apollographql.com/docs/react/api/apollo-client.html#apollo-client))
 
 All configuration passed by `config` is accessible via `ApolloClient`, which mean you can access any of its property via graphQL query.
 
@@ -233,12 +230,27 @@ Falcon Client exposes set of hooks to which you can attache custom logic:
 
 ## Environment Variables
 
-### Build-time Variables
+<!-- ### Build-time Variables -->
+
+Falcon client uses set of environment variables. All of them can be accessed via `process.env` anywhere in your application.
 
 - `process.env.NODE_ENV` - `development` or `production`
-- `process.env.VERBOSE`- default is `false`, setting this to true will not clear the console when you make edits in development (useful for debugging).
-- `process.env.PORT`- default is `3000`, unless changed
+- `process.env.BABEL_ENV`- `development` or `production`
+- `process.env.PORT`- (default: `3000`), builded in only when `development`
 - `process.env.HOST`- default is `0.0.0.0`
+- `process.env.BUILD_TARGET` - `client` or `server`
+- `process.env.ASSETS_MANIFEST` - path to webpack assets manifest,
+- `process.env.PUBLIC_DIR`: directory with your static assets
+
+You can create your own custom build-time environment variables. They must be listed on `envToBuildIn` in `falcon-client.build.config.js` file. Any other variables except the ones listed above will be ignored to avoid accidentally exposing a private key on the machine that could have the same name. Changing any environment variables will require you to restart the development server if it is running.
+
+For example, bellow configuration expose environment variable named `SECRET_CODE` as `process.env.SECRET_CODE`:
+
+```js
+module.exports = {
+  envToBuildIn: ['SECRET_CODE']
+};
+```
 
 ## State Management
 
@@ -363,12 +375,12 @@ To use default resources you need to install `@deity/falcon-i18n` npm module (or
 npm install --save @deity/falcon-i18n
 ```
 
-Then in `razzle.config.js` file you need to update `razzlePluginFalconClient` plugin configuration. Add `@deity/falcon-i18n` package name into `resourcePackages` array.
+Then in `falcon-client.build.config.js` file you need to update `i18n` configuration. Add `@deity/falcon-i18n` package name into `resourcePackages` array.
 
 Imported package (like `@deity/falcon-i18n`) can contain more languages and/or namespaces than you are interested in. So if you don't want to use all of them (to save bundle size, or just not to use some namespace as it's not relevant to your project) you can filter them out by using `filter` option - that will instruct webpack to skip items not listed in the `filter` property.
 
 ```javascript
-razzlePluginFalconClient({
+module.exports = {
   i18n: {
     resourcePackages: ['@deity/falcon-i18n'],
     filter: {
@@ -376,7 +388,7 @@ razzlePluginFalconClient({
       ns: ['common', 'blog']
     }
   }
-});
+};
 ```
 
 Above example configuration will deliver to your project default `common` and `blog` namespaces from English language.

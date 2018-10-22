@@ -7,7 +7,7 @@ function falconWebServer() {
   const app = require('./clientApp');
   const bootstrap = require('./clientApp/bootstrap').default;
   // eslint-disable-next-line
-  const assetsManifest = require(process.env.RAZZLE_ASSETS_MANIFEST);
+  const assetsManifest = require(process.env.ASSETS_MANIFEST);
 
   /**
    * Creates an instance of Falcon web server
