@@ -121,7 +121,7 @@ Runs an interactive zoomable treemap of output files to visualize their size. Re
 
 ## API contract
 
-Application needs to have the following files `index.js`, `razzle.config.js`, and optionally `falcon-client.config.js`. Each of them should be placed in application root directory.
+Application needs to have `index.js`, and following optional configuration files `bootstrap.js` and `falcon-client.build.config.js`. Each of them should be placed in application root directory.
 
 ### `index.js` (required)
 
@@ -142,31 +142,6 @@ export { clientApolloSchema };
 ```
 
 For more information se [this](#state-management)
-
-### `falcon-client.build.config.js`
-
-This is an optional build time configuration file which is used to setting up entire build process.
-By default support for following is turned on:
-
-- Latest JavaScript achieved via babel 7 compiler
-- [HMR](https://webpack.js.org/concepts/hot-module-replacement/) - page auto-reload if you make edits (on both backend and frontend)
-- ESLint with [Prettier](https://github.com/prettier/prettier) - to keep your code base clean and consistent, [see presets](https://github.com/deity-io/falcon/tree/master/packages/falcon-dev-tools/eslint-config-falcon)
-
-Here is example of `falcon-client.build.config.js` file content with defaults:
-
-```js
-module.exports = {
-  clearConsole: true,
-  i18n: {}
-  envToBuildIn: [],
-  plugins: [],
-};
-```
-
-- `clearConsole: boolean` - (default: `true`) determines whether console should be cleared when starting script
-- `i18n: object` - (default: `{}`) internationalization configuration, [see the details](#internationalization)
-- `envToBuildIn` - (default: `[]`) an array of environment variable names which should be build in into bundle, [see the details](#environment-variables)
-- `plugins` - (default: `[]`) an array of plugins which can modify underlying webpack configuration. Plugins API is `razzle` compatible [see the details](https://github.com/jaredpalmer/razzle#plugins)
 
 ### `bootstrap.js`
 
@@ -227,6 +202,31 @@ Falcon Client exposes set of hooks to which you can attache custom logic:
 - `onServerCreated(server: Koa)` - handler invoked immediately after koa server creation
 - `onServerInitialized(server: Koa)` - handler invoked immediately after koa server setup (when middlewares like handling errors, serving static files and routes were set up)
 - `onServerStarted(server: Koa)` - handler invoked when koa server started with no errors
+
+### `falcon-client.build.config.js`
+
+This is an optional build time configuration file which is used to setting up entire build process.
+By default support for following is turned on:
+
+- Latest JavaScript achieved via babel 7 compiler
+- [HMR](https://webpack.js.org/concepts/hot-module-replacement/) - page auto-reload if you make edits (on both backend and frontend)
+- ESLint with [Prettier](https://github.com/prettier/prettier) - to keep your code base clean and consistent, [see presets](https://github.com/deity-io/falcon/tree/master/packages/falcon-dev-tools/eslint-config-falcon)
+
+Here is example of `falcon-client.build.config.js` file content with defaults:
+
+```js
+module.exports = {
+  clearConsole: true,
+  i18n: {}
+  envToBuildIn: [],
+  plugins: [],
+};
+```
+
+- `clearConsole: boolean` - (default: `true`) determines whether console should be cleared when starting script
+- `i18n: object` - (default: `{}`) internationalization configuration, [see the details](#internationalization)
+- `envToBuildIn` - (default: `[]`) an array of environment variable names which should be build in into bundle, [see the details](#environment-variables)
+- `plugins` - (default: `[]`) an array of plugins which can modify underlying webpack configuration. Plugins API is `razzle` compatible [see the details](https://github.com/jaredpalmer/razzle#plugins)
 
 ## Environment Variables
 
