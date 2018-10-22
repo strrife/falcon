@@ -25,11 +25,11 @@ import { Details, Summary, DetailsContent } from '@deity/falcon-ui';
       {({ value, set }) => (
         <React.Fragment>
           <Details open={value === 1}>
-            <Summary onClick={e => { e.preventDefault(); set(1);}}>First</Summary>
+            <Summary onClick={e => { e.preventDefault(); set(value === 1 ? 0 : 1);}}>First</Summary>
             <DetailsContent>Now that we know who you are, I know who I am. Im not a mistake! It all makes sense! you know how you can tell who the arch...</DetailsContent>
           </Details>
           <Details open={value === 2}>
-            <Summary onClick={e => { e.preventDefault(); set(2);}}>Second</Summary>
+            <Summary onClick={e => { e.preventDefault(); set(value === 2 ? 0 : 2);}}>Second</Summary>
             <DetailsContent>In a comic you know how you can tell who the arch-villain s going to be? Hes the exact opposite of the hero</DetailsContent>
           </Details>
         </React.Fragment>
