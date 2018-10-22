@@ -125,7 +125,6 @@ module.exports = (target = 'web', options, buildConfig) => {
 
   const clientEnv = getClientEnv(target, options, buildConfig.envToBuildIn);
 
-  /* eslint-disable */
   // This is our base webpack config.
   let config = {
     mode: IS_DEV ? 'development' : 'production',
@@ -229,57 +228,46 @@ module.exports = (target = 'web', options, buildConfig) => {
         {
           test: /\.css$/,
           exclude: [paths.appBuild, /\.module\.css$/],
-          use: IS_NODE
-            ? // Style-loader does not work in Node.js without some crazy
-              // magic. Luckily we just need css-loader.
-              [
+          use: IS_NODE // Style-loader does not work in Node.js without some crazy magic. Luckily we just need css-loader.
+            ? [
                 {
                   loader: require.resolve('css-loader'),
-                  options: {
-                    importLoaders: 1
-                  }
+                  options: { importLoaders: 1 }
                 }
               ]
-            : IS_DEV
-              ? [
-                  require.resolve('style-loader'),
-                  {
-                    loader: require.resolve('css-loader'),
-                    options: {
-                      importLoaders: 1
-                    }
-                  },
-                  {
-                    loader: require.resolve('postcss-loader'),
-                    options: postCssOptions
-                  }
-                ]
-              : [
-                  MiniCssExtractPlugin.loader,
-                  {
-                    loader: require.resolve('css-loader'),
-                    options: {
-                      importLoaders: 1,
-                      modules: false,
-                      minimize: true
-                    }
-                  },
-                  {
-                    loader: require.resolve('postcss-loader'),
-                    options: postCssOptions
-                  }
-                ]
+            : [
+                ...(IS_DEV
+                  ? [
+                      require.resolve('style-loader'),
+                      {
+                        loader: require.resolve('css-loader'),
+                        options: { importLoaders: 1 }
+                      }
+                    ]
+                  : [
+                      MiniCssExtractPlugin.loader,
+                      {
+                        loader: require.resolve('css-loader'),
+                        options: {
+                          importLoaders: 1,
+                          modules: false,
+                          minimize: true
+                        }
+                      }
+                    ]),
+                {
+                  loader: require.resolve('postcss-loader'),
+                  options: postCssOptions
+                }
+              ]
         },
-        // Adds support for CSS Modules (https://github.com/css-modules/css-modules)
-        // using the extension .module.css
+        // Adds support for CSS Modules (https://github.com/css-modules/css-modules) using the extension .module.css
         {
           test: /\.module\.css$/,
           exclude: [paths.appBuild],
-          use: IS_NODE
+          use: IS_NODE // on the server we do not need to embed the css and just want the identifier mappings https://github.com/webpack-contrib/css-loader#scope
             ? [
                 {
-                  // on the server we do not need to embed the css and just want the identifier mappings
-                  // https://github.com/webpack-contrib/css-loader#scope
                   loader: require.resolve('css-loader/locals'),
                   options: {
                     modules: true,
@@ -288,38 +276,36 @@ module.exports = (target = 'web', options, buildConfig) => {
                   }
                 }
               ]
-            : IS_DEV
-              ? [
-                  require.resolve('style-loader'),
-                  {
-                    loader: require.resolve('css-loader'),
-                    options: {
-                      modules: true,
-                      importLoaders: 1,
-                      localIdentName: '[path]__[name]___[local]'
-                    }
-                  },
-                  {
-                    loader: require.resolve('postcss-loader'),
-                    options: postCssOptions
-                  }
-                ]
-              : [
-                  MiniCssExtractPlugin.loader,
-                  {
-                    loader: require.resolve('css-loader'),
-                    options: {
-                      modules: true,
-                      importLoaders: 1,
-                      minimize: true,
-                      localIdentName: '[path]__[name]___[local]'
-                    }
-                  },
-                  {
-                    loader: require.resolve('postcss-loader'),
-                    options: postCssOptions
-                  }
-                ]
+            : [
+                ...(IS_DEV
+                  ? [
+                      require.resolve('style-loader'),
+                      {
+                        loader: require.resolve('css-loader'),
+                        options: {
+                          modules: true,
+                          importLoaders: 1,
+                          localIdentName: '[path]__[name]___[local]'
+                        }
+                      }
+                    ]
+                  : [
+                      MiniCssExtractPlugin.loader,
+                      {
+                        loader: require.resolve('css-loader'),
+                        options: {
+                          modules: true,
+                          importLoaders: 1,
+                          minimize: true,
+                          localIdentName: '[path]__[name]___[local]'
+                        }
+                      }
+                    ]),
+                {
+                  loader: require.resolve('postcss-loader'),
+                  options: postCssOptions
+                }
+              ]
         }
       ].filter(x => x)
     }
@@ -347,16 +333,14 @@ module.exports = (target = 'web', options, buildConfig) => {
       })
     ];
 
-    // Specify webpack Node.js output path and filename
     config.output = {
       path: paths.appBuild,
       publicPath: IS_DEV ? `http://${host}:${devServerPort}/` : '/',
       filename: 'server.js',
       libraryTarget: 'commonjs2'
     };
-    // Add some plugins...
+
     config.plugins = [
-      // We define environment variables that can be accessed globally in our
       new webpack.DefinePlugin(clientEnv.stringified),
       // Prevent creating multiple chunks for the server
       new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })
@@ -365,7 +349,6 @@ module.exports = (target = 'web', options, buildConfig) => {
     config.entry = [paths.ownServerIndexJs];
 
     if (IS_DEV) {
-      // Use watch mode
       config.watch = true;
       config.entry.unshift('webpack/hot/poll?300');
 
@@ -373,7 +356,6 @@ module.exports = (target = 'web', options, buildConfig) => {
       config.entry.unshift('razzle-dev-utils/prettyNodeErrors');
       config.plugins = [
         ...config.plugins,
-        // Add hot module replacement
         new webpack.HotModuleReplacementPlugin(),
         // Suppress errors to console (we use our own logger)
         new StartServerPlugin({
@@ -389,7 +371,6 @@ module.exports = (target = 'web', options, buildConfig) => {
   if (IS_WEB) {
     config.plugins = [
       getFalconI18nPlugin(buildConfig.i18n),
-      // Emit assets json file
       new AssetsPlugin({
         path: paths.appBuild,
         filename: 'assets.json',
@@ -430,19 +411,17 @@ module.exports = (target = 'web', options, buildConfig) => {
         // watchContentBase: true,
         headers: { 'Access-Control-Allow-Origin': '*' },
         historyApiFallback: {
-          // Paths with dots should still use the history fallback.
-          // See https://github.com/facebookincubator/create-react-app/issues/387.
+          // Paths with dots should still use the history fallback. See https://github.com/facebookincubator/create-react-app/issues/387.
           disableDotRule: true
         },
-        host: host,
+        host,
         hot: true,
         noInfo: true,
         overlay: false,
         port: devServerPort,
         quiet: true,
         // By default files from `contentBase` will not trigger a page reload.
-        // Reportedly, this avoids CPU overload on some systems.
-        // https://github.com/facebookincubator/create-react-app/issues/293
+        // Reportedly, this avoids CPU overload on some systems. https://github.com/facebookincubator/create-react-app/issues/293
         watchOptions: {
           ignored: /node_modules/
         },
@@ -493,7 +472,6 @@ module.exports = (target = 'web', options, buildConfig) => {
 
       config.plugins = [
         ...config.plugins,
-        // Define production environment vars
         new webpack.DefinePlugin(clientEnv.stringified),
         // Extract our CSS into a files.
         new MiniCssExtractPlugin({
