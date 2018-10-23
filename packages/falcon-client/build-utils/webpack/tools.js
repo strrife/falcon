@@ -61,22 +61,33 @@ function removePreviousBuildAssets(appBuild, appBuildPublic) {
 }
 
 /**
+ * @typedef {object} FalconClientBuildConfig
+ * @property {boolean} clearConsole if clear console
+ * @property {boolean} useWebmanifest is process Web App Manifest
+ * @property {object} i18n i18n falcon client webpack plugin configuration
+ * @property {string[]} envToBuildIn env vars to build in bundle
+ * @property {(function|string)[]} plugins razzle compatible plugins
+ */
+
+/**
  * Get falcon-client build config
  * @param {string} buildConfigFileName='falcon-client.build.config.js' falcon-client build time config relative path
- * @returns {object} falcon-client build time config
+ * @returns {FalconClientBuildConfig} falcon-client build time config
  */
 function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {
-  let config = {
+  const configDefaults = {
     clearConsole: true,
+    useWebmanifest: false,
+    i18n: {},
     envToBuildIn: [],
-    i18n: {}
+    plugins: []
   };
 
   const buildConfigPath = paths.resolveApp(buildConfigFileName);
   if (fs.existsSync(buildConfigPath)) {
     try {
       // eslint-disable-next-line
-      config = deepMerge(config, require(buildConfigPath), { arrayMerge: (destination, source) => source });
+      return deepMerge(configDefaults, require(buildConfigPath), { arrayMerge: (destination, source) => source });
     } catch (e) {
       clearConsole();
       Logger.error(`Invalid falcon-client.build.config.js file, (${buildConfigFileName}).`, e);
@@ -84,7 +95,7 @@ function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {
     }
   }
 
-  return config;
+  return configDefaults;
 }
 
 function formatBytes(bytes) {
