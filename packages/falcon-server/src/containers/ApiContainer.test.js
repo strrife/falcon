@@ -1,6 +1,10 @@
 const ApiContainer = require('./ApiContainer');
 
-const apis = [{ package: 'fake-backend-api', name: 'fake-api' }];
+const apis = {
+  'fake-api': {
+    package: 'fake-backend-api'
+  }
+};
 
 describe('ApiContainer', () => {
   it('Should register provided API DataSources', () => {

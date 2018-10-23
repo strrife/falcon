@@ -2,17 +2,17 @@ const { mockServer } = require('graphql-tools');
 const ExtensionContainer = require('./ExtensionContainer');
 const { BaseSchema } = require('../index');
 
-const extensions = [
-  {
+const extensions = {
+  shop: {
     package: 'fake-shop-extension',
     config: {
       apiUrl: 'https://example.com'
     }
   },
-  {
+  reviews: {
     package: 'fake-product-reviews-extension'
   }
-];
+};
 
 const mocks = {
   Product: () => ({
