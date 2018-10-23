@@ -1,5 +1,4 @@
 import React from 'react';
-import { FieldArray } from 'formik';
 import { Box, Radio, H3 } from '@deity/falcon-ui';
 
 const Option: React.SFC<{ option: any; disabled?: boolean; onChange: Function }> = ({ option, disabled, onChange }) => (

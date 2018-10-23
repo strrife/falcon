@@ -1,5 +1,6 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
+import { adopt } from 'react-adopt';
 import { themed, Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
 import { Breadcrumbs } from '../Breadcrumbs';
 // import { ProductMeta } from './ProductMeta';
@@ -86,22 +87,45 @@ const ProductDescriptionLayout = themed({
   }
 });
 
-export class Product extends React.PureComponent<{ product: any; translations: ProductTranslations }> {
-  addToCartHandler(sku: String, addToCart: Function): Function {
-    return (values: any, props: any) => {
-      addToCart({
-        variables: {
-          input: {
-            sku,
-            ...values,
-            qty: parseInt(values.qty, 10)
-          }
-        }
-      });
-      props.setSubmitting(false);
-    };
-  }
+/**
+ * Combine render props functions into one with react-adopt
+ */
+const ProductData = adopt({
+  // mutation delivers addToCart method which should be called with proper data
+  mutation: ({ render }) => (
+    <AddToCartMutation>{(addToCart, result) => render({ addToCart, result })}</AddToCartMutation>
+  ),
 
+  // formik handles form operations and triggers submit when onSubmit event is fired on the form
+  formik: ({ sku, mutation, render }) => (
+    <Formik
+      initialValues={{ qty: 1 }}
+      onSubmit={(values: any) =>
+        mutation.addToCart({
+          variables: {
+            input: {
+              sku,
+              ...values,
+              qty: parseInt(values.qty, 10)
+            }
+          }
+        })
+      }
+    >
+      {render}
+    </Formik>
+  ),
+
+  // product configurator takes care about interactions between configurable product options and serializes
+  // selected data into proper format so GraphQL can use it
+  productConfigurator: ({ formik, render }) => (
+    <ProductConfigurator onChange={(name: string, value: any) => formik.setFieldValue(name, value)}>
+      {render}
+    </ProductConfigurator>
+  )
+});
+
+export class Product extends React.PureComponent<{ product: any; translations: ProductTranslations }> {
   render() {
     const { product, translations } = this.props;
 
@@ -116,50 +140,42 @@ export class Product extends React.PureComponent<{ product: any; translations: P
             {`${translations.sku}: ${product.sku}`}
           </Text>
           <H1 gridArea={Area.title}>{product.name}</H1>
-          <AddToCartMutation>
-            {(addToCart, { error }) => (
-              <Formik initialValues={{ qty: 1 }} onSubmit={this.addToCartHandler(product.sku, addToCart) as any}>
-                {(props: any) => (
-                  <ProductConfigurator onChange={(name: string, value: any) => props.setFieldValue(name, value)}>
-                    {({ handleProductConfigurationChange }) => (
-                      <React.Fragment>
-                        <Text fontSize="xxl" gridArea={Area.price}>
-                          {product.currency} {product.price}
-                        </Text>
-                        <Form>
-                          <ProductOptions
-                            options={product.configurableOptions}
-                            onChange={(ev: React.ChangeEvent<any>) =>
-                              handleProductConfigurationChange('configurableOption', ev)
-                            }
-                          />
-                          <ProductDescriptionLayout
-                            dangerouslySetInnerHTML={{ __html: product.description }}
-                            gridArea={Area.description}
-                          />
-                          <FlexLayout alignItems="center" gridArea={Area.cta}>
-                            <NumberInput
-                              mr="md"
-                              min="1"
-                              name="qty"
-                              disabled={props.isSubmitting}
-                              defaultValue={String(props.values.qty)}
-                              onChange={props.handleChange}
-                            />
-                            <Button type="submit">
-                              <Icon src="cart" stroke="white" size={20} mr="sm" />
-                              {translations.addToCart}
-                            </Button>
-                            {!!error && <Text color="error">{error.message}</Text>}
-                          </FlexLayout>
-                        </Form>
-                      </React.Fragment>
-                    )}
-                  </ProductConfigurator>
-                )}
-              </Formik>
+          <ProductData sku={product.sku}>
+            {({ mutation, formik, productConfigurator }: any) => (
+              <React.Fragment>
+                <Text fontSize="xxl" gridArea={Area.price}>
+                  {product.currency} {product.price}
+                </Text>
+                <Form>
+                  <ProductOptions
+                    options={product.configurableOptions}
+                    onChange={(ev: React.ChangeEvent<any>) =>
+                      productConfigurator.handleProductConfigurationChange('configurableOption', ev)
+                    }
+                  />
+                  <ProductDescriptionLayout
+                    dangerouslySetInnerHTML={{ __html: product.description }}
+                    gridArea={Area.description}
+                  />
+                  <FlexLayout alignItems="center" gridArea={Area.cta} mt="md">
+                    <NumberInput
+                      mr="md"
+                      min="1"
+                      name="qty"
+                      disabled={formik.isSubmitting}
+                      defaultValue={String(formik.values.qty)}
+                      onChange={formik.handleChange}
+                    />
+                    <Button type="submit">
+                      <Icon src="cart" stroke="white" size={20} mr="sm" />
+                      {translations.addToCart}
+                    </Button>
+                    {!!mutation.result.error && <Text color="error">{mutation.result.error.message}</Text>}
+                  </FlexLayout>
+                </Form>
+              </React.Fragment>
             )}
-          </AddToCartMutation>
+          </ProductData>
           <Box gridArea={Area.meta} my="lg">
             {/* <ProductMeta meta={data.seo} /> */}
           </Box>
