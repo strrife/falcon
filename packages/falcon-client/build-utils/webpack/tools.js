@@ -5,6 +5,7 @@ const deepMerge = require('deepmerge');
 const webpack = require('webpack');
 const Logger = require('@deity/falcon-logger');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
+const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const clearConsole = require('react-dev-utils/clearConsole');
 const paths = require('./../paths');
 
@@ -98,6 +99,19 @@ function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {
   return configDefaults;
 }
 
+/**
+ * Check whether required files exists
+ * @param {FalconClientBuildConfig} config falcon-client build config
+ * @returns {boolean} falcon-client build time config
+ */
+function ifRequiredFilesExists(config) {
+  const filesExists = checkRequiredFiles(
+    [paths.appIndexJs, config.useWebmanifest && paths.appWebmanifest].filter(x => x)
+  );
+
+  return filesExists;
+}
+
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} Bytes`;
   else if (bytes < 1048576) return `${(bytes / 1024).toFixed(3)} KB`;
@@ -107,6 +121,7 @@ function formatBytes(bytes) {
 
 module.exports = {
   getBuildConfig,
+  ifRequiredFilesExists,
   removePreviousBuildAssets,
   webpackCompiler,
   webpackCompileAsync,
