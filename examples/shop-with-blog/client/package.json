@@ -6,8 +6,8 @@
   "repository": "https://github.com/deity-io/falcon/tree/master/examples/shop-with-blog/client",
   "scripts": {
     "start": "falcon-client start",
-    "start:dbg": "cross-env falcon-client start -- --inspect",
-    "start:dbg-brk": "cross-env falcon-client start -- --inspect-brk",
+    "start:dbg": "falcon-client start -- --inspect",
+    "start:dbg-brk": "falcon-client start -- --inspect-brk",
     "start:prod": "cross-env NODE_ENV=production node build/server.js",
     "build": "falcon-client build",
     "size": "falcon-client size",
