@@ -3,17 +3,28 @@ const chalk = require('chalk');
 const Logger = require('@deity/falcon-logger');
 const WebpackDevServer = require('webpack-dev-server-speedy');
 const clearConsole = require('react-dev-utils/clearConsole');
-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const { choosePort } = require('react-dev-utils/WebpackDevServerUtils');
 const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react-dev-utils/FileSizeReporter');
 
 const paths = require('./../paths');
-const { getBuildConfig, removePreviousBuildAssets, webpackCompiler, webpackCompileAsync } = require('./tools');
+const {
+  getBuildConfig,
+  ifRequiredFilesExists,
+  removePreviousBuildAssets,
+  webpackCompiler,
+  webpackCompileAsync
+} = require('./tools');
 const createConfig = require('./config/create');
 const { generateSW } = require('./workbox');
 
 module.exports.startDevServer = async () => {
-  if (!checkRequiredFiles([paths.appIndexJs])) {
+  const falconConfig = getBuildConfig();
+  if (falconConfig.clearConsole) {
+    clearConsole();
+  }
+
+  Logger.info(chalk.hex('#a9cf38')('Starting development server...'));
+  if (!ifRequiredFilesExists(falconConfig)) {
     process.exit(1);
   }
 
@@ -23,12 +34,6 @@ module.exports.startDevServer = async () => {
   process.env.PORT = await choosePort(process.env.HOST, parseInt(process.env.PORT, 10) || 3000);
 
   try {
-    const falconConfig = getBuildConfig();
-    if (falconConfig.clearConsole) {
-      clearConsole();
-    }
-
-    Logger.info(chalk`{hex('#a9cf38') Compiling...}`);
     removePreviousBuildAssets(paths.appBuild, paths.appBuildPublic);
 
     const options = {
@@ -73,7 +78,13 @@ module.exports.startDevServer = async () => {
 };
 
 module.exports.build = async () => {
-  if (!checkRequiredFiles([paths.appIndexJs])) {
+  const falconConfig = getBuildConfig();
+  if (falconConfig.clearConsole) {
+    clearConsole();
+  }
+
+  Logger.log('Creating an optimized production build...');
+  if (!ifRequiredFilesExists(falconConfig)) {
     process.exit(1);
   }
 
@@ -81,18 +92,12 @@ module.exports.build = async () => {
   process.env.BABEL_ENV = process.env.NODE_ENV;
 
   try {
-    const falconConfig = getBuildConfig();
-    if (falconConfig.clearConsole) {
-      clearConsole();
-    }
-
     const options = {
       env: process.env.NODE_ENV,
       publicPath: process.env.PUBLIC_PATH || '/',
       isCI: process.env.CI && (typeof process.env.CI !== 'string' || process.env.CI.toLowerCase() !== 'false')
     };
 
-    Logger.log('Creating an optimized production build...');
     const previousBuildSizes = await measureFileSizesBeforeBuild(paths.appBuildPublic);
     fs.emptyDirSync(paths.appBuild);
     fs.copySync(paths.appPublic, paths.appBuildPublic, { dereference: true });
@@ -134,7 +139,13 @@ module.exports.build = async () => {
 };
 
 module.exports.size = async () => {
-  if (!checkRequiredFiles([paths.appIndexJs])) {
+  const falconConfig = getBuildConfig();
+  if (falconConfig.clearConsole) {
+    clearConsole();
+  }
+
+  Logger.log('Creating an optimized production build...');
+  if (!ifRequiredFilesExists(falconConfig)) {
     process.exit(1);
   }
 
@@ -142,18 +153,11 @@ module.exports.size = async () => {
   process.env.BABEL_ENV = process.env.NODE_ENV;
 
   try {
-    const falconConfig = getBuildConfig();
-    if (falconConfig.clearConsole) {
-      clearConsole();
-    }
-
     const options = {
       env: process.env.NODE_ENV,
       publicPath: process.env.PUBLIC_PATH || '/',
       analyze: true
     };
-
-    Logger.log('Creating an optimized production build...');
 
     fs.emptyDirSync(paths.appBuild);
     fs.copySync(paths.appPublic, paths.appBuildPublic, { dereference: true });
