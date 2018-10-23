@@ -7,10 +7,10 @@ export const Breadcrumbs = themed({
     breadcrumbs: {
       p: 'none',
       m: 'none',
+      display: 'flex',
+      flexWrap: 'wrap',
 
       css: {
-        display: 'flex',
-        flexWrap: 'wrap',
         listStyle: 'none'
       }
     }
@@ -22,10 +22,10 @@ export const Breadcrumb = themed({
 
   defaultTheme: {
     breadcrumb: {
-      css: ({ theme }) => ({
-        display: 'flex',
-        alignItems: 'center',
+      display: 'flex',
+      alignItems: 'center',
 
+      css: ({ theme }) => ({
         '::after': {
           content: '"→"',
           color: 'inherit',

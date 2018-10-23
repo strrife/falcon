@@ -11,7 +11,7 @@ export const Button = themed({
       fontSize: 'sm',
       lineHeight: 'small',
       height: 'lg',
-      px: 'md',
+      px: 'sm',
       transitionTimingFunction: 'easeIn',
       transitionDuration: 'short',
 
