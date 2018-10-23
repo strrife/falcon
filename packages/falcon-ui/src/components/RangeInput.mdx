@@ -4,11 +4,17 @@ menu: Components
 ---
 
 import { Playground } from 'docz';
+import { ThemePreview } from '../../docs';
 import { RangeInput } from '../';
 
-# RangeInput
+<ThemePreview of={RangeInput} />
 
-### Basic usage
+`RangeInput` component renders as `<input type="range">` and accepts all of the native `input` props
+ as well as [responsive, theme-based style props](/responsive-props).
+ 
+```javascript
+import { RangeInput } from '@deity/falcon-ui';
+```
 
 <Playground>
   <RangeInput min={0} max={100} />
