@@ -10,6 +10,7 @@ const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackBar = require('webpackbar');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const VirtualModulesPlugin = require('webpack-virtual-modules');
 const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 
@@ -114,7 +115,7 @@ function addVendorsBundle(modules = []) {
  */
 module.exports = (target = 'web', options, buildConfig) => {
   const { env, host, devServerPort } = options;
-  const { plugins, modify } = buildConfig;
+  const { useWebmanifest, plugins, modify } = buildConfig;
 
   // Define some useful shorthands.
   const IS_NODE = target === 'node';
@@ -142,7 +143,8 @@ module.exports = (target = 'web', options, buildConfig) => {
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',
         src: paths.appSrc,
-        'app-path': paths.appPath
+        'app-path': paths.appPath,
+        'app-webmanifest': useWebmanifest ? paths.appWebmanifest : paths.ownWebmanifest
       }
     },
     resolveLoader: {
@@ -212,7 +214,7 @@ module.exports = (target = 'web', options, buildConfig) => {
               loader: require.resolve('file-loader'),
               options: {
                 name: 'static/[name].[hash:8].[ext]',
-                emitFile: true
+                emitFile: useWebmanifest
               }
             },
             { loader: require.resolve('app-manifest-loader') }
@@ -370,6 +372,7 @@ module.exports = (target = 'web', options, buildConfig) => {
 
   if (IS_WEB) {
     config.plugins = [
+      new VirtualModulesPlugin({ [paths.ownWebmanifest]: '{}' }),
       getFalconI18nPlugin(buildConfig.i18n),
       new AssetsPlugin({
         path: paths.appBuild,

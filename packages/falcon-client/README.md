@@ -166,7 +166,7 @@ This is configuration object used to setup `@deity/falcon-client`
 
 - `logLevel: string` - (default: `'error'`) [@deity/falcon-logger](https://github.com/deity-io/falcon/tree/master/packages/falcon-logger) logger level
 - `serverSideRendering: boolean` - (default `true`) switch to control whether the [SSR](#server-side-rendering) is enabled
-- `useWebManifest: boolean` - (default `true`) determines if Web App Manifest should be included in output bundle, [see the details](#webmanifest)
+the details](#webmanifest)
 - `googleTagManager: object` - Google Tag Manager configuration, [see the details](#google-tag-manager)
 - `i18n: object` - internationalization configuration, [see the details](#internationalization)
 - `menus: object` - menus configuration [TODO]
@@ -217,13 +217,15 @@ Here is example of `falcon-client.build.config.js` file content with defaults:
 ```js
 module.exports = {
   clearConsole: true,
-  i18n: {}
+  useWebmanifest: false,
+  i18n: {},
   envToBuildIn: [],
   plugins: [],
 };
 ```
 
 - `clearConsole: boolean` - (default: `true`) determines whether console should be cleared when starting script
+- `useWebmanifest: boolean` - (default: `false`) determines whether [Web App Manifest](#webmanifest) should be processed via webpack and included in output bundle
 - `i18n: object` - (default: `{}`) internationalization configuration, [see the details](#internationalization)
 - `envToBuildIn` - (default: `[]`) an array of environment variable names which should be build in into bundle, [see the details](#environment-variables)
 - `plugins` - (default: `[]`) an array of plugins which can modify underlying webpack configuration. Plugins API is `razzle` compatible [see the details](https://github.com/jaredpalmer/razzle#plugins)
