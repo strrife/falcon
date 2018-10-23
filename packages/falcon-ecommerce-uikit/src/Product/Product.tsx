@@ -1,13 +1,13 @@
 import React from 'react';
-import gql from 'graphql-tag';
-import { Mutation } from 'react-apollo';
 import { Formik, Form } from 'formik';
-import { themed, Box, Radio, Text, H3, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
-import { Breadcrumbs } from './Breadcrumbs';
+import { themed, Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
+import { Breadcrumbs } from '../Breadcrumbs';
 // import { ProductMeta } from './ProductMeta';
 import { ProductGallery } from './ProductGallery';
 import { ProductTranslations } from './ProductQuery';
-import { AddToCartMutation } from './MiniCart';
+import { ProductOptions } from './ConfigurableOptions';
+import { AddToCartMutation } from '../MiniCart';
+import { ProductConfigurator } from './ProductConfigurator';
 
 export const ProductLayout = themed({
   tag: 'div',
@@ -72,33 +72,6 @@ export const ProductDetailsLayout = themed({
   }
 });
 
-const Option: React.SFC<{ option: any }> = ({ option }) => (
-  <Box mb="md">
-    <H3 mb="md">{option.label}</H3>
-    {option.values.map((value: any) => (
-      <Radio
-        key={value.valueIndex}
-        mr="sm"
-        icon={<div>{value.label}</div>}
-        size={55}
-        name={option.attributeId}
-        value={value.valueIndex}
-      />
-    ))}
-  </Box>
-);
-
-const ProductOptions: React.SFC<{ options: any[] }> = ({ options }) => (
-  <Box>
-    {options.map(option => (
-      <Option key={option.id} option={option} />
-    ))}
-  </Box>
-);
-ProductOptions.defaultProps = {
-  options: []
-};
-
 const ProductDescriptionLayout = themed({
   tag: 'div',
 
@@ -143,35 +116,46 @@ export class Product extends React.PureComponent<{ product: any; translations: P
             {`${translations.sku}: ${product.sku}`}
           </Text>
           <H1 gridArea={Area.title}>{product.name}</H1>
-          <Text fontSize="xxl" gridArea={Area.price}>
-            {product.currency} {product.price}
-          </Text>
           <AddToCartMutation>
             {(addToCart, { error }) => (
               <Formik initialValues={{ qty: 1 }} onSubmit={this.addToCartHandler(product.sku, addToCart) as any}>
                 {(props: any) => (
-                  <Form>
-                    <ProductOptions options={product.configurableOptions} />
-                    <ProductDescriptionLayout
-                      dangerouslySetInnerHTML={{ __html: product.description }}
-                      gridArea={Area.description}
-                    />
-                    <FlexLayout alignItems="center" gridArea={Area.cta}>
-                      <NumberInput
-                        mr="md"
-                        min="1"
-                        name="qty"
-                        disabled={props.isSubmitting}
-                        defaultValue={String(props.values.qty)}
-                        onChange={props.handleChange}
-                      />
-                      <Button type="submit">
-                        <Icon src="cart" stroke="white" size={20} mr="sm" />
-                        {translations.addToCart}
-                      </Button>
-                      {!!error && <Text color="error">{error.message}</Text>}
-                    </FlexLayout>
-                  </Form>
+                  <ProductConfigurator onChange={(name: string, value: any) => props.setFieldValue(name, value)}>
+                    {({ handleProductConfigurationChange }) => (
+                      <React.Fragment>
+                        <Text fontSize="xxl" gridArea={Area.price}>
+                          {product.currency} {product.price}
+                        </Text>
+                        <Form>
+                          <ProductOptions
+                            options={product.configurableOptions}
+                            onChange={(ev: React.ChangeEvent<any>) =>
+                              handleProductConfigurationChange('configurableOption', ev)
+                            }
+                          />
+                          <ProductDescriptionLayout
+                            dangerouslySetInnerHTML={{ __html: product.description }}
+                            gridArea={Area.description}
+                          />
+                          <FlexLayout alignItems="center" gridArea={Area.cta}>
+                            <NumberInput
+                              mr="md"
+                              min="1"
+                              name="qty"
+                              disabled={props.isSubmitting}
+                              defaultValue={String(props.values.qty)}
+                              onChange={props.handleChange}
+                            />
+                            <Button type="submit">
+                              <Icon src="cart" stroke="white" size={20} mr="sm" />
+                              {translations.addToCart}
+                            </Button>
+                            {!!error && <Text color="error">{error.message}</Text>}
+                          </FlexLayout>
+                        </Form>
+                      </React.Fragment>
+                    )}
+                  </ProductConfigurator>
                 )}
               </Formik>
             )}

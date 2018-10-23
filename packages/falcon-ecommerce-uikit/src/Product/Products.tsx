@@ -2,7 +2,7 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
 import { themed, Image, Text } from '@deity/falcon-ui';
-import { Query } from './Query';
+import { Query } from '../Query';
 
 export const ProductCardLayout = themed({
   tag: Link,

@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { Query } from './Query';
+import { Query } from '../Query';
 
 export const product = gql`
   query GET_PRODUCT($id: Int!) {
