@@ -26,7 +26,7 @@ export function extractThemableProps(props: any) {
 }
 
 export function mergeThemes(theme: Theme, themeOverride: RecursivePartial<Theme>): Theme {
-  return merge(theme, themeOverride, {
+  return merge(theme, themeOverride as Theme, {
     isMergeableObject: isPlainObject
   });
 }

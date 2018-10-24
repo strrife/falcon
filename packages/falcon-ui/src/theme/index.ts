@@ -36,7 +36,7 @@ export interface Theme {
 }
 export type ThemedIcons = {
   [name: string]: {
-    icon: React.ComponentType;
+    icon: React.ComponentType | ((props: any) => JSX.Element);
   } & ThemedComponentProps;
 };
 
