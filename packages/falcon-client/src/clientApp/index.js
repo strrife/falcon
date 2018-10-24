@@ -1,4 +1,4 @@
-import App from 'app-path';
+import * as App from 'app-path';
 
-export default App;
+export default App.default;
 export const clientApolloSchema = App.clientApolloSchema || {};
