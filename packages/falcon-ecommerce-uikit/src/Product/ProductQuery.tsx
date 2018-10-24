@@ -44,6 +44,12 @@ function getTranslations(t: reactI18Next.TranslationFunction /* , product: any *
     inStock: t('product.inStock'),
     reviews: t('product.reviews', { count: 3 }),
     addToCart: t('product.addToCart'),
+    addingToCart: t('product.addingToCart'),
+    addedToCart: t('product.addedToCart'),
+    error: {
+      qty: t('product.error.qty'),
+      configurableOptions: t('product.error.configurableOptions')
+    },
     tabs: {
       reviews: '...'
     }

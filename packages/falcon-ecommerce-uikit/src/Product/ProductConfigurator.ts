@@ -1,12 +1,13 @@
 import React from 'react';
 
 /**
- * Available options that can be changed
+ * Available options that can be changed. Currently ProductConfigurator handles only product configurable options.
  */
 type TOptionType = 'configurableOption' | 'bundleOption';
 
 /**
- * Change source - currently only React.ChangeEvent is supported so only change from UI can be handled
+ * Change source - currently only React.ChangeEvent is supported so only change from UI can be handled.
+ * In the future we'll probably need also custom change handler (passing name and value of changed option).
  */
 type THandleChangeParam = React.ChangeEvent<any>;
 
@@ -47,11 +48,20 @@ type TProductConfiguratorState = {
   selectedConfigurableOptions: { [name: string]: any };
 };
 
+/**
+ * ProductConfigurator takes care of handling data relaed to product options available to be selected before adding to cart.
+ * Currently only configurable options are supported, in the future that class will handle bundled products as well as custom product attributes.
+ */
 export class ProductConfigurator extends React.Component<TProductConfiguratorProps, TProductConfiguratorState> {
   state: TProductConfiguratorState = {
     selectedConfigurableOptions: {}
   };
 
+  /**
+   * Handles change of configurable product option
+   * @param {string} name - name of the option
+   * @param {any} value - value of changed option
+   */
   handleConfigurationOptionChange(name: string, value: any) {
     this.setState(
       (state: TProductConfiguratorState) => ({
@@ -71,6 +81,11 @@ export class ProductConfigurator extends React.Component<TProductConfiguratorPro
     );
   }
 
+  /**
+   * Handler for all configuration changes, based on the type invokes proper type handler
+   * @param {TOptionType} type - type of the change
+   * @param {THandleChangeParam} ev - change data
+   */
   handleProductConfigurationChange = (type: TOptionType, ev: THandleChangeParam) => {
     const { name, value } = ev.target;
 
@@ -79,6 +94,13 @@ export class ProductConfigurator extends React.Component<TProductConfiguratorPro
     }
   };
 
+  /**
+   * Checks if passed value is selected.
+   * @param {TOptionType} type - type of the option to check
+   * @param {string} name - name of the option to check
+   * @param {any} value - value of the option to check
+   * @returns {boolean} true when option with passed name has passed value
+   */
   isValueSelected = (type: TOptionType, name: string, value: any): boolean => {
     if (type === 'configurableOption') {
       return this.state.selectedConfigurableOptions.get(name) === value;

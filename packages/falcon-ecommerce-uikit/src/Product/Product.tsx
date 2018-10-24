@@ -1,12 +1,12 @@
 import React from 'react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
 import { themed, Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
 import { Breadcrumbs } from '../Breadcrumbs';
 // import { ProductMeta } from './ProductMeta';
 import { ProductGallery } from './ProductGallery';
 import { ProductTranslations } from './ProductQuery';
-import { ProductOptions } from './ConfigurableOptions';
+import { ProductConfigurableOptions } from './ConfigurableOptions';
 import { AddToCartMutation } from '../MiniCart';
 import { ProductConfigurator } from './ProductConfigurator';
 
@@ -90,16 +90,17 @@ const ProductDescriptionLayout = themed({
 /**
  * Combine render props functions into one with react-adopt
  */
-const ProductData = adopt({
+const ProductForm = adopt({
   // mutation delivers addToCart method which should be called with proper data
   mutation: ({ render }) => (
     <AddToCartMutation>{(addToCart, result) => render({ addToCart, result })}</AddToCartMutation>
   ),
 
   // formik handles form operations and triggers submit when onSubmit event is fired on the form
-  formik: ({ sku, mutation, render }) => (
+  formik: ({ sku, validate, mutation, render }) => (
     <Formik
       initialValues={{ qty: 1 }}
+      validate={validate}
       onSubmit={(values: any) =>
         mutation.addToCart({
           variables: {
@@ -126,6 +127,78 @@ const ProductData = adopt({
 });
 
 export class Product extends React.PureComponent<{ product: any; translations: ProductTranslations }> {
+  createValidator(product: any) {
+    const { translations } = this.props;
+    return (values: any) => {
+      const errors: any = {};
+
+      // handle qty
+      if (parseInt(values.qty, 10) < 1) {
+        errors.qty = translations.error.qty;
+      }
+
+      // handle configuration options
+      if (product.configurableOptions) {
+        if (!values.configurableOptions || values.configurableOptions.length !== product.configurableOptions.length) {
+          errors.configurableOptions = translations.error.configurableOptions;
+        }
+      }
+
+      // todo: handle bundled products
+
+      return errors;
+    };
+  }
+
+  // this method is defined as instance property so we don't need to use bind when passing it as render prop
+  renderProductFormContent = ({
+    mutation,
+    formik: { values, isSubmitting, handleChange, errors },
+    productConfigurator
+  }: any) => {
+    const { product, translations } = this.props;
+
+    return (
+      <React.Fragment>
+        <Text fontSize="xxl" gridArea={Area.price}>
+          {product.currency} {product.price}
+        </Text>
+        <Form>
+          <ProductConfigurableOptions
+            options={product.configurableOptions}
+            error={errors.configurableOptions}
+            onChange={(ev: React.ChangeEvent<any>) =>
+              productConfigurator.handleProductConfigurationChange('configurableOption', ev)
+            }
+          />
+          <ProductDescriptionLayout
+            mt="sm"
+            dangerouslySetInnerHTML={{ __html: product.description }}
+            gridArea={Area.description}
+          />
+          <FlexLayout alignItems="center" gridArea={Area.cta} mt="md">
+            <NumberInput
+              mr="md"
+              min="1"
+              name="qty"
+              disabled={isSubmitting}
+              defaultValue={String(values.qty)}
+              onChange={handleChange}
+            />
+            <Button type="submit">
+              <Icon src="cart" stroke="white" size={20} mr="sm" />
+              {translations.addToCart}
+            </Button>
+          </FlexLayout>
+          <Box>
+            <ErrorMessage name="qty" render={msg => <Text color="error">{msg}</Text>} />
+            {!!mutation.result.error && <Text color="error">{mutation.result.error.message}</Text>}
+          </Box>
+        </Form>
+      </React.Fragment>
+    );
+  };
+
   render() {
     const { product, translations } = this.props;
 
@@ -140,42 +213,11 @@ export class Product extends React.PureComponent<{ product: any; translations: P
             {`${translations.sku}: ${product.sku}`}
           </Text>
           <H1 gridArea={Area.title}>{product.name}</H1>
-          <ProductData sku={product.sku}>
-            {({ mutation, formik, productConfigurator }: any) => (
-              <React.Fragment>
-                <Text fontSize="xxl" gridArea={Area.price}>
-                  {product.currency} {product.price}
-                </Text>
-                <Form>
-                  <ProductOptions
-                    options={product.configurableOptions}
-                    onChange={(ev: React.ChangeEvent<any>) =>
-                      productConfigurator.handleProductConfigurationChange('configurableOption', ev)
-                    }
-                  />
-                  <ProductDescriptionLayout
-                    dangerouslySetInnerHTML={{ __html: product.description }}
-                    gridArea={Area.description}
-                  />
-                  <FlexLayout alignItems="center" gridArea={Area.cta} mt="md">
-                    <NumberInput
-                      mr="md"
-                      min="1"
-                      name="qty"
-                      disabled={formik.isSubmitting}
-                      defaultValue={String(formik.values.qty)}
-                      onChange={formik.handleChange}
-                    />
-                    <Button type="submit">
-                      <Icon src="cart" stroke="white" size={20} mr="sm" />
-                      {translations.addToCart}
-                    </Button>
-                    {!!mutation.result.error && <Text color="error">{mutation.result.error.message}</Text>}
-                  </FlexLayout>
-                </Form>
-              </React.Fragment>
-            )}
-          </ProductData>
+          <ProductForm
+            sku={product.sku}
+            validate={this.createValidator(product)}
+            render={this.renderProductFormContent}
+          />
           <Box gridArea={Area.meta} my="lg">
             {/* <ProductMeta meta={data.seo} /> */}
           </Box>

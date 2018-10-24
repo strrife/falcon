@@ -94,7 +94,7 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
 const MiniCartProducts: React.SFC<any> = ({ products, currency }) => (
   <List>
     {products.map((product: any, index: number) => (
-      <ListItem pb="none" key={product.name}>
+      <ListItem pb="none" key={product.sku}>
         <MiniCartProduct product={product} currency={currency} />
         {index < products.length - 1 && <Divider my="lg" />}
       </ListItem>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Radio, H3 } from '@deity/falcon-ui';
+import { Box, Radio, H3, Text } from '@deity/falcon-ui';
 
 const Option: React.SFC<{ option: any; disabled?: boolean; onChange: Function }> = ({ option, disabled, onChange }) => (
   <Box mb="md">
@@ -19,13 +19,18 @@ const Option: React.SFC<{ option: any; disabled?: boolean; onChange: Function }>
   </Box>
 );
 
-export const ProductOptions: React.SFC<{ options: any[]; onChange: Function }> = ({ options, onChange }) => (
+export const ProductConfigurableOptions: React.SFC<{ options: any[]; error?: string; onChange: Function }> = ({
+  options,
+  error,
+  onChange
+}) => (
   <Box>
     {options.map(option => (
       <Option key={option.id} option={option} onChange={onChange} />
     ))}
+    {!!error && <Text color="error">{error}</Text>}
   </Box>
 );
-ProductOptions.defaultProps = {
+ProductConfigurableOptions.defaultProps = {
   options: []
 };
