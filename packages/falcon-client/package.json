@@ -35,7 +35,6 @@
     "babel-loader": "^8.0.0",
     "chalk": "^2.4.1",
     "cross-env": "^5.2.0",
-    "cross-spawn": "^6.0.5",
     "css-loader": "0.28.11",
     "deepmerge": "^2.1.1",
     "enzyme": "^3.6.0",
@@ -88,7 +87,14 @@
     "webpackbar": "^2.4.0",
     "workbox-build": "^3.5.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "graphql": "^14.0.2",
+    "graphql-tag": "^2.9.2",
+    "i18next": "^11.6.0",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2"
+  },
   "peerDependencies": {
     "graphql": "^14.0.2",
     "graphql-tag": "^2.9.2",
