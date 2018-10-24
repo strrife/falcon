@@ -1,9 +1,9 @@
 export const defaultBaseTheme = {
   colors: {
-    primary: '#A9CF38',
-    primaryLight: '#CBDE6E',
-    primaryDark: '#A9CF38',
-    primaryText: '#fff',
+    primary: '#2196f3',
+    primaryLight: '#6ec6ff',
+    primaryDark: '#0069c0',
+    primaryText: '#ffffff',
 
     secondary: '#eef0f2',
     secondaryLight: '#f8f8f8',
