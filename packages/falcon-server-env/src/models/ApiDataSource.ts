@@ -4,6 +4,7 @@ import { Body, Request } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URL, URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
 import { stringify } from 'qs';
 import { format } from 'url';
+import * as Logger from '@deity/falcon-logger';
 import ContextHTTPCache from '../cache/ContextHTTPCache';
 import {
   ApiUrlPriority,
@@ -17,8 +18,6 @@ import {
   ContextRequestOptions,
   PaginationData
 } from '../types';
-
-import Logger = require('@deity/falcon-logger');
 
 export type PaginationValue = number | string | null;
 

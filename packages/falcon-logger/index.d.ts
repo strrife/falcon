@@ -1,2 +1,3 @@
-import Logger = require('./src');
+import * as Logger from './src';
+
 export = Logger;
