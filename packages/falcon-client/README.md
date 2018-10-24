@@ -166,7 +166,6 @@ This is configuration object used to setup `@deity/falcon-client`
 
 - `logLevel: string` - (default: `'error'`) [@deity/falcon-logger](https://github.com/deity-io/falcon/tree/master/packages/falcon-logger) logger level
 - `serverSideRendering: boolean` - (default `true`) switch to control whether the [SSR](#server-side-rendering) is enabled
-the details](#webmanifest)
 - `googleTagManager: object` - Google Tag Manager configuration, [see the details](#google-tag-manager)
 - `i18n: object` - internationalization configuration, [see the details](#internationalization)
 - `menus: object` - menus configuration [TODO]
