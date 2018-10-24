@@ -11,6 +11,8 @@ const isEmpty = require('lodash/isEmpty');
 
 const DEFAULT_KEY = '*';
 
+const { codes } = require('@deity/falcon-errors');
+
 /**
  * Base API features (configuration fetching, response parsing, token management etc.) required for communication
  * with Magento2. Extracted to separate class to keep final class clean (only resolvers-related logic should be there).
@@ -76,10 +78,20 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
     const response = await this.retrieveToken({ username: this.config.username, password: this.config.password });
 
-    Logger.info('Magento token found.');
     // data available only if retrieveToken is not wrapped with cache.
     const tokenData = this.convertKeys(response.data || response);
     const { token, validTime } = tokenData;
+    if (token === undefined) {
+      const noTokenError = new Error(
+        'Magento Admin token not found. Did you install the falcon-magento2-module on magento?'
+      );
+
+      noTokenError.statusCode = 501;
+      noTokenError.code = codes.CUSTOMER_TOKEN_NOT_FOUND;
+      throw noTokenError;
+    } else {
+      Logger.info('Magento token found.');
+    }
     this.token = token;
     this.tokenExpirationTime = null;
 
@@ -199,7 +211,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       const sessionExpiredError = new Error('Session has expired');
 
       sessionExpiredError.statusCode = 401;
-      sessionExpiredError.code = 'CUSTOMER_TOKEN_EXPIRED';
+      sessionExpiredError.code = codes.CUSTOMER_TOKEN_EXPIRED;
       throw sessionExpiredError;
     }
   }
@@ -367,7 +379,10 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   createContextData(context) {
     if (!has(context, 'req.session')) {
-      throw new Error('No session in context passed to Magento2Api.createContextData()');
+      const noSessionError = new Error('No session in context passed to Magento2Api.createContextData()');
+      noSessionError.statusCode = 501;
+      noSessionError.code = codes.SESSION_NOT_FOUND;
+      throw noSessionError;
     }
 
     if (!has(context, 'req.session.magento2')) {
