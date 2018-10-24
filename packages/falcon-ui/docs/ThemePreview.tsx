@@ -1,19 +1,34 @@
 import React from 'react';
 import { withMDXComponents } from '@mdx-js/tag/dist/mdx-provider';
-import { FlexLayout, H2, Icon } from '../src';
 import { ThemeStateContext } from '@deity/falcon-theme-editor';
+import { Icon, Button, FlexLayout, H2 } from '../src';
 
-const ThemePreview: React.SFC<any> = ({ of }) => {
-  const themeKey = Object.keys(of.defaultProps.defaultTheme);
+const ThemePreview: React.SFC<any> = props => {
+  const themeKey = Array.isArray(props.of)
+    ? Object.keys(props.of[0].defaultProps.defaultTheme)
+    : Object.keys(props.of.defaultProps.defaultTheme);
+
   return (
-    <ThemeStateContext>
-      {({ setActiveComponent }) => (
-        <FlexLayout css={{ cursor: 'pointer' }} onClick={() => setActiveComponent(of.defaultProps)}>
-          <Icon fill="secondary" size={40} src="editor" />
-          <H2 css={{ fontSize: 24 }}>Edit {themeKey} theme</H2>
+    <ThemeStateContext.Consumer>
+      {({ selectComponents }) => (
+        <FlexLayout my="lg" alignItems="center">
+          <H2 css={{ textTransform: 'capitalize' }} mr="md">
+            {props.name || themeKey}
+          </H2>
+          <Button
+            onClick={() => {
+              if (Array.isArray(props.of)) {
+                selectComponents(props.of.map(component => component.defaultProps));
+              } else {
+                selectComponents([props.of.defaultProps]);
+              }
+            }}
+          >
+            <Icon stroke="white" size="md" src="viewTheme" mr="xs" /> view theme
+          </Button>
         </FlexLayout>
       )}
-    </ThemeStateContext>
+    </ThemeStateContext.Consumer>
   );
 };
 

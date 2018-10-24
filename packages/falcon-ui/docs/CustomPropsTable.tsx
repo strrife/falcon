@@ -1,7 +1,7 @@
 import React, { Fragment, SFC } from 'react';
 import { withMDXComponents } from '@mdx-js/tag/dist/mdx-provider';
 import { withCSSContext } from '@emotion/core';
-import { Table, Tr, Th, H2, Tbody, Td, Thead } from '../src';
+import { Table, Tr, Th, H3, Tbody, Td, Thead } from '../src';
 
 export interface Prop {
   name: string;
@@ -12,6 +12,7 @@ export interface Prop {
 }
 export interface PropsTableProps {
   props: Prop[];
+  componentName: string;
 }
 
 export type TooltipComponent = React.ComponentType<{
@@ -24,8 +25,8 @@ const PropsTable: SFC<PropsTableProps> = props => {
 
   return (
     <Fragment>
-      <H2 pb="lg">Custom props</H2>
-      <Table>
+      <H3 py="lg">{props.componentName} specific props</H3>
+      <Table mb="lg">
         <Thead>
           <Tr>
             <Th>Property</Th>
@@ -42,7 +43,21 @@ const PropsTable: SFC<PropsTableProps> = props => {
               <Td>{prop.type}</Td>
               <Td>{prop.required ? '🗸' : '-'}</Td>
               <Td>{prop.defaultValue}</Td>
-              <Td>{prop.description && prop.description}</Td>
+              <Td
+                css={{
+                  code: {
+                    background: '#f4f6f9',
+                    color: '#7D899C',
+                    margin: '0 3px',
+                    padding: '4px 6px',
+                    borderRadius: '3px',
+                    fontSize: '14px',
+                    fontWeight: 'normal'
+                  }
+                }}
+              >
+                <p dangerouslySetInnerHTML={{ __html: prop.description }} />
+              </Td>
             </Tr>
           ))}
         </Tbody>
