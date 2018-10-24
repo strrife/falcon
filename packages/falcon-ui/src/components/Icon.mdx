@@ -4,10 +4,12 @@ menu: Components
 ---
 
 import { Playground } from 'docz';
-import { ThemePreview, themeWithCustomIcon, CustomPropsTable } from '../../docs';
-import { Icon, ThemeProvider } from '../';
+import { ThemePreview, themeWithCustomIcon, CustomPropsTable } from 'docs';
+import { IconRenderer, Icon, ThemeProvider } from '@deity/falcon-ui';
 
-<ThemePreview of={Icon} />
+<ThemePreview name="Icon" of={IconRenderer} />
+
+
 
 `Icon` component main purpose is to render icons defined in `ThemeProvider`'s `icons` section.
 It's being used internally in other `falcon-ui` components such as `Checkbox` to render default icons 
