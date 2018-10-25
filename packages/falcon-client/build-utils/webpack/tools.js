@@ -118,16 +118,15 @@ function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {
 }
 
 /**
- * Check whether required files exists
+ * Exit if required files does no exist
  * @param {FalconClientBuildConfig} config falcon-client build config
- * @returns {boolean} falcon-client build time config
+ * @returns {void}
  */
-function ifRequiredFilesExists(config) {
-  const filesExists = checkRequiredFiles(
-    [paths.appIndexJs, config.useWebmanifest && paths.appWebmanifest].filter(x => x)
-  );
-
-  return filesExists;
+function exitIfNoRequiredFiles(config) {
+  const filesToCheck = [paths.appIndexJs, config.useWebmanifest && paths.appWebmanifest].filter(x => x);
+  if (!checkRequiredFiles(filesToCheck)) {
+    process.exit(1);
+  }
 }
 
 function formatBytes(bytes) {
@@ -139,8 +138,8 @@ function formatBytes(bytes) {
 
 module.exports = {
   exitIfBuildingItself,
+  exitIfNoRequiredFiles,
   getBuildConfig,
-  ifRequiredFilesExists,
   removePreviousBuildAssets,
   webpackCompiler,
   webpackCompileAsync,

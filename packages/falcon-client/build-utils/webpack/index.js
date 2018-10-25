@@ -8,8 +8,9 @@ const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react
 
 const paths = require('./../paths');
 const {
+  exitIfBuildingItself,
+  exitIfNoRequiredFiles,
   getBuildConfig,
-  ifRequiredFilesExists,
   removePreviousBuildAssets,
   webpackCompiler,
   webpackCompileAsync
@@ -18,15 +19,14 @@ const createConfig = require('./config/create');
 const { generateSW } = require('./workbox');
 
 module.exports.startDevServer = async () => {
+  exitIfBuildingItself();
   const falconConfig = getBuildConfig();
+  exitIfNoRequiredFiles(falconConfig);
+
   if (falconConfig.clearConsole) {
     clearConsole();
   }
-
   Logger.info(chalk.hex('#a9cf38')('Starting development server...'));
-  if (!ifRequiredFilesExists(falconConfig)) {
-    process.exit(1);
-  }
 
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
   process.env.BABEL_ENV = process.env.NODE_ENV;
@@ -78,15 +78,14 @@ module.exports.startDevServer = async () => {
 };
 
 module.exports.build = async () => {
+  exitIfBuildingItself();
   const falconConfig = getBuildConfig();
+  exitIfNoRequiredFiles(falconConfig);
+
   if (falconConfig.clearConsole) {
     clearConsole();
   }
-
-  Logger.log('Creating an optimized production build...');
-  if (!ifRequiredFilesExists(falconConfig)) {
-    process.exit(1);
-  }
+  Logger.log(chalk.hex('#a9cf38')('Creating an optimized production build...'));
 
   process.env.NODE_ENV = 'production';
   process.env.BABEL_ENV = process.env.NODE_ENV;
@@ -139,15 +138,14 @@ module.exports.build = async () => {
 };
 
 module.exports.size = async () => {
+  exitIfBuildingItself();
   const falconConfig = getBuildConfig();
+  exitIfNoRequiredFiles(falconConfig);
+
   if (falconConfig.clearConsole) {
     clearConsole();
   }
-
-  Logger.log('Creating an optimized production build...');
-  if (!ifRequiredFilesExists(falconConfig)) {
-    process.exit(1);
-  }
+  Logger.log(chalk.hex('#a9cf38')('Creating an optimized production build...'));
 
   process.env.NODE_ENV = 'production';
   process.env.BABEL_ENV = process.env.NODE_ENV;
