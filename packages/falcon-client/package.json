@@ -8,8 +8,8 @@
     "falcon-client": "./bin/falcon-client.js"
   },
   "scripts": {
-    "test": "cross-env node ./bin/falcon-client test --env=jsdom",
-    "test:coverage": "cross-env node ./bin/falcon-client test --env=jsdom --ci --coverage"
+    "test": "node ./bin/falcon-client test --env=jsdom",
+    "test:coverage": "node ./bin/falcon-client test --env=jsdom --ci --coverage"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "./../../test/setupTests.js"
@@ -34,7 +34,6 @@
     "babel-jest": "^23.4.2",
     "babel-loader": "^8.0.0",
     "chalk": "^2.4.1",
-    "cross-env": "^5.2.0",
     "css-loader": "0.28.11",
     "deepmerge": "^2.1.1",
     "enzyme": "^3.6.0",
