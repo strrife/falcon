@@ -205,7 +205,7 @@ Falcon Client exposes set of hooks to which you can attache custom logic:
 ### `falcon-client.build.config.js`
 
 This is an optional build time configuration file which is used to setting up entire build process.
-By default support for following is turned on:
+By default it supports the following features:
 
 - Latest JavaScript achieved via babel 7 compiler
 - [HMR](https://webpack.js.org/concepts/hot-module-replacement/) - page auto-reload if you make edits (on both backend and frontend)
