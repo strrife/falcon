@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon-theme-editor",
   "license": "OSL-3.0",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-theme-editor",
   "main": "dist/falcon-theme-editor.cjs.js",
   "module": "dist/index.js",
@@ -49,5 +49,6 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0",
     "webfontloader": "^1.6.28"
-  }
+  },
+  "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }
