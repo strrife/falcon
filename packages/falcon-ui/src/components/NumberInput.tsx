@@ -103,13 +103,12 @@ export const NumberInput = themed({
     numberInput: {
       display: 'inline-flex',
       alignItems: 'center',
-      width: 'lg',
       height: 'lg',
 
       css: ({ theme }) => ({
         input: {
           flex: 'none',
-          width: '100%',
+          width: theme.spacing.lg,
           height: '100%',
           appearance: 'none',
           MozAppearance: 'textfield',
@@ -127,9 +126,9 @@ export const NumberInput = themed({
         },
 
         '.-inner-input-step-down-element, .-inner-input-step-up-element': {
-          width: '100%',
           height: '100%',
           flex: 'none',
+          width: theme.spacing.lg,
           border: 'none',
           outline: 'none',
           appearance: 'none',
@@ -144,7 +143,8 @@ export const NumberInput = themed({
           cursor: 'pointer',
           display: 'flex',
           justifyContent: 'center',
-
+          transform: 'scale(0.8)',
+          lineHeight: 1,
           ':hover': {
             background: theme.colors.secondary
           }
@@ -152,13 +152,13 @@ export const NumberInput = themed({
         '.-inner-input-step-down-element': {
           marginRight: theme.spacing.xs,
           ':active': {
-            transform: 'scale(0.8)'
+            transform: 'scale(0.6)'
           }
         },
         '.-inner-input-step-up-element': {
           marginLeft: theme.spacing.xs,
           ':active': {
-            transform: 'scale(1.2)'
+            transform: 'scale(1)'
           }
         }
       })
