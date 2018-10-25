@@ -2,7 +2,7 @@
   "name": "@deity/falcon-magento2-api",
   "license": "OSL-3.0",
   "main": "src/index.js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-magento2-api",
   "scripts": {
     "test": "jest --watch",
@@ -22,9 +22,9 @@
     ]
   },
   "dependencies": {
-    "@deity/falcon-errors": "^0.0.2",
-    "@deity/falcon-logger": "^0.0.2",
-    "@deity/falcon-server-env": "^0.0.2",
+    "@deity/falcon-errors": "^0.0.3",
+    "@deity/falcon-logger": "^0.0.3",
+    "@deity/falcon-server-env": "^0.0.3",
     "apollo-datasource-rest": "^0.1.1",
     "cron": "^1.4.0",
     "date-fns": "^1.29.0",

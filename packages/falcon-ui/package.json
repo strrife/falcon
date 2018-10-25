@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon-ui",
   "license": "OSL-3.0",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-ui",
   "main": "dist/falcon-ui.cjs.js",
   "module": "dist/index.js",
