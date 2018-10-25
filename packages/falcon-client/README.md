@@ -121,7 +121,7 @@ Runs an interactive zoomable treemap of output files to visualize their size. Re
 
 ## API contract
 
-Application needs to have `index.js`, and following optional configuration files `bootstrap.js` and `falcon-client.build.config.js`. Each of them should be placed in application root directory.
+Application needs to have `index.js` file, and the following optional configuration `bootstrap.js` and `falcon-client.build.config.js` files. Each of them should be placed into the application root directory.
 
 ### `index.js` (required)
 
