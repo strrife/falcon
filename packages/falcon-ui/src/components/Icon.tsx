@@ -1,5 +1,5 @@
 import React from 'react';
-import { withCSSContext } from '@emotion/core';
+import { withTheme } from 'emotion-theming';
 import { themed, PropsWithTheme, BaseProps, ThemedComponentProps } from '../theme';
 
 export const IconRenderer = themed({
@@ -18,12 +18,12 @@ export const IconRenderer = themed({
   }
 });
 
-type IconProps = { src: string; fallback?: React.ReactNode } & ThemedComponentProps & BaseProps<'svg'>;
+type IconProps = { src: string; fallback?: any } & ThemedComponentProps & BaseProps<'svg'> & PropsWithTheme;
 
-export const Icon = withCSSContext((props: IconProps, context: PropsWithTheme) => {
-  if (!context.theme || !context.theme.icons) return null;
+const IconComponent: React.SFC<IconProps> = props => {
+  if (!props.theme || !props.theme.icons) return null;
 
-  const { icons } = context.theme;
+  const { icons } = props.theme;
   const { src, fallback, ...rest } = props;
 
   if (!props.src || !icons[src]) {
@@ -33,4 +33,6 @@ export const Icon = withCSSContext((props: IconProps, context: PropsWithTheme) =
   const { icon, ...otherProps } = icons[src];
 
   return <IconRenderer as={icon} {...otherProps as any} {...rest} />;
-}) as (props: IconProps) => JSX.Element;
+};
+
+export const Icon = withTheme(IconComponent);

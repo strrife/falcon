@@ -1,9 +1,9 @@
 import React from 'react';
 import { withMDXComponents } from '@mdx-js/tag/dist/mdx-provider';
-import { withCSSContext } from '@emotion/core';
+import { withTheme } from 'emotion-theming';
+import { themeCategories, themeMeta } from '@deity/falcon-theme-editor';
 import { mappings, ResponsivePropMapping } from '../src/theme/responsiveprops';
 import { Table, Thead, Tr, Th, Tbody, Td, Theme, Box, H3, H1 } from '../src';
-import { themeCategories, themeMeta } from '@deity/falcon-theme-editor';
 
 const mappingKeys = Object.keys(mappings);
 
@@ -71,10 +71,8 @@ const ResponsiveProps: React.SFC<{ theme: Theme; category: keyof typeof themeCat
                   <Td>
                     <Box
                       bg="primaryDark"
-                      border="light"
+                      border="regular"
                       borderColor="black"
-                      width={30}
-                      height={30}
                       css={themeMeta[section].previewCss(theme[section][key])}
                     />
                   </Td>
@@ -88,6 +86,4 @@ const ResponsiveProps: React.SFC<{ theme: Theme; category: keyof typeof themeCat
   </Box>
 );
 
-export default withMDXComponents(
-  withCSSContext((props: any, context: any) => <ResponsiveProps theme={context.theme} {...props} />)
-);
+export default withMDXComponents(withTheme(ResponsiveProps));
