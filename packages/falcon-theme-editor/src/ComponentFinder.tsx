@@ -56,7 +56,7 @@ function getNearestThemableComponentForElement(el: Element) {
         // some themed components render via another component, like checkbox
         // so we need to search for parent's defaultTheme prop as well
         // eslint-disable-next-line
-        const parentComponent = component._debugOwner;
+        const parentComponent = component && component._debugOwner;
         const parentDefaultTheme =
           parentComponent && parentComponent.memoizedProps && parentComponent.memoizedProps.defaultTheme;
         if (parentDefaultTheme && elementToCheck.parentElement) {
@@ -180,7 +180,7 @@ export class ComponentFinder extends React.Component<ComponentFinderProps, Compo
   render() {
     return (
       <Portal>
-        <Box position="fixed" top="0" left="0" css={{ pointerEvents: 'none', height: 100, width: 100 }}>
+        <Box position="fixed" top="0" left="0" css={{ pointerEvents: 'none', height: 100, width: 100, zIndex: 10000 }}>
           {this.renderOverlay()}
         </Box>
       </Portal>
