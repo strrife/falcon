@@ -9,6 +9,24 @@ const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const clearConsole = require('react-dev-utils/clearConsole');
 const paths = require('./../paths');
 
+function exitIfBuildingItself() {
+  if (paths.ownPath === paths.appPath) {
+    Logger.error(
+      chalk.red(
+        'Error: falcon-client is not intended to starting or building itself. It hosts your application instead!\n'
+      )
+    );
+    Logger.info(
+      "If you don't known how to start see this: https://github.com/deity-io/falcon/tree/master/packages/create-falcon-app"
+    );
+    Logger.info(
+      'If you want more information about falcon-client see this: https://github.com/deity-io/falcon/tree/master/packages/falcon-client'
+    );
+
+    process.exit(1);
+  }
+}
+
 function webpackCompiler(config) {
   let compiler;
   try {
@@ -120,6 +138,7 @@ function formatBytes(bytes) {
 }
 
 module.exports = {
+  exitIfBuildingItself,
   getBuildConfig,
   ifRequiredFilesExists,
   removePreviousBuildAssets,
