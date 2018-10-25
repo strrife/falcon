@@ -3,34 +3,34 @@ import React from 'react';
 /**
  * Available options that can be changed. Currently ProductConfigurator handles only product configurable options.
  */
-type TOptionType = 'configurableOption' | 'bundleOption';
+export type OptionType = 'configurableOption' | 'bundleOption';
 
 /**
  * Change source - currently only React.ChangeEvent is supported so only change from UI can be handled.
  * In the future we'll probably need also custom change handler (passing name and value of changed option).
  */
-type THandleChangeParam = React.ChangeEvent<any>;
+type HandleChangeParam = React.ChangeEvent<any>;
 
 /**
  * Properties injected to render prop function
  */
-type TProductConfiguratorInjectedProps = {
+type ProductConfiguratorInjectedProps = {
   /**
    *
    * @param type - type of the changed option (currently only configurable products are supported so 'configurableOption' goes here)
    * @param ev - change event
    */
-  handleProductConfigurationChange(type: TOptionType, ev: THandleChangeParam): void;
+  handleProductConfigurationChange(type: OptionType, ev: HandleChangeParam): void;
   /**
    * Helper that allows to check if a particular option is already selected
    * @param type - type of option to check
    * @param name - name of option to check
    * @param value  - value to check
    */
-  isValueSelected(type: TOptionType, name: string, value: any): boolean;
+  isValueSelected(type: OptionType, name: string, value: any): boolean;
 };
 
-type TProductConfiguratorProps = {
+type ProductConfiguratorProps = {
   /**
    * Handler which will be called when option change has been processed and we have final state after change that can be submitted
    * @param name - name of changed option
@@ -41,10 +41,10 @@ type TProductConfiguratorProps = {
    * Render prop function that should return valid react element
    * @param props - props passed to render function
    */
-  children(props: TProductConfiguratorInjectedProps): any;
+  children(props: ProductConfiguratorInjectedProps): any;
 };
 
-type TProductConfiguratorState = {
+type ProductConfiguratorState = {
   selectedConfigurableOptions: { [name: string]: any };
 };
 
@@ -52,8 +52,8 @@ type TProductConfiguratorState = {
  * ProductConfigurator takes care of handling data relaed to product options available to be selected before adding to cart.
  * Currently only configurable options are supported, in the future that class will handle bundled products as well as custom product attributes.
  */
-export class ProductConfigurator extends React.Component<TProductConfiguratorProps, TProductConfiguratorState> {
-  state: TProductConfiguratorState = {
+export class ProductConfigurator extends React.Component<ProductConfiguratorProps, ProductConfiguratorState> {
+  state: ProductConfiguratorState = {
     selectedConfigurableOptions: {}
   };
 
@@ -64,7 +64,7 @@ export class ProductConfigurator extends React.Component<TProductConfiguratorPro
    */
   handleConfigurationOptionChange(name: string, value: any) {
     this.setState(
-      (state: TProductConfiguratorState) => ({
+      (state: ProductConfiguratorState) => ({
         selectedConfigurableOptions: {
           ...state.selectedConfigurableOptions,
           [name]: value
@@ -83,10 +83,10 @@ export class ProductConfigurator extends React.Component<TProductConfiguratorPro
 
   /**
    * Handler for all configuration changes, based on the type invokes proper type handler
-   * @param {TOptionType} type - type of the change
-   * @param {THandleChangeParam} ev - change data
+   * @param {OptionType} type - type of the change
+   * @param {HandleChangeParam} ev - change data
    */
-  handleProductConfigurationChange = (type: TOptionType, ev: THandleChangeParam) => {
+  handleProductConfigurationChange = (type: OptionType, ev: HandleChangeParam) => {
     const { name, value } = ev.target;
 
     if (type === 'configurableOption') {
@@ -96,12 +96,12 @@ export class ProductConfigurator extends React.Component<TProductConfiguratorPro
 
   /**
    * Checks if passed value is selected.
-   * @param {TOptionType} type - type of the option to check
+   * @param {OptionType} type - type of the option to check
    * @param {string} name - name of the option to check
    * @param {any} value - value of the option to check
    * @returns {boolean} true when option with passed name has passed value
    */
-  isValueSelected = (type: TOptionType, name: string, value: any): boolean => {
+  isValueSelected = (type: OptionType, name: string, value: any): boolean => {
     if (type === 'configurableOption') {
       return this.state.selectedConfigurableOptions.get(name) === value;
     }
