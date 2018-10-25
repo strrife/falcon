@@ -36,7 +36,7 @@
     "@babel/preset-env": "7.1.0",
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.1.0",
-    "@deity/falcon-theme-editor": "^0.0.2",
+    "@deity/falcon-theme-editor": "^0.0.3",
     "@mdx-js/tag": "0.15.0",
     "@types/deepmerge": "2.1.0",
     "@types/react": "16.4.16",
@@ -71,5 +71,6 @@
       "gzip": false,
       "limit": "60 KB"
     }
-  ]
+  ],
+  "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }

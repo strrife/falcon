@@ -1,6 +1,7 @@
 {
   "name": "@deity/falcon-i18n",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "OSL-3.0",
-  "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-i18n"
+  "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-i18n",
+  "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }

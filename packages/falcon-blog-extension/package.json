@@ -15,5 +15,6 @@
   },
   "devDependencies": {
     "@deity/falcon-server": "^0.0.3"
-  }
+  },
+  "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }

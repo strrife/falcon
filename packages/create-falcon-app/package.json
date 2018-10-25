@@ -16,5 +16,6 @@
     "execa": "1.0.0",
     "fs-extra": "7.0.0",
     "listr": "0.14.2"
-  }
+  },
+  "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }

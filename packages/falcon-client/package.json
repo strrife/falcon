@@ -114,5 +114,6 @@
     "react-dom": "^16.4.2",
     "react-i18next": "^7.11.0",
     "react-router-dom": "^4.3.1"
-  }
+  },
+  "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }
