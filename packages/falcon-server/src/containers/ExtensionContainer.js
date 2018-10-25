@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop, no-underscore-dangle */
 const Logger = require('@deity/falcon-logger');
 const { mergeSchemas, makeExecutableSchema } = require('graphql-tools');
+const Events = require('./../events');
 
 /**
  * @typedef {object} ExtensionInstanceConfig
@@ -15,14 +16,12 @@ const { mergeSchemas, makeExecutableSchema } = require('graphql-tools');
 module.exports = class ExtensionContainer {
   /**
    * Creates extensions container
-   * @param {ExtensionInstanceConfig[]} [extensions] extensions List of extension configurations
-   * @param {Map<string,ApiDataSource>} dataSources Map of API DataSources
+   * @param {EventEmitter2} eventEmitter EventEmitter
    */
-  constructor(extensions, dataSources) {
+  constructor(eventEmitter) {
     /** @type {Map<string,Extension>} */
     this.extensions = new Map();
-
-    this.registerExtensions(extensions, dataSources);
+    this.eventEmitter = eventEmitter;
   }
 
   /**
@@ -30,8 +29,8 @@ module.exports = class ExtensionContainer {
    * @param {ExtensionInstanceConfig[]} extensions List of extension configurations
    * @param {Map<string, ApiDataSource>} dataSources Map of API DataSources
    */
-  registerExtensions(extensions, dataSources) {
-    extensions.forEach(extension => {
+  async registerExtensions(extensions, dataSources) {
+    for (const extension of extensions) {
       try {
         const ExtensionClass = require(extension.package); // eslint-disable-line import/no-dynamic-require
         const extensionInstance = new ExtensionClass({
@@ -44,11 +43,18 @@ module.exports = class ExtensionContainer {
         const { api: apiName } = extension.config || {};
         if (apiName && dataSources.has(apiName)) {
           extensionInstance.api = dataSources.get(apiName);
-          Logger.debug(`ExtensionContainer: API "${apiName}" has added to Extension "${extensionInstance.name}"`);
+          Logger.debug(
+            `ExtensionContainer: "${apiName}" API DataSource added to Extension "${extensionInstance.name}"`
+          );
         } else {
           Logger.debug(`ExtensionContainer: Extension "${extensionInstance.name}" has no API defined`);
         }
         this.extensions.set(extensionInstance.name, extensionInstance);
+
+        await this.eventEmitter.emitAsync(Events.EXTENSION_REGISTERED, {
+          instance: extensionInstance,
+          name: extensionInstance.name
+        });
       } catch (ex) {
         Logger.warn(
           `ExtensionContainer: "${extension.package}" extension cannot be loaded. Make sure it is installed. Details: ${
@@ -56,7 +62,7 @@ module.exports = class ExtensionContainer {
           }`
         );
       }
-    });
+    }
   }
 
   /**
