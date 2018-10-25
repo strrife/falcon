@@ -33,6 +33,9 @@ export default {
   defaults: {
     miniCart: {
       open: false
+    },
+    miniLogin: {
+      open: false
     }
   },
 
@@ -56,6 +59,25 @@ export default {
 
         const data = {
           miniCart: { ...miniCart, open: !miniCart.open }
+        };
+
+        cache.writeData({ data });
+
+        return null;
+      },
+      toggleMiniLogin: (_, _variables, { cache }) => {
+        const { miniLogin } = cache.readQuery({
+          query: gql`
+            query miniLogin {
+              miniLogin @client {
+                open
+              }
+            }
+          `
+        });
+
+        const data = {
+          miniLogin: { ...miniLogin, open: !miniLogin.open }
         };
 
         cache.writeData({ data });

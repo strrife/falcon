@@ -6,5 +6,6 @@ export * from './Product/ProductQuery';
 export * from './Footer';
 export * from './Category';
 export * from './MiniCart';
+export * from './MiniLogin';
 export * from './SidebarLayout';
 export * from './Query';

@@ -15,6 +15,7 @@ import {
 import { toGridTemplate } from '../helpers';
 import { ToggleMiniCartMutation, MiniCartIcon, MiniCartQuery } from '../MiniCart';
 import { HeaderData, MenuItem } from './HeaderQuery';
+import { ToggleMiniLoginMutation } from '../MiniLogin';
 
 const bannerLayoutTheme: DefaultThemeProps = {
   bannerLayout: {
@@ -80,7 +81,7 @@ const searchBarLayoutTheme: DefaultThemeProps = {
     gridGap: 'md',
     // prettier-ignore
     gridTemplate: toGridTemplate([
-      [ '200px',             '1fr',                'auto',               'auto'             ],
+      [ "200px",             "1fr",                "auto",               "auto"             ],
       [ SearchBarArea.logo,  SearchBarArea.search,  SearchBarArea.login,  SearchBarArea.cart],
     ]),
     css: {
@@ -94,7 +95,11 @@ export const Searchbar = () => (
     <Link as={RouterLink} gridArea={SearchBarArea.logo} to="/">
       <Icon src="logo" />
     </Link>
-    <Icon gridArea={SearchBarArea.login} src="user" />
+    <ToggleMiniLoginMutation>
+      {toggle => (
+        <Icon gridArea={SearchBarArea.login} src="user" onClick={() => toggle()} css={{ cursor: 'pointer' }} />
+      )}
+    </ToggleMiniLoginMutation>
     <ToggleMiniCartMutation>
       {toggle => (
         <MiniCartQuery>

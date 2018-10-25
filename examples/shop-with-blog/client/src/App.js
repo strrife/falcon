@@ -17,7 +17,9 @@ import {
   FooterQuery,
   HeaderQuery,
   MiniCartQuery,
-  MiniCart
+  MiniCart,
+  MiniLoginQuery,
+  MiniLogin
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeState } from '@deity/falcon-theme-editor';
 
@@ -64,6 +66,7 @@ const App = ({ online }) => (
             </Switch>
             <FooterQuery>{(data, t) => <Footer {...data} translations={t} />}</FooterQuery>
             <MiniCartQuery>{data => <MiniCart {...data} />}</MiniCartQuery>
+            <MiniLoginQuery>{data => <MiniLogin {...data} />}</MiniLoginQuery>
           </AppLayout>
         </ThemeProvider>
         <ThemeEditor {...props} />

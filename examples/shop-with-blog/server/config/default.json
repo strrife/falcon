@@ -1,5 +1,5 @@
 {
-  "debug": false,
+  "debug": true,
   "port": 4000,
   "logLevel": "info",
   "verboseEvents": false,
