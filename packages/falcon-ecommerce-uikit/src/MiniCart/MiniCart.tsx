@@ -31,7 +31,7 @@ export enum MiniCartProductArea {
 const miniCartProductTheme: DefaultThemeProps = {
   miniCartProduct: {
     display: 'grid',
-    gridGap: 'sm',
+    gridGap: 'xs',
     // prettier-ignore
     gridTemplate: toGridTemplate([
       ['1fr',                     '2fr'                                     ],
@@ -50,7 +50,7 @@ const MiniCartProduct: React.SFC<any> = ({ product }) => (
       {product.currency} {product.price}
     </H3>
     <Link display="flex" alignItems="center">
-      <Icon size={24} stroke="primaryDark" src="remove" gridArea={MiniCartProductArea.remove} mr="sm" />
+      <Icon size="md" stroke="primaryDark" src="remove" gridArea={MiniCartProductArea.remove} mr="xs" />
       <span>Remove</span>
     </Link>
   </Box>
@@ -61,30 +61,28 @@ const MiniCartProducts: React.SFC<any> = ({ products }) => (
     {products.map((product: any, index: number) => (
       <ListItem pb="none" key={product.name}>
         <MiniCartProduct product={product} />
-        {index < products.length - 1 && <Divider my="lg" />}
+        {index < products.length - 1 && <Divider my="md" />}
       </ListItem>
     ))}
   </List>
 );
 
-export const MiniCart: React.SFC<MiniCartData> = ({ miniCart: { open }, basketItems }) => {
-  return (
-    <ToggleMiniCartMutation>
-      {toggle => (
-        <React.Fragment>
-          <Sidebar as={Portal} visible={open} side="right">
-            <SidebarLayout>
-              <Icon src="close" onClick={toggle as any} position="absolute" top={15} right={30} />
-              <H2 mb="lg">Shopping cart</H2>
-              <MiniCartProducts products={basketItems} />
-              <Box position="absolute" bottom={0} right={0} left={0} bg="primaryLight" p="md">
-                <Button width="100%">Checkout</Button>
-              </Box>
-            </SidebarLayout>
-          </Sidebar>
-          <Backdrop as={Portal} visible={open} onClick={toggle as any} />
-        </React.Fragment>
-      )}
-    </ToggleMiniCartMutation>
-  );
-};
+export const MiniCart: React.SFC<MiniCartData> = ({ miniCart: { open }, basketItems }) => (
+  <ToggleMiniCartMutation>
+    {toggle => (
+      <React.Fragment>
+        <Sidebar as={Portal} visible={open} side="right">
+          <SidebarLayout>
+            <Icon src="close" onClick={() => toggle()} position="absolute" top={15} right={30} />
+            <H2 mb="lg">Shopping cart</H2>
+            <MiniCartProducts products={basketItems} />
+            <Box position="absolute" bottom={0} right={0} left={0} bg="secondaryLight" p="sm">
+              <Button css={{ width: '100%' }}>Checkout</Button>
+            </Box>
+          </SidebarLayout>
+        </Sidebar>
+        <Backdrop as={Portal} visible={open} onClick={() => toggle()} />
+      </React.Fragment>
+    )}
+  </ToggleMiniCartMutation>
+);

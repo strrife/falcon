@@ -8,15 +8,15 @@ import { MenuItem } from '../Header';
 
 const footerLayoutTheme: DefaultThemeProps = {
   footerLayout: {
-    mt: 'lg'
+    mt: 'md'
   }
 };
 
 const copyrightLayoutTheme: DefaultThemeProps = {
   copyrightLayout: {
-    p: 'md',
-    color: 'primaryText',
-    bgFullWidth: 'primary',
+    p: 'sm',
+    color: 'secondaryText',
+    bgFullWidth: 'secondary',
     css: {
       textAlign: 'center'
     }
@@ -27,9 +27,9 @@ const footerSectionsTheme: DefaultThemeProps = {
   footerSectionLayout: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))',
-    gridGap: 'md',
-    bgFullWidth: 'primaryLight',
-    py: 'md',
+    gridGap: 'sm',
+    bgFullWidth: 'secondaryLight',
+    py: 'sm',
     css: {
       justifyItems: {
         xs: 'center',
@@ -46,7 +46,7 @@ export const FooterSections: React.SFC<{ sections: MenuItem[] }> = ({ sections }
         <H3>{section.name}</H3>
         <List>
           {section.children.map(item => (
-            <ListItem p="sm" key={item.name}>
+            <ListItem p="xs" key={item.name}>
               <Link as={RouterLink} to={item.url}>
                 {item.name}
               </Link>
@@ -60,8 +60,8 @@ export const FooterSections: React.SFC<{ sections: MenuItem[] }> = ({ sections }
 
 const languageSectionTheme: DefaultThemeProps = {
   languageSection: {
-    bgFullWidth: 'primaryLight',
-    py: 'lg',
+    bgFullWidth: 'secondaryLight',
+    py: 'md',
     css: {
       maxWidth: 160,
       margin: '0 auto',

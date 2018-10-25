@@ -1,4 +1,6 @@
 import React, { MouseEventHandler } from 'react';
+// eslint-disable-next-line
+import { NetworkStatus } from 'apollo-client';
 import {
   themed,
   H1,
@@ -15,7 +17,6 @@ import {
 } from '@deity/falcon-ui';
 
 import { ProductsList } from './../Products';
-import { NetworkStatus } from 'apollo-client';
 
 const CategoryLayout = themed({
   tag: 'div',
@@ -37,7 +38,7 @@ export const SortOrderDropdown: React.SFC<any> = ({ sortOrders, onChange }) => {
 
   return (
     <Box display="flex">
-      <Dropdown width="100%" onChange={onChange}>
+      <Dropdown css={{ width: '100%' }} onChange={onChange}>
         <DropdownLabel>{activeSortOrder.name}</DropdownLabel>
 
         <DropdownMenu>
@@ -59,7 +60,7 @@ export const CategoryToolbar: React.SFC<{ translations: { showingOutOf: string }
   <FlexLayout justifyContent="space-between" alignItems="center">
     <Text>{translations.showingOutOf}</Text>
     <FlexLayout alignItems="center">
-      <Text mr="md">Sort by</Text>
+      <Text mr="sm">Sort by</Text>
       <SortOrderDropdown sortOrders={sortOrders} />
     </FlexLayout>
   </FlexLayout>
@@ -70,10 +71,10 @@ export const ShowMore: React.SFC<{ text: string; onClick?: MouseEventHandler; lo
   onClick,
   loading
 }) => (
-  <Box my="lg" onClick={onClick || (() => {})}>
+  <Box my="sm" onClick={onClick || (() => {})}>
     <Button variant="secondary">
       {text}
-        {loading && <Icon src="loader" ml='sm' size={16} />}
+      {loading && <Icon src="loader" ml="xs" size="sm" />}
     </Button>
   </Box>
 );

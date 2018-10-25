@@ -76,7 +76,7 @@ export const availablePresets: Preset[] = [
           css: {
             height: 50
           },
-          fill: 'secondaryDark'
+          fill: 'primaryDark'
         }
       },
 
@@ -98,7 +98,7 @@ export const availablePresets: Preset[] = [
         },
         navbar: {
           bgFullWidth: 'transparent',
-          bg: 'secondary',
+          bg: 'primary',
           borderRadius: 'round',
           mt: 'xs',
           justifyContent: 'center'
@@ -212,7 +212,7 @@ export const availablePresets: Preset[] = [
               </g>
             </svg>
           ),
-          fill: 'secondary'
+          fill: 'primary'
         }
       },
 

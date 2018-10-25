@@ -19,7 +19,7 @@ import {
   MiniCartQuery,
   MiniCart
 } from '@deity/falcon-ecommerce-uikit';
-import { ThemeEditor, ThemeState } from '@deity/falcon-theme-editor';
+import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 
 import { deityGreenTheme } from './theme';
 
@@ -43,10 +43,10 @@ const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category
 const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
 
 const App = ({ online }) => (
-  <ThemeState initial={deityGreenTheme}>
-    {props => (
+  <ThemeEditorState initial={deityGreenTheme}>
+    {({ theme, ...rest }) => (
       <React.Fragment>
-        <ThemeProvider theme={props.theme}>
+        <ThemeProvider theme={theme}>
           <HeadMetaTags />
           <AppLayout>
             <HeaderQuery>{data => <Header {...data} />}</HeaderQuery>
@@ -66,10 +66,10 @@ const App = ({ online }) => (
             <MiniCartQuery>{data => <MiniCart {...data} />}</MiniCartQuery>
           </AppLayout>
         </ThemeProvider>
-        <ThemeEditor {...props} />
+        <ThemeEditor theme={theme} {...rest} />
       </React.Fragment>
     )}
-  </ThemeState>
+  </ThemeEditorState>
 );
 
 App.propTypes = {

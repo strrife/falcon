@@ -10,8 +10,8 @@ export const ProductLayout = themed({
   defaultTheme: {
     productLayout: {
       display: 'grid',
-      gridGap: 'md',
-      my: 'lg'
+      gridGap: 'sm',
+      my: 'md'
     }
   }
 });
@@ -35,7 +35,7 @@ export const ProductDetailsLayout = themed({
   defaultTheme: {
     productDetailsLayout: {
       display: 'grid',
-      gridGap: 'md',
+      gridGap: 'xs',
       gridTemplateColumns: {
         xs: '1fr',
         md: '1.5fr 1fr'
@@ -69,16 +69,19 @@ export const ProductDetailsLayout = themed({
 });
 
 const Option: React.SFC<{ option: any }> = ({ option }) => (
-  <Box mb="md">
-    <H3 mb="md">{option.label}</H3>
+  <Box mb="sm">
+    <H3 mb="sm">{option.label}</H3>
     {option.values.map((value: any) => (
       <Radio
         key={value.valueIndex}
         mr="sm"
-        icon={<div>{value.label}</div>}
-        size={55}
+        icon={<Box fontSize="xs">{value.label}</Box>}
         name={option.attributeId}
         value={value.valueIndex}
+        css={{
+          height: 50,
+          width: 50
+        }}
       />
     ))}
   </Box>
@@ -120,11 +123,11 @@ export class Product extends React.PureComponent<{ product: any; translations: P
           <Box gridArea={Area.gallery} css={{ maxHeight: '100%' }}>
             <ProductGallery items={product.gallery} />
           </Box>
-          <Text fontSize="sm" gridArea={Area.sku}>
+          <Text fontSize="xs" gridArea={Area.sku}>
             {`${translations.sku}: ${product.sku}`}
           </Text>
           <H1 gridArea={Area.title}>{product.name}</H1>
-          <Text fontSize="xxl" gridArea={Area.price}>
+          <Text fontSize="xl" gridArea={Area.price}>
             {product.currency} {product.price}
           </Text>
           <ProductOptions options={product.configurableOptions} />
@@ -134,13 +137,13 @@ export class Product extends React.PureComponent<{ product: any; translations: P
           />
 
           <FlexLayout alignItems="center" gridArea={Area.cta}>
-            <NumberInput defaultValue="1" mr="md" />
+            <NumberInput defaultValue="1" mr="xs" />
             <Button>
-              <Icon src="cart" stroke="white" size={20} mr="sm" />
+              <Icon src="cart" stroke="white" mr="xs" size="sm" />
               {translations.addToCart}
             </Button>
           </FlexLayout>
-          <Box gridArea={Area.meta} my="lg">
+          <Box gridArea={Area.meta} my="md">
             {/* <ProductMeta meta={data.seo} /> */}
           </Box>
         </ProductDetailsLayout>

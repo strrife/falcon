@@ -9,10 +9,17 @@ import { createTheme } from '@deity/falcon-ui';
 import logo from './assets/logo.svg';
 
 export const deityGreenTheme = createTheme({
+  colors: {
+    primary: '#A9CF38',
+    primaryLight: '#CBDE6E',
+    primaryDark: '#A9CF38',
+    primaryText: '#fff'
+  },
+
   icons: {
     logo: {
       icon: props => <img src={logo} alt="logo" {...props} />,
-      height: 70,
+      height: 'xxxl',
       width: 'auto',
       display: 'block'
     },
@@ -35,9 +42,9 @@ export const deityGreenTheme = createTheme({
           </path>
         </svg>
       ),
-      size: 50,
+      size: 'xxl',
       stroke: 'transparent',
-      fill: 'secondary'
+      fill: 'primary'
     },
     cart: {
       icon: ShoppingCart
@@ -47,12 +54,12 @@ export const deityGreenTheme = createTheme({
     },
     dropdownArrowDown: {
       icon: ChevronDown,
-      size: 22,
+      size: 'md',
       ml: 'xs'
     },
     dropdownArrowUp: {
       icon: ChevronUp,
-      size: 22,
+      size: 'md',
       ml: 'xs'
     },
     close: {
@@ -63,11 +70,6 @@ export const deityGreenTheme = createTheme({
     },
     remove: {
       icon: Remove
-    }
-  },
-  components: {
-    button: {
-      boxShadow: 'none'
     }
   }
 });

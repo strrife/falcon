@@ -11,10 +11,10 @@ export const ProductCardLayout = themed({
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      height: '100%',
-      color: 'primaryText',
+      color: 'secondaryText',
 
       css: {
+        height: '100%',
         textDecoration: 'none',
         overflow: 'hidden',
         cursor: 'pointer'
@@ -30,7 +30,7 @@ export const ProductListLayout = themed({
       display: 'grid',
       gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))',
       gridAutoRows: '280px',
-      gridGap: 'md',
+      gridGap: 'sm',
       m: 'none',
       p: 'none',
       css: {
@@ -47,7 +47,7 @@ export const ProductsList: React.SFC<{ products: any[] }> = ({ products }) => (
         <ProductCardLayout to={product.urlPath}>
           <Image css={{ flex: 1, minHeight: '0%' }} src={product.thumbnail} />
 
-          <Text mt="sm" ellipsis>
+          <Text mt="xs" ellipsis>
             {product.name}
           </Text>
 
