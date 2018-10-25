@@ -91,9 +91,6 @@
     "webpack-node-externals": "^1.7.2",
     "workbox-build": "^3.5.0"
   },
-  "devDependencies": {
-    "react-router-dom": "^4.3.1"
-  },
   "peerDependencies": {
     "graphql": "^14.0.2",
     "graphql-tag": "^2.9.2",
