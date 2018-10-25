@@ -204,12 +204,49 @@ Falcon Client exposes set of hooks to which you can attache custom logic:
 
 ### `falcon-client.build.config.js`
 
-This is an optional build-time configuration file which is used to set up the entire build process.
-By default it supports the following features:
+This is an optional build-time configuration file which is used to set up the entire build process. By default it supports the following features:
 
-- Latest JavaScript achieved via babel 7 compiler
-- [HMR](https://webpack.js.org/concepts/hot-module-replacement/) - page auto-reload if you make edits (on both backend and frontend)
+- Universal [HMR](https://webpack.js.org/concepts/hot-module-replacement/) - page auto-reload if you make edits (on both backend and frontend)
+- Latest JavaScript achieved via babel 7 compiler.
+
+  However, if you want to add your own babel transformations, you can override defaults by adding the `.babelrc` file into the root of your project. Please note that it is necessary to at the very minimum the default `@deity/babel-preset-falcon-client` preset:
+
+  ```js
+  {
+    "presets": [
+      "@deity/babel-preset-falcon-client", // needed
+    ],
+    "plugins": [
+      // additional plugins
+    ]
+  }
+  ```
+
 - ESLint with [Prettier](https://github.com/prettier/prettier) - to keep your code base clean and consistent, [see presets](https://github.com/deity-io/falcon/tree/master/packages/falcon-dev-tools/eslint-config-falcon)
+
+  You can override (or extend) defaults by adding the `.eslintrc` file into the root of your project:
+
+  ```JSON
+  {
+    "extends": ["@deity/eslint-config-falcon"],
+    "rules": {
+      "foo/bar": "error",
+    }
+  }
+  ```
+
+- Jest test runner setup with sensible defaults.
+
+  It is possible to override it by adding `jest` node into `package.json`. Below example configures `setupTestFrameworkScriptFile` file:
+
+  ```js
+  // package.json
+  {
+   "jest": {
+     "setupTestFrameworkScriptFile": "./setupTests.js"
+   }
+  }
+  ```
 
 Here is example of `falcon-client.build.config.js` file content with defaults:
 
@@ -219,7 +256,7 @@ module.exports = {
   useWebmanifest: false,
   i18n: {},
   envToBuildIn: [],
-  plugins: [],
+  plugins: []
 };
 ```
 
