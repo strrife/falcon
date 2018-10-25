@@ -204,7 +204,7 @@ Falcon Client exposes set of hooks to which you can attache custom logic:
 
 ### `falcon-client.build.config.js`
 
-This is an optional build time configuration file which is used to setting up entire build process.
+This is an optional build-time configuration file which is used to set up the entire build process.
 By default it supports the following features:
 
 - Latest JavaScript achieved via babel 7 compiler
