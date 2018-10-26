@@ -42,7 +42,7 @@ describe('ExtensionContainer', () => {
   });
 
   it('Should correctly pass configuration to extensions', () => {
-    expect(container.extensions.get('fake-shop-extension').config.apiUrl).toEqual('https://example.com');
+    expect(container.extensions.get('shop').config.apiUrl).toEqual('https://example.com');
   });
 
   describe('Schema stitching', () => {
