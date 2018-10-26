@@ -26,6 +26,7 @@ export const Button = themed({
         border: 'none',
         textDecoration: 'none',
         appearance: 'none',
+        cursor: 'pointer',
         ':focus': {
           outline: 'none'
         },
