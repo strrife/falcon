@@ -1,89 +1,57 @@
 import React from 'react';
 import { withMDXComponents } from '@mdx-js/tag/dist/mdx-provider';
-import { withTheme } from 'emotion-theming';
-import { themeCategories, themeMeta } from '@deity/falcon-theme-editor';
+import { themeCategories, themeMeta, ThemeStateContext } from '@deity/falcon-theme-editor';
 import { mappings, ResponsivePropMapping } from '../src/theme/responsiveprops';
-import { Table, Thead, Tr, Th, Tbody, Td, Theme, Box, H3, H1 } from '../src';
+import { Table, Thead, Tr, Th, Tbody, Td, Theme, Box, H3, Icon } from '../src';
 
 const mappingKeys = Object.keys(mappings);
 
 const toKebabCase = (val: string) => val.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 
-const ResponsiveProps: React.SFC<{ theme: Theme; category: keyof typeof themeCategories }> = ({ theme, category }) => (
+const ResponsiveProps: React.SFC<{ category: keyof typeof themeCategories }> = ({ category }) => (
   <Box>
-    <H1>{themeCategories[category].name}</H1>
+    <Table>
+      <Thead>
+        <Tr>
+          <Th>Property</Th>
+          <Th>Meaning(CSS property)</Th>
+          <Th>Available Values</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {themeCategories[category].themeSections.map(section =>
+          mappingKeys.filter(name => (mappings[name] as ResponsivePropMapping).themeProp === section).map(name => {
+            const prop: ResponsivePropMapping = mappings[name];
+            const cssProp = prop.cssProp || (!prop.transformToCss ? name : '');
 
-    {themeCategories[category].themeSections.map(section => (
-      <React.Fragment>
-        {themeCategories[category].themeSections.length > 1 && <H3>{section}</H3>}
-        <Table mb="xl">
-          <Thead>
-            <Tr>
-              <Th>Property</Th>
-              <Th>Meaning(CSS property)</Th>
-            </Tr>
-          </Thead>
+            return (
+              <Tr key={name}>
+                <Td fontWeight="bold">{name}</Td>
 
-          <Tbody>
-            {mappingKeys.filter(name => (mappings[name] as ResponsivePropMapping).themeProp === section).map(name => {
-              const prop: ResponsivePropMapping = mappings[name];
-              const cssProp = prop.cssProp || (!prop.transformToCss ? name : '');
-
-              return (
-                <Tr key={name}>
-                  <Td>{name}</Td>
-
-                  <Td>
-                    {cssProp && toKebabCase(cssProp)}
-                    {!cssProp && (
-                      <Box color="secondary" title={prop.transformToCss.toString()}>
-                        transform function
+                <Td>
+                  {cssProp && toKebabCase(cssProp)}
+                  {!cssProp && (
+                    <Box color="primary" title={prop.transformToCss.toString()}>
+                      transform function
+                    </Box>
+                  )}
+                </Td>
+                <Td>
+                  <ThemeStateContext.Consumer>
+                    {({ openThemePropsPanel }) => (
+                      <Box css={{ cursor: 'pointer' }} onClick={() => openThemePropsPanel(category, section)}>
+                        <Icon size="md" src="viewTheme" />
                       </Box>
                     )}
-                  </Td>
-                </Tr>
-              );
-            })}
-          </Tbody>
-        </Table>
-
-        <H3 mb="md" fontWeight="regular">
-          Allowed values
-        </H3>
-
-        <Table mb="xl">
-          <Thead>
-            <Tr>
-              <Th>Property Value</Th>
-              <Th>Meaning (CSS property value)</Th>
-              {themeMeta[section].previewCss && <Th>Preview</Th>}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {Object.keys(theme[section]).map(key => (
-              <Tr key={key}>
-                <Td>{key}</Td>
-                <Td>
-                  {theme[section][key]} {themeMeta[section].unit}
+                  </ThemeStateContext.Consumer>
                 </Td>
-
-                {themeMeta[section].previewCss && (
-                  <Td>
-                    <Box
-                      bg="primaryDark"
-                      border="regular"
-                      borderColor="black"
-                      css={themeMeta[section].previewCss(theme[section][key])}
-                    />
-                  </Td>
-                )}
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </React.Fragment>
-    ))}
+            );
+          })
+        )}
+      </Tbody>
+    </Table>
   </Box>
 );
 
-export default withMDXComponents(withTheme(ResponsiveProps));
+export default withMDXComponents(ResponsiveProps);

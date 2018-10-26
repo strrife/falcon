@@ -8,6 +8,7 @@ export type ComponentWithDefaultTheme = {
 
 export type ThemeStateContextType = {
   selectComponents?: (components: ComponentWithDefaultTheme[]) => void;
+  openThemePropsPanel?: (panel: string, subpanel?: string) => void;
   openEditor?: boolean;
 };
 
@@ -162,9 +163,31 @@ export class ThemeEditorState extends React.Component<ThemeEditorStateProps, The
     });
   };
 
+  openThemePropsPanel = (panel: string, subpanel?: string) => {
+    this.setState(state => {
+      const tabs = { ...state.tabs };
+      const openPanels = {
+        [panel]: true
+      };
+
+      if (subpanel) {
+        openPanels[panel + subpanel] = true;
+      }
+
+      tabs.theme.openPanels = openPanels;
+      return {
+        tabs,
+        activeTab: 'theme',
+        visible: true
+      };
+    });
+  };
+
   render() {
     return (
-      <ThemeStateContext.Provider value={{ selectComponents: this.selectComponents }}>
+      <ThemeStateContext.Provider
+        value={{ selectComponents: this.selectComponents, openThemePropsPanel: this.openThemePropsPanel }}
+      >
         {this.props.children({
           theme: this.state.activeTheme,
           updateTheme: this.updateTheme,

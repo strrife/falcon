@@ -57,7 +57,7 @@ const EditorSection: React.SFC<EditorSectionProps> = ({ theme, section, onChange
           gridTemplateColumns={meta.input.type === 'dropdown' ? '50px auto 1.8fr 20px' : '1.1fr auto 1.8fr 35px'}
           key={themeProp}
         >
-          <Text p="xs">{themeProp}</Text>
+          <Text p="xs">{`"${themeProp}"`}</Text>
 
           {meta.input.type === 'number' && (
             <React.Fragment>
@@ -156,7 +156,7 @@ export const ThemePropsEditor: React.SFC<ThemePropsEditorProps> = ({
 
               {category.themeSections.length > 1 &&
                 category.themeSections.map(section => {
-                  const key = category.name + section;
+                  const key = categoryKey + section;
 
                   return (
                     <Details mb="sm" key={key} open={openPanels[key]}>

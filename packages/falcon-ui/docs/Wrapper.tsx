@@ -4,6 +4,10 @@ import Eye from 'react-feather/dist/icons/eye';
 import { ThemeProvider, createTheme } from '../src';
 
 const initialTheme = createTheme({
+  fontWeights: {
+    bold: 500
+  },
+
   components: {},
   icons: {
     viewTheme: {
