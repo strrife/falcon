@@ -1,7 +1,5 @@
 # Falcon Server Env
 
-This package delivers base classes and helpers for ApiDataSources and Extensions.
-
 ## ApiDataSource
 
 `src/models/ApiDataSource` is a base class for REST API data sources that is
@@ -15,9 +13,9 @@ the back-end system.
 
 ### `api.getFetchUrlPriority(url)`
 
-This method must be defined when ApiDataSource supports Dynamic Routing.
+This method must be defined if ApiDataSource supports Dynamic Routing.
 It should provide a simple logic to determine custom priority or return a default priority
-(`this.fetchUrlPriority` equals `1` by default).
+(`this.fetchUrlPriority` equals `ApiUrlPriority.NORMAL` by default).
 
 #### ApiDataSource internal methods
 
