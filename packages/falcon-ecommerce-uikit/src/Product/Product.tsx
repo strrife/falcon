@@ -128,7 +128,9 @@ const ProductForm = adopt({
   // product configurator takes care about interactions between configurable product options and serializes
   // selected data into proper format so GraphQL can use it
   productConfigurator: ({ formik, render }) => (
-    <ProductConfigurator onChange={(name: string, value: any) => formik.setFieldValue(name, value)}>
+    <ProductConfigurator
+      onChange={(name: string, value: any) => formik.setFieldValue(name, value, !!formik.submitCount)}
+    >
       {render}
     </ProductConfigurator>
   )
@@ -146,7 +148,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
       }
 
       // handle configuration options
-      if (product.configurableOptions) {
+      if (product.configurableOptions && product.configurableOptions.length) {
         if (!values.configurableOptions || values.configurableOptions.length !== product.configurableOptions.length) {
           errors.configurableOptions = translations.error.configurableOptions;
         }
@@ -161,7 +163,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
   // this method is defined as instance property so we don't need to use bind when passing it as render prop
   renderProductFormContent = ({
     addToCartMutation,
-    formik: { values, isSubmitting, handleChange, errors },
+    formik: { values, isSubmitting, errors, setFieldValue, submitCount },
     productConfigurator
   }: any) => {
     const { product, translations } = this.props;
@@ -189,7 +191,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
               name="qty"
               disabled={isSubmitting}
               defaultValue={String(values.qty)}
-              onChange={handleChange}
+              onChange={ev => setFieldValue('qty', ev.target.value, !!submitCount)}
             />
             <Button type="submit">
               <Icon src="cart" stroke="white" size={20} mr="sm" />
