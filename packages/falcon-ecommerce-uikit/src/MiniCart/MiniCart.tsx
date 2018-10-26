@@ -60,7 +60,15 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
           alignItems="center"
           onClick={() => removeCartItem({ variables: { input: { itemId: product.itemId } } })}
         >
-          <Icon size={24} stroke="primaryDark" src="remove" mr="sm" />
+          <Icon
+            size={32}
+            stroke="primaryDark"
+            src="remove"
+            mr="sm"
+            css={({ theme }) => ({
+              ':hover': { stroke: theme.colors.secondary }
+            })}
+          />
         </Link>
       )}
     </RemoveCartItemMutation>
@@ -116,7 +124,7 @@ export const MiniCart: React.SFC<MiniCartData> = ({ miniCart: { open }, cart: { 
             </Box>
           </SidebarLayout>
         </Sidebar>
-        <Backdrop as={Portal} visible={open} onClick={() => toggle} />
+        <Backdrop as={Portal} visible={open} onClick={() => toggle()} />
       </React.Fragment>
     )}
   </ToggleMiniCartMutation>

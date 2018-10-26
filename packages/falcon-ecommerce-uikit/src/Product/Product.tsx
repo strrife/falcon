@@ -7,7 +7,7 @@ import { Breadcrumbs } from '../Breadcrumbs';
 import { ProductGallery } from './ProductGallery';
 import { ProductTranslations } from './ProductQuery';
 import { ProductConfigurableOptions } from './ConfigurableOptions';
-import { AddToCartMutation } from '../MiniCart';
+import { AddToCartMutation, ToggleMiniCartMutation } from '../MiniCart';
 import { ProductConfigurator } from './ProductConfigurator';
 
 export const ProductLayout = themed({
@@ -91,18 +91,25 @@ const ProductDescriptionLayout = themed({
  * Combine render props functions into one with react-adopt
  */
 const ProductForm = adopt({
-  // mutation delivers addToCart method which should be called with proper data
-  mutation: ({ render }) => (
-    <AddToCartMutation>{(addToCart, result) => render({ addToCart, result })}</AddToCartMutation>
+  // mutation provides toggle() method that allows us to show mini cart once product is added
+  toggleMiniCartMutation: ({ render }) => (
+    <ToggleMiniCartMutation>{toggle => render({ toggle })}</ToggleMiniCartMutation>
+  ),
+
+  // mutation provides addToCart method which should be called with proper data
+  addToCartMutation: ({ render, toggleMiniCartMutation }) => (
+    <AddToCartMutation onCompleted={() => toggleMiniCartMutation.toggle()}>
+      {(addToCart, result) => render({ addToCart, result })}
+    </AddToCartMutation>
   ),
 
   // formik handles form operations and triggers submit when onSubmit event is fired on the form
-  formik: ({ sku, validate, mutation, render }) => (
+  formik: ({ sku, validate, addToCartMutation, render }) => (
     <Formik
       initialValues={{ qty: 1 }}
       validate={validate}
       onSubmit={(values: any) =>
-        mutation.addToCart({
+        addToCartMutation.addToCart({
           variables: {
             input: {
               sku,
@@ -152,7 +159,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
 
   // this method is defined as instance property so we don't need to use bind when passing it as render prop
   renderProductFormContent = ({
-    mutation,
+    addToCartMutation,
     formik: { values, isSubmitting, handleChange, errors },
     productConfigurator
   }: any) => {
@@ -192,7 +199,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
           </FlexLayout>
           <Box>
             <ErrorMessage name="qty" render={msg => <Text color="error">{msg}</Text>} />
-            {!!mutation.result.error && <Text color="error">{mutation.result.error.message}</Text>}
+            {!!addToCartMutation.result.error && <Text color="error">{addToCartMutation.result.error.message}</Text>}
           </Box>
         </Form>
       </React.Fragment>

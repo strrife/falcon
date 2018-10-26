@@ -14,6 +14,7 @@ const Option: React.SFC<{ option: any; disabled?: boolean; onChange: Function }>
         onChange={ev => onChange(ev)}
         name={option.attributeId}
         value={value.valueIndex}
+        css={{ cursor: 'pointer' }}
       />
     ))}
   </Box>
