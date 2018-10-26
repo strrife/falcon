@@ -1,20 +1,22 @@
 {
   "debug": false,
   "port": 4000,
+  "logLevel": "info",
+  "verboseEvents": false,
   "apis": {
     "api-wordpress": {
       "package": "@deity/falcon-wordpress-api",
       "config": {
-        "host": "snapshot.deity.io",
+        "host": "wordpress.deity.io",
         "protocol": "https",
-        "apiPrefix": "/blog-api",
+        "apiPrefix": "/wp-json",
         "apiSuffix": "/wp/v2"
       }
     },
     "api-magento2": {
       "package": "@deity/falcon-magento2-api",
       "config": {
-        "host": "snapshot.deity.io",
+        "host": "magento.deity.io",
         "protocol": "https",
         "username": "node-api",
         "password": "3de3f3a262",
