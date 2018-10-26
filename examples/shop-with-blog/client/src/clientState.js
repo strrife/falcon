@@ -75,12 +75,11 @@ export default {
             }
           `
         });
-
-        const data = {
-          miniLogin: { ...miniLogin, open: !miniLogin.open }
-        };
-
-        cache.writeData({ data });
+        cache.writeData({
+          data: {
+            miniLogin: { ...miniLogin, open: !miniLogin.open }
+          }
+        });
 
         return null;
       }
