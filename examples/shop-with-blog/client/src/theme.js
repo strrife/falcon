@@ -2,6 +2,7 @@ import React from 'react';
 import ShoppingCart from 'react-feather/dist/icons/shopping-cart';
 import ChevronDown from 'react-feather/dist/icons/chevron-down';
 import ChevronUp from 'react-feather/dist/icons/chevron-up';
+import ChevronRight from 'react-feather/dist/icons/chevron-right';
 import User from 'react-feather/dist/icons/user';
 import Close from 'react-feather/dist/icons/x';
 import Remove from 'react-feather/dist/icons/x-circle';
@@ -54,6 +55,12 @@ export const deityGreenTheme = createTheme({
       icon: ChevronUp,
       size: 22,
       ml: 'xs'
+    },
+    buttonArrowRight: {
+      icon: ChevronRight,
+      size: 13,
+      ml: 'xs',
+      stroke: 'white'
     },
     close: {
       icon: Close,
