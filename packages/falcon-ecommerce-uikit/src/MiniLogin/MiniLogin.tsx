@@ -13,10 +13,13 @@ import {
   Image,
   Link,
   Divider,
-  Button
+  Button,
+  Input,
+  Label,
+  Text
 } from '@deity/falcon-ui';
 import { MiniLoginData } from './MiniLoginQuery';
-import { ToggleMiniLoginMutation } from './MiniLoginMutations';
+import { ToggleMiniLoginMutation, SignUpMutation } from './MiniLoginMutations';
 import { SidebarLayout } from '../SidebarLayout';
 // import { toGridTemplate } from "../helpers";
 
@@ -75,10 +78,33 @@ export const MiniLogin: React.SFC<MiniLoginData> = ({ miniLogin: { open } }) => 
           <SidebarLayout>
             <Icon src="close" onClick={() => toggle()} position="absolute" top={15} right={30} />
             <H2 mb="lg">Login</H2>
-            {/* <MiniCartProducts products={basketItems} /> */}
-            <Box position="absolute" bottom={0} right={0} left={0} bg="primaryLight" p="md">
-              <Button width="100%">Login</Button>
+            <Text>Log in with your account</Text>
+            <Box>
+              <Label htmlFor="email">Email</Label>
+              <Input name="email" />
             </Box>
+            <Box>
+              <Label htmlFor="password">Password</Label>
+              <Input name="password" type="password" />
+            </Box>
+            <Link fontWeight="bold">Password forgot?</Link>
+            {/* <SignUpMutation>{signUp => <Button width="100%">Login</Button>}</SignUpMutation> */}
+            <Button type="submit" width="100%">
+              Login
+              <Icon src="buttonArrowRight" stroke="white" />
+            </Button>
+
+            <Text>No account yet?</Text>
+            <Button type="submit" width="100%">
+              Create an account
+              <Icon src="buttonArrowRight" stroke="white" />
+            </Button>
+            <Text fontWeight="bold">Creating an account has many benefits: </Text>
+            <List>
+              <ListItem>check out faster</ListItem>
+              <ListItem>keep more than one address</ListItem>
+              <ListItem>track orders and more</ListItem>
+            </List>
           </SidebarLayout>
         </Sidebar>
         <Backdrop as={Portal} visible={open} onClick={() => toggle()} />
