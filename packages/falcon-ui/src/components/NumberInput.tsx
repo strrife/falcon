@@ -99,6 +99,10 @@ class NumberInputInnerDOM extends React.Component<
 export const NumberInput = themed({
   tag: NumberInputInnerDOM,
 
+  defaultProps: {
+    readOnly: true
+  },
+
   defaultTheme: {
     numberInput: {
       display: 'inline-flex',
@@ -112,7 +116,6 @@ export const NumberInput = themed({
           height: '100%',
           appearance: 'none',
           MozAppearance: 'textfield',
-          pointerEvents: 'none',
           userSelect: 'none',
           fontStyle: 'inherit',
           border: theme.borders.regular,
