@@ -1,11 +1,11 @@
 ---
 name: Responsive props
 route: /responsive-props
-order: 1
+order: 0
 ---
 import { Playground } from 'docz';
 import { Box, GridLayout, Divider, Button } from '@deity/falcon-ui';
-import { ResponsivePropsTable, ThemeBreakpoints } from 'docs';
+import { ResponsivePropsTable, ViewThemeSection } from 'docs';
 
 
 # Responsive theme-based props
@@ -56,7 +56,9 @@ All of `@deity/falcon-ui` components come with default theme which can be overri
 ## Responsive notation
 All of the responsive theme-based props work seamlessy with `breakpoints` defined in `Theme`.
 
-<ThemeBreakpoints />
+<ViewThemeSection section="breakpoints">
+  view available theme breakpoints
+</ViewThemeSection>
 
 Simply pass object as responsive prop value with it's keys being breakpoints keys defined in `Theme` and values being property values to have responsive prop that changes based on 
 screen width. 

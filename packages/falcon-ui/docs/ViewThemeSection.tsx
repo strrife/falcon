@@ -3,18 +3,19 @@ import { withMDXComponents } from '@mdx-js/tag/dist/mdx-provider';
 import { ThemeStateContext } from '@deity/falcon-theme-editor';
 import { Icon, Button } from '../src';
 
-const ThemeBreakpoints: React.SFC = () => (
+const ViewThemeSection: React.SFC<{ section: string }> = ({ section, children }) => (
   <ThemeStateContext.Consumer>
     {({ openThemePropsPanel }) => (
       <Button
+        mr="xs"
         onClick={() => {
-          openThemePropsPanel('breakpoints');
+          openThemePropsPanel(section);
         }}
       >
-        <Icon stroke="white" size="md" src="viewTheme" mr="xs" /> view available theme breakpoints
+        <Icon stroke="white" size="md" src="viewTheme" mr="xs" /> {children}
       </Button>
     )}
   </ThemeStateContext.Consumer>
 );
 
-export default withMDXComponents(ThemeBreakpoints);
+export default withMDXComponents(ViewThemeSection);
