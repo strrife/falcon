@@ -1,3 +1,3 @@
 export * from './MiniLogin';
-export * from './MiniLoginQuery';
-export * from './MiniLoginMutations';
+export * from './MiniSignUpQuery';
+export * from './MiniSignUpMutations';

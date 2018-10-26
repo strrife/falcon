@@ -1,15 +1,15 @@
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
-const TOGGLE_MINI_LOGIN = gql`
+export const TOGGLE_MINI_SIGN_UP = gql`
   mutation {
-    toggleMiniLogin @client
+    toggleMiniSignUp @client
   }
 `;
 
-export class ToggleMiniLoginMutation extends Mutation {
+export class ToggleMiniSignUpMutation extends Mutation {
   static defaultProps = {
-    mutation: TOGGLE_MINI_LOGIN
+    mutation: TOGGLE_MINI_SIGN_UP
   };
 }
 

@@ -18,8 +18,8 @@ import {
   Label,
   Text
 } from '@deity/falcon-ui';
-import { MiniLoginData } from './MiniLoginQuery';
-import { ToggleMiniLoginMutation, SignUpMutation } from './MiniLoginMutations';
+import { MiniSignUpData } from './MiniSignUpQuery';
+import { ToggleMiniSignUpMutation, SignUpMutation } from './MiniSignUpMutations';
 import { SidebarLayout } from '../SidebarLayout';
 // import { toGridTemplate } from "../helpers";
 
@@ -70,8 +70,8 @@ import { SidebarLayout } from '../SidebarLayout';
 //   </List>
 // );
 
-export const MiniLogin: React.SFC<MiniLoginData> = ({ miniLogin: { open } }) => (
-  <ToggleMiniLoginMutation>
+export const MiniLogin: React.SFC<MiniSignUpData> = ({ miniSignUp: { open } }) => (
+  <ToggleMiniSignUpMutation>
     {toggle => (
       <React.Fragment>
         <Sidebar as={Portal} visible={open} side="right">
@@ -110,5 +110,5 @@ export const MiniLogin: React.SFC<MiniLoginData> = ({ miniLogin: { open } }) => 
         <Backdrop as={Portal} visible={open} onClick={() => toggle()} />
       </React.Fragment>
     )}
-  </ToggleMiniLoginMutation>
+  </ToggleMiniSignUpMutation>
 );

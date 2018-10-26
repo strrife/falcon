@@ -34,7 +34,7 @@ export default {
     miniCart: {
       open: false
     },
-    miniLogin: {
+    miniSignUp: {
       open: false
     }
   },
@@ -65,11 +65,11 @@ export default {
 
         return null;
       },
-      toggleMiniLogin: (_, _variables, { cache }) => {
-        const { miniLogin } = cache.readQuery({
+      toggleMiniSignUp: (_, _variables, { cache }) => {
+        const { miniSignUp } = cache.readQuery({
           query: gql`
-            query miniLogin {
-              miniLogin @client {
+            query miniSignUp {
+              miniSignUp @client {
                 open
               }
             }
@@ -77,7 +77,7 @@ export default {
         });
         cache.writeData({
           data: {
-            miniLogin: { ...miniLogin, open: !miniLogin.open }
+            miniSignUp: { ...miniSignUp, open: !miniSignUp.open }
           }
         });
 
