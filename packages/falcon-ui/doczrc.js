@@ -2,7 +2,10 @@
 import doczPluginNetlify from 'docz-plugin-netlify';
 import * as path from 'path';
 
-module.exports = {
+// always  build docz in development version in order to have 'component finder working'
+// as it only works in react development mode
+process.env.NODE_ENV = 'development';
+export default {
   typescript: true,
   propsParser: false,
   src: './src',
@@ -33,6 +36,8 @@ module.exports = {
   },
 
   modifyBundlerConfig: config => {
+    config.mode = 'development';
+
     config.resolve.alias = Object.assign({}, config.resolve.alias, {
       '@deity/falcon-ui': path.resolve(__dirname, 'src'),
       docs: path.resolve(__dirname, 'docs')
