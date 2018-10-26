@@ -13,7 +13,8 @@ const {
   getBuildConfig,
   removePreviousBuildAssets,
   webpackCompiler,
-  webpackCompileAsync
+  webpackCompileAsync,
+  logDeityGreenInfo
 } = require('./tools');
 const createConfig = require('./config/create');
 const { generateSW } = require('./workbox');
@@ -26,7 +27,7 @@ module.exports.startDevServer = async () => {
   if (falconConfig.clearConsole) {
     clearConsole();
   }
-  Logger.info(chalk.hex('#a9cf38')('Starting development server...'));
+  logDeityGreenInfo('Starting development server...');
 
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
   process.env.BABEL_ENV = process.env.NODE_ENV;
@@ -85,7 +86,7 @@ module.exports.build = async () => {
   if (falconConfig.clearConsole) {
     clearConsole();
   }
-  Logger.log(chalk.hex('#a9cf38')('Creating an optimized production build...'));
+  logDeityGreenInfo('Creating an optimized production build...');
 
   process.env.NODE_ENV = 'production';
   process.env.BABEL_ENV = process.env.NODE_ENV;
@@ -145,7 +146,7 @@ module.exports.size = async () => {
   if (falconConfig.clearConsole) {
     clearConsole();
   }
-  Logger.log(chalk.hex('#a9cf38')('Creating an optimized production build...'));
+  logDeityGreenInfo('Creating an optimized production build...');
 
   process.env.NODE_ENV = 'production';
   process.env.BABEL_ENV = process.env.NODE_ENV;

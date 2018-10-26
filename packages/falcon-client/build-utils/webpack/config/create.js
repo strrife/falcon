@@ -1,6 +1,5 @@
 const fs = require('fs-extra');
 const path = require('path');
-// const logger = require('@deity/falcon-logger');
 const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
@@ -15,6 +14,7 @@ const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 
 const paths = require('./../../paths');
+const { colors } = require('./../tools');
 const { getClientEnv } = require('./env');
 const runPlugin = require('./runPlugin');
 
@@ -569,7 +569,7 @@ module.exports = (target = 'web', options, buildConfig) => {
     ...config.plugins,
     new WebpackBar({
       minimal: options.isCI,
-      color: '#cbde6e',
+      color: colors.deityGreen,
       name: IS_WEB ? 'client' : 'server',
       compiledIn: true
     })

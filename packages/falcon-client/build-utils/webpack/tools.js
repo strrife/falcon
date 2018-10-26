@@ -9,6 +9,14 @@ const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const clearConsole = require('react-dev-utils/clearConsole');
 const paths = require('./../paths');
 
+const colors = {
+  deityGreen: '#a9cf38'
+};
+
+function logDeityGreenInfo(x) {
+  Logger.info(chalk.hex(colors.deityGreen)(x));
+}
+
 function exitIfBuildingItself() {
   if (paths.ownPath === paths.appPath) {
     Logger.error(
@@ -23,6 +31,18 @@ function exitIfBuildingItself() {
       'If you want more information about falcon-client see this: https://github.com/deity-io/falcon/tree/master/packages/falcon-client'
     );
 
+    process.exit(1);
+  }
+}
+
+/**
+ * Exit if required files does no exist
+ * @param {FalconClientBuildConfig} config falcon-client build config
+ * @returns {void}
+ */
+function exitIfNoRequiredFiles(config) {
+  const filesToCheck = [paths.appIndexJs, config.useWebmanifest && paths.appWebmanifest].filter(x => x);
+  if (!checkRequiredFiles(filesToCheck)) {
     process.exit(1);
   }
 }
@@ -117,18 +137,6 @@ function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {
   return configDefaults;
 }
 
-/**
- * Exit if required files does no exist
- * @param {FalconClientBuildConfig} config falcon-client build config
- * @returns {void}
- */
-function exitIfNoRequiredFiles(config) {
-  const filesToCheck = [paths.appIndexJs, config.useWebmanifest && paths.appWebmanifest].filter(x => x);
-  if (!checkRequiredFiles(filesToCheck)) {
-    process.exit(1);
-  }
-}
-
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} Bytes`;
   else if (bytes < 1048576) return `${(bytes / 1024).toFixed(3)} KB`;
@@ -137,6 +145,8 @@ function formatBytes(bytes) {
 }
 
 module.exports = {
+  colors,
+  logDeityGreenInfo,
   exitIfBuildingItself,
   exitIfNoRequiredFiles,
   getBuildConfig,
