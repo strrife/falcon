@@ -9,6 +9,7 @@ import { ProductTranslations } from './ProductQuery';
 import { ProductConfigurableOptions } from './ConfigurableOptions';
 import { AddToCartMutation, ToggleMiniCartMutation } from '../MiniCart';
 import { ProductConfigurator } from './ProductConfigurator';
+import { Price } from '../Locale';
 
 export const ProductLayout = themed({
   tag: 'div',
@@ -167,9 +168,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
 
     return (
       <React.Fragment>
-        <Text fontSize="xxl" gridArea={Area.price}>
-          {product.currency} {product.price}
-        </Text>
+        <Price fontSize="xxl" gridArea={Area.price} value={product.price} />
         <Form>
           <ProductConfigurableOptions
             options={product.configurableOptions}

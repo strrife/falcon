@@ -41,6 +41,12 @@ export default {
   defaults: {
     miniCart: {
       open: false
+    },
+
+    // todo: this is temporary, these values should be fetched from shop settings
+    localeSettings: {
+      locale: 'en',
+      currency: 'EUR'
     }
   },
 

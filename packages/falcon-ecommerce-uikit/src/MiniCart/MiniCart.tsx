@@ -21,6 +21,7 @@ import { MiniCartData } from './MiniCartQuery';
 import { ToggleMiniCartMutation, RemoveCartItemMutation, UpdateCartItemMutation } from './MiniCartMutations';
 import { SidebarLayout } from '../SidebarLayout';
 import { toGridTemplate } from '../helpers';
+import { Price } from '../Locale';
 
 export enum MiniCartProductArea {
   empty = '.',
@@ -49,9 +50,13 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
   <Box defaultTheme={miniCartProductTheme}>
     <Image gridArea={MiniCartProductArea.thumb} src={product.thumbnailUrl} />
     <H3 gridArea={MiniCartProductArea.productName}>{product.name}</H3>
-    <H3 fontWeight="bold" gridArea={MiniCartProductArea.price}>
-      {currency} {product.price}
-    </H3>
+    <Price
+      fontSize="lg"
+      fontWeight="bold"
+      gridArea={MiniCartProductArea.price}
+      currency={currency}
+      value={product.price}
+    />
     <RemoveCartItemMutation>
       {removeCartItem => (
         <Link
