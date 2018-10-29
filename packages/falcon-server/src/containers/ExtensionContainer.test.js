@@ -1,4 +1,5 @@
 const { mockServer } = require('graphql-tools');
+const { EventEmitter2 } = require('eventemitter2');
 const ExtensionContainer = require('./ExtensionContainer');
 const { BaseSchema } = require('../index');
 
@@ -28,12 +29,15 @@ const mocks = {
 
 describe('ExtensionContainer', () => {
   let container;
+  let ee;
 
-  beforeEach(() => {
-    container = new ExtensionContainer(extensions, {});
+  beforeEach(async () => {
+    ee = new EventEmitter2();
+    container = new ExtensionContainer(ee);
+    await container.registerExtensions(extensions);
   });
 
-  it('Should correctly load extensions passed in configuration', () => {
+  it('Should correctly load extensions passed in configuration', async () => {
     expect(container.extensions.size).toEqual(2);
   });
 

@@ -13,32 +13,7 @@ const { codes } = require('@deity/falcon-errors');
 const DynamicRouteResolver = require('./resolvers/DynamicRouteResolver');
 
 const BaseSchema = readFileSync(resolvePath(__dirname, './schema.graphql'), 'utf8');
-
-const Events = {
-  ERROR: 'falcon-server.error',
-
-  BEFORE_INITIALIZED: 'falcon-server.before-initialized',
-  AFTER_INITIALIZED: 'falcon-server.after-initialized',
-
-  BEFORE_STARTED: 'falcon-server.before-started',
-  AFTER_STARTED: 'falcon-server.after-started',
-
-  BEFORE_WEB_SERVER_CREATED: 'falcon-server.before-web-server-created',
-  AFTER_WEB_SERVER_CREATED: 'falcon-server.after-web-server-created',
-
-  BEFORE_API_CONTAINER_CREATED: 'falcon-server.before-api-container-created',
-  AFTER_API_CONTAINER_CREATED: 'falcon-server.after-api-container-created',
-
-  BEFORE_EXTENSION_CONTAINER_CREATED: 'falcon-server.before-extension-container-created',
-  AFTER_EXTENSION_CONTAINER_CREATED: 'falcon-server.after-extension-container-created',
-  AFTER_EXTENSION_CONTAINER_INITIALIZED: 'falcon-server.after-extension-container-initialized',
-
-  BEFORE_APOLLO_SERVER_CREATED: 'falcon-server.before-apollo-server-created',
-  AFTER_APOLLO_SERVER_CREATED: 'falcon-server.after-apollo-server-created',
-
-  BEFORE_ENDPOINTS_REGISTERED: 'falcon-server.before-endpoints-registered',
-  AFTER_ENDPOINTS_REGISTERED: 'falcon-server.after-endpoints-registered'
-};
+const Events = require('./events');
 
 class FalconServer {
   constructor(config) {
@@ -61,7 +36,7 @@ class FalconServer {
 
     if (verboseEvents) {
       this.eventEmitter.onAny(event => {
-        Logger.trace(`Triggering "${event}" event listener...`);
+        Logger.debug(`Triggering "${event}" event...`);
       });
     }
   }
@@ -150,6 +125,12 @@ class FalconServer {
       ctx.req.session = ctx.session;
       return next();
     });
+    this.app.use(async (ctx, next) => {
+      await this.eventEmitter.emitAsync(Events.BEFORE_WEB_SERVER_REQUEST, ctx);
+      await next();
+      await this.eventEmitter.emitAsync(Events.AFTER_WEB_SERVER_REQUEST, ctx);
+    });
+
     await this.eventEmitter.emitAsync(Events.AFTER_WEB_SERVER_CREATED, this.app);
   }
 
@@ -159,12 +140,14 @@ class FalconServer {
   async initializeExtensions() {
     await this.eventEmitter.emitAsync(Events.BEFORE_API_CONTAINER_CREATED, this.config.apis);
     /** @type {ApiContainer} */
-    this.apiContainer = new ApiContainer(this.config.apis);
+    this.apiContainer = new ApiContainer(this.eventEmitter);
+    await this.apiContainer.registerApis(this.config.apis);
     await this.eventEmitter.emitAsync(Events.AFTER_API_CONTAINER_CREATED, this.apiContainer);
 
     await this.eventEmitter.emitAsync(Events.BEFORE_EXTENSION_CONTAINER_CREATED, this.config.extensions);
     /** @type {ExtensionContainer} */
-    this.extensionContainer = new ExtensionContainer(this.config.extensions, this.apiContainer.dataSources);
+    this.extensionContainer = new ExtensionContainer(this.eventEmitter);
+    await this.extensionContainer.registerExtensions(this.config.extensions, this.apiContainer.dataSources);
     await this.eventEmitter.emitAsync(Events.AFTER_EXTENSION_CONTAINER_CREATED, this.extensionContainer);
 
     await this.extensionContainer.initialize();
