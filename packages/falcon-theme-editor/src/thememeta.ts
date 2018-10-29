@@ -74,9 +74,7 @@ export const themeMeta: ThemeMeta = {
       min: 0,
       step: 0.1,
       max: 3
-    },
-
-    unit: 'px'
+    }
   },
 
   letterSpacings: {

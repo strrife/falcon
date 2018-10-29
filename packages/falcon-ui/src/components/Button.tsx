@@ -14,6 +14,7 @@ export const Button = themed({
       px: 'sm',
       transitionTimingFunction: 'easeIn',
       transitionDuration: 'short',
+      border: 'none',
 
       css: ({ theme }) => ({
         // basic reset styles
@@ -23,7 +24,6 @@ export const Button = themed({
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
-        border: 'none',
         textDecoration: 'none',
         appearance: 'none',
         cursor: 'pointer',

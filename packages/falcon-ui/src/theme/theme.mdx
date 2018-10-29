@@ -87,14 +87,16 @@ import { createTheme } from '@deity/falcon-ui';
 
 const customizedButtonTheme = createTheme({
   components: {
-      button: {
-        borderRadius: 'round',
-        height: 'xxl',
-        bg: 'primaryDark',
-        css: {
-          textTransform: 'uppercase'
-        }
-      }
+    button: {
+      height: 'xl',
+      px: 'lg',
+      bg: 'transparent',
+      color: 'secondaryText',
+      fontWeight: 'bold',
+      border: 'bold',
+      borderColor: 'primary',
+      borderRadius: 'round'
+    }
   }
 });
 ```

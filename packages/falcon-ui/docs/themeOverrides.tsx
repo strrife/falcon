@@ -85,12 +85,14 @@ export const customizedButtonTheme = (theme: Theme) => ({
   ...{
     components: {
       button: {
-        borderRadius: 'round',
-        height: 'xxl',
-        bg: 'primaryDark',
-        css: {
-          textTransform: 'uppercase'
-        }
+        height: 'xl',
+        px: 'lg',
+        bg: 'transparent',
+        color: 'secondaryText',
+        fontWeight: 'bold',
+        border: 'bold',
+        borderColor: 'primary',
+        borderRadius: 'round'
       }
     }
   }
