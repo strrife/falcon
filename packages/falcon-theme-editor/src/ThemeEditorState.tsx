@@ -9,7 +9,9 @@ export type ComponentWithDefaultTheme = {
 export type ThemeStateContextType = {
   selectComponents?: (components: ComponentWithDefaultTheme[]) => void;
   openThemePropsPanel?: (panel: string, subpanel?: string) => void;
+  toggleFinder?: () => void;
   openEditor?: boolean;
+  finderActive?: boolean;
 };
 
 export const ThemeStateContext = React.createContext<ThemeStateContextType>({});
@@ -186,7 +188,12 @@ export class ThemeEditorState extends React.Component<ThemeEditorStateProps, The
   render() {
     return (
       <ThemeStateContext.Provider
-        value={{ selectComponents: this.selectComponents, openThemePropsPanel: this.openThemePropsPanel }}
+        value={{
+          selectComponents: this.selectComponents,
+          openThemePropsPanel: this.openThemePropsPanel,
+          toggleFinder: this.toggleFinder,
+          finderActive: this.state.finderActive
+        }}
       >
         {this.props.children({
           theme: this.state.activeTheme,
