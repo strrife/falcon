@@ -18,7 +18,8 @@ import {
   NumberInput
 } from '@deity/falcon-ui';
 import { MiniCartData } from './MiniCartQuery';
-import { ToggleMiniCartMutation, RemoveCartItemMutation, UpdateCartItemMutation } from './MiniCartMutations';
+import { RemoveCartItemMutation, UpdateCartItemMutation } from '../Cart/CartMutation';
+import { ToggleMiniCartMutation } from './MiniCartMutation';
 import { SidebarLayout } from '../SidebarLayout';
 import { toGridTemplate } from '../helpers';
 import { Price } from '../Locale';
@@ -38,10 +39,10 @@ const miniCartProductTheme: DefaultThemeProps = {
     gridGap: 'sm',
     // prettier-ignore
     gridTemplate: toGridTemplate([
-      ['30px'                    , '1fr',                     '2fr'                                    ],
-      [MiniCartProductArea.empty, MiniCartProductArea.thumb, MiniCartProductArea.productName           ],
-      [MiniCartProductArea.remove, MiniCartProductArea.thumb, MiniCartProductArea.price,         '1fr' ],
-      [MiniCartProductArea.empty, MiniCartProductArea.thumb, MiniCartProductArea.modify                ]
+      ['30px',                     '1fr',                     '2fr'                                     ],
+      [MiniCartProductArea.empty,  MiniCartProductArea.thumb, MiniCartProductArea.productName           ],
+      [MiniCartProductArea.remove, MiniCartProductArea.thumb, MiniCartProductArea.price,          '1fr' ],
+      [MiniCartProductArea.empty,  MiniCartProductArea.thumb, MiniCartProductArea.modify                ]
     ])
   }
 };

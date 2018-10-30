@@ -1,11 +1,8 @@
 import gql from 'graphql-tag';
 import { Query } from '../Query/Query';
 
-export const GET_MINI_CART = gql`
-  query MiniCart {
-    miniCart @client {
-      open
-    }
+export const GET_CART = gql`
+  query Cart {
     cart {
       itemsQty
       quoteCurrency
@@ -21,7 +18,7 @@ export const GET_MINI_CART = gql`
   }
 `;
 
-export type MiniCartData = {
+export type CartData = {
   miniCart: {
     open: boolean;
   };
@@ -32,8 +29,8 @@ export type MiniCartData = {
   };
 };
 
-export class MiniCartQuery extends Query<MiniCartData> {
+export class CartQuery extends Query<CartData> {
   static defaultProps = {
-    query: GET_MINI_CART
+    query: GET_CART
   };
 }

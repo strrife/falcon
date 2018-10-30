@@ -3,11 +3,11 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
 import { themed, Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
 import { Breadcrumbs } from '../Breadcrumbs';
-// import { ProductMeta } from './ProductMeta';
 import { ProductGallery } from './ProductGallery';
 import { ProductTranslations } from './ProductQuery';
 import { ProductConfigurableOptions } from './ConfigurableOptions';
-import { AddToCartMutation, ToggleMiniCartMutation } from '../MiniCart';
+import { AddToCartMutation } from '../Cart';
+import { ToggleMiniCartMutation } from '../MiniCart';
 import { ProductConfigurator } from './ProductConfigurator';
 import { Price } from '../Locale';
 
@@ -226,9 +226,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
             validate={this.createValidator(product)}
             render={this.renderProductFormContent}
           />
-          <Box gridArea={Area.meta} my="lg">
-            {/* <ProductMeta meta={data.seo} /> */}
-          </Box>
+          <Box gridArea={Area.meta} my="lg" />
         </ProductDetailsLayout>
       </ProductLayout>
     );

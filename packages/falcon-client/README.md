@@ -199,8 +199,8 @@ This is configuration object used to setup `@deity/falcon-client`
     `apollo-link-http` method which defines HTTP link the remote Falcon Server
     ([available options](https://www.apollographql.com/docs/link/links/http.html#options))
   - `apolloClient.config` - configuration object that will be passed to the
-  main `ApolloClient` constructor
-  ([available options](https://www.apollographql.com/docs/react/api/apollo-client.html#apollo-client))
+    main `ApolloClient` constructor
+    ([available options](https://www.apollographql.com/docs/react/api/apollo-client.html#apollo-client))
 
 All configuration passed by `config` is accessible via `ApolloClient`, which mean you can access any of its property via graphQL query.
 
@@ -208,7 +208,7 @@ In order to retrieve `logLevel` you can run following query:
 
 ```graphql
 gql`
-  query LNG {
+  query LogLevel {
     config @client {
         logLevel
       }

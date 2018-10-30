@@ -1,8 +1,6 @@
 import React from 'react';
-import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
 import { themed, Image, Text } from '@deity/falcon-ui';
-import { Query } from '../Query';
 import { Price } from '../Locale';
 
 export const ProductCardLayout = themed({
@@ -58,27 +56,3 @@ export const ProductsList: React.SFC<{ products: any[] }> = ({ products }) => (
     ))}
   </ProductListLayout>
 );
-
-const GET_PRODUCTS = gql`
-  query {
-    products {
-      items {
-        id
-        name
-        price
-        thumbnail
-        urlPath
-      }
-    }
-  }
-`;
-
-export type Products = {
-  items: any[];
-};
-
-export class ProductsListQuery extends Query<Products> {
-  static defaultProps = {
-    query: GET_PRODUCTS
-  };
-}

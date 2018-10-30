@@ -29,8 +29,8 @@ const sortOrders = [
   }
 ];
 
-const MINI_CART_QUERY = gql`
-  query miniCart {
+const GET_MINI_CART_STATE = gql`
+  query MiniCartState {
     miniCart @client {
       open
     }
@@ -55,11 +55,11 @@ export default {
       languages: () => languages,
       sortOrders: () => sortOrders,
 
-      // this resolver makes sure, that when refetchQuery is refreshing also miniCart its state will
-      // be loaded from cache, not from defaults as we don't want refetch to toggle miniCart
+      // todo: this resolver makes sure, that when refetchQuery is refreshing also miniCart its state will
+      // be loaded from cache, not from defaults as we don't want the refetch mechanism to toggle miniCart
       miniCart: (_, _variables, { cache }) => {
         const { miniCart } = cache.readQuery({
-          query: MINI_CART_QUERY
+          query: GET_MINI_CART_STATE
         });
         return miniCart;
       }
@@ -68,7 +68,7 @@ export default {
     Mutation: {
       toggleMiniCart: (_, _variables, { cache }) => {
         const { miniCart } = cache.readQuery({
-          query: MINI_CART_QUERY
+          query: GET_MINI_CART_STATE
         });
 
         const data = {
