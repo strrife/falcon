@@ -209,7 +209,7 @@ export class ThemeEditor extends React.Component<ThemeEditorStateRenderProp> {
               <Icon src="theme" fill={visible ? 'primary' : 'black'} stroke={visible ? 'primary' : 'black'} />
             </Box>
             <Divider m="xs" css={{ width: '100%' }} />
-            <Box title="Select an themable component on the page to inspect it's theme" onClick={toggleFinder}>
+            <Box title="Select a themable component in the page to inspect its theme" onClick={toggleFinder}>
               <Icon stroke={finderActive ? 'primary' : 'black'} src="finder" />
             </Box>
           </Box>
