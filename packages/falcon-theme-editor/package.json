@@ -13,7 +13,7 @@
     "src"
   ],
   "peerDependencies": {
-    "@deity/falcon-ui": "0.0.2",
+    "@deity/falcon-ui": "^0.0.2",
     "react": "~16.4.2",
     "react-dom": "~16.4.2"
   },
