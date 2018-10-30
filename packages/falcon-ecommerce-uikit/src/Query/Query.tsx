@@ -1,7 +1,7 @@
 import React from 'react';
 import { Query as ApolloQuery, OperationVariables, QueryProps, QueryResult, ObservableQueryFields } from 'react-apollo';
+import { NetworkStatus, ApolloError } from 'apollo-client';
 import { I18n, TranslationFunction } from 'react-i18next';
-import { NetworkStatus } from 'apollo-client';
 import { Loader } from './Loader';
 
 export class Query<TData = any, TVariables = OperationVariables, TTranslations = {}> extends React.Component<
@@ -11,15 +11,39 @@ export class Query<TData = any, TVariables = OperationVariables, TTranslations =
     fetchMore?: (data: TData, fetchMore: QueryResult<TData, TVariables>['fetchMore']) => any;
     getTranslations?: (t: TranslationFunction, data: TData) => TTranslations;
     translationsNamespaces?: string[];
+    handleErrors?: boolean;
   }
 > {
+  getErrorCode(error: ApolloError | undefined): string | undefined {
+    if (error) {
+      const { graphQLErrors } = error;
+      if (Array.isArray(graphQLErrors) && graphQLErrors.length > 0) {
+        const { extensions = {} } = graphQLErrors[0];
+        const { code } = extensions;
+
+        return code;
+      }
+    }
+
+    return undefined;
+  }
+
   render() {
-    const { children, getTranslations, fetchMore, ...restProps } = this.props;
+    const { children, getTranslations, fetchMore, handleErrors, ...restProps } = this.props;
 
     return (
       <ApolloQuery {...restProps}>
         {({ networkStatus, error, data, fetchMore: apolloFetchMore }) => {
-          if (error) return `Error!: ${error}`;
+          if (error) {
+            const errorCode = this.getErrorCode(error);
+
+            return (
+              <p>
+                {`Error!: ${errorCode}`}
+                <br /> {`${error}`}
+              </p>
+            );
+          }
 
           if (networkStatus === NetworkStatus.loading) {
             return <Loader />;
