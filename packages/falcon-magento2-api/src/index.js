@@ -763,11 +763,15 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { cart: { quoteId = null } = {} } = this.context.magento2;
 
     try {
-      const response = await this.post('/integration/customer/token', {
-        username: email,
-        password,
-        guest_quote_id: quoteId
-      });
+      const response = await this.post(
+        '/integration/customer/token',
+        {
+          username: email,
+          password,
+          guest_quote_id: quoteId
+        },
+        { context: { skipAuth: true } }
+      );
 
       // depending on deity-magento-api module response may be a string with token (up until and including v1.0.1)
       // or a hash with token and valid time setting (after v1.0.1)
