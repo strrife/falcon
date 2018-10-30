@@ -13,7 +13,7 @@ import { ThemeProvider, H1, H2, Button, FlexLayout } from '@deity/falcon-ui';
 
 ## Introduction
 **`@deity/falcon-ui`** ships with powerful `ThemeProvider` based theming capabilities.
-Every component has default theme build-in, providing consistent and pleasing look and feel out of the box, yet giving possibility to customize it in every detail.
+Every component has default theme built-in, providing a consistent and pleasing look and feel out of the box, yet giving possibility to customize it in every detail.
 
 ## Default theme
 Default theme is influenced by constraint-based design system principles, based on typographic scale and 8px grid. 
@@ -41,7 +41,7 @@ const App = (
 - [8px grid system](https://builttoadapt.io/intro-to-the-8-point-grid-system-d2573cde8632)
 
 ## Customizing theme
-All theme customizations are done using `createTheme` function by providing necessary overrides and passing it's output as `theme` prop to `ThemeProvider`.
+All theme related customizations are done using `createTheme` function by providing necessary overrides and passing its output as `theme` prop to `ThemeProvider`.
 Example below shows how to override primary color and font family.
 
 <Playground>
@@ -105,7 +105,7 @@ Every component accepts all of the [responsive, theme-based style props](/respon
 <ActivateComponentFinder />
 
 ## Custom themed components
-  In addition to build-in components there is an easy way to create custom components with default theme that also plugin-in into general theming system.
+  In addition to built-in components, there is an easy way to create custom components with default theme that also plugin-in into the general theming system.
   This can be accomplished by `themed` factory as in example below.
 
 ```javascript
