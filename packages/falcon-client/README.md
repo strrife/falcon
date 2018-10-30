@@ -204,51 +204,7 @@ Falcon Client exposes set of hooks to which you can attache custom logic:
 
 ### `falcon-client.build.config.js`
 
-This is an optional build-time configuration file which is used to set up the entire build process. By default it supports the following features:
-
-- Universal [HMR](https://webpack.js.org/concepts/hot-module-replacement/) - page auto-reload if you make edits (on both backend and frontend)
-- Latest JavaScript achieved via babel 7 compiler.
-
-  However, if you want to add your own babel transformations, you can override defaults by adding the `.babelrc` file into the root of your project. Please note that it is necessary to at the very minimum the default `@deity/babel-preset-falcon-client` preset:
-
-  ```js
-  {
-    "presets": [
-      "@deity/babel-preset-falcon-client", // needed
-    ],
-    "plugins": [
-      // additional plugins
-    ]
-  }
-  ```
-
-- ESLint with [Prettier](https://github.com/prettier/prettier) - to keep your code base clean and consistent, [see presets](https://github.com/deity-io/falcon/tree/master/packages/falcon-dev-tools/eslint-config-falcon)
-
-  You can override (or extend) defaults by adding the `.eslintrc` file into the root of your project:
-
-  ```JSON
-  {
-    "extends": ["@deity/eslint-config-falcon"],
-    "rules": {
-      "foo/bar": "error",
-    }
-  }
-  ```
-
-- Jest test runner setup with sensible defaults.
-
-  It is possible to override it by adding `jest` node into `package.json`. Below example configures `setupTestFrameworkScriptFile` file:
-
-  ```js
-  // package.json
-  {
-   "jest": {
-     "setupTestFrameworkScriptFile": "./setupTests.js"
-   }
-  }
-  ```
-
-Here is example of `falcon-client.build.config.js` file content with defaults:
+This is an optional build-time configuration file which is used to set up the entire build process. Bellow, there is an example of `falcon-client.build.config.js` file content with defaults:
 
 ```js
 module.exports = {
@@ -264,9 +220,22 @@ module.exports = {
 - `useWebmanifest: boolean` - (default: `false`) determines whether [Web App Manifest](#webmanifest) should be processed via webpack and included in output bundle
 - `i18n: object` - (default: `{}`) internationalization configuration, [see the details](#internationalization)
 - `envToBuildIn` - (default: `[]`) an array of environment variable names which should be build in into bundle, [see the details](#environment-variables)
-- `plugins` - (default: `[]`) an array of plugins which can modify underlying webpack configuration. Plugins API is `razzle` compatible [see the details](https://github.com/jaredpalmer/razzle#plugins)
+- `plugins` - (default: `[]`) an array of plugins which can modify underlying [webpack configuration](#webpack).
 
-## Environment Variables
+Falcon Client provides you much more build configuration options. You can find all of them described in [Build process configuration](#build-process-configuration) section.
+
+## Build process configuration
+
+Falcon Client comes with all necessary features and development tools turned on by default:
+
+- Universal [HMR](https://webpack.js.org/concepts/hot-module-replacement/) - page auto-reload if you make edits (on both backend and frontend)
+- Latest JavaScript achieved via babel 7 compiler, [see the details](#babel).
+- ESLint with [Prettier](https://github.com/prettier/prettier) - to keep your code base clean and consistent, [see the details](#eslint)
+- Jest test runner setup with sensible defaults [see the details](#jest).
+
+However, you can still modify Falcon Client defaults
+
+### Environment Variables
 
 <!-- ### Build-time Variables -->
 
@@ -288,6 +257,100 @@ For example, bellow configuration expose environment variable named `SECRET_CODE
 module.exports = {
   envToBuildIn: ['SECRET_CODE']
 };
+```
+
+### Webpack
+
+Falcon Client gives you the possibility to extend the underlying webpack configuration. You can do it via exposed plugins API (not webpack plugins). It is worth to mention that Falcon Client plugins API is [razzle](https://github.com/jaredpalmer/razzle#plugins) compatible.
+
+To use Falcon Client (or Razzle) plugin, you need to instal it in your project, and add it to `plugins` array in `falcon-client.build.config.js` file:
+
+```js
+module.exports = {
+  plugins: ['plugin-name']
+};
+```
+
+Plugins are simply functions that modify and return Falcon Client's webpack config. Each plugin function will receive the following arguments:
+
+- `config: object` - webpack configuration object,
+- `env.target: 'web' | 'node'` - webpack build target,
+- `env.dev: boolean` - `true` when `process.env.NODE_ENV` is `development`, otherwise `false`,
+- `webpack: Webpack` - webpack reference,
+
+```js
+module.exports = function myFalconClientPlugin(config, env, webpack) {
+  const { target, dev } = env;
+
+  if (target === 'web') {
+    // client only
+  }
+  if (target === 'server') {
+    // server only
+  }
+  if (dev) {
+    // development only
+  } else {
+    // production only
+  }
+
+  // your webpack config modifications
+
+  return webpackConfig;
+};
+```
+
+`falcon-client.build.config.js` file accepts also `modify` setting which is an escape hatch function, which can be used for quick webpack configuration modifications. Basicly it works sam as plugins, but can be specified inline:
+
+```js
+module.exports = {
+  modify: (config, { target, dev }, webpack) => {
+    // your webpack config modifications
+    return config;
+  }
+};
+```
+
+### Babel
+
+Falcon Client gives you Ecma Script 6 compiled via Babel 7. However, if you want to add your own babel transformations, you can override defaults by adding the `.babelrc` file into the root of your project. Please note that it is necessary to at the very minimum the default `@deity/babel-preset-falcon-client` preset:
+
+```js
+{
+  "presets": [
+    "@deity/babel-preset-falcon-client", // needed
+  ],
+  "plugins": [
+    // additional plugins
+  ]
+}
+```
+
+### ESLint
+
+Falcon Client comes with ESLint with [Prettier](https://github.com/prettier/prettier) rules - to keep your code base clean and consistent, [see presets](https://github.com/deity-io/falcon/tree/master/packages/falcon-dev-tools/eslint-config-falcon).
+You can override (or extend) defaults by adding the `.eslintrc` file into the root of your project:
+
+```JSON
+{
+  "extends": ["@deity/eslint-config-falcon"],
+  "rules": {
+    "foo/bar": "error",
+  }
+}
+```
+
+### Jest
+
+Falcon Client comes with configured [Jest](https://jestjs.io/) test runner. However it is possible to override it by adding `jest` node into `package.json`. Below example configures `setupTestFrameworkScriptFile` file:
+
+```JSON
+// package.json
+{
+ "jest": {
+   "setupTestFrameworkScriptFile": "./setupTests.js"
+ }
+}
 ```
 
 ## State Management
