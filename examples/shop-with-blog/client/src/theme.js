@@ -9,13 +9,6 @@ import { createTheme } from '@deity/falcon-ui';
 import logo from './assets/logo.svg';
 
 export const deityGreenTheme = createTheme({
-  colors: {
-    primary: '#A9CF38',
-    primaryLight: '#CBDE6E',
-    primaryDark: '#A9CF38',
-    primaryText: '#fff'
-  },
-
   icons: {
     logo: {
       icon: props => <img src={logo} alt="logo" {...props} />,

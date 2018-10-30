@@ -88,7 +88,7 @@ export class ThemeEditorState extends React.Component<ThemeEditorStateProps, The
           selectedComponents: []
         },
         presets: {
-          active: ''
+          active: 'Deity Green'
         }
       }
     };
