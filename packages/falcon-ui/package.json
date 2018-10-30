@@ -58,10 +58,10 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "@emotion/core": "10.0.0-beta.5",
+    "@emotion/core": "^0.13.1",
     "@emotion/is-prop-valid": "0.7.0",
-    "emotion-theming": "10.0.0-beta.5",
-    "@emotion/styled-base": "10.0.0-beta.5",
+    "@emotion/provider": "^0.11.2",
+    "@emotion/styled-base": "^0.10.6",
     "csstype": "^2.5.7",
     "deepmerge": "^2.1.1",
     "is-plain-object": "^2.0.4",
@@ -73,6 +73,5 @@
       "gzip": false,
       "limit": "60 KB"
     }
-  ],
-  "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
+  ]
 }

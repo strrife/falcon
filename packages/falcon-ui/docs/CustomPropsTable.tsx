@@ -1,6 +1,6 @@
 import React, { Fragment, SFC } from 'react';
 import { withMDXComponents } from '@mdx-js/tag/dist/mdx-provider';
-import { withTheme } from 'emotion-theming';
+import { withCSSContext } from '@emotion/core';
 import { Table, Tr, Th, H3, Tbody, Td, Thead } from '../src';
 
 export interface Prop {
@@ -66,4 +66,6 @@ const PropsTable: SFC<PropsTableProps> = props => {
   );
 };
 
-export default withMDXComponents(withTheme(PropsTable));
+export default withMDXComponents(
+  withCSSContext((props: any, context: any) => <PropsTable {...props} theme={context.theme} />)
+);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTheme } from 'emotion-theming';
+import { withCSSContext } from '@emotion/core';
 import { themed, PropsWithTheme, BaseProps, ThemedComponentProps } from '../theme';
 
 export const IconRenderer = themed({
@@ -35,4 +35,6 @@ const IconComponent: React.SFC<IconProps> = props => {
   return <IconRenderer as={icon} {...otherProps as any} {...rest} />;
 };
 
-export const Icon = withTheme(IconComponent);
+export const Icon = withCSSContext((props: IconProps, context: PropsWithTheme) => (
+  <IconComponent {...props} theme={context.theme} />
+));
