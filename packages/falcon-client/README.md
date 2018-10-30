@@ -300,7 +300,7 @@ module.exports = function myFalconClientPlugin(config, env, webpack) {
 };
 ```
 
-`falcon-client.build.config.js` file accepts also `modify` setting which is an escape hatch function, which can be used for quick webpack configuration modifications. Basicly it works sam as plugins, but can be specified inline:
+`falcon-client.build.config.js` file accepts also `modify` setting which is an escape hatch function, which can be used for quick webpack configuration modifications. Basically, it works same as plugins, but can be specified inline:
 
 ```js
 module.exports = {
