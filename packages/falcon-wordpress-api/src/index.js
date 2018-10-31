@@ -108,9 +108,19 @@ module.exports = class WordpressApi extends ApiDataSource {
    * @param {object} session Web-server session data
    * @return {Object[]} posts data
    */
-  async blogPosts(root, { query }, { session }) {
+  async blogPosts(root, { query, pagination }, { session }) {
     const { language } = session;
-    return this.get('posts', query, {
+
+    const payload = {
+      ...query
+    };
+
+    if (pagination) {
+      payload.per_page = pagination.perPage;
+      payload.page = pagination.page;
+    }
+
+    return this.get('posts', payload, {
       context: {
         language,
         didReceiveResult: result =>
