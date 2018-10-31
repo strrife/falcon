@@ -2,7 +2,7 @@
   "serverSideRendering": true,
   "useWebManifest": true,
   "i18n": {
-    "ns": ["common", "shop", "post"]
+    "ns": ["common", "shop", "post", "blog"]
   },
   "apolloClient": {
     "httpLink": {
@@ -59,11 +59,6 @@
         "name": "Sale",
         "url": "/sale.html",
         "children": []
-      },
-      {
-        "name": "Blog",
-        "url": "/blog",
-        "children": []
       }
     ],
     "banner": [
@@ -73,7 +68,7 @@
       },
       {
         "name": "Blog",
-        "url": "#"
+        "url": "/blog"
       }
     ],
     "footer": [
@@ -103,7 +98,7 @@
         "children": [
           {
             "name": "Blog",
-            "url": "/"
+            "url": "/blog"
           },
           {
             "name": "Cookies",
@@ -124,7 +119,7 @@
         "children": [
           {
             "name": "Blog",
-            "url": "/"
+            "url": "/blog"
           },
           {
             "name": "Cookies",

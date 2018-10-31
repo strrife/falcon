@@ -53,8 +53,8 @@ export type BlogPosts = {
 
 function getTranslations(t: reactI18Next.TranslationFunction) {
   return {
-    title: t('blog.title'),
-    readMore: t('blog.readMore')
+    title: t('title'),
+    readMore: t('readMore')
   };
 }
 
