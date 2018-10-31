@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import { Box, Badge, Icon } from '@deity/falcon-ui';
 
 export const MiniCartIcon: React.SFC<{
