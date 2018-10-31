@@ -47,7 +47,7 @@ export const expandValue = (state, key) => {
 export default (config = {}) => {
   // disabling 'addTypename' option to avoid manual setting "__typename" field
   const addTypename = false;
-  const { extraLinks = [], isBrowser = false, initialState = {}, clientState = {}, headers } = config;
+  const { extraLinks = [], isBrowser = false, initialState = {}, clientState = {}, headers, defaultOptions } = config;
 
   let apolloClient;
   if (isBrowser) {
@@ -75,6 +75,7 @@ export default (config = {}) => {
 
   return new ApolloClient({
     ...clientConfig,
+    defaultOptions,
     cache,
     connectToDevTools: isBrowser && process.env.NODE_ENV !== 'production',
     ssrMode: !isBrowser,
