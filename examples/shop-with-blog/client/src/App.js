@@ -41,6 +41,7 @@ const HeadMetaTags = () => (
 
 const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
 const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
+const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/Blog" */ './pages/blog/Blog'));
 
 const App = ({ online }) => (
   <ThemeEditorState initial={deityGreenTheme}>
@@ -53,6 +54,7 @@ const App = ({ online }) => (
             {!online && <p>your are offline.</p>}
             <Switch>
               <Route exact path="/" component={Home} />
+              <Route exact path="/blog" component={Blog} />
               <Route exact path="/products" component={Category} />
               <DynamicRoute
                 loaderComponent={Loader}
