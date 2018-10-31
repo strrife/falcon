@@ -19,9 +19,6 @@ export const GET_CART = gql`
 `;
 
 export type CartData = {
-  miniCart: {
-    open: boolean;
-  };
   cart: {
     itemsQty: number;
     quoteCurrency: string;

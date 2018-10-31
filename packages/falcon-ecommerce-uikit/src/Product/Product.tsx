@@ -219,11 +219,51 @@ export class Product extends React.PureComponent<{ product: any; translations: P
             {`${translations.sku}: ${product.sku}`}
           </Text>
           <H1 gridArea={Area.title}>{product.name}</H1>
-          <ProductForm
-            sku={product.sku}
-            validate={this.createValidator(product)}
-            render={this.renderProductFormContent}
-          />
+
+          <ProductForm sku={product.sku} validate={this.createValidator(product)}>
+            {({
+              addToCartMutation,
+              formik: { values, isSubmitting, errors, setFieldValue, submitCount },
+              productConfigurator
+            }: any) => (
+              <React.Fragment>
+                <Price fontSize="xxl" gridArea={Area.price} value={product.price} />
+                <ProductConfigurableOptions
+                  options={product.configurableOptions}
+                  error={errors.configurableOptions}
+                  onChange={(ev: React.ChangeEvent<any>) =>
+                    productConfigurator.handleProductConfigurationChange('configurableOption', ev)
+                  }
+                />
+                <ProductDescriptionLayout
+                  mt="sm"
+                  dangerouslySetInnerHTML={{ __html: product.description }}
+                  gridArea={Area.description}
+                />
+                <FlexLayout alignItems="center" gridArea={Area.cta} mt="md">
+                  <NumberInput
+                    mr="md"
+                    min="1"
+                    name="qty"
+                    disabled={isSubmitting}
+                    defaultValue={String(values.qty)}
+                    onChange={ev => setFieldValue('qty', ev.target.value, !!submitCount)}
+                  />
+                  <Button type="submit">
+                    <Icon src="cart" stroke="white" size={20} mr="sm" />
+                    {translations.addToCart}
+                  </Button>
+                </FlexLayout>
+                <Box>
+                  <ErrorMessage name="qty" render={msg => <Text color="error">{msg}</Text>} />
+                  {!!addToCartMutation.result.error && (
+                    <Text color="error">{addToCartMutation.result.error.message}</Text>
+                  )}
+                </Box>
+              </React.Fragment>
+            )}
+          </ProductForm>
+
           <Box gridArea={Area.meta} my="lg" />
         </ProductDetailsLayout>
       </ProductLayout>
