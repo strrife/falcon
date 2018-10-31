@@ -263,7 +263,7 @@ module.exports = {
 
 Falcon Client gives you the possibility to extend the underlying webpack configuration. You can do it via exposed plugins API (not webpack plugins). It is worth to mention that Falcon Client plugins API is [razzle](https://github.com/jaredpalmer/razzle#plugins) compatible.
 
-To use Falcon Client (or Razzle) plugin, you need to instal it in your project, and add it to `plugins` array in `falcon-client.build.config.js` file:
+To use Falcon Client (or Razzle) plugin, you need to install it in your project, and add it to `plugins` array in `falcon-client.build.config.js` file:
 
 ```js
 module.exports = {
