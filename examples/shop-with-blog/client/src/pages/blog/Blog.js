@@ -1,20 +1,28 @@
 import React from 'react';
 import { Box, H1 } from '@deity/falcon-ui';
-import { BlogPostsQuery, BlogPostsLayout, BlogPostExcerpt } from '@deity/falcon-ecommerce-uikit';
+import { BlogPostsQuery, BlogPostsLayout, BlogPostExcerpt, BlogPostPaginator } from '@deity/falcon-ecommerce-uikit';
 
-const Blog = () => (
-  <BlogPostsQuery>
-    {props => (
+const Blog = props => (
+  <BlogPostsQuery
+    variables={{
+      pagination: {
+        page: +props.match.params.page || 1,
+        perPage: 2
+      }
+    }}
+  >
+    {({ blogPosts, translations }) => (
       <Box as="section">
         <Box as="header" bgFullWidth="secondaryLight" py="xxl" css={{ textAlign: 'center' }}>
-          <H1 fontSize="xxxl">{props.translations.title}</H1>
+          <H1 fontSize="xxxl">{translations.title}</H1>
         </Box>
 
         <BlogPostsLayout>
-          {props.blogPosts.items.map(item => (
-            <BlogPostExcerpt key={item.slug} excerpt={item} translations={props.translations} />
+          {blogPosts.items.map(item => (
+            <BlogPostExcerpt key={item.slug} excerpt={item} translations={translations} />
           ))}
         </BlogPostsLayout>
+        <BlogPostPaginator pagination={blogPosts.pagination} />
       </Box>
     )}
   </BlogPostsQuery>

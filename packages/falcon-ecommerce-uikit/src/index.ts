@@ -7,4 +7,5 @@ export * from './Footer';
 export * from './Category';
 export * from './MiniCart';
 export * from './SidebarLayout';
+export * from './Blog';
 export * from './Query';

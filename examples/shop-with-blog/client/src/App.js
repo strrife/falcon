@@ -54,7 +54,7 @@ const App = ({ online }) => (
             {!online && <p>your are offline.</p>}
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route exact path="/blog" component={Blog} />
+              <Route exact path="/blog/:page?" component={Blog} />
               <Route exact path="/products" component={Category} />
               <DynamicRoute
                 loaderComponent={Loader}
