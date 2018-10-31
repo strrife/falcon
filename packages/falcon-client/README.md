@@ -183,7 +183,7 @@ In order to retrieve `logLevel` you can run following query:
 
 ```graphql
 gql`
-  query LNG {
+  query LogLevel {
     config @client {
         logLevel
       }

@@ -1,4 +1,5 @@
 import React, { MouseEventHandler } from 'react';
+import { NetworkStatus } from 'apollo-client';
 import {
   themed,
   H1,
@@ -13,9 +14,7 @@ import {
   DropdownMenu,
   DropdownMenuItem
 } from '@deity/falcon-ui';
-
-import { ProductsList } from './../Products';
-import { NetworkStatus } from 'apollo-client';
+import { ProductsList } from '../Product/Products';
 
 const CategoryLayout = themed({
   tag: 'div',
@@ -73,7 +72,7 @@ export const ShowMore: React.SFC<{ text: string; onClick?: MouseEventHandler; lo
   <Box my="lg" onClick={onClick || (() => {})}>
     <Button variant="secondary">
       {text}
-        {loading && <Icon src="loader" ml='sm' size={16} />}
+      {loading && <Icon src="loader" ml="sm" size={16} />}
     </Button>
   </Box>
 );
