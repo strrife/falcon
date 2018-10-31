@@ -8,7 +8,7 @@
     "test": "lerna run test:coverage",
     "prepublish": "lerna run --scope=@deity/falcon-ui --stream prepare",
     "prepare": "lerna run --stream prepare",
-    "lint": "eslint --ext .js,.jxs,.ts,.tsx ./"
+    "lint": "eslint ./"
   },
   "devDependencies": {
     "eslint": "4.19.1",
