@@ -2,11 +2,11 @@ const qs = require('qs');
 const isEmpty = require('lodash/isEmpty');
 const pick = require('lodash/pick');
 const has = require('lodash/has');
-const { htmlHelpers } = require('@deity/falcon-server-env');
 const isPlainObject = require('lodash/isPlainObject');
 const addMinutes = require('date-fns/add_minutes');
-
+const { htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
+
 const Magento2ApiBase = require('./Magento2ApiBase');
 
 /**
@@ -872,7 +872,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { customerToken = {} } = this.context.magento2;
 
     if (!customerToken.token) {
-      throw new Error('Customer token is required.');
+      // returning null cause that it is easier to check on client side if User is authenticated
+      // in other cases we should throw AuthenticationError()
+      return null;
     }
 
     const response = await this.get('/customers/me');
