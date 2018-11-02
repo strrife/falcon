@@ -8,7 +8,7 @@ import { SignInForm, SignInFormContent, SignInFormRenderProps } from './../SignI
 import { SidebarLayout } from '../SidebarLayout';
 import { CustomerQuery } from './../Customer';
 
-export const MiniLogin: React.SFC<MiniSignInData> = ({ miniSignIn: { open } }) => (
+export const MiniSignIn: React.SFC<MiniSignInData> = ({ miniSignIn: { open } }) => (
   <ToggleMiniSignInMutation>
     {toggle => (
       <React.Fragment>

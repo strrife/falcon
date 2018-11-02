@@ -19,7 +19,7 @@ import {
   MiniCartQuery,
   MiniCart,
   MiniSignInQuery,
-  MiniLogin
+  MiniSignIn
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeState } from '@deity/falcon-theme-editor';
 
@@ -66,7 +66,7 @@ const App = ({ online }) => (
             </Switch>
             <FooterQuery>{(data, t) => <Footer {...data} translations={t} />}</FooterQuery>
 
-            <MiniSignInQuery>{data => <MiniLogin {...data} />}</MiniSignInQuery>
+            <MiniSignInQuery>{data => <MiniSignIn {...data} />}</MiniSignInQuery>
             <MiniCartQuery>{data => <MiniCart {...data} />}</MiniCartQuery>
           </AppLayout>
         </ThemeProvider>
