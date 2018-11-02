@@ -13,7 +13,7 @@ import {
 } from '@deity/falcon-ui';
 
 import { toGridTemplate } from '../helpers';
-import { ToggleMiniCartMutation } from '../MiniCart';
+import { ToggleMiniCartMutation, MiniCartIcon, MiniCartQuery } from '../MiniCart';
 import { HeaderData, MenuItem } from './HeaderQuery';
 
 const bannerLayoutTheme: DefaultThemeProps = {
@@ -53,7 +53,7 @@ export const Nav: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
             <List>
               {item.children.map(subItem => (
                 <ListItem key={subItem.name}>
-                  <Link p="xs" display="block" as={RouterLink} to={item.url}>
+                  <Link p="xs" display="block" as={RouterLink} to={subItem.url}>
                     {subItem.name}
                   </Link>
                 </ListItem>
@@ -96,7 +96,11 @@ export const Searchbar = () => (
     </Link>
     <Icon gridArea={SearchBarArea.login} src="user" />
     <ToggleMiniCartMutation>
-      {toggle => <Icon gridArea={SearchBarArea.cart} src="cart" onClick={() => toggle()} css={{ cursor: 'pointer' }} />}
+      {toggle => (
+        <MiniCartQuery>
+          {(data: any) => <MiniCartIcon onClick={toggle} gridArea={SearchBarArea.cart} itemsQty={data.cart.itemsQty} />}
+        </MiniCartQuery>
+      )}
     </ToggleMiniCartMutation>
   </Box>
 );
