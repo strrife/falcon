@@ -39,6 +39,29 @@ You configuration source must provide the following data:
 
 > `ga` will be available on the client-side only.
 
+You can also use Google Analytics as a part of your routing (put a new `Route` component
+right before `<Switch></Switch>`):
+
+```diff
+// other imports
+import Route from 'react-router-dom/Route';
++ import trackPageView from '@deity/falcon-client/src/components/trackPageView';
+
+const App = () => {
+  { /* other components */ }
++  <Route path="/" component={trackPageView} />
+  <Switch>
+    { /* other routes */ }
+  </Switch>
+  ...
+}
+
+export default App;
+```
+
+You have a full control over this `trackPageView` component by setting `path` with
+a required pattern (you may want to exclude some of your paths for examples).
+
 ## Advanced usage
 
 Falcon exposes `withAnalytics` HOC in order to send custom analytics data to Google Analytics.
