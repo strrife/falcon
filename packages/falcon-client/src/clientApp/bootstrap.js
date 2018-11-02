@@ -1,12 +1,11 @@
 import deepMerge from 'deepmerge';
-import configuration from 'app-path/falcon-client.config.js';
+import bootstrap from 'app-path/bootstrap.js';
 
 const config = deepMerge(
   {
     __typename: 'Config',
     logLevel: 'error',
     serverSideRendering: true,
-    useWebManifest: true,
     googleTagManager: {
       __typename: 'GoogleTagManager',
       id: null
@@ -21,7 +20,7 @@ const config = deepMerge(
       debug: false
     }
   },
-  configuration.config || {},
+  bootstrap.config || {},
   { arrayMerge: (destination, source) => source }
 );
 
@@ -33,7 +32,7 @@ export default {
     }
   },
 
-  onServerCreated: configuration.onServerCreated || (() => {}),
-  onServerInitialized: configuration.onServerInitialized || (() => {}),
-  onServerStarted: configuration.onServerStarted || (() => {})
+  onServerCreated: bootstrap.onServerCreated || (() => {}),
+  onServerInitialized: bootstrap.onServerInitialized || (() => {}),
+  onServerStarted: bootstrap.onServerStarted || (() => {})
 };

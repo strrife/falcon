@@ -13,7 +13,7 @@ import {
 } from '@deity/falcon-ui';
 
 import { toGridTemplate } from '../helpers';
-import { ToggleMiniCartMutation } from '../MiniCart';
+import { ToggleMiniCartMutation, MiniCartIcon, MiniCartQuery } from '../MiniCart';
 import { HeaderData, MenuItem } from './HeaderQuery';
 
 const bannerLayoutTheme: DefaultThemeProps = {
@@ -96,7 +96,11 @@ export const Searchbar = () => (
     </Link>
     <Icon gridArea={SearchBarArea.login} src="user" />
     <ToggleMiniCartMutation>
-      {toggle => <Icon gridArea={SearchBarArea.cart} src="cart" onClick={toggle as any} css={{ cursor: 'pointer' }} />}
+      {toggle => (
+        <MiniCartQuery>
+          {(data: any) => <MiniCartIcon onClick={toggle} gridArea={SearchBarArea.cart} itemsQty={data.cart.itemsQty} />}
+        </MiniCartQuery>
+      )}
     </ToggleMiniCartMutation>
   </Box>
 );

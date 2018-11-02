@@ -84,15 +84,6 @@ Please check out https://github.com/deity-io/falcon/tree/master/packages/falcon-
 
 [Falcon Server](https://github.com/deity-io/falcon/tree/master/packages/falcon-server)
 
-## Advanced
-
-Coming soon
-
-### Code Splitting
-
-### Dynamic routing
-
-### State management
 
 ## Development quick start
 
@@ -132,9 +123,3 @@ Front-end packages (`FalconClient`):
 
 - `falcon-X-plugin` - represents a module that should be used within a FalconClient app in order to provide
 UI/UX (front-end) enhancements to the "client" application (analytics, maps, widgets etc)
-
-### TODO
-
-- jest for all packages
-- changelog generation? - https://github.com/lerna/lerna-changelog
-- Lerna publish packages to npm script?
