@@ -1,5 +1,6 @@
 const Logger = require('@deity/falcon-logger');
 const { ApiDataSource } = require('@deity/falcon-server-env');
+const { AuthenticationError } = require('@deity/falcon-errors');
 const util = require('util');
 const { CronJob } = require('cron');
 const addMinutes = require('date-fns/add_minutes');
@@ -208,10 +209,10 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   validateCustomerToken(customerToken) {
     if (customerToken && customerToken.token && !this.isCustomerTokenValid(customerToken)) {
-      const sessionExpiredError = new Error('Session has expired');
-
+      const sessionExpiredError = new AuthenticationError('Session has expired');
       sessionExpiredError.statusCode = 401;
       sessionExpiredError.code = codes.CUSTOMER_TOKEN_EXPIRED;
+
       throw sessionExpiredError;
     }
   }
