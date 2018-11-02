@@ -20,7 +20,7 @@ import {
   MiniCart,
   LocaleProvider
 } from '@deity/falcon-ecommerce-uikit';
-import { ThemeEditor, ThemeState } from '@deity/falcon-theme-editor';
+import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 
 import { deityGreenTheme } from './theme';
 
@@ -45,7 +45,7 @@ const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" 
 
 const App = ({ online }) => (
   <LocaleProvider>
-    <ThemeState initial={deityGreenTheme}>
+    <ThemeEditorState initial={deityGreenTheme}>
       {props => (
         <React.Fragment>
           <ThemeProvider theme={props.theme}>
@@ -71,7 +71,7 @@ const App = ({ online }) => (
           <ThemeEditor {...props} />
         </React.Fragment>
       )}
-    </ThemeState>
+    </ThemeEditorState>
   </LocaleProvider>
 );
 

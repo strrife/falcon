@@ -36,7 +36,7 @@ export const SortOrderDropdown: React.SFC<any> = ({ sortOrders, onChange }) => {
 
   return (
     <Box display="flex">
-      <Dropdown width="100%" onChange={onChange}>
+      <Dropdown css={{ width: '100%' }} onChange={onChange}>
         <DropdownLabel>{activeSortOrder.name}</DropdownLabel>
 
         <DropdownMenu>
@@ -58,7 +58,7 @@ export const CategoryToolbar: React.SFC<{ translations: { showingOutOf: string }
   <FlexLayout justifyContent="space-between" alignItems="center">
     <Text>{translations.showingOutOf}</Text>
     <FlexLayout alignItems="center">
-      <Text mr="md">Sort by</Text>
+      <Text mr="sm">Sort by</Text>
       <SortOrderDropdown sortOrders={sortOrders} />
     </FlexLayout>
   </FlexLayout>
@@ -69,10 +69,10 @@ export const ShowMore: React.SFC<{ text: string; onClick?: MouseEventHandler; lo
   onClick,
   loading
 }) => (
-  <Box my="lg" onClick={onClick || (() => {})}>
+  <Box my="sm" onClick={onClick || (() => {})}>
     <Button variant="secondary">
       {text}
-      {loading && <Icon src="loader" ml="sm" size={16} />}
+      {loading && <Icon src="loader" ml="sm" size="sm" />}
     </Button>
   </Box>
 );
@@ -96,14 +96,16 @@ export const Category: React.SFC<{
       />
       <Divider />
       <ProductsList products={items} />
-      <Divider />
 
       {pagination.nextPage && (
-        <ShowMore
-          text={translations.category.pagination.showMore}
-          onClick={fetchMore}
-          loading={networkStatus === NetworkStatus.fetchMore}
-        />
+        <React.Fragment>
+          <Divider />
+          <ShowMore
+            text={translations.category.pagination.showMore}
+            onClick={fetchMore}
+            loading={networkStatus === NetworkStatus.fetchMore}
+          />
+        </React.Fragment>
       )}
     </CategoryLayout>
   );

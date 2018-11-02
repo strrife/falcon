@@ -59,13 +59,9 @@ export class ProductGallery extends React.Component<{ items: Item[] }> {
             <Box
               onClick={this.scrollToItem(index)}
               key={item.full}
-              border="light"
-              borderRadius="sm"
-              borderColor={index === activeIndex ? 'secondary' : 'primary'}
-              size={{
-                xs: 70,
-                md: 'auto'
-              }}
+              border="regular"
+              borderRadius="medium"
+              borderColor={index === activeIndex ? 'primary' : 'secondary'}
               display={{
                 xs: 'inline-flex',
                 md: 'block'
@@ -76,7 +72,17 @@ export class ProductGallery extends React.Component<{ items: Item[] }> {
                 md: 'none'
               }}
               p="xs"
-              css={{ cursor: 'pointer' }}
+              css={{
+                cursor: 'pointer',
+                height: {
+                  xs: 70,
+                  md: 'auto'
+                },
+                width: {
+                  xs: 70,
+                  md: 'auto'
+                }
+              }}
             >
               <Image key={item.thumbnail} src={item.thumbnail} />
             </Box>
