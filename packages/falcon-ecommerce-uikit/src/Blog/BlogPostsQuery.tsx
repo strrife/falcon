@@ -72,7 +72,6 @@ export type BlogPostsTranslations = ReturnType<typeof getTranslations>;
 export class BlogPostsQuery extends Query<BlogPosts, BlogPostsQueryVariables, BlogPostsTranslations> {
   static defaultProps = {
     query: GET_BLOG_POSTS,
-
     getTranslations,
     translationsNamespaces: ['blog']
   };
