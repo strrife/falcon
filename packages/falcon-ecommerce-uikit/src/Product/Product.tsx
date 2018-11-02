@@ -16,8 +16,8 @@ export const ProductLayout = themed({
   defaultTheme: {
     productLayout: {
       display: 'grid',
-      gridGap: 'md',
-      my: 'lg'
+      gridGap: 'sm',
+      my: 'md'
     }
   }
 });
@@ -41,7 +41,7 @@ export const ProductDetailsLayout = themed({
   defaultTheme: {
     productDetailsLayout: {
       display: 'grid',
-      gridGap: 'md',
+      gridGap: 'sm',
       gridTemplateColumns: {
         xs: '1fr',
         md: '1.5fr 1fr'
@@ -179,13 +179,13 @@ export class Product extends React.PureComponent<{ product: any; translations: P
           }
         />
         <ProductDescriptionLayout
-          mt="sm"
+          mt="xs"
           dangerouslySetInnerHTML={{ __html: product.description }}
           gridArea={Area.description}
         />
         <FlexLayout alignItems="center" gridArea={Area.cta} mt="md">
           <NumberInput
-            mr="md"
+            mr="sm"
             min="1"
             name="qty"
             disabled={isSubmitting}
@@ -193,7 +193,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
             onChange={ev => setFieldValue('qty', ev.target.value, !!submitCount)}
           />
           <Button type="submit">
-            <Icon src="cart" stroke="white" size={20} mr="sm" />
+            <Icon src="cart" stroke="white" size="md" mr="xs" />
             {translations.addToCart}
           </Button>
         </FlexLayout>
@@ -227,7 +227,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
               productConfigurator
             }: any) => (
               <React.Fragment>
-                <Price fontSize="xxl" gridArea={Area.price} value={product.price} />
+                <Price mb="sm" fontSize="xl" gridArea={Area.price} value={product.price} />
                 <ProductConfigurableOptions
                   options={product.configurableOptions}
                   error={errors.configurableOptions}
@@ -236,21 +236,27 @@ export class Product extends React.PureComponent<{ product: any; translations: P
                   }
                 />
                 <ProductDescriptionLayout
-                  mt="sm"
+                  my="xs"
                   dangerouslySetInnerHTML={{ __html: product.description }}
                   gridArea={Area.description}
                 />
-                <FlexLayout alignItems="center" gridArea={Area.cta} mt="md">
+                <FlexLayout alignItems="center" gridArea={Area.cta} mt="xs">
                   <NumberInput
-                    mr="md"
+                    mr="sm"
                     min="1"
                     name="qty"
                     disabled={isSubmitting}
                     defaultValue={String(values.qty)}
                     onChange={ev => setFieldValue('qty', ev.target.value, !!submitCount)}
                   />
-                  <Button type="submit">
-                    <Icon src="cart" stroke="white" size={20} mr="sm" />
+                  <Button type="submit" height="xl" px="md">
+                    <Icon
+                      src={isSubmitting ? 'loader' : 'cart'}
+                      stroke="white"
+                      fill={isSubmitting ? 'white' : 'transparent'}
+                      size="md"
+                      mr="xs"
+                    />
                     {translations.addToCart}
                   </Button>
                 </FlexLayout>
@@ -264,7 +270,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
             )}
           </ProductForm>
 
-          <Box gridArea={Area.meta} my="lg" />
+          <Box gridArea={Area.meta} my="md" />
         </ProductDetailsLayout>
       </ProductLayout>
     );

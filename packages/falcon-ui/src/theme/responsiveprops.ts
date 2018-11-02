@@ -1,14 +1,11 @@
 import CSS from 'csstype';
-import { Theme, CSSObject } from './';
+import { Theme, CSSObject } from '.';
 
 function propsMapping<T extends PropsMapping>(param: T) {
   return param;
 }
 
 export const mappings = propsMapping({
-  /**
-   * Themed margin
-   */
   m: {
     cssProp: 'margin',
     themeProp: 'spacing'
@@ -77,6 +74,33 @@ export const mappings = propsMapping({
       paddingBottom: value
     })
   },
+  height: {
+    themeProp: 'spacing'
+  },
+  width: {
+    themeProp: 'spacing'
+  },
+  size: {
+    themeProp: 'spacing',
+    transformToCss: value => ({
+      height: value,
+      width: value
+    })
+  },
+  gridGap: {
+    themeProp: 'spacing'
+  },
+  gridRowGap: {
+    themeProp: 'spacing'
+  },
+  gridColumnGap: {
+    themeProp: 'spacing'
+  },
+
+  color: {
+    cssProp: 'color',
+    themeProp: 'colors'
+  },
   bg: {
     cssProp: 'backgroundColor',
     themeProp: 'colors'
@@ -87,6 +111,11 @@ export const mappings = propsMapping({
   stroke: {
     themeProp: 'colors'
   },
+
+  borderColor: {
+    themeProp: 'colors'
+  },
+
   bgFullWidth: {
     themeProp: 'colors',
     transformToCss: value => ({
@@ -103,20 +132,6 @@ export const mappings = propsMapping({
         top: 0,
         zIndex: -1
       }
-    })
-  },
-  color: {
-    cssProp: 'color',
-    themeProp: 'colors'
-  },
-
-  width: {},
-  height: {},
-
-  size: {
-    transformToCss: value => ({
-      height: value,
-      width: value
     })
   },
 
@@ -136,42 +151,6 @@ export const mappings = propsMapping({
   letterSpacing: {
     themeProp: 'letterSpacings'
   },
-  display: {},
-
-  alignItems: {},
-  justifyContent: {},
-  flexWrap: {},
-  flexDirection: {},
-  flex: {},
-  alignContent: {},
-  justifySelf: {},
-  alignSelf: {},
-  order: {},
-  flexBasis: {},
-
-  gridGap: {
-    themeProp: 'spacing'
-  },
-  gridRowGap: {
-    themeProp: 'spacing'
-  },
-  gridColumnGap: {
-    themeProp: 'spacing'
-  },
-  gridColumn: {},
-  gridRow: {},
-  gridAutoFlow: {},
-  gridAutoRows: {},
-  gridAutoColumns: {},
-  gridTemplateRows: {},
-  gridTemplateColumns: {},
-  gridTemplateAreas: {},
-  gridArea: {},
-  gridTemplate: {},
-
-  borderRadius: {
-    themeProp: 'borderRadius'
-  },
 
   border: {
     themeProp: 'borders'
@@ -188,19 +167,55 @@ export const mappings = propsMapping({
   borderLeft: {
     themeProp: 'borders'
   },
-  borderColor: {
-    themeProp: 'colors'
+
+  borderRadius: {
+    themeProp: 'borderRadius'
   },
+
   boxShadow: {
     themeProp: 'boxShadows'
   },
 
-  opacity: {},
-  position: {},
+  position: {
+    cssProp: 'position'
+  },
+
+  transitionTimingFunction: {
+    themeProp: 'easingFunctions'
+  },
+
+  transitionDuration: {
+    themeProp: 'transitionDurations'
+  },
+
   top: {},
   right: {},
   bottom: {},
-  left: {}
+  left: {},
+
+  display: {},
+
+  alignItems: {},
+  justifyContent: {},
+  flexWrap: {},
+  flexDirection: {},
+  flex: {},
+  alignContent: {},
+  justifySelf: {},
+  alignSelf: {},
+  order: {},
+  flexBasis: {},
+
+  gridColumn: {},
+  gridRow: {},
+  gridAutoFlow: {},
+  gridAutoRows: {},
+  gridAutoColumns: {},
+  gridTemplateRows: {},
+  gridTemplateColumns: {},
+  gridTemplateAreas: {},
+  gridArea: {},
+  gridTemplate: {}
 });
 
 export type PropsMappings = typeof mappings;

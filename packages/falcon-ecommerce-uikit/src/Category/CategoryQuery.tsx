@@ -34,7 +34,7 @@ export const fetchMore = (data: any, apolloFetchMore: any) =>
     variables: {
       page: data.products.pagination.nextPage
     },
-    updateQuery: (prev: any, { fetchMoreResult }: { fetchMoreResult: any }) => {
+    updateQuery: (prev: any, { fetchMoreResult }: any) => {
       if (!fetchMoreResult) {
         return prev;
       }

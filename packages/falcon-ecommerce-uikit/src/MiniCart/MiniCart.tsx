@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Sidebar,
-  H2,
   Backdrop,
   Portal,
   Icon,
@@ -9,6 +8,7 @@ import {
   ListItem,
   Box,
   H3,
+  H4,
   DefaultThemeProps,
   Image,
   Link,
@@ -36,7 +36,7 @@ export enum MiniCartProductArea {
 const miniCartProductTheme: DefaultThemeProps = {
   miniCartProduct: {
     display: 'grid',
-    gridGap: 'sm',
+    gridGap: 'xs',
     // prettier-ignore
     gridTemplate: toGridTemplate([
       ['30px',                     '1fr',                     '2fr'                                     ],
@@ -50,9 +50,9 @@ const miniCartProductTheme: DefaultThemeProps = {
 const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
   <Box defaultTheme={miniCartProductTheme}>
     <Image gridArea={MiniCartProductArea.thumb} src={product.thumbnailUrl} />
-    <H3 gridArea={MiniCartProductArea.productName}>{product.name}</H3>
+    <H4 gridArea={MiniCartProductArea.productName}>{product.name}</H4>
     <Price
-      fontSize="lg"
+      fontSize="md"
       fontWeight="bold"
       gridArea={MiniCartProductArea.price}
       currency={currency}
@@ -67,12 +67,12 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
           onClick={() => removeCartItem({ variables: { input: { itemId: product.itemId } } })}
         >
           <Icon
-            size={32}
-            stroke="primaryDark"
+            size="lg"
+            stroke="secondaryDark"
             src="remove"
-            mr="sm"
+            mr="xs"
             css={({ theme }) => ({
-              ':hover': { stroke: theme.colors.secondary }
+              ':hover': { stroke: theme.colors.primary }
             })}
           />
         </Link>
@@ -110,7 +110,7 @@ const MiniCartProducts: React.SFC<any> = ({ products, currency }) => (
     {products.map((product: any, index: number) => (
       <ListItem pb="none" key={product.sku}>
         <MiniCartProduct product={product} currency={currency} />
-        {index < products.length - 1 && <Divider my="lg" />}
+        {index < products.length - 1 && <Divider my="md" />}
       </ListItem>
     ))}
   </List>
@@ -123,10 +123,10 @@ export const MiniCart: React.SFC<MiniCartData> = ({ miniCart: { open }, cart: { 
         <Sidebar as={Portal} visible={open} side="right">
           <SidebarLayout>
             <Icon src="close" onClick={() => toggle()} position="absolute" top={15} right={30} />
-            <H2 mb="lg">Shopping cart</H2>
+            <H3 mb="lg">Shopping cart</H3>
             <MiniCartProducts products={items} currency={quoteCurrency} />
-            <Box position="absolute" bottom={0} right={0} left={0} bg="primaryLight" p="md">
-              <Button width="100%">Checkout</Button>
+            <Box position="absolute" bottom={0} right={0} left={0} bg="secondaryLight" p="sm">
+              <Button css={{ width: '100%' }}>Checkout</Button>
             </Box>
           </SidebarLayout>
         </Sidebar>
