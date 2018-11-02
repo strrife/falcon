@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Sidebar,
-  H2,
   Backdrop,
   Portal,
   Icon,
@@ -9,6 +8,7 @@ import {
   ListItem,
   Box,
   H3,
+  H4,
   DefaultThemeProps,
   Image,
   Link,
@@ -50,9 +50,9 @@ const miniCartProductTheme: DefaultThemeProps = {
 const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
   <Box defaultTheme={miniCartProductTheme}>
     <Image gridArea={MiniCartProductArea.thumb} src={product.thumbnailUrl} />
-    <H3 gridArea={MiniCartProductArea.productName}>{product.name}</H3>
+    <H4 gridArea={MiniCartProductArea.productName}>{product.name}</H4>
     <Price
-      fontSize="lg"
+      fontSize="md"
       fontWeight="bold"
       gridArea={MiniCartProductArea.price}
       currency={currency}
@@ -68,7 +68,7 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
         >
           <Icon
             size="lg"
-            stroke="primaryDark"
+            stroke="secondaryDark"
             src="remove"
             mr="xs"
             css={({ theme }) => ({
@@ -123,7 +123,7 @@ export const MiniCart: React.SFC<MiniCartData> = ({ miniCart: { open }, cart: { 
         <Sidebar as={Portal} visible={open} side="right">
           <SidebarLayout>
             <Icon src="close" onClick={() => toggle()} position="absolute" top={15} right={30} />
-            <H2 mb="lg">Shopping cart</H2>
+            <H3 mb="lg">Shopping cart</H3>
             <MiniCartProducts products={items} currency={quoteCurrency} />
             <Box position="absolute" bottom={0} right={0} left={0} bg="secondaryLight" p="sm">
               <Button css={{ width: '100%' }}>Checkout</Button>

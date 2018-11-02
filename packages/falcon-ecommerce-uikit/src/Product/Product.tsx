@@ -227,7 +227,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
               productConfigurator
             }: any) => (
               <React.Fragment>
-                <Price fontSize="xxl" gridArea={Area.price} value={product.price} />
+                <Price mb="sm" fontSize="xl" gridArea={Area.price} value={product.price} />
                 <ProductConfigurableOptions
                   options={product.configurableOptions}
                   error={errors.configurableOptions}
@@ -236,7 +236,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
                   }
                 />
                 <ProductDescriptionLayout
-                  mt="xs"
+                  my="xs"
                   dangerouslySetInnerHTML={{ __html: product.description }}
                   gridArea={Area.description}
                 />
@@ -249,8 +249,14 @@ export class Product extends React.PureComponent<{ product: any; translations: P
                     defaultValue={String(values.qty)}
                     onChange={ev => setFieldValue('qty', ev.target.value, !!submitCount)}
                   />
-                  <Button type="submit">
-                    <Icon src="cart" stroke="white" size="md" mr="xs" />
+                  <Button type="submit" height="xl" px="md">
+                    <Icon
+                      src={isSubmitting ? 'loader' : 'cart'}
+                      stroke="white"
+                      fill={isSubmitting ? 'white' : 'transparent'}
+                      size="md"
+                      mr="xs"
+                    />
                     {translations.addToCart}
                   </Button>
                 </FlexLayout>

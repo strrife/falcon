@@ -50,7 +50,7 @@ export const ProductsList: React.SFC<{ products: any[] }> = ({ products }) => (
             {product.name}
           </Text>
 
-          <Price fontSize="lg" value={product.price} />
+          <Price fontSize="md" value={product.price} />
         </ProductCardLayout>
       </li>
     ))}

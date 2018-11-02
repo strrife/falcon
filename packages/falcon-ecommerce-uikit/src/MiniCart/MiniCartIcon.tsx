@@ -10,7 +10,11 @@ export const MiniCartIcon: React.SFC<{
     <Icon src="cart" />
     {itemsQty > 0 && (
       <Badge
+        borderRadius="round"
+        boxShadow="pronounced"
         fontSize="xs"
+        size="md"
+        p="none"
         css={{
           position: 'absolute',
           bottom: '-10px',
