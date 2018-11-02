@@ -1,23 +1,15 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const workbox = require('workbox-build');
 const Logger = require('@deity/falcon-logger');
 const path = require('path');
-const paths = require('./../paths');
+const paths = require('../paths');
+const { formatBytes } = require('./tools');
 
-function formatBytes(bytes) {
-  if (bytes < 1024) return `${bytes} Bytes`;
-  else if (bytes < 1048576) return `${(bytes / 1024).toFixed(3)} KB`;
-  else if (bytes < 1073741824) return `${(bytes / 1048576).toFixed(3)} MB`;
-  return `${(bytes / 1073741824).toFixed(3)} GB`;
-}
-
-const swLocation = path.join('build', 'public', 'sw.js');
-
-async function injectManifest() {
+module.exports.generateSW = async () => {
+  const swLocation = path.join('build', 'public', 'sw.js');
   try {
     const configuration = {
-      swSrc: path.join(paths.falconClient.appSrc, 'serviceWorker/sw.js'),
-      swDest: path.join(paths.razzle.appPath, swLocation),
+      swSrc: path.join(paths.ownSrc, 'serviceWorker/sw.js'),
+      swDest: path.join(paths.appPath, swLocation),
       maximumFileSizeToCacheInBytes: 8 * 1024 * 1024, // 8MB
       globDirectory: '.',
       globPatterns: ['build/public/**/*.{js,json,html,css,ico,png,jpg,gif,svg,eot,ttf,woff,woff2}'],
@@ -42,8 +34,4 @@ async function injectManifest() {
 
     throw error;
   }
-}
-
-module.exports = {
-  injectManifest
 };

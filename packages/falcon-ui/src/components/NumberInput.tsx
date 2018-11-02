@@ -82,13 +82,13 @@ class NumberInputInnerDOM extends React.Component<
 
     return (
       <Box {...themableProps} className={className}>
-        <button aria-hidden onClick={this.stepDown} className="-inner-input-step-down-element">
+        <button type="button" aria-hidden onClick={this.stepDown} className="-inner-input-step-down-element">
           <Icon src="numberInputDown" fallback="−" />
         </button>
 
         <input ref={this.inputRef} min={5} type="number" {...rest} />
 
-        <button aria-hidden onClick={this.stepUp} className="-inner-input-step-up-element">
+        <button type="button" aria-hidden onClick={this.stepUp} className="-inner-input-step-up-element">
           <Icon src="numberInputUp" fallback="+" />
         </button>
       </Box>
