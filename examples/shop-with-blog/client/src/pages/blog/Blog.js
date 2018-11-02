@@ -21,7 +21,7 @@ const Blog = props => (
             <BlogPostExcerpt key={item.slug} excerpt={item} translations={translations} />
           ))}
         </BlogPostsLayout>
-        <BlogPostPaginator pagination={blogPosts.pagination} />
+        <BlogPostPaginator pagination={blogPosts.pagination} translations={translations} />
       </Box>
     )}
   </BlogPostsQuery>

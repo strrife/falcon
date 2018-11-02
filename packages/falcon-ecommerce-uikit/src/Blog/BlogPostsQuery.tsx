@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 import { Query } from '../Query/Query';
 
 const GET_BLOG_POSTS = gql`
-  query BlogPosts {
-    blogPosts {
+  query BlogPosts($pagination: PaginationInput) {
+    blogPosts(pagination: $pagination) {
       items {
         title
         date
@@ -51,18 +51,28 @@ export type BlogPosts = {
   };
 };
 
+export type BlogPostsQueryVariables = {
+  pagination: {
+    page: number;
+    perPage: number;
+  };
+};
+
 function getTranslations(t: reactI18Next.TranslationFunction) {
   return {
     title: t('title'),
-    readMore: t('readMore')
+    readMore: t('readMore'),
+    newerEntries: t('newerEntries'),
+    olderEntries: t('olderEntries')
   };
 }
 
 export type BlogPostsTranslations = ReturnType<typeof getTranslations>;
 
-export class BlogPostsQuery extends Query<BlogPosts, {}, BlogPostsTranslations> {
+export class BlogPostsQuery extends Query<BlogPosts, BlogPostsQueryVariables, BlogPostsTranslations> {
   static defaultProps = {
     query: GET_BLOG_POSTS,
+
     getTranslations,
     translationsNamespaces: ['blog']
   };

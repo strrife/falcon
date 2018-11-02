@@ -1,4 +1,6 @@
 {
   "title": "Blog",
-  "readMore": "Read more..."
+  "readMore": "Read more...",
+  "newerEntries": "Newer Entries",
+  "olderEntries": "Older Entries"
 }
