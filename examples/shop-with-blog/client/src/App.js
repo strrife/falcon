@@ -42,6 +42,7 @@ const HeadMetaTags = () => (
 const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
 const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
 const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/Blog" */ './pages/blog/Blog'));
+const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/Post" */ './pages/blog/Post'));
 
 const App = ({ online }) => (
   <ThemeEditorState initial={deityGreenTheme}>
@@ -60,7 +61,8 @@ const App = ({ online }) => (
                 loaderComponent={Loader}
                 components={{
                   'shop-category': Category,
-                  'shop-product': Product
+                  'shop-product': Product,
+                  'blog-post': BlogPost
                 }}
               />
             </Switch>

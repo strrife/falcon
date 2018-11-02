@@ -6,8 +6,7 @@ const Blog = props => (
   <BlogPostsQuery
     variables={{
       pagination: {
-        page: +props.match.params.page || 1,
-        perPage: 2
+        page: +props.match.params.page || 1
       }
     }}
   >
