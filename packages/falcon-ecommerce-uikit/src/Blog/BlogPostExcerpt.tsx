@@ -2,7 +2,7 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, H2, Text, Image, DefaultThemeProps, Link } from '@deity/falcon-ui';
 import { BlogPostsTranslations, BlogPostExcerptType } from './BlogPostsQuery';
-import { DateFormat } from './DateFormat';
+import { DateFormat } from '../Locale';
 import { toGridTemplate } from '../helpers';
 
 enum BlogPostEcerptArea {

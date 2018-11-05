@@ -2,7 +2,7 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, H1, DefaultThemeProps, Breadcrumbs, Breadcrumb, Link } from '@deity/falcon-ui';
 import { BlogPostType, BlogPostTranslations } from './BlogPostQuery';
-import { DateFormat } from './DateFormat';
+import { DateFormat } from '../Locale';
 import { CMSContent } from './CmsContent';
 
 const blogPostLayout: DefaultThemeProps = {
