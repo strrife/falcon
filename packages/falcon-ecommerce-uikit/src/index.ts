@@ -7,6 +7,7 @@ export * from './Footer';
 export * from './Category';
 export * from './MiniCart';
 export * from './SignIn';
+export * from './SignOut';
 export * from './Customer';
 export * from './SidebarLayout';
 export * from './Query';

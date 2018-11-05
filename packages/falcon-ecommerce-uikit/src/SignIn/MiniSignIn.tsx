@@ -4,6 +4,7 @@ import { Sidebar, Box, Backdrop, Portal, Icon, Link, List, ListItem, Button, Tex
 import { MiniSignInData } from './../SignIn';
 import { ToggleMiniSignInMutation } from './../SignIn/MiniSignInMutation';
 import { SignInForm, SignInFormContent, SignInFormRenderProps } from './../SignIn';
+import { SignOutMutation } from './../SignOut';
 
 import { SidebarLayout } from '../SidebarLayout';
 import { CustomerQuery } from './../Customer';
@@ -15,18 +16,20 @@ export const MiniSignIn: React.SFC<MiniSignInData> = ({ miniSignIn: { open } }) 
         <Sidebar as={Portal} visible={open} side="right">
           <SidebarLayout>
             <CustomerQuery>
-              {(data: any) => {
-                const d = 1;
-
-                return data.customer ? (
+              {(data: any) =>
+                data.customer ? (
                   <Box>
                     <Box>
                       <H2>{`${data.customer.firstname} ${data.customer.lastname}`}</H2>
                       <Text>{data.customer.email}</Text>
-                      <Button width="100%" mt="md" /* disabled={isSubmitting} */>
-                        Logout
-                        <Icon src="logOut" stroke="white" size={13} ml="xs" />
-                      </Button>
+                      <SignOutMutation>
+                        {(signOut, { loading }) => (
+                          <Button width="100%" mt="md" disabled={loading} onClick={() => signOut()}>
+                            Logout
+                            <Icon src="logOut" stroke="white" size={13} ml="xs" />
+                          </Button>
+                        )}
+                      </SignOutMutation>
                     </Box>
                     <List mt="lg">
                       <ListItem>
@@ -77,8 +80,8 @@ export const MiniSignIn: React.SFC<MiniSignInData> = ({ miniSignIn: { open } }) 
                       <ListItem>track orders and more</ListItem>
                     </List>
                   </React.Fragment>
-                );
-              }}
+                )
+              }
             </CustomerQuery>
             <Icon src="close" onClick={() => toggle()} position="absolute" top={15} right={30} />
           </SidebarLayout>
