@@ -23,7 +23,8 @@
     "coverageReporters": [
       "html",
       "text",
-      "text-summary"
+      "text-summary",
+      "lcov"
     ],
     "transform": {
       "^.+\\.ts$": "ts-jest"
