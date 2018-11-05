@@ -6,7 +6,7 @@
   "repository": "git@github.com:deity-io/falcon.git",
   "scripts": {
     "test": "lerna run test:coverage",
-    "test:codecov": "lerna exec --scope=@deity/falcon-* -- codecov",
+    "coverage": "lerna exec --scope=@deity/falcon-* -- codecov",
     "prepublish": "lerna run --scope=@deity/falcon-ui --stream prepare",
     "prepare": "lerna run --stream prepare",
     "lint": "eslint ./"

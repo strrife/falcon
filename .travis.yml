@@ -17,4 +17,4 @@ install:
 script:
   - yarn lint
   - yarn test
-  - yarn test:codecov
+  - yarn coverage
