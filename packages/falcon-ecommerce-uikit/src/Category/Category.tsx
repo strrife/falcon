@@ -1,5 +1,4 @@
 import React, { MouseEventHandler } from 'react';
-// eslint-disable-next-line
 import { NetworkStatus } from 'apollo-client';
 import {
   themed,
@@ -15,8 +14,7 @@ import {
   DropdownMenu,
   DropdownMenuItem
 } from '@deity/falcon-ui';
-
-import { ProductsList } from './../Products';
+import { ProductsList } from '../Product/Products';
 
 const CategoryLayout = themed({
   tag: 'div',
@@ -74,7 +72,7 @@ export const ShowMore: React.SFC<{ text: string; onClick?: MouseEventHandler; lo
   <Box my="sm" onClick={onClick || (() => {})}>
     <Button variant="secondary">
       {text}
-      {loading && <Icon src="loader" ml="xs" size="sm" />}
+      {loading && <Icon src="loader" ml="sm" size="sm" />}
     </Button>
   </Box>
 );
@@ -98,14 +96,16 @@ export const Category: React.SFC<{
       />
       <Divider />
       <ProductsList products={items} />
-      <Divider />
 
       {pagination.nextPage && (
-        <ShowMore
-          text={translations.category.pagination.showMore}
-          onClick={fetchMore}
-          loading={networkStatus === NetworkStatus.fetchMore}
-        />
+        <React.Fragment>
+          <Divider />
+          <ShowMore
+            text={translations.category.pagination.showMore}
+            onClick={fetchMore}
+            loading={networkStatus === NetworkStatus.fetchMore}
+          />
+        </React.Fragment>
       )}
     </CategoryLayout>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { H2, Text, Group, Input, Button, Checkbox, Label, Box, DefaultThemeProps } from '@deity/falcon-ui';
+import { H3, Text, Group, Input, Button, Checkbox, Label, Box, DefaultThemeProps } from '@deity/falcon-ui';
 
 const newsletterLayoutTheme: DefaultThemeProps = {
   newsletterLayout: {
@@ -18,7 +18,7 @@ const newsletterLayoutTheme: DefaultThemeProps = {
 
 export const Newsletter = () => (
   <Box defaultTheme={newsletterLayoutTheme}>
-    <H2>Newsletter</H2>
+    <H3>Newsletter</H3>
     <Text>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum egestas nisl eu accumsan sodales. Nam semper
       magna vitae enim placerat dictum.

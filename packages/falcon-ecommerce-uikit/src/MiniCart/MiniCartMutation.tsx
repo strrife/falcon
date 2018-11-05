@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
 const TOGGLE_MINI_CART = gql`
-  mutation {
+  mutation ToggleMiniCart {
     toggleMiniCart @client
   }
 `;
