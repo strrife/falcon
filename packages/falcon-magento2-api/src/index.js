@@ -424,59 +424,23 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * Special endpoint to fetch any magento entity by it's url, for example product, cms page
    * @param {object} params - request params
    * @param {string} [params.path] - request path to be checked against api urls
-   * @param {boolean} [params.loadEntityData] - flag to mark whether endpoint should return entity data as well
    * @return {Promise} - request promise
    */
-  async fetchUrl(params) {
-    const { path, loadEntityData = false } = params;
-
+  async fetchUrl({ path }) {
     return this.get(
-      '/url/',
-      {
-        request_path: path,
-        load_entity_data: loadEntityData
-      },
+      'url',
+      { url: path },
       {
         context: {
-          didReceiveResult: result => this.reduceUrl(result, this.context.magento2.currency)
+          // unify the types so client receives 'shop-page, 'shop-product', 'shop-category, etc.
+          didReceiveResult: result => ({
+            id: result.entity_id,
+            path: result.canonical_url,
+            type: `shop-${result.entity_type.toLowerCase().replace('cms-', '')}`
+          })
         }
       }
     );
-  }
-
-  /**
-   * Reduce url endpoint data.
-   * Find entity reducer and use it.
-   *
-   * @param {object} data - parsed response Api Response
-   * @param {string} [currency] currency code
-   * @return {CmsPage | Product | Category} reduced data
-   */
-  reduceUrl(data, currency = null) {
-    const type = data.entity_type;
-    const entityData = data[type.replace('-', '_')];
-    // unify the types so client receives 'shop-page, 'shop-product', 'shop-category, etc.
-    const unifiedType = `shop-${type.replace('cms-', '')}`;
-
-    if (entityData === null) {
-      return { id: data.entity_id, type: unifiedType };
-    }
-
-    let reducer;
-
-    if (type === 'cms-page') {
-      reducer = this.reduceCmsPage;
-    } else if (type === 'product') {
-      reducer = this.reduceProduct;
-    } else if (type === 'category') {
-      reducer = this.reduceCategory;
-    } else {
-      throw new Error(`Unknown url entity type: ${type} in magento api.`);
-    }
-
-    const reducedEntityData = reducer.call(this, { data: entityData }, currency);
-
-    return Object.assign(reducedEntityData.data, { type: unifiedType });
   }
 
   /**
@@ -524,10 +488,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {number} params.id - product id called by magento entity_id
    * @return {Promise<Product>} product data
    */
-  async product(params) {
-    const urlPath = `catalog/product/view/id/${params.id}`;
-
-    return this.fetchUrl({ path: urlPath, loadEntityData: true });
+  async product({ id }) {
+    return this.get(`products/${id}`);
   }
 
   /**
