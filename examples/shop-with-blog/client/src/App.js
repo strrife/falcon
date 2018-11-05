@@ -68,7 +68,7 @@ const App = ({ online }) => (
                   }}
                 />
               </Switch>
-              <FooterQuery>{(data, t) => <Footer {...data} translations={t} />}</FooterQuery>
+              <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
               <MiniCartQuery>{data => <MiniCart {...data} />}</MiniCartQuery>
             </AppLayout>
           </ThemeProvider>
