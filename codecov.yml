@@ -13,15 +13,6 @@ coverage:
       falcon-server-env:
         paths:
           - packages/falcon-server-env/
-      falcon-ui:
-        paths:
-          - packages/falcon-ui/
-      falcon-ecommerce-uikit:
-        paths:
-          - packages/falcon-ecommerce-uikit/
-      falcon-theme-editor:
-        paths:
-          - packages/falcon-theme-editor/
       falcon-shop-extension:
         paths:
           - packages/falcon-shop-extension/
