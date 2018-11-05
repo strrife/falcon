@@ -44,7 +44,7 @@ export const SignInFormContent: React.SFC<SignInFormRenderProps> = ({ formik: { 
       <Input name="password" type="password" onChange={handleChange} disabled={isSubmitting} />
     </Box>
     <Link fontWeight="bold">Password forgot?</Link>
-    <Button type="submit" width="100%" disabled={isSubmitting}>
+    <Button type="submit" disabled={isSubmitting} css={{ width: '100%' }}>
       Login
       <Icon src="buttonArrowRight" stroke="white" />
     </Button>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import { Box, Badge, Icon } from '@deity/falcon-ui';
 
 export const MiniCartIcon: React.SFC<{
@@ -11,7 +10,11 @@ export const MiniCartIcon: React.SFC<{
     <Icon src="cart" />
     {itemsQty > 0 && (
       <Badge
+        borderRadius="round"
+        boxShadow="pronounced"
         fontSize="xs"
+        size="md"
+        p="none"
         css={{
           position: 'absolute',
           bottom: '-10px',

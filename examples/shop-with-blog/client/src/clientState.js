@@ -29,6 +29,14 @@ const sortOrders = [
   }
 ];
 
+const GET_MINI_CART_STATE = gql`
+  query MiniCartState {
+    miniCart @client {
+      open
+    }
+  }
+`;
+
 export default {
   defaults: {
     miniCart: {
@@ -37,25 +45,33 @@ export default {
     miniSignIn: {
       open: false
     },
-    customer: {}
+    customer: {},
+    // todo: this is temporary, these values should be fetched from shop settings
+    localeSettings: {
+      locale: 'en',
+      currency: 'EUR'
+    }
   },
 
   resolvers: {
     Query: {
       languages: () => languages,
-      sortOrders: () => sortOrders
+      sortOrders: () => sortOrders,
+
+      // todo: this resolver makes sure, that when refetchQuery is refreshing also miniCart its state will
+      // be loaded from cache, not from defaults as we don't want the refetch mechanism to toggle miniCart
+      miniCart: (_, _variables, { cache }) => {
+        const { miniCart } = cache.readQuery({
+          query: GET_MINI_CART_STATE
+        });
+        return miniCart;
+      }
     },
 
     Mutation: {
       toggleMiniCart: (_, _variables, { cache }) => {
         const { miniCart } = cache.readQuery({
-          query: gql`
-            query miniCart {
-              miniCart @client {
-                open
-              }
-            }
-          `
+          query: GET_MINI_CART_STATE
         });
 
         const data = {

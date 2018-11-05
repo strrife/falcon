@@ -24,9 +24,9 @@ export const MiniSignIn: React.SFC<MiniSignInData> = ({ miniSignIn: { open } }) 
                       <Text>{data.customer.email}</Text>
                       <SignOutMutation>
                         {(signOut, { loading }) => (
-                          <Button width="100%" mt="md" disabled={loading} onClick={() => signOut()}>
+                          <Button css={{ width: '100%' }} mt="md" disabled={loading} onClick={() => signOut()}>
                             Logout
-                            <Icon src="logOut" stroke="white" size={13} ml="xs" />
+                            <Icon src="logOut" stroke="white" size="sm" ml="xs" />
                           </Button>
                         )}
                       </SignOutMutation>
@@ -69,7 +69,7 @@ export const MiniSignIn: React.SFC<MiniSignInData> = ({ miniSignIn: { open } }) 
                   <React.Fragment>
                     <SignInForm>{(props: SignInFormRenderProps) => <SignInFormContent {...props} />}</SignInForm>
                     <Text>No account yet?</Text>
-                    <Button type="submit" width="100%">
+                    <Button type="submit" css={{ width: '100%' }}>
                       Create an account
                       <Icon src="buttonArrowRight" stroke="white" />
                     </Button>

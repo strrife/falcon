@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Sidebar,
-  H2,
   Backdrop,
   Portal,
   Icon,
@@ -9,6 +8,7 @@ import {
   ListItem,
   Box,
   H3,
+  H4,
   DefaultThemeProps,
   Image,
   Link,
@@ -18,9 +18,11 @@ import {
   NumberInput
 } from '@deity/falcon-ui';
 import { MiniCartData } from './MiniCartQuery';
-import { ToggleMiniCartMutation, RemoveCartItemMutation, UpdateCartItemMutation } from './MiniCartMutations';
+import { RemoveCartItemMutation, UpdateCartItemMutation } from '../Cart/CartMutation';
+import { ToggleMiniCartMutation } from './MiniCartMutation';
 import { SidebarLayout } from '../SidebarLayout';
 import { toGridTemplate } from '../helpers';
+import { Price } from '../Locale';
 
 export enum MiniCartProductArea {
   empty = '.',
@@ -34,13 +36,13 @@ export enum MiniCartProductArea {
 const miniCartProductTheme: DefaultThemeProps = {
   miniCartProduct: {
     display: 'grid',
-    gridGap: 'sm',
+    gridGap: 'xs',
     // prettier-ignore
     gridTemplate: toGridTemplate([
-      ['30px'                    , '1fr',                     '2fr'                                    ],
-      [MiniCartProductArea.empty, MiniCartProductArea.thumb, MiniCartProductArea.productName           ],
-      [MiniCartProductArea.remove, MiniCartProductArea.thumb, MiniCartProductArea.price,         '1fr' ],
-      [MiniCartProductArea.empty, MiniCartProductArea.thumb, MiniCartProductArea.modify                ]
+      ['30px',                     '1fr',                     '2fr'                                     ],
+      [MiniCartProductArea.empty,  MiniCartProductArea.thumb, MiniCartProductArea.productName           ],
+      [MiniCartProductArea.remove, MiniCartProductArea.thumb, MiniCartProductArea.price,          '1fr' ],
+      [MiniCartProductArea.empty,  MiniCartProductArea.thumb, MiniCartProductArea.modify                ]
     ])
   }
 };
@@ -48,10 +50,14 @@ const miniCartProductTheme: DefaultThemeProps = {
 const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
   <Box defaultTheme={miniCartProductTheme}>
     <Image gridArea={MiniCartProductArea.thumb} src={product.thumbnailUrl} />
-    <H3 gridArea={MiniCartProductArea.productName}>{product.name}</H3>
-    <H3 fontWeight="bold" gridArea={MiniCartProductArea.price}>
-      {currency} {product.price}
-    </H3>
+    <H4 gridArea={MiniCartProductArea.productName}>{product.name}</H4>
+    <Price
+      fontSize="md"
+      fontWeight="bold"
+      gridArea={MiniCartProductArea.price}
+      currency={currency}
+      value={product.price}
+    />
     <RemoveCartItemMutation>
       {removeCartItem => (
         <Link
@@ -60,7 +66,15 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
           alignItems="center"
           onClick={() => removeCartItem({ variables: { input: { itemId: product.itemId } } })}
         >
-          <Icon size={24} stroke="primaryDark" src="remove" mr="sm" />
+          <Icon
+            size="lg"
+            stroke="secondaryDark"
+            src="remove"
+            mr="xs"
+            css={({ theme }) => ({
+              ':hover': { stroke: theme.colors.primary }
+            })}
+          />
         </Link>
       )}
     </RemoveCartItemMutation>
@@ -96,7 +110,7 @@ const MiniCartProducts: React.SFC<any> = ({ products, currency }) => (
     {products.map((product: any, index: number) => (
       <ListItem pb="none" key={product.sku}>
         <MiniCartProduct product={product} currency={currency} />
-        {index < products.length - 1 && <Divider my="lg" />}
+        {index < products.length - 1 && <Divider my="md" />}
       </ListItem>
     ))}
   </List>
@@ -109,14 +123,14 @@ export const MiniCart: React.SFC<MiniCartData> = ({ miniCart: { open }, cart: { 
         <Sidebar as={Portal} visible={open} side="right">
           <SidebarLayout>
             <Icon src="close" onClick={() => toggle()} position="absolute" top={15} right={30} />
-            <H2 mb="lg">Shopping cart</H2>
+            <H3 mb="lg">Shopping cart</H3>
             <MiniCartProducts products={items} currency={quoteCurrency} />
-            <Box position="absolute" bottom={0} right={0} left={0} bg="primaryLight" p="md">
-              <Button width="100%">Checkout</Button>
+            <Box position="absolute" bottom={0} right={0} left={0} bg="secondaryLight" p="sm">
+              <Button css={{ width: '100%' }}>Checkout</Button>
             </Box>
           </SidebarLayout>
         </Sidebar>
-        <Backdrop as={Portal} visible={open} onClick={() => toggle} />
+        <Backdrop as={Portal} visible={open} onClick={() => toggle()} />
       </React.Fragment>
     )}
   </ToggleMiniCartMutation>

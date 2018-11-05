@@ -1,19 +1,23 @@
 import React from 'react';
-import { Box, Radio, H3, Text } from '@deity/falcon-ui';
+import { Box, Radio, H4, Text } from '@deity/falcon-ui';
 
 const Option: React.SFC<{ option: any; disabled?: boolean; onChange: Function }> = ({ option, disabled, onChange }) => (
-  <Box mb="md">
-    <H3 mb="md">{option.label}</H3>
+  <Box mb="sm">
+    <H4 mb="sm">{option.label}</H4>
     {option.values.map((value: any) => (
       <Radio
         key={value.valueIndex}
         disabled={disabled}
-        mr="sm"
+        mr="xs"
         icon={<div>{value.label}</div>}
-        size={55}
         onChange={ev => onChange(ev)}
         name={option.attributeId}
         value={value.valueIndex}
+        css={{
+          cursor: 'pointer',
+          height: 55,
+          width: 55
+        }}
       />
     ))}
   </Box>
