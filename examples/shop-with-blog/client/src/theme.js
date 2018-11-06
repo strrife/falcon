@@ -81,5 +81,19 @@ export const deityGreenTheme = createTheme({
         zIndex: 2
       }
     }
+  },
+
+  components: {
+    sidebar: {
+      px: 'sm',
+      pt: 'sm',
+      css: {
+        boxSizing: 'border-box',
+        width: {
+          xs: '80vw',
+          sm: 510
+        }
+      }
+    }
   }
 });
