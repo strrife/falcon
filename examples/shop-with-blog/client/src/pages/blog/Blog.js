@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, H1 } from '@deity/falcon-ui';
-import { BlogPostsQuery, BlogPostsLayout, BlogPostExcerpt, BlogPostPaginator } from '@deity/falcon-ecommerce-uikit';
+import { BlogPostsQuery, BlogPostsLayout, BlogPostExcerpt, BlogPostsPaginator } from '@deity/falcon-ecommerce-uikit';
 
 const Blog = props => (
   <BlogPostsQuery
@@ -21,7 +21,7 @@ const Blog = props => (
             <BlogPostExcerpt key={item.slug} excerpt={item} translations={translations} />
           ))}
         </BlogPostsLayout>
-        <BlogPostPaginator pagination={blogPosts.pagination} translations={translations} />
+        <BlogPostsPaginator pagination={blogPosts.pagination} translations={translations} />
       </Box>
     )}
   </BlogPostsQuery>

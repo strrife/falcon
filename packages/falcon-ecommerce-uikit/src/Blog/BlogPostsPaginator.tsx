@@ -10,7 +10,7 @@ const blogPostsPaginatorLayout: DefaultThemeProps = {
   }
 };
 
-export const BlogPostPaginator: React.SFC<{ pagination: BlogPagination; translations: BlogPostsTranslations }> = ({
+export const BlogPostsPaginator: React.SFC<{ pagination: BlogPagination; translations: BlogPostsTranslations }> = ({
   pagination,
   translations
 }) => (
