@@ -5,6 +5,8 @@ import ChevronUp from 'react-feather/dist/icons/chevron-up';
 import User from 'react-feather/dist/icons/user';
 import Close from 'react-feather/dist/icons/x';
 import Remove from 'react-feather/dist/icons/x-circle';
+import ChevronsRight from 'react-feather/dist/icons/chevrons-right';
+import ChevronsLeft from 'react-feather/dist/icons/chevrons-left';
 import { createTheme } from '@deity/falcon-ui';
 import logo from './assets/logo.svg';
 
@@ -63,6 +65,21 @@ export const deityGreenTheme = createTheme({
     },
     remove: {
       icon: Remove
+    },
+    nextPage: {
+      icon: ChevronsRight,
+      stroke: 'black'
+    },
+    prevPage: {
+      icon: ChevronsLeft,
+      stroke: 'black'
+    }
+  },
+  components: {
+    navbar: {
+      css: {
+        zIndex: 2
+      }
     }
   }
 });
