@@ -759,24 +759,24 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<boolean>} true if login was successful
    */
   async signIn(data) {
-    const { email, password } = data;
     const { cart: { quoteId = null } = {} } = this.context.magento2;
+    const dateNow = Date.now();
 
     try {
       const response = await this.post(
         '/integration/customer/token',
         {
-          username: email,
-          password,
+          username: data.email,
+          password: data.password,
           guest_quote_id: quoteId
         },
         { context: { skipAuth: true } }
       );
       const { token, validTime } = this.convertKeys(response.data);
 
-      // calculate token expiration date and subtract 5 minutes for margin
-      const tokenValidationTimeInMinutes = validTime * 60 - 5;
-      const tokenExpirationTime = addMinutes(Date.now(), tokenValidationTimeInMinutes);
+      // calculate token expiration date and subtract 1 minute for margin
+      const tokenValidationTimeInMinutes = validTime * 60 - 1;
+      const tokenExpirationTime = addMinutes(dateNow, tokenValidationTimeInMinutes);
       Logger.debug(`Customer token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
 
       this.context.magento2.customerToken = {
