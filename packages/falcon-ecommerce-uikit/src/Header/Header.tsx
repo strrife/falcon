@@ -15,7 +15,7 @@ import {
 import { toGridTemplate } from '../helpers';
 import { ToggleMiniCartMutation, MiniCartIcon, MiniCartQuery } from '../MiniCart';
 import { HeaderData, MenuItem } from './HeaderQuery';
-import { ToggleMiniSignInMutation } from '../SignIn/MiniSignInMutation';
+import { ToggleMiniAccountMutation } from '../MiniAccount/MiniAccountMutation';
 
 const bannerLayoutTheme: DefaultThemeProps = {
   bannerLayout: {
@@ -95,11 +95,11 @@ export const Searchbar = () => (
     <Link as={RouterLink} gridArea={SearchBarArea.logo} to="/">
       <Icon src="logo" />
     </Link>
-    <ToggleMiniSignInMutation>
+    <ToggleMiniAccountMutation>
       {toggle => (
         <Icon gridArea={SearchBarArea.signIn} src="user" onClick={() => toggle()} css={{ cursor: 'pointer' }} />
       )}
-    </ToggleMiniSignInMutation>
+    </ToggleMiniAccountMutation>
     <ToggleMiniCartMutation>
       {toggle => (
         <MiniCartQuery>

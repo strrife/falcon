@@ -10,6 +10,6 @@ export const SIGN_OUT_MUTATION = gql`
 export class SignOutMutation extends Mutation {
   static defaultProps = {
     mutation: SIGN_OUT_MUTATION,
-    refetchQueries: ['customer']
+    refetchQueries: ['customer', 'miniAccount']
   };
 }

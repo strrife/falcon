@@ -10,6 +10,6 @@ export const SIGN_IN_MUTATION = gql`
 export class SignInMutation extends Mutation {
   static defaultProps = {
     mutation: SIGN_IN_MUTATION,
-    refetchQueries: ['customer']
+    refetchQueries: ['customer', 'miniAccount']
   };
 }
