@@ -24,7 +24,7 @@ const App = () => {
 }
 
 - export default isOnline()(App);
-+ export default isOnline()(withPageviewApp)));
++ export default isOnline()(withPageview(App));
 ```
 
 You configuration source must provide the following data:
