@@ -15,9 +15,10 @@ import {
   Text,
   Divider,
   Button,
-  NumberInput
+  NumberInput,
+  FlexLayout
 } from '@deity/falcon-ui';
-import { MiniCartData } from './MiniCartQuery';
+import { MiniCartData, MiniCartTranslations } from './MiniCartQuery';
 import { RemoveCartItemMutation, UpdateCartItemMutation } from '../Cart/CartMutation';
 import { ToggleMiniCartMutation } from './MiniCartMutation';
 import { toGridTemplate, prettyScrollbars } from '../helpers';
@@ -149,14 +150,18 @@ const MiniCartProducts: React.SFC<any> = ({ products, currency }) => (
   </List>
 );
 
-export const MiniCart: React.SFC<MiniCartData> = ({ miniCart: { open }, cart: { quoteCurrency, items } }) => (
+export const MiniCart: React.SFC<MiniCartData & { translations: MiniCartTranslations }> = ({
+  miniCart: { open },
+  cart: { quoteCurrency, items },
+  translations
+}) => (
   <ToggleMiniCartMutation>
     {toggle => (
       <React.Fragment>
         <Sidebar as={Portal} visible={open} side="right">
           <Box defaultTheme={miniCartLayout}>
-            <Icon gridArea={MiniCartLayoutArea.close} src="close" onClick={() => toggle()} />
-            <H3 gridArea={MiniCartLayoutArea.title}>Shopping cart</H3>
+            <Icon gridArea={MiniCartLayoutArea.close} src="close" stroke="black" onClick={() => toggle()} />
+            <H3 gridArea={MiniCartLayoutArea.title}>{translations.title}</H3>
 
             <Box
               gridArea={MiniCartLayoutArea.items}
@@ -165,11 +170,24 @@ export const MiniCart: React.SFC<MiniCartData> = ({ miniCart: { open }, cart: { 
               })}
             >
               <MiniCartProducts products={items} currency={quoteCurrency} />
+              {!items.length && (
+                <FlexLayout alignItems="center" flexDirection="column">
+                  <Text fontSize="md">{translations.empty}</Text>
+                  <Button onClick={() => toggle()} mt="lg">
+                    {translations.continue}
+                  </Button>
+                </FlexLayout>
+              )}
             </Box>
 
-            <Box gridArea={MiniCartLayoutArea.cta} bgFullWidth="secondaryLight" py="sm">
-              <Button css={{ width: '100%' }}>Checkout</Button>
-            </Box>
+            {items.length > 0 && (
+              <Box gridArea={MiniCartLayoutArea.cta} py="sm" bgFullWidth="secondaryLight">
+                <Button css={{ width: '100%' }} height="xl">
+                  <Icon stroke="white" size="md" mr="xs" src="lock" />
+                  {translations.cta}
+                </Button>
+              </Box>
+            )}
           </Box>
         </Sidebar>
         <Backdrop as={Portal} visible={open} onClick={() => toggle()} />
