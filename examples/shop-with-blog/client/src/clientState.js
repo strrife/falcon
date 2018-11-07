@@ -45,7 +45,6 @@ export default {
     miniAccount: {
       open: false
     },
-    customer: {},
     // todo: this is temporary, these values should be fetched from shop settings
     localeSettings: {
       locale: 'en',
