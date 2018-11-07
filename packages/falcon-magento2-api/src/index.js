@@ -1303,7 +1303,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     try {
-      return await this.put(`${route}/coupons/${input.couponCode}`);
+      const result = await this.put(`${route}/coupons/${input.couponCode}`);
+      return result.data;
     } catch (e) {
       if (e.statusCode === 404) {
         e.userMessage = true;
@@ -1323,7 +1324,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const route = this.getCartPath();
 
     if (cart && cart.quoteId) {
-      return this.delete(`${route}/coupons`);
+      const result = this.delete(`${route}/coupons`);
+      return result.data;
     }
 
     throw new Error('Trying to remove coupon without quoteId in session');

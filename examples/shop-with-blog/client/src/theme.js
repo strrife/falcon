@@ -10,7 +10,7 @@ import Remove from 'react-feather/dist/icons/x-circle';
 import ChevronsRight from 'react-feather/dist/icons/chevrons-right';
 import ChevronsLeft from 'react-feather/dist/icons/chevrons-left';
 import Lock from 'react-feather/dist/icons/lock';
-
+import Trash from 'react-feather/dist/icons/trash-2';
 import { createTheme } from '@deity/falcon-ui';
 import logo from './assets/logo.svg';
 
@@ -83,7 +83,8 @@ export const deityGreenTheme = createTheme({
       icon: ChevronsLeft,
       stroke: 'black'
     },
-    lock: { icon: Lock }
+    lock: { icon: Lock },
+    trash: { icon: Trash }
   },
   keyframes: {
     loader: {

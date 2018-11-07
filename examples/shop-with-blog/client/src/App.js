@@ -48,6 +48,7 @@ const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category
 const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
 const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/Blog" */ './pages/blog/Blog'));
 const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/Post" */ './pages/blog/Post'));
+const Cart = AsyncComponent(() => import(/* webpackChunkName: "shop/cart" */ './pages/shop/Cart'));
 
 let ThemeEditorComponent;
 // ThemeEditor gets loaded only in dev mode
@@ -67,11 +68,12 @@ const App = ({ online }) => (
             <HeadMetaTags />
             <AppLayout>
               <HeaderQuery>{data => <Header {...data} />}</HeaderQuery>
-              {!online && <p>your are offline.</p>}
+              {!online && <p>you are offline.</p>}
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/products" component={Category} />
                 <Route exact path="/blog/:page?" component={Blog} />
+                <Route exact path="/cart" component={Cart} />
                 <DynamicRoute
                   loaderComponent={Loader}
                   components={{

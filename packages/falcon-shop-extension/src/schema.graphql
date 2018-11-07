@@ -286,7 +286,7 @@ type CartItem {
 
 type CartItemOption {
   label: String
-  data: [CartItemOptionValue]
+  value: String
 }
 
 type CartItemOptionValue {
