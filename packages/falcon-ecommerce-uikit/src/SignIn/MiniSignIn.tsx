@@ -63,7 +63,6 @@ export const MiniSignIn: React.SFC<MiniSignInData> = ({ miniSignIn: { open } }) 
                         </Link>
                       </ListItem>
                     </List>
-                    <p>{JSON.stringify(data.customer, null, 2)}</p>
                   </Box>
                 ) : (
                   <React.Fragment>
