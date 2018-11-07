@@ -1093,7 +1093,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {RemoveCartItemInput} input - cart item data
    * @param {string} [input.itemId] - item id
    * @param {string|number} [params.cart.quoteId] - cart id
-   * @return {Promise<boolean>} true on success
+   * @return {Promise<RemoveCartItemResponse>} - RemoveCartItemResponse with itemId when operation was successfull
    */
   async removeCartItem(input) {
     const { cart } = this.context.magento2;
@@ -1102,12 +1102,18 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     if (cart && cart.quoteId) {
       const result = await this.delete(`${cartPath}/items/${itemId}`);
-      return result.data;
+      if (result.data) {
+        return {
+          itemId
+        };
+      }
+
+      return {};
     }
 
     Logger.warn('Trying to remove cart item without quoteId');
 
-    return false;
+    return {};
   }
 
   /**

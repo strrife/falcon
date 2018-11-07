@@ -24,7 +24,7 @@ extend type Query {
 extend type Mutation {
   addToCart(input: AddToCartInput!): CartItemPayload
   updateCartItem(input: UpdateCartItemInput!): CartItemPayload
-  removeCartItem(input: RemoveCartItemInput!): Boolean
+  removeCartItem(input: RemoveCartItemInput!): RemoveCartItemResponse
   applyCoupon(input: CouponInput!): Boolean
   cancelCoupon: Boolean
   signUp(input: SignUp!): Customer
@@ -358,6 +358,10 @@ type CartItemPayload {
   name: String
   price: Float
   productType: String
+}
+
+type RemoveCartItemResponse {
+  itemId: Int
 }
 
 type Customer {
