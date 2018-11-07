@@ -772,24 +772,17 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         },
         { context: { skipAuth: true } }
       );
+      const { token, validTime } = this.convertKeys(response.data);
 
-      // depending on deity-magento-api module response may be a string with token (up until and including v1.0.1)
-      // or a hash with token and valid time setting (after v1.0.1)
-      const { token, validTime } = isPlainObject(response.data)
-        ? this.convertKeys(response.data)
-        : { token: response.data };
-      const customerTokenObject = { token };
+      // calculate token expiration date and subtract 5 minutes for margin
+      const tokenValidationTimeInMinutes = validTime * 60 - 5;
+      const tokenExpirationTime = addMinutes(Date.now(), tokenValidationTimeInMinutes);
+      Logger.debug(`Customer token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
 
-      if (validTime) {
-        // calculate token expiration date and subtract 5 minutes for margin
-        const tokenTimeInMinutes = validTime * 60 - 5;
-        const tokenExpirationTime = addMinutes(Date.now(), tokenTimeInMinutes);
-
-        // save expiration time as unix timestamp in milliseconds
-        customerTokenObject.expirationTime = tokenExpirationTime.getTime();
-        Logger.debug(`Customer token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
-      }
-      this.context.magento2.customerToken = customerTokenObject;
+      this.context.magento2.customerToken = {
+        token,
+        expirationTime: tokenExpirationTime.getTime()
+      };
 
       // Remove guest cart. Magento merges guest cart with cart of authorized user so we'll have to refresh it
       delete this.context.magento2.cart;
