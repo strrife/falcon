@@ -8,6 +8,7 @@ export * from './MiniCart';
 export * from './MiniAccount';
 export * from './SignIn';
 export * from './SignOut';
+export * from './SignUp';
 export * from './Customer';
 export * from './SidebarLayout';
 export * from './Query';

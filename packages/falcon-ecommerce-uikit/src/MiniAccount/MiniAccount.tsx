@@ -5,6 +5,7 @@ import { SidebarLayout } from '../SidebarLayout';
 import { ToggleMiniAccountMutation, MiniAccountData } from '.';
 import { SignInForm, SignInFormContent, SignInFormRenderProps } from './../SignIn';
 import { SignOutMutation } from './../SignOut';
+import { SignUpForm } from './../SignUp';
 
 export const MiniAccount: React.SFC<MiniAccountData> = ({ miniAccount: { open }, customer }) => (
   <ToggleMiniAccountMutation>
@@ -60,20 +61,10 @@ export const MiniAccount: React.SFC<MiniAccountData> = ({ miniAccount: { open },
                 </List>
               </Box>
             ) : (
-              <React.Fragment>
+              <Box>
                 <SignInForm>{(props: SignInFormRenderProps) => <SignInFormContent {...props} />}</SignInForm>
-                <Text>No account yet?</Text>
-                <Button type="submit" css={{ width: '100%' }}>
-                  Create an account
-                  <Icon src="buttonArrowRight" stroke="white" />
-                </Button>
-                <Text fontWeight="bold">Creating an account has many benefits: </Text>
-                <List>
-                  <ListItem>check out faster</ListItem>
-                  <ListItem>keep more than one address</ListItem>
-                  <ListItem>track orders and more</ListItem>
-                </List>
-              </React.Fragment>
+                <SignUpForm />
+              </Box>
             )}
             <Icon src="close" onClick={() => toggle()} position="absolute" top={15} right={30} />
           </SidebarLayout>
