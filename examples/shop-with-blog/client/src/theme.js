@@ -7,6 +7,8 @@ import Close from 'react-feather/dist/icons/x';
 import Remove from 'react-feather/dist/icons/x-circle';
 import ChevronsRight from 'react-feather/dist/icons/chevrons-right';
 import ChevronsLeft from 'react-feather/dist/icons/chevrons-left';
+import Lock from 'react-feather/dist/icons/lock';
+
 import { createTheme } from '@deity/falcon-ui';
 import logo from './assets/logo.svg';
 
@@ -73,17 +75,18 @@ export const deityGreenTheme = createTheme({
     prevPage: {
       icon: ChevronsLeft,
       stroke: 'black'
+    },
+    lock: {
+      icon: Lock
     }
   },
+
   components: {
     navbar: {
       css: {
         zIndex: 2
       }
-    }
-  },
-
-  components: {
+    },
     sidebar: {
       px: 'sm',
       pt: 'sm',
