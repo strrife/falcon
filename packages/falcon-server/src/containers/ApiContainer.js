@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
 const Logger = require('@deity/falcon-logger');
-const Events = require('./../events');
+const { Events } = require('@deity/falcon-server-env');
 
 /**
  * @typedef {object} ApiInstanceConfig

@@ -10,10 +10,10 @@ const { EventEmitter2 } = require('eventemitter2');
 const { resolve: resolvePath } = require('path');
 const { readFileSync } = require('fs');
 const { codes } = require('@deity/falcon-errors');
+const { Events } = require('@deity/falcon-server-env');
 const DynamicRouteResolver = require('./resolvers/DynamicRouteResolver');
 
 const BaseSchema = readFileSync(resolvePath(__dirname, './schema.graphql'), 'utf8');
-const Events = require('./events');
 
 class FalconServer {
   constructor(config) {

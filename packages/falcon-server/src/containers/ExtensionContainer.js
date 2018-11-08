@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop, no-underscore-dangle */
 const Logger = require('@deity/falcon-logger');
 const { mergeSchemas, makeExecutableSchema } = require('graphql-tools');
-const Events = require('./../events');
+const { Events } = require('@deity/falcon-server-env');
 
 /**
  * @typedef {object} ExtensionInstanceConfig
