@@ -32,5 +32,13 @@
       "ascending": "ascending",
       "descending": "descending"
     }
-  }
+  },
+  "newsletter": {
+    "title": "Newsletter",
+    "message": "Join our mailing list to receive the latest offers and more!",
+    "subscribe": "Subscribe",
+    "emailPlaceholder": "Enter your email address",
+    "consent": "I would like to subscribe to updates"
+  },
+  "copyright": "© Copyright"
 }
