@@ -21,7 +21,7 @@ module.exports = paths => {
       '^react-native$': 'react-native-web'
     },
     collectCoverageFrom: ['<rootDir>/src/**/*.{js,jsx,mjs}'],
-    coverageReporters: ['html', 'text', 'text-summary']
+    coverageReporters: ['html', 'text', 'text-summary', 'lcov']
   };
 
   // eslint-disable-next-line
