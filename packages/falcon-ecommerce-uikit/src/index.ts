@@ -6,5 +6,6 @@ export * from './Category';
 export * from './Cart';
 export * from './MiniCart';
 export * from './SidebarLayout';
+export * from './Blog';
 export * from './Query';
 export * from './Locale';
