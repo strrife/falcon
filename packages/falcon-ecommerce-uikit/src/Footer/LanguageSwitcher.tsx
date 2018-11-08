@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown, DropdownLabel, DropdownMenu, DropdownMenuItem, Box } from '@deity/falcon-ui';
+import { Dropdown, DropdownLabel, DropdownMenu, DropdownMenuItem } from '@deity/falcon-ui';
 import { LanguageItem } from './FooterQuery';
 
 type LanguageSwitcherProps = {

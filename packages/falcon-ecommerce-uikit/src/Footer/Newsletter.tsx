@@ -1,5 +1,6 @@
 import React from 'react';
 import { H3, Text, Group, Input, Button, Checkbox, Label, Box, DefaultThemeProps } from '@deity/falcon-ui';
+import { FooterTranslations } from './FooterQuery';
 
 const newsletterLayoutTheme: DefaultThemeProps = {
   newsletterLayout: {
@@ -16,27 +17,19 @@ const newsletterLayoutTheme: DefaultThemeProps = {
   }
 };
 
-export const Newsletter = () => (
+export const Newsletter: React.SFC<{ translations: FooterTranslations }> = ({ translations: { newsletter } }) => (
   <Box defaultTheme={newsletterLayoutTheme}>
-    <H3>Newsletter</H3>
-    <Text>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum egestas nisl eu accumsan sodales. Nam semper
-      magna vitae enim placerat dictum.
-    </Text>
+    <H3>{newsletter.title}</H3>
+    <Text>{newsletter.message}</Text>
 
     <form>
       <Group>
-        <Input
-          type="email"
-          required
-          css={({ theme }) => ({
-            height: theme.spacing.lg
-          })}
-        />
-        <Button as="input" type="submit" value="Subscribe" />
+        <Input type="email" required height="lg" placeholder={newsletter.emailPlaceholder} />
+        <Button as="input" type="submit" value={newsletter.subscribe} />
       </Group>
       <Label htmlFor="subscribe" my="sm" display="flex" justifyContent="center" alignItems="center">
-        <Checkbox id="subscribe" required mr="xs" />I would like to subscribe to updates
+        <Checkbox id="subscribe" required mr="xs" />
+        {newsletter.consent}
       </Label>
     </form>
   </Box>
