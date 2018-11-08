@@ -28,6 +28,7 @@
     "@deity/falcon-server-env": "^0.0.3",
     "apollo-datasource-rest": "^0.1.1",
     "cron": "^1.4.0",
+    "graphql-tools": "4.0.3",
     "date-fns": "^1.29.0",
     "lodash": "^4.17.11",
     "nock": "^10.0.0",

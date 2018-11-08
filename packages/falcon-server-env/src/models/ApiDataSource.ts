@@ -2,15 +2,16 @@ import { DataSourceConfig } from 'apollo-datasource';
 import { RESTDataSource } from 'apollo-datasource-rest';
 import { Body, Request } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URL, URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
+import { EventEmitter2 } from 'eventemitter2';
 import { stringify } from 'qs';
 import { format } from 'url';
 import * as Logger from '@deity/falcon-logger';
 import ContextHTTPCache from '../cache/ContextHTTPCache';
 import {
+  ApiContainer,
   ApiUrlPriority,
   ApiDataSourceConfig,
   ApiDataSourceEndpoint,
-  ConfigurableConstructorParams,
   ContextCacheOptions,
   ContextFetchResponse,
   ContextFetchRequest,
@@ -27,14 +28,21 @@ export default abstract class ApiDataSource<TContext = any> extends RESTDataSour
   public fetchUrlPriority: number = ApiUrlPriority.NORMAL;
   public perPage: number = 10;
 
+  protected apiContainer: ApiContainer;
+  protected eventEmitter: EventEmitter2;
+
   /**
    * @param {ApiDataSourceConfig} config API DataSource config
    * @param {string} name API DataSource short-name
+   * @param {apiContainer} ApiContainer ApiContainer instance
+   * @param {eventEmitter} EventEmitter2 EventEmitter2 instance
    */
-  constructor({ config, name }: ConfigurableConstructorParams<ApiDataSourceConfig> = {}) {
+  constructor({ config, name, apiContainer, eventEmitter }) {
     super();
     this.name = name || this.constructor.name;
     this.config = config || {};
+    this.apiContainer = apiContainer;
+    this.eventEmitter = eventEmitter;
 
     const { host, port, protocol } = this.config;
     if (host) {

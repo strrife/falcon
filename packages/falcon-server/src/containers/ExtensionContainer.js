@@ -39,7 +39,8 @@ module.exports = class ExtensionContainer {
           const extensionInstance = new ExtensionClass({
             config: extension.config || {},
             name: extKey,
-            extensionContainer: this
+            extensionContainer: this,
+            eventEmitter: this.eventEmitter
           });
 
           Logger.debug(`ExtensionContainer: "${extensionInstance.name}" added to the list of extensions`);

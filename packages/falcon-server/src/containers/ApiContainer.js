@@ -42,7 +42,12 @@ module.exports = class ApiContainer {
         try {
           const ApiClass = require(pkg); // eslint-disable-line import/no-dynamic-require
           /** @type {ApiDataSource} */
-          const apiInstance = new ApiClass({ config, name: apiKey });
+          const apiInstance = new ApiClass({
+            config,
+            name: apiKey,
+            apiContainer: this,
+            eventEmitter: this.eventEmitter
+          });
 
           Logger.debug(`ApiContainer: "${apiInstance.name}" added to the list of API DataSources`);
           this.dataSources.set(apiInstance.name, apiInstance);

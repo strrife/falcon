@@ -1,27 +1,28 @@
 import { GraphQLResolveInfo } from 'graphql';
+import { EventEmitter2 } from 'eventemitter2';
 import ApiDataSource from './ApiDataSource';
-import { ApiUrlPriority, ConfigurableConstructorParams, FetchUrlResult, ExtensionContainer } from '../types';
+import { ApiUrlPriority, FetchUrlResult, ExtensionContainer } from '../types';
 
 export default abstract class Extension<TApiConfig = object> {
   public config: object;
   public name: string;
   public api?: ApiDataSource;
   public apiConfig: TApiConfig | null = null;
-  private extensionContainer: ExtensionContainer;
+
+  protected extensionContainer: ExtensionContainer;
+  protected eventEmitter: EventEmitter2;
 
   /**
    * @param {object} config Extension config object
    * @param {string} name Extension short-name
-   * @param {ExtensionContainer} extensionContainer Instance of ExtensionContainer
+   * @param {ExtensionContainer} extensionContainer ExtensionContainer instance
+   * @param {EventEmitter2} eventEmitter EventEmitter2 instance
    */
-  constructor({
-    config = {},
-    name,
-    extensionContainer
-  }: ConfigurableConstructorParams & { extensionContainer: ExtensionContainer }) {
+  constructor({ config = {}, name, extensionContainer, eventEmitter }) {
     this.name = name || this.constructor.name;
     this.config = config;
     this.extensionContainer = extensionContainer;
+    this.eventEmitter = eventEmitter;
   }
 
   /**
