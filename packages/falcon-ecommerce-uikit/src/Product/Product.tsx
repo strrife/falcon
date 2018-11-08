@@ -176,7 +176,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
             productConfigurator
           }: any) => (
             <ProductDetailsLayout>
-              <Box gridArea={Area.gallery} css={{ maxHeight: '100%' }}>
+              <Box gridArea={Area.gallery}>
                 <ProductGallery items={product.gallery} />
               </Box>
               <Text fontSize="sm" gridArea={Area.sku}>
