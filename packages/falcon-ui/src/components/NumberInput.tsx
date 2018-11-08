@@ -146,6 +146,7 @@ export const NumberInput = themed({
           cursor: 'pointer',
           display: 'flex',
           justifyContent: 'center',
+          alignItems: 'center',
           transform: 'scale(0.8)',
           lineHeight: 1,
           ':hover': {
