@@ -104,6 +104,8 @@ export const defaultBaseTheme = {
     long: '375ms'
   },
 
+  keyframes: {},
+
   zIndex: {
     dropDownMenu: 600,
     backdrop: 800,
