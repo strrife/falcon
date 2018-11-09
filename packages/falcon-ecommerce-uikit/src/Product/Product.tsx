@@ -10,6 +10,7 @@ import { AddToCartMutation } from '../Cart';
 import { ToggleMiniCartMutation } from '../MiniCart';
 import { ProductConfigurator } from './ProductConfigurator';
 import { Price } from '../Locale';
+import { toGridTemplate } from '../helpers';
 
 export const ProductLayout = themed({
   tag: 'div',
@@ -22,8 +23,6 @@ export const ProductLayout = themed({
   }
 });
 
-const asGridAreas = (items: Area[][]) => items.map(item => `"${item.join(' ')}"`).join(' ');
-
 enum Area {
   gallery = 'gallery',
   sku = 'sku',
@@ -33,7 +32,8 @@ enum Area {
   price = 'price',
   meta = 'meta',
   empty = 'empty',
-  options = 'options'
+  options = 'options',
+  error = 'error'
 }
 
 export const ProductDetailsLayout = themed({
@@ -42,33 +42,33 @@ export const ProductDetailsLayout = themed({
     productDetailsLayout: {
       display: 'grid',
       gridGap: 'sm',
-      gridTemplateColumns: {
-        xs: '1fr',
-        md: '1.5fr 1fr'
-      },
-      gridTemplateAreas: {
-        xs: asGridAreas([
-          [Area.title],
-          [Area.sku],
-          [Area.gallery],
-          [Area.price],
-          [Area.options],
-          [Area.cta],
+
+      gridTemplate: {
+        // prettier-ignore
+        xs: toGridTemplate([
+          ['1fr'           ],
+          [Area.title      ],
+          [Area.sku        ],
+          [Area.gallery    ],
+          [Area.price      ],
+          [Area.error      ],
+          [Area.options    ],
+          [Area.cta        ],
           [Area.description],
-          [Area.meta]
+          [Area.meta       ]
         ]),
-        md: asGridAreas([
-          [Area.gallery, Area.sku],
-          [Area.gallery, Area.title],
-          [Area.gallery, Area.price],
-          [Area.gallery, Area.options],
-          [Area.gallery, Area.cta],
-          [Area.gallery, Area.description],
-          [Area.gallery, Area.meta]
+        // prettier-ignore
+        md: toGridTemplate([
+          ['1.5fr',        '1fr'                  ],
+          [Area.gallery,   Area.sku               ],
+          [Area.gallery,   Area.title             ],
+          [Area.gallery,   Area.price             ],
+          [Area.gallery,   Area.options           ],
+          [Area.gallery,   Area.cta               ],
+          [Area.gallery,   Area.error             ],
+          [Area.gallery,   Area.description, '1fr'],
+          [Area.gallery,   Area.meta              ]
         ])
-      },
-      gridTemplateRows: {
-        md: 'auto auto auto auto auto 1fr'
       }
     }
   }
@@ -160,118 +160,70 @@ export class Product extends React.PureComponent<{ product: any; translations: P
     };
   }
 
-  // this method is defined as instance property so we don't need to use bind when passing it as render prop
-  renderProductFormContent = ({
-    addToCartMutation,
-    formik: { values, isSubmitting, errors, setFieldValue, submitCount },
-    productConfigurator
-  }: any) => {
-    const { product, translations } = this.props;
-
-    return (
-      <React.Fragment>
-        <Price fontSize="xxl" gridArea={Area.price} value={product.price} />
-        <ProductConfigurableOptions
-          options={product.configurableOptions}
-          error={errors.configurableOptions}
-          onChange={(ev: React.ChangeEvent<any>) =>
-            productConfigurator.handleProductConfigurationChange('configurableOption', ev)
-          }
-        />
-        <ProductDescriptionLayout
-          mt="xs"
-          dangerouslySetInnerHTML={{ __html: product.description }}
-          gridArea={Area.description}
-        />
-        <FlexLayout alignItems="center" gridArea={Area.cta} mt="md">
-          <NumberInput
-            mr="sm"
-            min="1"
-            name="qty"
-            disabled={isSubmitting}
-            defaultValue={String(values.qty)}
-            onChange={ev => setFieldValue('qty', ev.target.value, !!submitCount)}
-          />
-          <Button type="submit">
-            <Icon src="cart" stroke="white" size="md" mr="xs" />
-            {translations.addToCart}
-          </Button>
-        </FlexLayout>
-        <Box>
-          <ErrorMessage name="qty" render={msg => <Text color="error">{msg}</Text>} />
-          {!!addToCartMutation.result.error && <Text color="error">{addToCartMutation.result.error.message}</Text>}
-        </Box>
-      </React.Fragment>
-    );
-  };
-
   render() {
     const { product, translations } = this.props;
 
     return (
       <ProductLayout>
         <Breadcrumbs breadcrumbs={product.breadcrumbs} />
-        <ProductDetailsLayout>
-          <Box gridArea={Area.gallery} css={{ maxHeight: '100%' }}>
-            <ProductGallery items={product.gallery} />
-          </Box>
-          <Text fontSize="sm" gridArea={Area.sku}>
-            {`${translations.sku}: ${product.sku}`}
-          </Text>
-          <H1 gridArea={Area.title}>{product.name}</H1>
 
-          <ProductForm sku={product.sku} validate={this.createValidator(product)}>
-            {({
-              addToCartMutation,
-              formik: { values, isSubmitting, errors, setFieldValue, submitCount },
-              productConfigurator
-            }: any) => (
-              <React.Fragment>
-                <Price mb="sm" fontSize="xl" gridArea={Area.price} value={product.price} />
-                <ProductConfigurableOptions
-                  options={product.configurableOptions}
-                  error={errors.configurableOptions}
-                  onChange={(ev: React.ChangeEvent<any>) =>
-                    productConfigurator.handleProductConfigurationChange('configurableOption', ev)
-                  }
+        <ProductForm sku={product.sku} validate={this.createValidator(product)}>
+          {({
+            addToCartMutation: {
+              result: { loading, error }
+            },
+            formik: { values, errors, setFieldValue, submitCount },
+            productConfigurator
+          }: any) => (
+            <ProductDetailsLayout>
+              <Box gridArea={Area.gallery}>
+                <ProductGallery items={product.gallery} />
+              </Box>
+              <Text fontSize="sm" gridArea={Area.sku}>
+                {`${translations.sku}: ${product.sku}`}
+              </Text>
+              <H1 gridArea={Area.title}>{product.name}</H1>
+
+              <Price mb="sm" fontSize="xl" gridArea={Area.price} value={product.price} />
+              <ProductConfigurableOptions
+                options={product.configurableOptions}
+                error={errors.configurableOptions}
+                onChange={(ev: React.ChangeEvent<any>) =>
+                  productConfigurator.handleProductConfigurationChange('configurableOption', ev)
+                }
+              />
+              <ProductDescriptionLayout
+                my="xs"
+                dangerouslySetInnerHTML={{ __html: product.description }}
+                gridArea={Area.description}
+              />
+              <FlexLayout alignItems="center" gridArea={Area.cta} mt="xs">
+                <NumberInput
+                  mr="sm"
+                  min="1"
+                  name="qty"
+                  disabled={loading}
+                  defaultValue={String(values.qty)}
+                  onChange={ev => setFieldValue('qty', ev.target.value, !!submitCount)}
                 />
-                <ProductDescriptionLayout
-                  my="xs"
-                  dangerouslySetInnerHTML={{ __html: product.description }}
-                  gridArea={Area.description}
-                />
-                <FlexLayout alignItems="center" gridArea={Area.cta} mt="xs">
-                  <NumberInput
-                    mr="sm"
-                    min="1"
-                    name="qty"
-                    disabled={isSubmitting}
-                    defaultValue={String(values.qty)}
-                    onChange={ev => setFieldValue('qty', ev.target.value, !!submitCount)}
+                <Button type="submit" height="xl" px="md" disabled={loading}>
+                  <Icon
+                    src={loading ? 'loader' : 'cart'}
+                    stroke="white"
+                    fill={loading ? 'white' : 'transparent'}
+                    size="md"
+                    mr="xs"
                   />
-                  <Button type="submit" height="xl" px="md">
-                    <Icon
-                      src={isSubmitting ? 'loader' : 'cart'}
-                      stroke="white"
-                      fill={isSubmitting ? 'white' : 'transparent'}
-                      size="md"
-                      mr="xs"
-                    />
-                    {translations.addToCart}
-                  </Button>
-                </FlexLayout>
-                <Box>
-                  <ErrorMessage name="qty" render={msg => <Text color="error">{msg}</Text>} />
-                  {!!addToCartMutation.result.error && (
-                    <Text color="error">{addToCartMutation.result.error.message}</Text>
-                  )}
-                </Box>
-              </React.Fragment>
-            )}
-          </ProductForm>
-
-          <Box gridArea={Area.meta} my="md" />
-        </ProductDetailsLayout>
+                  {translations.addToCart}
+                </Button>
+              </FlexLayout>
+              <Box gridArea={Area.error}>
+                <ErrorMessage name="qty" render={msg => <Text color="error">{msg}</Text>} />
+                {!!error && <Text color="error">{error.message}</Text>}
+              </Box>
+            </ProductDetailsLayout>
+          )}
+        </ProductForm>
       </ProductLayout>
     );
   }
