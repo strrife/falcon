@@ -17,10 +17,15 @@ import {
   ContextFetchRequest,
   ContextRequestInit,
   ContextRequestOptions,
+  ConfigurableConstructorParams,
   PaginationData
 } from '../types';
 
 export type PaginationValue = number | string | null;
+
+declare type ConfigurableContainerConstructorParams = ConfigurableConstructorParams<ApiDataSourceConfig> & {
+  apiContainer: ApiContainer;
+};
 
 export default abstract class ApiDataSource<TContext = any> extends RESTDataSource<TContext> {
   public name: string;
@@ -32,13 +37,15 @@ export default abstract class ApiDataSource<TContext = any> extends RESTDataSour
   protected eventEmitter: EventEmitter2;
 
   /**
-   * @param {ApiDataSourceConfig} config API DataSource config
-   * @param {string} name API DataSource short-name
-   * @param {apiContainer} ApiContainer ApiContainer instance
-   * @param {eventEmitter} EventEmitter2 EventEmitter2 instance
+   * @param {ConfigurableContainerConstructorParams} params Constructor params
+   * @param {ApiDataSourceConfig} params.config API DataSource config
+   * @param {string} params.name API DataSource short-name
+   * @param {ApiContainer} params.apiContainer ApiContainer instance
+   * @param {EventEmitter2} params.eventEmitter EventEmitter2 instance
    */
-  constructor({ config, name, apiContainer, eventEmitter }) {
+  constructor(params: ConfigurableContainerConstructorParams) {
     super();
+    const { config, name, apiContainer, eventEmitter } = params;
     this.name = name || this.constructor.name;
     this.config = config || {};
     this.apiContainer = apiContainer;
