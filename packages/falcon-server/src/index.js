@@ -2,6 +2,7 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const session = require('koa-session');
 const cors = require('@koa/cors');
+const _ = require('lodash');
 const { ApolloServer } = require('apollo-server-koa');
 const Logger = require('@deity/falcon-logger');
 const ApiContainer = require('./containers/ApiContainer');
@@ -206,7 +207,11 @@ class FalconServer {
   }
 
   formatGraphqlError(error) {
-    const { code = codes.INTERNAL_SERVER_ERROR } = error.extensions || {};
+    let { code = codes.INTERNAL_SERVER_ERROR } = error.extensions || {};
+
+    if (_.get(error, 'extensions.response.status') === 404) {
+      code = codes.NOT_FOUND;
+    }
 
     if (this.loggableErrorCodes.includes(code)) {
       setImmediate(async () => {
