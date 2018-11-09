@@ -23,7 +23,7 @@ export class Query<TData = any, TVariables = OperationVariables, TTranslations =
         {({ networkStatus, error, data, loading, fetchMore: apolloFetchMore }) => {
           if (error) return `Error!: ${error}`;
 
-          if (networkStatus === NetworkStatus.loading || loading) {
+          if (networkStatus === NetworkStatus.loading || (networkStatus !== NetworkStatus.fetchMore && loading)) {
             return <Loader />;
           }
 

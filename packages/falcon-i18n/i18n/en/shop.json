@@ -21,6 +21,12 @@
       "reviews": "Reviews ({{count}})"
     }
   },
+  "miniCart": {
+    "title": "Shopping cart",
+    "cta": "Secure checkout",
+    "continue": "Continue shopping",
+    "empty": "Shopping cart is empty"
+  },
   "category": {
     "pagination": {
       "showingOutOf": "Showing {{itemsCount}} products out of {{totalItems}}",

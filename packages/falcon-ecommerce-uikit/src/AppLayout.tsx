@@ -6,8 +6,8 @@ export const AppLayout = themed({
   defaultTheme: {
     appLayout: {
       px: {
-        xs: 'xs',
-        md: 'sm'
+        xs: 'sm',
+        md: 'md'
       },
       css: {
         margin: '0 auto',
