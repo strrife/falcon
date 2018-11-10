@@ -1,6 +1,6 @@
 extend type Query {
   category(id: Int!): Category
-  product(id: Int!): Product
+  product(id: String!): Product
   products(
     categoryId: Int
     includeSubcategories: Boolean
@@ -189,7 +189,7 @@ type Product {
   configurableOptions: [ConfigurableProductOption]
   bundleOptions: [BundleProductOption]
   gallery: [GalleryEntry]
-  breadcrumbs: [Breadcrumb]
+  breadcrumbs(path: String): [Breadcrumb]
   seo: ProductSeo
 }
 
@@ -218,6 +218,7 @@ type Category {
   id: Int
   name: String
   description: String
+  breadcrumbs(path: String): [Breadcrumb]
 }
 
 type ProductList {
