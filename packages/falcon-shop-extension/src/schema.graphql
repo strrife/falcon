@@ -322,8 +322,8 @@ type CartTotal {
 input AddToCartInput {
   sku: String!
   qty: Float!
-  configurableOptions: [configurableOptionInput]
-  bundleOptions: [bundleOptionInput]
+  configurableOptions: [ConfigurableOptionInput]
+  bundleOptions: [BundleOptionInput]
 }
 
 input UpdateCartItemInput {
@@ -337,12 +337,12 @@ input RemoveCartItemInput {
   itemId: Int!
 }
 
-input configurableOptionInput {
+input ConfigurableOptionInput {
   optionId: Int!
   value: Int!
 }
 
-input bundleOptionInput {
+input BundleOptionInput {
   optionId: Int!
   optionQty: Float!
   optionSelections: [Int]
