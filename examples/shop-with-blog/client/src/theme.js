@@ -59,7 +59,7 @@ export const deityGreenTheme = createTheme({
     },
     buttonArrowRight: {
       icon: ChevronRight,
-      size: 13,
+      size: 'md',
       ml: 'xs',
       stroke: 'white'
     },
