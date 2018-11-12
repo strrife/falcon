@@ -26,7 +26,7 @@ const DynamicRoute = ({ components, location, loaderComponent, errorComponent })
           return <p>{`Please register component for '${url.type}' content type!`}</p>;
         }
 
-        return <Component id={url.id} path={url.path} />;
+        return <Component id={url.id} path={url.path} location={location} />;
       }}
     </Query>
   );
