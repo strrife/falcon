@@ -7,6 +7,10 @@ import User from 'react-feather/dist/icons/user';
 import Close from 'react-feather/dist/icons/x';
 import LogOut from 'react-feather/dist/icons/log-out';
 import Remove from 'react-feather/dist/icons/x-circle';
+import ChevronsRight from 'react-feather/dist/icons/chevrons-right';
+import ChevronsLeft from 'react-feather/dist/icons/chevrons-left';
+import Lock from 'react-feather/dist/icons/lock';
+
 import { createTheme } from '@deity/falcon-ui';
 import logo from './assets/logo.svg';
 
@@ -66,11 +70,36 @@ export const deityGreenTheme = createTheme({
       }
     },
     logOut: { icon: LogOut },
-    remove: { icon: Remove }
+    remove: { icon: Remove },
+    nextPage: {
+      icon: ChevronsRight,
+      stroke: 'black'
+    },
+    prevPage: {
+      icon: ChevronsLeft,
+      stroke: 'black'
+    },
+    lock: { icon: Lock }
   },
   components: {
     button: {
       boxShadow: 'none'
+    },
+    navbar: {
+      css: {
+        zIndex: 2
+      }
+    },
+    sidebar: {
+      px: 'sm',
+      pt: 'sm',
+      css: {
+        boxSizing: 'border-box',
+        width: {
+          xs: '80vw',
+          sm: 510
+        }
+      }
     }
   }
 });

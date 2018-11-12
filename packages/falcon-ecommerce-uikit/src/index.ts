@@ -10,6 +10,6 @@ export * from './SignIn';
 export * from './SignOut';
 export * from './SignUp';
 export * from './Customer';
-export * from './SidebarLayout';
+export * from './Blog';
 export * from './Query';
 export * from './Locale';

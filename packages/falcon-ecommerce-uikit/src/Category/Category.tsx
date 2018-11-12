@@ -71,8 +71,8 @@ export const ShowMore: React.SFC<{ text: string; onClick?: MouseEventHandler; lo
 }) => (
   <Box my="sm" onClick={onClick || (() => {})}>
     <Button variant="secondary">
+      {loading && <Icon src="loader" mr="xs" size="md" />}
       {text}
-      {loading && <Icon src="loader" ml="sm" size="sm" />}
     </Button>
   </Box>
 );

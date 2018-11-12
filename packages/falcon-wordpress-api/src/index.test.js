@@ -42,4 +42,20 @@ describe('WordPress API', () => {
       redirect: false
     });
   });
+
+  it('Should pass pagination data correctly in "blogPosts" method', async () => {
+    const correctResponse = {
+      success: true
+    };
+
+    nock('https://example.com')
+      .get(uri => uri.indexOf('posts?per_page=3') >= 0)
+      .reply(200, correctResponse);
+
+    await wpApi.initialize({ context: {} });
+
+    const result = await wpApi.blogPosts({}, { query: {}, pagination: { perPage: 3 } }, { session: {} });
+
+    expect(result).toEqual(correctResponse);
+  });
 });
