@@ -123,7 +123,7 @@ export const deityGreenTheme = createTheme({
           borderColor: 'primary',
           p: 'none',
           css: props => ({
-            animation: `${props.theme.keyframes.loader} .6s linear infinite`,
+            animation: `${props.theme.keyframes.loader} .8s linear infinite`,
             borderRightColor: props.theme.colors.white,
             background: 'none',
             fontSize: 0,
