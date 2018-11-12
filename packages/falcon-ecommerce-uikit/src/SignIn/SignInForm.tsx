@@ -40,6 +40,7 @@ export const SignInFormContent: React.SFC<SignInFormRenderProps> = ({
   <React.Fragment>
     <H2 mb="lg">Login</H2>
     <Text>Log in with your account</Text>
+    <Box>{!!error && <Text color="error">{error.message}</Text>}</Box>
     <Box>
       <Label htmlFor="email">Email</Label>
       <Input name="email" onChange={handleChange} disabled={loading} />
