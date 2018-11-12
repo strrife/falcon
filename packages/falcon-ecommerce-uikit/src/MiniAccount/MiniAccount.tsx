@@ -20,7 +20,13 @@ export const MiniAccount: React.SFC<MiniAccountData> = ({ miniAccount: { open },
                   {(signOut, { loading }) => (
                     <Button css={{ width: '100%' }} mt="md" disabled={loading} onClick={() => signOut()}>
                       Logout
-                      <Icon src="logOut" stroke="white" size="sm" ml="xs" />
+                      <Icon
+                        src={loading ? 'loader' : 'logOut'}
+                        stroke="white"
+                        fill={loading ? 'white' : 'transparent'}
+                        size="md"
+                        ml="xs"
+                      />
                     </Button>
                   )}
                 </SignOutMutation>
@@ -65,6 +71,7 @@ export const MiniAccount: React.SFC<MiniAccountData> = ({ miniAccount: { open },
             </Box>
           )}
         </Sidebar>
+        <Icon src="close" stroke="black" onClick={() => toggle()} />
         <Backdrop as={Portal} visible={open} onClick={() => toggle()} />
       </React.Fragment>
     )}

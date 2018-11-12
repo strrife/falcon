@@ -15,7 +15,7 @@ export const SignInForm = adopt<SignInFormRenderProps>({
   formik: ({ signIn, render }) => (
     <Formik
       initialValues={{}}
-      onSubmit={(values: any) => {
+      onSubmit={(values: any) =>
         signIn.execute({
           variables: {
             input: {
@@ -23,30 +23,41 @@ export const SignInForm = adopt<SignInFormRenderProps>({
               password: values.password
             }
           }
-        });
-      }}
+        })
+      }
     >
       {(...props) => <Form>{render && render(...props)}</Form>}
     </Formik>
   )
 });
 
-export const SignInFormContent: React.SFC<SignInFormRenderProps> = ({ formik: { handleChange, isSubmitting } }) => (
+export const SignInFormContent: React.SFC<SignInFormRenderProps> = ({
+  formik: { handleChange },
+  signIn: {
+    result: { error, loading }
+  }
+}) => (
   <React.Fragment>
     <H2 mb="lg">Login</H2>
     <Text>Log in with your account</Text>
     <Box>
       <Label htmlFor="email">Email</Label>
-      <Input name="email" onChange={handleChange} disabled={isSubmitting} />
+      <Input name="email" onChange={handleChange} disabled={loading} />
     </Box>
     <Box>
       <Label htmlFor="password">Password</Label>
-      <Input name="password" type="password" onChange={handleChange} disabled={isSubmitting} />
+      <Input name="password" type="password" onChange={handleChange} disabled={loading} />
     </Box>
     <Link fontWeight="bold">Password forgot?</Link>
-    <Button type="submit" disabled={isSubmitting} css={{ width: '100%' }}>
+    <Button type="submit" disabled={loading} css={{ width: '100%' }}>
       Login
-      <Icon src="buttonArrowRight" stroke="white" />
+      <Icon
+        src={loading ? 'loader' : 'buttonArrowRight'}
+        stroke="white"
+        fill={loading ? 'white' : 'transparent'}
+        size="md"
+        ml="xs"
+      />
     </Button>
   </React.Fragment>
 );
