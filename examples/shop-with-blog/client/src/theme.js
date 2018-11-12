@@ -81,6 +81,17 @@ export const deityGreenTheme = createTheme({
     }
   },
 
+  keyframes: {
+    loader: {
+      '0%': {
+        transform: 'rotateZ(0)'
+      },
+      '100%': {
+        transform: 'rotateZ(360deg)'
+      }
+    }
+  },
+
   components: {
     navbar: {
       css: {
@@ -95,6 +106,36 @@ export const deityGreenTheme = createTheme({
         width: {
           xs: '80vw',
           sm: 510
+        }
+      }
+    },
+
+    button: {
+      css: {
+        transitionProperty: 'all'
+      },
+
+      variants: {
+        loader: {
+          size: 'xl',
+          borderRadius: 'round',
+          border: 'bold',
+          borderColor: 'primary',
+          p: 'none',
+          css: props => ({
+            animation: `${props.theme.keyframes.loader} .6s linear infinite`,
+            borderRightColor: props.theme.colors.white,
+            background: 'none',
+            fontSize: 0,
+            whiteSpace: 'nowrap',
+            cursor: 'default',
+            overflow: 'hidden',
+
+            ':hover': {
+              borderColor: props.theme.colors.primaryLight,
+              borderRightColor: props.theme.colors.white
+            }
+          })
         }
       }
     }
