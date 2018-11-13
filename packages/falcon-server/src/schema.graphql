@@ -5,10 +5,8 @@ schema {
 }
 
 type Mutation {
-  """
-  Temporary placeholder field
-  """
-  _: Boolean
+  setLanguage(language: String!): BackendConfig
+  setCurrency(currency: String!): BackendConfig
 }
 
 type Subscription {
@@ -37,7 +35,13 @@ type Url {
 Returns a compiled config object for all supported backends
 """
 type BackendConfig {
-  languages: [String!]
+  """
+  List of supported languages
+  """
+  languages: [String]
+  activeLanguage: String
+  currencies: [String]
+  activeCurrency: String
 }
 
 """
