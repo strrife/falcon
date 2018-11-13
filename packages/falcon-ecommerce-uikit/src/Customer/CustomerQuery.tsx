@@ -27,4 +27,7 @@ export class CustomerQuery extends Query<CustomerQueryData> {
   static defaultProps = {
     query: GET_CUSTOMER
   };
+  static propTypes = {
+    ...Query.propTypes
+  };
 }
