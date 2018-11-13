@@ -51,4 +51,3 @@ export function mergeThemes(theme: Theme, themeOverride: RecursivePartial<Theme>
 
   return newTheme;
 }
-// use https://github.com/FormidableLabs/react-animations for documentation and examples
