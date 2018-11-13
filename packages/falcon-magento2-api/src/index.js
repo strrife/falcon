@@ -2,10 +2,10 @@ const qs = require('qs');
 const isEmpty = require('lodash/isEmpty');
 const pick = require('lodash/pick');
 const has = require('lodash/has');
-const { htmlHelpers } = require('@deity/falcon-server-env');
+const { Events, htmlHelpers } = require('@deity/falcon-server-env');
 const isPlainObject = require('lodash/isPlainObject');
 const addMinutes = require('date-fns/add_minutes');
-
+const { addResolveFunctionsToSchema } = require('graphql-tools');
 const Logger = require('@deity/falcon-logger');
 const Magento2ApiBase = require('./Magento2ApiBase');
 
@@ -13,6 +13,29 @@ const Magento2ApiBase = require('./Magento2ApiBase');
  * API for Magento2 store - provides resolvers for shop schema.
  */
 module.exports = class Magento2Api extends Magento2ApiBase {
+  constructor(params) {
+    super(params);
+    this.eventEmitter.on(Events.BEFORE_APOLLO_SERVER_CREATED, serverConfig => this.addTypeResolvers(serverConfig));
+  }
+
+  /**
+   * Adds additional resolve functions to the stitched GQL schema for the sake of data-splitting
+   * @param {object} serverConfig Apollo Server config object
+   */
+  async addTypeResolvers(serverConfig) {
+    const resolvers = {
+      Product: {
+        breadcrumbs: (...params) => this.breadcrumbs(...params)
+      },
+      Category: {
+        breadcrumbs: (...params) => this.breadcrumbs(...params)
+      }
+    };
+
+    Logger.debug(`${this.name} Adding additional resolve functions`);
+    addResolveFunctionsToSchema({ schema: serverConfig.schema, resolvers });
+  }
+
   /**
    * Set shop configuration
    * @param {StoreConfigInput} params - params to be set
@@ -308,13 +331,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     } = response;
 
     if (attributes) {
-      this.convertProductData(response, currency);
+      this.reduceProduct(response, currency);
     }
 
     items.forEach(element => {
       // If product
       if (element.sku) {
-        this.convertProductData({ data: element }, currency);
+        this.reduceProduct({ data: element }, currency);
       }
 
       // If category
@@ -327,12 +350,52 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
-   * Process product data from Magento2 response
-   * @param {object} response - response from Magento2 backend
-   * @param {string} currency - selected currency
-   * @return {Product} - processed response
+   * Special endpoint to fetch any magento entity by it's url, for example product, cms page
+   * @param {object} params - request params
+   * @param {string} [params.path] - request path to be checked against api urls
+   * @return {Promise} - request promise
    */
-  convertProductData(response, currency = null) {
+  async fetchUrl({ path }) {
+    return this.get(
+      '/url',
+      { url: path },
+      {
+        context: {
+          // unify the types so client receives 'shop-page, 'shop-product', 'shop-category', etc.
+          didReceiveResult: result => ({
+            id: result.entity_id,
+            canonicalUrl: result.canonical_url,
+            path: result.canonical_url,
+            type: `shop-${result.entity_type.toLowerCase().replace('cms-', '')}`
+          })
+        }
+      }
+    );
+  }
+
+  /**
+   * Reduce cms page data
+   * @param {object} response - full api response
+   * @return {CmsPage} - reduced response
+   */
+  reduceCmsPage(response) {
+    const { data } = response;
+    const { title, id } = data;
+    let { content } = data;
+
+    content = this.replaceLinks(content);
+    response.data = { id, content, title };
+
+    return response;
+  }
+
+  /**
+   * Reduce product data to what is needed.
+   * @param {object} response - API response from Magento2 backend
+   * @param {string} [currency] - currency code
+   * @return {Product} - reduced data
+   */
+  reduceProduct(response, currency = null) {
     this.convertAttributesSet(response);
     let { data } = response;
     data = this.convertKeys(data);
@@ -421,57 +484,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
-   * Special endpoint to fetch any magento entity by it's url, for example product, cms page
-   * @param {object} params - request params
-   * @param {string} [params.path] - request path to be checked against api urls
-   * @return {Promise} - request promise
-   */
-  async fetchUrl({ path }) {
-    return this.get(
-      'url',
-      { url: path },
-      {
-        context: {
-          // unify the types so client receives 'shop-page, 'shop-product', 'shop-category, etc.
-          didReceiveResult: result => ({
-            id: result.entity_id,
-            path: result.canonical_url,
-            type: `shop-${result.entity_type.toLowerCase().replace('cms-', '')}`
-          })
-        }
-      }
-    );
-  }
-
-  /**
-   * Reduce cms page data
-   * @param {object} response - full api response
-   * @return {CmsPage} - reduced response
-   */
-  reduceCmsPage(response) {
-    const { data } = response;
-    const { title, id } = data;
-    let { content } = data;
-
-    content = this.replaceLinks(content);
-    response.data = { id, content, title };
-
-    return response;
-  }
-
-  /**
-   * Reduce product data to what is needed.
-   * @param {object} response - api response
-   * @param {string} [currency] - currency code
-   * @return {Product} - reduced data
-   */
-  reduceProduct(response, currency = null) {
-    this.convertProductData(response, currency);
-
-    return response;
-  }
-
-  /**
    * Reduce category data
    * @param {object} response - api response
    * @return {Category} reduced data
@@ -489,7 +501,20 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Product>} product data
    */
   async product({ id }) {
-    return this.get(`products/${id}`);
+    return this.get(
+      `/products/${id}`,
+      {},
+      {
+        didReceiveResult: res => this.reduceProduct(res, this.context.magento2.currency)
+      }
+    );
+  }
+
+  async breadcrumbs({ data }, params, context) {
+    const { id, sku } = data;
+    console.log({ id, sku }, params, context);
+    console.log('--------- loading breadcrumbs');
+    return [];
   }
 
   /**
@@ -745,7 +770,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
         // save expiration time as unix timestamp in milliseconds
         customerTokenObject.expirationTime = tokenExpirationTime.getTime();
-        Logger.debug(`Customer token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
+        Logger.debug(
+          `${this.name} Customer token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`
+        );
       }
       this.context.magento2.customerToken = customerTokenObject;
 
@@ -917,12 +944,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { customerToken = {} } = this.context.magento2;
 
     if (!id) {
-      Logger.error('Trying to fetch customer order info without order id');
+      Logger.error(`${this.name} Trying to fetch customer order info without order id`);
       throw new Error('Failed to load an order.');
     }
 
     if (!customerToken.token) {
-      Logger.error('Trying to fetch customer order info without customer token');
+      Logger.error(`${this.name} Trying to fetch customer order info without customer token`);
       throw new Error('Failed to load an order.');
     }
 
@@ -1073,7 +1100,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       return {};
     }
 
-    Logger.warn('Trying to remove cart item without quoteId');
+    Logger.warn(`${this.name} Trying to remove cart item without quoteId`);
 
     return {};
   }
@@ -1144,7 +1171,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     let addressData = data;
 
     if (!customerToken.token) {
-      Logger.error('Trying to edit customer data without customer token');
+      Logger.error(`${this.name} Trying to edit customer data without customer token`);
       throw new Error('You do not have an access to edit address data');
     }
 
@@ -1231,7 +1258,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { customerToken = {} } = this.context.magento2;
 
     if (!customerToken.token) {
-      Logger.error('Trying to edit customer data without customer token');
+      Logger.error(`${this.name} Trying to edit customer data without customer token`);
       throw new Error('You do not have an access to edit account data');
     }
 
@@ -1322,7 +1349,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     if (!cart.quoteId) {
       const errorMessage = `Quote id is empty, cannot perform api call for ${path}`;
 
-      Logger.warn(errorMessage);
+      Logger.warn(`${this.name} ${errorMessage}`);
       throw new Error(errorMessage);
     }
 
@@ -1409,7 +1436,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     if (!lastOrderId) {
-      Logger.warn('Trying to fetch order info without order id');
+      Logger.warn(`${this.name} Trying to fetch order info without order id`);
 
       return {};
     }
