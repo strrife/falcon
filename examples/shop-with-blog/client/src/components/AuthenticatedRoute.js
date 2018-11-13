@@ -1,25 +1,25 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { CustomerQuery } from '@deity/falcon-ecommerce-uikit';
+import { IsAuthenticatedQuery } from '@deity/falcon-ecommerce-uikit';
 
 export default ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props => (
-      <CustomerQuery>
-        {({ customer }) =>
+      <IsAuthenticatedQuery>
+        {({ customer, config }) =>
           customer ? (
             <Component {...props} />
           ) : (
             <Redirect
               to={{
-                pathname: '/login',
+                pathname: config.signInUrl,
                 state: { from: props.location }
               }}
             />
           )
         }
-      </CustomerQuery>
+      </IsAuthenticatedQuery>
     )}
   />
 );
