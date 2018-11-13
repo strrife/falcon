@@ -38,7 +38,6 @@ export class Query<TData = any, TVariables = OperationVariables, TTranslations =
         {({ networkStatus, error, data, loading, fetchMore: apolloFetchMore }) => {
           if (error) {
             const errorCode = this.getErrorCode(error);
-
             // TODO: check errorPolicy and if === 'all' then pass thru render props all extracted/formated errors with errorcodes instead of inline error message
             return (
               <p>
