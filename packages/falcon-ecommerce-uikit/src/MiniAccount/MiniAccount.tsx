@@ -14,9 +14,7 @@ export const MiniAccount: React.SFC<MiniAccountData> = ({ miniAccount: { open },
           {customer ? (
             <Box>
               <Box>
-                <H2>
-                  {customer.firstname} {customer.lastname}
-                </H2>
+                <H2>{`${customer.firstname} ${customer.lastname}`}</H2>
                 <Text>{customer.email}</Text>
                 <SignOutMutation>
                   {(signOut, { loading }) => (
