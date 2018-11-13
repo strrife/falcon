@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { Query } from '../Query/Query';
 
 export const GET_CUSTOMER = gql`
-  query customer {
+  query Customer {
     customer {
       id
       firstname

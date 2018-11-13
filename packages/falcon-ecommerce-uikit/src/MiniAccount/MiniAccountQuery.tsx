@@ -3,7 +3,7 @@ import { Query } from '../Query/Query';
 import { Customer } from '../Customer';
 
 const GET_MINI_ACCOUNT = gql`
-  query miniAccount {
+  query MiniAccount {
     miniAccount @client {
       open
     }

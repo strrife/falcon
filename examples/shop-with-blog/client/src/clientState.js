@@ -84,7 +84,7 @@ export default {
       toggleMiniAccount: (_, _variables, { cache }) => {
         const { miniAccount } = cache.readQuery({
           query: gql`
-            query miniAccount {
+            query MiniAccount {
               miniAccount @client {
                 open
               }
