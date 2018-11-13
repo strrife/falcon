@@ -4,6 +4,7 @@ import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
 import Helmet from 'react-helmet';
 import AsyncComponent from 'src/components/Async';
+import AuthenticatedRoute from 'src/components/AuthenticatedRoute';
 import Home from 'src/pages/Home';
 import { Loader } from '@deity/falcon-ecommerce-uikit';
 import { ThemeProvider } from '@deity/falcon-ui';
@@ -46,6 +47,7 @@ const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category
 const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
 const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/Blog" */ './pages/blog/Blog'));
 const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/Post" */ './pages/blog/Post'));
+const Dashboard = AsyncComponent(() => import(/* webpackChunkName: "account/Dashboard" */ './pages/account/Dashboard'));
 
 const App = ({ online }) => (
   <LocaleProvider>
@@ -61,6 +63,7 @@ const App = ({ online }) => (
                 <Route exact path="/" component={Home} />
                 <Route exact path="/products" component={Category} />
                 <Route exact path="/blog/:page?" component={Blog} />
+                <AuthenticatedRoute exact path="/account" component={Dashboard} />
                 <DynamicRoute
                   loaderComponent={Loader}
                   components={{
