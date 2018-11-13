@@ -69,32 +69,28 @@ export default {
 
     Mutation: {
       toggleMiniCart: (_, _variables, { cache }) => {
-        const { miniCart } = cache.readQuery({
-          query: GET_MINI_CART_STATE
+        const { miniCart } = cache.readQuery({ query: GET_MINI_CART_STATE });
+
+        cache.writeQuery({
+          query: GET_MINI_CART_STATE,
+          data: { miniCart: { open: !miniCart.open } }
         });
-
-        const data = {
-          miniCart: { ...miniCart, open: !miniCart.open }
-        };
-
-        cache.writeData({ data });
 
         return null;
       },
       toggleMiniAccount: (_, _variables, { cache }) => {
-        const { miniAccount } = cache.readQuery({
-          query: gql`
-            query MiniAccount {
-              miniAccount @client {
-                open
-              }
+        const query = gql`
+          query MiniAccount {
+            miniAccount @client {
+              open
             }
-          `
-        });
-        cache.writeData({
-          data: {
-            miniAccount: { ...miniAccount, open: !miniAccount.open }
           }
+        `;
+
+        const { miniAccount } = cache.readQuery({ query });
+        cache.writeQuery({
+          query,
+          data: { miniAccount: { open: !miniAccount.open } }
         });
 
         return null;
