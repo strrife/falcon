@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import LazyLoad from 'react-lazyload';
 import { themed, Image, Text } from '@deity/falcon-ui';
 import { Price } from '../Locale';
 
@@ -44,7 +45,9 @@ export const ProductsList: React.SFC<{ products: any[] }> = ({ products }) => (
     {products.map((product: any) => (
       <li key={product.id}>
         <ProductCardLayout to={product.urlPath}>
-          <Image css={{ flex: '1 1 100%', minHeight: '0%' }} src={product.thumbnail} />
+          <LazyLoad height="100%" offset={150}>
+            <Image css={{ flex: '1 1 100%', minHeight: '0%' }} src={product.thumbnail} alt={product.name} />
+          </LazyLoad>
 
           <Text py="xs" ellipsis>
             {product.name}

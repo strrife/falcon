@@ -14,6 +14,7 @@ export const MiniCartIcon: React.SFC<{
         boxShadow="pronounced"
         fontSize="xs"
         size="md"
+        fontWeight="bold"
         p="none"
         css={{
           position: 'absolute',
