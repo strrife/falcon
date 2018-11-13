@@ -9,6 +9,7 @@
     },
     "config": {}
   },
+  "signInUrl": "/sign-in",
 
   "menus": {
     "header": [
