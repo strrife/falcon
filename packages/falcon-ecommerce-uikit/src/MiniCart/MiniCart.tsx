@@ -39,10 +39,10 @@ const miniCartProductTheme: DefaultThemeProps = {
     gridGap: 'xs',
     // prettier-ignore
     gridTemplate: toGridTemplate([
-      ['30px',                     '1fr',                     '2fr'                                     ],
-      [MiniCartProductArea.empty,  MiniCartProductArea.thumb, MiniCartProductArea.productName           ],
-      [MiniCartProductArea.remove, MiniCartProductArea.thumb, MiniCartProductArea.price,          '1fr' ],
-      [MiniCartProductArea.empty,  MiniCartProductArea.thumb, MiniCartProductArea.modify                ]
+      ['30px',                     '1fr',                     '2fr'                                    ],
+      [MiniCartProductArea.empty,  MiniCartProductArea.thumb, MiniCartProductArea.productName          ],
+      [MiniCartProductArea.remove, MiniCartProductArea.thumb, MiniCartProductArea.price,          '1fr'],
+      [MiniCartProductArea.empty,  MiniCartProductArea.thumb, MiniCartProductArea.modify               ]
     ])
   }
 };

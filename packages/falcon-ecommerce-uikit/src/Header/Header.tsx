@@ -81,8 +81,8 @@ const searchBarLayoutTheme: DefaultThemeProps = {
     gridGap: 'sm',
     // prettier-ignore
     gridTemplate: toGridTemplate([
-      [ "200px",             "1fr",                "auto",               "auto"             ],
-      [SearchBarArea.logo, SearchBarArea.search, SearchBarArea.signIn,  SearchBarArea.cart],
+      ['200px',            '1fr',                'auto',               'auto'            ],
+      [SearchBarArea.logo, SearchBarArea.search, SearchBarArea.signIn, SearchBarArea.cart]
     ]),
     css: {
       alignItems: 'center'
