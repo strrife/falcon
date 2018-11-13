@@ -58,3 +58,6 @@ defined by other extensions - just use the same `extend` statement
 - `extConfig.resolvers` - [resolvers](https://www.apollographql.com/docs/graphql-tools/schema-stitching.html#resolvers) object
 - `extConfig.dataSources` - simple object that represents Extension's
 API DataSource instance (for example `{ wordpress: new WordpressApi() }`)
+
+## Data-splitting
+
