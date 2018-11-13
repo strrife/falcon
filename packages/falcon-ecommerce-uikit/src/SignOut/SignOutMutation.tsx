@@ -11,6 +11,6 @@ export class SignOutMutation extends Mutation {
   static defaultProps = {
     mutation: SIGN_OUT_MUTATION,
     awaitRefetchQueries: true,
-    refetchQueries: ['Customer', 'MiniAccount']
+    refetchQueries: ['Customer', 'MiniAccount', 'Cart']
   };
 }

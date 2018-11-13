@@ -14,6 +14,7 @@ import {
 
 import { toGridTemplate } from '../helpers';
 import { ToggleMiniCartMutation, MiniCartIcon, MiniCartQuery } from '../MiniCart';
+import { CartQuery } from '../Cart';
 import { HeaderData, MenuItem } from './HeaderQuery';
 import { ToggleMiniAccountMutation } from '../MiniAccount/MiniAccountMutation';
 
@@ -102,9 +103,9 @@ export const Searchbar = () => (
     </ToggleMiniAccountMutation>
     <ToggleMiniCartMutation>
       {toggle => (
-        <MiniCartQuery>
+        <CartQuery>
           {(data: any) => <MiniCartIcon onClick={toggle} gridArea={SearchBarArea.cart} itemsQty={data.cart.itemsQty} />}
-        </MiniCartQuery>
+        </CartQuery>
       )}
     </ToggleMiniCartMutation>
   </Box>
