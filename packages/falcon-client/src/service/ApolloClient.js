@@ -82,6 +82,7 @@ export default (config = {}) => {
       restConfig,
       clientConfig
     ),
+    // deepmerge can handle only plain properties, isMergeableObject does not help
     ...{
       ssrMode: !isBrowser,
       addTypename,
