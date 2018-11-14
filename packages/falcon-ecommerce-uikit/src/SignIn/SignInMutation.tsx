@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
 export const SIGN_IN_MUTATION = gql`
-  mutation signIn($input: SignIn!) {
+  mutation SignIn($input: SignIn!) {
     signIn(input: $input)
   }
 `;
