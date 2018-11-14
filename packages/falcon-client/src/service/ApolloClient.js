@@ -79,15 +79,13 @@ export default (config = {}) => {
       {
         connectToDevTools: isBrowser && process.env.NODE_ENV !== 'production'
       },
-      restConfig,
+      restConfig || {},
       clientConfig
     ),
     // deepmerge can handle only plain properties, isMergeableObject does not help
-    ...{
-      ssrMode: !isBrowser,
-      addTypename,
-      cache,
-      link: ApolloLink.from([...extraLinks, linkState, httpLink])
-    }
+    ssrMode: !isBrowser,
+    addTypename,
+    cache,
+    link: ApolloLink.from([...extraLinks, linkState, httpLink])
   });
 };
