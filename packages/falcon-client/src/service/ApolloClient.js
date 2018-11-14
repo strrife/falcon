@@ -79,7 +79,7 @@ export default (config = {}) => {
       {
         connectToDevTools: isBrowser && process.env.NODE_ENV !== 'production'
       },
-      restConfig,
+      restConfig || {},
       clientConfig
     ),
     // deepmerge can handle only plain properties, isMergeableObject does not help
