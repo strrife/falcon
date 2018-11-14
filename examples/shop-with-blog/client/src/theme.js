@@ -97,6 +97,18 @@ export const deityGreenTheme = createTheme({
   },
 
   components: {
+    breadcrumb: {
+      css: ({ theme }) => ({
+        ':last-child': {
+          pointerEvents: 'none',
+          fontWeight: theme.fontWeights.bold,
+          color: theme.colors.primary,
+          '::after': {
+            display: 'none'
+          }
+        }
+      })
+    },
     navbar: {
       css: {
         zIndex: 2
