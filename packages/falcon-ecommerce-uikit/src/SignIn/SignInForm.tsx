@@ -1,29 +1,41 @@
 import React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 import { MutationFn, OperationVariables, MutationResult } from 'react-apollo';
-import { Formik, Form, ErrorMessage, FormikProps } from 'formik';
+import { Formik, Form, FormikProps } from 'formik';
 import { adopt } from 'react-adopt';
 import { H2, Icon, Box, Link, Button, Input, Label, Text } from '@deity/falcon-ui';
+import { Router } from './../Router';
 import { SignInMutation } from './SignInMutation';
 
 export type SignInFormRenderProps = {
+  router: RouteComponentProps;
   signIn: { execute: MutationFn<any, OperationVariables>; result: MutationResult<any> };
   formik: FormikProps<any>;
 };
 
 export const SignInForm = adopt<SignInFormRenderProps>({
+  router: ({ render }) => <Router>{(router: any) => render && render({ ...router })}</Router>,
   signIn: ({ render }) => <SignInMutation>{(execute, result) => render && render({ execute, result })}</SignInMutation>,
-  formik: ({ signIn, render }) => (
+  formik: ({ signIn, router, render }) => (
     <Formik
       initialValues={{}}
       onSubmit={(values: any) =>
-        signIn.execute({
-          variables: {
-            input: {
-              email: values.email,
-              password: values.password
+        signIn
+          .execute({
+            variables: {
+              input: {
+                email: values.email,
+                password: values.password
+              }
             }
-          }
-        })
+          })
+          .then(() => {
+            const { location, history } = router;
+            const { state } = location;
+
+            const url = state && state.origin ? `${state.origin.pathname}${state.origin.search}` : '/';
+            history.replace(url, state);
+          })
       }
     >
       {(...props) => <Form>{render && render(...props)}</Form>}
