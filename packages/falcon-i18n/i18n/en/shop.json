@@ -11,6 +11,8 @@
     "addToCart": "Add to cart",
     "addingToCart": "Adding...",
     "addedToCart": "Added!",
+    "quantity": "Quantity",
+    "galleryItem": "Gallery item",
     "error": {
       "qty": "Quantity must be greater than 0",
       "configurableOptions": "Please select all required options"

@@ -47,6 +47,14 @@ const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" 
 const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/Blog" */ './pages/blog/Blog'));
 const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/Post" */ './pages/blog/Post'));
 
+let ThemeEditorComponent;
+// ThemeEditor gets loaded only in dev mode
+// condition below helps with tree shaking of unused exports
+// so ThemeEditor gets dead code eliminated in production mode
+if (process.env.NODE_ENV !== 'production') {
+  ThemeEditorComponent = ThemeEditor;
+}
+
 const App = ({ online }) => (
   <LocaleProvider>
     <ThemeEditorState initial={deityGreenTheme}>
@@ -75,7 +83,7 @@ const App = ({ online }) => (
               <MiniCartQuery>{data => <MiniCart {...data} />}</MiniCartQuery>
             </AppLayout>
           </ThemeProvider>
-          <ThemeEditor {...props} />
+          {ThemeEditorComponent && <ThemeEditorComponent {...props} />}
         </React.Fragment>
       )}
     </ThemeEditorState>

@@ -15,6 +15,10 @@ import { createTheme } from '@deity/falcon-ui';
 import logo from './assets/logo.svg';
 
 export const deityGreenTheme = createTheme({
+  colors: {
+    primary: '#607e07',
+    primaryLight: '#A9CF38'
+  },
   icons: {
     logo: {
       icon: props => <img src={logo} alt="logo" {...props} />,
@@ -81,14 +85,31 @@ export const deityGreenTheme = createTheme({
     },
     lock: { icon: Lock }
   },
+  keyframes: {
+    loader: {
+      '0%': {
+        transform: 'rotateZ(0)'
+      },
+      '100%': {
+        transform: 'rotateZ(360deg)'
+      }
+    }
+  },
   components: {
-    button: {
-      boxShadow: 'none'
+    breadcrumb: {
+      css: ({ theme }) => ({
+        ':last-child': {
+          pointerEvents: 'none',
+          fontWeight: theme.fontWeights.bold,
+          color: theme.colors.primary,
+          '::after': {
+            display: 'none'
+          }
+        }
+      })
     },
     navbar: {
-      css: {
-        zIndex: 2
-      }
+      css: { zIndex: 2 }
     },
     sidebar: {
       px: 'sm',
@@ -98,6 +119,34 @@ export const deityGreenTheme = createTheme({
         width: {
           xs: '80vw',
           sm: 510
+        }
+      }
+    },
+
+    button: {
+      css: { transitionProperty: 'all' },
+
+      variants: {
+        loader: {
+          size: 'xl',
+          borderRadius: 'round',
+          border: 'bold',
+          borderColor: 'primary',
+          p: 'none',
+          css: props => ({
+            animation: `${props.theme.keyframes.loader} .8s linear infinite`,
+            borderRightColor: props.theme.colors.white,
+            background: 'none',
+            fontSize: 0,
+            whiteSpace: 'nowrap',
+            cursor: 'default',
+            overflow: 'hidden',
+
+            ':hover': {
+              borderColor: props.theme.colors.primaryLight,
+              borderRightColor: props.theme.colors.white
+            }
+          })
         }
       }
     }

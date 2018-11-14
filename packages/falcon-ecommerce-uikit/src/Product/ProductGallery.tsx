@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, themed, Swipeable, SwipeableItem, Box } from '@deity/falcon-ui';
+import { ProductTranslations } from './ProductQuery';
 
 type Item = {
   thumbnail: string;
@@ -26,7 +27,7 @@ const ProductGalleryLayout = themed({
   }
 });
 
-export class ProductGallery extends React.Component<{ items: Item[] }> {
+export class ProductGallery extends React.Component<{ items: Item[]; translations: ProductTranslations }> {
   state = {
     activeIndex: 0
   };
@@ -44,10 +45,10 @@ export class ProductGallery extends React.Component<{ items: Item[] }> {
   scrollableEl = React.createRef<HTMLDivElement>();
 
   render() {
-    const { items } = this.props;
+    const { items, translations } = this.props;
     if (!items.length) return null;
     if (items.length === 1) {
-      return <Image src={items[0].full} />;
+      return <Image src={items[0].full} alt={translations.galleryItem} />;
     }
 
     const { activeIndex } = this.state;
@@ -84,14 +85,14 @@ export class ProductGallery extends React.Component<{ items: Item[] }> {
                 }
               }}
             >
-              <Image key={item.thumbnail} src={item.thumbnail} />
+              <Image key={item.thumbnail} src={item.thumbnail} alt={translations.galleryItem} />
             </Box>
           ))}
         </Box>
 
         <Swipeable gridArea="full" ref={this.scrollableEl} alignItems="center">
           {items.map(item => (
-            <SwipeableItem key={item.full} as={Image} src={item.full} />
+            <SwipeableItem key={item.full} as={Image} src={item.full} alt={translations.galleryItem} />
           ))}
         </Swipeable>
       </ProductGalleryLayout>
