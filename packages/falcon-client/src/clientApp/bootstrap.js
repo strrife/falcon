@@ -3,15 +3,12 @@ import bootstrap from 'app-path/bootstrap.js';
 
 const config = deepMerge(
   {
-    __typename: 'Config',
     logLevel: 'error',
     serverSideRendering: true,
     googleTagManager: {
-      __typename: 'GoogleTagManager',
       id: null
     },
     i18n: {
-      __typename: 'I18n',
       lng: 'en',
       ns: ['common'],
       fallbackLng: 'en',
