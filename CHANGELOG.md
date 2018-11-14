@@ -12,6 +12,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon UI v0.0.4
 
 - docs: comprehensive documentation added ([#115](https://github.com/deity-io/falcon/pull/115))
+- feat: support for keyframe animations defined in theme ([#153](https://github.com/deity-io/falcon/pull/153))
 
 ### Falcon Theme Editor v0.0.4
 

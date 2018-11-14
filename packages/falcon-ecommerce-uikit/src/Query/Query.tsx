@@ -20,7 +20,7 @@ export class Query<TData = any, TVariables = OperationVariables, TTranslations =
     ...ApolloQuery.propTypes
   };
 
-  getErrorCode(error: ApolloError | undefined): string | undefined {
+  getErrorCode(error?: ApolloError): string | undefined {
     if (error) {
       const { graphQLErrors } = error;
       if (Array.isArray(graphQLErrors) && graphQLErrors.length > 0) {

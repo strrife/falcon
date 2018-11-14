@@ -4,6 +4,7 @@ import { withClientState } from 'apollo-link-state';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import fetch from 'node-fetch';
+import deepMerge from 'deepmerge';
 
 /**
  * This method expands flatten Apollo cache value into a nested object
@@ -47,7 +48,7 @@ export const expandValue = (state, key) => {
 export default (config = {}) => {
   // disabling 'addTypename' option to avoid manual setting "__typename" field
   const addTypename = false;
-  const { extraLinks = [], isBrowser = false, initialState = {}, clientState = {}, headers, defaultOptions } = config;
+  const { extraLinks = [], isBrowser = false, initialState = {}, clientState = {}, headers, ...restConfig } = config;
 
   let apolloClient;
   if (isBrowser) {
@@ -74,12 +75,19 @@ export default (config = {}) => {
   });
 
   return new ApolloClient({
-    ...clientConfig,
-    defaultOptions,
-    cache,
-    connectToDevTools: isBrowser && process.env.NODE_ENV !== 'production',
-    ssrMode: !isBrowser,
-    addTypename,
-    link: ApolloLink.from([...extraLinks, linkState, httpLink])
+    ...deepMerge(
+      {
+        connectToDevTools: isBrowser && process.env.NODE_ENV !== 'production'
+      },
+      restConfig,
+      clientConfig
+    ),
+    // deepmerge can handle only plain properties, isMergeableObject does not help
+    ...{
+      ssrMode: !isBrowser,
+      addTypename,
+      cache,
+      link: ApolloLink.from([...extraLinks, linkState, httpLink])
+    }
   });
 };

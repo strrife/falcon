@@ -177,7 +177,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
           }: any) => (
             <ProductDetailsLayout>
               <Box gridArea={Area.gallery}>
-                <ProductGallery items={product.gallery} />
+                <ProductGallery items={product.gallery} translations={translations} />
               </Box>
               <Text fontSize="sm" gridArea={Area.sku}>
                 {`${translations.sku}: ${product.sku}`}
@@ -202,20 +202,17 @@ export class Product extends React.PureComponent<{ product: any; translations: P
                   mr="sm"
                   min="1"
                   name="qty"
+                  aria-label={translations.quantity}
                   disabled={loading}
                   defaultValue={String(values.qty)}
                   onChange={ev => setFieldValue('qty', ev.target.value, !!submitCount)}
                 />
-                <Button type="submit" height="xl" px="md" disabled={loading}>
-                  <Icon
-                    src={loading ? 'loader' : 'cart'}
-                    stroke="white"
-                    fill={loading ? 'white' : 'transparent'}
-                    size="md"
-                    mr="xs"
-                  />
-                  {translations.addToCart}
-                </Button>
+                <FlexLayout justifyContent="center" css={{ width: 170 }}>
+                  <Button type="submit" height="xl" px="md" disabled={loading} variant={loading ? 'loader' : undefined}>
+                    {!loading && <Icon src="cart" stroke="white" size="md" mr="xs" />}
+                    {translations.addToCart}
+                  </Button>
+                </FlexLayout>
               </FlexLayout>
               <Box gridArea={Area.error}>
                 <ErrorMessage name="qty" render={msg => <Text color="error">{msg}</Text>} />

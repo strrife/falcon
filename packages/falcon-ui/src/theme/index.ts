@@ -30,6 +30,7 @@ export interface Theme {
   boxShadows: ThemeBoxShadows;
   easingFunctions: ThemeEasingFunctions;
   transitionDurations: ThemeTransitionDurations;
+  keyframes: ThemeKeyframes;
   zIndex: ThemeZIndex;
   components: ThemedComponents;
   icons: ThemedIcons;
@@ -141,6 +142,10 @@ export interface ThemeEasingFunctions extends EasingFunctions {}
 
 type TransitionDurations = typeof defaultBaseTheme.transitionDurations;
 export interface ThemeTransitionDurations extends TransitionDurations {}
+
+export interface ThemeKeyframes {
+  [key: string]: CSSObject;
+}
 
 type ZIndex = typeof defaultBaseTheme.zIndex;
 export interface ThemeZIndex extends ZIndex {}
