@@ -48,7 +48,7 @@ export class ProductGallery extends React.Component<{ items: Item[]; translation
     const { items, translations } = this.props;
     if (!items.length) return null;
     if (items.length === 1) {
-      return <Image src={items[0].full} />;
+      return <Image src={items[0].full} alt={translations.galleryItem} />;
     }
 
     const { activeIndex } = this.state;
