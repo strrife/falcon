@@ -6,7 +6,7 @@
   "repository": "git@github.com:deity-io/falcon.git",
   "scripts": {
     "new-package": "node scripts/new-package.js",
-    "cleanup": "rimraf node_modules/ packages/**/{dist,coverage,node_modules} packages/create-falcon-app/examples",
+    "cleanup": "rimraf yarn.lock packages/**/{dist,coverage,node_modules} examples/**/{node_modules} packages/create-falcon-app/examples node_modules/",
     "test": "lerna run test:coverage",
     "coverage": "lerna exec --scope=@deity/falcon-* -- codecov",
     "prepublish": "lerna run --scope=@deity/falcon-ui --stream prepare",
