@@ -14,7 +14,7 @@ export const SignOutLogic = adopt<SignOutLogicRenderProps>({
   router: ({ render }) => <Router>{(router: any) => render && render({ ...router })}</Router>,
   signOut: ({ router, render }) => (
     <SignOutMutation
-      update={(cache, result) => {
+      update={(_cache, result) => {
         if (!result.errors && result.data.signOut) {
           router.history.push('/');
         }

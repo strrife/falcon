@@ -9,6 +9,8 @@ import DynamicRoute from '@deity/falcon-client/src/components/DynamicRoute';
 import isOnline from '@deity/falcon-client/src/components/isOnline';
 import {
   AppLayout,
+  AuthorizedRoute,
+  OnlyUnauthorizedRoute,
   Header,
   Footer,
   FooterQuery,
@@ -22,8 +24,6 @@ import {
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 
 import AsyncComponent from 'src/components/Async';
-import AuthorizedRoute from 'src/components/AuthorizedRoute';
-import OnlyUnauthorizedRoute from 'src/components/OnlyUnauthorizedRoute';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
 import { deityGreenTheme } from './theme';
