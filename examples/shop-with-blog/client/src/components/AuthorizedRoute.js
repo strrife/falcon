@@ -1,19 +1,20 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { IsAuthenticatedQuery } from '@deity/falcon-ecommerce-uikit';
 
-export default ({ component: Component, ...rest }) => (
+const AuthorizedRoute = ({ component: Component, redirectTo, ...rest }) => (
   <Route
     {...rest}
     render={props => (
       <IsAuthenticatedQuery>
-        {({ customer, config }) =>
+        {({ customer }) =>
           customer ? (
             <Component {...props} />
           ) : (
             <Redirect
               to={{
-                pathname: config.signInUrl,
+                pathname: redirectTo,
                 state: { origin: props.location }
               }}
             />
@@ -23,3 +24,12 @@ export default ({ component: Component, ...rest }) => (
     )}
   />
 );
+AuthorizedRoute.defaultProps = {
+  redirectTo: '/sign-in'
+};
+AuthorizedRoute.propTypes = {
+  ...Route.propTypes,
+  redirectTo: PropTypes.string
+};
+
+export default AuthorizedRoute;

@@ -6,15 +6,11 @@ export const GET_IS_AUTHENTICATED = gql`
     customer {
       id
     }
-    config @client {
-      signInUrl
-    }
   }
 `;
 
 export type IsAuthenticatedQueryData = {
   customer: { id: number };
-  config: { signInUrl: string };
 };
 
 export class IsAuthenticatedQuery extends Query<IsAuthenticatedQueryData> {
