@@ -46,30 +46,22 @@ export const expandValue = (state, key) => {
  * @return {ApolloClient} ApolloClient instance
  */
 export default (config = {}) => {
+  const { extraLinks = [], isBrowser = false, initialState = {}, clientState = {}, headers, ...restConfig } = config;
+  const falconClientConfig = isBrowser ? expandValue(initialState, '$ROOT_QUERY.config') : clientState.defaults.config;
+
   // disabling 'addTypename' option to avoid manual setting "__typename" field
   const addTypename = false;
-  const { extraLinks = [], isBrowser = false, initialState = {}, clientState = {}, headers, ...restConfig } = config;
-
-  let apolloClient;
-  if (isBrowser) {
-    apolloClient = expandValue(initialState, '$ROOT_QUERY.config.apolloClient');
-  } else {
-    const { defaults } = clientState || {};
-    const { config: clientStateConfig } = defaults || {};
-    ({ apolloClient = {} } = clientStateConfig || {});
-  }
-
-  const { httpLink: httpLinkConfig = {}, config: clientConfig = {} } = apolloClient;
-
   const cache = new InMemoryCache({ addTypename }).restore(initialState);
   const linkState = withClientState({
     cache,
     ...clientState
   });
+
+  const { apolloClient: apolloClientConfig } = falconClientConfig;
   const httpLink = createHttpLink({
     uri: 'http://localhost:4000/graphql',
     credentials: 'include',
-    ...httpLinkConfig,
+    ...apolloClientConfig.httpLink,
     fetch,
     headers
   });
@@ -85,7 +77,7 @@ export default (config = {}) => {
           link: ApolloLink.from([...extraLinks, linkState, httpLink])
         },
         restConfig,
-        clientConfig
+        apolloClientConfig.config || {}
       ],
       { clone: false }
     )
