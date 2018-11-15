@@ -1,8 +1,9 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { IsAuthenticatedQuery } from '@deity/falcon-ecommerce-uikit';
 
-export default ({ component: Component, ...rest }) => (
+const OnlyUnauthorizedRoute = ({ component: Component, redirectTo, ...rest }) => (
   <Route
     {...rest}
     render={props => (
@@ -11,7 +12,7 @@ export default ({ component: Component, ...rest }) => (
           customer ? (
             <Redirect
               to={{
-                pathname: '/',
+                pathname: redirectTo,
                 state: { origin: props.location }
               }}
             />
@@ -23,3 +24,13 @@ export default ({ component: Component, ...rest }) => (
     )}
   />
 );
+
+OnlyUnauthorizedRoute.defaultProps = {
+  redirectTo: '/'
+};
+OnlyUnauthorizedRoute.propTypes = {
+  ...Route.propTypes,
+  redirectTo: PropTypes.string
+};
+
+export default OnlyUnauthorizedRoute;
