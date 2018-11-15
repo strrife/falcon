@@ -3,14 +3,10 @@ import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
 import Helmet from 'react-helmet';
-import AsyncComponent from 'src/components/Async';
-import AuthenticatedRoute from 'src/components/AuthenticatedRoute';
-import Home from 'src/pages/Home';
 import { Loader } from '@deity/falcon-ecommerce-uikit';
 import { ThemeProvider } from '@deity/falcon-ui';
 import DynamicRoute from '@deity/falcon-client/src/components/DynamicRoute';
 import isOnline from '@deity/falcon-client/src/components/isOnline';
-import logo from 'src/assets/logo.png';
 import {
   AppLayout,
   Header,
@@ -25,6 +21,10 @@ import {
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 
+import AsyncComponent from 'src/components/Async';
+import AuthenticatedRoute from 'src/components/AuthenticatedRoute';
+import Home from 'src/pages/Home';
+import logo from 'src/assets/logo.png';
 import { deityGreenTheme } from './theme';
 
 const HeadMetaTags = () => (
