@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Sidebar, Box, Backdrop, Portal, Icon, Link, List, ListItem, Button, Text, H2 } from '@deity/falcon-ui';
 import { ToggleMiniAccountMutation, MiniAccountData } from '.';
 import { SignInForm, SignInFormContent, SignInFormRenderProps } from './../SignIn';
-import { SignOutMutation } from './../SignOut';
+import { SignOutLogic, SignOutLogicRenderProps } from './../SignOut';
 import { SignUpForm } from './../SignUp';
 
 export const MiniAccount: React.SFC<MiniAccountData> = ({ miniAccount: { open }, customer }) => (
@@ -16,20 +16,27 @@ export const MiniAccount: React.SFC<MiniAccountData> = ({ miniAccount: { open },
               <Box>
                 <H2>{`${customer.firstname} ${customer.lastname}`}</H2>
                 <Text>{customer.email}</Text>
-                <SignOutMutation>
-                  {(signOut, { loading }) => (
-                    <Button css={{ width: '100%' }} mt="md" disabled={loading} onClick={() => signOut()}>
+                <SignOutLogic>
+                  {/* eslint-disable-next-line */}
+                  {({ signOut }: SignOutLogicRenderProps) => (
+                    <Button
+                      type="submit"
+                      css={{ width: '100%' }}
+                      mt="md"
+                      onClick={() => signOut.execute()}
+                      disabled={signOut.result.loading}
+                    >
                       Logout
                       <Icon
-                        src={loading ? 'loader' : 'logOut'}
+                        src={signOut.result.loading ? 'loader' : 'logOut'}
                         stroke="white"
-                        fill={loading ? 'white' : 'transparent'}
+                        fill={signOut.result.loading ? 'white' : 'transparent'}
                         size="md"
                         ml="xs"
                       />
                     </Button>
                   )}
-                </SignOutMutation>
+                </SignOutLogic>
               </Box>
               <List mt="lg">
                 <ListItem>
