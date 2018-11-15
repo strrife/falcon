@@ -33,8 +33,7 @@ export const SignInForm = adopt<SignInFormRenderProps>({
             const { location, history } = router;
             const { state } = location;
 
-            const url = state && state.origin ? `${state.origin.pathname}${state.origin.search}` : '/';
-            history.replace(url, state);
+            history.replace(state && state.origin ? state.origin : '/', state);
           })
       }
     >
