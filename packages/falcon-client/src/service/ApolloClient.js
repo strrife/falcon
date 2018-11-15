@@ -61,7 +61,7 @@ export default (config = {}) => {
 
   const { httpLink: httpLinkConfig = {}, config: clientConfig = {} } = apolloClient;
 
-  const cache = new InMemoryCache({ addTypename }).restore(initialState || {});
+  const cache = new InMemoryCache({ addTypename }).restore(initialState);
   const linkState = withClientState({
     cache,
     ...clientState
@@ -74,18 +74,20 @@ export default (config = {}) => {
     headers
   });
 
-  return new ApolloClient({
-    ...deepMerge(
-      {
-        connectToDevTools: isBrowser && process.env.NODE_ENV !== 'production'
-      },
-      restConfig || {},
-      clientConfig
-    ),
-    // deepmerge can handle only plain properties, isMergeableObject does not help
-    ssrMode: !isBrowser,
-    addTypename,
-    cache,
-    link: ApolloLink.from([...extraLinks, linkState, httpLink])
-  });
+  return new ApolloClient(
+    deepMerge.all(
+      [
+        {
+          connectToDevTools: isBrowser && process.env.NODE_ENV !== 'production',
+          ssrMode: !isBrowser,
+          addTypename,
+          cache,
+          link: ApolloLink.from([...extraLinks, linkState, httpLink])
+        },
+        restConfig,
+        clientConfig
+      ],
+      { clone: false }
+    )
+  );
 };
