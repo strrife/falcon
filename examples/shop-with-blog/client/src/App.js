@@ -22,7 +22,7 @@ import {
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 
 import AsyncComponent from 'src/components/Async';
-import AuthenticatedRoute from 'src/components/AuthenticatedRoute';
+import AuthorizedRoute from 'src/components/AuthorizedRoute';
 import OnlyUnauthorizedRoute from 'src/components/OnlyUnauthorizedRoute';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
@@ -73,7 +73,7 @@ const App = ({ online }) => (
                 <Route exact path="/" component={Home} />
                 <Route exact path="/products" component={Category} />
                 <Route exact path="/blog/:page?" component={Blog} />
-                <AuthenticatedRoute exact path="/account" component={Dashboard} />
+                <AuthorizedRoute exact path="/account" component={Dashboard} />
                 <OnlyUnauthorizedRoute exact path="/sign-in" component={SignIn} />
                 <DynamicRoute
                   loaderComponent={Loader}
