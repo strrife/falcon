@@ -3,11 +3,8 @@ node_modules/
 coverage/
 .DS_Store
 .idea/
-yarn.lock
 yarn-error.log
 package-lock.json
-yarn-error.log
-.npmrc
 
 .vscode/
 */**/jsconfig.json
