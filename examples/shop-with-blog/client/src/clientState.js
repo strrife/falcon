@@ -42,7 +42,9 @@ export default {
     miniCart: {
       open: false
     },
-
+    miniAccount: {
+      open: false
+    },
     // todo: this is temporary, these values should be fetched from shop settings
     localeSettings: {
       locale: 'en',
@@ -67,15 +69,29 @@ export default {
 
     Mutation: {
       toggleMiniCart: (_, _variables, { cache }) => {
-        const { miniCart } = cache.readQuery({
-          query: GET_MINI_CART_STATE
+        const { miniCart } = cache.readQuery({ query: GET_MINI_CART_STATE });
+
+        cache.writeQuery({
+          query: GET_MINI_CART_STATE,
+          data: { miniCart: { open: !miniCart.open } }
         });
 
-        const data = {
-          miniCart: { ...miniCart, open: !miniCart.open }
-        };
+        return null;
+      },
+      toggleMiniAccount: (_, _variables, { cache }) => {
+        const query = gql`
+          query MiniAccount {
+            miniAccount @client {
+              open
+            }
+          }
+        `;
 
-        cache.writeData({ data });
+        const { miniAccount } = cache.readQuery({ query });
+        cache.writeQuery({
+          query,
+          data: { miniAccount: { open: !miniAccount.open } }
+        });
 
         return null;
       }
