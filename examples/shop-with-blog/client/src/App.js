@@ -10,20 +10,12 @@ import { ThemeProvider } from '@deity/falcon-ui';
 import DynamicRoute from '@deity/falcon-client/src/components/DynamicRoute';
 import isOnline from '@deity/falcon-client/src/components/isOnline';
 import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
-
-import logo from 'src/assets/logo.png';
-import {
-  AppLayout,
-  Header,
-  Footer,
-  FooterQuery,
-  HeaderQuery,
-  MiniCartQuery,
-  MiniCart,
-  LocaleProvider
-} from '@deity/falcon-ecommerce-uikit';
+import { AppLayout, Header, Footer, FooterQuery, HeaderQuery, LocaleProvider } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 
+import logo from 'src/assets/logo.png';
+
+import { Sidebar } from './pages/shop/components/Sidebar';
 import { deityGreenTheme } from './theme';
 
 const HeadMetaTags = () => (
@@ -80,7 +72,7 @@ const App = ({ online }) => (
                 />
               </Switch>
               <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
-              <MiniCartQuery>{data => <MiniCart {...data} />}</MiniCartQuery>
+              <Sidebar />
             </AppLayout>
           </ThemeProvider>
           {ThemeEditorComponent && <ThemeEditorComponent {...props} />}
