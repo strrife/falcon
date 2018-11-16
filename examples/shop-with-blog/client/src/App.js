@@ -7,6 +7,7 @@ import { Loader } from '@deity/falcon-ecommerce-uikit';
 import { ThemeProvider } from '@deity/falcon-ui';
 import DynamicRoute from '@deity/falcon-client/src/components/DynamicRoute';
 import isOnline from '@deity/falcon-client/src/components/isOnline';
+import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
 import {
   AppLayout,
   AuthorizedRoute,
@@ -22,7 +23,6 @@ import {
   LocaleProvider
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
-
 import AsyncComponent from 'src/components/Async';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
@@ -61,6 +61,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const App = ({ online }) => (
   <LocaleProvider>
+    <ScrollToTop />
     <ThemeEditorState initial={deityGreenTheme}>
       {props => (
         <React.Fragment>

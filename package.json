@@ -6,7 +6,7 @@
   "repository": "git@github.com:deity-io/falcon.git",
   "scripts": {
     "new-package": "node scripts/new-package.js",
-    "cleanup": "rimraf node_modules/ packages/**/{dist,coverage,node_modules} packages/create-falcon-app/examples",
+    "cleanup": "rimraf yarn.lock packages/**/{dist,coverage} packages/create-falcon-app/examples ./**/node_modules",
     "test": "lerna run test:coverage",
     "coverage": "lerna exec --scope=@deity/falcon-* -- codecov",
     "prepublish": "lerna run --scope=@deity/falcon-ui --stream prepare",
@@ -28,6 +28,10 @@
     "prettier": "1.14.3",
     "rimraf": "2.6.2",
     "typescript": "3.1.1"
+  },
+  "engines": {
+    "node": ">=8.10",
+    "yarn": ">=1.12"
   },
   "workspaces": [
     "packages/create-falcon-app",
