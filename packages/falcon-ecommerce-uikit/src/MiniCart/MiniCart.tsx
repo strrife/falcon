@@ -72,7 +72,7 @@ const miniCartLayout: DefaultThemeProps = {
   }
 };
 
-const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
+const MiniCartProduct: React.SFC<any> = ({ product, currency, translations }) => (
   <Box defaultTheme={miniCartProductTheme}>
     <Image gridArea={MiniCartProductArea.thumb} src={product.thumbnailUrl} />
     <H4 gridArea={MiniCartProductArea.productName}>{product.name}</H4>
@@ -120,6 +120,7 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
             min="1"
             name="qty"
             defaultValue={String(product.qty)}
+            aria-label={translations.quantity}
             onChange={ev =>
               updateCartItem({
                 variables: {
@@ -139,11 +140,11 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
   </Box>
 );
 
-const MiniCartProducts: React.SFC<any> = ({ products, currency }) => (
+const MiniCartProducts: React.SFC<any> = ({ products, currency, translations }) => (
   <List>
     {products.map((product: any, index: number) => (
       <ListItem pb="none" key={product.sku}>
-        <MiniCartProduct product={product} currency={currency} />
+        <MiniCartProduct product={product} currency={currency} translations={translations} />
         {index < products.length - 1 && <Divider my="md" />}
       </ListItem>
     ))}
@@ -169,7 +170,7 @@ export const MiniCart: React.SFC<MiniCartData & { translations: MiniCartTranslat
                 ...prettyScrollbars(props.theme)
               })}
             >
-              <MiniCartProducts products={items} currency={quoteCurrency} />
+              <MiniCartProducts products={items} currency={quoteCurrency} translations={translations} />
               {!items.length && (
                 <FlexLayout alignItems="center" flexDirection="column">
                   <Text fontSize="md">{translations.empty}</Text>

@@ -177,7 +177,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
           }: any) => (
             <ProductDetailsLayout>
               <Box gridArea={Area.gallery}>
-                <ProductGallery items={product.gallery} />
+                <ProductGallery items={product.gallery} translations={translations} />
               </Box>
               <Text fontSize="sm" gridArea={Area.sku}>
                 {`${translations.sku}: ${product.sku}`}
@@ -202,6 +202,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
                   mr="sm"
                   min="1"
                   name="qty"
+                  aria-label={translations.quantity}
                   disabled={loading}
                   defaultValue={String(values.qty)}
                   onChange={ev => setFieldValue('qty', ev.target.value, !!submitCount)}

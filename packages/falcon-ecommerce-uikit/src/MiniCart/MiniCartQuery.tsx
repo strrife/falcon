@@ -37,7 +37,8 @@ function getTranslations(t: reactI18Next.TranslationFunction) {
     title: t('miniCart.title'),
     cta: t('miniCart.cta'),
     continue: t('miniCart.continue'),
-    empty: t('miniCart.empty')
+    empty: t('miniCart.empty'),
+    quantity: t('product.quantity')
   };
 }
 
