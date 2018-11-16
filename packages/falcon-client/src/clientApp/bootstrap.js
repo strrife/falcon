@@ -5,6 +5,12 @@ const config = deepMerge(
   {
     logLevel: 'error',
     serverSideRendering: true,
+    apolloClient: {
+      httpLink: {
+        uri: 'http://localhost:4000/graphql'
+      },
+      config: {}
+    },
     googleTagManager: {
       id: null
     },

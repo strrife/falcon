@@ -13,7 +13,6 @@ export class Query<TData = any, TVariables = OperationVariables, TTranslations =
     fetchMore?: (data: TData, fetchMore: QueryResult<TData, TVariables>['fetchMore']) => any;
     getTranslations?: (t: TranslationFunction, data: TData) => TTranslations;
     translationsNamespaces?: string[];
-    handleErrors?: boolean;
   }
 > {
   static propTypes = {
@@ -35,7 +34,7 @@ export class Query<TData = any, TVariables = OperationVariables, TTranslations =
   }
 
   render() {
-    const { children, getTranslations, fetchMore, handleErrors, ...restProps } = this.props;
+    const { children, getTranslations, fetchMore, ...restProps } = this.props;
 
     return (
       <ApolloQuery {...restProps}>
