@@ -35,7 +35,7 @@ These are just a couple of advantages and use-cases, but feel free to ask anythi
 
 ### Demo
 
-We've created a Demo project which is using Algolia for search, WordPress for blog content and Magento 2 for e-commerce.
+We've created a Demo project which is using Algolia for search, WordPress for blog content and Magento 2 for the rest.
 
 Try it out yourself here [https://demo.deity.io](https://demo.deity.io)
 
