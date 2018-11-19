@@ -3,29 +3,17 @@ import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
 import Helmet from 'react-helmet';
-import AsyncComponent from 'src/components/Async';
-import Home from 'src/pages/Home';
 import { Loader } from '@deity/falcon-ecommerce-uikit';
 import { ThemeProvider } from '@deity/falcon-ui';
 import DynamicRoute from '@deity/falcon-client/src/components/DynamicRoute';
 import isOnline from '@deity/falcon-client/src/components/isOnline';
 import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
-
-import logo from 'src/assets/logo.png';
-import {
-  AppLayout,
-  Header,
-  Footer,
-  FooterQuery,
-  HeaderQuery,
-  MiniCartQuery,
-  MiniCart,
-  MiniAccountQuery,
-  MiniAccount,
-  LocaleProvider
-} from '@deity/falcon-ecommerce-uikit';
+import { AppLayout, Header, Footer, FooterQuery, HeaderQuery, LocaleProvider } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
-
+import AsyncComponent from 'src/components/Async';
+import Home from 'src/pages/Home';
+import logo from 'src/assets/logo.png';
+import { Sidebar } from 'src/pages/shop/components/Sidebar';
 import { deityGreenTheme } from './theme';
 
 const HeadMetaTags = () => (
@@ -82,8 +70,8 @@ const App = ({ online }) => (
                 />
               </Switch>
               <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
-              <MiniAccountQuery>{data => <MiniAccount {...data} />}</MiniAccountQuery>
-              <MiniCartQuery>{data => <MiniCart {...data} />}</MiniCartQuery>
+
+              <Sidebar />
             </AppLayout>
           </ThemeProvider>
           {ThemeEditorComponent && <ThemeEditorComponent {...props} />}
