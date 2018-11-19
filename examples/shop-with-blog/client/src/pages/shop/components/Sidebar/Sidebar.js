@@ -1,6 +1,6 @@
 import React from 'react';
-import { Loader } from '@deity/falcon-ecommerce-uikit';
-import { Sidebar as SidebarLayout, Portal, Backdrop } from '@deity/falcon-ui';
+import { Loader, CloseSidebarMutation } from '@deity/falcon-ecommerce-uikit';
+import { Sidebar as SidebarLayout, Portal, Backdrop, Icon, Box } from '@deity/falcon-ui';
 import AsyncComponent from 'src/components/Async';
 import { SidebarQuery } from './index';
 
@@ -36,16 +36,28 @@ export class Sidebar extends React.Component {
   render() {
     return (
       <SidebarQuery>
-        {({ sidebar }) =>
-          console.log(sidebar) || (
-            <React.Fragment>
-              <SidebarLayout as={Portal} visible={sidebar.open} side={sidebar.side || undefined}>
-                {this.state.ready ? <SidebarContents contentType={sidebar.contentType} /> : <Loader />}
-              </SidebarLayout>
-              <Backdrop as={Portal} visible={sidebar.open} />
-            </React.Fragment>
-          )
-        }
+        {({ sidebar }) => (
+          <CloseSidebarMutation>
+            {closeSidebar => (
+              <React.Fragment>
+                <SidebarLayout as={Portal} visible={sidebar.open} side={sidebar.side || undefined}>
+                  <Box position="relative" flex={1}>
+                    <Icon
+                      src="close"
+                      stroke="black"
+                      position="absolute"
+                      right={0}
+                      top={0}
+                      onClick={() => closeSidebar()}
+                    />
+                    {this.state.ready ? <SidebarContents contentType={sidebar.contentType} /> : <Loader />}
+                  </Box>
+                </SidebarLayout>
+                <Backdrop as={Portal} visible={sidebar.open} onClick={() => closeSidebar()} />
+              </React.Fragment>
+            )}
+          </CloseSidebarMutation>
+        )}
       </SidebarQuery>
     );
   }
