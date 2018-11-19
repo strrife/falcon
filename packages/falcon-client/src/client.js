@@ -18,17 +18,17 @@ const apolloInitialState = window.__APOLLO_STATE__ || {};
 const asyncComponentState = window.ASYNC_COMPONENTS_STATE;
 const i18nextState = window.I18NEXT_STATE || {};
 
-const client = new ApolloClient({
+const apolloClient = new ApolloClient({
   isBrowser: true,
   clientState: clientApolloSchema,
   // eslint-disable-next-line no-underscore-dangle
   initialState: apolloInitialState
 });
-const { config } = client.readQuery({ query: CLIENT_SIDE_APP_INIT });
+const { config } = apolloClient.readQuery({ query: CLIENT_SIDE_APP_INIT });
 const renderApp = config.serverSideRendering ? hydrate : render;
 
 const markup = (
-  <ApolloProvider client={client}>
+  <ApolloProvider client={apolloClient}>
     <AsyncComponentProvider rehydrateState={asyncComponentState}>
       <I18nextProvider
         i18n={i18nFactory(config.i18n)}
