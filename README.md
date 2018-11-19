@@ -59,7 +59,7 @@ Join the official chat channel: [Deity Community Slack](http://slack.deity.io)
 
 ## Documentation
 
-Falcon has it's own documentation website which resides in a separate repository: [https://github.com/deity-io/falcon-docs](https://github.com/deity-io/falcon-docs). We try to continuously improve and update it to create a great development experience and reduce any possible development hurdles. 
+Falcon has its own documentation website which resides in a separate repository: [https://github.com/deity-io/falcon-docs](https://github.com/deity-io/falcon-docs). We try to continuously improve and update it to create a great development experience and reduce any possible development hurdles. 
 
 Please visit [https://falcon.deity.io](https://falcon.deity.io) to see the documentation
 
