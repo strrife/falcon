@@ -1,6 +1,6 @@
 import { ApolloLink } from 'apollo-link';
 import { onError } from 'apollo-link-error';
-import ApolloClient from '../../service/ApolloClient';
+import { ApolloClient } from '../../service/ApolloClient';
 
 /**
  * Apollo Client Provider middleware, sets ApolloClient on ctx.state.client

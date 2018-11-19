@@ -1,5 +1,5 @@
 import { ApolloLink } from 'apollo-link';
-import ApolloClient from 'apollo-client';
+import Apollo from 'apollo-client';
 import { withClientState } from 'apollo-link-state';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -24,9 +24,9 @@ import apolloStateToObject from './apolloStateToObject';
 /**
  * Creates an ApolloClient instance with the provided arguments
  * @param {FalconApolloClientConfig} config Falcon configuration for creating ApolloClient instance
- * @return {ApolloClient} ApolloClient instance
+ * @return {Apollo} ApolloClient instance
  */
-export default (config = {}) => {
+export function ApolloClient(config = {}) {
   const { extraLinks = [], isBrowser = false, initialState = {}, clientState = {}, headers, ...restConfig } = config;
   const falconClientConfig = isBrowser
     ? apolloStateToObject(initialState, '$ROOT_QUERY.config')
@@ -50,7 +50,7 @@ export default (config = {}) => {
     headers
   });
 
-  return new ApolloClient(
+  return new Apollo(
     deepMerge.all(
       [
         {
@@ -66,4 +66,4 @@ export default (config = {}) => {
       { clone: false }
     )
   );
-};
+}
