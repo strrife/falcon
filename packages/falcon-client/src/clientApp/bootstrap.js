@@ -8,9 +8,12 @@ const config = deepMerge(
     serverSideRendering: true,
     apolloClient: {
       httpLink: {
-        uri: 'http://localhost:4000/graphql'
+        uri: 'http://localhost:4000/graphql',
+        useGETForQueries: false
       },
-      config: {}
+      connectToDevTools: process.env.NODE_ENV !== 'production',
+      defaultOptions: {},
+      queryDeduplication: false
     },
     googleTagManager: {
       __typename: 'GoogleTagManager',
