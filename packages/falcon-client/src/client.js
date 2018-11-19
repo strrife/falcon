@@ -13,19 +13,23 @@ import { CLIENT_SIDE_APP_INIT } from './graphql/config.gql';
 import i18nFactory from './i18n/i18nClientFactory';
 import { register, unregisterAll } from './serviceWorker';
 
+// eslint-disable-next-line no-underscore-dangle
+const apolloInitialState = window.__APOLLO_STATE__ || {};
+const asyncComponentState = window.ASYNC_COMPONENTS_STATE;
 const i18nextState = window.I18NEXT_STATE || {};
+
 const client = new ApolloClient({
   isBrowser: true,
   clientState: clientApolloSchema,
   // eslint-disable-next-line no-underscore-dangle
-  initialState: window.__APOLLO_STATE__ || {}
+  initialState: apolloInitialState
 });
 const { config } = client.readQuery({ query: CLIENT_SIDE_APP_INIT });
 const renderApp = config.serverSideRendering ? hydrate : render;
 
 const markup = (
   <ApolloProvider client={client}>
-    <AsyncComponentProvider rehydrateState={window.ASYNC_COMPONENTS_STATE}>
+    <AsyncComponentProvider rehydrateState={asyncComponentState}>
       <I18nextProvider
         i18n={i18nFactory(config.i18n)}
         initialLanguage={i18nextState.language}
