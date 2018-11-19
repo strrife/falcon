@@ -16,10 +16,10 @@ export const expandValue = (state, key) => {
   const value = Object.assign({}, state[key]);
   Object.keys(value).forEach(vKey => {
     const vValue = value[vKey];
-    if (typeof vValue === 'object' && vValue.generated && vValue.id) {
+    if (vValue && typeof vValue === 'object' && vValue.generated && vValue.id) {
       value[vKey] = expandValue(state, vValue.id);
     }
-    if (vValue.type === 'json') {
+    if (vValue && vValue.type === 'json') {
       value[vKey] = vValue.json;
     }
   });
@@ -58,6 +58,7 @@ export default (config = {}) => {
   });
 
   const { apolloClient: apolloClientConfig = {} } = falconClientConfig;
+  console.error(apolloClientConfig);
   const httpLink = createHttpLink({
     uri: 'http://localhost:4000/graphql',
     credentials: 'include',

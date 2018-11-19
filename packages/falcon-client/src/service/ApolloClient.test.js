@@ -57,5 +57,41 @@ describe('ApolloClient', () => {
     it('Should handle unset value', () => {
       expect(expandValue({}, '')).toEqual({});
     });
+
+    it('Should handle undefined key value', () => {
+      const testStateObj = {
+        root: {
+          foo: {
+            generated: true,
+            id: 'foo'
+          }
+        },
+        foo: {
+          list: undefined
+        }
+      };
+      expect(expandValue(testStateObj, 'root')).toEqual({
+        foo: {}
+      });
+    });
+
+    it('Should handle null key value', () => {
+      const testStateObj = {
+        root: {
+          foo: {
+            generated: true,
+            id: 'foo'
+          }
+        },
+        foo: {
+          list: null
+        }
+      };
+      expect(expandValue(testStateObj, 'root')).toEqual({
+        foo: {
+          list: null
+        }
+      });
+    });
   });
 });
