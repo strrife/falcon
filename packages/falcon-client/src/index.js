@@ -2,7 +2,7 @@ import http from 'http';
 import Logger from '@deity/falcon-logger';
 
 function falconWebServer() {
-  const server = require('./server').default;
+  const { Server } = require('./server');
   const app = require('./clientApp');
   const bootstrap = require('./clientApp/bootstrap');
   // eslint-disable-next-line
@@ -13,7 +13,7 @@ function falconWebServer() {
    * @param {ServerAppConfig} props Application parameters
    * @return {WebServer} Falcon web server
    */
-  return server({
+  return Server({
     App: app.default,
     clientApolloSchema: app.clientApolloSchema,
     bootstrap: bootstrap.default,

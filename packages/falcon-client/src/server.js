@@ -13,7 +13,7 @@ import { renderAppShell, renderApp } from './middlewares/routes';
  * @param {ServerAppConfig} props Application parameters
  * @return {WebServer} Falcon web server
  */
-export default ({ App, clientApolloSchema, bootstrap, webpackAssets }) => {
+export function Server({ App, clientApolloSchema, bootstrap, webpackAssets }) {
   const { config } = bootstrap;
   Logger.setLogLevel(config.logLevel);
 
@@ -43,12 +43,12 @@ export default ({ App, clientApolloSchema, bootstrap, webpackAssets }) => {
     callback: () => instance.callback(),
     started: () => bootstrap.onServerStarted(instance)
   };
-};
+}
 
 /**
  * @typedef {object} ServerAppConfig
  * @property {function} App Root application component
- * @property {object} configuration Initial configuration
+ * @property {object} bootstrap Initial configuration
  * @property {object} clientApolloSchema Apollo State object
  * @property {object} webpackAssets webpack assets
  */
