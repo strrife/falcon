@@ -5,26 +5,7 @@ import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import fetch from 'node-fetch';
 import deepMerge from 'deepmerge';
-
-/**
- * This method expands flatten Apollo cache value into a nested object
- * @param {object} state Apollo state object
- * @param {string} key Apollo state key
- * @return {object} Expanded object
- */
-export const expandValue = (state, key) => {
-  const value = Object.assign({}, state[key]);
-  Object.keys(value).forEach(vKey => {
-    const vValue = value[vKey];
-    if (vValue && typeof vValue === 'object' && vValue.generated && vValue.id) {
-      value[vKey] = expandValue(state, vValue.id);
-    }
-    if (vValue && vValue.type === 'json') {
-      value[vKey] = vValue.json;
-    }
-  });
-  return value;
-};
+import apolloStateToObject from './apolloStateToObject';
 
 /**
  * @typedef {object} FalconApolloLinkStateConfig
@@ -47,7 +28,9 @@ export const expandValue = (state, key) => {
  */
 export default (config = {}) => {
   const { extraLinks = [], isBrowser = false, initialState = {}, clientState = {}, headers, ...restConfig } = config;
-  const falconClientConfig = isBrowser ? expandValue(initialState, '$ROOT_QUERY.config') : clientState.defaults.config;
+  const falconClientConfig = isBrowser
+    ? apolloStateToObject(initialState, '$ROOT_QUERY.config')
+    : clientState.defaults.config;
 
   // disabling 'addTypename' option to avoid manual setting "__typename" field
   const addTypename = false;
@@ -58,10 +41,10 @@ export default (config = {}) => {
   });
 
   const { apolloClient: apolloClientConfig = {} } = falconClientConfig;
-  console.error(apolloClientConfig);
   const httpLink = createHttpLink({
     uri: 'http://localhost:4000/graphql',
     credentials: 'include',
+    fetchOptions: {},
     ...apolloClientConfig.httpLink,
     fetch,
     headers
