@@ -34,34 +34,24 @@ export function ApolloClient(config = {}) {
     headers,
     apolloClientConfig
   } = config;
+  const { httpLink, connectToDevTools, ...restApolloClientConfig } = apolloClientConfig;
+  const addTypename = false; // disabling 'addTypename' option to avoid manual setting "__typename" field
 
-  // disabling 'addTypename' option to avoid manual setting "__typename" field
-  const addTypename = false;
   const cache = new InMemoryCache({ addTypename }).restore(initialState);
-  const linkState = withClientState({
-    cache,
-    ...clientState
-  });
-
-  const { httpLink: httpLinkConfig, ...restApolloClientConfig } = apolloClientConfig;
-  const httpLink = createHttpLink({
-    uri: 'http://localhost:4000/graphql',
-    credentials: 'include',
-    fetchOptions: {},
-    httpLinkConfig,
-    fetch,
-    headers
-  });
 
   return new Apollo(
     deepMerge.all(
       [
         {
-          connectToDevTools: isBrowser && process.env.NODE_ENV !== 'production',
+          connectToDevTools: isBrowser && connectToDevTools,
           ssrMode: !isBrowser,
           addTypename,
           cache,
-          link: ApolloLink.from([...extraLinks, linkState, httpLink])
+          link: ApolloLink.from([
+            ...extraLinks,
+            withClientState({ cache, ...clientState }),
+            createHttpLink({ ...httpLink, fetch, credentials: 'include', headers })
+          ])
         },
         restApolloClientConfig
       ],
