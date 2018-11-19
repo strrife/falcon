@@ -3,7 +3,6 @@ import deepMerge from 'deepmerge';
 export default initialConfig =>
   deepMerge(
     {
-      __typename: 'Config',
       logLevel: 'error',
       serverSideRendering: true,
       apolloClient: {
@@ -16,11 +15,9 @@ export default initialConfig =>
         queryDeduplication: false
       },
       googleTagManager: {
-        __typename: 'GoogleTagManager',
         id: null
       },
       i18n: {
-        __typename: 'I18n',
         lng: 'en',
         ns: ['common'],
         fallbackLng: 'en',
