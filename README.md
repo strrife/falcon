@@ -13,7 +13,7 @@
 
 ## Introduction
 
-DEITY Falcon is a platform agnostic, stand-alone but modular library to be used to easily build headless PWA websites.
+DEITY Falcon is a platform agnostic, stand-alone but modular library to easily build headless PWA websites.
 
 Falcon was built with the F.I.R.E. principal in mind:
 
