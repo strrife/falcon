@@ -29,9 +29,11 @@ const sortOrders = [
   }
 ];
 
-const GET_MINI_CART_STATE = gql`
-  query MiniCartState {
-    miniCart @client {
+const GET_SIDEBAR_STATE = gql`
+  query SIDEBAR_STATE {
+    sidebar @client {
+      contentType
+      side
       open
     }
   }
@@ -39,10 +41,9 @@ const GET_MINI_CART_STATE = gql`
 
 export default {
   defaults: {
-    miniCart: {
-      open: false
-    },
-    miniAccount: {
+    sidebar: {
+      contentType: null,
+      side: 'right',
       open: false
     },
     // todo: this is temporary, these values should be fetched from shop settings
@@ -55,42 +56,32 @@ export default {
   resolvers: {
     Query: {
       languages: () => languages,
-      sortOrders: () => sortOrders,
-
-      // todo: this resolver makes sure, that when refetchQuery is refreshing also miniCart its state will
-      // be loaded from cache, not from defaults as we don't want the refetch mechanism to toggle miniCart
-      miniCart: (_, _variables, { cache }) => {
-        const { miniCart } = cache.readQuery({
-          query: GET_MINI_CART_STATE
-        });
-        return miniCart;
-      }
+      sortOrders: () => sortOrders
     },
 
     Mutation: {
-      toggleMiniCart: (_, _variables, { cache }) => {
-        const { miniCart } = cache.readQuery({ query: GET_MINI_CART_STATE });
+      openSidebar: (_, { contentType, side }, { cache }) => {
+        const data = {
+          sidebar: {
+            contentType,
+            side: side || 'right',
+            open: true
+          }
+        };
 
-        cache.writeQuery({
-          query: GET_MINI_CART_STATE,
-          data: { miniCart: { open: !miniCart.open } }
-        });
+        cache.writeQuery({ query: GET_SIDEBAR_STATE, data });
 
         return null;
       },
-      toggleMiniAccount: (_, _variables, { cache }) => {
-        const query = gql`
-          query MiniAccount {
-            miniAccount @client {
-              open
-            }
-          }
-        `;
 
-        const { miniAccount } = cache.readQuery({ query });
+      closeSidebar: (_, _variables, { cache }) => {
+        const queryResponse = cache.readQuery({ query: GET_SIDEBAR_STATE });
+        const sidebar = { ...queryResponse.sidebar };
+        sidebar.open = false;
+
         cache.writeQuery({
-          query,
-          data: { miniAccount: { open: !miniAccount.open } }
+          query: GET_SIDEBAR_STATE,
+          data: { sidebar }
         });
 
         return null;
