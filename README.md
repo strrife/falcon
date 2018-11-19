@@ -25,13 +25,21 @@ Falcon was built with the F.I.R.E. principal in mind:
 ### Why should you use Falcon
 
 - You can work separately and independently on the front or back-end - save crucial development time
-- Get started within 5 minutes using our CLI tool `create-falcon-app`
+- Get started within a couple minutes using our CLI tool `create-falcon-app`
 - Client rendering (SPA) to increase pagespeed and reduce server load
 - Server Side Rendering (SSR) built-in - no longer do you have to worry about SPA SEO complications
 - Service worker to provide application caching and PWA features such as offline capabilities and add to homescreen
 - Falcon's architecture allows it to be very modular, lightweight and scalable
 
 These are just a couple of advantages and use-cases, but feel free to ask anything in the official slack channel [slack.deity.io](slack.deity.io)
+
+### Start developing right away
+
+```bash
+npx create-falcon-app my-app
+```
+
+![create-falcon-app](https://user-images.githubusercontent.com/40865297/48708977-64cd4a80-ec04-11e8-80cf-757db1610bf1.gif)
 
 ### Demo
 
