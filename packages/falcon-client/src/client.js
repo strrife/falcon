@@ -6,10 +6,9 @@ import { ApolloProvider } from 'react-apollo';
 import { AsyncComponentProvider } from 'react-async-component';
 import asyncBootstrapper from 'react-async-bootstrapper2';
 import { I18nextProvider } from 'react-i18next';
-import { ApolloClient } from './service/ApolloClient';
+import { ApolloClient, apolloStateToObject } from './service';
 import HtmlHead from './components/HtmlHead';
 import App, { clientApolloSchema } from './clientApp';
-import { CLIENT_SIDE_APP_INIT } from './graphql/config.gql';
 import i18nFactory from './i18n/i18nClientFactory';
 import { register, unregisterAll } from './serviceWorker';
 
@@ -18,13 +17,14 @@ const apolloInitialState = window.__APOLLO_STATE__ || {};
 const asyncComponentState = window.ASYNC_COMPONENTS_STATE;
 const i18nextState = window.I18NEXT_STATE || {};
 
+const config = apolloStateToObject(apolloInitialState, '$ROOT_QUERY.config');
+
 const apolloClient = new ApolloClient({
   isBrowser: true,
   clientState: clientApolloSchema,
-  // eslint-disable-next-line no-underscore-dangle
-  initialState: apolloInitialState
+  initialState: apolloInitialState,
+  apolloClientConfig: config.apolloClient
 });
-const { config } = apolloClient.readQuery({ query: CLIENT_SIDE_APP_INIT });
 const renderApp = config.serverSideRendering ? hydrate : render;
 
 const markup = (

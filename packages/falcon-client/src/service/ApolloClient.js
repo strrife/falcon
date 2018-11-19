@@ -5,7 +5,6 @@ import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import fetch from 'node-fetch';
 import deepMerge from 'deepmerge';
-import apolloStateToObject from './apolloStateToObject';
 
 /**
  * @typedef {object} FalconApolloLinkStateConfig
@@ -27,10 +26,14 @@ import apolloStateToObject from './apolloStateToObject';
  * @return {Apollo} ApolloClient instance
  */
 export function ApolloClient(config = {}) {
-  const { extraLinks = [], isBrowser = false, initialState = {}, clientState = {}, headers, ...restConfig } = config;
-  const falconClientConfig = isBrowser
-    ? apolloStateToObject(initialState, '$ROOT_QUERY.config')
-    : clientState.defaults.config;
+  const {
+    extraLinks = [],
+    isBrowser = false,
+    initialState = {},
+    clientState = {},
+    headers,
+    apolloClientConfig
+  } = config;
 
   // disabling 'addTypename' option to avoid manual setting "__typename" field
   const addTypename = false;
@@ -40,12 +43,12 @@ export function ApolloClient(config = {}) {
     ...clientState
   });
 
-  const { apolloClient: apolloClientConfig = {} } = falconClientConfig;
+  const { httpLink: httpLinkConfig, ...restApolloClientConfig } = apolloClientConfig;
   const httpLink = createHttpLink({
     uri: 'http://localhost:4000/graphql',
     credentials: 'include',
     fetchOptions: {},
-    ...apolloClientConfig.httpLink,
+    httpLinkConfig,
     fetch,
     headers
   });
@@ -60,8 +63,7 @@ export function ApolloClient(config = {}) {
           cache,
           link: ApolloLink.from([...extraLinks, linkState, httpLink])
         },
-        restConfig,
-        apolloClientConfig.config || {}
+        restApolloClientConfig
       ],
       { clone: false }
     )
