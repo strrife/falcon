@@ -1,4 +1,4 @@
-# DEITY FALCON
+# DEITY FALCON - build back-end agnostic headless PWA websites
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b8b60963bac941f081de64671ae8b7fd)](https://app.codacy.com/app/Deity/falcon?utm_source=github.com&utm_medium=referral&utm_content=deity-io/falcon&utm_campaign=Badge_Grade_Settings)
 [![Build Status](https://travis-ci.org/deity-io/falcon.svg?branch=master)](https://travis-ci.org/deity-io/falcon)
@@ -13,113 +13,16 @@
 
 ## Introduction
 
-DEITY Falcon is a platform agnostic PWA, stand-alone but modular library to be used with any e-commerce platform.
+DEITY Falcon is a platform agnostic, stand-alone but modular library to be used to easily build headless PWA websites.
 
-#### Technologies inside
+### Demo
 
-- Apollo
-- NodeJS
-- Razzle
-- GraphQL
-- React
-- Koa
-- Jest (testing)
+We've created a Demo project as a proof of concept. It's using Algolia for search, WordPress for blog content and Magento 2 for e-commerce. 
 
-#### Community
+#### Contributions & Community
 
 Any contributions, small or big, are very welcome! Please take a look at our [Contributor guidelines](https://github.com/deity-io/falcon/blob/master/.github/CONTRIBUTING.md) and [Code of Conduct](https://github.com/deity-io/falcon/blob/master/.github/CODE_OF_CONDUCT.md)
 
-Join the official chat channel
+Join the official chat channel:
 
 [Deity Community Slack](http://slack.deity.io)
-
-## Requirements
-
-NodeJS (8.x +) https://nodejs.org
-
-Yarn (Optional, but recommended) https://yarnpkg.com
-
-
-To install Yarn, see https://yarnpkg.com/lang/en/docs/install
-
-## Starting a project
-
-Use the project generator:
-
-[Create-falcon-app](https://github.com/deity-io/falcon/tree/master/packages/create-falcon-app)
-
-Out of the box, it connects to a public back-end service (Magento & WordPress), so you can start developing right away.
-
-### Connecting to your services
-
-#### Magento
-
-Install falcon-magento2-module in Magento 2
-
-[falcon-magento2-module](https://github.com/deity-io/falcon-magento2-module)
-
-#### WordPress
-
-Install falcon-wordpress-module in WordPress
-
-[falcon-wordpress-module](https://github.com/deity-io/falcon-wordpress-module)
-
-#### Other platforms
-
-Coming soon
-
-#### Connecting to them
-
-Inside `server/config` change `apis.config` to your instance's credentials
-
-## Customizing the theme
-
-Please check out https://github.com/deity-io/falcon/tree/master/packages/falcon-ui
-
-## Basics
-
-### Project Structure
-
-[Falcon Client](https://github.com/deity-io/falcon/tree/master/packages/falcon-client)
-
-[Falcon Server](https://github.com/deity-io/falcon/tree/master/packages/falcon-server)
-
-
-## Development quick start
-
-Yarn and Node are required for core development.
-
-#### Adding new dependency for single package
-
-```bash
-cd package-name
-yarn add dependency-name
-```
-
-#### Testing
-
-There are 2 main scripts available - `test` and `test:coverage`:
-
-- `test` in the root package.json file - triggers `test:coverage` script in every available package (it is used by the CI system mainly)
-- `test` in the module's package.json - runs Jest testing in "watch" mode (re-runs tests on every code change)
-- `test:coverage` in the module's package.json runs Jest testing with enabled Coverage option
-
-```bash
-cd package-name
-yarn test
-yarn test:coverage
-```
-
-### Package naming conventions
-
-Back-end packages (`FalconServer`):
-
-- `falcon-X-extension` - represents a module that should be used within a FalconServer app in order
-to provide an abstract (higher-level) access to the data (shop, blog, CRM etc)
-- `falcon-X-api` - represents a module that should act as a "transport" layer between an extension
-and a certain back-end (REST API, remote GraphQL, service, database etc)
-
-Front-end packages (`FalconClient`):
-
-- `falcon-X-plugin` - represents a module that should be used within a FalconClient app in order to provide
-UI/UX (front-end) enhancements to the "client" application (analytics, maps, widgets etc)
