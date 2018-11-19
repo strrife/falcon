@@ -58,7 +58,6 @@ export default (config = {}) => {
   });
 
   const { apolloClient: apolloClientConfig = {} } = falconClientConfig;
-  console.error(apolloClientConfig);
   const httpLink = createHttpLink({
     uri: 'http://localhost:4000/graphql',
     credentials: 'include',
