@@ -74,6 +74,9 @@ describe('Server', () => {
     const config = {
       logLevel: 'error',
       serverSideRendering: true,
+      apolloClient: {
+        httpLink: {}
+      },
       googleTagManager: {
         id: null
       },
