@@ -1,4 +1,4 @@
-import apolloStateToObject from './apolloStateToObject';
+import { apolloStateToObject } from './apolloStateToObject';
 
 describe('ApolloClient', () => {
   describe('apolloStateToObject', () => {
