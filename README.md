@@ -1,4 +1,4 @@
-# DEITY FALCON - build back-end agnostic headless PWA websites
+# DEITY Falcon - build back-end agnostic headless PWA websites
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b8b60963bac941f081de64671ae8b7fd)](https://app.codacy.com/app/Deity/falcon?utm_source=github.com&utm_medium=referral&utm_content=deity-io/falcon&utm_campaign=Badge_Grade_Settings)
 [![Build Status](https://travis-ci.org/deity-io/falcon.svg?branch=master)](https://travis-ci.org/deity-io/falcon)
@@ -15,14 +15,56 @@
 
 DEITY Falcon is a platform agnostic, stand-alone but modular library to be used to easily build headless PWA websites.
 
+Falcon was built with the F.I.R.E. principal in mind:
+
+- Flexible - Allow you to build any kind of website; e-commerce, blogs, portfolio's, you name it
+- Integrable - Allow you to integrate any kind of data source with it
+- Reliable - You do not have to worry about high traffic and scalability
+- Extensible - Allow you to extend your project with as many custom features as necessary
+
+### Why should you use Falcon
+
+- You can work separately and independently on the front or back-end - save crucial development time
+- Get started within 5 minutes using our CLI tool `create-falcon-app`
+- Client rendering (SPA) to increase pagespeed and reduce server load
+- Server Side Rendering (SSR) built-in - no longer do you have to worry about SPA SEO complications
+- Service worker to provide application caching and PWA features such as offline capabilities and add to homescreen
+- Falcon's architecture allows it to be very modular, lightweight and scalable
+
+These are just a couple of advantages and use-cases, but feel free to ask anything in the official slack channel [slack.deity.io](slack.deity.io)
+
 ### Demo
 
-We've created a Demo project as a proof of concept. It's using Algolia for search, WordPress for blog content and Magento 2 for e-commerce. 
+We've created a Demo project which is using Algolia for search, WordPress for blog content and Magento 2 for e-commerce.
 
-#### Contributions & Community
+Try it out yourself here [https://demo.deity.io](https://demo.deity.io)
+
+![demo gif](https://user-images.githubusercontent.com/40865297/48703128-1a8f9d80-ebf3-11e8-8b61-afa490d26c24.gif)
+
+## Community
 
 Any contributions, small or big, are very welcome! Please take a look at our [Contributor guidelines](https://github.com/deity-io/falcon/blob/master/.github/CONTRIBUTING.md) and [Code of Conduct](https://github.com/deity-io/falcon/blob/master/.github/CODE_OF_CONDUCT.md)
 
-Join the official chat channel:
+### Chat channel
 
-[Deity Community Slack](http://slack.deity.io)
+Join the official chat channel: [Deity Community Slack](http://slack.deity.io)
+
+## Documentation
+
+Falcon has it's own documentation website which resides in a separate repository: [https://github.com/deity-io/falcon-docs](https://github.com/deity-io/falcon-docs). We try to continuously improve and update it to create a great development experience and reduce any possible development hurdles. 
+
+Please visit [https://falcon.deity.io](https://falcon.deity.io) to see the documentation
+
+Feedback and contributions are always very welcome!
+
+We also regularly create blog posts on Medium which you can find here: [https://medium.com/deity-io](https://medium.com/deity-io)
+
+## Partners
+
+Trusted by the best from the industry
+
+|<img src="https://user-images.githubusercontent.com/40865297/48707105-ace96e80-ebfe-11e8-85f2-b6072ec4c6b3.png" />|<img src="https://user-images.githubusercontent.com/40865297/48707163-da361c80-ebfe-11e8-8e71-9ffad9ff2291.png" />|<img src="https://user-images.githubusercontent.com/40865297/48707223-00f45300-ebff-11e8-890e-4595a057f8f0.png" />|<img src="https://user-images.githubusercontent.com/40865297/48707235-0c477e80-ebff-11e8-930a-5901fec84445.png" />|<img src="https://user-images.githubusercontent.com/40865297/48707246-15385000-ebff-11e8-92ae-835b38186a5c.png" />|
+|---|---|---|---|---|
+|<img src="https://user-images.githubusercontent.com/40865297/48707268-2aad7a00-ebff-11e8-8ad3-21eb6f2d7048.png" />|<img src="https://user-images.githubusercontent.com/40865297/48707457-d5259d00-ebff-11e8-8131-7bc79d98849e.png" width="200px"/>|<img src="https://user-images.githubusercontent.com/40865297/48707477-de166e80-ebff-11e8-88b3-f8333dbe39b5.png" />|<img src="https://user-images.githubusercontent.com/40865297/48707482-e53d7c80-ebff-11e8-9db7-4f891a0979f7.png" />||
+
+If you would like to become a partner please contact us at contributors@deity.io
