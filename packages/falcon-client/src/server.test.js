@@ -7,7 +7,7 @@ import { Route, Switch } from 'react-router-dom';
 import { translate } from 'react-i18next';
 import Koa from 'koa';
 import supertest from 'supertest';
-import webServer from './server';
+import { Server } from './server';
 import DynamicRoute from './components/DynamicRoute';
 
 describe('Server', () => {
@@ -19,21 +19,16 @@ describe('Server', () => {
       serverSideRendering: true,
       logLevel: 'error'
     };
-    const configuration = {
+    const bootstrap = {
       config,
-      configSchema: {
-        defaults: {
-          config
-        }
-      },
       onServerCreated: onServerCreatedMock,
       onServerInitialized: onServerInitializedMock,
       onServerStarted: onServerStartedMock
     };
 
-    const server = webServer({
+    const server = Server({
       App: () => <div />,
-      configuration,
+      bootstrap,
       clientApolloSchema: {
         defaults: {}
       },
@@ -87,13 +82,8 @@ describe('Server', () => {
         resources: { en: { common: { key: 'foo bar baz' } } }
       }
     };
-    const configuration = {
+    const bootstrap = {
       config,
-      configSchema: {
-        defaults: {
-          config
-        }
-      },
       onServerCreated: () => {},
       onServerInitialized: () => {}
     };
@@ -104,9 +94,9 @@ describe('Server', () => {
       }
     };
 
-    const serverHandler = webServer({
+    const serverHandler = Server({
       App,
-      configuration,
+      bootstrap,
       clientApolloSchema,
       webpackAssets: {}
     }).callback();
