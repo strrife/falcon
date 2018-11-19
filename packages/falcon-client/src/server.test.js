@@ -9,16 +9,17 @@ import Koa from 'koa';
 import supertest from 'supertest';
 import { Server } from './server';
 import DynamicRoute from './components/DynamicRoute';
+import defaultConfiguration from './clientApp/defaultConfiguration';
 
 describe('Server', () => {
   it('Should properly call eventHandlers', () => {
     const onServerCreatedMock = jest.fn();
     const onServerInitializedMock = jest.fn();
     const onServerStartedMock = jest.fn();
-    const config = {
+    const config = defaultConfiguration({
       serverSideRendering: true,
       logLevel: 'error'
-    };
+    });
     const bootstrap = {
       config,
       onServerCreated: onServerCreatedMock,
@@ -71,12 +72,9 @@ describe('Server', () => {
       </Switch>
     );
 
-    const config = {
+    const config = defaultConfiguration({
       logLevel: 'error',
       serverSideRendering: true,
-      apolloClient: {
-        httpLink: {}
-      },
       googleTagManager: {
         id: null
       },
@@ -84,7 +82,7 @@ describe('Server', () => {
         lng: 'en',
         resources: { en: { common: { key: 'foo bar baz' } } }
       }
-    };
+    });
     const bootstrap = {
       config,
       onServerCreated: () => {},
