@@ -25,8 +25,8 @@ export function Server({ App, clientApolloSchema, bootstrap, webpackAssets }) {
   router.get('/sw.js', serve(publicDir, { maxage: 0 }));
   router.get('/static/*', serve(publicDir, { maxage: process.env.NODE_ENV === 'production' ? 31536000000 : 0 }));
   router.get('/*', serve(publicDir));
-  router.get('/app-shell', ...renderAppShell({ configuration: bootstrap, webpackAssets }));
-  router.get('/*', ...renderApp({ App, clientApolloSchema, configuration: bootstrap, webpackAssets }));
+  router.get('/app-shell', ...renderAppShell({ config, webpackAssets }));
+  router.get('/*', ...renderApp({ App, clientApolloSchema, config, webpackAssets }));
 
   instance
     .use(helmet())
@@ -48,7 +48,7 @@ export function Server({ App, clientApolloSchema, bootstrap, webpackAssets }) {
 /**
  * @typedef {object} ServerAppConfig
  * @property {function} App Root application component
- * @property {object} bootstrap Initial configuration
+ * @property {{config, onServerCreated, onServerInitialized, onServerStarted }} bootstrap Initial configuration
  * @property {object} clientApolloSchema Apollo State object
  * @property {object} webpackAssets webpack assets
  */

@@ -35,12 +35,6 @@ const config = deepMerge(
 
 export default {
   config,
-  configSchema: {
-    defaults: {
-      config
-    }
-  },
-
   onServerCreated: bootstrap.onServerCreated || (() => {}),
   onServerInitialized: bootstrap.onServerInitialized || (() => {}),
   onServerStarted: bootstrap.onServerStarted || (() => {})
