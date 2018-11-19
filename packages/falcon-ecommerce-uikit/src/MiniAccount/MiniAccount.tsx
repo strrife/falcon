@@ -18,19 +18,19 @@ export const MiniAccount: React.SFC<MiniAccountData> = ({ miniAccount: { open },
                 <Text>{customer.email}</Text>
                 <SignOutLogic>
                   {/* eslint-disable-next-line */}
-                  {({ signOut }: SignOutLogicRenderProps) => (
+                  {({ signOutMutation }: SignOutLogicRenderProps) => (
                     <Button
                       type="submit"
                       css={{ width: '100%' }}
                       mt="md"
-                      onClick={() => signOut.execute()}
-                      disabled={signOut.result.loading}
+                      onClick={() => signOutMutation.signOut()}
+                      disabled={signOutMutation.result.loading}
                     >
                       Logout
                       <Icon
-                        src={signOut.result.loading ? 'loader' : 'logOut'}
+                        src={signOutMutation.result.loading ? 'loader' : 'logOut'}
                         stroke="white"
-                        fill={signOut.result.loading ? 'white' : 'transparent'}
+                        fill={signOutMutation.result.loading ? 'white' : 'transparent'}
                         size="md"
                         ml="xs"
                       />

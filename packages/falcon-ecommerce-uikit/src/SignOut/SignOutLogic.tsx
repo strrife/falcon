@@ -7,12 +7,12 @@ import { SignOutMutation } from './SignOutMutation';
 
 export type SignOutLogicRenderProps = {
   router: RouteComponentProps;
-  signOut: { execute: MutationFn<any, OperationVariables>; result: MutationResult<any> };
+  signOutMutation: { signOut: MutationFn<any, OperationVariables>; result: MutationResult<any> };
 };
 
 export const SignOutLogic = adopt<SignOutLogicRenderProps>({
   router: ({ render }) => <Router>{(router: any) => render && render({ ...router })}</Router>,
-  signOut: ({ router, render }) => (
+  signOutMutation: ({ router, render }) => (
     <SignOutMutation
       update={(_cache, result) => {
         if (!result.errors && result.data.signOut) {
@@ -20,7 +20,7 @@ export const SignOutLogic = adopt<SignOutLogicRenderProps>({
         }
       }}
     >
-      {(execute, result) => render && render({ execute, result })}
+      {(signOut, result) => render && render({ signOut, result })}
     </SignOutMutation>
   )
 });

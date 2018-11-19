@@ -9,19 +9,21 @@ import { SignInMutation } from './SignInMutation';
 
 export type SignInFormRenderProps = {
   router: RouteComponentProps;
-  signIn: { execute: MutationFn<any, OperationVariables>; result: MutationResult<any> };
+  signInMutation: { signIn: MutationFn<any, OperationVariables>; result: MutationResult<any> };
   formik: FormikProps<any>;
 };
 
 export const SignInForm = adopt<SignInFormRenderProps>({
   router: ({ render }) => <Router>{(router: any) => render && render({ ...router })}</Router>,
-  signIn: ({ render }) => <SignInMutation>{(execute, result) => render && render({ execute, result })}</SignInMutation>,
-  formik: ({ signIn, router, render }) => (
+  signInMutation: ({ render }) => (
+    <SignInMutation>{(signIn, result) => render && render({ signIn, result })}</SignInMutation>
+  ),
+  formik: ({ signInMutation, router, render }) => (
     <Formik
       initialValues={{}}
       onSubmit={(values: any) =>
-        signIn
-          .execute({
+        signInMutation
+          .signIn({
             variables: {
               input: {
                 email: values.email,
@@ -44,7 +46,7 @@ export const SignInForm = adopt<SignInFormRenderProps>({
 
 export const SignInFormContent: React.SFC<SignInFormRenderProps> = ({
   formik: { handleChange },
-  signIn: {
+  signInMutation: {
     result: { error, loading }
   }
 }) => (
