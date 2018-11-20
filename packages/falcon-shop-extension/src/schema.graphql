@@ -44,6 +44,14 @@ extend type Mutation {
   setStoreConfig(input: StoreConfigInput): Boolean
 }
 
+extend type BackendConfig {
+  shop: ShopConfig
+}
+
+type ShopConfig {
+  demo: Boolean
+}
+
 input EntityIdInput {
   id: Int!
 }

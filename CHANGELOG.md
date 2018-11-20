@@ -9,6 +9,11 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 - feat: removed razzle ([#87](https://github.com/deity-io/falcon/pull/87))
 - feat: support for Google Analytics added ([#78](https://github.com/deity-io/falcon/pull/78))
 
+### Falcon Server v0.0.4
+
+- feat: added `backendConfig` resolver ([#176](https://github.com/deity-io/falcon/pull/176))
+- fix: removed duplicated context data ([#176](https://github.com/deity-io/falcon/pull/176))
+
 ### Falcon UI v0.0.4
 
 - docs: comprehensive documentation added ([#115](https://github.com/deity-io/falcon/pull/115))
@@ -27,6 +32,11 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 - docs: updated documentation ([#47](https://github.com/deity-io/falcon/pull/47))
 - fix: fixed problem with React 16.6.0 ([#109](https://github.com/deity-io/falcon/pull/109))
+
+### Falcon Server Env v0.0.4
+
+- feat: added `session` getter-method to extract "named" session object from the context in ApiDataSource
+([#176](https://github.com/deity-io/falcon/pull/176))
 
 ---
 

@@ -19,6 +19,8 @@ class FalconServer {
   constructor(config) {
     this.loggableErrorCodes = [codes.INTERNAL_SERVER_ERROR, codes.GRAPHQL_PARSE_FAILED];
     this.config = config;
+    this.server = null;
+    this.backendConfig = {};
     const { maxListeners = 20, verboseEvents = false } = this.config;
     if (config.logLevel) {
       Logger.setLogLevel(config.logLevel);
@@ -62,12 +64,14 @@ class FalconServer {
       // todo: re-think that - maybe we could avoid passing session here and instead pass just required data
       // from session?
       context: ({ ctx }) => ({
+        headers: ctx.req.headers,
         session: ctx.req.session
       }),
       cache,
       resolvers: {
         Query: {
-          url: (...params) => dynamicRouteResolver.fetchUrl(...params)
+          url: (...params) => dynamicRouteResolver.fetchUrl(...params),
+          backendConfig: () => this.backendConfig
         }
       },
       tracing: this.config.debug,
@@ -80,15 +84,10 @@ class FalconServer {
 
     /* eslint-disable no-underscore-dangle */
     // Removing "placeholder" (_) fields from the Type definitions
-    delete apolloServerConfig.schema._mutationType._fields._;
     delete apolloServerConfig.schema._subscriptionType._fields._;
 
     // If there were no other fields defined for Type by any other extension
     // - we need to remove it completely in order to comply with GraphQL specification
-    if (!Object.keys(apolloServerConfig.schema._mutationType._fields).length) {
-      apolloServerConfig.schema._mutationType = undefined;
-      delete apolloServerConfig.schema._typeMap.Mutation;
-    }
     if (!Object.keys(apolloServerConfig.schema._subscriptionType._fields).length) {
       apolloServerConfig.schema._subscriptionType = undefined;
       delete apolloServerConfig.schema._typeMap.Subscription;
@@ -150,7 +149,7 @@ class FalconServer {
     await this.extensionContainer.registerExtensions(this.config.extensions, this.apiContainer.dataSources);
     await this.eventEmitter.emitAsync(Events.AFTER_EXTENSION_CONTAINER_CREATED, this.extensionContainer);
 
-    await this.extensionContainer.initialize();
+    this.backendConfig = await this.extensionContainer.initialize();
     await this.eventEmitter.emitAsync(Events.AFTER_EXTENSION_CONTAINER_INITIALIZED, this.extensionContainer);
   }
 
@@ -161,10 +160,10 @@ class FalconServer {
     const apolloServerConfig = await this.getApolloServerConfig();
 
     await this.eventEmitter.emitAsync(Events.BEFORE_APOLLO_SERVER_CREATED, apolloServerConfig);
-    const server = new ApolloServer(apolloServerConfig);
-    await this.eventEmitter.emitAsync(Events.AFTER_APOLLO_SERVER_CREATED, server);
+    this.server = new ApolloServer(apolloServerConfig);
+    await this.eventEmitter.emitAsync(Events.AFTER_APOLLO_SERVER_CREATED, this.server);
 
-    server.applyMiddleware({ app: this.app });
+    this.server.applyMiddleware({ app: this.app });
   }
 
   /**
@@ -231,6 +230,8 @@ class FalconServer {
       });
     };
 
+    Logger.info('Starting Falcon Server');
+
     this.initialize()
       .then(() => this.eventEmitter.emitAsync(Events.BEFORE_STARTED, this))
       .then(
@@ -238,6 +239,9 @@ class FalconServer {
           new Promise(resolve => {
             this.app.listen({ port: this.config.port }, () => {
               Logger.info(`🚀 Server ready at http://localhost:${this.config.port}`);
+              Logger.info(
+                `🌍 GraphQL endpoint ready at http://localhost:${this.config.port}${this.server.graphqlPath}`
+              );
               resolve();
             });
           }, handleStartupError)

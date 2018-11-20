@@ -16,25 +16,27 @@ import {
   ContextFetchRequest,
   ContextRequestInit,
   ContextRequestOptions,
+  ContextSession,
   PaginationData
 } from '../types';
 
 export type PaginationValue = number | string | null;
 
-export default abstract class ApiDataSource<TContext = any> extends RESTDataSource<TContext> {
+export default abstract class ApiDataSource<TContext extends ContextSession = any> extends RESTDataSource<TContext> {
   public name: string;
   public config: ApiDataSourceConfig;
   public fetchUrlPriority: number = ApiUrlPriority.NORMAL;
   public perPage: number = 10;
 
   /**
-   * @param {ApiDataSourceConfig} config API DataSource config
-   * @param {string} name API DataSource short-name
+   * @param {ConfigurableConstructorParams<ApiDataSourceConfig>} params Constructor params
+   * @param {ApiDataSourceConfig} params.config API DataSource config
+   * @param {string} params.name API DataSource short-name
    */
-  constructor({ config, name }: ConfigurableConstructorParams<ApiDataSourceConfig> = {}) {
+  constructor(params: ConfigurableConstructorParams<ApiDataSourceConfig> = {}) {
     super();
-    this.name = name || this.constructor.name;
-    this.config = config || {};
+    this.name = params.name || this.constructor.name;
+    this.config = params.config || {};
 
     const { host, port, protocol } = this.config;
     if (host) {
@@ -67,6 +69,18 @@ export default abstract class ApiDataSource<TContext = any> extends RESTDataSour
   initialize(config: DataSourceConfig<TContext>): void {
     super.initialize(config);
     this.httpCache = new ContextHTTPCache(config.cache);
+  }
+
+  get session(): any {
+    if (!this.context.session) {
+      return {};
+    }
+
+    if (!(this.name in this.context.session)) {
+      this.context.session[this.name] = {};
+    }
+
+    return this.context.session[this.name];
   }
 
   /**

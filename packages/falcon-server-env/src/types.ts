@@ -54,6 +54,15 @@ export interface ContextData {
   context?: ContextType;
 }
 
+export interface ContextSession {
+  session?: {
+    [propName: string]: any;
+  };
+  headers?: {
+    [propName: string]: string;
+  };
+}
+
 export type ContextRequestInit = RequestInit & ContextData;
 
 export type ContextCacheOptions = CacheOptions & ContextData;
