@@ -12,7 +12,7 @@ export default initialConfig =>
         },
         connectToDevTools: process.env.NODE_ENV !== 'production',
         defaultOptions: {},
-        queryDeduplication: false
+        queryDeduplication: true
       },
       googleTagManager: {
         id: null
