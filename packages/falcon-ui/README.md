@@ -13,4 +13,4 @@
 
 ## Docs
 
-Please visit https://falcon-ui.docs.deity.io for detailed documentation.
+If you would like to find more information please check out the official documentation website [https://falcon-ui.docs.deity.io/](https://falcon-ui.docs.deity.io/)
