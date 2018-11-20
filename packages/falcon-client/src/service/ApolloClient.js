@@ -7,17 +7,17 @@ import fetch from 'node-fetch';
 import deepMerge from 'deepmerge';
 
 /**
- * @typedef {object} FalconApolloLinkStateConfig
- * @property {object} defaults https://www.apollographql.com/docs/link/links/state.html#defaults
- * @property {object} resolvers https://www.apollographql.com/docs/link/links/state.html#resolver
- */
-
-/**
  * @typedef {object} FalconApolloClientConfig
  * @property {boolean} [isBrowser=false] Boolean flag to determine the current environment
  * @property {object} [initialState={}] Object to restore Cache data from
  * @property {string} [serverUri="http://localhost:4000/graphql"] ApolloServer URL
  * @property {FalconApolloLinkStateConfig} [clientState={}] https://www.apollographql.com/docs/link/links/state.html
+ */
+
+/**
+ * @typedef {object} FalconApolloLinkStateConfig
+ * @property {object} defaults https://www.apollographql.com/docs/link/links/state.html#defaults
+ * @property {object} resolvers https://www.apollographql.com/docs/link/links/state.html#resolver
  */
 
 /**
@@ -43,15 +43,15 @@ export function ApolloClient(config = {}) {
     deepMerge.all(
       [
         {
-          connectToDevTools: isBrowser && connectToDevTools,
-          ssrMode: !isBrowser,
           addTypename,
+          ssrMode: !isBrowser,
           cache,
           link: ApolloLink.from([
             ...extraLinks,
             withClientState({ cache, ...clientState }),
             createHttpLink({ ...httpLink, fetch, credentials: 'include', headers })
-          ])
+          ]),
+          connectToDevTools: isBrowser && connectToDevTools
         },
         restApolloClientConfig
       ],
