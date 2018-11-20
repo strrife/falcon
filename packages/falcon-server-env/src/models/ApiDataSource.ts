@@ -83,6 +83,14 @@ export default abstract class ApiDataSource<TContext extends ContextSession = an
     return this.context.session[this.name];
   }
 
+  set session(value: any) {
+    if (!this.context.session) {
+      this.context.session = {};
+    }
+
+    this.context.session[this.name] = value;
+  }
+
   /**
    * Should be implemented if ApiDataSource wants to deliver content via dynamic URLs.
    * It should return priority value for passed url.
