@@ -2,17 +2,4 @@
 
 This package provides default internationalization resources.
 
-Resources are located in `./i18n` directory and are organized accordingly to `{{lng}}/{{ns}}.json` pattern. Then for English it looks like this:
-
-```
-i18n
-  |-en
-    |-common.json
-    |-blog.json
-    |-...
-  |-...
-```
-
-## Provided languages
-* EN
-* NL
+If you would like to find more information please check out the official documentation website [https://falcon.deity.io/docs/basics/falcon-client#internationalization](https://falcon.deity.io/docs/basics/falcon-client#internationalization)

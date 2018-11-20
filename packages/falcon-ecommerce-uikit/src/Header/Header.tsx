@@ -14,7 +14,9 @@ import {
 
 import { toGridTemplate } from '../helpers';
 import { ToggleMiniCartMutation, MiniCartIcon, MiniCartQuery } from '../MiniCart';
+import { CartQuery } from '../Cart';
 import { HeaderData, MenuItem } from './HeaderQuery';
+import { ToggleMiniAccountMutation } from '../MiniAccount/MiniAccountMutation';
 
 const bannerLayoutTheme: DefaultThemeProps = {
   bannerLayout: {
@@ -68,7 +70,7 @@ export const Nav: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
 
 export enum SearchBarArea {
   logo = 'logo',
-  login = 'login',
+  signIn = 'signIn',
   cart = 'cart',
   search = 'search'
 }
@@ -80,8 +82,8 @@ const searchBarLayoutTheme: DefaultThemeProps = {
     gridGap: 'sm',
     // prettier-ignore
     gridTemplate: toGridTemplate([
-      [ '200px',             '1fr',                'auto',               'auto'             ],
-      [ SearchBarArea.logo,  SearchBarArea.search,  SearchBarArea.login,  SearchBarArea.cart],
+      ['200px',            '1fr',                'auto',               'auto'            ],
+      [SearchBarArea.logo, SearchBarArea.search, SearchBarArea.signIn, SearchBarArea.cart]
     ]),
     css: {
       alignItems: 'center'
@@ -94,12 +96,16 @@ export const Searchbar = () => (
     <Link as={RouterLink} gridArea={SearchBarArea.logo} to="/">
       <Icon src="logo" />
     </Link>
-    <Icon gridArea={SearchBarArea.login} src="user" />
+    <ToggleMiniAccountMutation>
+      {toggle => (
+        <Icon gridArea={SearchBarArea.signIn} src="user" onClick={() => toggle()} css={{ cursor: 'pointer' }} />
+      )}
+    </ToggleMiniAccountMutation>
     <ToggleMiniCartMutation>
       {toggle => (
-        <MiniCartQuery>
+        <CartQuery>
           {(data: any) => <MiniCartIcon onClick={toggle} gridArea={SearchBarArea.cart} itemsQty={data.cart.itemsQty} />}
-        </MiniCartQuery>
+        </CartQuery>
       )}
     </ToggleMiniCartMutation>
   </Box>

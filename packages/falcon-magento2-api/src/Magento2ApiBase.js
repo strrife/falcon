@@ -1,5 +1,6 @@
 const Logger = require('@deity/falcon-logger');
 const { ApiDataSource } = require('@deity/falcon-server-env');
+const { AuthenticationError } = require('@deity/falcon-errors');
 const util = require('util');
 const { CronJob } = require('cron');
 const addMinutes = require('date-fns/add_minutes');
@@ -105,8 +106,15 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       return;
     }
 
+    const { customerToken } = this.session;
+    if (customerToken && !this.isCustomerTokenValid(customerToken)) {
+      this.session = {};
+    }
+
     this.ensureStoreCode();
     this.ensureCurrency();
+
+    this.context.session.save();
   }
 
   /**
@@ -132,6 +140,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    * @return {boolean} true if token is valid
    */
   isAdminTokenValid() {
+    Logger.debug(`this.tokenExpirationTime: ${this.tokenExpirationTime}`);
     return !this.tokenExpirationTime || (this.tokenExpirationTime && this.tokenExpirationTime > Date.now());
   }
 
@@ -222,7 +231,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   async resolveURL(req) {
     const { path } = req;
-    let { storeCode } = this.context.magento2 || {};
+    let { storeCode } = this.session;
     if (storeCode) {
       req.params.delete(storeCode);
     } else {
@@ -249,15 +258,22 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    * @param {RequestOptions} req - request input
    */
   async authorizeRequest(req) {
-    let token;
     const { useAdminToken } = req.context || {};
+    const { customerToken } = this.session || {};
 
-    if (useAdminToken) {
+    let token;
+    // FIXME: it looks like `useAdminToken` flag is not used very often and do not cover all api requests
+    // there is an assumption that if customer token is not provided then admin token should be used
+    if (useAdminToken || !customerToken) {
       token = await this.getAdminToken();
+    } else if (this.isCustomerTokenValid(customerToken)) {
+      // eslint-disable-next-line prefer-destructuring
+      token = customerToken.token;
     } else {
-      const { customerToken = {} } = this.context.magento2 || {};
-      this.validateCustomerToken(customerToken);
-      token = customerToken.token || (await this.getAdminToken());
+      const sessionExpiredError = new AuthenticationError(`Customer token has expired.`);
+      sessionExpiredError.statusCode = 401;
+      sessionExpiredError.code = codes.CUSTOMER_TOKEN_EXPIRED;
+      throw sessionExpiredError;
     }
 
     req.headers.set('Authorization', `Bearer ${token}`);
@@ -266,34 +282,22 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
-   * Check if token is still valid and throw error if it has expired
-   * @param {object} customerToken - customer token data
-   * @param {string} [customerToken.token] - token
-   * @param {number} [customerToken.expirationTime] - token expiration time
-   * @throws Error - throw error and set status code to 401 if token has expired
+   * @typedef {object} AuthToken
+   * @property {string} token token
+   * @property {number} expirationTime expiration time
    */
-  validateCustomerToken(customerToken) {
-    if (customerToken && customerToken.token && !this.isCustomerTokenValid(customerToken)) {
-      const sessionExpiredError = new Error('Session has expired');
-
-      sessionExpiredError.statusCode = 401;
-      sessionExpiredError.code = codes.CUSTOMER_TOKEN_EXPIRED;
-      throw sessionExpiredError;
-    }
-  }
 
   /**
-   * Check if admin token is still valid
-   * @param {object} customerTokenObject - customer token data
-   * @param {string} [customerTokenObject.token] - token
-   * @param {number} [customerTokenObject.expirationTime] - token expiration time
+   * Check if authentication token is valid
+   * @param {AuthToken} authToken - authentication token
    * @return {boolean} - true if token is valid
    */
-  isCustomerTokenValid(customerTokenObject) {
-    return (
-      (customerTokenObject.expirationTime && customerTokenObject.expirationTime > Date.now()) ||
-      !customerTokenObject.expirationTime
-    );
+  isCustomerTokenValid(authToken) {
+    if (!authToken || !authToken.token || !authToken.expirationTime) {
+      return false;
+    }
+
+    return authToken.expirationTime > Date.now();
   }
 
   /**

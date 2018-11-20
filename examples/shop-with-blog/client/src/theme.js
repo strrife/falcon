@@ -2,8 +2,10 @@ import React from 'react';
 import ShoppingCart from 'react-feather/dist/icons/shopping-cart';
 import ChevronDown from 'react-feather/dist/icons/chevron-down';
 import ChevronUp from 'react-feather/dist/icons/chevron-up';
+import ChevronRight from 'react-feather/dist/icons/chevron-right';
 import User from 'react-feather/dist/icons/user';
 import Close from 'react-feather/dist/icons/x';
+import LogOut from 'react-feather/dist/icons/log-out';
 import Remove from 'react-feather/dist/icons/x-circle';
 import ChevronsRight from 'react-feather/dist/icons/chevrons-right';
 import ChevronsLeft from 'react-feather/dist/icons/chevrons-left';
@@ -47,12 +49,8 @@ export const deityGreenTheme = createTheme({
       stroke: 'transparent',
       fill: 'primary'
     },
-    cart: {
-      icon: ShoppingCart
-    },
-    user: {
-      icon: User
-    },
+    cart: { icon: ShoppingCart },
+    user: { icon: User },
     dropdownArrowDown: {
       icon: ChevronDown,
       size: 'md',
@@ -63,15 +61,20 @@ export const deityGreenTheme = createTheme({
       size: 'md',
       ml: 'xs'
     },
+    buttonArrowRight: {
+      icon: ChevronRight,
+      size: 'md',
+      ml: 'xs',
+      stroke: 'white'
+    },
     close: {
       icon: Close,
       css: {
         cursor: 'pointer'
       }
     },
-    remove: {
-      icon: Remove
-    },
+    logOut: { icon: LogOut },
+    remove: { icon: Remove },
     nextPage: {
       icon: ChevronsRight,
       stroke: 'black'
@@ -80,11 +83,8 @@ export const deityGreenTheme = createTheme({
       icon: ChevronsLeft,
       stroke: 'black'
     },
-    lock: {
-      icon: Lock
-    }
+    lock: { icon: Lock }
   },
-
   keyframes: {
     loader: {
       '0%': {
@@ -95,7 +95,6 @@ export const deityGreenTheme = createTheme({
       }
     }
   },
-
   components: {
     breadcrumb: {
       css: ({ theme }) => ({
@@ -110,9 +109,7 @@ export const deityGreenTheme = createTheme({
       })
     },
     navbar: {
-      css: {
-        zIndex: 2
-      }
+      css: { zIndex: 2 }
     },
     sidebar: {
       px: 'sm',
@@ -127,9 +124,7 @@ export const deityGreenTheme = createTheme({
     },
 
     button: {
-      css: {
-        transitionProperty: 'all'
-      },
+      css: { transitionProperty: 'all' },
 
       variants: {
         loader: {

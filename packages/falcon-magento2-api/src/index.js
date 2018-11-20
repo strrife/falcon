@@ -2,11 +2,11 @@ const qs = require('qs');
 const isEmpty = require('lodash/isEmpty');
 const pick = require('lodash/pick');
 const has = require('lodash/has');
-const { htmlHelpers } = require('@deity/falcon-server-env');
 const isPlainObject = require('lodash/isPlainObject');
 const addMinutes = require('date-fns/add_minutes');
-
+const { htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
+
 const Magento2ApiBase = require('./Magento2ApiBase');
 
 /**
@@ -758,33 +758,30 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<boolean>} true if login was successful
    */
   async signIn(data) {
-    const { email, password } = data;
     const { cart: { quoteId = null } = {} } = this.session;
+    const dateNow = Date.now();
 
     try {
-      const response = await this.post('/integration/customer/token', {
-        username: email,
-        password,
-        guest_quote_id: quoteId
-      });
+      const response = await this.post(
+        '/integration/customer/token',
+        {
+          username: data.email,
+          password: data.password,
+          guest_quote_id: quoteId
+        },
+        { context: { skipAuth: true } }
+      );
+      const { token, validTime } = this.convertKeys(response.data);
 
-      // depending on deity-magento-api module response may be a string with token (up until and including v1.0.1)
-      // or a hash with token and valid time setting (after v1.0.1)
-      const { token, validTime } = isPlainObject(response.data)
-        ? this.convertKeys(response.data)
-        : { token: response.data };
-      const customerTokenObject = { token };
+      // calculate token expiration date and subtract 1 minute for margin
+      const tokenValidationTimeInMinutes = validTime * 60 - 1;
+      const tokenExpirationTime = addMinutes(dateNow, tokenValidationTimeInMinutes);
+      Logger.debug(`Customer token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
 
-      if (validTime) {
-        // calculate token expiration date and subtract 5 minutes for margin
-        const tokenTimeInMinutes = validTime * 60 - 5;
-        const tokenExpirationTime = addMinutes(Date.now(), tokenTimeInMinutes);
-
-        // save expiration time as unix timestamp in milliseconds
-        customerTokenObject.expirationTime = tokenExpirationTime.getTime();
-        Logger.debug(`Customer token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
-      }
-      this.session.customerToken = customerTokenObject;
+      this.session.customerToken = {
+        token,
+        expirationTime: tokenExpirationTime.getTime()
+      };
 
       // Remove guest cart. Magento merges guest cart with cart of authorized user so we'll have to refresh it
       delete this.session.cart;
@@ -867,7 +864,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { customerToken = {} } = this.session;
 
     if (!customerToken.token) {
-      throw new Error('Customer token is required.');
+      // returning null cause that it is easier to check on client side if User is authenticated
+      // in other cases we should throw AuthenticationError()
+      return null;
     }
 
     const response = await this.get('/customers/me');

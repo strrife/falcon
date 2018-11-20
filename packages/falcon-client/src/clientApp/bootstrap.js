@@ -6,6 +6,12 @@ const config = deepMerge(
     __typename: 'Config',
     logLevel: 'error',
     serverSideRendering: true,
+    apolloClient: {
+      httpLink: {
+        uri: 'http://localhost:4000/graphql'
+      },
+      config: {}
+    },
     googleTagManager: {
       __typename: 'GoogleTagManager',
       id: null
