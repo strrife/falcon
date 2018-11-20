@@ -19,6 +19,7 @@ before_script:
     - yarn --non-interactive
     - yarn lint
     - yarn test
+    - yarn coverage
 
 Node 8:
   <<: *job_definition
