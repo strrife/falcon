@@ -33,7 +33,7 @@
     "apollo-server-koa": "^2.1.0",
     "eventemitter2": "^5.0.1",
     "graphql": "^14.0.2",
-    "graphql-tools": "^4.0.0",
+    "graphql-tools": "4.0.3",
     "koa": "^2.5.3",
     "koa-router": "^7.4.0",
     "koa-session": "^5.9.0",
