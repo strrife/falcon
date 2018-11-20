@@ -1,38 +1,17 @@
-const Logger = require('@deity/falcon-logger');
 const { Extension, ApiUrlPriority } = require('@deity/falcon-server-env');
 const { resolve } = require('path');
-
 const typeDefs = require('fs').readFileSync(resolve(__dirname, 'schema.graphql'), 'utf8');
 
 /**
  * Extension that implements shop features
  */
 module.exports = class Shop extends Extension {
-  async initialize() {
-    await super.initialize();
-    return this.initConfig();
-  }
-
-  async initConfig() {
-    Logger.debug('Loading shop config');
-
-    const { baseCurrencyCode, locale } = await this.api.getInfo();
-
-    // todo: verify if this is needed because all the operations that use those are performed inside API class
-    // which keeps these values updated locally
-    Logger.debug(`Locale set to: ${locale}.`);
-    this.defaultLanguage = locale;
-    Logger.debug(`Currency set to: ${baseCurrencyCode}.`);
-    this.currency = baseCurrencyCode;
-  }
-
   getGraphQLConfig() {
     return {
       schema: [typeDefs],
       dataSources: {
         [this.api.name]: this.api
       },
-      context: ({ ctx }) => this.api.createContextData(ctx),
       resolvers: {
         Query: {
           category: (root, params) => this.api.category(params),
@@ -73,7 +52,8 @@ module.exports = class Shop extends Extension {
           setShipping: (root, data) => this.api.setShipping(data.input),
           placeOrder: (root, data) => this.api.placeOrder(data.input),
           setStoreConfig: (root, data) => this.api.setStoreConfig(data.input)
-        }
+        },
+        ShopConfig: () => this.apiConfig
       }
     };
   }

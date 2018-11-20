@@ -6,7 +6,6 @@ const addMinutes = require('date-fns/add_minutes');
 const isPlainObject = require('lodash/isPlainObject');
 const camelCase = require('lodash/camelCase');
 const keys = require('lodash/keys');
-const has = require('lodash/has');
 const isEmpty = require('lodash/isEmpty');
 
 const DEFAULT_KEY = '*';
@@ -36,11 +35,78 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Makes sure that context required for http calls exists
+   * Gets basic store configuration from Magento
+   * @return {object} Magento config
    */
   async preInitialize() {
     if (!this.context) {
       this.initialize({ context: {} });
     }
+
+    const [storeConfigs, storeViews, storeGroups, storeWebsites] = await Promise.all([
+      this.get('/store/storeConfigs'),
+      this.get('/store/storeViews'),
+      this.get('/store/storeGroups'),
+      this.get('/store/websites')
+    ]);
+
+    const { data } = storeConfigs;
+    const config = { ...data[0] };
+
+    const {
+      default_display_currency_code: baseCurrencyCode,
+      locale,
+      extension_attributes: extensionAttributes
+    } = config;
+
+    config.locale = locale.split('_')[0];
+    const postCodes = extensionAttributes.optional_post_codes;
+    const minPasswordLength = extensionAttributes.min_password_length;
+    const minPasswordCharClass = extensionAttributes.min_password_char_class;
+    const storeCodes = data.map(item => {
+      const itemView = storeViews.data.find(view => item.code === view.code);
+      const itemGroup = storeGroups.data.find(group => group.id === itemView.store_group_id);
+      const itemWebsite = storeWebsites.data.find(website => itemGroup.website_id === website.id);
+      const active = itemView.extension_attributes && itemView.extension_attributes.is_active;
+
+      return {
+        currency: item.default_display_currency_code,
+        locale: item.locale && item.locale.split('_')[0],
+        code: item.code,
+        id: itemView.id,
+        name: itemView.name,
+        groupName: itemGroup.name,
+        groupId: itemGroup.id,
+        websiteName: itemWebsite.name,
+        websiteId: itemWebsite.id,
+        active: active !== undefined ? active : 1
+      };
+    });
+
+    const activeStores = storeCodes.filter(item => item.active);
+
+    this.magentoConfig = {
+      ...config,
+      stores: data,
+      activeStores,
+      minPasswordLength,
+      minPasswordCharClass,
+      baseCurrencyCode,
+      postCodes
+    };
+
+    return this.magentoConfig;
+  }
+
+  initialize(config) {
+    super.initialize(config);
+
+    if (!this.context.session) {
+      return;
+    }
+
+    this.ensureStoreCode();
+    this.ensureCurrency();
   }
 
   /**
@@ -314,92 +380,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
-   * Get basic store configuration from Magento
-   * @return {Promise<object>} - combined configuration
-   */
-  async getInfo() {
-    const [storeConfigs, storeViews, storeGroups, storeWebsites] = await Promise.all([
-      this.get('/store/storeConfigs'),
-      this.get('/store/storeViews'),
-      this.get('/store/storeGroups'),
-      this.get('/store/websites')
-    ]);
-
-    const { data } = storeConfigs;
-    const config = { ...data[0] };
-    const {
-      default_display_currency_code: baseCurrencyCode,
-      locale,
-      extension_attributes: extensionAttributes
-    } = config;
-
-    config.locale = locale.split('_')[0];
-    const postCodes = extensionAttributes.optional_post_codes;
-    const minPasswordLength = extensionAttributes.min_password_length;
-    const minPasswordCharClass = extensionAttributes.min_password_char_class;
-    const storeCodes = data.map(item => {
-      const itemView = storeViews.data.find(view => item.code === view.code);
-      const itemGroup = storeGroups.data.find(group => group.id === itemView.store_group_id);
-      const itemWebsite = storeWebsites.data.find(website => itemGroup.website_id === website.id);
-      const active = itemView.extension_attributes && itemView.extension_attributes.is_active;
-
-      return {
-        currency: item.default_display_currency_code,
-        locale: item.locale && item.locale.split('_')[0],
-        code: item.code,
-        id: itemView.id,
-        name: itemView.name,
-        groupName: itemGroup.name,
-        groupId: itemGroup.id,
-        websiteName: itemWebsite.name,
-        websiteId: itemWebsite.id,
-        active: active !== undefined ? active : 1
-      };
-    });
-
-    const activeStores = storeCodes.filter(item => item.active);
-
-    this.magentoConfig = {
-      ...config,
-      stores: data,
-      activeStores,
-      minPasswordLength,
-      minPasswordCharClass,
-      baseCurrencyCode,
-      postCodes
-    };
-
-    return this.magentoConfig;
-  }
-
-  /**
-   * Returns data that should be placed in global GraphQL execution context for the upcoming query
-   * @param {object} context - existing context data
-   * @return {object} additional data to be created
-   */
-  createContextData(context) {
-    if (!has(context, 'req.session')) {
-      const noSessionError = new Error('No session in context passed to Magento2Api.createContextData()');
-      noSessionError.statusCode = 501;
-      noSessionError.code = codes.SESSION_NOT_FOUND;
-      throw noSessionError;
-    }
-
-    if (!has(context, 'req.session.magento2')) {
-      context.req.session.magento2 = {};
-    }
-
-    this.ensureStoreCode(context.req);
-    this.ensureCurrency(context.req.session);
-
-    // put all the required data as 'magento' alias inside context
-    // it's a reference to context.req.session.magento2 so change in context.magento will cause changes in the session
-    return {
-      magento2: context.req.session.magento2
-    };
-  }
-
-  /**
    * Ensuring that user gets storeCode in the session with the first hit.
    *
    * Simple config structure:
@@ -441,10 +421,10 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    *
    * @param {Request} req Koa request object
    */
-  ensureStoreCode(req) {
-    const clientCountryCode = req.headers['CountryCode']; // eslint-disable-line dot-notation
+  ensureStoreCode() {
+    const { CountryCode: clientCountryCode } = this.context.headers;
     const { enableAutoDetection = false, geoMapping: storeMapping = {} } = this.config;
-    const { storeCode, cart } = req.session.magento2;
+    const { storeCode, cart } = this.session;
 
     if (storeCode) {
       const isValidCode = this.magentoConfig.stores.find(({ code }) => code === storeCode);
@@ -456,10 +436,10 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
         if (cart) {
           Logger.warn(`Removing cart from session assuming it was create in non existing
             store with code: ${storeCode}`);
-          delete req.session.magento2.cart;
+          delete this.session.cart;
         }
         // api should use it's default if not present in session
-        delete req.session.magento2.storeCode;
+        delete this.session.storeCode;
       }
 
       return;
@@ -483,7 +463,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     clientStoreCode = clientStoreCode || defaultStoreCode;
 
     if (clientStoreCode && typeof clientStoreCode === 'object') {
-      const { 'accept-language': acceptLanguage } = req.headers;
+      const { 'accept-language': acceptLanguage } = this.context.headers;
       // Equals to a default mapped key
       let activeLanguage = DEFAULT_KEY;
       // Splitting accept-language header string with comma-separated values ("da,en-gb;q=0.8,en;q=0.7")
@@ -507,7 +487,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
     if (clientStoreCode) {
       Logger.debug(`Using country detected store code: ${clientStoreCode}`);
-      req.session.magento2.storeCode = clientStoreCode;
+      this.session.storeCode = clientStoreCode;
     }
   }
 
@@ -515,8 +495,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    * Ensure session has a currency code to be use for example for price formatting.
    * @param {object} session object
    */
-  ensureCurrency(session) {
-    const { storeCode } = session.magento2;
+  ensureCurrency() {
+    const { storeCode } = this.session;
 
     // todo: use sensible defaults instead of EUR
     let userCurrency = this.config.currency && (this.config.currency.symbol || 'EUR');
@@ -536,6 +516,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       Logger.debug('No store code or store inactive.');
     }
 
-    session.magento2.currency = userCurrency;
+    this.session.currency = userCurrency;
   }
 };

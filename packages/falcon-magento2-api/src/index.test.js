@@ -20,8 +20,50 @@ describe('Magento2Api', () => {
 
   beforeAll(async () => {
     nock(URL)
+      .persist(true)
       .post(createMagentoUrl('/integration/admin/token'))
       .reply(200, magentoResponses.adminToken.data);
+
+    nock(URL)
+      .persist(true)
+      .get(createMagentoUrl('/store/storeConfigs'))
+      .reply(200, [
+        {
+          locale: 'en_US',
+          extension_attributes: {},
+          code: 'foo'
+        }
+      ]);
+
+    nock(URL)
+      .persist(true)
+      .get(createMagentoUrl('/store/storeViews'))
+      .reply(200, [
+        {
+          code: 'foo',
+          store_group_id: 'bar'
+        }
+      ]);
+
+    nock(URL)
+      .persist(true)
+      .get(createMagentoUrl('/store/storeGroups'))
+      .reply(200, [
+        {
+          id: 'bar',
+          website_id: 'oof'
+        }
+      ]);
+
+    nock(URL)
+      .persist(true)
+      .get(createMagentoUrl('/store/websites'))
+      .reply(200, [
+        {
+          id: 'oof'
+        }
+      ]);
+
     api = new Magento2Api(apiConfig);
     await api.preInitialize();
   });
@@ -40,7 +82,7 @@ describe('Magento2Api', () => {
       .get(uri => /\/categories\/20/.test(uri)) // regexp as query params might be there
       .reply(200, magentoResponses.category.data);
 
-    api.context = { magento2: { storeCode: '' } };
+    api.session.storeCode = '';
     const result = await api.category({ id: 20 });
     expect(result.data.id).toEqual(magentoResponses.category.data.id);
   });
