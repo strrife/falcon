@@ -27,9 +27,10 @@
     "@deity/falcon-logger": "^0.0.3",
     "@deity/falcon-server-env": "^0.0.3",
     "apollo-datasource-rest": "^0.1.1",
-    "cron": "^1.4.0",
-    "date-fns": "^1.29.0",
-    "lodash": "^4.17.11",
+    "cron": "1.5.0",
+    "date-fns": "1.29.0",
+    "graphql-tools": "4.0.3",
+    "lodash": "4.17.11",
     "qs": "^6.5.2"
   },
   "devDependencies": {

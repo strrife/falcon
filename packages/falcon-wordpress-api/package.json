@@ -13,7 +13,7 @@
     "@deity/falcon-server-env": "^0.0.3",
     "apollo-server-env": "^2.0.3",
     "graphql": "^14.0.2",
-    "lodash": "^4.17.11",
+    "lodash": "4.17.11",
     "qs": "^6.5.2"
   },
   "devDependencies": {
