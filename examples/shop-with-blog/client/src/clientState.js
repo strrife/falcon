@@ -1,5 +1,4 @@
-import gql from 'graphql-tag';
-
+import { GET_SIDEBAR_STATE } from './pages/shop/components/Sidebar';
 /**
  * Defines client-side state resolvers
  */
@@ -28,16 +27,6 @@ const sortOrders = [
     id: 'desc'
   }
 ];
-
-const GET_SIDEBAR_STATE = gql`
-  query SIDEBAR_STATE {
-    sidebar @client {
-      contentType
-      side
-      open
-    }
-  }
-`;
 
 export default {
   defaults: {
