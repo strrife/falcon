@@ -2,12 +2,38 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import { Box, Text, Link, Input, Button, Details, DetailsContent } from '@deity/falcon-ui';
-import { SignInForm, SignInFormContent, SignOutMutation, GET_CUSTOMER } from '@deity/falcon-ecommerce-uikit';
+import {
+  SignInForm,
+  SignInFormContent,
+  SignOutMutation,
+  GET_CUSTOMER,
+  toGridTemplate
+} from '@deity/falcon-ecommerce-uikit';
 import SectionHeader from './CheckoutSectionHeader';
 
 const WIDGETS = {
   signInForm: 'signInForm',
   emailForm: 'emailForm'
+};
+
+const customerEmailFormLayout = {
+  customerEmailFormLayout: {
+    display: 'grid',
+    my: 'xs',
+    gridGap: 'sm',
+    // prettier-ignore
+    gridTemplate: {
+      xs: toGridTemplate([
+        ['1fr'   ],
+        ['input' ],
+        ['button']
+      ]),
+      md: toGridTemplate([
+        ['2fr',   '1fr'  ],
+        ['input', 'button']
+      ])
+    }
+  }
 };
 
 class EmailForm extends React.Component {
@@ -23,14 +49,18 @@ class EmailForm extends React.Component {
     return (
       <Box>
         <Text>Type your email and continue as guest:</Text>
-        <Input
-          type="text"
-          name="email"
-          my="xs"
-          value={this.state.email}
-          onChange={ev => this.setState({ email: ev.target.value })}
-        />
-        <Button onClick={() => this.props.setEmail(this.state.email)}>continue as guest</Button>
+        <Box defaultTheme={customerEmailFormLayout}>
+          <Input
+            gridArea="input"
+            type="text"
+            name="email"
+            value={this.state.email}
+            onChange={ev => this.setState({ email: ev.target.value })}
+          />
+          <Button gridArea="button" onClick={() => this.props.setEmail(this.state.email)}>
+            continue as guest
+          </Button>
+        </Box>
       </Box>
     );
   }

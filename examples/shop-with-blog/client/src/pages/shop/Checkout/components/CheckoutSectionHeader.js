@@ -19,7 +19,7 @@ const checkoutHeaderLayout = {
     gridGap: 'xs',
     // prettier-ignore
     gridTemplate: toGridTemplate([
-      ['35px',                  '1fr',                    '1fr',                      '100px'                  ],
+      ['40px',                  '1fr',                    '1fr',                      '100px'                  ],
       [CheckoutHeaderArea.icon, CheckoutHeaderArea.title, CheckoutHeaderArea.summary, CheckoutHeaderArea.button]
     ])
   }

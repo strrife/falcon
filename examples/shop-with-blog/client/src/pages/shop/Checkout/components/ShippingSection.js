@@ -5,7 +5,7 @@ import { Price } from '@deity/falcon-ecommerce-uikit';
 import SectionHeader from './CheckoutSectionHeader';
 
 const ShippingSelector = ({ availableShippingOptions = [], onShippingSelected }) => (
-  <Box mt="md">
+  <Box my="md">
     {availableShippingOptions.map(option => (
       <FlexLayout key={option.carrierCode}>
         <Radio

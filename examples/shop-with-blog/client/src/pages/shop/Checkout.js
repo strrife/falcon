@@ -35,15 +35,22 @@ const checkoutLayout = {
         [CheckoutArea.checkout, CheckoutArea.divider, CheckoutArea.cart]
       ])
     },
-    css: {
+    css: ({ theme }) => ({
       // remove default -/+ icons in summary element
       'details summary:after': {
         display: 'none'
       },
       'details summary:active, details summary:focus': {
         outline: 'none'
+      },
+      'details summary': {
+        paddingRight: theme.spacing.xxl
+      },
+      'details article': {
+        paddingLeft: theme.spacing.xxl,
+        paddingRight: theme.spacing.xxl
       }
-    }
+    })
   }
 };
 
@@ -108,6 +115,7 @@ class CheckoutWizard extends React.Component {
                 <AddressSection
                   open={currentStep === 2}
                   title="Shipping address"
+                  submitLabel="Continue"
                   selectedAddress={values.shippingAddress}
                   setAddress={address => {
                     setShippingAddress(address);
@@ -121,6 +129,7 @@ class CheckoutWizard extends React.Component {
                 <AddressSection
                   open={currentStep === 3}
                   title="Billing address"
+                  submitLabel="Continue"
                   selectedAddress={values.billingAddress}
                   setAddress={address => {
                     setBillingAddress(address);

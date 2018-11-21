@@ -102,9 +102,9 @@ const AddressForm = ({ submitLabel = 'Save' }) => (
     <FormField name="city" label="City" required gridArea={AddressFormArea.city} />
     <FormField type="hidden" name="countryId" label="Country" required gridArea={AddressFormArea.country} />
     <FormField name="telephone" label="Phone" required gridArea={AddressFormArea.phone} />
-    <Button type="submit" gridArea={AddressFormArea.submit}>
-      {submitLabel}
-    </Button>
+    <Box gridArea={AddressFormArea.submit}>
+      <Button type="submit">{submitLabel}</Button>
+    </Box>
   </Box>
 );
 
