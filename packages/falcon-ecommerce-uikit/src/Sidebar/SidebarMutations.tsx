@@ -20,7 +20,7 @@ export class CloseSidebarMutation extends Mutation {
 }
 
 type OpenSidebarVariables = {
-  contentType: 'cart' | 'signin';
+  contentType: string;
   side?: 'left' | 'right';
 };
 
