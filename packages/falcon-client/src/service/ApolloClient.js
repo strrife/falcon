@@ -38,6 +38,8 @@ export function ApolloClient(config = {}) {
   const addTypename = false; // disabling 'addTypename' option to avoid manual setting "__typename" field
 
   const cache = new InMemoryCache({ addTypename }).restore(initialState);
+  const apolloClientStateLink = withClientState({ cache, ...clientState });
+  const apolloHttpLink = createHttpLink({ ...httpLink, fetch, credentials: 'include', headers });
 
   return new Apollo(
     deepMerge.all(
@@ -46,11 +48,7 @@ export function ApolloClient(config = {}) {
           addTypename,
           ssrMode: !isBrowser,
           cache,
-          link: ApolloLink.from([
-            ...extraLinks,
-            withClientState({ cache, ...clientState }),
-            createHttpLink({ ...httpLink, fetch, credentials: 'include', headers })
-          ]),
+          link: ApolloLink.from([...extraLinks, apolloClientStateLink, apolloHttpLink]),
           connectToDevTools: isBrowser && connectToDevTools
         },
         restApolloClientConfig
