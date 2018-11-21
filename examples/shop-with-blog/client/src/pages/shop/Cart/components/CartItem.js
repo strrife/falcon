@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { Box, Text, Image } from '@deity/falcon-ui';
 import { UpdateCartItemMutation, RemoveCartItemMutation, Price, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
 import { RemoveItemButton, ChangeItemNumberInput } from './Inputs';

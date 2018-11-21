@@ -2,19 +2,19 @@ export const defaultBaseTheme = {
   colors: {
     primary: '#A9CF38',
     primaryLight: '#CBDE6E',
-    primaryDark: '#95b82c',
-    primaryText: '#fff',
+    primaryDark: '#95B82C',
+    primaryText: '#FFFFFF',
 
-    secondary: '#eef0f2',
-    secondaryLight: '#f8f8f8',
-    secondaryDark: '#e8e8e8',
-    secondaryText: '#5f6367',
+    secondary: '#EEF0F2',
+    secondaryLight: '#F8F8F8',
+    secondaryDark: '#E8E8E8',
+    secondaryText: '#5F6367',
 
     error: '#E74C3C',
     errorText: '#000000',
 
     black: '#5f6367',
-    white: '#ffffff',
+    white: '#FFFFFF',
     transparent: 'transparent'
   },
 

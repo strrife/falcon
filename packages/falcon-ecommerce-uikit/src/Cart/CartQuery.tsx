@@ -45,7 +45,9 @@ function getTranslations(t: reactI18Next.TranslationFunction) {
     couponCode: t('cart.couponCode'),
     applyCouponCode: t('cart.applyCouponCode'),
     cancelCouponCode: t('cart.cancelCouponCode'),
-    invalidCouponCode: t('cart.invalidCouponCode')
+    invalidCouponCode: t('cart.invalidCouponCode'),
+    checkout: t('cart.checkout'),
+    continueShopping: t('cart.continueShopping')
   };
 }
 

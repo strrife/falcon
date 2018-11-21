@@ -4,6 +4,7 @@ export * from './Product';
 export * from './Footer';
 export * from './Category';
 export * from './Cart';
+export * from './Checkout';
 export * from './MiniCart';
 export * from './MiniAccount';
 export * from './SignIn';

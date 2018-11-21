@@ -6,6 +6,7 @@ import { H2, Icon, Box, Link, Button, Input, Label, Text } from '@deity/falcon-u
 import { SignInMutation } from './SignInMutation';
 
 export type SignInFormRenderProps = {
+  hideHeader?: boolean;
   signIn: { execute: MutationFn<any, OperationVariables>; result: MutationResult<any> };
   formik: FormikProps<any>;
 };
@@ -32,14 +33,19 @@ export const SignInForm = adopt<SignInFormRenderProps>({
 });
 
 export const SignInFormContent: React.SFC<SignInFormRenderProps> = ({
+  hideHeader,
   formik: { handleChange },
   signIn: {
     result: { error, loading }
   }
 }) => (
   <React.Fragment>
-    <H2 mb="lg">Login</H2>
-    <Text>Log in with your account</Text>
+    {!hideHeader && (
+      <React.Fragment>
+        <H2 mb="lg">Login</H2>
+        <Text>Log in with your account</Text>
+      </React.Fragment>
+    )}
     <Box>{!!error && <Text color="error">{error.message}</Text>}</Box>
     <Box>
       <Label htmlFor="email">Email</Label>

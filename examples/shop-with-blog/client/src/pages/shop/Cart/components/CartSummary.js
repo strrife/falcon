@@ -1,16 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Price, ApplyCouponMutation, CancelCouponMutation, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
-import { Box, Divider, Input, Button, Text, Icon } from '@deity/falcon-ui';
+import { ApplyCouponMutation, CancelCouponMutation, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
+import { Box, Input, Button, Text, Icon } from '@deity/falcon-ui';
 import { Formik, Form } from 'formik';
 import { adopt } from 'react-adopt';
-
-const TOTALS = {
-  SHIPPING: 'shipping',
-  SUBTOTAL: 'subtotal',
-  GRAND_TOTAL: 'grand_total',
-  DISCOUNT: 'discount'
-};
+import CartTotals from '../../components/CartTotals';
 
 export const CartSummaryArea = {
   coupon: 'coupon',
@@ -73,19 +67,6 @@ const ApplyCouponForm = adopt({
     </Formik>
   )
 });
-
-// helper that returns particular total by its code
-const getTotalByCode = (totals, code) => totals.find(total => total.code === code);
-
-const TotalRow = ({ total, fontWeight = 'normal' }) =>
-  total ? (
-    <Box display="flex">
-      <Text fontWeight={fontWeight} flex="1">
-        {total.title}
-      </Text>
-      <Price fontWeight={fontWeight} value={total.value} />
-    </Box>
-  ) : null;
 
 const CartSummary = ({ totals, couponCode, translations }) => (
   <Box mt="md" defaultTheme={cartSummaryLayout}>
@@ -152,13 +133,24 @@ const CartSummary = ({ totals, couponCode, translations }) => (
         }
       })}
     />
-    <Box gridArea={CartSummaryArea.totals}>
-      <TotalRow total={getTotalByCode(totals, TOTALS.SUBTOTAL)} />
-      <TotalRow total={getTotalByCode(totals, TOTALS.SHIPPING)} />
-      <TotalRow total={getTotalByCode(totals, TOTALS.DISCOUNT)} />
-      <Divider my="xs" />
-      <TotalRow total={getTotalByCode(totals, TOTALS.GRAND_TOTAL)} fontWeight="bold" />
-    </Box>
+    <CartTotals
+      gridArea={CartSummaryArea.totals}
+      totalsData={totals}
+      totalsToDisplay={[
+        CartTotals.TOTALS.SUBTOTAL,
+        CartTotals.TOTALS.SHIPPING,
+        CartTotals.TOTALS.DISCOUNT,
+        'divider',
+        CartTotals.TOTALS.GRAND_TOTAL
+      ]}
+      bold={[CartTotals.TOTALS.GRAND_TOTAL]}
+      css={({ theme }) => ({
+        '> hr': {
+          marginTop: theme.spacing.xs,
+          marginBottom: theme.spacing.xs
+        }
+      })}
+    />
   </Box>
 );
 

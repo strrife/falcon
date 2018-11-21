@@ -56,6 +56,8 @@
     "couponCode": "Vouchercode",
     "applyCouponCode": "Activate",
     "cancelCouponCode": "Cancel code",
-    "invalidCouponCode": "Invalid coupon code"
+    "invalidCouponCode": "Invalid coupon code",
+    "checkout": "Checkout",
+    "continueShopping": "Shopping"
   }
 }

@@ -38,6 +38,9 @@ const CartPage = () => (
           <React.Fragment>
             <CartItemsList items={cart.items} />
             <CartSummary totals={cart.totals} couponCode={cart.couponCode} translations={translations} />
+            <Button as={RouterLink} to="/checkout" alignSelf="center" px="xxxl">
+              {translations.checkout}
+            </Button>
           </React.Fragment>
         ) : (
           <Box display="flex" flexDirection="column" alignItems="center">

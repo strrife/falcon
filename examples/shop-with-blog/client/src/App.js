@@ -49,6 +49,7 @@ const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" 
 const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/Blog" */ './pages/blog/Blog'));
 const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/Post" */ './pages/blog/Post'));
 const Cart = AsyncComponent(() => import(/* webpackChunkName: "shop/cart" */ './pages/shop/Cart'));
+const Checkout = AsyncComponent(() => import(/* webpackChunkName: "shop/checkout" */ './pages/shop/Checkout'));
 
 let ThemeEditorComponent;
 // ThemeEditor gets loaded only in dev mode
@@ -74,6 +75,7 @@ const App = ({ online }) => (
                 <Route exact path="/products" component={Category} />
                 <Route exact path="/blog/:page?" component={Blog} />
                 <Route exact path="/cart" component={Cart} />
+                <Route exact path="/checkout" component={Checkout} />
                 <DynamicRoute
                   loaderComponent={Loader}
                   components={{

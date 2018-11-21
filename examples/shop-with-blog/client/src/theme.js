@@ -11,6 +11,7 @@ import ChevronsRight from 'react-feather/dist/icons/chevrons-right';
 import ChevronsLeft from 'react-feather/dist/icons/chevrons-left';
 import Lock from 'react-feather/dist/icons/lock';
 import Trash from 'react-feather/dist/icons/trash-2';
+import Check from 'react-feather/dist/icons/check';
 import { createTheme } from '@deity/falcon-ui';
 import logo from './assets/logo.svg';
 
@@ -51,6 +52,7 @@ export const deityGreenTheme = createTheme({
     },
     cart: { icon: ShoppingCart },
     user: { icon: User },
+    arrowRight: { icon: ChevronRight },
     dropdownArrowDown: {
       icon: ChevronDown,
       size: 'md',
@@ -84,7 +86,8 @@ export const deityGreenTheme = createTheme({
       stroke: 'black'
     },
     lock: { icon: Lock },
-    trash: { icon: Trash }
+    trash: { icon: Trash },
+    check: { icon: Check }
   },
   keyframes: {
     loader: {
