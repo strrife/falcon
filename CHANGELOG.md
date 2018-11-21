@@ -4,7 +4,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 ## Falcon v0.2
 
-### Falcon Client v0.0.3
+### Falcon Client v0.0.8
 
 - feat: removed razzle ([#87](https://github.com/deity-io/falcon/pull/87))
 - feat: support for Google Analytics added ([#78](https://github.com/deity-io/falcon/pull/78))
@@ -13,6 +13,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 - feat: added `backendConfig` resolver ([#176](https://github.com/deity-io/falcon/pull/176))
 - fix: removed duplicated context data ([#176](https://github.com/deity-io/falcon/pull/176))
+- refactor: `Events` enum has been moved from `falcon-server` to `falcon-server-env` package ([#176](https://github.com/deity-io/falcon/pull/176))
 
 ### Falcon UI v0.0.4
 
@@ -37,6 +38,8 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon Server Env v0.0.4
 
 - feat: added getter and setter methods to work with "named" session object from the context in ApiDataSource
+([#176](https://github.com/deity-io/falcon/pull/176))
+- feat: `ApiDataSource` and `Extension` models are now accept `eventEmitter` instance
 ([#176](https://github.com/deity-io/falcon/pull/176))
 
 ---

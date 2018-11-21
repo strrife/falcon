@@ -2,6 +2,7 @@ import { Response, Request } from 'apollo-server-env';
 import { CacheOptions, RequestOptions } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { IMiddleware } from 'koa-router';
 import { RequestInit } from 'apollo-server-env';
+import { EventEmitter2 } from 'eventemitter2';
 
 export interface FetchUrlResult {
   id: string | number;
@@ -21,6 +22,7 @@ export enum ApiUrlPriority {
 export interface ConfigurableConstructorParams<T = object> {
   config?: T;
   name?: string;
+  eventEmitter: EventEmitter2;
 }
 
 export type ContextType = {
@@ -49,6 +51,7 @@ export interface ApiDataSourceConfig {
 
 // todo: this is a temporary type just to have proper type checking in the Extension class. It needs to be improved.
 export type ExtensionContainer = object;
+export type ApiContainer = object;
 
 export interface ContextData {
   context?: ContextType;

@@ -2,11 +2,13 @@ import { DataSourceConfig } from 'apollo-datasource';
 import { RESTDataSource } from 'apollo-datasource-rest';
 import { Body, Request } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URL, URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
+import { EventEmitter2 } from 'eventemitter2';
 import { stringify } from 'qs';
 import { format } from 'url';
 import * as Logger from '@deity/falcon-logger';
 import ContextHTTPCache from '../cache/ContextHTTPCache';
 import {
+  ApiContainer,
   ApiUrlPriority,
   ApiDataSourceConfig,
   ApiDataSourceEndpoint,
@@ -22,21 +24,34 @@ import {
 
 export type PaginationValue = number | string | null;
 
+export type ConfigurableContainerConstructorParams = ConfigurableConstructorParams<ApiDataSourceConfig> & {
+  apiContainer: ApiContainer;
+};
+
 export default abstract class ApiDataSource<TContext extends ContextSession = any> extends RESTDataSource<TContext> {
   public name: string;
   public config: ApiDataSourceConfig;
   public fetchUrlPriority: number = ApiUrlPriority.NORMAL;
   public perPage: number = 10;
 
+  protected apiContainer: ApiContainer;
+  protected eventEmitter: EventEmitter2;
+
   /**
-   * @param {ConfigurableConstructorParams<ApiDataSourceConfig>} params Constructor params
+   * @param {ConfigurableContainerConstructorParams} params Constructor params
    * @param {ApiDataSourceConfig} params.config API DataSource config
    * @param {string} params.name API DataSource short-name
+   * @param {ApiContainer} params.apiContainer ApiContainer instance
+   * @param {EventEmitter2} params.eventEmitter EventEmitter2 instance
    */
-  constructor(params: ConfigurableConstructorParams<ApiDataSourceConfig> = {}) {
+  constructor(params: ConfigurableContainerConstructorParams) {
     super();
-    this.name = params.name || this.constructor.name;
-    this.config = params.config || {};
+    const { config, name, apiContainer, eventEmitter } = params;
+
+    this.name = name || this.constructor.name;
+    this.config = config || {};
+    this.apiContainer = apiContainer;
+    this.eventEmitter = eventEmitter;
 
     const { host, port, protocol } = this.config;
     if (host) {

@@ -20,16 +20,11 @@ const { codes } = require('@deity/falcon-errors');
 module.exports = class Magento2ApiBase extends ApiDataSource {
   /**
    * Create Magento api wrapper instance
-   * @param {object} options configuration options
-   * @param {string} options.apiHost api host
-   * @param {string} options.apiProtocol https or http
-   * @param {string} options.apiUser api user
-   * @param {string} options.apiPassword api password
-   * @param {string} options.apiPort api port
+   * @param {object} params configuration params
    */
-  constructor({ config, name }) {
-    super({ config, name });
-    this.storePrefix = config.storePrefix || 'default';
+  constructor(params) {
+    super(params);
+    this.storePrefix = this.config.storePrefix || 'default';
     this.cookie = null;
     this.setupAdminTokenRefreshJob();
   }

@@ -6,7 +6,6 @@ const isPlainObject = require('lodash/isPlainObject');
 const addMinutes = require('date-fns/add_minutes');
 const { htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
-
 const Magento2ApiBase = require('./Magento2ApiBase');
 
 /**

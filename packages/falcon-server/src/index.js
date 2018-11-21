@@ -2,6 +2,7 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const session = require('koa-session');
 const cors = require('@koa/cors');
+const get = require('lodash/get');
 const { ApolloServer } = require('apollo-server-koa');
 const Logger = require('@deity/falcon-logger');
 const ApiContainer = require('./containers/ApiContainer');
@@ -10,10 +11,10 @@ const { EventEmitter2 } = require('eventemitter2');
 const { resolve: resolvePath } = require('path');
 const { readFileSync } = require('fs');
 const { codes } = require('@deity/falcon-errors');
+const { Events } = require('@deity/falcon-server-env');
 const DynamicRouteResolver = require('./resolvers/DynamicRouteResolver');
 
 const BaseSchema = readFileSync(resolvePath(__dirname, './schema.graphql'), 'utf8');
-const Events = require('./events');
 
 class FalconServer {
   constructor(config) {
@@ -205,7 +206,11 @@ class FalconServer {
   }
 
   formatGraphqlError(error) {
-    const { code = codes.INTERNAL_SERVER_ERROR } = error.extensions || {};
+    let { code = codes.INTERNAL_SERVER_ERROR } = error.extensions || {};
+
+    if (get(error, 'extensions.response.status') === 404) {
+      code = codes.NOT_FOUND;
+    }
 
     if (this.loggableErrorCodes.includes(code)) {
       setImmediate(async () => {
