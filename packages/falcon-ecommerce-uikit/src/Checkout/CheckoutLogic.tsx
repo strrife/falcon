@@ -230,10 +230,15 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
   render() {
     return (
       <CartQuery>
-        {({ cart }) =>
-          cart.items.length === 0 && !this.state.orderId ? (
-            <Redirect to="/" />
-          ) : (
+        {({ cart }) => {
+          if (this.state.orderId) {
+            // order has been placed successfully so we show confirmation
+            return <Redirect to="/checkout/confirmation" />;
+          } else if (!cart.items.length) {
+            // cart is empty, so checkout route shouldn't be presented
+            return <Redirect to="/" />;
+          }
+          return (
             <React.Fragment>
               {this.props.children({
                 loading: this.state.loading,
@@ -250,8 +255,8 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
                 placeOrder: this.placeOrder
               })}
             </React.Fragment>
-          )
-        }
+          );
+        }}
       </CartQuery>
     );
   }

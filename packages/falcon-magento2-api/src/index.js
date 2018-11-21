@@ -585,6 +585,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
           e.userMessage = true;
           e.noLogging = true;
         }
+      } else if (e.message.match(/^No such entity with cartId/)) {
+        this.removeCartData();
+        delete this.context.magento2.cart;
+        this.context.session.save();
+        e.code = 'INVALID_CART';
+        e.userMessage = false;
+        e.noLogging = true;
       }
 
       throw e;
@@ -646,14 +653,15 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   async cart() {
     const { magento2 } = this.context;
     const quoteId = magento2.cart && magento2.cart.quoteId;
+    const emptyCart = {
+      active: false,
+      itemsQty: 0,
+      items: [],
+      totals: []
+    };
 
     if (!magento2.cart || !magento2.cart.quoteId) {
-      return {
-        active: false,
-        itemsQty: 0,
-        items: [],
-        totals: []
-      };
+      return emptyCart;
     }
 
     if (!quoteId) {
@@ -662,24 +670,30 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     // todo avoid calling both endpoints if not necessary
     const cartPath = this.getCartPath();
-    const [{ data: quote }, { data: totals }] = await Promise.all([
-      this.get(
-        cartPath,
-        {},
-        {
-          context: { didReceiveResult: result => this.convertKeys(result) }
-        }
-      ),
-      this.get(
-        `${cartPath}/totals`,
-        {},
-        {
-          context: { didReceiveResult: result => this.convertKeys(result) }
-        }
-      )
-    ]);
 
-    return this.convertCartData(quote, totals);
+    try {
+      const [{ data: quote }, { data: totals }] = await Promise.all([
+        this.get(
+          cartPath,
+          {},
+          {
+            context: { didReceiveResult: result => this.convertKeys(result) }
+          }
+        ),
+        this.get(
+          `${cartPath}/totals`,
+          {},
+          {
+            context: { didReceiveResult: result => this.convertKeys(result) }
+          }
+        )
+      ]);
+      return this.convertCartData(quote, totals);
+    } catch (ex) {
+      // can't fetch cart so remove its data from session
+      this.removeCartData();
+      return emptyCart;
+    }
   }
 
   /**
@@ -1458,5 +1472,10 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     response.data.paymentMethodName = response.data.payment.method;
 
     return response.data;
+  }
+
+  removeCartData() {
+    delete this.context.magento2.cart;
+    this.context.session.save();
   }
 };
