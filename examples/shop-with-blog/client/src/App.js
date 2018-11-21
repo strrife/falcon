@@ -13,7 +13,7 @@ import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import AsyncComponent from 'src/components/Async';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
-import { Sidebar } from 'src/pages/shop/components/Sidebar';
+import { Sidebar, SidebarContainer } from 'src/pages/shop/components/Sidebar';
 import { deityGreenTheme } from './theme';
 
 const HeadMetaTags = () => (
@@ -36,6 +36,9 @@ const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category
 const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
 const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/Blog" */ './pages/blog/Blog'));
 const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/Post" */ './pages/blog/Post'));
+const SidebarContents = AsyncComponent(() =>
+  import(/* webpackChunkName: "shop/SidebarContents" */ './pages/shop/components/Sidebar/SidebarContents')
+);
 
 let ThemeEditorComponent;
 // ThemeEditor gets loaded only in dev mode
@@ -71,7 +74,13 @@ const App = ({ online }) => (
               </Switch>
               <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
 
-              <Sidebar />
+              <SidebarContainer>
+                {sidebarProps => (
+                  <Sidebar {...sidebarProps}>
+                    {() => <SidebarContents contentType={sidebarProps.contentType} />}
+                  </Sidebar>
+                )}
+              </SidebarContainer>
             </AppLayout>
           </ThemeProvider>
           {ThemeEditorComponent && <ThemeEditorComponent {...props} />}

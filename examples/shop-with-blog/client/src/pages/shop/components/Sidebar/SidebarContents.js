@@ -5,7 +5,7 @@ import { MiniCartQuery, MiniAccountQuery, MiniCart, MiniAccount } from '@deity/f
 export default ({ contentType }) => {
   if (!contentType) return null;
   // using hidden attribute will cause react to consider rendering it as low priority
-  // (in ver >= 16.6)
+  // (in version > 16.6) - https://github.com/oliviertassinari/react-swipeable-views/issues/453#issuecomment-417939459
   return (
     <React.Fragment>
       <Box hidden={contentType !== 'cart'} css={{ height: '100%' }}>
