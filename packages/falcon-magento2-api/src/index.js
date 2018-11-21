@@ -4,14 +4,34 @@ const pick = require('lodash/pick');
 const has = require('lodash/has');
 const isPlainObject = require('lodash/isPlainObject');
 const addMinutes = require('date-fns/add_minutes');
-const { htmlHelpers } = require('@deity/falcon-server-env');
+const { Events, htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
+const { addResolveFunctionsToSchema } = require('graphql-tools');
 const Magento2ApiBase = require('./Magento2ApiBase');
 
 /**
  * API for Magento2 store - provides resolvers for shop schema.
  */
 module.exports = class Magento2Api extends Magento2ApiBase {
+  constructor(params) {
+    super(params);
+    this.eventEmitter.on(Events.BEFORE_APOLLO_SERVER_CREATED, serverConfig => this.addTypeResolvers(serverConfig));
+  }
+
+  /**
+   * Adds additional resolve functions to the stitched GQL schema for the sake of data-splitting
+   * @param {object} serverConfig Apollo Server config object
+   */
+  async addTypeResolvers(serverConfig) {
+    const resolvers = {
+      BackendConfig: {
+        shop: () => this.magentoConfig
+      }
+    };
+    Logger.debug(`${this.name}: Adding additional resolve functions`);
+    addResolveFunctionsToSchema({ schema: serverConfig.schema, resolvers });
+  }
+
   /**
    * Set shop configuration
    * @param {StoreConfigInput} params - params to be set
@@ -775,7 +795,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       // calculate token expiration date and subtract 1 minute for margin
       const tokenValidationTimeInMinutes = validTime * 60 - 1;
       const tokenExpirationTime = addMinutes(dateNow, tokenValidationTimeInMinutes);
-      Logger.debug(`Customer token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
+      Logger.debug(`${this.name}: Customer token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
 
       this.session.customerToken = {
         token,
@@ -952,12 +972,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { customerToken = {} } = this.session;
 
     if (!id) {
-      Logger.error('Trying to fetch customer order info without order id');
+      Logger.error(`${this.name}: Trying to fetch customer order info without order id`);
       throw new Error('Failed to load an order.');
     }
 
     if (!customerToken.token) {
-      Logger.error('Trying to fetch customer order info without customer token');
+      Logger.error(`${this.name}: Trying to fetch customer order info without customer token`);
       throw new Error('Failed to load an order.');
     }
 
@@ -1108,7 +1128,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       return {};
     }
 
-    Logger.warn('Trying to remove cart item without quoteId');
+    Logger.warn(`${this.name}: Trying to remove cart item without quoteId`);
 
     return {};
   }
@@ -1179,7 +1199,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     let addressData = data;
 
     if (!customerToken.token) {
-      Logger.error('Trying to edit customer data without customer token');
+      Logger.error(`${this.name}: Trying to edit customer data without customer token`);
       throw new Error('You do not have an access to edit address data');
     }
 
@@ -1266,7 +1286,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { customerToken = {} } = this.session;
 
     if (!customerToken.token) {
-      Logger.error('Trying to edit customer data without customer token');
+      Logger.error(`${this.name}: Trying to edit customer data without customer token`);
       throw new Error('You do not have an access to edit account data');
     }
 
