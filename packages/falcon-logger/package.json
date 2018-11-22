@@ -4,6 +4,9 @@
   "main": "src/index.js",
   "version": "0.0.3",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-logger",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "util": "^0.11.0",
     "winston": "^3.0.0"
