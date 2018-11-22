@@ -9,7 +9,7 @@ const rootPackage = resolve(rootDir, 'package.json');
 
 const getAvailableExamples = () => {
   try {
-    return fs.readdirSync(examplesPath);
+    return fs.readdirSync(examplesPath).filter(entry => fs.lstatSync(resolve(examplesPath, entry)).isDirectory());
   } catch (e) {
     return [];
   }
