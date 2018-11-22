@@ -36,7 +36,12 @@ const getActiveProjects = targetPath => {
   if (fs.existsSync(resolve(targetPath, 'package.json'))) {
     folders.push(targetPath);
   } else {
-    folders.push(...fs.readdirSync(targetPath).map(folder => resolve(targetPath, folder)));
+    const entries = fs
+      .readdirSync(targetPath)
+      .map(folder => resolve(targetPath, folder))
+      .filter(entry => fs.lstatSync(entry).isDirectory());
+
+    folders.push(...entries);
   }
 
   return folders;
