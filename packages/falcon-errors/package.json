@@ -5,6 +5,9 @@
   "main": "index.js",
   "version": "0.0.3",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-errors",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "apollo-server-errors": "^2.0.2"
   },

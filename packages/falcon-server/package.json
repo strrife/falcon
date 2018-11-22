@@ -4,6 +4,9 @@
   "main": "src/index.js",
   "version": "0.0.3",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-server",
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "falcon-server": "bin/falcon-server.js"
   },
