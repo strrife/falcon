@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, H2, Button, Divider } from '@deity/falcon-ui';
+import { Box, H2, Button, Divider, Icon } from '@deity/falcon-ui';
 import { CheckoutLogic, CartQuery, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
 import CheckoutCartSummary from './Checkout/components/CheckoutCartSummary';
 import CustomerSelector from './Checkout/components/CustomerSelector';
@@ -54,6 +54,22 @@ const checkoutLayout = {
   }
 };
 
+const Loader = ({ visible }) => (
+  <Box
+    css={{
+      position: 'absolute',
+      display: visible ? 'flex' : 'none',
+      justifyContent: 'center',
+      alignItems: 'center',
+      background: 'rgba(255, 255, 255, 0.7)',
+      height: '100%',
+      width: '100%'
+    }}
+  >
+    <Icon src="loader" />
+  </Box>
+);
+
 class CheckoutWizard extends React.Component {
   state = {
     currentStep: 1
@@ -68,6 +84,7 @@ class CheckoutWizard extends React.Component {
       <CheckoutLogic>
         {({
           values,
+          loading,
           availableShippingMethods,
           availablePaymentMethods,
           setEmail,
@@ -79,12 +96,14 @@ class CheckoutWizard extends React.Component {
           placeOrder
         }) => (
           <Box defaultTheme={checkoutLayout}>
+            {console.log('values', values.loading, values)}
             <Box gridArea={CheckoutArea.cart}>
               <H2 fontSize="md">Summary</H2>
               <CartQuery>{({ cart }) => <CheckoutCartSummary cart={cart} />}</CartQuery>
             </Box>
             <Divider gridArea={CheckoutArea.divider} />
-            <Box gridArea={CheckoutArea.checkout}>
+            <Box gridArea={CheckoutArea.checkout} position="relative">
+              <Loader visible={loading} />
               <CustomerSelector
                 open={currentStep === 1}
                 onEditRequested={() => this.setCurrentStep(1)}
