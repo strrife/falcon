@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, H1, H2, Text, Button, Divider } from '@deity/falcon-ui';
+import { Box, H2, Button, Divider } from '@deity/falcon-ui';
 import { CheckoutLogic, CartQuery, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
 import CheckoutCartSummary from './Checkout/components/CheckoutCartSummary';
 import CustomerSelector from './Checkout/components/CustomerSelector';
@@ -54,18 +54,6 @@ const checkoutLayout = {
   }
 };
 
-const OrderConfirmation = () => (
-  <Box>
-    <H1>THANK YOU FOR SHOPPING!</H1>
-    <Text>We are delighted you chose our shop.</Text>
-    <Text>
-      Your order has been successfully completed. We have received your order and we are working hard on getting your
-      item to you as soon as possible.
-    </Text>
-    <Text>We will send you a shipping confirmation email once your order is on the way.</Text>
-  </Box>
-);
-
 class CheckoutWizard extends React.Component {
   state = {
     currentStep: 1
@@ -89,96 +77,92 @@ class CheckoutWizard extends React.Component {
           setShipping,
           setPayment,
           placeOrder
-        }) =>
-          values.orderId ? (
-            <OrderConfirmation />
-          ) : (
-            <Box defaultTheme={checkoutLayout}>
-              <Box gridArea={CheckoutArea.cart}>
-                <H2 fontSize="md">Summary</H2>
-                <CartQuery>{({ cart }) => <CheckoutCartSummary cart={cart} />}</CartQuery>
-              </Box>
-              <Divider gridArea={CheckoutArea.divider} />
-              <Box gridArea={CheckoutArea.checkout}>
-                <CustomerSelector
-                  open={currentStep === 1}
-                  onEditRequested={() => this.setCurrentStep(1)}
-                  email={values.email}
-                  setEmail={email => {
-                    setEmail(email);
-                    this.goToNextStep();
-                  }}
-                />
-
-                <Divider my="md" />
-
-                <AddressSection
-                  open={currentStep === 2}
-                  title="Shipping address"
-                  submitLabel="Continue"
-                  selectedAddress={values.shippingAddress}
-                  setAddress={address => {
-                    setShippingAddress(address);
-                    this.goToNextStep();
-                  }}
-                  onEditRequested={() => this.setCurrentStep(2)}
-                />
-
-                <Divider my="md" />
-
-                <AddressSection
-                  open={currentStep === 3}
-                  title="Billing address"
-                  submitLabel="Continue"
-                  selectedAddress={values.billingAddress}
-                  setAddress={address => {
-                    setBillingAddress(address);
-                    this.goToNextStep();
-                  }}
-                  setUseDefault={value => {
-                    setBillingSameAsShipping(value);
-                    this.goToNextStep();
-                  }}
-                  onEditRequested={() => this.setCurrentStep(3)}
-                  useDefault={values.billingSameAsShipping}
-                  labelUseDefault="My billing address is the same as shipping"
-                />
-
-                <Divider my="md" />
-
-                <ShippingSection
-                  open={currentStep === 4}
-                  shippingAddress={values.shippingAddress}
-                  selectedShipping={values.shippingMethod}
-                  setShippingAddress={setShippingAddress}
-                  availableShippingMethods={availableShippingMethods}
-                  onEditRequested={() => this.setCurrentStep(4)}
-                  setShipping={shipping => {
-                    setShipping(shipping);
-                    this.goToNextStep();
-                  }}
-                />
-
-                <Divider my="md" />
-
-                <PaymentSection
-                  open={currentStep === 5}
-                  selectedPayment={values.paymentMethod}
-                  availablePaymentMethods={availablePaymentMethods}
-                  onEditRequested={() => this.setCurrentStep(5)}
-                  setPayment={payment => {
-                    setPayment(payment);
-                    this.goToNextStep();
-                  }}
-                />
-
-                <Divider my="md" />
-
-                {currentStep === 6 && <Button onClick={placeOrder}>Place order</Button>}
-              </Box>
+        }) => (
+          <Box defaultTheme={checkoutLayout}>
+            <Box gridArea={CheckoutArea.cart}>
+              <H2 fontSize="md">Summary</H2>
+              <CartQuery>{({ cart }) => <CheckoutCartSummary cart={cart} />}</CartQuery>
             </Box>
-          )
-        }
+            <Divider gridArea={CheckoutArea.divider} />
+            <Box gridArea={CheckoutArea.checkout}>
+              <CustomerSelector
+                open={currentStep === 1}
+                onEditRequested={() => this.setCurrentStep(1)}
+                email={values.email}
+                setEmail={email => {
+                  setEmail(email);
+                  this.goToNextStep();
+                }}
+              />
+
+              <Divider my="md" />
+
+              <AddressSection
+                open={currentStep === 2}
+                title="Shipping address"
+                submitLabel="Continue"
+                selectedAddress={values.shippingAddress}
+                setAddress={address => {
+                  setShippingAddress(address);
+                  this.goToNextStep();
+                }}
+                onEditRequested={() => this.setCurrentStep(2)}
+              />
+
+              <Divider my="md" />
+
+              <AddressSection
+                open={currentStep === 3}
+                title="Billing address"
+                submitLabel="Continue"
+                selectedAddress={values.billingAddress}
+                setAddress={address => {
+                  setBillingAddress(address);
+                  this.goToNextStep();
+                }}
+                setUseDefault={value => {
+                  setBillingSameAsShipping(value);
+                  this.goToNextStep();
+                }}
+                onEditRequested={() => this.setCurrentStep(3)}
+                useDefault={values.billingSameAsShipping}
+                labelUseDefault="My billing address is the same as shipping"
+              />
+
+              <Divider my="md" />
+
+              <ShippingSection
+                open={currentStep === 4}
+                shippingAddress={values.shippingAddress}
+                selectedShipping={values.shippingMethod}
+                setShippingAddress={setShippingAddress}
+                availableShippingMethods={availableShippingMethods}
+                onEditRequested={() => this.setCurrentStep(4)}
+                setShipping={shipping => {
+                  setShipping(shipping);
+                  this.goToNextStep();
+                }}
+              />
+
+              <Divider my="md" />
+
+              <PaymentSection
+                open={currentStep === 5}
+                selectedPayment={values.paymentMethod}
+                availablePaymentMethods={availablePaymentMethods}
+                onEditRequested={() => this.setCurrentStep(5)}
+                setPayment={payment => {
+                  setPayment(payment);
+                  this.goToNextStep();
+                }}
+              />
+
+              <Divider my="md" />
+
+              {currentStep === 6 && <Button onClick={placeOrder}>Place order</Button>}
+            </Box>
+          </Box>
+        )}
       </CheckoutLogic>
     );
   }

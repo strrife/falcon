@@ -605,6 +605,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async ensureCart() {
     const { cart, customerToken: { token } = {} } = this.context.magento2;
+    console.log('ensureCart() 1', cart && cart.quoteId);
 
     if (cart && cart.quoteId) {
       return cart;
@@ -612,6 +613,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     const cartPath = token ? '/carts/mine' : '/guest-carts';
     const response = await this.post(cartPath);
+    console.log('ensureCart() 2', response.data);
 
     this.context.magento2.cart = { quoteId: response.data };
 
@@ -782,7 +784,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         {
           username: data.email,
           password: data.password,
-          guest_quote_id: quoteId
+          guestQuoteId: quoteId
         },
         { context: { skipAuth: true } }
       );
