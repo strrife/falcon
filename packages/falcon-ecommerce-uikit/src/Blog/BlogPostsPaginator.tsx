@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { NamespacesConsumer } from 'react-i18next-with-context';
 import { Box, DefaultThemeProps, Link, Icon } from '@deity/falcon-ui';
-import { BlogPagination, BlogPostsTranslations } from './BlogPostsQuery';
+import { BlogPagination } from './BlogPostsQuery';
 
 const blogPostsPaginatorLayout: DefaultThemeProps = {
   blogPostsPaginatorLayout: {
@@ -12,35 +13,38 @@ const blogPostsPaginatorLayout: DefaultThemeProps = {
 
 type BlogPostsPaginatorProps = {
   pagination: BlogPagination;
-  translations: BlogPostsTranslations;
   blogUrlBase: string;
 };
 
-export const BlogPostsPaginator: React.SFC<BlogPostsPaginatorProps> = ({ pagination, translations, blogUrlBase }) => (
-  <Box defaultTheme={blogPostsPaginatorLayout} justifyContent={!pagination.prevPage ? 'flex-end' : 'space-between'}>
-    {pagination.prevPage && (
-      <Link
-        display="flex"
-        lineHeight="small"
-        fontSize="md"
-        as={RouterLink}
-        to={`${blogUrlBase}/${pagination.prevPage}`}
-      >
-        <Icon size="md" mr="xs" src="prevPage" /> {translations.newerEntries}
-      </Link>
+export const BlogPostsPaginator: React.SFC<BlogPostsPaginatorProps> = ({ pagination, blogUrlBase }) => (
+  <NamespacesConsumer ns="blog">
+    {t => (
+      <Box defaultTheme={blogPostsPaginatorLayout} justifyContent={!pagination.prevPage ? 'flex-end' : 'space-between'}>
+        {pagination.prevPage && (
+          <Link
+            display="flex"
+            lineHeight="small"
+            fontSize="md"
+            as={RouterLink}
+            to={`${blogUrlBase}/${pagination.prevPage}`}
+          >
+            <Icon size="md" mr="xs" src="prevPage" /> {t('newerEntries')}
+          </Link>
+        )}
+        {pagination.nextPage && (
+          <Link
+            display="flex"
+            lineHeight="small"
+            fontSize="md"
+            as={RouterLink}
+            to={`${blogUrlBase}/${pagination.nextPage}`}
+          >
+            {t('olderEntries')} <Icon ml="xs" size="md" src="nextPage" />
+          </Link>
+        )}
+      </Box>
     )}
-    {pagination.nextPage && (
-      <Link
-        display="flex"
-        lineHeight="small"
-        fontSize="md"
-        as={RouterLink}
-        to={`${blogUrlBase}/${pagination.nextPage}`}
-      >
-        {translations.olderEntries} <Icon ml="xs" size="md" src="nextPage" />
-      </Link>
-    )}
-  </Box>
+  </NamespacesConsumer>
 );
 
 BlogPostsPaginator.defaultProps = {

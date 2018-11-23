@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import { TranslationFunction } from 'i18next';
 import { Query } from '../Query/Query';
 
 const GET_BLOG_POSTS = gql`
@@ -59,21 +58,8 @@ export type BlogPostsQueryVariables = {
   };
 };
 
-function getTranslations(t: TranslationFunction) {
-  return {
-    title: t('title'),
-    readMore: t('readMore'),
-    newerEntries: t('newerEntries'),
-    olderEntries: t('olderEntries')
-  };
-}
-
-export type BlogPostsTranslations = ReturnType<typeof getTranslations>;
-
-export class BlogPostsQuery extends Query<BlogPosts, BlogPostsQueryVariables, BlogPostsTranslations> {
+export class BlogPostsQuery extends Query<BlogPosts, BlogPostsQueryVariables> {
   static defaultProps = {
-    query: GET_BLOG_POSTS,
-    getTranslations,
-    translationsNamespaces: ['blog']
+    query: GET_BLOG_POSTS
   };
 }

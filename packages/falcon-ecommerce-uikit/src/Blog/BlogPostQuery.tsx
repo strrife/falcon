@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import { TranslationFunction } from 'i18next';
 import { Query } from '../Query/Query';
 
 const GET_BLOG_POST = gql`
@@ -20,22 +19,12 @@ export type BlogPostType = {
   };
 };
 
-function getTranslations(t: TranslationFunction) {
-  return {
-    blogTitle: t('title')
-  };
-}
-
-export type BlogPostTranslations = ReturnType<typeof getTranslations>;
-
 export type BlogPostQueryVariables = {
   path: string;
 };
 
-export class BlogPostQuery extends Query<BlogPostType, BlogPostQueryVariables, BlogPostTranslations> {
+export class BlogPostQuery extends Query<BlogPostType, BlogPostQueryVariables> {
   static defaultProps = {
-    query: GET_BLOG_POST,
-    getTranslations,
-    translationsNamespaces: ['blog']
+    query: GET_BLOG_POST
   };
 }

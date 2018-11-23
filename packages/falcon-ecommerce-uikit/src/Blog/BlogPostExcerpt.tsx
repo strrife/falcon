@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { NamespacesConsumer } from 'react-i18next-with-context';
 import { Box, H2, Text, Image, DefaultThemeProps, Link } from '@deity/falcon-ui';
-import { BlogPostsTranslations, BlogPostExcerptType } from './BlogPostsQuery';
+import { BlogPostExcerptType } from './BlogPostsQuery';
 import { DateFormat } from '../Locale';
 import { toGridTemplate } from '../helpers';
 
@@ -44,21 +45,22 @@ const blogPostExcerptLayout: DefaultThemeProps = {
   }
 };
 
-export const BlogPostExcerpt: React.SFC<{ excerpt: BlogPostExcerptType; translations: BlogPostsTranslations }> = ({
-  excerpt,
-  translations
-}) => (
-  <Box as="li">
-    <Link as={RouterLink} to={excerpt.slug} defaultTheme={blogPostExcerptLayout}>
-      {excerpt.image && (
-        <Image gridArea={BlogPostEcerptArea.image} src={excerpt.image.url} alt={excerpt.image.description} />
-      )}
-      <H2 gridArea={BlogPostEcerptArea.title}>{excerpt.title}</H2>
-      <DateFormat gridArea={BlogPostEcerptArea.date} value={excerpt.date} />
-      <Text fontSize="md" gridArea={BlogPostEcerptArea.excerpt}>
-        {excerpt.excerpt}
-      </Text>
-      <Text gridArea={BlogPostEcerptArea.readMore}>{translations.readMore}</Text>
-    </Link>
-  </Box>
+export const BlogPostExcerpt: React.SFC<{ excerpt: BlogPostExcerptType }> = ({ excerpt }) => (
+  <NamespacesConsumer ns="blog">
+    {t => (
+      <Box as="li">
+        <Link as={RouterLink} to={excerpt.slug} defaultTheme={blogPostExcerptLayout}>
+          {excerpt.image && (
+            <Image gridArea={BlogPostEcerptArea.image} src={excerpt.image.url} alt={excerpt.image.description} />
+          )}
+          <H2 gridArea={BlogPostEcerptArea.title}>{excerpt.title}</H2>
+          <DateFormat gridArea={BlogPostEcerptArea.date} value={excerpt.date} />
+          <Text fontSize="md" gridArea={BlogPostEcerptArea.excerpt}>
+            {excerpt.excerpt}
+          </Text>
+          <Text gridArea={BlogPostEcerptArea.readMore}>{t('readMore')}</Text>
+        </Link>
+      </Box>
+    )}
+  </NamespacesConsumer>
 );
