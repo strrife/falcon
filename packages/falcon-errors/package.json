@@ -9,7 +9,7 @@
     "access": "public"
   },
   "dependencies": {
-    "apollo-server-errors": "^2.0.2"
+    "apollo-server-errors": "2.2.0"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }
