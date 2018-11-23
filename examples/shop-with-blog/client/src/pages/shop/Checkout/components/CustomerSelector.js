@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Formik, Form, ErrorMessage } from 'formik';
 import { graphql } from 'react-apollo';
 import { Box, Text, Link, Input, Button, Details, DetailsContent } from '@deity/falcon-ui';
 import {
@@ -36,35 +37,36 @@ const customerEmailFormLayout = {
   }
 };
 
-class EmailForm extends React.Component {
-  constructor(props) {
-    super(props);
+const emailRx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    this.state = {
-      email: props.email
-    };
-  }
-
-  render() {
-    return (
-      <Box>
+const EmailForm = ({ email = '', setEmail }) => (
+  <Formik
+    onSubmit={values => setEmail(values.email)}
+    initialValues={{ email }}
+    validate={values => {
+      if (!emailRx.test(values.email.toLowerCase())) {
+        return {
+          email: 'Invalid email address'
+        };
+      }
+    }}
+  >
+    {({ values, errors, handleChange }) => (
+      <Form>
         <Text>Type your email and continue as guest:</Text>
         <Box defaultTheme={customerEmailFormLayout}>
-          <Input
-            gridArea="input"
-            type="text"
-            name="email"
-            value={this.state.email}
-            onChange={ev => this.setState({ email: ev.target.value })}
-          />
-          <Button gridArea="button" onClick={() => this.props.setEmail(this.state.email)}>
+          <Box gridArea="input">
+            <Input type="text" name="email" value={values.email} onChange={handleChange} />
+            <ErrorMessage name="email" render={msg => <Text color="error">{msg}</Text>} />
+          </Box>
+          <Button gridArea="button" disabled={errors.email} type="submit">
             continue as guest
           </Button>
         </Box>
-      </Box>
-    );
-  }
-}
+      </Form>
+    )}
+  </Formik>
+);
 
 EmailForm.propTypes = {
   setEmail: PropTypes.func.isRequired,

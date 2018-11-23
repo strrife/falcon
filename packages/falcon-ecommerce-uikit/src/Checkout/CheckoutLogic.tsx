@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { withApollo, WithApolloClient } from 'react-apollo';
+import isEqual from 'lodash.isequal';
 import { CartQuery } from '../Cart/CartQuery';
 import { ESTIMATE_SHIPPING_METHODS, SET_SHIPPING, PLACE_ORDER } from './CheckoutMutation';
 
@@ -77,7 +78,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
     super(props);
     this.state = {
       loading: false,
-      values: props.initialValues || ({ billingSameAsShipping: true } as any),
+      values: props.initialValues || ({ billingSameAsShipping: false } as any),
       availablePaymentMethods: [],
       availableShippingMethods: []
     };
@@ -103,27 +104,34 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
     this.setPartialState({ loading }, callback);
   }
 
-  setBillingSameAsShipping = (same: boolean) =>
-    this.setPartialState({
-      values: {
-        billingSameAsShipping: same,
-        billingAddress: same ? this.state.values.shippingAddress : null
-      }
-    });
-
-  // call setState only if email is different from currently saved
-  setEmail = (email: string) => this.state.values.email !== email && this.setPartialState({ values: { email } });
-
-  setBillingAddress = (billingAddress: CheckoutAddress) => this.setPartialState({ values: { billingAddress } });
-
-  setPayment = (paymentMethod: CheckoutPaymentMethod) => this.setPartialState({ values: { paymentMethod } });
-
   getShippingMethodData(shippingMethod: CheckoutShippingMethod) {
     return {
       shippingCarrierCode: shippingMethod.carrierCode,
       shippingMethodCode: shippingMethod.methodCode
     };
   }
+
+  setEmail = (email: string) =>
+    this.setLoading(true, () => this.setPartialState({ loading: false, values: { email } }));
+
+  // the following setters first set loading to true, and then in the callback actual values is set
+  // and loading flag gets reset to false, so the flow goes through whole proces (loading > set value > loaded)
+  setBillingSameAsShipping = (same: boolean) =>
+    this.setLoading(true, () =>
+      this.setPartialState({
+        loading: false,
+        values: {
+          billingSameAsShipping: same,
+          billingAddress: same ? this.state.values.shippingAddress : null
+        }
+      })
+    );
+
+  setBillingAddress = (billingAddress: CheckoutAddress) =>
+    this.setLoading(true, () => this.setPartialState({ loading: false, values: { billingAddress } }));
+
+  setPayment = (paymentMethod: CheckoutPaymentMethod) =>
+    this.setLoading(true, () => this.setPartialState({ loading: false, values: { paymentMethod } }));
 
   setShippingAddress = (shippingAddress: CheckoutAddress) => {
     this.setLoading(true, () => {
@@ -138,17 +146,21 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           }
         })
         .then(resp => {
-          const values = {
-            shippingAddress
-          } as CheckoutLogicData;
+          const values = { shippingAddress } as CheckoutLogicData;
 
           // if billing is set to the same as shipping then set it also to received value
           if (this.state.values.billingSameAsShipping) {
             values.billingAddress = shippingAddress;
           }
 
+          // if shipping methods has changed then remove already selected shipping method
+          if (!isEqual(resp.data!.estimateShippingMethods, this.state.availableShippingMethods)) {
+            values.shippingMethod = null;
+          }
+
           this.setPartialState({
             loading: false,
+            error: null,
             values,
             availableShippingMethods: resp.data!.estimateShippingMethods
           });
@@ -180,9 +192,17 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           }
         })
         .then(resp => {
+          const values = { shippingMethod } as CheckoutLogicData;
+
+          // if available payment methods has changed then remove selected payment method
+          if (!isEqual(resp.data!.setShipping.paymentMethods, this.state.availablePaymentMethods)) {
+            values.paymentMethod = null;
+          }
+
           this.setPartialState({
             loading: false,
-            values: { shippingMethod },
+            error: null,
+            values,
             availablePaymentMethods: resp.data!.setShipping.paymentMethods
           });
         })
@@ -215,6 +235,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
         .then(resp => {
           this.setPartialState({
             loading: false,
+            error: null,
             orderId: resp.data && resp.data.placeOrder.orderId
           });
         })
