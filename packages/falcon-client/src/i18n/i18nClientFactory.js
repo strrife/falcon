@@ -27,6 +27,7 @@ export default ({ lng = 'en', fallbackLng = 'en', whitelist = ['en'], debug = fa
     resources,
     debug,
     react: {
+      wait: true,
       nsMode: 'fallback'
     },
     interpolation: {

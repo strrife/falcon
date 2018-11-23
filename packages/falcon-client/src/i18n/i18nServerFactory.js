@@ -37,6 +37,7 @@ export default ({
     resources,
     debug,
     react: {
+      wait: true,
       nsMode: 'fallback'
     },
     interpolation: {
