@@ -1,6 +1,6 @@
 import React from 'react';
+import { NamespacesConsumer } from 'react-i18next-with-context';
 import { H3, Text, Group, Input, Button, Checkbox, Label, Box, DefaultThemeProps } from '@deity/falcon-ui';
-import { FooterTranslations } from './FooterQuery';
 
 const newsletterLayoutTheme: DefaultThemeProps = {
   newsletterLayout: {
@@ -17,26 +17,29 @@ const newsletterLayoutTheme: DefaultThemeProps = {
   }
 };
 
-export const Newsletter: React.SFC<{ translations: FooterTranslations }> = ({ translations: { newsletter } }) => (
-  <Box defaultTheme={newsletterLayoutTheme}>
-    <H3>{newsletter.title}</H3>
-    <Text>{newsletter.message}</Text>
+export const Newsletter: React.SFC<{}> = () => (
+  <NamespacesConsumer ns="common">
+    {t => (
+      <Box defaultTheme={newsletterLayoutTheme}>
+        <H3>{t('newsletter.title')}</H3>
+        <Text>{t('newsletter.message')}</Text>
 
-    <form>
-      <Group>
-        <Input
-          aria-label={newsletter.emailPlaceholder}
-          type="email"
-          required
-          height="lg"
-          placeholder={newsletter.emailPlaceholder}
-        />
-        <Button as="input" type="submit" value={newsletter.subscribe} flex="none" />
-      </Group>
-      <Label htmlFor="subscribe" my="sm" display="flex" justifyContent="center" alignItems="center">
-        <Checkbox id="subscribe" required mr="xs" />
-        {newsletter.consent}
-      </Label>
-    </form>
-  </Box>
+        <form>
+          <Group>
+            <Input
+              aria-label={t('newsletter.emailPlaceholder')}
+              type="email"
+              required
+              height="lg"
+              placeholder={t('newsletter.emailPlaceholder')}
+            />
+            <Button as="input" type="submit" value={t('newsletter.subscribe')} flex="none" />
+          </Group>
+          <Label htmlFor="subscribe" my="sm" display="flex" justifyContent="center" alignItems="center">
+            <Checkbox id="subscribe" required mr="xs" /> {t('newsletter.consent')}
+          </Label>
+        </form>
+      </Box>
+    )}
+  </NamespacesConsumer>
 );

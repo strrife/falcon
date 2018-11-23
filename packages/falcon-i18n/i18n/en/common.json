@@ -1,3 +1,11 @@
 {
-  "welcome": "Welcome to @deity"
+  "welcome": "Welcome to @deity",
+  "copyright": "© Copyright",
+  "newsletter": {
+    "title": "Newsletter",
+    "message": "Join our mailing list to receive the latest offers and more!",
+    "subscribe": "Subscribe",
+    "emailPlaceholder": "Enter your email address",
+    "consent": "I would like to subscribe to updates"
+  }
 }
