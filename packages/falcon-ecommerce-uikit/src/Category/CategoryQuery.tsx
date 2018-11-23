@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { TranslationFunction } from 'i18next';
 import { Query } from '../Query/Query';
 
 export const GET_CATEGORY_PRODUCTS = gql`
@@ -52,7 +53,7 @@ export const fetchMore = (data: any, apolloFetchMore: any) =>
     }
   });
 
-function getTranslations(t: reactI18Next.TranslationFunction, data: any) {
+function getTranslations(t: TranslationFunction, data: any) {
   const {
     products: { items, pagination }
   } = data;

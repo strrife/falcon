@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { TranslationFunction } from 'i18next';
 import { Query } from '../Query';
 
 export const GET_PRODUCT = gql`
@@ -38,7 +39,7 @@ export const GET_PRODUCT = gql`
   }
 `;
 
-function getTranslations(t: reactI18Next.TranslationFunction /* , product: any */) {
+function getTranslations(t: TranslationFunction /* , product: any */) {
   return {
     sku: t('product.sku'),
     inStock: t('product.inStock'),

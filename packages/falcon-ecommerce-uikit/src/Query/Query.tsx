@@ -1,10 +1,27 @@
 import React from 'react';
 import { Query as ApolloQuery, OperationVariables, QueryProps, QueryResult } from 'react-apollo';
 import { NetworkStatus, ApolloError } from 'apollo-client';
-import { I18n, TranslationFunction } from 'react-i18next';
+import { TranslationFunction } from 'i18next';
+import { NamespacesConsumer } from 'react-i18next-with-context';
 import { Loader } from './Loader';
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+// class T extends React.Component<{ key?: string; ns?: string | string[] }> {
+//   render() {
+//     const { key, children } = this.props;
+
+//     if (key) {
+
+//     }
+
+//     if (children && typeof children === 'string') {
+//       return <React.Fragment>{children}</React.Fragment>;
+//     }
+
+//     return null;
+//   }
+// }
 
 export class Query<TData = any, TVariables = OperationVariables, TTranslations = {}> extends React.Component<
   Omit<QueryProps<TData, TVariables>, 'children'> & {
@@ -40,6 +57,7 @@ export class Query<TData = any, TVariables = OperationVariables, TTranslations =
             // TODO: check errorPolicy and if === 'all' then pass thru render props all extracted/formated errors with errorcodes instead of inline error message
             return (
               <p>
+                {/* <T ns="footer">newsletter.title</T> */}
                 {`Error!: ${errorCode}`}
                 <br /> {`${error}`}
               </p>
@@ -57,10 +75,12 @@ export class Query<TData = any, TVariables = OperationVariables, TTranslations =
           };
 
           if (getTranslations) {
+            const { translationsNamespaces } = this.props;
+
             return (
-              <I18n ns={this.props.translationsNamespaces}>
+              <NamespacesConsumer ns={['common', ...(translationsNamespaces || [])]}>
                 {t => children({ ...props, translations: getTranslations(t, data!) })}
-              </I18n>
+              </NamespacesConsumer>
             );
           }
 

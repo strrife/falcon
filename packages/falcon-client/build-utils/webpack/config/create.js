@@ -595,7 +595,7 @@ module.exports = (target = 'web', options, buildConfig) => {
     'react-dom',
     'react-google-tag-manager',
     `react-helmet`,
-    'react-i18next',
+    'react-react-i18next-with-context',
     'react-router',
     'react-router-dom',
     'history'

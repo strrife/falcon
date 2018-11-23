@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { TranslationFunction } from 'i18next';
 import { Query } from '../Query/Query';
 
 export const GET_MINI_CART = gql`
@@ -32,7 +33,7 @@ export type MiniCartData = {
   };
 };
 
-function getTranslations(t: reactI18Next.TranslationFunction) {
+function getTranslations(t: TranslationFunction) {
   return {
     title: t('miniCart.title'),
     cta: t('miniCart.cta'),

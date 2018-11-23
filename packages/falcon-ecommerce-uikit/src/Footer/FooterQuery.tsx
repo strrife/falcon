@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { TranslationFunction } from 'i18next';
 import { Query } from '../Query';
 import { MenuItem } from '../Header';
 
@@ -38,7 +39,7 @@ export type FooterData = {
   };
 };
 
-function getTranslations(t: reactI18Next.TranslationFunction) {
+function getTranslations(t: TranslationFunction) {
   return {
     newsletter: {
       title: t('newsletter.title'),

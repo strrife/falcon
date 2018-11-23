@@ -4,7 +4,7 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { asyncComponent } from 'react-async-component';
 import { Route, Switch } from 'react-router-dom';
-import { translate } from 'react-i18next';
+import { translate } from 'react-i18next-with-context';
 import Koa from 'koa';
 import supertest from 'supertest';
 import webServer from './server';

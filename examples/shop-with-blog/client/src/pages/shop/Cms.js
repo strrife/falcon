@@ -1,5 +1,5 @@
 import React from 'react';
-import { translate } from 'react-i18next';
+import { translate } from 'react-i18next-with-context';
 import PropTypes from 'prop-types';
 
 const Cms = ({ id, path, type, t }) => (

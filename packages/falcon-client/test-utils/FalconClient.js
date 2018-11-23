@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { AsyncComponentProvider } from 'react-async-component';
 import MemoryRouter from 'react-router-dom/MemoryRouter';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next-with-context';
 import i18nFactory from './../src/i18n/__mocks__/i18nFactory';
 
 /**

@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { TranslationFunction } from 'i18next';
 import { Query } from '../Query/Query';
 
 const GET_BLOG_POST = gql`
@@ -19,7 +20,7 @@ export type BlogPostType = {
   };
 };
 
-function getTranslations(t: reactI18Next.TranslationFunction) {
+function getTranslations(t: TranslationFunction) {
   return {
     blogTitle: t('title')
   };

@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { TranslationFunction } from 'i18next';
 import { Query } from '../Query/Query';
 
 const GET_BLOG_POSTS = gql`
@@ -58,7 +59,7 @@ export type BlogPostsQueryVariables = {
   };
 };
 
-function getTranslations(t: reactI18Next.TranslationFunction) {
+function getTranslations(t: TranslationFunction) {
   return {
     title: t('title'),
     readMore: t('readMore'),
