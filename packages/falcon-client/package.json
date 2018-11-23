@@ -69,7 +69,6 @@
     "react-error-overlay": "^2.0.0",
     "react-google-tag-manager": "2.2.1",
     "react-helmet": "^5.2.0",
-    "react-i18next": "^7.11.0",
     "react-test-renderer": "^16.4.2",
     "resolve": "^1.8.1",
     "serialize-javascript": "^1.5.0",
@@ -89,25 +88,25 @@
   "devDependencies": {
     "graphql": "^14.0.2",
     "graphql-tag": "^2.9.2",
-    "i18next": "^11.6.0",
+    "i18next": "^12.0.0",
     "prop-types": "^15.6.2",
     "react": "~16.4.2",
     "react-apollo": "2.2.4",
     "react-async-component": "^2.0.0",
     "react-dom": "~16.4.2",
-    "react-i18next": "^7.11.0",
+    "react-i18next-with-context": "8.3.8-cntxt-fix",
     "react-router-dom": "^4.3.1"
   },
   "peerDependencies": {
     "graphql": "^14.0.2",
     "graphql-tag": "^2.9.2",
-    "i18next": "^11.6.0",
+    "i18next": "^12.0.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
     "react-apollo": "2.2.4",
     "react-async-component": "^2.0.0",
     "react-dom": "~16.4.2",
-    "react-i18next": "^7.11.0",
+    "react-i18next-with-context": "8.3.8-cntxt-fix",
     "react-router-dom": "^4.3.1"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
