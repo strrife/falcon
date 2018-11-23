@@ -5,7 +5,7 @@ import BrowserRouter from 'react-router-dom/BrowserRouter';
 import { ApolloProvider } from 'react-apollo';
 import { AsyncComponentProvider } from 'react-async-component';
 import asyncBootstrapper from 'react-async-bootstrapper2';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next-with-context';
 import ApolloClient from './service/ApolloClient';
 import HtmlHead from './components/HtmlHead';
 import App, { clientApolloSchema } from './clientApp';
@@ -21,7 +21,9 @@ const client = new ApolloClient({
   initialState: window.__APOLLO_STATE__ || {}
 });
 const { config } = client.readQuery({ query: CLIENT_SIDE_APP_INIT });
-const renderApp = config.serverSideRendering ? hydrate : render;
+const renderApp = config.serverSideRendering
+  ? (element, container, callback) => asyncBootstrapper(element).then(() => hydrate(element, container, callback))
+  : render;
 
 const markup = (
   <ApolloProvider client={client}>
@@ -42,7 +44,7 @@ const markup = (
   </ApolloProvider>
 );
 
-asyncBootstrapper(markup).then(() => renderApp(markup, document.getElementById('root')));
+renderApp(markup, document.getElementById('root'));
 
 if (process.env.NODE_ENV === 'production') {
   register('/sw.js');
