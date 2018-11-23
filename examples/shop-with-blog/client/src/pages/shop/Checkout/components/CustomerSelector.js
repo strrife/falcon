@@ -30,7 +30,7 @@ const customerEmailFormLayout = {
         ['button']
       ]),
       md: toGridTemplate([
-        ['2fr',   '1fr'  ],
+        ['2fr',   '1fr'   ],
         ['input', 'button']
       ])
     }
