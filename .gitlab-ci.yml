@@ -42,4 +42,4 @@ Publish nightly build:
   script:
     - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
     - yarn --non-interactive --frozen-lockfile
-    - yarn lerna publish -c patch --no-git-tag-version --no-push --npm-tag nightly --yes --force-publish --npm-client npm --preid nightly --registry https://registry.npmjs.org
+    - yarn lerna publish -c patch --no-git-tag-version --no-push --npm-tag nightly --yes --force-publish --npm-client npm --preid nightly.$(date +%H%M%S) --registry https://registry.npmjs.org
