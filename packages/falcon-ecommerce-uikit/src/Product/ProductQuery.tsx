@@ -69,7 +69,7 @@ export class ProductQuery extends Query<any> {
   };
 }
 
-export const GET_PRODUCTS = gql`
+export const GET_PRODUCTS_LIST = gql`
   query Products {
     products {
       items {
@@ -89,6 +89,6 @@ export type Products = {
 
 export class ProductsListQuery extends Query<Products> {
   static defaultProps = {
-    query: GET_PRODUCTS
+    query: GET_PRODUCTS_LIST
   };
 }
