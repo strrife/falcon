@@ -52,7 +52,7 @@ export const fetchMore = (data: any, apolloFetchMore: any) =>
     }
   });
 
-export class CategoryQuery extends Query<any> {
+export class CategoryProductsQuery extends Query<any> {
   static defaultProps = {
     query: GET_CATEGORY_PRODUCTS,
     fetchMore,
