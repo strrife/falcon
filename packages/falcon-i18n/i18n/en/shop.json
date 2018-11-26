@@ -27,6 +27,12 @@
     "pagination": {
       "showingOutOf": "Showing {{itemsCount}} products out of {{totalItems}}",
       "showMore": "Show more products"
+    },
+    "sort": {
+      "title": "Sort by",
+      "disabled": "No sort",
+      "ascending": "ascending",
+      "descending": "descending"
     }
   },
   "miniCart": {
@@ -34,13 +40,5 @@
     "cta": "Secure checkout",
     "continue": "Continue shopping",
     "empty": "Shopping cart is empty"
-  },
-  "category": {
-    "sort": {
-      "title": "Sort by",
-      "disabled": "No sort",
-      "ascending": "ascending",
-      "descending": "descending"
-    }
   }
 }

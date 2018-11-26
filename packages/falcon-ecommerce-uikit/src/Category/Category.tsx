@@ -44,7 +44,7 @@ export const SortOrderDropdown: React.SFC<any> = ({ sortOrders, onChange }) => {
     <NamespacesConsumer ns="shop">
       {t => (
         <FlexLayout alignItems="center">
-          <Text mr="sm">{t('category.sort.title')}</Text>
+          <Text mr="sm">{t('productsList.sort.title')}</Text>
           <Box display="flex">
             <Dropdown css={{ width: '100%' }} onChange={onChange}>
               <DropdownLabel>{activeSortOrder.name}</DropdownLabel>
