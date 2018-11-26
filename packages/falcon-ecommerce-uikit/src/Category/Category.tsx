@@ -14,7 +14,7 @@ import {
   DropdownMenu,
   DropdownMenuItem
 } from '@deity/falcon-ui';
-import { ProductsList } from '../Product/Products';
+import { ProductsList } from '../ProductsList/ProductsList';
 
 const CategoryLayout = themed({
   tag: 'div',
