@@ -1,9 +1,10 @@
 import React from 'react';
 import { NamespacesConsumer } from 'react-i18next-with-context';
-import { H3, Text, Group, Input, Button, Checkbox, Label, Box, DefaultThemeProps } from '@deity/falcon-ui';
+import { themed, H3, Text, Group, Input, Button, Checkbox, Label, Box, DefaultThemeProps } from '@deity/falcon-ui';
 
-const newsletterLayoutTheme: DefaultThemeProps = {
-  newsletterLayout: {
+const NewsletterLayout = themed({
+  tag: 'div',
+  defaultProps: {
     bgFullWidth: 'secondaryLight',
     py: 'md',
     gridGap: 'sm',
@@ -15,12 +16,12 @@ const newsletterLayoutTheme: DefaultThemeProps = {
       textAlign: 'center'
     }
   }
-};
+});
 
 export const Newsletter: React.SFC<{}> = () => (
   <NamespacesConsumer ns="common">
     {t => (
-      <Box defaultTheme={newsletterLayoutTheme}>
+      <NewsletterLayout>
         <H3>{t('newsletter.title')}</H3>
         <Text>{t('newsletter.message')}</Text>
 
@@ -39,7 +40,7 @@ export const Newsletter: React.SFC<{}> = () => (
             <Checkbox id="subscribe" required mr="xs" /> {t('newsletter.consent')}
           </Label>
         </form>
-      </Box>
+      </NewsletterLayout>
     )}
   </NamespacesConsumer>
 );
