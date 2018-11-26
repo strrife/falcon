@@ -71,6 +71,11 @@ const languageSectionTheme: DefaultThemeProps = {
     }
   }
 };
+
+export const Copyright = () => (
+  <NamespacesConsumer ns="common">{t => `${t('copyright')} ${new Date().getFullYear()}`}</NamespacesConsumer>
+);
+
 export const Footer: React.SFC<FooterData> = ({
   config: {
     menus: { footer },
@@ -84,7 +89,7 @@ export const Footer: React.SFC<FooterData> = ({
       <LanguageSwitcher languages={languages} />
     </Box>
     <Box defaultTheme={copyrightLayoutTheme}>
-      <NamespacesConsumer ns="common">{t => `${t('copyright')} ${new Date().getFullYear()}`}</NamespacesConsumer>
+      <Copyright />
     </Box>
   </Box>
 );
