@@ -1,7 +1,6 @@
 import React from 'react';
 import { NamespacesConsumer } from 'react-i18next-with-context';
 import { Text, Image, themed, Swipeable, SwipeableItem, Box } from '@deity/falcon-ui';
-import { ProductTranslations } from './ProductQuery';
 
 type Item = {
   thumbnail: string;
@@ -28,7 +27,7 @@ const ProductGalleryLayout = themed({
   }
 });
 
-export class ProductGallery extends React.Component<{ items: Item[]; translations: ProductTranslations }> {
+export class ProductGallery extends React.Component<{ items: Item[] }> {
   state = {
     activeIndex: 0
   };

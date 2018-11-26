@@ -166,7 +166,6 @@ export class Product extends React.PureComponent<{ product: any; translations: P
     return (
       <ProductLayout>
         <Breadcrumbs breadcrumbs={product.breadcrumbs} />
-
         <ProductForm sku={product.sku} validate={this.createValidator(product)}>
           {({
             addToCartMutation: {
@@ -177,7 +176,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
           }: any) => (
             <ProductDetailsLayout>
               <Box gridArea={Area.gallery}>
-                <ProductGallery items={product.gallery} translations={translations} />
+                <ProductGallery items={product.gallery} />
               </Box>
               <Text fontSize="sm" gridArea={Area.sku}>
                 {`${translations.sku}: ${product.sku}`}
