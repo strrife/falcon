@@ -4,6 +4,9 @@
   "main": "src/index.js",
   "version": "0.0.3",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-magento2-api",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "jest --watch",
     "test:coverage": "jest --ci --coverage"

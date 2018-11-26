@@ -31,9 +31,11 @@ Falcon was built with the F.I.R.E. principal in mind:
 - Service worker to provide application caching and PWA features such as offline capabilities and add to homescreen
 - Falcon's architecture allows it to be very modular, lightweight and scalable
 
-These are just a couple of advantages and use-cases, but feel free to ask anything in the official slack channel [slack.deity.io](slack.deity.io)
+These are just a couple of advantages and use-cases, feel free to ask anything in the official slack channel [slack.deity.io](slack.deity.io)
 
 ### Start developing right away
+
+Using the app generator:
 
 ```bash
 npx create-falcon-app my-app
@@ -59,9 +61,9 @@ Join the official chat channel: [Deity Community Slack](http://slack.deity.io)
 
 ## Documentation
 
-Falcon has its own documentation website which resides in a separate repository: [https://github.com/deity-io/falcon-docs](https://github.com/deity-io/falcon-docs). We try to continuously improve and update it to create a great development experience and reduce any possible development hurdles.
+Please visit [https://falcon.deity.io](https://falcon.deity.io) to view the documentation
 
-Please visit [https://falcon.deity.io](https://falcon.deity.io) to see the documentation
+Falcon has its own documentation website which resides in a separate repository: [https://github.com/deity-io/falcon-docs](https://github.com/deity-io/falcon-docs). We try to continuously improve and update it to create a great development experience and reduce any possible development hurdles.
 
 Feedback and contributions are always very welcome!
 
