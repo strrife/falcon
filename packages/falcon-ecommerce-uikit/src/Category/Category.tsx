@@ -1,11 +1,11 @@
 import React, { MouseEventHandler } from 'react';
 import { NetworkStatus } from 'apollo-client';
+import { NamespacesConsumer } from 'react-i18next-with-context';
 import {
   themed,
   H1,
   Text,
   Divider,
-  Icon,
   Button,
   Box,
   FlexLayout,
@@ -31,36 +31,45 @@ const CategoryLayout = themed({
   }
 });
 
+export const ShowingOutOf: React.SFC<{ itemsCount: number; totalItems: number }> = ({ itemsCount, totalItems }) => (
+  <NamespacesConsumer ns="shop">
+    {t => <Text>{t('category.pagination.showingOutOf', { itemsCount, totalItems })}</Text>}
+  </NamespacesConsumer>
+);
+
 export const SortOrderDropdown: React.SFC<any> = ({ sortOrders, onChange }) => {
   const activeSortOrder = sortOrders.filter((sortOrder: any) => sortOrder.active)[0];
 
   return (
-    <Box display="flex">
-      <Dropdown css={{ width: '100%' }} onChange={onChange}>
-        <DropdownLabel>{activeSortOrder.name}</DropdownLabel>
-
-        <DropdownMenu>
-          {sortOrders.map((sortOrder: any) => (
-            <DropdownMenuItem key={sortOrder.name} value={sortOrder}>
-              {sortOrder.name}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenu>
-      </Dropdown>
-    </Box>
+    <NamespacesConsumer ns="shop">
+      {t => (
+        <FlexLayout alignItems="center">
+          <Text mr="sm">{t('category.sort.title')}</Text>
+          <Box display="flex">
+            <Dropdown css={{ width: '100%' }} onChange={onChange}>
+              <DropdownLabel>{activeSortOrder.name}</DropdownLabel>
+              <DropdownMenu>
+                {sortOrders.map((sortOrder: any) => (
+                  <DropdownMenuItem key={sortOrder.name} value={sortOrder}>
+                    {sortOrder.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenu>
+            </Dropdown>
+          </Box>
+        </FlexLayout>
+      )}
+    </NamespacesConsumer>
   );
 };
-export const CategoryToolbar: React.SFC<{ translations: { showingOutOf: string }; sortOrders: any }> = ({
-  translations,
-
+export const CategoryToolbar: React.SFC<{ itemsCount: number; totalItems: number; sortOrders: any }> = ({
+  itemsCount,
+  totalItems,
   sortOrders
 }) => (
   <FlexLayout justifyContent="space-between" alignItems="center">
-    <Text>{translations.showingOutOf}</Text>
-    <FlexLayout alignItems="center">
-      <Text mr="sm">Sort by</Text>
-      <SortOrderDropdown sortOrders={sortOrders} />
-    </FlexLayout>
+    <ShowingOutOf itemsCount={itemsCount} totalItems={totalItems} />
+    <SortOrderDropdown sortOrders={sortOrders} />
   </FlexLayout>
 );
 
@@ -89,10 +98,7 @@ export const Category: React.SFC<{
   return (
     <CategoryLayout>
       <H1>{category.name}</H1>
-      <CategoryToolbar
-        sortOrders={sortOrders}
-        translations={{ showingOutOf: translations.category.pagination.showingOutOf }}
-      />
+      <CategoryToolbar itemsCount={items.length} totalItems={pagination.totalItems} sortOrders={sortOrders} />
       <Divider />
       <ProductsList products={items} />
 
