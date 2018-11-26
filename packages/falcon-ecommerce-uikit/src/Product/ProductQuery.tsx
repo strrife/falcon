@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import { TranslationFunction } from 'i18next';
 import { Query } from '../Query';
 
 export const GET_PRODUCT = gql`
@@ -39,31 +38,8 @@ export const GET_PRODUCT = gql`
   }
 `;
 
-function getTranslations(t: TranslationFunction /* , product: any */) {
-  return {
-    sku: t('product.sku'),
-    inStock: t('product.inStock'),
-    reviews: t('product.reviews', { count: 3 }),
-    addToCart: t('product.addToCart'),
-    addingToCart: t('product.addingToCart'),
-    addedToCart: t('product.addedToCart'),
-    quantity: t('product.quantity'),
-    error: {
-      qty: t('product.error.qty'),
-      configurableOptions: t('product.error.configurableOptions')
-    },
-    tabs: {
-      reviews: '...'
-    }
-  };
-}
-
-export type ProductTranslations = ReturnType<typeof getTranslations>;
-
 export class ProductQuery extends Query<any> {
   static defaultProps = {
-    query: GET_PRODUCT,
-    getTranslations,
-    translationsNamespaces: ['shop']
+    query: GET_PRODUCT
   };
 }

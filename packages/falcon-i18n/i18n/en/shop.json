@@ -9,8 +9,6 @@
     "reviews": "{{count}} review",
     "reviews_plural": "{{count}} reviews",
     "addToCart": "Add to cart",
-    "addingToCart": "Adding...",
-    "addedToCart": "Added!",
     "quantity": "Quantity",
     "error": {
       "quantity": "Quantity must be greater than 0",
