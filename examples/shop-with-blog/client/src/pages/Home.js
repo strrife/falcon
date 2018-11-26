@@ -8,7 +8,6 @@ const Home = () => (
     <NamespacesConsumer ns={['shop']}>
       {t => <H1 css={{ textAlign: 'center' }}>{t('home.hotSellers')}</H1>}
     </NamespacesConsumer>
-
     <ProductsListQuery>{({ products }) => <ProductsList products={products.items} />}</ProductsListQuery>
   </GridLayout>
 );
