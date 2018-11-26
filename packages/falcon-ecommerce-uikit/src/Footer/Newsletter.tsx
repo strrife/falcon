@@ -2,7 +2,7 @@ import React from 'react';
 import { NamespacesConsumer } from 'react-i18next-with-context';
 import { themed, H3, Text, Group, Input, Button, Checkbox, Label, Box, DefaultThemeProps } from '@deity/falcon-ui';
 
-const NewsletterLayout = themed({
+export const NewsletterLayout = themed({
   tag: 'div',
   defaultProps: {
     bgFullWidth: 'secondaryLight',
