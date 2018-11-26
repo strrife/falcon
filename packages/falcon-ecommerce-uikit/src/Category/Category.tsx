@@ -33,7 +33,7 @@ const CategoryLayout = themed({
 
 export const ShowingOutOf: React.SFC<{ itemsCount: number; totalItems: number }> = ({ itemsCount, totalItems }) => (
   <NamespacesConsumer ns="shop">
-    {t => <Text>{t('category.pagination.showingOutOf', { itemsCount, totalItems })}</Text>}
+    {t => <Text>{t('productsList.pagination.showingOutOf', { itemsCount, totalItems })}</Text>}
   </NamespacesConsumer>
 );
 
@@ -63,14 +63,10 @@ export const SortOrderDropdown: React.SFC<any> = ({ sortOrders, onChange }) => {
   );
 };
 
-export const ShowMore: React.SFC<{ text: string; onClick?: MouseEventHandler; loading: boolean }> = ({
-  text,
-  onClick,
-  loading
-}) => (
-  <Box my="sm" onClick={onClick || (() => {})}>
-    <Button variant={loading ? 'loader' : 'secondary'} height="xl">
-      {text}
+export const ShowMore: React.SFC<{ onClick: MouseEventHandler; loading: boolean }> = ({ onClick, loading }) => (
+  <Box>
+    <Button onClick={onClick} variant={loading ? 'loader' : 'secondary'} height="xl" my="sm">
+      <NamespacesConsumer ns="shop">{t => t('productsList.pagination.showMore')}</NamespacesConsumer>
     </Button>
   </Box>
 );
@@ -79,10 +75,9 @@ export const Category: React.SFC<{
   category: { name: string };
   products: any;
   sortOrders: any[];
-  translations: any;
   fetchMore: any;
   networkStatus: NetworkStatus;
-}> = ({ category, products, sortOrders, translations, fetchMore, networkStatus }) => {
+}> = ({ category, products, sortOrders, fetchMore, networkStatus }) => {
   const { pagination, items } = products;
 
   return (
@@ -94,17 +89,8 @@ export const Category: React.SFC<{
       </FlexLayout>
       <Divider />
       <ProductsList products={items} />
-
-      {pagination.nextPage && (
-        <React.Fragment>
-          <Divider />
-          <ShowMore
-            text={translations.category.pagination.showMore}
-            onClick={fetchMore}
-            loading={networkStatus === NetworkStatus.fetchMore}
-          />
-        </React.Fragment>
-      )}
+      {pagination.nextPage && <Divider />}
+      {pagination.nextPage && <ShowMore onClick={fetchMore} loading={networkStatus === NetworkStatus.fetchMore} />}
     </CategoryLayout>
   );
 };

@@ -23,6 +23,12 @@
       "reviews": "Reviews ({{count}})"
     }
   },
+  "productsList": {
+    "pagination": {
+      "showingOutOf": "Showing {{itemsCount}} products out of {{totalItems}}",
+      "showMore": "Show more products"
+    }
+  },
   "miniCart": {
     "title": "Shopping cart",
     "cta": "Secure checkout",
@@ -30,10 +36,6 @@
     "empty": "Shopping cart is empty"
   },
   "category": {
-    "pagination": {
-      "showingOutOf": "Showing {{itemsCount}} products out of {{totalItems}}",
-      "showMore": "Show more products"
-    },
     "sort": {
       "title": "Sort by",
       "disabled": "No sort",
