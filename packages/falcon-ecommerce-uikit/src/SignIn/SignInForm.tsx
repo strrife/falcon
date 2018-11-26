@@ -2,19 +2,30 @@ import React from 'react';
 import { MutationFn, OperationVariables, MutationResult } from 'react-apollo';
 import { Formik, Form, FormikProps } from 'formik';
 import { adopt } from 'react-adopt';
-import { H3, Icon, Box, Link, Button, Input, Label, Text } from '@deity/falcon-ui';
+import { Box, Button, Text, DefaultThemeProps } from '@deity/falcon-ui';
 import { SignInMutation } from './SignInMutation';
+import { FormInput } from '../Forms';
 
 export type SignInFormRenderProps = {
   signIn: { execute: MutationFn<any, OperationVariables>; result: MutationResult<any> };
   formik: FormikProps<any>;
 };
 
+const signInFormLayout: DefaultThemeProps = {
+  signInFormLayout: {
+    display: 'grid',
+    gridGap: 'sm'
+  }
+};
+
 export const SignInForm = adopt<SignInFormRenderProps>({
   signIn: ({ render }) => <SignInMutation>{(execute, result) => render && render({ execute, result })}</SignInMutation>,
   formik: ({ signIn, render }) => (
     <Formik
-      initialValues={{}}
+      initialValues={{
+        email: '',
+        password: ''
+      }}
       onSubmit={(values: any) =>
         signIn.execute({
           variables: {
@@ -32,35 +43,29 @@ export const SignInForm = adopt<SignInFormRenderProps>({
 });
 
 export const SignInFormContent: React.SFC<SignInFormRenderProps> = ({
-  formik: { handleChange },
   signIn: {
     result: { error, loading }
   }
 }) => (
-  <React.Fragment>
-    <H3 mb="md">Login</H3>
-    <Text>Log in with your account</Text>
+  <Box defaultTheme={signInFormLayout}>
     <Box>{!!error && <Text color="error">{error.message}</Text>}</Box>
-    <Box>
-      <Label htmlFor="email">Email</Label>
-      <Input name="email" onChange={handleChange} disabled={loading} />
+    <FormInput label="Email" name="email" required type="email" autoComplete="email" />
+    <FormInput
+      label="Password"
+      name="password"
+      // pass empty array, so default password strength validator does not get triggered
+      validators={[]}
+      required
+      type="password"
+      autoComplete="current-password"
+    />
+
+    <Box justifySelf="end" mt="md">
+      <Button type="submit" variant={loading ? 'loader' : undefined}>
+        Sign in
+      </Button>
     </Box>
-    <Box>
-      <Label htmlFor="password">Password</Label>
-      <Input name="password" type="password" onChange={handleChange} disabled={loading} />
-    </Box>
-    <Link fontWeight="bold">Password forgot?</Link>
-    <Button type="submit" disabled={loading} css={{ width: '100%' }}>
-      Login
-      <Icon
-        src={loading ? 'loader' : 'buttonArrowRight'}
-        stroke="white"
-        fill={loading ? 'white' : 'transparent'}
-        size="md"
-        ml="xs"
-      />
-    </Button>
-  </React.Fragment>
+  </Box>
 );
 
 export const SignIn: React.SFC = () => (
