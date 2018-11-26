@@ -13,7 +13,6 @@ const formInputLayout: DefaultThemeProps = {
   formInputLayout: {
     display: 'grid',
     gridGap: 'none',
-    my: 'xs',
     // prettier-ignore
     gridTemplate: toGridTemplate([
       ['1fr'                ],
@@ -30,7 +29,7 @@ const errorLayout: DefaultThemeProps = {
       FormInputAreas.error
     }-end`,
     color: 'error',
-    fontSize: 'xs',
+    fontSize: 'xxs',
     mr: 'xs',
     css: {
       pointerEvents: 'none',
@@ -122,7 +121,7 @@ export const FormInput: React.SFC<FormInputProps> = ({ label, required, name, va
 
         return (
           <Box defaultTheme={formInputLayout} {...themableProps}>
-            <Label htmlFor={name} gridArea={FormInputAreas.label}>
+            <Label htmlFor={name} gridArea={FormInputAreas.label} fontSize="xs" fontWeight="bold">
               {label}
             </Label>
             <Input {...field} {...rest} gridArea={FormInputAreas.input} id={name} invalid={invalid} />
