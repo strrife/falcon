@@ -1,10 +1,10 @@
 import React from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
+import { NamespacesConsumer } from 'react-i18next-with-context';
 import { themed, Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
 import { Breadcrumbs } from '../Breadcrumbs';
 import { ProductGallery } from './ProductGallery';
-import { ProductTranslations } from './ProductQuery';
 import { ProductConfigurableOptions } from './ConfigurableOptions';
 import { AddToCartMutation } from '../Cart';
 import { ToggleMiniCartMutation } from '../MiniCart';
@@ -96,14 +96,12 @@ const ProductForm = adopt({
   toggleMiniCartMutation: ({ render }) => (
     <ToggleMiniCartMutation>{toggle => render({ toggle })}</ToggleMiniCartMutation>
   ),
-
   // mutation provides addToCart method which should be called with proper data
   addToCartMutation: ({ render, toggleMiniCartMutation }) => (
     <AddToCartMutation onCompleted={() => toggleMiniCartMutation.toggle()}>
       {(addToCart, result) => render({ addToCart, result })}
     </AddToCartMutation>
   ),
-
   // formik handles form operations and triggers submit when onSubmit event is fired on the form
   formik: ({ sku, validate, addToCartMutation, render }) => (
     <Formik
@@ -136,21 +134,20 @@ const ProductForm = adopt({
   )
 });
 
-export class Product extends React.PureComponent<{ product: any; translations: ProductTranslations }> {
-  createValidator(product: any) {
-    const { translations } = this.props;
+export class Product extends React.PureComponent<{ product: any }> {
+  createValidator(product: any, t: any) {
     return (values: any) => {
       const errors: any = {};
 
       // handle qty
       if (parseInt(values.qty, 10) < 1) {
-        errors.qty = translations.error.qty;
+        errors.qty = t('product.error.quantity');
       }
 
       // handle configuration options
       if (product.configurableOptions && product.configurableOptions.length) {
         if (!values.configurableOptions || values.configurableOptions.length !== product.configurableOptions.length) {
-          errors.configurableOptions = translations.error.configurableOptions;
+          errors.configurableOptions = t('product.error.configurableOptions');
         }
       }
 
@@ -161,65 +158,75 @@ export class Product extends React.PureComponent<{ product: any; translations: P
   }
 
   render() {
-    const { product, translations } = this.props;
+    const { product } = this.props;
 
     return (
       <ProductLayout>
         <Breadcrumbs breadcrumbs={product.breadcrumbs} />
-        <ProductForm sku={product.sku} validate={this.createValidator(product)}>
-          {({
-            addToCartMutation: {
-              result: { loading, error }
-            },
-            formik: { values, errors, setFieldValue, submitCount },
-            productConfigurator
-          }: any) => (
-            <ProductDetailsLayout>
-              <FlexLayout gridArea={Area.gallery} alignItems="center" justifyContent="center">
-                <ProductGallery items={product.gallery} />
-              </FlexLayout>
-              <Text fontSize="sm" gridArea={Area.sku}>
-                {`${translations.sku}: ${product.sku}`}
-              </Text>
-              <H1 gridArea={Area.title}>{product.name}</H1>
+        <NamespacesConsumer ns="shop">
+          {t => (
+            <ProductForm sku={product.sku} validate={this.createValidator(product, t)}>
+              {({
+                addToCartMutation: {
+                  result: { loading, error }
+                },
+                formik: { values, errors, setFieldValue, submitCount },
+                productConfigurator
+              }: any) => (
+                <ProductDetailsLayout>
+                  <FlexLayout gridArea={Area.gallery} alignItems="center" justifyContent="center">
+                    <ProductGallery items={product.gallery} />
+                  </FlexLayout>
+                  <Text fontSize="sm" gridArea={Area.sku}>
+                    {`${t('product.sku')}: ${product.sku}`}
+                  </Text>
+                  <H1 gridArea={Area.title}>{product.name}</H1>
 
-              <Price mb="sm" fontSize="xl" gridArea={Area.price} value={product.price} />
-              <ProductConfigurableOptions
-                options={product.configurableOptions}
-                error={errors.configurableOptions}
-                onChange={(ev: React.ChangeEvent<any>) =>
-                  productConfigurator.handleProductConfigurationChange('configurableOption', ev)
-                }
-              />
-              <ProductDescriptionLayout
-                my="xs"
-                dangerouslySetInnerHTML={{ __html: product.description }}
-                gridArea={Area.description}
-              />
-              <FlexLayout alignItems="center" gridArea={Area.cta} mt="xs">
-                <NumberInput
-                  mr="sm"
-                  min="1"
-                  name="qty"
-                  aria-label={translations.quantity}
-                  disabled={loading}
-                  defaultValue={String(values.qty)}
-                  onChange={ev => setFieldValue('qty', ev.target.value, !!submitCount)}
-                />
-                <FlexLayout justifyContent="center" css={{ width: 170 }}>
-                  <Button type="submit" height="xl" px="md" disabled={loading} variant={loading ? 'loader' : undefined}>
-                    {!loading && <Icon src="cart" stroke="white" size="md" mr="xs" />}
-                    {translations.addToCart}
-                  </Button>
-                </FlexLayout>
-              </FlexLayout>
-              <Box gridArea={Area.error}>
-                <ErrorMessage name="qty" render={msg => <Text color="error">{msg}</Text>} />
-                {!!error && <Text color="error">{error.message}</Text>}
-              </Box>
-            </ProductDetailsLayout>
+                  <Price mb="sm" fontSize="xl" gridArea={Area.price} value={product.price} />
+                  <ProductConfigurableOptions
+                    options={product.configurableOptions}
+                    error={errors.configurableOptions}
+                    onChange={(ev: React.ChangeEvent<any>) =>
+                      productConfigurator.handleProductConfigurationChange('configurableOption', ev)
+                    }
+                  />
+                  <ProductDescriptionLayout
+                    my="xs"
+                    dangerouslySetInnerHTML={{ __html: product.description }}
+                    gridArea={Area.description}
+                  />
+                  <FlexLayout alignItems="center" gridArea={Area.cta} mt="xs">
+                    <NumberInput
+                      mr="sm"
+                      min="1"
+                      name="qty"
+                      aria-label={t('product.quantity')}
+                      disabled={loading}
+                      defaultValue={String(values.qty)}
+                      onChange={ev => setFieldValue('qty', ev.target.value, !!submitCount)}
+                    />
+                    <FlexLayout justifyContent="center" css={{ width: 170 }}>
+                      <Button
+                        type="submit"
+                        height="xl"
+                        px="md"
+                        disabled={loading}
+                        variant={loading ? 'loader' : undefined}
+                      >
+                        {!loading && <Icon src="cart" stroke="white" size="md" mr="xs" />}
+                        {t('product.addToCart')}
+                      </Button>
+                    </FlexLayout>
+                  </FlexLayout>
+                  <Box gridArea={Area.error}>
+                    <ErrorMessage name="qty" render={msg => <Text color="error">{msg}</Text>} />
+                    {!!error && <Text color="error">{error.message}</Text>}
+                  </Box>
+                </ProductDetailsLayout>
+              )}
+            </ProductForm>
           )}
-        </ProductForm>
+        </NamespacesConsumer>
       </ProductLayout>
     );
   }

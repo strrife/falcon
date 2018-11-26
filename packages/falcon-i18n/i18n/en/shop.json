@@ -13,7 +13,7 @@
     "addedToCart": "Added!",
     "quantity": "Quantity",
     "error": {
-      "qty": "Quantity must be greater than 0",
+      "quantity": "Quantity must be greater than 0",
       "configurableOptions": "Please select all required options"
     },
     "tabs": {
