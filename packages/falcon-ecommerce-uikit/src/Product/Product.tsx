@@ -192,7 +192,7 @@ export class Product extends React.PureComponent<{ product: any; translations: P
               </Text>
               <H1 gridArea={Area.title}>{product.name}</H1>
 
-              <Price mb="sm" fontSize="xl" gridArea={Area.price} value={product.price} />
+              <Price fontSize="xl" gridArea={Area.price} value={product.price} />
               <ProductConfigurableOptions
                 options={product.configurableOptions}
                 error={errors.configurableOptions}
@@ -201,13 +201,13 @@ export class Product extends React.PureComponent<{ product: any; translations: P
                 }
               />
               <ProductDescriptionLayout
-                my="xs"
                 dangerouslySetInnerHTML={{ __html: product.description }}
                 gridArea={Area.description}
               />
-              <FlexLayout alignItems="center" gridArea={Area.cta} mt="xs">
+              <FlexLayout alignItems="center" gridArea={Area.cta}>
                 <NumberInput
                   mr="sm"
+                  mt="sm"
                   min="1"
                   name="qty"
                   aria-label={translations.quantity}
@@ -215,12 +215,11 @@ export class Product extends React.PureComponent<{ product: any; translations: P
                   defaultValue={String(values.qty)}
                   onChange={ev => setFieldValue('qty', ev.target.value, !!submitCount)}
                 />
-                <FlexLayout justifyContent="center" css={{ width: 170 }}>
-                  <Button type="submit" height="xl" px="md" disabled={loading} variant={loading ? 'loader' : undefined}>
-                    {!loading && <Icon src="cart" stroke="white" size="md" mr="xs" />}
-                    {translations.addToCart}
-                  </Button>
-                </FlexLayout>
+
+                <Button height="xl" mt="sm" type="submit" disabled={loading} variant={loading ? 'loader' : undefined}>
+                  {!loading && <Icon src="cart" stroke="white" size="md" mr="sm" />}
+                  {translations.addToCart}
+                </Button>
               </FlexLayout>
               <Box gridArea={Area.error}>
                 <ErrorMessage name="qty" render={msg => <Text color="error">{msg}</Text>} />
