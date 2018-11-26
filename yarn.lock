@@ -9842,7 +9842,7 @@ koa-send@5.0.0, koa-send@^5.0.0:
     mz "^2.7.0"
     resolve-path "^1.4.0"
 
-koa-session@^5.9.0:
+koa-session@^5.10.0:
   version "5.10.0"
   resolved "https://registry.npmjs.org/koa-session/-/koa-session-5.10.0.tgz#223a1d0d16fc4315c48fda7cdd08113b0c7a6518"
   integrity sha512-eolkZ2Yw2nPX4fjvDANKdBornp60zcaX0xayA3mfeyyGTSY+MQ5t7vdI5HAdOSwLtF/lXoeEzUeXilVrkVsSdA==
@@ -9904,7 +9904,7 @@ koa@2.5.3:
     type-is "^1.6.16"
     vary "^1.1.2"
 
-koa@2.6.2, koa@^2.4.1, koa@^2.5.2, koa@^2.5.3:
+koa@2.6.2, koa@^2.4.1, koa@^2.5.2, koa@^2.6.2:
   version "2.6.2"
   resolved "https://registry.npmjs.org/koa/-/koa-2.6.2.tgz#57ba4d049b0a99cae0d594e6144e2931949a7ce1"
   integrity sha512-KdnBFhTgh9ysMMoYe4J4fLvaKjT7mF3nRYV8MjxLzx6qywFNeptqi4xevyUltg1fZl2CFJ+HeLXuCGx07Yvl/A==
