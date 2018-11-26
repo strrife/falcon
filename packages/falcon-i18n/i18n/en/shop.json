@@ -38,8 +38,7 @@
   },
   "miniCart": {
     "title": "Shopping cart",
-    "cta": "Secure checkout",
-    "continue": "Continue shopping",
+    "checkout": "Secure checkout",
     "empty": "Shopping cart is empty"
   }
 }
