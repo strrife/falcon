@@ -48,7 +48,6 @@ function getTranslations(t: TranslationFunction /* , product: any */) {
     addingToCart: t('product.addingToCart'),
     addedToCart: t('product.addedToCart'),
     quantity: t('product.quantity'),
-    galleryItem: t('product.galleryItem'),
     error: {
       qty: t('product.error.qty'),
       configurableOptions: t('product.error.configurableOptions')
