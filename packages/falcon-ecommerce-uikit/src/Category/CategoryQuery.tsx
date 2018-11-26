@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import { TranslationFunction } from 'i18next';
 import { Query } from '../Query/Query';
 
 export const GET_CATEGORY_PRODUCTS = gql`
@@ -53,26 +52,10 @@ export const fetchMore = (data: any, apolloFetchMore: any) =>
     }
   });
 
-function getTranslations(t: TranslationFunction, data: any) {
-  const {
-    products: { items, pagination }
-  } = data;
-
-  return {
-    category: {
-      pagination: {
-        showMore: t('category.pagination.showMore')
-      }
-    }
-  };
-}
-
 export class CategoryQuery extends Query<any> {
   static defaultProps = {
     query: GET_CATEGORY_PRODUCTS,
     fetchMore,
-    notifyOnNetworkStatusChange: true,
-    getTranslations,
-    translationsNamespaces: ['shop']
+    notifyOnNetworkStatusChange: true
   };
 }
