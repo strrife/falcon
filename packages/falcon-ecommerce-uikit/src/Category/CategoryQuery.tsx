@@ -61,10 +61,6 @@ function getTranslations(t: TranslationFunction, data: any) {
   return {
     category: {
       pagination: {
-        showingOutOf: t('category.pagination.showingOutOf', {
-          itemsCount: items.length,
-          totalItems: pagination.totalItems
-        }),
         showMore: t('category.pagination.showMore')
       }
     }
