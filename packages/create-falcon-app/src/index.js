@@ -9,7 +9,7 @@ const rootPackage = resolve(rootDir, 'package.json');
 
 const getAvailableExamples = () => {
   try {
-    return fs.readdirSync(examplesPath);
+    return fs.readdirSync(examplesPath).filter(entry => fs.lstatSync(resolve(examplesPath, entry)).isDirectory());
   } catch (e) {
     return [];
   }
@@ -36,7 +36,12 @@ const getActiveProjects = targetPath => {
   if (fs.existsSync(resolve(targetPath, 'package.json'))) {
     folders.push(targetPath);
   } else {
-    folders.push(...fs.readdirSync(targetPath).map(folder => resolve(targetPath, folder)));
+    const entries = fs
+      .readdirSync(targetPath)
+      .map(folder => resolve(targetPath, folder))
+      .filter(entry => fs.lstatSync(entry).isDirectory());
+
+    folders.push(...entries);
   }
 
   return folders;
