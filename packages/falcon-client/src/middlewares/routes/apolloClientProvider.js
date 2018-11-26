@@ -1,13 +1,14 @@
 import { ApolloLink } from 'apollo-link';
 import { onError } from 'apollo-link-error';
-import ApolloClient from '../../service/ApolloClient';
+import { ApolloClient } from '../../service';
 
 /**
  * Apollo Client Provider middleware, sets ApolloClient on ctx.state.client
+ * @param {object} config ApolloClient configuration
  * @param {Object.<string, {defaults, resolvers}>} - dictionary of Apollo States.
  * @return {function(ctx: object, next: function): Promise<void>} Koa middleware function
  */
-export default ({ clientStates = {} }) => {
+export default ({ config, clientStates = {} }) => {
   const mergedClientState = Object.keys(clientStates).reduce(
     (result, key) => {
       if (clientStates[key]) {
@@ -52,15 +53,16 @@ export default ({ clientStates = {} }) => {
       }
     });
 
-    const client = new ApolloClient({
+    const apolloClient = new ApolloClient({
       clientState: mergedClientState,
       extraLinks: [profileMiddleware, errorLink],
       headers: {
         cookie: ctx.get('cookie')
-      }
+      },
+      apolloClientConfig: config
     });
 
-    ctx.state.client = client;
+    ctx.state.client = apolloClient;
 
     return next();
   };
