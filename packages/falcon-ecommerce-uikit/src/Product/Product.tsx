@@ -175,9 +175,9 @@ export class Product extends React.PureComponent<{ product: any; translations: P
             productConfigurator
           }: any) => (
             <ProductDetailsLayout>
-              <Box gridArea={Area.gallery}>
+              <FlexLayout gridArea={Area.gallery} alignItems="center" justifyContent="center">
                 <ProductGallery items={product.gallery} />
-              </Box>
+              </FlexLayout>
               <Text fontSize="sm" gridArea={Area.sku}>
                 {`${translations.sku}: ${product.sku}`}
               </Text>
