@@ -62,16 +62,6 @@ export const SortOrderDropdown: React.SFC<any> = ({ sortOrders, onChange }) => {
     </NamespacesConsumer>
   );
 };
-export const CategoryToolbar: React.SFC<{ itemsCount: number; totalItems: number; sortOrders: any }> = ({
-  itemsCount,
-  totalItems,
-  sortOrders
-}) => (
-  <FlexLayout justifyContent="space-between" alignItems="center">
-    <ShowingOutOf itemsCount={itemsCount} totalItems={totalItems} />
-    <SortOrderDropdown sortOrders={sortOrders} />
-  </FlexLayout>
-);
 
 export const ShowMore: React.SFC<{ text: string; onClick?: MouseEventHandler; loading: boolean }> = ({
   text,
@@ -98,7 +88,10 @@ export const Category: React.SFC<{
   return (
     <CategoryLayout>
       <H1>{category.name}</H1>
-      <CategoryToolbar itemsCount={items.length} totalItems={pagination.totalItems} sortOrders={sortOrders} />
+      <FlexLayout justifyContent="space-between" alignItems="center">
+        <ShowingOutOf itemsCount={items.length} totalItems={pagination.totalItems} />
+        <SortOrderDropdown sortOrders={sortOrders} />
+      </FlexLayout>
       <Divider />
       <ProductsList products={items} />
 
