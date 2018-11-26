@@ -31,6 +31,30 @@ const CategoryLayout = themed({
   }
 });
 
+export const Category: React.SFC<{
+  category: { name: string };
+  products: any;
+  sortOrders: any[];
+  fetchMore: any;
+  networkStatus: NetworkStatus;
+}> = ({ category, products, sortOrders, fetchMore, networkStatus }) => {
+  const { pagination, items } = products;
+
+  return (
+    <CategoryLayout>
+      <H1>{category.name}</H1>
+      <FlexLayout justifyContent="space-between" alignItems="center">
+        <ShowingOutOf itemsCount={items.length} totalItems={pagination.totalItems} />
+        <SortOrderDropdown sortOrders={sortOrders} />
+      </FlexLayout>
+      <Divider />
+      <ProductsList products={items} />
+      {pagination.nextPage && <Divider />}
+      {pagination.nextPage && <ShowMore onClick={fetchMore} loading={networkStatus === NetworkStatus.fetchMore} />}
+    </CategoryLayout>
+  );
+};
+
 export const ShowingOutOf: React.SFC<{ itemsCount: number; totalItems: number }> = ({ itemsCount, totalItems }) => (
   <NamespacesConsumer ns="shop">
     {t => <Text>{t('productsList.pagination.showingOutOf', { itemsCount, totalItems })}</Text>}
@@ -70,27 +94,3 @@ export const ShowMore: React.SFC<{ onClick: MouseEventHandler; loading: boolean 
     </Button>
   </Box>
 );
-
-export const Category: React.SFC<{
-  category: { name: string };
-  products: any;
-  sortOrders: any[];
-  fetchMore: any;
-  networkStatus: NetworkStatus;
-}> = ({ category, products, sortOrders, fetchMore, networkStatus }) => {
-  const { pagination, items } = products;
-
-  return (
-    <CategoryLayout>
-      <H1>{category.name}</H1>
-      <FlexLayout justifyContent="space-between" alignItems="center">
-        <ShowingOutOf itemsCount={items.length} totalItems={pagination.totalItems} />
-        <SortOrderDropdown sortOrders={sortOrders} />
-      </FlexLayout>
-      <Divider />
-      <ProductsList products={items} />
-      {pagination.nextPage && <Divider />}
-      {pagination.nextPage && <ShowMore onClick={fetchMore} loading={networkStatus === NetworkStatus.fetchMore} />}
-    </CategoryLayout>
-  );
-};
