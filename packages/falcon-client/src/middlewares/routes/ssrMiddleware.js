@@ -52,7 +52,6 @@ export default ({ App }) => async (ctx, next) => {
   ctx.state.AppMarkup = markup;
   ctx.state.asyncContext = asyncContext.getState();
   ctx.state.helmetContext = Helmet.renderStatic();
-
   ctx.state.i18nextFilteredStore = filterResourceStoreByNs(i18next.services.resourceStore.data, i18nextUsedNamespaces);
 
   return context.url ? ctx.redirect(context.url) : next();
