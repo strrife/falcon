@@ -1,6 +1,6 @@
 import React from 'react';
-import { NamespacesConsumer } from 'react-i18next-with-context';
-import { themed, H3, Text, Group, Input, Button, Checkbox, Label, Box, DefaultThemeProps } from '@deity/falcon-ui';
+import { themed, H3, Text, Group, Input, Button, Checkbox, Label } from '@deity/falcon-ui';
+import { T } from '../I18n';
 
 export const NewsletterLayout = themed({
   tag: 'div',
@@ -19,7 +19,7 @@ export const NewsletterLayout = themed({
 });
 
 export const Newsletter: React.SFC<{}> = () => (
-  <NamespacesConsumer ns="common">
+  <T>
     {t => (
       <NewsletterLayout>
         <H3>{t('newsletter.title')}</H3>
@@ -28,10 +28,10 @@ export const Newsletter: React.SFC<{}> = () => (
         <form>
           <Group>
             <Input
-              aria-label={t('newsletter.emailPlaceholder')}
               type="email"
               required
               height="lg"
+              aria-label={t('newsletter.emailPlaceholder')}
               placeholder={t('newsletter.emailPlaceholder')}
             />
             <Button as="input" type="submit" value={t('newsletter.subscribe')} flex="none" />
@@ -42,5 +42,5 @@ export const Newsletter: React.SFC<{}> = () => (
         </form>
       </NewsletterLayout>
     )}
-  </NamespacesConsumer>
+  </T>
 );

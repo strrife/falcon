@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { NamespacesConsumer } from 'react-i18next-with-context';
 import { Box, H1, DefaultThemeProps, Breadcrumbs, Breadcrumb, Link } from '@deity/falcon-ui';
 import { BlogPostType } from './BlogPostQuery';
 import { DateFormat } from '../Locale';
 import { CMSContent } from './CmsContent';
+import { T } from '../I18n';
 
 const blogPostLayout: DefaultThemeProps = {
   blogPostLayout: {
@@ -20,7 +20,7 @@ export const BlogPost: React.SFC<BlogPostType> = ({ blogPost }) => (
     <Breadcrumbs my="md" alignSelf="flex-start">
       <Breadcrumb key="index">
         <Link to="/blog" as={RouterLink}>
-          <NamespacesConsumer ns="blog">{t => t('title')}</NamespacesConsumer>
+          <T id="blog.title" />
         </Link>
       </Breadcrumb>
       <Breadcrumb key="post">{blogPost.title}</Breadcrumb>

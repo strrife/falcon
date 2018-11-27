@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { NamespacesConsumer } from 'react-i18next-with-context';
 import { H4, Link, List, ListItem, Box, DefaultThemeProps } from '@deity/falcon-ui';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { FooterData } from './FooterQuery';
 import { Newsletter } from './Newsletter';
 import { MenuItem } from '../Header';
+import { T } from '../I18n';
 
 const footerLayoutTheme: DefaultThemeProps = {
   footerLayout: {
@@ -73,7 +73,9 @@ const languageSectionTheme: DefaultThemeProps = {
 };
 
 export const Copyright = () => (
-  <NamespacesConsumer ns="common">{t => `${t('copyright')} ${new Date().getFullYear()}`}</NamespacesConsumer>
+  <>
+    <T>copyright</T> {new Date().getFullYear()}
+  </>
 );
 
 export const Footer: React.SFC<FooterData> = ({

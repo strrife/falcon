@@ -1,7 +1,6 @@
 import React from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
-import { NamespacesConsumer } from 'react-i18next-with-context';
 import { themed, Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
 import { Breadcrumbs } from '../Breadcrumbs';
 import { ProductGallery } from './ProductGallery';
@@ -11,6 +10,7 @@ import { ToggleMiniCartMutation } from '../MiniCart';
 import { ProductConfigurator } from './ProductConfigurator';
 import { Price } from '../Locale';
 import { toGridTemplate } from '../helpers';
+import { T } from '../I18n';
 
 export const ProductLayout = themed({
   tag: 'div',
@@ -163,7 +163,7 @@ export class Product extends React.PureComponent<{ product: any }> {
     return (
       <ProductLayout>
         <Breadcrumbs breadcrumbs={product.breadcrumbs} />
-        <NamespacesConsumer ns="shop">
+        <T>
           {t => (
             <ProductForm sku={product.sku} validate={this.createValidator(product, t)}>
               {({
@@ -226,7 +226,7 @@ export class Product extends React.PureComponent<{ product: any }> {
               )}
             </ProductForm>
           )}
-        </NamespacesConsumer>
+        </T>
       </ProductLayout>
     );
   }

@@ -14,3 +14,4 @@ export * from './Customer';
 export * from './Blog';
 export * from './Query';
 export * from './Locale';
+export * from './I18n';

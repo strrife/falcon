@@ -1,5 +1,4 @@
 import React from 'react';
-import { NamespacesConsumer } from 'react-i18next-with-context';
 import {
   Sidebar,
   Backdrop,
@@ -19,6 +18,7 @@ import {
   NumberInput,
   FlexLayout
 } from '@deity/falcon-ui';
+import { T } from '../I18n';
 import { MiniCartData } from './MiniCartQuery';
 import { RemoveCartItemMutation, UpdateCartItemMutation } from '../Cart/CartMutation';
 import { ToggleMiniCartMutation } from './MiniCartMutation';
@@ -74,50 +74,50 @@ const miniCartLayout: DefaultThemeProps = {
 };
 
 const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
-  <NamespacesConsumer ns="shop">
-    {t => (
-      <Box defaultTheme={miniCartProductTheme}>
-        <Image gridArea={MiniCartProductArea.thumb} src={product.thumbnailUrl} />
-        <H4 gridArea={MiniCartProductArea.productName}>{product.name}</H4>
-        <Price
-          fontSize="md"
-          fontWeight="bold"
-          gridArea={MiniCartProductArea.price}
-          currency={currency}
-          value={product.price}
-        />
-        <RemoveCartItemMutation>
-          {removeCartItem => (
-            <Link
-              gridArea={MiniCartProductArea.remove}
-              display="flex"
-              alignItems="center"
-              onClick={() =>
-                removeCartItem({
-                  variables: { input: { itemId: product.itemId } },
-                  optimisticResponse: {
-                    removeCartItem: {
-                      itemId: product.itemId
-                    }
-                  }
-                })
+  <Box defaultTheme={miniCartProductTheme}>
+    <Image gridArea={MiniCartProductArea.thumb} src={product.thumbnailUrl} />
+    <H4 gridArea={MiniCartProductArea.productName}>{product.name}</H4>
+    <Price
+      fontSize="md"
+      fontWeight="bold"
+      gridArea={MiniCartProductArea.price}
+      currency={currency}
+      value={product.price}
+    />
+    <RemoveCartItemMutation>
+      {removeCartItem => (
+        <Link
+          gridArea={MiniCartProductArea.remove}
+          display="flex"
+          alignItems="center"
+          onClick={() =>
+            removeCartItem({
+              variables: { input: { itemId: product.itemId } },
+              optimisticResponse: {
+                removeCartItem: {
+                  itemId: product.itemId
+                }
               }
-            >
-              <Icon
-                size="lg"
-                stroke="secondaryDark"
-                src="remove"
-                mr="xs"
-                css={({ theme }) => ({
-                  ':hover': { stroke: theme.colors.primary }
-                })}
-              />
-            </Link>
-          )}
-        </RemoveCartItemMutation>
-        <UpdateCartItemMutation>
-          {(updateCartItem, { loading, error }) => (
-            <Box gridArea={MiniCartProductArea.modify}>
+            })
+          }
+        >
+          <Icon
+            size="lg"
+            stroke="secondaryDark"
+            src="remove"
+            mr="xs"
+            css={({ theme }) => ({
+              ':hover': { stroke: theme.colors.primary }
+            })}
+          />
+        </Link>
+      )}
+    </RemoveCartItemMutation>
+    <UpdateCartItemMutation>
+      {(updateCartItem, { loading, error }) => (
+        <Box gridArea={MiniCartProductArea.modify}>
+          <T>
+            {t => (
               <NumberInput
                 disabled={loading}
                 min="1"
@@ -136,13 +136,14 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
                   })
                 }
               />
-              {!!error && <Text color="error">{error.message}</Text>}
-            </Box>
-          )}
-        </UpdateCartItemMutation>
-      </Box>
-    )}
-  </NamespacesConsumer>
+            )}
+          </T>
+
+          {!!error && <Text color="error">{error.message}</Text>}
+        </Box>
+      )}
+    </UpdateCartItemMutation>
+  </Box>
 );
 
 const MiniCartProducts: React.SFC<any> = ({ products, currency }) => (
@@ -159,33 +160,31 @@ const MiniCartProducts: React.SFC<any> = ({ products, currency }) => (
 export const MiniCart: React.SFC<MiniCartData> = ({ miniCart: { open }, cart: { quoteCurrency, items } }) => (
   <ToggleMiniCartMutation>
     {toggle => (
-      <NamespacesConsumer ns="shop">
-        {t => (
-          <React.Fragment>
-            <Sidebar as={Portal} visible={open} side="right">
-              <Box defaultTheme={miniCartLayout}>
-                <Icon gridArea={MiniCartLayoutArea.close} src="close" stroke="black" onClick={() => toggle()} />
-                <H3 gridArea={MiniCartLayoutArea.title}>{t('miniCart.title')}</H3>
+      <React.Fragment>
+        <Sidebar as={Portal} visible={open} side="right">
+          <Box defaultTheme={miniCartLayout}>
+            <Icon gridArea={MiniCartLayoutArea.close} src="close" stroke="black" onClick={() => toggle()} />
+            <H3 gridArea={MiniCartLayoutArea.title}>
+              <T id="miniCart.title" />
+            </H3>
 
-                <Box gridArea={MiniCartLayoutArea.items} css={props => ({ ...prettyScrollbars(props.theme) })}>
-                  <MiniCartProducts products={items} currency={quoteCurrency} />
-                  {!items.length && (
-                    <FlexLayout alignItems="center" flexDirection="column">
-                      <Button css={{ width: '100%' }} height="xl">
-                        <Icon stroke="white" size="md" mr="xs" src="lock" />
-                        {t('miniCart.checkout')}
-                      </Button>
-                    </FlexLayout>
-                  )}
-                </Box>
+            <Box gridArea={MiniCartLayoutArea.items} css={props => ({ ...prettyScrollbars(props.theme) })}>
+              <MiniCartProducts products={items} currency={quoteCurrency} />
+              {!items.length && (
+                <FlexLayout alignItems="center" flexDirection="column">
+                  <Button css={{ width: '100%' }} height="xl">
+                    <Icon stroke="white" size="md" mr="xs" src="lock" />
+                    <T id="miniCart.checkout" />
+                  </Button>
+                </FlexLayout>
+              )}
+            </Box>
 
-                {items.length > 0 && <Box gridArea={MiniCartLayoutArea.cta} py="sm" bgFullWidth="secondaryLight" />}
-              </Box>
-            </Sidebar>
-            <Backdrop as={Portal} visible={open} onClick={() => toggle()} />
-          </React.Fragment>
-        )}
-      </NamespacesConsumer>
+            {items.length > 0 && <Box gridArea={MiniCartLayoutArea.cta} py="sm" bgFullWidth="secondaryLight" />}
+          </Box>
+        </Sidebar>
+        <Backdrop as={Portal} visible={open} onClick={() => toggle()} />
+      </React.Fragment>
     )}
   </ToggleMiniCartMutation>
 );

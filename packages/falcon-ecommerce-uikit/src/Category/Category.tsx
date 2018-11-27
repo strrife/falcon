@@ -1,6 +1,5 @@
 import React, { MouseEventHandler } from 'react';
 import { NetworkStatus } from 'apollo-client';
-import { NamespacesConsumer } from 'react-i18next-with-context';
 import {
   themed,
   H1,
@@ -15,6 +14,7 @@ import {
   DropdownMenuItem
 } from '@deity/falcon-ui';
 import { ProductsList } from '../ProductsList/ProductsList';
+import { T } from '../I18n';
 
 const CategoryLayout = themed({
   tag: 'div',
@@ -55,42 +55,40 @@ export const Category: React.SFC<{
   );
 };
 
-export const ShowingOutOf: React.SFC<{ itemsCount: number; totalItems: number }> = ({ itemsCount, totalItems }) => (
-  <NamespacesConsumer ns="shop">
-    {t => <Text>{t('productsList.pagination.showingOutOf', { itemsCount, totalItems })}</Text>}
-  </NamespacesConsumer>
+export const ShowingOutOf: React.SFC<{ itemsCount: number; totalItems: number }> = props => (
+  <Text>
+    <T id="productsList.pagination.showingOutOf" {...props} />
+  </Text>
 );
 
 export const SortOrderDropdown: React.SFC<any> = ({ sortOrders, onChange }) => {
   const activeSortOrder = sortOrders.filter((sortOrder: any) => sortOrder.active)[0];
 
   return (
-    <NamespacesConsumer ns="shop">
-      {t => (
-        <FlexLayout alignItems="center">
-          <Text mr="sm">{t('productsList.sort.title')}</Text>
-          <Box display="flex">
-            <Dropdown css={{ width: '100%' }} onChange={onChange}>
-              <DropdownLabel>{activeSortOrder.name}</DropdownLabel>
-              <DropdownMenu>
-                {sortOrders.map((sortOrder: any) => (
-                  <DropdownMenuItem key={sortOrder.name} value={sortOrder}>
-                    {sortOrder.name}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-          </Box>
-        </FlexLayout>
-      )}
-    </NamespacesConsumer>
+    <FlexLayout alignItems="center">
+      <Text mr="sm">
+        <T id="productsList.sort.title" />
+      </Text>
+      <Box display="flex">
+        <Dropdown css={{ width: '100%' }} onChange={onChange}>
+          <DropdownLabel>{activeSortOrder.name}</DropdownLabel>
+          <DropdownMenu>
+            {sortOrders.map((sortOrder: any) => (
+              <DropdownMenuItem key={sortOrder.name} value={sortOrder}>
+                {sortOrder.name}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenu>
+        </Dropdown>
+      </Box>
+    </FlexLayout>
   );
 };
 
 export const ShowMore: React.SFC<{ onClick: MouseEventHandler; loading: boolean }> = ({ onClick, loading }) => (
   <Box>
     <Button onClick={onClick} variant={loading ? 'loader' : 'secondary'} height="xl" my="sm">
-      <NamespacesConsumer ns="shop">{t => t('productsList.pagination.showMore')}</NamespacesConsumer>
+      <T id="productsList.pagination.showMore" />
     </Button>
   </Box>
 );

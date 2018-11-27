@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { NamespacesConsumer } from 'react-i18next-with-context';
 import { Box, H2, Text, Image, DefaultThemeProps, Link } from '@deity/falcon-ui';
 import { BlogPostExcerptType } from './BlogPostsQuery';
 import { DateFormat } from '../Locale';
 import { toGridTemplate } from '../helpers';
+import { T } from '../I18n';
 
 enum BlogPostEcerptArea {
   image = 'image',
@@ -46,21 +46,19 @@ const blogPostExcerptLayout: DefaultThemeProps = {
 };
 
 export const BlogPostExcerpt: React.SFC<{ excerpt: BlogPostExcerptType }> = ({ excerpt }) => (
-  <NamespacesConsumer ns="blog">
-    {t => (
-      <Box as="li">
-        <Link as={RouterLink} to={excerpt.slug} defaultTheme={blogPostExcerptLayout}>
-          {excerpt.image && (
-            <Image gridArea={BlogPostEcerptArea.image} src={excerpt.image.url} alt={excerpt.image.description} />
-          )}
-          <H2 gridArea={BlogPostEcerptArea.title}>{excerpt.title}</H2>
-          <DateFormat gridArea={BlogPostEcerptArea.date} value={excerpt.date} />
-          <Text fontSize="md" gridArea={BlogPostEcerptArea.excerpt}>
-            {excerpt.excerpt}
-          </Text>
-          <Text gridArea={BlogPostEcerptArea.readMore}>{t('readMore')}</Text>
-        </Link>
-      </Box>
-    )}
-  </NamespacesConsumer>
+  <Box as="li">
+    <Link as={RouterLink} to={excerpt.slug} defaultTheme={blogPostExcerptLayout}>
+      {excerpt.image && (
+        <Image gridArea={BlogPostEcerptArea.image} src={excerpt.image.url} alt={excerpt.image.description} />
+      )}
+      <H2 gridArea={BlogPostEcerptArea.title}>{excerpt.title}</H2>
+      <DateFormat gridArea={BlogPostEcerptArea.date} value={excerpt.date} />
+      <Text fontSize="md" gridArea={BlogPostEcerptArea.excerpt}>
+        {excerpt.excerpt}
+      </Text>
+      <Text gridArea={BlogPostEcerptArea.readMore}>
+        <T id="blog.readMore" />
+      </Text>
+    </Link>
+  </Box>
 );

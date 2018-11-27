@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, H1 } from '@deity/falcon-ui';
-import { NamespacesConsumer } from 'react-i18next-with-context';
-import { BlogPostsQuery, BlogPostsLayout, BlogPostExcerpt, BlogPostsPaginator } from '@deity/falcon-ecommerce-uikit';
+import { BlogPostsQuery, BlogPostsLayout, BlogPostExcerpt, BlogPostsPaginator, T } from '@deity/falcon-ecommerce-uikit';
 
 const Blog = props => (
   <BlogPostsQuery variables={{ pagination: { page: +props.match.params.page || 1 } }}>
@@ -22,7 +21,7 @@ const Blog = props => (
 const BlogPostTitle = () => (
   <Box as="header" bgFullWidth="secondaryLight" py="xxl" css={{ textAlign: 'center' }}>
     <H1 fontSize="xxxl">
-      <NamespacesConsumer ns="blog">{t => t('title')}</NamespacesConsumer>
+      <T id="blog.title" />
     </H1>
   </Box>
 );
