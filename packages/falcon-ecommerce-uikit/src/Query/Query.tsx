@@ -7,22 +7,6 @@ import { Loader } from './Loader';
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
-// class T extends React.Component<{ key?: string; ns?: string | string[] }> {
-//   render() {
-//     const { key, children } = this.props;
-
-//     if (key) {
-
-//     }
-
-//     if (children && typeof children === 'string') {
-//       return <React.Fragment>{children}</React.Fragment>;
-//     }
-
-//     return null;
-//   }
-// }
-
 export class Query<TData = any, TVariables = OperationVariables, TTranslations = {}> extends React.Component<
   Omit<QueryProps<TData, TVariables>, 'children'> & {
     children: (result: TData & { translations: TTranslations }) => React.ReactNode;
