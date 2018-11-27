@@ -1,25 +1,22 @@
 import React from 'react';
-import { Box, H3, DefaultThemeProps } from '@deity/falcon-ui';
+import { OpenSidebarMutation } from '../Sidebar';
 import { SignUpForm } from '../SignUp';
-
-const signUpLayout: DefaultThemeProps = {
-  signUpLayout: {
-    display: 'grid',
-    gridRowGap: 'md'
-  }
-};
+import { MiniFormLayout } from './MiniFormLayout';
 
 export const SignUp = () => (
-  <Box defaultTheme={signUpLayout}>
-    <H3>Register</H3>
-    <Box
-      css={{
-        maxWidth: 340,
-        width: '100%',
-        margin: '0 auto'
-      }}
-    >
-      <SignUpForm />
-    </Box>
-  </Box>
+  <MiniFormLayout title="Register">
+    <OpenSidebarMutation>
+      {openSidebarMutation => (
+        <SignUpForm
+          onCompleted={() =>
+            openSidebarMutation({
+              variables: {
+                contentType: 'signin'
+              }
+            })
+          }
+        />
+      )}
+    </OpenSidebarMutation>
+  </MiniFormLayout>
 );
