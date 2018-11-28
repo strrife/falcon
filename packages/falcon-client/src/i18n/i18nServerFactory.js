@@ -4,7 +4,6 @@ import Backend from 'i18next-sync-fs-backend';
 /**
  * @typedef {object} Options
  * @property {string} lng - language
- * @property {string[]} ns - namespaces to load
  * @property {string} fallbackLng fallback language
  * @property {string[]} whitelist languages whitelist
  * @property {object} resources Initial internationalization resources
@@ -15,19 +14,12 @@ import Backend from 'i18next-sync-fs-backend';
  * @argument {Options} options - options
  * @returns {object} - next middleware or redirect
  */
-export default ({
-  lng = 'en',
-  ns = ['common'],
-  fallbackLng = 'en',
-  whitelist = ['en'],
-  debug = false,
-  resources
-} = {}) => {
-  const defaultNS = 'common';
+export default ({ lng = 'en', fallbackLng = 'en', whitelist = ['en'], debug = false, resources } = {}) => {
+  const defaultNS = 'translations';
 
   return i18next.use(Backend).init({
     lng,
-    ns,
+    ns: [defaultNS],
     fallbackLng,
     whitelist,
     defaultNS,

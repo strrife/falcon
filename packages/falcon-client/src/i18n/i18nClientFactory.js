@@ -14,11 +14,11 @@ const loadLocale = (url, options, callback) =>
     });
 
 export default ({ lng = 'en', fallbackLng = 'en', whitelist = ['en'], debug = false, resources } = {}) => {
-  const defaultNS = 'common';
+  const defaultNS = 'translations';
 
   const instance = i18next.use(XHR).init({
     lng,
-    ns: ['common'], // on client side we need only 'common' ns, other will be fetched on demand
+    ns: [defaultNS],
     fallbackLng,
     whitelist,
     defaultNS,

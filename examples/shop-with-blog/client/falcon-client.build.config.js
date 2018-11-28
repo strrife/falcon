@@ -3,6 +3,6 @@ module.exports = {
   useWebmanifest: true,
   i18n: {
     resourcePackages: ['@deity/falcon-i18n'],
-    filter: { lng: ['en'] }
+    filter: { lng: ['en'], ns: ['translations'] }
   }
 };

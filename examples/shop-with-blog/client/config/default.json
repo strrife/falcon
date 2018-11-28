@@ -1,7 +1,7 @@
 {
   "serverSideRendering": true,
   "i18n": {
-    "ns": ["common", "shop", "post", "blog"]
+    "ns": ["translations"]
   },
   "apolloClient": {
     "httpLink": {
