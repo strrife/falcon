@@ -2,7 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field, ErrorMessage } from 'formik';
 import { toGridTemplate } from '@deity/falcon-ecommerce-uikit';
-import { Box, Input, Label, Text, Button } from '@deity/falcon-ui';
+import {
+  Box,
+  Input,
+  Label,
+  Text,
+  Button,
+  Dropdown,
+  DropdownLabel,
+  DropdownMenu,
+  DropdownMenuItem
+} from '@deity/falcon-ui';
 
 const AddressFormArea = {
   firstName: 'firstName',
@@ -92,7 +102,7 @@ FormField.propTypes = {
   gridArea: PropTypes.string
 };
 
-const AddressForm = ({ submitLabel = 'Save' }) => (
+const AddressForm = ({ countries = [], submitLabel = 'Save' }) => (
   <Box as={Form} defaultTheme={addressFormLayout}>
     <FormField name="email" type="email" label="Email" required gridArea={AddressFormArea.email} />
     <FormField name="firstname" label="First name" required gridArea={AddressFormArea.firstName} />
@@ -100,7 +110,44 @@ const AddressForm = ({ submitLabel = 'Save' }) => (
     <FormField name="street" label="Street" required gridArea={AddressFormArea.street} />
     <FormField name="postcode" label="Post code" required gridArea={AddressFormArea.postCode} />
     <FormField name="city" label="City" required gridArea={AddressFormArea.city} />
-    <FormField type="hidden" name="countryId" label="Country" required gridArea={AddressFormArea.country} />
+
+    <Field
+      name="countryId"
+      render={({ field, form }) => (
+        <Box gridArea={AddressForm.country}>
+          <Label htmlFor={field.name}>Country *</Label>
+          <Dropdown
+            onChange={value => {
+              form.setFieldValue(field.name, value);
+            }}
+          >
+            <DropdownLabel>
+              {(countries.find(item => item.code === field.value) || { localName: '' }).localName}
+            </DropdownLabel>
+            <DropdownMenu
+              css={{
+                maxHeight: 300,
+                overflowY: 'scroll'
+              }}
+            >
+              {countries.map(item => (
+                <DropdownMenuItem key={item.localName} value={item.code}>
+                  {item.localName}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
+          <ErrorMessage
+            name={field.name}
+            render={msg => (
+              <Text fontSize="xs" color="error">
+                {msg}
+              </Text>
+            )}
+          />
+        </Box>
+      )}
+    />
     <FormField name="telephone" label="Phone" required gridArea={AddressFormArea.phone} />
     <Box gridArea={AddressFormArea.submit}>
       <Button type="submit">{submitLabel}</Button>
@@ -109,7 +156,13 @@ const AddressForm = ({ submitLabel = 'Save' }) => (
 );
 
 AddressForm.propTypes = {
-  submitLabel: PropTypes.string
+  submitLabel: PropTypes.string,
+  countries: PropTypes.arrayOf(
+    PropTypes.shape({
+      localName: PropTypes.string,
+      code: PropTypes.string
+    })
+  )
 };
 
 export default AddressForm;

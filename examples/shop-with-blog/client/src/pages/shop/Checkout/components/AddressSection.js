@@ -35,7 +35,8 @@ class AddressSection extends React.Component {
       selectedAddress,
       onEditRequested,
       submitLabel,
-      errors
+      errors,
+      countries
     } = this.props;
     let header;
     let content;
@@ -94,7 +95,7 @@ class AddressSection extends React.Component {
     } else {
       content = (
         <Formik initialValues={initialAddressValue} onSubmit={this.submitAddress}>
-          {() => <AddressForm submitLabel={submitLabel} />}
+          {() => <AddressForm countries={countries} submitLabel={submitLabel} />}
         </Formik>
       );
     }
@@ -121,6 +122,12 @@ AddressSection.propTypes = {
   setUseDefault: PropTypes.func,
   labelUseDefault: PropTypes.string,
   submitLabel: PropTypes.string,
+  countries: PropTypes.arrayOf(
+    PropTypes.shape({
+      code: PropTypes.string,
+      localName: PropTypes.string
+    })
+  ),
   errors: PropTypes.arrayOf(
     PropTypes.shape({
       message: PropTypes.string

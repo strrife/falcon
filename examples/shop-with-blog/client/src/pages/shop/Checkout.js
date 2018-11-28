@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { Box, H2, Button, Divider, Icon } from '@deity/falcon-ui';
-import { CheckoutLogic, CartQuery, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
+import { CheckoutLogic, CartQuery, CountriesQuery, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
 import CheckoutCartSummary from './Checkout/components/CheckoutCartSummary';
 import CustomerSelector from './Checkout/components/CustomerSelector';
 import ShippingSection from './Checkout/components/ShippingSection';
@@ -161,93 +161,99 @@ class CheckoutWizard extends React.Component {
     }
 
     return (
-      <CartQuery>
-        {({ cart }) => {
-          // cart is empty so redirect user to the homepage
-          if (cart.itemsQty === 0) {
-            return <Redirect to="/" />;
-          }
+      <CountriesQuery>
+        {({ countries }) => (
+          <CartQuery>
+            {({ cart }) => {
+              // cart is empty so redirect user to the homepage
+              if (cart.itemsQty === 0) {
+                return <Redirect to="/" />;
+              }
 
-          return (
-            <Box defaultTheme={checkoutLayout}>
-              <Box gridArea={CheckoutArea.cart}>
-                <H2 fontSize="md" mb="md">
-                  Summary
-                </H2>
-                <CheckoutCartSummary cart={cart} />
-                <Button as={RouterLink} mt="md" to="/cart">
-                  Edit cart items
-                </Button>
-              </Box>
-              <Divider gridArea={CheckoutArea.divider} />
-              <Box gridArea={CheckoutArea.checkout} position="relative">
-                <Loader visible={loading} />
-                <CustomerSelector
-                  open={currentStep === CHECKOUT_STEPS.EMAIL}
-                  onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.EMAIL)}
-                  email={values.email}
-                  setEmail={setEmail}
-                />
+              return (
+                <Box defaultTheme={checkoutLayout}>
+                  <Box gridArea={CheckoutArea.cart}>
+                    <H2 fontSize="md" mb="md">
+                      Summary
+                    </H2>
+                    <CheckoutCartSummary cart={cart} />
+                    <Button as={RouterLink} mt="md" to="/cart">
+                      Edit cart items
+                    </Button>
+                  </Box>
+                  <Divider gridArea={CheckoutArea.divider} />
+                  <Box gridArea={CheckoutArea.checkout} position="relative">
+                    <Loader visible={loading} />
+                    <CustomerSelector
+                      open={currentStep === CHECKOUT_STEPS.EMAIL}
+                      onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.EMAIL)}
+                      email={values.email}
+                      setEmail={setEmail}
+                    />
 
-                <Divider my="md" />
+                    <Divider my="md" />
 
-                <AddressSection
-                  open={currentStep === CHECKOUT_STEPS.SHIPPING_ADDRESS}
-                  onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.SHIPPING_ADDRESS)}
-                  title="Shipping address"
-                  submitLabel="Continue"
-                  selectedAddress={values.shippingAddress}
-                  setAddress={setShippingAddress}
-                  errors={errors.shippingAddress}
-                />
+                    <AddressSection
+                      open={currentStep === CHECKOUT_STEPS.SHIPPING_ADDRESS}
+                      countries={countries.items}
+                      onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.SHIPPING_ADDRESS)}
+                      title="Shipping address"
+                      submitLabel="Continue"
+                      selectedAddress={values.shippingAddress}
+                      setAddress={setShippingAddress}
+                      errors={errors.shippingAddress}
+                    />
 
-                <Divider my="md" />
+                    <Divider my="md" />
 
-                <AddressSection
-                  open={currentStep === CHECKOUT_STEPS.BILLING_ADDRESS}
-                  onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.BILLING_ADDRESS)}
-                  title="Billing address"
-                  submitLabel="Continue"
-                  selectedAddress={values.billingAddress}
-                  setAddress={setBillingAddress}
-                  setUseDefault={setBillingSameAsShipping}
-                  useDefault={values.billingSameAsShipping}
-                  labelUseDefault="My billing address is the same as shipping"
-                />
+                    <AddressSection
+                      open={currentStep === CHECKOUT_STEPS.BILLING_ADDRESS}
+                      onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.BILLING_ADDRESS)}
+                      title="Billing address"
+                      submitLabel="Continue"
+                      countries={countries.items}
+                      selectedAddress={values.billingAddress}
+                      setAddress={setBillingAddress}
+                      setUseDefault={setBillingSameAsShipping}
+                      useDefault={values.billingSameAsShipping}
+                      labelUseDefault="My billing address is the same as shipping"
+                    />
 
-                <Divider my="md" />
+                    <Divider my="md" />
 
-                <ShippingSection
-                  open={currentStep === CHECKOUT_STEPS.SHIPPING}
-                  onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.SHIPPING)}
-                  shippingAddress={values.shippingAddress}
-                  selectedShipping={values.shippingMethod}
-                  setShippingAddress={setShippingAddress}
-                  availableShippingMethods={availableShippingMethods}
-                  setShipping={setShippingMethod}
-                  errors={errors.shippingMethod}
-                />
+                    <ShippingSection
+                      open={currentStep === CHECKOUT_STEPS.SHIPPING}
+                      onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.SHIPPING)}
+                      shippingAddress={values.shippingAddress}
+                      selectedShipping={values.shippingMethod}
+                      setShippingAddress={setShippingAddress}
+                      availableShippingMethods={availableShippingMethods}
+                      setShipping={setShippingMethod}
+                      errors={errors.shippingMethod}
+                    />
 
-                <Divider my="md" />
+                    <Divider my="md" />
 
-                <PaymentSection
-                  open={currentStep === CHECKOUT_STEPS.PAYMENT}
-                  onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.PAYMENT)}
-                  selectedPayment={values.paymentMethod}
-                  availablePaymentMethods={availablePaymentMethods}
-                  setPayment={setPaymentMethod}
-                  errors={errors.paymentMethod}
-                />
+                    <PaymentSection
+                      open={currentStep === CHECKOUT_STEPS.PAYMENT}
+                      onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.PAYMENT)}
+                      selectedPayment={values.paymentMethod}
+                      availablePaymentMethods={availablePaymentMethods}
+                      setPayment={setPaymentMethod}
+                      errors={errors.paymentMethod}
+                    />
 
-                <Divider my="md" />
+                    <Divider my="md" />
 
-                <ErrorList errors={errors.order} />
-                {currentStep === CHECKOUT_STEPS.CONFIRMATION && <Button onClick={placeOrder}>Place order</Button>}
-              </Box>
-            </Box>
-          );
-        }}
-      </CartQuery>
+                    <ErrorList errors={errors.order} />
+                    {currentStep === CHECKOUT_STEPS.CONFIRMATION && <Button onClick={placeOrder}>Place order</Button>}
+                  </Box>
+                </Box>
+              );
+            }}
+          </CartQuery>
+        )}
+      </CountriesQuery>
     );
   }
 }
