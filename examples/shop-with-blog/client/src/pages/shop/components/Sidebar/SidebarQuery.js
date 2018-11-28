@@ -6,7 +6,7 @@ export const GET_SIDEBAR_STATE = gql`
     sidebar @client {
       contentType
       side
-      open
+      isOpen
     }
   }
 `;

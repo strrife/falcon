@@ -33,7 +33,7 @@ export default {
     sidebar: {
       contentType: null,
       side: 'right',
-      open: false
+      isOpen: false
     },
     // todo: this is temporary, these values should be fetched from shop settings
     localeSettings: {
@@ -54,7 +54,7 @@ export default {
           sidebar: {
             contentType,
             side: side || 'right',
-            open: true
+            isOpen: true
           }
         };
 
@@ -66,7 +66,7 @@ export default {
       closeSidebar: (_, _variables, { cache }) => {
         const queryResponse = cache.readQuery({ query: GET_SIDEBAR_STATE });
         const sidebar = { ...queryResponse.sidebar };
-        sidebar.open = false;
+        sidebar.isOpen = false;
 
         cache.writeQuery({
           query: GET_SIDEBAR_STATE,
