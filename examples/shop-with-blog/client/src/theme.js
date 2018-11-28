@@ -11,6 +11,8 @@ import ChevronsRight from 'react-feather/dist/icons/chevrons-right';
 import ChevronsLeft from 'react-feather/dist/icons/chevrons-left';
 import Lock from 'react-feather/dist/icons/lock';
 import Check from 'react-feather/dist/icons/check-circle';
+import Eye from 'react-feather/dist/icons/eye';
+import EyeOff from 'react-feather/dist/icons/eye-off';
 
 import { createTheme } from '@deity/falcon-ui';
 import logo from './assets/logo.svg';
@@ -90,7 +92,9 @@ export const deityGreenTheme = createTheme({
       stroke: 'black'
     },
     lock: { icon: Lock },
-    check: { icon: Check }
+    check: { icon: Check },
+    eye: { icon: Eye },
+    eyeOff: { icon: EyeOff }
   },
   keyframes: {
     loader: {
