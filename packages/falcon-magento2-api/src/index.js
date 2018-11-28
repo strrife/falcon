@@ -1345,6 +1345,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   async estimateShippingMethods(params) {
+    params.address = this.prepareAddressForOrder(params.address);
+
     const response = await this.performCartAction(
       '/estimate-shipping-methods',
       'post',
@@ -1359,6 +1361,19 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     });
 
     return this.convertKeys(response.data);
+  }
+
+  /**
+   * Removes unnecesary fields from address entry so Magento doesn't crash
+   * @param {AddressInput} address - address to process
+   * @return {AddresInput} processed address
+   */
+  prepareAddressForOrder(address) {
+    const data = { ...address };
+    delete data.defaultBilling;
+    delete data.defaultShipping;
+    delete data.id;
+    return data;
   }
 
   /**
@@ -1402,7 +1417,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async setShipping(data) {
     const magentoData = {
-      addressInformation: data
+      addressInformation: {
+        ...data,
+        billingAddress: this.prepareAddressForOrder(data.billingAddress),
+        shippingAddress: this.prepareAddressForOrder(data.shippingAddress)
+      }
     };
 
     const response = await this.performCartAction('/shipping-information', 'post', magentoData);
@@ -1466,7 +1485,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       return {};
     }
 
-    const response = await this.get(`/orders/${lastOrderId}`);
+    const response = await this.get(`/orders/${lastOrderId}`, {}, { context: { useAdminToken: true } });
     response.data = this.convertKeys(response.data);
     response.data.paymentMethodName = response.data.payment.method;
 
