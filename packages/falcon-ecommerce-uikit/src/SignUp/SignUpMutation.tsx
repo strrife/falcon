@@ -12,7 +12,6 @@ export type SignUpVariables = {
   lastname: string;
   email: string;
   password: string;
-  passwordConfirmation: string;
   autoSignIn?: boolean;
 };
 

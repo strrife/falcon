@@ -1,6 +1,6 @@
 import React from 'react';
 import { Formik } from 'formik';
-import { FormInput, Form, FormSubmit, FormErrorSummary } from '../Forms';
+import { FormInput, Form, FormSubmit, PasswordRevealInput, FormErrorSummary } from '../Forms';
 import { SignInMutation } from './SignInMutation';
 
 type SignInFormProps = {
@@ -37,9 +37,11 @@ export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted }) => (
               required
               type="password"
               autoComplete="current-password"
-            />
+            >
+              {inputProps => <PasswordRevealInput {...inputProps} />}
+            </FormInput>
 
-            <FormSubmit submitting={loading} value=" Sign in" />
+            <FormSubmit submitting={loading} value="Sign in" />
             <FormErrorSummary errors={error && [error.message]} />
           </Form>
         )}

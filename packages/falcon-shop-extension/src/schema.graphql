@@ -396,7 +396,6 @@ input SignUp {
   firstname: String
   lastname: String
   password: String
-  passwordConfirmation: String
   address: AddressInput
   autoSignIn: Boolean
 }

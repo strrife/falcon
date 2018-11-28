@@ -10,5 +10,5 @@ const formLayout: DefaultThemeProps = {
 };
 
 export const Form: React.SFC<ThemedComponentProps> = props => (
-  <Box {...props} as={FormikForm} defaultTheme={formLayout} />
+  <Box {...props} as={FormikForm as any} defaultTheme={formLayout} />
 );
