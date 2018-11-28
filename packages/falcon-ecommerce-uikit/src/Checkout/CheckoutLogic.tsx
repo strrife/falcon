@@ -1,5 +1,5 @@
 import React from 'react';
-import { withApollo, WithApolloClient } from 'react-apollo';
+import { withApollo, WithApolloClient, FetchResult } from 'react-apollo';
 import isEqual from 'lodash.isequal';
 import { ESTIMATE_SHIPPING_METHODS, SET_SHIPPING, PLACE_ORDER } from './CheckoutMutation';
 
@@ -255,6 +255,23 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
   };
 
   placeOrder = () => {
+    const handleResponse = (resp: FetchResult) => {
+      if (resp.errors) {
+        this.setPartialState({
+          loading: false,
+          errors: {
+            order: resp.errors
+          }
+        });
+      } else {
+        this.setPartialState({
+          loading: false,
+          error: null,
+          orderId: resp.data!.placeOrder.orderId
+        });
+      }
+    };
+
     this.setLoading(true, () => {
       this.props.client
         .mutate({
@@ -265,22 +282,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           // when refetchQueries and awaitRefetchQueries are set then we cannot use promise
           // because it's not called (Apollo's bug), but we can update state based on
           // update() callback
-          update: (_, { data, errors }) => {
-            if (errors) {
-              this.setPartialState({
-                loading: false,
-                errors: {
-                  order: errors
-                }
-              });
-            } else {
-              this.setPartialState({
-                loading: false,
-                error: null,
-                orderId: data && data.placeOrder.orderId
-              });
-            }
-          },
+          update: (_, resp) => handleResponse(resp),
           variables: {
             input: {
               email: this.state.values.email,
@@ -290,19 +292,13 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
             }
           }
         })
-        .catch(error => {
-          this.setPartialState({
-            loading: false,
-            errors: {
-              order: [error]
-            }
-          });
-        });
+        // promise catches the errors which are not passed to update callback
+        .then(handleResponse)
+        .catch(error => handleResponse({ errors: [error] }));
     });
   };
 
   render() {
-    console.log('current state ', JSON.stringify(this.state, null, 2));
     return (
       <React.Fragment>
         {this.props.children({
