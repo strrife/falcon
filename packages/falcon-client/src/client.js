@@ -17,26 +17,25 @@ const apolloInitialState = window.__APOLLO_STATE__ || {};
 const asyncComponentState = window.ASYNC_COMPONENTS_STATE;
 const i18nextState = window.I18NEXT_STATE || {};
 
-const config = apolloStateToObject(apolloInitialState, '$ROOT_QUERY.config');
-
-const apolloClient = new ApolloClient({
-  isBrowser: true,
-  clientState: clientApolloSchema,
-  initialState: apolloInitialState,
-  apolloClientConfig: config.apolloClient
-});
-
-const renderApp = config.serverSideRendering
-  ? (element, container, callback) => asyncBootstrapper(element).then(() => hydrate(element, container, callback))
-  : render;
-
 (async () => {
-  const i18nextInstance = await i18nFactory(config.i18n);
+  const config = apolloStateToObject(apolloInitialState, '$ROOT_QUERY.config');
+
+  const apolloClient = new ApolloClient({
+    isBrowser: true,
+    clientState: clientApolloSchema,
+    initialState: apolloInitialState,
+    apolloClientConfig: config.apolloClient
+  });
+  const i18next = await i18nFactory(config.i18n);
+
+  const renderApp = config.serverSideRendering
+    ? (element, container, callback) => asyncBootstrapper(element).then(() => hydrate(element, container, callback))
+    : render;
 
   const markup = (
     <ApolloProvider client={apolloClient}>
       <AsyncComponentProvider rehydrateState={asyncComponentState}>
-        <I18nextProvider i18n={i18nextInstance} initialLanguage={i18nextState.language}>
+        <I18nextProvider i18n={i18next} initialLanguage={i18nextState.language}>
           <BrowserRouter>
             <React.Fragment>
               <HtmlHead htmlLang={i18nextState.language || config.i18n.lng} />
