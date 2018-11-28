@@ -41,7 +41,7 @@ export class SidebarContainer extends React.Component {
               this.props.children({
                 ready: this.state.ready,
                 close: closeSidebar,
-                open: sidebar.open,
+                isOpen: sidebar.isOpen,
                 side: sidebar.side,
                 contentType: sidebar.contentType
               })

@@ -6,10 +6,16 @@ export const GET_SIDEBAR_STATE = gql`
     sidebar @client {
       contentType
       side
-      open
+      isOpen
     }
   }
 `;
+
+export const SIDEBAR_CONTENT_TYPES = {
+  cart: 'cart',
+  account: 'account',
+  signUp: 'signUp'
+};
 
 export class SidebarQuery extends Query {
   static defaultProps = {
