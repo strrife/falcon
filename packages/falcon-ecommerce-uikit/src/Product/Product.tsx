@@ -7,7 +7,7 @@ import { ProductGallery } from './ProductGallery';
 import { ProductTranslations } from './ProductQuery';
 import { ProductConfigurableOptions } from './ConfigurableOptions';
 import { AddToCartMutation } from '../Cart';
-import { ToggleMiniCartMutation } from '../MiniCart';
+import { OpenSidebarMutation } from '../Sidebar';
 import { ProductConfigurator } from './ProductConfigurator';
 import { Price } from '../Locale';
 import { toGridTemplate } from '../helpers';
@@ -92,14 +92,22 @@ const ProductDescriptionLayout = themed({
  * Combine render props functions into one with react-adopt
  */
 const ProductForm = adopt({
-  // mutation provides toggle() method that allows us to show mini cart once product is added
-  toggleMiniCartMutation: ({ render }) => (
-    <ToggleMiniCartMutation>{toggle => render({ toggle })}</ToggleMiniCartMutation>
+  // mutation provides openSidebar() method that allows us to show mini cart once product is added
+  openSidebarMutation: ({ render }) => (
+    <OpenSidebarMutation>{openSidebar => render({ openSidebar })}</OpenSidebarMutation>
   ),
 
   // mutation provides addToCart method which should be called with proper data
-  addToCartMutation: ({ render, toggleMiniCartMutation }) => (
-    <AddToCartMutation onCompleted={() => toggleMiniCartMutation.toggle()}>
+  addToCartMutation: ({ render, openSidebarMutation }) => (
+    <AddToCartMutation
+      onCompleted={() =>
+        openSidebarMutation.openSidebar({
+          variables: {
+            contentType: 'cart'
+          }
+        })
+      }
+    >
       {(addToCart, result) => render({ addToCart, result })}
     </AddToCartMutation>
   ),
