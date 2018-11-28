@@ -42,32 +42,10 @@ export default ({ lng = 'en', fallbackLng = 'en', whitelist = ['en'], debug = fa
   });
 };
 
-export function filterResourceStoreByNs(storeData, namespaces) {
-  const i18nResourceStore = {};
-  Object.keys(storeData).forEach(lng => {
-    i18nResourceStore[lng] = Object.keys(storeData[lng])
-      .filter(ns => !namespaces.length || namespaces.find(x => x === ns))
-      .reduce(
-        (result, ns) => ({
-          ...result,
-          [ns]: storeData[lng][ns]
-        }),
-        {}
-      );
-  });
-
-  return i18nResourceStore;
-}
-
 export function extractI18nextState(ctx) {
-  const { i18nextUsedNamespaces = [] } = ctx.state;
-
   if (ctx.i18next) {
-    const { data } = ctx.i18next.services.resourceStore;
-
     return {
-      language: ctx.i18next.language,
-      data: filterResourceStoreByNs(data, i18nextUsedNamespaces)
+      language: ctx.i18next.language
     };
   }
 

@@ -36,11 +36,7 @@ const renderApp = config.serverSideRendering
   const markup = (
     <ApolloProvider client={apolloClient}>
       <AsyncComponentProvider rehydrateState={asyncComponentState}>
-        <I18nextProvider
-          i18n={i18nextInstance}
-          initialLanguage={i18nextState.language}
-          initialI18nStore={i18nextState.data}
-        >
+        <I18nextProvider i18n={i18nextInstance} initialLanguage={i18nextState.language}>
           <BrowserRouter>
             <React.Fragment>
               <HtmlHead htmlLang={i18nextState.language || config.i18n.lng} />

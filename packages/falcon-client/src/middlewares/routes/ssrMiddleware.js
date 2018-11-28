@@ -18,12 +18,11 @@ export default ({ App }) => async (ctx, next) => {
   const { i18next } = ctx;
   const context = {};
   const asyncContext = createAsyncContext();
-  const i18nextUsedNamespaces = new Set();
 
   const markup = (
     <ApolloProvider client={client}>
       <AsyncComponentProvider asyncContext={asyncContext}>
-        <I18nextProvider i18n={i18next} reportNS={x => i18nextUsedNamespaces.add(x)}>
+        <I18nextProvider i18n={i18next}>
           <StaticRouter context={context} location={ctx.url}>
             <React.Fragment>
               <HtmlHead htmlLang={i18next.language} />
@@ -51,7 +50,6 @@ export default ({ App }) => async (ctx, next) => {
   ctx.state.AppMarkup = markup;
   ctx.state.asyncContext = asyncContext.getState();
   ctx.state.helmetContext = Helmet.renderStatic();
-  ctx.state.i18nextUsedNamespaces = Array.from(i18nextUsedNamespaces);
 
   return context.url ? ctx.redirect(context.url) : next();
 };
