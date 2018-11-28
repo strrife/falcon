@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { Box, FlexLayout, Checkbox, Label, Details, DetailsContent, Text, Button } from '@deity/falcon-ui';
 import AddressForm from '../../components/AddressForm';
+import ErrorList from '../../components/ErrorList';
 import SectionHeader from './CheckoutSectionHeader';
 
 const AddressSummary = ({ address = {} }) => (
@@ -26,7 +27,16 @@ class AddressSection extends React.Component {
   };
 
   render() {
-    const { open, title, labelUseDefault, setUseDefault, selectedAddress, onEditRequested, submitLabel } = this.props;
+    const {
+      open,
+      title,
+      labelUseDefault,
+      setUseDefault,
+      selectedAddress,
+      onEditRequested,
+      submitLabel,
+      errors
+    } = this.props;
     let header;
     let content;
 
@@ -92,7 +102,10 @@ class AddressSection extends React.Component {
     return (
       <Details open={open}>
         {header}
-        <DetailsContent> {content} </DetailsContent>
+        <DetailsContent>
+          {content}
+          <ErrorList errors={errors} />
+        </DetailsContent>
       </Details>
     );
   }
@@ -107,7 +120,12 @@ AddressSection.propTypes = {
   useDefault: PropTypes.bool,
   setUseDefault: PropTypes.func,
   labelUseDefault: PropTypes.string,
-  submitLabel: PropTypes.string
+  submitLabel: PropTypes.string,
+  errors: PropTypes.arrayOf(
+    PropTypes.shape({
+      message: PropTypes.string
+    })
+  )
 };
 
 export default AddressSection;

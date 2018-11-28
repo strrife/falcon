@@ -1,8 +1,6 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 import { withApollo, WithApolloClient } from 'react-apollo';
 import isEqual from 'lodash.isequal';
-import { CartQuery } from '../Cart/CartQuery';
 import { ESTIMATE_SHIPPING_METHODS, SET_SHIPPING, PLACE_ORDER } from './CheckoutMutation';
 
 type CheckoutAddress = {
@@ -11,10 +9,10 @@ type CheckoutAddress = {
   lastname: string;
   city: string;
   postcode: string;
-  company: string;
+  company?: string;
   countryId: string;
-  region: string;
-  regionId: number;
+  region?: string;
+  regionId?: number;
   street: string[];
   telephone: string;
 };
@@ -44,17 +42,34 @@ type CheckoutLogicData = {
   paymentMethod: CheckoutPaymentMethod | null;
 };
 
+type CheckoutLogicError = {
+  message: string;
+};
+
+type CheckoutErrors = CheckoutLogicError[];
+
 type CheckoutLogicState = {
   loading: boolean;
-  error?: any;
+  errors: CheckoutLogicErrors;
   values: CheckoutLogicData;
   orderId?: number;
   availableShippingMethods: CheckoutShippingMethod[];
   availablePaymentMethods: CheckoutPaymentMethod[];
 };
 
+type CheckoutLogicErrors = {
+  email?: CheckoutErrors;
+  shippingAddress?: CheckoutErrors;
+  billingSameAsShipping?: CheckoutErrors;
+  billingAddress?: CheckoutErrors;
+  shippingMethod?: CheckoutErrors;
+  paymentMethod?: CheckoutErrors;
+  order?: CheckoutErrors;
+};
+
 export type CheckoutLogicInjectedProps = {
   values: CheckoutLogicData;
+  errors: CheckoutLogicErrors;
   loading: boolean;
   availableShippingMethods: CheckoutShippingMethod[];
   availablePaymentMethods: CheckoutPaymentMethod[];
@@ -63,8 +78,8 @@ export type CheckoutLogicInjectedProps = {
   setShippingAddress(address: CheckoutAddress): void;
   setBillingSameAsShipping(same: boolean): void;
   setBillingAddress(address: CheckoutAddress): void;
-  setShipping(shipping: CheckoutShippingMethod): void;
-  setPayment(payment: CheckoutPaymentMethod): void;
+  setShippingMethod(shipping: CheckoutShippingMethod): void;
+  setPaymentMethod(payment: CheckoutPaymentMethod): void;
   placeOrder(): void;
 };
 
@@ -79,6 +94,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
     this.state = {
       loading: false,
       values: props.initialValues || ({ billingSameAsShipping: false } as any),
+      errors: {},
       availablePaymentMethods: [],
       availableShippingMethods: []
     };
@@ -130,7 +146,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
   setBillingAddress = (billingAddress: CheckoutAddress) =>
     this.setLoading(true, () => this.setPartialState({ loading: false, values: { billingAddress } }));
 
-  setPayment = (paymentMethod: CheckoutPaymentMethod) =>
+  setPaymentMethod = (paymentMethod: CheckoutPaymentMethod) =>
     this.setLoading(true, () => this.setPartialState({ loading: false, values: { paymentMethod } }));
 
   setShippingAddress = (shippingAddress: CheckoutAddress) => {
@@ -146,35 +162,45 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           }
         })
         .then(resp => {
-          const values = { shippingAddress } as CheckoutLogicData;
+          if (resp.errors) {
+            this.setPartialState({
+              loading: false,
+              errors: {
+                shippingAddress: resp.errors
+              },
+              availableShippingMethods: null
+            });
+          } else {
+            const values = { shippingAddress } as CheckoutLogicData;
 
-          // if billing is set to the same as shipping then set it also to received value
-          if (this.state.values.billingSameAsShipping) {
-            values.billingAddress = shippingAddress;
+            // if billing is set to the same as shipping then set it also to received value
+            if (this.state.values.billingSameAsShipping) {
+              values.billingAddress = shippingAddress;
+            }
+
+            // if shipping methods has changed then remove already selected shipping method
+            if (!isEqual(resp.data!.estimateShippingMethods, this.state.availableShippingMethods)) {
+              values.shippingMethod = null;
+            }
+
+            this.setPartialState({
+              loading: false,
+              errors: {},
+              values,
+              availableShippingMethods: resp.data!.estimateShippingMethods
+            });
           }
-
-          // if shipping methods has changed then remove already selected shipping method
-          if (!isEqual(resp.data!.estimateShippingMethods, this.state.availableShippingMethods)) {
-            values.shippingMethod = null;
-          }
-
-          this.setPartialState({
-            loading: false,
-            error: null,
-            values,
-            availableShippingMethods: resp.data!.estimateShippingMethods
-          });
         })
         .catch(error => {
           this.setPartialState({
             loading: false,
-            error
+            errors: [error]
           });
         });
     });
   };
 
-  setShipping = (shippingMethod: CheckoutShippingMethod) => {
+  setShippingMethod = (shippingMethod: CheckoutShippingMethod) => {
     this.setLoading(true, () => {
       // trigger mutation that will reutrn available payment options
       this.props.client
@@ -192,24 +218,33 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           }
         })
         .then(resp => {
-          const values = { shippingMethod } as CheckoutLogicData;
+          if (resp.errors) {
+            this.setPartialState({
+              loading: false,
+              errors: {
+                shippingMethod: resp.errors
+              },
+              availablePaymentMethods: null
+            });
+          } else {
+            const values = { shippingMethod } as CheckoutLogicData;
+            // if available payment methods has changed then remove selected payment method
+            if (!isEqual(resp.data!.setShipping.paymentMethods, this.state.availablePaymentMethods)) {
+              values.paymentMethod = null;
+            }
 
-          // if available payment methods has changed then remove selected payment method
-          if (!isEqual(resp.data!.setShipping.paymentMethods, this.state.availablePaymentMethods)) {
-            values.paymentMethod = null;
+            this.setPartialState({
+              loading: false,
+              errors: {},
+              values,
+              availablePaymentMethods: resp.data!.setShipping.paymentMethods
+            });
           }
-
-          this.setPartialState({
-            loading: false,
-            error: null,
-            values,
-            availablePaymentMethods: resp.data!.setShipping.paymentMethods
-          });
         })
         .catch(error => {
           this.setPartialState({
             loading: false,
-            error
+            errors: [error]
           });
         });
     });
@@ -233,16 +268,25 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           }
         })
         .then(resp => {
-          this.setPartialState({
-            loading: false,
-            error: null,
-            orderId: resp.data && resp.data.placeOrder.orderId
-          });
+          if (resp.errors) {
+            this.setPartialState({
+              loading: false,
+              errors: {
+                order: resp.errors
+              }
+            });
+          } else {
+            this.setPartialState({
+              loading: false,
+              error: null,
+              orderId: resp.data && resp.data.placeOrder.orderId
+            });
+          }
         })
         .catch(error => {
           this.setPartialState({
             loading: false,
-            error
+            errors: [error]
           });
         });
     });
@@ -250,35 +294,23 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
 
   render() {
     return (
-      <CartQuery>
-        {({ cart }) => {
-          if (this.state.orderId) {
-            // order has been placed successfully so we show confirmation
-            return <Redirect to="/checkout/confirmation" />;
-          } else if (!cart.items.length) {
-            // cart is empty, so checkout route shouldn't be presented
-            return <Redirect to="/" />;
-          }
-          return (
-            <React.Fragment>
-              {this.props.children({
-                loading: this.state.loading,
-                values: this.state.values,
-                orderId: this.state.orderId,
-                availablePaymentMethods: this.state.availablePaymentMethods,
-                availableShippingMethods: this.state.availableShippingMethods,
-                setEmail: this.setEmail,
-                setShippingAddress: this.setShippingAddress,
-                setBillingAddress: this.setBillingAddress,
-                setBillingSameAsShipping: this.setBillingSameAsShipping,
-                setShipping: this.setShipping,
-                setPayment: this.setPayment,
-                placeOrder: this.placeOrder
-              })}
-            </React.Fragment>
-          );
-        }}
-      </CartQuery>
+      <React.Fragment>
+        {this.props.children({
+          loading: this.state.loading,
+          values: this.state.values,
+          errors: this.state.errors,
+          orderId: this.state.orderId,
+          availablePaymentMethods: this.state.availablePaymentMethods,
+          availableShippingMethods: this.state.availableShippingMethods,
+          setEmail: this.setEmail,
+          setShippingAddress: this.setShippingAddress,
+          setBillingAddress: this.setBillingAddress,
+          setBillingSameAsShipping: this.setBillingSameAsShipping,
+          setShippingMethod: this.setShippingMethod,
+          setPaymentMethod: this.setPaymentMethod,
+          placeOrder: this.placeOrder
+        })}
+      </React.Fragment>
     );
   }
 }

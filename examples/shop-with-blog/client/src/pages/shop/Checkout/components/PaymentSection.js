@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, FlexLayout, Label, Details, DetailsContent, Text, Radio, Button } from '@deity/falcon-ui';
 import SectionHeader from './CheckoutSectionHeader';
+import ErrorList from '../../components/ErrorList';
 
 // we have to filter the methods until we have implementation for all of them
 const ALLOWED_PAYMENT_METHODS = ['checkmo'];
@@ -42,7 +43,7 @@ class PaymentSection extends React.Component {
   };
 
   render() {
-    const { open, selectedPayment, onEditRequested, availablePaymentMethods } = this.props;
+    const { open, selectedPayment, onEditRequested, availablePaymentMethods, errors } = this.props;
     let header;
     if (!open && selectedPayment) {
       header = (
@@ -66,6 +67,7 @@ class PaymentSection extends React.Component {
             availablePaymentMethods={availablePaymentMethods}
             onPaymentSelected={this.onPaymentSelected}
           />
+          <ErrorList errors={errors} />
           <Button disabled={!this.state.selectedPayment} onClick={this.submitPayment}>
             Continue
           </Button>
@@ -80,7 +82,12 @@ PaymentSection.propTypes = {
   availablePaymentMethods: PropTypes.arrayOf(PropTypes.shape({})),
   selectedPayment: PropTypes.shape({}),
   onEditRequested: PropTypes.func,
-  setPayment: PropTypes.func
+  setPayment: PropTypes.func,
+  errors: PropTypes.arrayOf(
+    PropTypes.shape({
+      message: PropTypes.string
+    })
+  )
 };
 
 export default PaymentSection;

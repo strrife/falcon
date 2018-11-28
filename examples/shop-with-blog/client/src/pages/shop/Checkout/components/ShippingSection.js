@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Label, FlexLayout, Details, DetailsContent, Text, Radio, Box, Button } from '@deity/falcon-ui';
 import { Price } from '@deity/falcon-ecommerce-uikit';
 import SectionHeader from './CheckoutSectionHeader';
+import ErrorList from '../../components/ErrorList';
 
 const ShippingSelector = ({ availableShippingOptions = [], onShippingSelected }) => (
   <Box my="md">
@@ -41,7 +42,7 @@ class ShippingSection extends React.Component {
   };
 
   render() {
-    const { open, onEditRequested, availableShippingMethods, selectedShipping } = this.props;
+    const { open, onEditRequested, availableShippingMethods, selectedShipping, errors } = this.props;
     let header;
 
     if (!open && selectedShipping) {
@@ -66,6 +67,7 @@ class ShippingSection extends React.Component {
             availableShippingOptions={availableShippingMethods}
             onShippingSelected={this.onShippingSelected}
           />
+          <ErrorList errors={errors} />
           <Button disabled={!this.state.selectedShipping} onClick={this.submitShipping}>
             Continue
           </Button>
@@ -80,7 +82,12 @@ ShippingSection.propTypes = {
   availableShippingMethods: PropTypes.arrayOf(PropTypes.shape({})),
   onEditRequested: PropTypes.func,
   selectedShipping: PropTypes.shape({}),
-  setShipping: PropTypes.func
+  setShipping: PropTypes.func,
+  errors: PropTypes.arrayOf(
+    PropTypes.shape({
+      message: PropTypes.string
+    })
+  )
 };
 
 export default ShippingSection;
