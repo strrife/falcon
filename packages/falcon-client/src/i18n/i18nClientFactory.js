@@ -13,38 +13,44 @@ const loadLocale = (url, options, callback) =>
       callback(null, { status: '404' });
     });
 
-export default ({ lng = 'en', fallbackLng = 'en', whitelist = ['en'], debug = false, resources } = {}) => {
-  const defaultNS = 'translations';
+export default ({ lng = 'en', fallbackLng = 'en', whitelist = ['en'], debug = false, resources } = {}) =>
+  new Promise((resolve, reject) => {
+    const defaultNS = 'translations';
 
-  const instance = i18next.use(XHR).init({
-    lng,
-    ns: [defaultNS],
-    fallbackLng,
-    whitelist,
-    defaultNS,
-    fallbackNS: defaultNS,
-    saveMissing: false,
-    resources,
-    debug,
-    react: {
-      wait: true,
-      nsMode: 'fallback'
-    },
-    interpolation: {
-      escapeValue: false
-    },
-    backend: {
-      loadPath: '{{lng}}/{{ns}}.json',
-      parse: x => x,
-      ajax: loadLocale
+    const instance = i18next.use(XHR).init(
+      {
+        lng,
+        ns: [defaultNS],
+        fallbackLng,
+        whitelist,
+        defaultNS,
+        fallbackNS: defaultNS,
+        saveMissing: false,
+        resources,
+        debug,
+        react: {
+          nsMode: 'fallback'
+        },
+        interpolation: {
+          escapeValue: false
+        },
+        backend: {
+          loadPath: '{{lng}}/{{ns}}.json',
+          parse: x => x,
+          ajax: loadLocale
+        }
+      },
+      error => {
+        if (error) {
+          reject(error);
+        }
+        resolve(instance);
+      }
+    );
+
+    if (module.hot) {
+      instance.on('initialized', () => {
+        instance.reloadResources();
+      });
     }
   });
-
-  if (module.hot) {
-    instance.on('initialized', () => {
-      instance.reloadResources();
-    });
-  }
-
-  return instance;
-};

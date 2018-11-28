@@ -30,32 +30,36 @@ const renderApp = config.serverSideRendering
   ? (element, container, callback) => asyncBootstrapper(element).then(() => hydrate(element, container, callback))
   : render;
 
-const markup = (
-  <ApolloProvider client={apolloClient}>
-    <AsyncComponentProvider rehydrateState={asyncComponentState}>
-      <I18nextProvider
-        i18n={i18nFactory(config.i18n)}
-        initialLanguage={i18nextState.language}
-        initialI18nStore={i18nextState.data}
-      >
-        <BrowserRouter>
-          <React.Fragment>
-            <HtmlHead htmlLang={i18nextState.language || config.i18n.lng} />
-            <App />
-          </React.Fragment>
-        </BrowserRouter>
-      </I18nextProvider>
-    </AsyncComponentProvider>
-  </ApolloProvider>
-);
+(async () => {
+  const i18nextInstance = await i18nFactory(config.i18n);
 
-renderApp(markup, document.getElementById('root'));
+  const markup = (
+    <ApolloProvider client={apolloClient}>
+      <AsyncComponentProvider rehydrateState={asyncComponentState}>
+        <I18nextProvider
+          i18n={i18nextInstance}
+          initialLanguage={i18nextState.language}
+          initialI18nStore={i18nextState.data}
+        >
+          <BrowserRouter>
+            <React.Fragment>
+              <HtmlHead htmlLang={i18nextState.language || config.i18n.lng} />
+              <App />
+            </React.Fragment>
+          </BrowserRouter>
+        </I18nextProvider>
+      </AsyncComponentProvider>
+    </ApolloProvider>
+  );
 
-if (process.env.NODE_ENV === 'production') {
-  register('/sw.js');
-} else {
-  unregisterAll();
-}
+  renderApp(markup, document.getElementById('root'));
+
+  if (process.env.NODE_ENV === 'production') {
+    register('/sw.js');
+  } else {
+    unregisterAll();
+  }
+})();
 
 if (module.hot) {
   module.hot.accept();
