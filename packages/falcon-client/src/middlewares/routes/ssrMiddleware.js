@@ -7,7 +7,6 @@ import { I18nextProvider } from 'react-i18next-with-context';
 import { AsyncComponentProvider, createAsyncContext } from 'react-async-component';
 import asyncBootstrapper from 'react-async-bootstrapper2';
 import HtmlHead from '../../components/HtmlHead';
-import { filterResourceStoreByNs } from '../../i18n/i18nServerFactory';
 
 /**
  * Server Side Rendering middleware.
@@ -52,7 +51,7 @@ export default ({ App }) => async (ctx, next) => {
   ctx.state.AppMarkup = markup;
   ctx.state.asyncContext = asyncContext.getState();
   ctx.state.helmetContext = Helmet.renderStatic();
-  ctx.state.i18nextFilteredStore = filterResourceStoreByNs(i18next.services.resourceStore.data, i18nextUsedNamespaces);
+  ctx.state.i18nextUsedNamespaces = Array.from(i18nextUsedNamespaces);
 
   return context.url ? ctx.redirect(context.url) : next();
 };

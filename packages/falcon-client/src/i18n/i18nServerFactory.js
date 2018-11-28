@@ -46,7 +46,7 @@ export function filterResourceStoreByNs(storeData, namespaces) {
   const i18nResourceStore = {};
   Object.keys(storeData).forEach(lng => {
     i18nResourceStore[lng] = Object.keys(storeData[lng])
-      .filter(ns => namespaces.has(ns))
+      .filter(ns => !namespaces.length || namespaces.find(x => x === ns))
       .reduce(
         (result, ns) => ({
           ...result,
@@ -60,10 +60,14 @@ export function filterResourceStoreByNs(storeData, namespaces) {
 }
 
 export function extractI18nextState(ctx) {
+  const { i18nextUsedNamespaces = [] } = ctx.state;
+
   if (ctx.i18next) {
+    const { data } = ctx.i18next.services.resourceStore;
+
     return {
       language: ctx.i18next.language,
-      data: ctx.state.i18nextFilteredStore
+      data: filterResourceStoreByNs(data, i18nextUsedNamespaces)
     };
   }
 
