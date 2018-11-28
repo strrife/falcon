@@ -14,7 +14,8 @@ export const GET_SIDEBAR_STATE = gql`
 export const SIDEBAR_CONTENT_TYPES = {
   cart: 'cart',
   account: 'account',
-  signUp: 'signUp'
+  signUp: 'signUp',
+  forgotPassword: 'forgotPassword'
 };
 
 export class SidebarQuery extends Query {

@@ -1,7 +1,10 @@
 import React from 'react';
 import { Formik } from 'formik';
-import { FormField, Form, FormSubmit, PasswordRevealInput, FormErrorSummary } from '../Forms';
+import { Button, FlexLayout } from '@deity/falcon-ui';
+
+import { FormField, Form, PasswordRevealInput, FormErrorSummary } from '../Forms';
 import { SignInMutation } from './SignInMutation';
+import { ForgotPasswordTrigger } from './ForgotPasswordTrigger';
 
 type SignInFormProps = {
   onCompleted?: () => void;
@@ -40,8 +43,13 @@ export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted }) => (
             >
               {inputProps => <PasswordRevealInput {...inputProps} />}
             </FormField>
+            <FlexLayout justifyContent="space-between" alignItems="center" mt="md">
+              <ForgotPasswordTrigger />
+              <Button type="submit" variant={loading ? 'loader' : undefined}>
+                Sign in
+              </Button>
+            </FlexLayout>
 
-            <FormSubmit submitting={loading} value="Sign in" />
             <FormErrorSummary errors={error && [error.message]} />
           </Form>
         )}
