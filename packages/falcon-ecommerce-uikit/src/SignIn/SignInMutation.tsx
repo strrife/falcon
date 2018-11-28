@@ -11,6 +11,6 @@ export class SignInMutation extends Mutation {
   static defaultProps = {
     mutation: SIGN_IN_MUTATION,
     awaitRefetchQueries: true,
-    refetchQueries: ['Customer', 'MiniAccount', 'Cart']
+    refetchQueries: ['Customer', 'CustomerWithAddresses', 'MiniAccount', 'Cart']
   };
 }

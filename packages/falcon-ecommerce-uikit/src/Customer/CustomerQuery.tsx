@@ -30,7 +30,7 @@ export class CustomerQuery extends Query<CustomerQueryData> {
 }
 
 export const GET_CUSTOMER_WITH_ADDRESSES = gql`
-  query Customer {
+  query CustomerWithAddresses {
     customer {
       id
       firstname

@@ -5,6 +5,7 @@ import { Box, FlexLayout, Checkbox, Label, Details, DetailsContent, Text, Button
 import AddressForm from '../../components/AddressForm';
 import ErrorList from '../../components/ErrorList';
 import SectionHeader from './CheckoutSectionHeader';
+import AddressPicker from './AddressPicker';
 
 const AddressSummary = ({ address = {} }) => (
   <Box>
@@ -18,7 +19,8 @@ class AddressSection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      useDefault: !!props.useDefault
+      useTheSame: !!props.useTheSame,
+      selectedAddressId: null
     };
   }
 
@@ -26,17 +28,25 @@ class AddressSection extends React.Component {
     this.props.setAddress(values);
   };
 
+  submitSelectedAddress = () => {
+    const selectedAddressId = this.state.selectedAddressId || this.props.defaultSelected.id;
+    const selectedAddress = this.props.availableAddresses.find(item => item.id === selectedAddressId);
+    this.props.setAddress(selectedAddress);
+  };
+
   render() {
     const {
       open,
       title,
-      labelUseDefault,
-      setUseDefault,
+      labelUseTheSame,
+      setUseTheSame,
       selectedAddress,
       onEditRequested,
       submitLabel,
       errors,
-      countries
+      countries,
+      availableAddresses,
+      defaultSelected
     } = this.props;
     let header;
     let content;
@@ -49,7 +59,6 @@ class AddressSection extends React.Component {
       postcode: '',
       city: '',
       telephone: '',
-      // todo: add CountriesQuery and display select field for countryId
       countryId: 'NL',
       ...selectedAddress
     };
@@ -68,30 +77,68 @@ class AddressSection extends React.Component {
       header = <SectionHeader title={title} />;
     }
 
-    if (setUseDefault) {
+    let selectedAvailableAddress;
+    // if available addresses are passed then we should display dropdown so the user can pick his saved address
+    if (availableAddresses) {
+      // compute address that should be selected in the dropdown
+      if (this.state.selectedAddressId) {
+        // if we have locally selected address id then use it
+        selectedAvailableAddress = availableAddresses.find(item => item.id === this.state.selectedAddressId);
+      } else if (selectedAddress && selectedAddress.id) {
+        // if there's passed selected address then use it
+        selectedAvailableAddress = availableAddresses.find(item => item.id === selectedAddress.id);
+      } else if (defaultSelected) {
+        // if default that should be selected is passed then use it
+        selectedAvailableAddress = availableAddresses.find(item => item.id === defaultSelected.id);
+      }
+    }
+
+    const addressEditor = (
+      <React.Fragment>
+        {availableAddresses && (
+          <AddressPicker
+            addresses={availableAddresses}
+            selectedAddressId={selectedAvailableAddress ? selectedAvailableAddress.id : 0}
+            onChange={id => this.setState({ selectedAddressId: id })}
+          />
+        )}
+        {!selectedAvailableAddress && (
+          <Formik initialValues={initialAddressValue} onSubmit={this.submitAddress}>
+            {() => <AddressForm countries={countries} submitLabel={submitLabel} />}
+          </Formik>
+        )}
+        {!!selectedAvailableAddress && (
+          <Button my="sm" onClick={this.submitSelectedAddress}>
+            Continue
+          </Button>
+        )}
+      </React.Fragment>
+    );
+
+    if (setUseTheSame) {
       content = (
         <React.Fragment>
           <FlexLayout mb="md">
             <Checkbox
               id="use-default"
               size="sm"
-              checked={this.state.useDefault}
-              onChange={ev => this.setState({ useDefault: ev.target.checked })}
+              checked={this.state.useTheSame}
+              onChange={ev => this.setState({ useTheSame: ev.target.checked })}
             />
             <Label ml="xs" htmlFor="use-default">
-              {labelUseDefault}
+              {labelUseTheSame}
             </Label>
           </FlexLayout>
 
-          {this.state.useDefault ? (
-            <Button onClick={() => this.props.setUseDefault(true)}>Continue</Button>
+          {this.state.useTheSame ? (
+            <Button onClick={() => this.props.setUseTheSame(true)}>Continue</Button>
           ) : (
-            <Formik initialValues={initialAddressValue} onSubmit={this.submitAddress}>
-              {() => <AddressForm />}
-            </Formik>
+            addressEditor
           )}
         </React.Fragment>
       );
+    } else if (availableAddresses) {
+      content = addressEditor;
     } else {
       content = (
         <Formik initialValues={initialAddressValue} onSubmit={this.submitAddress}>
@@ -118,10 +165,12 @@ AddressSection.propTypes = {
   selectedAddress: PropTypes.shape({}),
   setAddress: PropTypes.func,
   onEditRequested: PropTypes.func,
-  useDefault: PropTypes.bool,
-  setUseDefault: PropTypes.func,
-  labelUseDefault: PropTypes.string,
+  useTheSame: PropTypes.bool,
+  setUseTheSame: PropTypes.func,
+  labelUseTheSame: PropTypes.string,
   submitLabel: PropTypes.string,
+  availableAddresses: PropTypes.arrayOf(PropTypes.shape({})),
+  defaultSelected: PropTypes.shape({}),
   countries: PropTypes.arrayOf(
     PropTypes.shape({
       code: PropTypes.string,

@@ -1,7 +1,14 @@
 import React from 'react';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { Box, H2, Button, Divider, Icon } from '@deity/falcon-ui';
-import { CheckoutLogic, CartQuery, CountriesQuery, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
+import {
+  CheckoutLogic,
+  CartQuery,
+  CountriesQuery,
+  CustomerQuery,
+  GET_CUSTOMER_WITH_ADDRESSES,
+  toGridTemplate
+} from '@deity/falcon-ecommerce-uikit';
 import CheckoutCartSummary from './Checkout/components/CheckoutCartSummary';
 import CustomerSelector from './Checkout/components/CustomerSelector';
 import ShippingSection from './Checkout/components/ShippingSection';
@@ -155,9 +162,22 @@ class CheckoutWizard extends React.Component {
       placeOrder
     } = this.props.checkoutData;
 
+    const { customerData } = this.props;
+
     if (orderId) {
       // order has been placed successfully so we show confirmation
       return <Redirect to="/checkout/confirmation" />;
+    }
+
+    let addresses;
+    let defaultShippingAddress;
+    let defaultBillingAddress;
+
+    // detect ifuser is logged in - if so and he has address list then use it for address sections
+    if (customerData && customerData.addresses && customerData.addresses.length) {
+      ({ addresses } = customerData);
+      defaultShippingAddress = addresses.find(item => item.defaultShipping);
+      defaultBillingAddress = addresses.find(item => item.defaultBilling);
     }
 
     return (
@@ -202,6 +222,8 @@ class CheckoutWizard extends React.Component {
                       selectedAddress={values.shippingAddress}
                       setAddress={setShippingAddress}
                       errors={errors.shippingAddress}
+                      availableAddresses={addresses}
+                      defaultSelected={defaultShippingAddress}
                     />
 
                     <Divider my="md" />
@@ -214,9 +236,11 @@ class CheckoutWizard extends React.Component {
                       countries={countries.items}
                       selectedAddress={values.billingAddress}
                       setAddress={setBillingAddress}
-                      setUseDefault={setBillingSameAsShipping}
-                      useDefault={values.billingSameAsShipping}
-                      labelUseDefault="My billing address is the same as shipping"
+                      setUseTheSame={setBillingSameAsShipping}
+                      useTheSame={values.billingSameAsShipping}
+                      labelUseTheSame="My billing address is the same as shipping"
+                      availableAddresses={addresses}
+                      defaultSelected={defaultBillingAddress}
                     />
 
                     <Divider my="md" />
@@ -259,7 +283,13 @@ class CheckoutWizard extends React.Component {
 }
 
 const CheckoutPage = () => (
-  <CheckoutLogic>{checkoutData => <CheckoutWizard checkoutData={checkoutData} />}</CheckoutLogic>
+  <CheckoutLogic>
+    {checkoutData => (
+      <CustomerQuery query={GET_CUSTOMER_WITH_ADDRESSES}>
+        {({ customer }) => <CheckoutWizard checkoutData={checkoutData} customerData={customer} />}
+      </CustomerQuery>
+    )}
+  </CheckoutLogic>
 );
 
 export default CheckoutPage;
