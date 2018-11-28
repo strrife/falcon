@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik } from 'formik';
 import { SignUpMutation, SignUpVariables } from './SignUpMutation';
-import { FormInput, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '../Forms';
+import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '../Forms';
 
 type SignUpFormProps = {
   onCompleted?: () => void;
@@ -33,11 +33,11 @@ export const SignUpForm: React.SFC<SignUpFormProps> = ({ onCompleted }) => (
       >
         {() => (
           <Form>
-            <FormInput label="First Name" type="text" required name="firstname" autoComplete="given-name" />
-            <FormInput label="Last Name" type="text" required name="lastname" autoComplete="family-name" />
-            <FormInput label="Email" type="email" required name="email" autoComplete="email" />
+            <FormField label="First Name" type="text" required name="firstname" autoComplete="given-name" />
+            <FormField label="Last Name" type="text" required name="lastname" autoComplete="family-name" />
+            <FormField label="Email" type="email" required name="email" autoComplete="email" />
 
-            <FormInput
+            <FormField
               label="Password"
               required
               name="password"
@@ -46,7 +46,7 @@ export const SignUpForm: React.SFC<SignUpFormProps> = ({ onCompleted }) => (
               placeholder="At least 8 characters"
             >
               {inputProps => <PasswordRevealInput {...inputProps} />}
-            </FormInput>
+            </FormField>
 
             <FormSubmit submitting={loading} value="Create an account" />
             <FormErrorSummary errors={error && [error.message]} />
