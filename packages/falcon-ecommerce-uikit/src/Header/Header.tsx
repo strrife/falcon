@@ -105,7 +105,7 @@ export const Searchbar = () => (
             onClick={() =>
               openSidebar({
                 variables: {
-                  contentType: 'signin'
+                  contentType: 'account'
                 }
               })
             }
