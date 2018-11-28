@@ -40,7 +40,7 @@
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.1.0",
     "@deity/falcon-theme-editor": "^0.0.3",
-    "@mdx-js/tag": "0.15.0",
+    "@mdx-js/tag": "0.16.1",
     "@types/deepmerge": "2.1.0",
     "@types/react": "16.7.6",
     "@types/react-dom": "16.0.9",
