@@ -4,18 +4,12 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import { graphql } from 'react-apollo';
 import { Box, Text, Link, Input, Button, Details, DetailsContent } from '@deity/falcon-ui';
 import {
-  SignInForm,
-  SignInFormContent,
   SignOutMutation,
   GET_CUSTOMER,
-  toGridTemplate
+  toGridTemplate,
+  ToggleMiniAccountMutation
 } from '@deity/falcon-ecommerce-uikit';
 import SectionHeader from './CheckoutSectionHeader';
-
-const WIDGETS = {
-  signInForm: 'signInForm',
-  emailForm: 'emailForm'
-};
 
 const customerEmailFormLayout = {
   customerEmailFormLayout: {
@@ -86,7 +80,6 @@ class EmailSection extends React.Component {
 
     this.state = {
       email: props.email,
-      widget: WIDGETS.emailForm,
       getPrevProps: () => this.props
     };
   }
@@ -126,12 +119,8 @@ class EmailSection extends React.Component {
     return null;
   }
 
-  showEmailForm = () => this.setState({ widget: WIDGETS.emailForm });
-  showLoginForm = () => this.setState({ widget: WIDGETS.signInForm });
-
   render() {
     let header;
-    let content;
     const { open, data, onEditRequested } = this.props;
     const isSignedIn = !!data.customer;
 
@@ -142,14 +131,7 @@ class EmailSection extends React.Component {
             <SectionHeader
               title="Customer"
               editLabel={isSignedIn ? 'Sign out' : 'Edit'}
-              onActionClick={
-                isSignedIn
-                  ? signOut
-                  : () => {
-                      this.showEmailForm();
-                      onEditRequested();
-                    }
-              }
+              onActionClick={isSignedIn ? signOut : onEditRequested}
               complete
               summary={<Text>{this.state.email}</Text>}
             />
@@ -160,33 +142,22 @@ class EmailSection extends React.Component {
       header = <SectionHeader title="Customer" />;
     }
 
-    if (this.state.widget === WIDGETS.emailForm) {
-      content = (
-        <Box>
-          <EmailForm email={this.state.email} setEmail={this.props.setEmail} />
-          <Text>
-            or
-            <Link mx="xs" color="primary" onClick={this.showLoginForm}>
-              sign in with your account
-            </Link>
-            if you are already registered
-          </Text>
-        </Box>
-      );
-    } else if (this.state.widget === WIDGETS.signInForm) {
-      content = (
-        <Box>
-          <SignInForm>{props => <SignInFormContent hideHeader {...props} />}</SignInForm>
-          <Text>
-            or
-            <Link mx="xs" color="primary" onClick={this.showEmailForm}>
-              click here
-            </Link>
-            to continue as guest
-          </Text>
-        </Box>
-      );
-    }
+    const content = (
+      <ToggleMiniAccountMutation>
+        {toggle => (
+          <Box>
+            <EmailForm email={this.state.email} setEmail={this.props.setEmail} />
+            <Text>
+              or
+              <Link mx="xs" color="primary" onClick={toggle}>
+                sign in with your account
+              </Link>
+              if you are already registered
+            </Text>
+          </Box>
+        )}
+      </ToggleMiniAccountMutation>
+    );
 
     return (
       <Details open={open}>
