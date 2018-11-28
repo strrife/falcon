@@ -17,6 +17,7 @@ import { ToggleMiniCartMutation, MiniCartIcon, MiniCartQuery } from '../MiniCart
 import { CartQuery } from '../Cart';
 import { HeaderData, MenuItem } from './HeaderQuery';
 import { ToggleMiniAccountMutation } from '../MiniAccount/MiniAccountMutation';
+import { CategoryToolbar } from '../Category';
 
 const bannerLayoutTheme: DefaultThemeProps = {
   bannerLayout: {
@@ -104,7 +105,13 @@ export const Searchbar = () => (
     <ToggleMiniCartMutation>
       {toggle => (
         <CartQuery>
-          {(data: any) => <MiniCartIcon onClick={toggle} gridArea={SearchBarArea.cart} itemsQty={data.cart.itemsQty} />}
+          {(data: any) => (
+            <MiniCartIcon
+              onClick={toggle}
+              gridArea={SearchBarArea.cart}
+              itemsQty={data.cart ? data.cart.itemsQty : 0}
+            />
+          )}
         </CartQuery>
       )}
     </ToggleMiniCartMutation>
