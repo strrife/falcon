@@ -262,6 +262,25 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           // update cart once order is placed successfully
           refetchQueries: ['Cart'],
           awaitRefetchQueries: true,
+          // when refetchQueries and awaitRefetchQueries are set then we cannot use promise
+          // because it's not called (Apollo's bug), but we can update state based on
+          // update() callback
+          update: (_, { data, errors }) => {
+            if (errors) {
+              this.setPartialState({
+                loading: false,
+                errors: {
+                  order: errors
+                }
+              });
+            } else {
+              this.setPartialState({
+                loading: false,
+                error: null,
+                orderId: data && data.placeOrder.orderId
+              });
+            }
+          },
           variables: {
             input: {
               email: this.state.values.email,
@@ -269,22 +288,6 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
                 method: this.state.values.paymentMethod!.code
               }
             }
-          }
-        })
-        .then(resp => {
-          if (resp.errors) {
-            this.setPartialState({
-              loading: false,
-              errors: {
-                order: resp.errors
-              }
-            });
-          } else {
-            this.setPartialState({
-              loading: false,
-              error: null,
-              orderId: resp.data && resp.data.placeOrder.orderId
-            });
           }
         })
         .catch(error => {
@@ -299,6 +302,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
   };
 
   render() {
+    console.log('current state ', JSON.stringify(this.state, null, 2));
     return (
       <React.Fragment>
         {this.props.children({
