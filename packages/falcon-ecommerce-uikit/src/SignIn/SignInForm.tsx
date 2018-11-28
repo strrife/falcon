@@ -1,8 +1,8 @@
 import React from 'react';
 import { MutationFn, OperationVariables, MutationResult } from 'react-apollo';
-import { Formik, Form, ErrorMessage, FormikProps } from 'formik';
+import { Formik, Form, FormikProps } from 'formik';
 import { adopt } from 'react-adopt';
-import { H2, Icon, Box, Link, Button, Input, Label, Text } from '@deity/falcon-ui';
+import { H3, Icon, Box, Link, Button, Input, Label, Text } from '@deity/falcon-ui';
 import { SignInMutation } from './SignInMutation';
 
 export type SignInFormRenderProps = {
@@ -38,7 +38,7 @@ export const SignInFormContent: React.SFC<SignInFormRenderProps> = ({
   }
 }) => (
   <React.Fragment>
-    <H2 mb="lg">Login</H2>
+    <H3 mb="md">Login</H3>
     <Text>Log in with your account</Text>
     <Box>{!!error && <Text color="error">{error.message}</Text>}</Box>
     <Box>
