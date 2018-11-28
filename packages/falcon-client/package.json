@@ -4,6 +4,9 @@
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-client",
   "license": "OSL-3.0",
   "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "falcon-client": "./bin/falcon-client.js"
   },
