@@ -1,7 +1,7 @@
 # DEITY Falcon - build back-end agnostic headless PWA websites
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b8b60963bac941f081de64671ae8b7fd)](https://app.codacy.com/app/Deity/falcon?utm_source=github.com&utm_medium=referral&utm_content=deity-io/falcon&utm_campaign=Badge_Grade_Settings)
-[![Build Status](https://travis-ci.org/deity-io/falcon.svg?branch=master)](https://travis-ci.org/deity-io/falcon)
+[![Build Status](https://gitlab.com/deity-io/falcon/badges/master/pipeline.svg)](https://gitlab.com/deity-io/falcon/commits/master)
 [![License: OSL-3.0](https://img.shields.io/badge/license-OSL--3.0-yellow.svg?style=flat-square)](https://opensource.org/licenses/OSL-3.0)
 [![Blazing Fast](https://img.shields.io/badge/speed-blazing%20%F0%9F%94%A5-brightgreen.svg?style=flat-square)](https://twitter.com/acdlite/status/974390255393505280)
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square)](https://lernajs.io/)
@@ -31,9 +31,11 @@ Falcon was built with the F.I.R.E. principal in mind:
 - Service worker to provide application caching and PWA features such as offline capabilities and add to homescreen
 - Falcon's architecture allows it to be very modular, lightweight and scalable
 
-These are just a couple of advantages and use-cases, but feel free to ask anything in the official slack channel [slack.deity.io](slack.deity.io)
+These are just a couple of advantages and use-cases, feel free to ask anything in the official slack channel [slack.deity.io](slack.deity.io)
 
 ### Start developing right away
+
+Using the app generator:
 
 ```bash
 npx create-falcon-app my-app
@@ -59,9 +61,9 @@ Join the official chat channel: [Deity Community Slack](http://slack.deity.io)
 
 ## Documentation
 
-Falcon has its own documentation website which resides in a separate repository: [https://github.com/deity-io/falcon-docs](https://github.com/deity-io/falcon-docs). We try to continuously improve and update it to create a great development experience and reduce any possible development hurdles. 
+Please visit [https://falcon.deity.io](https://falcon.deity.io) to view the documentation
 
-Please visit [https://falcon.deity.io](https://falcon.deity.io) to see the documentation
+Falcon has its own documentation website which resides in a separate repository: [https://github.com/deity-io/falcon-docs](https://github.com/deity-io/falcon-docs). We try to continuously improve and update it to create a great development experience and reduce any possible development hurdles.
 
 Feedback and contributions are always very welcome!
 

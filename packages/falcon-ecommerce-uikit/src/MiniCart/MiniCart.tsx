@@ -21,7 +21,7 @@ import {
 import { T } from '../I18n';
 import { MiniCartData } from './MiniCartQuery';
 import { RemoveCartItemMutation, UpdateCartItemMutation } from '../Cart/CartMutation';
-import { ToggleMiniCartMutation } from './MiniCartMutation';
+import { CloseSidebarMutation } from '../Sidebar';
 import { toGridTemplate, prettyScrollbars } from '../helpers';
 import { Price } from '../Locale';
 
@@ -49,7 +49,6 @@ const miniCartProductTheme: DefaultThemeProps = {
 };
 
 export enum MiniCartLayoutArea {
-  close = 'close',
   title = 'title',
   items = 'items',
   cta = 'cta'
@@ -62,13 +61,14 @@ const miniCartLayout: DefaultThemeProps = {
 
     // prettier-ignore
     gridTemplate: toGridTemplate([
-      ['1fr',                    '30px'                         ],
-      [MiniCartLayoutArea.title, MiniCartLayoutArea.close,      ],
-      [MiniCartLayoutArea.items, MiniCartLayoutArea.items, '1fr'],
-      [MiniCartLayoutArea.cta,   MiniCartLayoutArea.cta         ],
+      ['1fr'                          ],
+      [MiniCartLayoutArea.title       ],
+      [MiniCartLayoutArea.items, '1fr'],
+      [MiniCartLayoutArea.cta         ]
     ]),
     css: {
-      width: '100%'
+      width: '100%',
+      height: '100%'
     }
   }
 };
@@ -157,34 +157,37 @@ const MiniCartProducts: React.SFC<any> = ({ products, currency }) => (
   </List>
 );
 
-export const MiniCart: React.SFC<MiniCartData> = ({ miniCart: { open }, cart: { quoteCurrency, items } }) => (
-  <ToggleMiniCartMutation>
-    {toggle => (
-      <React.Fragment>
-        <Sidebar as={Portal} visible={open} side="right">
-          <Box defaultTheme={miniCartLayout}>
-            <Icon gridArea={MiniCartLayoutArea.close} src="close" stroke="black" onClick={() => toggle()} />
-            <H3 gridArea={MiniCartLayoutArea.title}>
-              <T id="miniCart.title" />
-            </H3>
+export const MiniCart: React.SFC<MiniCartData> = ({ cart: { quoteCurrency, items } }) => (
+  <CloseSidebarMutation>
+    {closeSidebar => (
+      <Box defaultTheme={miniCartLayout}>
+        <H3 gridArea={MiniCartLayoutArea.title}>
+          <T id="miniCart.title" />
+        </H3>
 
-            <Box gridArea={MiniCartLayoutArea.items} css={props => ({ ...prettyScrollbars(props.theme) })}>
-              <MiniCartProducts products={items} currency={quoteCurrency} />
-              {!items.length && (
-                <FlexLayout alignItems="center" flexDirection="column">
-                  <Button css={{ width: '100%' }} height="xl">
-                    <Icon stroke="white" size="md" mr="xs" src="lock" />
-                    <T id="miniCart.checkout" />
-                  </Button>
-                </FlexLayout>
-              )}
-            </Box>
+        <Box gridArea={MiniCartLayoutArea.items} css={props => ({ ...prettyScrollbars(props.theme) })}>
+          <MiniCartProducts products={items} currency={quoteCurrency} />
+          {!items.length && (
+            <FlexLayout alignItems="center" flexDirection="column">
+              <Text fontSize="md">
+                <T id="miniCart.empty" />
+              </Text>
+              <Button onClick={() => closeSidebar()} mt="lg">
+                <T id="miniCart.continue" />
+              </Button>
+            </FlexLayout>
+          )}
+        </Box>
 
-            {items.length > 0 && <Box gridArea={MiniCartLayoutArea.cta} py="sm" bgFullWidth="secondaryLight" />}
+        {items.length > 0 && (
+          <Box gridArea={MiniCartLayoutArea.cta} py="sm" bgFullWidth="secondaryLight">
+            <Button css={{ width: '100%' }} height="xl">
+              <Icon stroke="white" size="md" mr="xs" src="lock" />
+              <T id="miniCart.checkout" />
+            </Button>
           </Box>
-        </Sidebar>
-        <Backdrop as={Portal} visible={open} onClick={() => toggle()} />
-      </React.Fragment>
+        )}
+      </Box>
     )}
-  </ToggleMiniCartMutation>
+  </CloseSidebarMutation>
 );

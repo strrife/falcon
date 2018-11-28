@@ -3,9 +3,6 @@ import { Query } from '../Query/Query';
 
 export const GET_MINI_CART = gql`
   query MiniCart {
-    miniCart @client {
-      open
-    }
     cart {
       itemsQty
       quoteCurrency
@@ -22,9 +19,6 @@ export const GET_MINI_CART = gql`
 `;
 
 export type MiniCartData = {
-  miniCart: {
-    open: boolean;
-  };
   cart: {
     itemsQty: number;
     quoteCurrency: string;
