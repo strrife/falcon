@@ -37,7 +37,7 @@ export const SignIn = () => (
             onClick={() =>
               openSidebar({
                 variables: {
-                  contentType: 'signup'
+                  contentType: 'signUp'
                 }
               })
             }
