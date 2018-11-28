@@ -5,12 +5,11 @@ import { Box, Text } from '@deity/falcon-ui';
 const ErrorList = ({ errors = [], ...props }) =>
   errors.length ? (
     <Box {...props}>
-      {errors.order &&
-        errors.order.map(err => (
-          <Text key={err.message} color="error">
-            {err.message}
-          </Text>
-        ))}
+      {errors.map(err => (
+        <Text key={err.message} color="error">
+          {err.message}
+        </Text>
+      ))}
     </Box>
   ) : null;
 

@@ -194,7 +194,9 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
         .catch(error => {
           this.setPartialState({
             loading: false,
-            errors: [error]
+            errors: {
+              shippingAddress: [error]
+            }
           });
         });
     });
@@ -244,7 +246,9 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
         .catch(error => {
           this.setPartialState({
             loading: false,
-            errors: [error]
+            errors: {
+              shippingMethod: [error]
+            }
           });
         });
     });
@@ -286,7 +290,9 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
         .catch(error => {
           this.setPartialState({
             loading: false,
-            errors: [error]
+            errors: {
+              order: [error]
+            }
           });
         });
     });

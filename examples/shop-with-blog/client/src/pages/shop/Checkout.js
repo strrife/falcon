@@ -83,16 +83,16 @@ const Loader = ({ visible }) => (
 );
 
 // helper that computes step that should be open based on values from CheckoutLogic
-const computeStepFromValues = values => {
-  if (!values.email) {
+const computeStepFromValues = (values, errors) => {
+  if (!values.email || errors.email) {
     return CHECKOUT_STEPS.EMAIL;
-  } else if (!values.shippingAddress) {
+  } else if (!values.shippingAddress || errors.shippingAddress) {
     return CHECKOUT_STEPS.SHIPPING_ADDRESS;
-  } else if (!values.billingAddress) {
+  } else if (!values.billingAddress || errors.billingAddress) {
     return CHECKOUT_STEPS.BILLING_ADDRESS;
-  } else if (!values.shippingMethod) {
+  } else if (!values.shippingMethod || errors.shippingMethod) {
     return CHECKOUT_STEPS.SHIPPING;
-  } else if (!values.paymentMethod) {
+  } else if (!values.paymentMethod || errors.paymentMethod) {
     return CHECKOUT_STEPS.PAYMENT;
   }
   return CHECKOUT_STEPS.CONFIRMATION;
@@ -110,8 +110,8 @@ class CheckoutWizard extends React.Component {
 
   static getDerivedStateFromProps(nextProps, currentState) {
     const { checkoutData: currentPropsData } = currentState.getCurrentProps();
-    const currentStepFromProps = computeStepFromValues(currentPropsData.values);
-    const nextStepFromProps = computeStepFromValues(nextProps.checkoutData.values);
+    const currentStepFromProps = computeStepFromValues(currentPropsData.values, currentPropsData.errors);
+    const nextStepFromProps = computeStepFromValues(nextProps.checkoutData.values, nextProps.checkoutData.errors);
 
     const changedStep = { currentStep: nextStepFromProps };
 
@@ -198,7 +198,7 @@ class CheckoutWizard extends React.Component {
                   submitLabel="Continue"
                   selectedAddress={values.shippingAddress}
                   setAddress={setShippingAddress}
-                  errors={errors.setShippingAddress}
+                  errors={errors.shippingAddress}
                 />
 
                 <Divider my="md" />
