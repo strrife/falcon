@@ -27,14 +27,14 @@ export class PasswordRevealInput extends React.Component<
           top={0}
           bottom={0}
           right={0}
-          title={isPasswordRevealed ? 'Hide password' : 'Reveal password'}
+          title={isPasswordRevealed ? 'Hide password' : 'Show password'}
         >
           <Icon
             onClick={this.toggleInputType}
             stroke={isPasswordRevealed ? 'primary' : 'black'}
             cursor="pointer"
             size="md"
-            src={isPasswordRevealed ? 'eyeOff' : 'eye'}
+            src={isPasswordRevealed ? 'eye' : 'eyeOff'}
             bg="white"
             m="xs"
           />
