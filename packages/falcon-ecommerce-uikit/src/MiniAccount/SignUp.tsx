@@ -11,7 +11,7 @@ export const SignUp = () => (
           onCompleted={() =>
             openSidebarMutation({
               variables: {
-                contentType: 'signin'
+                contentType: 'account'
               }
             })
           }
