@@ -9,7 +9,7 @@ extend type BackendConfig {
 
 type BlogConfig {
   """
-  Placeholder field until Blog config gets defined
+  _Placeholder field until Blog config gets defined_
   """
   _: Boolean
 }
