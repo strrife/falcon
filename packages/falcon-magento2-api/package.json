@@ -36,6 +36,7 @@
     "qs": "^6.5.2"
   },
   "devDependencies": {
+    "eventemitter2": "5.0.1",
     "nock": "10.0.2"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"

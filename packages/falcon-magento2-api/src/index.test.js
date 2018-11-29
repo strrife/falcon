@@ -3,15 +3,18 @@ global.__SERVER__ = true; // eslint-disable-line no-underscore-dangle
 const nock = require('nock');
 const Magento2Api = require('./index');
 const magentoResponses = require('./__mocks__/apiResponses');
+const { EventEmitter2 } = require('eventemitter2');
 const { codes } = require('@deity/falcon-errors');
 
 const URL = 'http://example.com';
+const ee = new EventEmitter2();
 const apiConfig = {
   config: {
     host: 'example.com',
     protocol: 'http'
   },
-  name: 'api-magento2'
+  name: 'api-magento2',
+  eventEmitter: ee
 };
 const createMagentoUrl = path => `/rest/default/V1${path}`;
 
@@ -31,7 +34,7 @@ describe('Magento2Api', () => {
         {
           locale: 'en_US',
           extension_attributes: {},
-          code: 'foo'
+          code: 'default'
         }
       ]);
 
@@ -40,8 +43,12 @@ describe('Magento2Api', () => {
       .get(createMagentoUrl('/store/storeViews'))
       .reply(200, [
         {
-          code: 'foo',
-          store_group_id: 'bar'
+          website_id: 1,
+          code: 'default',
+          store_group_id: 'bar',
+          extension_attributes: {
+            is_active: true
+          }
         }
       ]);
 
