@@ -2,6 +2,7 @@ const qs = require('qs');
 const isEmpty = require('lodash/isEmpty');
 const pick = require('lodash/pick');
 const has = require('lodash/has');
+const forEach = require('lodash/forEach');
 const isPlainObject = require('lodash/isPlainObject');
 const addMinutes = require('date-fns/add_minutes');
 const { Events, htmlHelpers } = require('@deity/falcon-server-env');
@@ -24,25 +25,34 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async addTypeResolvers(serverConfig) {
     const resolvers = {
-      BackendConfig: {
-        shop: () => this.magentoConfig
+      ShopConfig: {
+        stores: () => this.getActiveStores(),
+        currencies: () => this.getActiveCurrencies(),
+        baseCurrency: () => this.session.baseCurrency,
+        timezone: () => this.session.timezone,
+        weightUnit: () => this.session.weightUnit
       }
     };
     Logger.debug(`${this.name}: Adding additional resolve functions`);
     addResolveFunctionsToSchema({ schema: serverConfig.schema, resolvers });
   }
 
-  /**
-   * Set shop configuration
-   * @param {StoreConfigInput} params - params to be set
-   * @return {boolean} true when change has been successful
-   */
-  setStoreConfig(params) {
-    const { storeCode } = params;
-    if (storeCode) {
-      this.session.storeCode = storeCode;
-    }
-    return true;
+  async getActiveStores() {
+    return this.storeList.map(storeWebsite => ({
+      name: storeWebsite.name,
+      code: storeWebsite.defaultStore.code
+    }));
+  }
+
+  async getActiveCurrencies() {
+    const currentStoreConfig = this.getActiveStoreConfig();
+    const currencies = [];
+    forEach(this.storeConfigMap, storeConfig => {
+      if (currentStoreConfig.store_group_id === storeConfig.store_group_id) {
+        currencies.push(storeConfig.default_display_currency_code);
+      }
+    });
+    return currencies;
   }
 
   /**
@@ -52,13 +62,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Category>} - converted response with category data
    */
   async category(params) {
-    const response = await this.get(
-      `/categories/${params.id}`,
-      {
-        storeCode: this.session.storeCode
-      },
-      { context: { useAdminToken: true } }
-    );
+    const response = await this.get(`/categories/${params.id}`, {}, { context: { useAdminToken: true } });
     return this.convertCategoryData(response);
   }
 
