@@ -34,6 +34,9 @@ const HeadMetaTags = () => (
 
 const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
 const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
+const ResetPassword = AsyncComponent(() =>
+  import(/* webpackChunkName: "shop/resetpassword" */ './pages/shop/ResetPassword')
+);
 const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/Blog" */ './pages/blog/Blog'));
 const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/Post" */ './pages/blog/Post'));
 const SidebarContents = AsyncComponent(() =>
@@ -63,6 +66,7 @@ const App = ({ online }) => (
                 <Route exact path="/" component={Home} />
                 <Route exact path="/products" component={Category} />
                 <Route exact path="/blog/:page?" component={Blog} />
+                <Route exact path="/reset-password" component={ResetPassword} />
                 <DynamicRoute
                   loaderComponent={Loader}
                   components={{
