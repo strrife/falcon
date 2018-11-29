@@ -19,7 +19,7 @@ type SignUpMutationVariables = {
   input: SignUpVariables;
 };
 
-export class SignUpMutation extends Mutation<{}, SignUpMutationVariables> {
+export class SignUpMutation extends Mutation<boolean, SignUpMutationVariables> {
   static defaultProps = {
     mutation: SIGN_UP_MUTATION,
     awaitRefetchQueries: true,
