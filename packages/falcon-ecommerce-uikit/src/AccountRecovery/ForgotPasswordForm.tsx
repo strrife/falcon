@@ -27,7 +27,7 @@ export const ForgotPasswordForm: React.SFC<ForgotPasswordProps> = ({ onCompleted
       >
         {({ values }) => (
           <Form>
-            <FormField label="Email" name="email" required type="email" autoComplete="email" />
+            <FormField id="forgotPasswordEmail" label="Email" name="email" required type="email" autoComplete="email" />
 
             <FormSubmit submitting={loading} value="Reset my password" />
 

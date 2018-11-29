@@ -33,11 +33,26 @@ export const SignUpForm: React.SFC<SignUpFormProps> = ({ onCompleted }) => (
       >
         {() => (
           <Form>
-            <FormField label="First Name" type="text" required name="firstname" autoComplete="given-name" />
-            <FormField label="Last Name" type="text" required name="lastname" autoComplete="family-name" />
-            <FormField label="Email" type="email" required name="email" autoComplete="email" />
+            <FormField
+              id="signUpFirstName"
+              label="First Name"
+              type="text"
+              required
+              name="firstname"
+              autoComplete="given-name"
+            />
+            <FormField
+              id="signUpLastName"
+              label="Last Name"
+              type="text"
+              required
+              name="lastname"
+              autoComplete="family-name"
+            />
+            <FormField id="signUpEmail" label="Email" type="email" required name="email" autoComplete="email" />
 
             <FormField
+              id="signUpPassword"
               label="Password"
               required
               name="password"

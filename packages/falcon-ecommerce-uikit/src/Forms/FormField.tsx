@@ -62,6 +62,7 @@ const getDefaultInputTypeValidator = (inputType: string | undefined) => {
 
 // TODO: when new i18n support is ready use it to translate label and placeholder props
 export const FormField: React.SFC<FormFieldProps> = ({
+  id,
   label,
   required,
   name,
@@ -97,12 +98,16 @@ export const FormField: React.SFC<FormFieldProps> = ({
         const error = getIn(form.errors, name);
         const invalid = !!touch && !!error;
 
+        // TODO: is there a better way of handling input ids (more automated)?
+        // is fallback to name correct?
+        const inputId = id || name;
+
         const inputProps = {
           ...field,
           ...rest,
           gridArea: FormFieldAreas.input,
           height: 'xl',
-          id: name,
+          id: inputId,
           invalid
         };
 
@@ -110,7 +115,7 @@ export const FormField: React.SFC<FormFieldProps> = ({
 
         return (
           <Box defaultTheme={formFieldLayout} {...themableProps}>
-            <Label htmlFor={name} gridArea={FormFieldAreas.label} fontSize="xs" fontWeight="bold">
+            <Label htmlFor={inputId} gridArea={FormFieldAreas.label} fontSize="xs" fontWeight="bold">
               {label}
             </Label>
             {children ? children(inputProps) : defaultInput}
