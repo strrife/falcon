@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, Icon, Link, List, ListItem, Button, Text, H2 } from '@deity/falcon-ui';
-import { MiniAccountData } from '.';
-import { SignInForm, SignInFormContent, SignInFormRenderProps } from './../SignIn';
-import { SignOutMutation } from './../SignOut';
-import { SignUpForm } from './../SignUp';
+import { MiniAccountData } from './MiniAccountQuery';
+
+import { SignIn } from './SignIn';
+import { SignOutMutation } from '../SignOut';
 
 export const MiniAccount: React.SFC<MiniAccountData> = ({ customer }) =>
   customer ? (
@@ -61,8 +61,5 @@ export const MiniAccount: React.SFC<MiniAccountData> = ({ customer }) =>
       </List>
     </Box>
   ) : (
-    <Box>
-      <SignInForm>{(props: SignInFormRenderProps) => <SignInFormContent {...props} />}</SignInForm>
-      <SignUpForm />
-    </Box>
+    <SignIn />
   );
