@@ -27,7 +27,7 @@ module.exports = class WordpressApi extends ApiDataSource {
    */
   async resolveURL(req) {
     const { path } = req;
-    const { locale } = this.session;
+    const { locale } = this.context.session || {};
     const { apiPrefix } = this.config;
     const { baseLanguage, languageSupported, languageMap } = this;
 
@@ -366,14 +366,11 @@ module.exports = class WordpressApi extends ApiDataSource {
   async fetchUrl(root, { path }, { session }) {
     const params = { path };
     const { locale } = session;
-    if (locale) {
-      params.language = this.languageMap[locale];
-    }
 
     return this.get('url', params, {
       context: {
         authRequired: this.isDraft(path),
-        didReceiveResult: result => this.reduceUrl(result, path, params.language)
+        didReceiveResult: result => this.reduceUrl(result, path, this.languageMap[locale])
       }
     });
   }
