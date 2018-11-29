@@ -9,8 +9,7 @@
       "config": {
         "host": "wordpress.deity.io",
         "protocol": "https",
-        "apiPrefix": "/wp-json",
-        "apiSuffix": "/wp/v2"
+        "apiPrefix": "/wp-json/wp/v2"
       }
     },
     "api-magento2": {

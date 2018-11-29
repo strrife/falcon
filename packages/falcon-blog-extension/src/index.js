@@ -1,5 +1,4 @@
 const { Extension } = require('@deity/falcon-server-env');
-const Logger = require('@deity/falcon-logger');
 const { resolve } = require('path');
 const typeDefs = require('fs').readFileSync(resolve(__dirname, 'schema.graphql'), 'utf8');
 
@@ -12,23 +11,6 @@ const typeDefs = require('fs').readFileSync(resolve(__dirname, 'schema.graphql')
  * - show shop products inside post
  */
 module.exports = class Blog extends Extension {
-  async initialize() {
-    await super.initialize();
-    const { languages = {} } = this.apiConfig;
-
-    if (languages.options) {
-      this.languages = languages.options;
-    } else {
-      Logger.warn(`Seems that "${this.api.name}" API DataSource has no languages defined.`);
-    }
-
-    return this.apiConfig;
-  }
-
-  isLanguageSupported(language) {
-    return this.languages && this.languages.find(item => item.code === language);
-  }
-
   async getGraphQLConfig() {
     return {
       schema: [typeDefs],
@@ -39,13 +21,15 @@ module.exports = class Blog extends Extension {
         Query: {
           blogPost: async (...params) => this.api.blogPost(...params),
           blogPosts: async (...params) => this.api.blogPosts(...params)
+        },
+        BackendConfig: {
+          blog: () => this.apiConfig
         }
       }
     };
   }
 
-  async fetchUrl(root, { path }, { session = {} }) {
-    const { language } = session;
-    return this.api.fetchUrl(path, language);
+  async fetchUrl(...params) {
+    return this.api.fetchUrl(...params);
   }
 };
