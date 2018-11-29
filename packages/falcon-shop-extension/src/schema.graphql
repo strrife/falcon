@@ -22,6 +22,9 @@ extend type Query {
 }
 
 extend type Mutation {
+  setShopCurrency(currency: String!): BackendConfig
+  setShopStore(storeCode: String!): BackendConfig
+
   addToCart(input: AddToCartInput!): CartItemPayload
   updateCartItem(input: UpdateCartItemInput!): CartItemPayload
   removeCartItem(input: RemoveCartItemInput!): RemoveCartItemResponse
@@ -41,7 +44,6 @@ extend type Mutation {
   # set current customer order shipping information
   setShipping(input: ShippingInput): ShippingInformation
   placeOrder(input: PlaceOrderInput!): PlaceOrderResult
-  setStoreConfig(input: StoreConfigInput): Boolean
 }
 
 extend type BackendConfig {
@@ -49,7 +51,18 @@ extend type BackendConfig {
 }
 
 type ShopConfig {
-  demo: Boolean
+  activeCurrency: String
+  activeStore: String
+  currencies: [String]
+  baseCurrency: String
+  stores: [ShopStoreEntry]
+  timezone: String
+  weightUnit: String
+}
+
+type ShopStoreEntry {
+  name: String
+  code: String
 }
 
 input EntityIdInput {
@@ -86,11 +99,6 @@ input ShopPageQuery {
   aggregations: [String]
   perPage: Int
   page: Int
-}
-
-input SortOrder {
-  field: String
-  direction: String
 }
 
 input Filter {
@@ -411,10 +419,6 @@ input SignUp {
 input SignIn {
   email: String
   password: String
-}
-
-input StoreConfigInput {
-  storeCode: String
 }
 
 type GalleryEntry {

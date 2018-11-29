@@ -51,9 +51,16 @@ module.exports = class Shop extends Extension {
           estimateShippingMethods: (root, data) => this.api.estimateShippingMethods(data.input),
           setShipping: (root, data) => this.api.setShipping(data.input),
           placeOrder: (root, data) => this.api.placeOrder(data.input),
-          setStoreConfig: (root, data) => this.api.setStoreConfig(data.input)
+          setShopCurrency: (...params) => this.api.setShopCurrency(...params),
+          setShopStore: (...params) => this.api.setShopStore(...params)
         },
-        ShopConfig: () => this.apiConfig
+        BackendConfig: {
+          shop: () => this.apiConfig
+        },
+        ShopConfig: {
+          activeCurrency: () => this.api.session.currency,
+          activeStore: () => this.api.session.storeCode
+        }
       }
     };
   }
