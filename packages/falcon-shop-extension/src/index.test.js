@@ -83,7 +83,7 @@ describe('Falcon Shop Extension', () => {
     let server;
     beforeAll(() => {
       const shop = new Shop({ extensionContainer: {} });
-      shop.api = new CustomApi();
+      shop.api = new CustomApi({});
 
       // prepare server with mocks for tests
       ({ schema } = shop.getGraphQLConfig());
