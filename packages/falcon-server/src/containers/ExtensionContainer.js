@@ -1,13 +1,19 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop, no-underscore-dangle */
 const Logger = require('@deity/falcon-logger');
 const { mergeSchemas, makeExecutableSchema } = require('graphql-tools');
-const Events = require('./../events');
+const { Events } = require('@deity/falcon-server-env');
 
 /**
  * @typedef {object} ExtensionInstanceConfig
  * @property {string} package Node package path (example: "@deity/falcon-blog-extension")
  * @property {object} config Config object to be passed to Extension Instance constructor
  * @property {string} config.api API instance name to be used by the Extension
+ */
+
+/**
+ * @typedef {object} BackendConfig
+ * @property {string[]} locales
+ * @property {string} defaultLocale
  */
 
 /**
@@ -39,7 +45,8 @@ module.exports = class ExtensionContainer {
           const extensionInstance = new ExtensionClass({
             config: extension.config || {},
             name: extKey,
-            extensionContainer: this
+            extensionContainer: this,
+            eventEmitter: this.eventEmitter
           });
 
           Logger.debug(`ExtensionContainer: "${extensionInstance.name}" added to the list of extensions`);
@@ -71,14 +78,54 @@ module.exports = class ExtensionContainer {
 
   /**
    * Initializes each registered extension (in sequence)
-   * @return {undefined}
+   * @return {BackendConfig} Merged config
    */
   async initialize() {
+    const configs = [];
+
     // initialization of extensions cannot be done in parallel because of race condition
     for (const [extName, ext] of this.extensions) {
       Logger.debug(`ExtensionContainer: initializing "${extName}" extension`);
-      await ext.initialize();
+      const extConfig = await ext.initialize();
+      if (extConfig) {
+        configs.push(extConfig);
+      }
     }
+
+    return this.mergeConfigs(configs);
+  }
+
+  /**
+   * Merges
+   * @param {Object[]} configs List of API config
+   * @return {BackendConfig} Merged config
+   */
+  mergeConfigs(configs) {
+    return configs.reduce((prev, current) => {
+      if (!current) {
+        return prev;
+      }
+
+      const { locales: prevLocales } = prev;
+      const { locales: currLocales } = current;
+
+      const isPrevLocalesArr = Array.isArray(prevLocales);
+      const isCurrLocalesArr = Array.isArray(currLocales);
+
+      let mergedLocales;
+
+      // Merging "locales" values (leaving only those that exist on every API)
+      if (isCurrLocalesArr && isPrevLocalesArr) {
+        mergedLocales = currLocales.filter(loc => prevLocales.indexOf(loc) >= 0);
+      } else {
+        mergedLocales = isCurrLocalesArr && !isPrevLocalesArr ? currLocales : prevLocales;
+      }
+
+      return {
+        defaultLocale: prev.defaultLocale || current.defaultLocale,
+        locales: mergedLocales
+      };
+    }, {});
   }
 
   /**

@@ -37,9 +37,9 @@ describe('DynamicRouteResolver', () => {
       }
     };
     const ext1 = new Ext1({ name: 'Ext1' });
-    ext1.api = new Api1();
+    ext1.api = new Api1({});
     const ext2 = new Ext2({ name: 'Ext2' });
-    ext2.api = new Api2();
+    ext2.api = new Api2({});
 
     const spyExt1 = jest.spyOn(ext1, 'fetchUrl');
     const spyExt2 = jest.spyOn(ext2, 'fetchUrl');

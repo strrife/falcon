@@ -72,7 +72,15 @@ class FalconServer {
       resolvers: {
         Query: {
           url: (...params) => dynamicRouteResolver.fetchUrl(...params),
-          backendConfig: () => this.backendConfig
+          // returning an empty object to make BackendConfig custom resolvers work
+          backendConfig: () => ({})
+        },
+        Mutation: {
+          setLocale: (...params) => this.setLocale(...params)
+        },
+        BackendConfig: {
+          locales: () => this.backendConfig.locales,
+          activeLocale: (root, params, { session: ctxSession }) => ctxSession.locale
         }
       },
       tracing: this.config.debug,
@@ -203,6 +211,11 @@ class FalconServer {
 
     this.app.use(this.router.routes()).use(this.router.allowedMethods());
     await this.eventEmitter.emitAsync(Events.AFTER_ENDPOINTS_REGISTERED, this.router);
+  }
+
+  async setLocale(root, { locale }, { session: ctxSession }) {
+    ctxSession.locale = locale;
+    return this.backendConfig;
   }
 
   formatGraphqlError(error) {
