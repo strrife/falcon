@@ -34,7 +34,7 @@ describe('WordPress API', () => {
 
     await wpApi.initialize({ context: {} });
 
-    const result = await wpApi.fetchUrl('/foo/');
+    const result = await wpApi.fetchUrl({}, { path: '/foo/' }, { session: {} });
     expect(result).toEqual({
       id: 1,
       path: '/foo/',
