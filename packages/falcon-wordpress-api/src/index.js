@@ -6,6 +6,14 @@ const isObject = require('lodash/isObject');
 const url = require('url');
 
 module.exports = class WordpressApi extends ApiDataSource {
+  constructor(params) {
+    super(params);
+    this.wpConfig = {};
+    this.languageMap = {};
+    this.languageSupported = false;
+    this.baseLanguage = null;
+  }
+
   async authorizeRequest(req) {
     const { username, password } = this.config;
     const token = Buffer.from(`${username}:${password}`).toString('base64');
@@ -18,18 +26,16 @@ module.exports = class WordpressApi extends ApiDataSource {
    * @return {string} resolved url object
    */
   async resolveURL(req) {
-    const { path, context = {} } = req;
-    const { language } = context;
-    const { apiPrefix, apiSuffix, language: baseLanguage } = this.config;
-    let prefix = `${apiPrefix}${apiSuffix}`;
+    const { path } = req;
+    const { locale } = this.session;
+    const { apiPrefix } = this.config;
+    const { baseLanguage, languageSupported, languageMap } = this;
 
-    if (language) {
-      // for base lang do not add prefix
-      const languagePrefix = language && language !== baseLanguage ? `/${language}` : '';
-      prefix = `${languagePrefix}${prefix}`;
-    }
+    const language = languageSupported && locale ? languageMap[locale] : baseLanguage;
+    // for base lang do not add prefix
+    const langPrefix = language && language !== baseLanguage ? `/${language}` : '';
 
-    return super.resolveURL({ path: `${prefix}/${path}` });
+    return super.resolveURL({ path: `${langPrefix}${apiPrefix}/${path}` });
   }
 
   /**
@@ -63,7 +69,24 @@ module.exports = class WordpressApi extends ApiDataSource {
     if (!this.context) {
       this.initialize({ context: {} });
     }
-    return this.get('blog/info');
+
+    const config = await this.get('blog/info');
+    const { languages = {} } = config;
+    this.languageSupported = !!Object.keys(languages).length;
+
+    if (this.languageSupported) {
+      this.wpConfig.locales = [];
+      this.baseLanguage = languages.default;
+      languages.options.forEach(({ default_locale: locale, language_code: langCode }) => {
+        this.languageMap[locale] = langCode;
+        this.wpConfig.locales.push(locale);
+        if (this.baseLanguage === langCode) {
+          this.wpConfig.defaultLocale = locale;
+        }
+      });
+    }
+
+    return this.wpConfig;
   }
 
   /**
@@ -71,12 +94,10 @@ module.exports = class WordpressApi extends ApiDataSource {
    * @query
    * @param {object} root GraphQL root object
    * @param {string} path WP "slug" value
-   * @param {object} session Web-server session object
    * @return {Object} Post data
    */
-  async blogPost(root, { path }, { session }) {
+  async blogPost(root, { path }) {
     const slug = path.replace('/', '');
-    const { language } = session;
 
     const query = {
       slug,
@@ -87,7 +108,6 @@ module.exports = class WordpressApi extends ApiDataSource {
 
     return this.get('posts', query, {
       context: {
-        language,
         didReceiveResult: (result, res) => {
           // WP API returns "post" entry as an array, the following code removes extra-headers
           if (res && res.headers && res.headers.has('x-wp-total')) {
@@ -108,9 +128,7 @@ module.exports = class WordpressApi extends ApiDataSource {
    * @param {object} session Web-server session data
    * @return {Object[]} posts data
    */
-  async blogPosts(root, { query, pagination }, { session }) {
-    const { language } = session;
-
+  async blogPosts(root, { query, pagination }) {
     const payload = {
       ...query
     };
@@ -122,7 +140,6 @@ module.exports = class WordpressApi extends ApiDataSource {
 
     return this.get('posts', payload, {
       context: {
-        language,
         didReceiveResult: result =>
           result && Array.isArray(result) ? result.map(entry => this.processPost(entry)) : result
       }
@@ -339,21 +356,24 @@ module.exports = class WordpressApi extends ApiDataSource {
   /**
    * Fetch wordpress url based on pathname and check if it contains any redirect.
    * Convert response based on data type (page | post | category )
-   * @param {String} path - pathname of wordpress url
-   * @param {String} language - wordpress language
+   * @param {object} root GQL root object
+   * @param {object} params GQL params object
+   * @param {string} params.path URL path param
+   * @param {object} context GQL context object
+   * @param {object} context.session GQL session object
    * @return {Object} response - with reduced and converted data
    */
-  async fetchUrl(path, language = null) {
+  async fetchUrl(root, { path }, { session }) {
     const params = { path };
-    if (language) {
-      params.language = language;
+    const { locale } = session;
+    if (locale) {
+      params.language = this.languageMap[locale];
     }
 
     return this.get('url', params, {
       context: {
         authRequired: this.isDraft(path),
-        language,
-        didReceiveResult: result => this.reduceUrl(result, path, language)
+        didReceiveResult: result => this.reduceUrl(result, path, params.language)
       }
     });
   }
