@@ -126,14 +126,12 @@ input AddressInput {
 input CustomerPassword {
   currentPassword: String!
   password: String!
-  passwordConfirmation: String
 }
 
 input CustomerPasswordReset {
   customerId: String!
   resetToken: String!
-  password: String
-  passwordConfirmation: String
+  password: String!
 }
 
 type Orders {
