@@ -87,7 +87,7 @@ const App = ({ online }) => (
               </SidebarContainer>
             </AppLayout>
           </ThemeProvider>
-          {ThemeEditorComponent && <ThemeEditorComponent {...props} />}
+          {ThemeEditorComponent && <ThemeEditorComponent {...props} side="left" />}
         </React.Fragment>
       )}
     </ThemeEditorState>
