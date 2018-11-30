@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { H4, Link, List, ListItem, Box, DefaultThemeProps } from '@deity/falcon-ui';
+import { T, I18n } from '@deity/falcon-i18n';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { FooterData } from './FooterQuery';
 import { Newsletter } from './Newsletter';
 import { MenuItem } from '../Header';
-import { T } from '../I18n';
 
 const footerLayoutTheme: DefaultThemeProps = {
   footerLayout: {
@@ -88,7 +88,9 @@ export const Footer: React.SFC<FooterData> = ({
     <Newsletter />
     <FooterSections sections={footer} />
     <Box defaultTheme={languageSectionTheme}>
-      <LanguageSwitcher languages={languages} />
+      <I18n>
+        {({ i18n }) => <LanguageSwitcher languages={languages} onChange={x => i18n.changeLanguage(x.code)} />}
+      </I18n>
     </Box>
     <Box defaultTheme={copyrightLayoutTheme}>
       <Copyright />
