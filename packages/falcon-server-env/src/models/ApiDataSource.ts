@@ -231,6 +231,7 @@ export default abstract class ApiDataSource<TContext extends ContextSession = an
    * @param {function} fn Callback to trace
    * @return {Promise<TResult>} Result
    */
+  /* istanbul ignore next Skipping code coverage for "dev" function */
   private async traceLog<TResult>(label: string, fn: () => Promise<TResult>): Promise<TResult> {
     if (process && process.env && process.env.NODE_ENV === 'development') {
       const startTime = Date.now();

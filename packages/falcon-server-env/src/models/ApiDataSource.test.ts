@@ -262,4 +262,39 @@ describe('ApiDataSource', () => {
       expect(didReceiveResponseSpy).toHaveBeenCalledTimes(2);
     });
   });
+
+  describe('Session', () => {
+    it('Should return an empty object if context.session does not exist', async () => {
+      const customApiDataSource: CustomApiDataSource = new CustomApiDataSource({});
+      await customApiDataSource.initialize({
+        context: {}
+      } as any);
+      expect(customApiDataSource.session).toEqual({});
+      expect(customApiDataSource.context).toEqual({});
+    });
+
+    it('Should work with a named object in context.session', async () => {
+      const customApiDataSource: CustomApiDataSource = new CustomApiDataSource({});
+      await customApiDataSource.initialize({
+        context: {
+          session: {}
+        }
+      } as any);
+      expect(customApiDataSource.session).toEqual({});
+      expect(customApiDataSource.context.session).toEqual({ CustomApiDataSource: {} });
+
+      customApiDataSource.session.foo = 'bar';
+      expect(customApiDataSource.context.session).toEqual({ CustomApiDataSource: { foo: 'bar' } });
+
+      customApiDataSource.session = {};
+      expect(customApiDataSource.context.session).toEqual({ CustomApiDataSource: {} });
+
+      await customApiDataSource.initialize({
+        context: {}
+      } as any);
+
+      customApiDataSource.session = { foo: 'bar' };
+      expect(customApiDataSource.context.session).toEqual({ CustomApiDataSource: { foo: 'bar' } });
+    });
+  });
 });
