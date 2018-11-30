@@ -3,7 +3,7 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import Helmet from 'react-helmet';
-import { I18nextProvider } from 'react-i18next-with-context';
+import { I18nProvider } from '@deity/falcon-i18n';
 import { AsyncComponentProvider, createAsyncContext } from 'react-async-component';
 import asyncBootstrapper from 'react-async-bootstrapper2';
 import HtmlHead from '../../components/HtmlHead';
@@ -22,14 +22,14 @@ export default ({ App }) => async (ctx, next) => {
   const markup = (
     <ApolloProvider client={client}>
       <AsyncComponentProvider asyncContext={asyncContext}>
-        <I18nextProvider i18n={i18next}>
+        <I18nProvider i18n={i18next}>
           <StaticRouter context={context} location={ctx.url}>
             <React.Fragment>
               <HtmlHead htmlLang={i18next.language} />
               <App />
             </React.Fragment>
           </StaticRouter>
-        </I18nextProvider>
+        </I18nProvider>
       </AsyncComponentProvider>
     </ApolloProvider>
   );

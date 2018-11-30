@@ -5,7 +5,7 @@ import BrowserRouter from 'react-router-dom/BrowserRouter';
 import { ApolloProvider } from 'react-apollo';
 import { AsyncComponentProvider } from 'react-async-component';
 import asyncBootstrapper from 'react-async-bootstrapper2';
-import { I18nextProvider } from 'react-i18next-with-context';
+import { I18nProvider } from '@deity/falcon-i18n';
 import { ApolloClient, apolloStateToObject } from './service';
 import HtmlHead from './components/HtmlHead';
 import App, { clientApolloSchema } from './clientApp';
@@ -26,7 +26,7 @@ const i18nextState = window.I18NEXT_STATE || {};
     initialState: apolloInitialState,
     apolloClientConfig: config.apolloClient
   });
-  const i18next = await i18nFactory(config.i18n);
+  const i18next = await i18nFactory({ ...config.i18n, lng: i18nextState.language });
 
   const renderApp = config.serverSideRendering
     ? (element, container, callback) => asyncBootstrapper(element).then(() => hydrate(element, container, callback))
@@ -35,14 +35,14 @@ const i18nextState = window.I18NEXT_STATE || {};
   const markup = (
     <ApolloProvider client={apolloClient}>
       <AsyncComponentProvider rehydrateState={asyncComponentState}>
-        <I18nextProvider i18n={i18next} initialLanguage={i18nextState.language}>
+        <I18nProvider i18n={i18next}>
           <BrowserRouter>
             <React.Fragment>
               <HtmlHead htmlLang={i18nextState.language || config.i18n.lng} />
               <App />
             </React.Fragment>
           </BrowserRouter>
-        </I18nextProvider>
+        </I18nProvider>
       </AsyncComponentProvider>
     </ApolloProvider>
   );
