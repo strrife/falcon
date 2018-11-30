@@ -129,7 +129,7 @@ input CustomerPassword {
 }
 
 input CustomerPasswordReset {
-  customerId: String!
+  customerId: Int!
   resetToken: String!
   password: String!
 }

@@ -37,7 +37,7 @@ const formFieldErrorLayout: DefaultThemeProps = {
 };
 
 export type FormFieldProps = {
-  label: string;
+  label?: string;
   name: string;
   validators?: Validator[];
   children?: (props: React.InputHTMLAttributes<HTMLInputElement> & ThemedComponentProps) => React.ReactNode;
@@ -72,7 +72,7 @@ export const FormField: React.SFC<FormFieldProps> = ({
 }) => {
   const hasCustomValidators = validators !== undefined;
   const inputType = remaingProps.type;
-
+  const isHidden = inputType === 'hidden';
   if (required) {
     if (!validators) {
       validators = [];
@@ -89,7 +89,7 @@ export const FormField: React.SFC<FormFieldProps> = ({
   return (
     <Field
       name={name}
-      validate={validateSequentially(validators, label)}
+      validate={validateSequentially(validators, label || '')}
       render={(fieldProps: FieldProps) => {
         const { themableProps, rest } = extractThemableProps(remaingProps);
 
@@ -114,7 +114,7 @@ export const FormField: React.SFC<FormFieldProps> = ({
         const defaultInput = <Input {...inputProps} />;
 
         return (
-          <Box defaultTheme={formFieldLayout} {...themableProps}>
+          <Box defaultTheme={formFieldLayout} {...themableProps} display={isHidden ? 'none' : undefined}>
             <Label htmlFor={inputId} gridArea={FormFieldAreas.label} fontSize="xs" fontWeight="bold">
               {label}
             </Label>

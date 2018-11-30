@@ -28,7 +28,7 @@ export const RESET_CUSTOMER_PASSWORD_MUTATION = gql`
 `;
 
 export type ResetCustomerPasswordVariables = {
-  customerId: string;
+  customerId: number;
   resetToken: string;
   password: string;
 };
