@@ -1,98 +1,15 @@
 import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
-import gql from 'graphql-tag';
-import { makeExecutableSchema } from 'graphql-tools';
+import { makeExecutableSchema, mergeSchemas } from 'graphql-tools';
 import { SchemaLink } from 'apollo-link-schema';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
+import { BaseSchema } from '@deity/falcon-server';
+import { Schema } from '@deity/falcon-shop-extension';
 
 import { CheckoutLogic, CheckoutLogicInjectedProps } from './CheckoutLogic';
 import { wait } from '../../../../test/helpers';
-
-const typeDefs = gql`
-  type Query {
-    cart: Cart
-  }
-
-  type Mutation {
-    estimateShippingMethods(input: EstimateShippingInput!): [ShippingMethod]
-    setShipping(input: ShippingInput): ShippingInformation
-    placeOrder(input: PlaceOrderInput!): PlaceOrderResult
-  }
-
-  input EstimateShippingInput {
-    address: AddressInput!
-  }
-
-  input AddressInput {
-    id: Int
-    firstname: String
-    lastname: String
-    city: String
-    postcode: String
-    countryId: String
-    street: [String]
-    telephone: String
-  }
-
-  type ShippingMethod {
-    carrierTitle: String
-    amount: Int
-    carrierCode: String
-    methodCode: String
-    methodTitle: String
-    priceExclTax: Int
-    priceInclTax: Int
-    currency: String
-  }
-
-  input ShippingInput {
-    billingAddress: AddressInput
-    shippingAddress: AddressInput
-    shippingCarrierCode: String
-    shippingMethodCode: String
-  }
-
-  type Cart {
-    itemsQty: Int
-  }
-
-  type CartItem {
-    itemId: Int
-  }
-
-  type ShippingInformation {
-    paymentMethods: [PaymentMethod]
-    totals: [CartTotal]
-  }
-
-  type PaymentMethod {
-    code: String
-    title: String
-  }
-
-  type CartTotal {
-    code: String!
-    title: String
-    value: Float
-  }
-
-  input PlaceOrderInput {
-    billingAddress: AddressInput
-    email: String
-    paymentMethod: PaymentMethodInput
-  }
-
-  input PaymentMethodInput {
-    method: String
-  }
-
-  type PlaceOrderResult {
-    orderId: Int
-    orderRealId: String
-  }
-`;
 
 const sampleAddress = {
   id: 1,
@@ -149,7 +66,10 @@ const resolversWithErrors = {
 };
 
 const createApolloClient = (resolvers: any) => {
-  const schema = makeExecutableSchema({ typeDefs, resolvers });
+  const schema = mergeSchemas({
+    schemas: [makeExecutableSchema({ typeDefs: [BaseSchema, Schema] })],
+    resolvers
+  });
   const link = new SchemaLink({ schema });
   const cache = new InMemoryCache({ addTypename: false });
   return new ApolloClient({
@@ -189,7 +109,7 @@ describe('CheckoutLogic', () => {
     };
   };
 
-  describe('Successfull scenarios', () => {
+  describe('Successful scenarios', () => {
     beforeEach(() => {
       client = createApolloClient(resolversWithoutErrors);
     });

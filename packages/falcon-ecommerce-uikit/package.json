@@ -73,6 +73,8 @@
     "@babel/preset-env": "7.1.6",
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.1.0",
+    "@deity/falcon-shop-extension": "^0.0.3",
+    "@deity/falcon-server": "^0.0.3",
     "@deity/falcon-ui": "^0.0.3",
     "@types/enzyme": "^3.1.15",
     "@types/enzyme-adapter-react-16": "^1.0.3",
