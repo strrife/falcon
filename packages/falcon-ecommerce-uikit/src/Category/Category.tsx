@@ -13,8 +13,8 @@ import {
   DropdownMenu,
   DropdownMenuItem
 } from '@deity/falcon-ui';
+import { T } from '@deity/falcon-i18n';
 import { ProductsList } from '../ProductsList/ProductsList';
-import { T } from '../I18n';
 
 const CategoryLayout = themed({
   tag: 'div',
@@ -55,9 +55,9 @@ export const Category: React.SFC<{
   );
 };
 
-export const ShowingOutOf: React.SFC<{ itemsCount: number; totalItems: number }> = props => (
+export const ShowingOutOf: React.SFC<{ itemsCount: number; totalItems: number }> = ({ itemsCount, totalItems }) => (
   <Text>
-    <T id="productsList.pagination.showingOutOf" {...props} />
+    <T id="productsList.pagination.showingOutOf" {...{ itemsCount, totalItems }} />
   </Text>
 );
 

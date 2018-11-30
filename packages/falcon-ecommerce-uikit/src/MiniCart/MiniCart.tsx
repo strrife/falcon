@@ -1,8 +1,5 @@
 import React from 'react';
 import {
-  Sidebar,
-  Backdrop,
-  Portal,
   Icon,
   List,
   ListItem,
@@ -18,7 +15,7 @@ import {
   NumberInput,
   FlexLayout
 } from '@deity/falcon-ui';
-import { T } from '../I18n';
+import { T } from '@deity/falcon-i18n';
 import { MiniCartData } from './MiniCartQuery';
 import { RemoveCartItemMutation, UpdateCartItemMutation } from '../Cart/CartMutation';
 import { CloseSidebarMutation } from '../Sidebar';

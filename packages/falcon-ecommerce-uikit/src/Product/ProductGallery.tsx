@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, Image, themed, Swipeable, SwipeableItem, Box } from '@deity/falcon-ui';
-import { T } from '../I18n';
+import { T } from '@deity/falcon-i18n';
 
 type Item = {
   thumbnail: string;

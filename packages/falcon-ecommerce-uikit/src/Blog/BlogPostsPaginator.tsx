@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, DefaultThemeProps, Link, Icon } from '@deity/falcon-ui';
+import { T } from '@deity/falcon-i18n';
 import { BlogPagination } from './BlogPostsQuery';
-import { T } from '../I18n';
 
 const blogPostsPaginatorLayout: DefaultThemeProps = {
   blogPostsPaginatorLayout: {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
+import { T } from '@deity/falcon-i18n';
 import { themed, Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
 import { Breadcrumbs } from '../Breadcrumbs';
 import { ProductGallery } from './ProductGallery';
@@ -10,7 +11,6 @@ import { OpenSidebarMutation } from '../Sidebar';
 import { ProductConfigurator } from './ProductConfigurator';
 import { Price } from '../Locale';
 import { toGridTemplate } from '../helpers';
-import { T } from '../I18n';
 
 export const ProductLayout = themed({
   tag: 'div',

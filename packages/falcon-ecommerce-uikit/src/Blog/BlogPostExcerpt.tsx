@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, H2, Text, Image, DefaultThemeProps, Link } from '@deity/falcon-ui';
+import { T } from '@deity/falcon-i18n';
 import { BlogPostExcerptType } from './BlogPostsQuery';
 import { DateFormat } from '../Locale';
 import { toGridTemplate } from '../helpers';
-import { T } from '../I18n';
 
 enum BlogPostEcerptArea {
   image = 'image',

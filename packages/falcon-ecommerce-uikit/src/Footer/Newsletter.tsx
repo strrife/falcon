@@ -1,6 +1,6 @@
 import React from 'react';
 import { themed, H3, Text, Group, Input, Button, Checkbox, Label } from '@deity/falcon-ui';
-import { T } from '../I18n';
+import { T } from '@deity/falcon-i18n';
 
 export const NewsletterLayout = themed({
   tag: 'div',
