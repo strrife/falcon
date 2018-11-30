@@ -33,8 +33,32 @@ export type CartData = {
   cart: {
     itemsQty: number;
     quoteCurrency: string;
-    items: any[];
+    couponCode: string;
+    totals: CartTotal[];
+    items: CartItem[];
   };
+};
+
+type CartTotal = {
+  code: string;
+  title: string;
+  value: number;
+};
+
+type CartItem = {
+  itemId: number;
+  sku: string;
+  qty: number;
+  name: string;
+  price: number;
+  rowTotalInclTax: number;
+  thumbnailUrl: string;
+  itemOptions: CartItemOption[];
+};
+
+type CartItemOption = {
+  label: string;
+  value: string;
 };
 
 function getTranslations(t: reactI18Next.TranslationFunction) {

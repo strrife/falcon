@@ -590,8 +590,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         delete this.context.magento2.cart;
         this.context.session.save();
         e.code = 'INVALID_CART';
-        e.userMessage = false;
-        e.noLogging = true;
       }
 
       throw e;
