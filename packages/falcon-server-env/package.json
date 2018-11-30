@@ -21,6 +21,7 @@
     },
     "collectCoverageFrom": [
       "src/**/*.ts",
+      "!src/events.ts",
       "!src/index.ts"
     ],
     "coverageReporters": [
