@@ -5,8 +5,7 @@ export type I18nContextOptions = typeof defaultOptions;
 export const defaultOptions = {
   wait: false,
   withRef: false,
-  bindI18n: 'languageChanged loaded',
-  bindStore: 'added removed',
+  rerenderOn: ['languageChanged', 'loaded', 'added', 'removed'],
   translateFuncName: 't',
   nsMode: 'default',
   usePureComponent: false,
