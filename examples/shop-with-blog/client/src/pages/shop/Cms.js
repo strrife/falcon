@@ -1,5 +1,5 @@
 import React from 'react';
-import { T } from '@deity/falcon-ecommerce-uikit';
+import { T } from '@deity/falcon-i18n';
 
 const Cms = ({ id, path, type }) => (
   <div>

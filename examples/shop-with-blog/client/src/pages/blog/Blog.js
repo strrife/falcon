@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, H1 } from '@deity/falcon-ui';
-import { BlogPostsQuery, BlogPostsLayout, BlogPostExcerpt, BlogPostsPaginator, T } from '@deity/falcon-ecommerce-uikit';
+import { T } from '@deity/falcon-i18n';
+import { BlogPostsQuery, BlogPostsLayout, BlogPostExcerpt, BlogPostsPaginator } from '@deity/falcon-ecommerce-uikit';
 
 const Blog = props => (
   <BlogPostsQuery variables={{ pagination: { page: +props.match.params.page || 1 } }}>
