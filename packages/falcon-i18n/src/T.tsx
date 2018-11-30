@@ -3,6 +3,13 @@ import PropTypes from 'prop-types';
 import i18next, { TranslationFunction } from 'i18next';
 import { I18nContext, I18nContextOptions } from './context';
 
+export type I18nRenderProps = {
+  i18n: i18next.i18n;
+  t: i18next.TranslationFunction;
+};
+export type I18nProps = {
+  children: (renderProps: I18nRenderProps) => any;
+};
 export class I18n extends React.Component<{}> {
   static propTypes = {
     children: PropTypes.oneOfType([PropTypes.func]).isRequired
@@ -15,29 +22,33 @@ export class I18n extends React.Component<{}> {
   }
 }
 
+interface InjectTranslationFunction {
+  (t: TranslationFunction): any;
+}
+export type TRenderProps = string | InjectTranslationFunction | null;
 export type TProps = {
   id?: string;
-  children?: (t: TranslationFunction) => any;
+  children?: TRenderProps;
 } & i18next.TranslationOptions;
 
 export class T extends React.Component<TProps> {
   static propTypes = {
     id: PropTypes.string,
-    children: PropTypes.oneOf([PropTypes.string, PropTypes.func]),
-    defaultValue: PropTypes.oneOf([PropTypes.string]),
+    children: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+    defaultValue: PropTypes.oneOfType([PropTypes.string]),
     count: PropTypes.number,
     // eslint-disable-next-line react/forbid-prop-types
     context: PropTypes.any, // used for contexts (eg. male\female)
     replace: PropTypes.shape({}), // object with vars for interpolation - or put them directly in options
     lng: PropTypes.string,
     lngs: PropTypes.arrayOf(PropTypes.string),
-    fallbackLng: PropTypes.oneOf([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
-    ns: PropTypes.oneOf([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
+    fallbackLng: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
+    ns: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
     keySeparator: PropTypes.string,
     nsSeparator: PropTypes.string,
     returnObjects: PropTypes.bool, // accessing an object not a translation string
     joinArrays: PropTypes.string, // char, eg. '\n' that arrays will be joined by (can be set globally too)
-    postProcess: PropTypes.oneOf([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]), // postProcessors to apply see interval plurals as a sample
+    postProcess: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]), // postProcessors to apply see interval plurals as a sample
     interpolation: PropTypes.shape({})
   };
 
@@ -81,7 +92,7 @@ export class T extends React.Component<TProps> {
           }
 
           if (children && typeof children === 'function') {
-            return children(t);
+            return (children as InjectTranslationFunction)(t);
           }
           // children (if exists) needs to be string here
           const key = id || (children as string) || undefined;
