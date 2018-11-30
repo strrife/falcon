@@ -8,8 +8,7 @@ import { ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 
 import { CheckoutLogic, CheckoutLogicInjectedProps } from './CheckoutLogic';
-
-const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { wait } from '../../../../test/helpers';
 
 const typeDefs = gql`
   type Query {

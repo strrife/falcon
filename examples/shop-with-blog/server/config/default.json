@@ -1,7 +1,7 @@
 {
-  "debug": true,
+  "debug": false,
   "port": 4000,
-  "logLevel": "debug",
+  "logLevel": "info",
   "verboseEvents": false,
   "apis": {
     "api-wordpress": {

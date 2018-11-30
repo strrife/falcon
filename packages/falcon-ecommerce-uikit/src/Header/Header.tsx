@@ -14,10 +14,9 @@ import {
 
 import { toGridTemplate } from '../helpers';
 import { ToggleMiniCartMutation, MiniCartIcon, MiniCartQuery } from '../MiniCart';
-import { CartQuery } from '../Cart';
+import { CartQuery, CartData } from '../Cart';
 import { HeaderData, MenuItem } from './HeaderQuery';
 import { ToggleMiniAccountMutation } from '../MiniAccount/MiniAccountMutation';
-import { CategoryToolbar } from '../Category';
 
 const bannerLayoutTheme: DefaultThemeProps = {
   bannerLayout: {
@@ -105,7 +104,7 @@ export const Searchbar = () => (
     <ToggleMiniCartMutation>
       {toggle => (
         <CartQuery>
-          {(data: any) => (
+          {(data: CartData) => (
             <MiniCartIcon
               onClick={toggle}
               gridArea={SearchBarArea.cart}
