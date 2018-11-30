@@ -18,30 +18,14 @@ import { CartQuery } from '../Cart';
 import { HeaderData, MenuItem } from './HeaderQuery';
 import { OpenSidebarMutation } from '../Sidebar';
 
-const bannerLayoutTheme: DefaultThemeProps = {
-  bannerLayout: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    bgFullWidth: 'secondaryLight',
-    m: 'none',
-    p: 'none',
+const brandLine: DefaultThemeProps = {
+  brandLine: {
+    bgFullWidth: 'primaryLight',
     css: {
-      listStyle: 'none'
+      height: 3
     }
   }
 };
-
-export const Banner: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
-  <List defaultTheme={bannerLayoutTheme}>
-    {items.map(item => (
-      <ListItem p="sm" key={item.name}>
-        <Link as={RouterLink} to={item.url}>
-          {item.name}
-        </Link>
-      </ListItem>
-    ))}
-  </List>
-);
 
 export const Nav: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
   <Navbar>
@@ -135,11 +119,11 @@ export const Searchbar = () => (
 
 export const Header: React.SFC<HeaderData> = ({
   config: {
-    menus: { header, banner }
+    menus: { header }
   }
 }) => (
   <header>
-    <Banner items={banner} />
+    <Box defaultTheme={brandLine} />
     <Searchbar />
     <nav>
       <Nav items={header} />

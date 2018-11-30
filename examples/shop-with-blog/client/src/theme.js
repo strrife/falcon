@@ -18,7 +18,8 @@ import { Box, createTheme } from '@deity/falcon-ui';
 export const deityGreenTheme = createTheme({
   colors: {
     primary: '#607e07',
-    primaryLight: '#95c110'
+    primaryLight: '#95c110',
+    primaryDark: '#4a6006'
   },
 
   fontWeights: {
@@ -126,6 +127,10 @@ export const deityGreenTheme = createTheme({
     }
   },
   components: {
+    icon: {
+      stroke: 'primaryLight'
+    },
+
     breadcrumb: {
       css: ({ theme }) => ({
         ':last-child': {
@@ -140,8 +145,15 @@ export const deityGreenTheme = createTheme({
     },
 
     navbar: {
+      bgFullWidth: 'secondaryLight',
       css: { zIndex: 2 }
     },
+
+    navbarItem: {
+      fontWeight: 'bold',
+      color: 'secondaryText'
+    },
+
     sidebar: {
       px: 'sm',
       pt: 'sm',

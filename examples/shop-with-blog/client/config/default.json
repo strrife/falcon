@@ -57,18 +57,14 @@
         "name": "Sale",
         "url": "/sale.html",
         "children": []
-      }
-    ],
-    "banner": [
-      {
-        "name": "Contact",
-        "url": "#"
       },
       {
         "name": "Blog",
-        "url": "/blog"
+        "url": "/blog",
+        "children": []
       }
     ],
+
     "footer": [
       {
         "name": "Customer service",

@@ -15,6 +15,15 @@ export const availablePresets: Preset[] = [
         primaryLight: '#CBDE6E',
         primaryDark: '#A9CF38',
         primaryText: '#fff'
+      },
+      components: {
+        navbar: {
+          bgFullWidth: 'primary'
+        },
+
+        navbarItem: {
+          color: 'primaryText'
+        }
       }
     }
   },
@@ -75,15 +84,17 @@ export const availablePresets: Preset[] = [
           gridAutoRows: '340px',
           gridGap: 'md'
         },
-        bannerLayout: {
-          display: 'none'
-        },
+
         navbar: {
           bgFullWidth: 'transparent',
           bg: 'primary',
           borderRadius: 'round',
           mt: 'xs',
           justifyContent: 'center'
+        },
+
+        navbarItem: {
+          color: 'primaryText'
         },
 
         productDetailsLayout: {
@@ -128,11 +139,6 @@ export const availablePresets: Preset[] = [
 
         icon: {
           stroke: 'secondaryDark'
-        },
-
-        bannerLayout: {
-          bgFullWidth: 'primary',
-          color: 'primaryText'
         },
 
         productListLayout: {
