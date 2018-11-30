@@ -1,7 +1,8 @@
 {
   "serverSideRendering": true,
   "i18n": {
-    "ns": ["translations"]
+    "ns": ["translations"],
+    "whitelist": ["en", "nl"]
   },
   "apolloClient": {
     "httpLink": {
