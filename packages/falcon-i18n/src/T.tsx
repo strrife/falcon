@@ -3,29 +3,10 @@ import PropTypes from 'prop-types';
 import i18next, { TranslationFunction } from 'i18next';
 import { I18nContext, I18nContextOptions } from './context';
 
-export type I18nRenderProps = {
-  i18n: i18next.i18n;
-  t: i18next.TranslationFunction;
-};
-export type I18nProps = {
-  children: (renderProps: I18nRenderProps) => any;
-};
-export class I18n extends React.Component<{}> {
-  static propTypes = {
-    children: PropTypes.oneOfType([PropTypes.func]).isRequired
-  };
-
-  render() {
-    const { children } = this.props as any;
-
-    return <I18nContext.Consumer>{({ i18n, t }) => children({ i18n, t })}</I18nContext.Consumer>;
-  }
-}
-
 interface InjectTranslationFunction {
   (t: TranslationFunction): any;
 }
-export type TRenderProps = string | InjectTranslationFunction | null;
+export type TRenderProps = string | InjectTranslationFunction;
 export type TProps = {
   id?: string;
   children?: TRenderProps;
