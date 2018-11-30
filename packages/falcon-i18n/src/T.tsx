@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import i18next from 'i18next';
+import i18next, { TranslationFunction } from 'i18next';
 import { I18nContext, I18nContextOptions } from './context';
 
 export class I18n extends React.Component<{}> {
@@ -15,19 +15,30 @@ export class I18n extends React.Component<{}> {
   }
 }
 
-export class T extends React.Component<{ id?: string }> {
+export type TProps = {
+  id?: string;
+  children?: (t: TranslationFunction) => any;
+} & i18next.TranslationOptions;
+
+export class T extends React.Component<TProps> {
   static propTypes = {
     id: PropTypes.string,
-    children: PropTypes.oneOfType([PropTypes.string, PropTypes.func])
-    // tReady: PropTypes.bool.isRequired
-    // initialI18nStore: PropTypes.shape({}),
-    // initialLanguage: PropTypes.string,
-    // i18nOptions: PropTypes.shape({}),
-    // i18n: PropTypes.shape({}),
-    // t: PropTypes.func,
-    // defaultNS: PropTypes.string,
-    // reportNS: PropTypes.func,
-    // lng: PropTypes.string
+    children: PropTypes.oneOf([PropTypes.string, PropTypes.func]),
+    defaultValue: PropTypes.oneOf([PropTypes.string]),
+    count: PropTypes.number,
+    // eslint-disable-next-line react/forbid-prop-types
+    context: PropTypes.any, // used for contexts (eg. male\female)
+    replace: PropTypes.shape({}), // object with vars for interpolation - or put them directly in options
+    lng: PropTypes.string,
+    lngs: PropTypes.arrayOf(PropTypes.string),
+    fallbackLng: PropTypes.oneOf([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
+    ns: PropTypes.oneOf([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
+    keySeparator: PropTypes.string,
+    nsSeparator: PropTypes.string,
+    returnObjects: PropTypes.bool, // accessing an object not a translation string
+    joinArrays: PropTypes.string, // char, eg. '\n' that arrays will be joined by (can be set globally too)
+    postProcess: PropTypes.oneOf([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]), // postProcessors to apply see interval plurals as a sample
+    interpolation: PropTypes.shape({})
   };
 
   constructor(props) {
@@ -53,7 +64,7 @@ export class T extends React.Component<{ id?: string }> {
   options?: I18nContextOptions = undefined;
 
   render() {
-    const { id, children, ...options } = this.props as any;
+    const { id, children, ...options } = this.props;
 
     return (
       <I18nContext.Consumer>
@@ -70,17 +81,10 @@ export class T extends React.Component<{ id?: string }> {
           }
 
           if (children && typeof children === 'function') {
-            return children(t, options);
+            return children(t);
           }
-
-          if (children) {
-            if (typeof children === 'string') {
-              return t(children, options);
-            }
-          }
-
-          const keyFromChildren = children && typeof children === 'string' && children;
-          const key = id || keyFromChildren || undefined;
+          // children (if exists) needs to be string here
+          const key = id || (children as string) || undefined;
 
           return key ? t(key, options) : null;
         }}
