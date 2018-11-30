@@ -15,3 +15,5 @@ export * from './Blog';
 export * from './Query';
 export * from './Locale';
 export * from './helpers';
+export * from './Sidebar';
+export * from './Forms';

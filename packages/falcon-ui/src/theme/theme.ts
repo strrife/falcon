@@ -43,7 +43,8 @@ export const defaultBaseTheme = {
   },
 
   fontSizes: {
-    xs: 13,
+    xxs: 12,
+    xs: 14,
     sm: 16,
     md: 20,
     lg: 26,

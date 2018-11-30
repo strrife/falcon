@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { graphql } from 'react-apollo';
 import { Box, Text, Link, Input, Button, Details, DetailsContent } from '@deity/falcon-ui';
-import {
-  SignOutMutation,
-  GET_CUSTOMER,
-  toGridTemplate,
-  ToggleMiniAccountMutation
-} from '@deity/falcon-ecommerce-uikit';
+import { SignOutMutation, GET_CUSTOMER, toGridTemplate, OpenSidebarMutation } from '@deity/falcon-ecommerce-uikit';
 import SectionHeader from './CheckoutSectionHeader';
 
 const customerEmailFormLayout = {
@@ -143,20 +138,30 @@ class EmailSection extends React.Component {
     }
 
     const content = (
-      <ToggleMiniAccountMutation>
-        {toggle => (
+      <OpenSidebarMutation>
+        {openSidebar => (
           <Box>
             <EmailForm email={this.state.email} setEmail={this.props.setEmail} />
             <Text>
               or
-              <Link mx="xs" color="primary" onClick={toggle}>
+              <Link
+                mx="xs"
+                color="primary"
+                onClick={() =>
+                  openSidebar({
+                    variables: {
+                      contentType: 'account'
+                    }
+                  })
+                }
+              >
                 sign in with your account
               </Link>
               if you are already registered
             </Text>
           </Box>
         )}
-      </ToggleMiniAccountMutation>
+      </OpenSidebarMutation>
     );
 
     return (

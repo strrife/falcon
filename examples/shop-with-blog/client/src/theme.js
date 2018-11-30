@@ -12,6 +12,10 @@ import ChevronsLeft from 'react-feather/dist/icons/chevrons-left';
 import Lock from 'react-feather/dist/icons/lock';
 import Trash from 'react-feather/dist/icons/trash-2';
 import Check from 'react-feather/dist/icons/check';
+import CheckCircle from 'react-feather/dist/icons/check-circle';
+import Eye from 'react-feather/dist/icons/eye';
+import EyeOff from 'react-feather/dist/icons/eye-off';
+
 import { createTheme } from '@deity/falcon-ui';
 import logo from './assets/logo.svg';
 
@@ -20,6 +24,11 @@ export const deityGreenTheme = createTheme({
     primary: '#607e07',
     primaryLight: '#A9CF38'
   },
+
+  fontWeights: {
+    bold: 500
+  },
+
   icons: {
     logo: {
       icon: props => <img src={logo} alt="logo" {...props} />,
@@ -87,7 +96,10 @@ export const deityGreenTheme = createTheme({
     },
     lock: { icon: Lock },
     trash: { icon: Trash },
-    check: { icon: Check }
+    check: { icon: Check },
+    checkCircle: { icon: CheckCircle },
+    eye: { icon: Eye },
+    eyeOff: { icon: EyeOff }
   },
   keyframes: {
     loader: {
@@ -112,12 +124,14 @@ export const deityGreenTheme = createTheme({
         }
       })
     },
+
     navbar: {
       css: { zIndex: 2 }
     },
     sidebar: {
       px: 'sm',
       pt: 'sm',
+      boxShadow: 'subtle',
       css: {
         boxSizing: 'border-box',
         width: {
@@ -128,7 +142,12 @@ export const deityGreenTheme = createTheme({
     },
 
     button: {
-      css: { transitionProperty: 'all' },
+      px: 'xl',
+      height: 'xl',
+      css: {
+        transitionProperty: 'all',
+        textTransform: 'capitalize'
+      },
 
       variants: {
         loader: {

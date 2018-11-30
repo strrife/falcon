@@ -4,9 +4,6 @@ import { Customer } from '../Customer';
 
 const GET_MINI_ACCOUNT = gql`
   query MiniAccount {
-    miniAccount @client {
-      open
-    }
     customer {
       id
       firstname
@@ -17,9 +14,6 @@ const GET_MINI_ACCOUNT = gql`
 `;
 
 export type MiniAccountData = {
-  miniAccount: {
-    open: boolean;
-  };
   customer: Customer;
 };
 

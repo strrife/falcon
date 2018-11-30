@@ -31,7 +31,7 @@ export const Newsletter: React.SFC<{ translations: FooterTranslations }> = ({ tr
           height="lg"
           placeholder={newsletter.emailPlaceholder}
         />
-        <Button as="input" type="submit" value={newsletter.subscribe} flex="none" />
+        <Button height="lg" as="input" type="submit" value={newsletter.subscribe} flex="none" />
       </Group>
       <Label htmlFor="subscribe" my="sm" display="flex" justifyContent="center" alignItems="center">
         <Checkbox id="subscribe" required mr="xs" />

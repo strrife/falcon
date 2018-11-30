@@ -13,10 +13,10 @@ import {
 } from '@deity/falcon-ui';
 
 import { toGridTemplate } from '../helpers';
-import { ToggleMiniCartMutation, MiniCartIcon, MiniCartQuery } from '../MiniCart';
+import { MiniCartIcon } from '../MiniCart';
 import { CartQuery, CartData } from '../Cart';
 import { HeaderData, MenuItem } from './HeaderQuery';
-import { ToggleMiniAccountMutation } from '../MiniAccount/MiniAccountMutation';
+import { OpenSidebarMutation } from '../Sidebar';
 
 const bannerLayoutTheme: DefaultThemeProps = {
   bannerLayout: {
@@ -96,24 +96,40 @@ export const Searchbar = () => (
     <Link as={RouterLink} gridArea={SearchBarArea.logo} to="/">
       <Icon src="logo" />
     </Link>
-    <ToggleMiniAccountMutation>
-      {toggle => (
-        <Icon gridArea={SearchBarArea.signIn} src="user" onClick={() => toggle()} css={{ cursor: 'pointer' }} />
+    <OpenSidebarMutation>
+      {openSidebar => (
+        <React.Fragment>
+          <Icon
+            gridArea={SearchBarArea.signIn}
+            src="user"
+            onClick={() =>
+              openSidebar({
+                variables: {
+                  contentType: 'account'
+                }
+              })
+            }
+            css={{ cursor: 'pointer' }}
+          />
+
+          <CartQuery>
+            {(data: CartData) => (
+              <MiniCartIcon
+                onClick={() =>
+                  openSidebar({
+                    variables: {
+                      contentType: 'cart'
+                    }
+                  })
+                }
+                gridArea={SearchBarArea.cart}
+                itemsQty={data.cart ? data.cart.itemsQty : 0}
+              />
+            )}
+          </CartQuery>
+        </React.Fragment>
       )}
-    </ToggleMiniAccountMutation>
-    <ToggleMiniCartMutation>
-      {toggle => (
-        <CartQuery>
-          {(data: CartData) => (
-            <MiniCartIcon
-              onClick={toggle}
-              gridArea={SearchBarArea.cart}
-              itemsQty={data.cart ? data.cart.itemsQty : 0}
-            />
-          )}
-        </CartQuery>
-      )}
-    </ToggleMiniCartMutation>
+    </OpenSidebarMutation>
   </Box>
 );
 

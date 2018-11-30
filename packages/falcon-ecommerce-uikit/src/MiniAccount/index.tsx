@@ -1,3 +1,4 @@
 export * from './MiniAccount';
 export * from './MiniAccountQuery';
-export * from './MiniAccountMutation';
+export * from './SignUp';
+export * from './MiniFormLayout';
