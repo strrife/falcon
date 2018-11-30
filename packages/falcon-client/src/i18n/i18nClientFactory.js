@@ -40,12 +40,7 @@ export default ({ lng = 'en', fallbackLng = 'en', whitelist = ['en'], debug = fa
           ajax: loadLocale
         }
       },
-      error => {
-        if (error) {
-          reject(error);
-        }
-        resolve(instance);
-      }
+      error => (error ? reject(error) : resolve(instance))
     );
 
     if (module.hot) {
