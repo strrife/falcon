@@ -61,9 +61,7 @@ class FalconServer {
       schemas: [BaseSchema],
       dataSources: this.apiContainer.dataSources.values(),
       formatError: error => this.formatGraphqlError(error),
-      // inject session to graph context
-      // todo: re-think that - maybe we could avoid passing session here and instead pass just required data
-      // from session?
+      // inject session and headers into GraphQL context
       context: ({ ctx }) => ({
         headers: ctx.req.headers,
         session: ctx.req.session

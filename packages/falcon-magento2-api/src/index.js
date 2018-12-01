@@ -26,8 +26,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   async addTypeResolvers(serverConfig) {
     const resolvers = {
       ShopConfig: {
-        stores: () => this.getActiveStores(),
-        currencies: () => this.getActiveCurrencies(),
+        stores: (...params) => this.getActiveStores(...params),
+        currencies: (...param) => this.getActiveCurrencies(...param),
         baseCurrency: () => this.session.baseCurrency,
         timezone: () => this.session.timezone,
         weightUnit: () => this.session.weightUnit
