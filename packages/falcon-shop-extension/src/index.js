@@ -1,6 +1,7 @@
 const { Extension, ApiUrlPriority } = require('@deity/falcon-server-env');
 const { resolve } = require('path');
 const typeDefs = require('fs').readFileSync(resolve(__dirname, 'schema.graphql'), 'utf8');
+const get = require('lodash.get');
 
 /**
  * Extension that implements shop features
@@ -58,8 +59,8 @@ module.exports = class Shop extends Extension {
           shop: () => this.apiConfig
         },
         ShopConfig: {
-          activeCurrency: () => this.api.session.currency,
-          activeStore: () => this.api.session.storeCode
+          activeCurrency: (root, params, { session }) => get(session, `${this.api.name}.currency`),
+          activeStore: (root, params, { session }) => get(session, `${this.api.name}.storeCode`)
         }
       }
     };
