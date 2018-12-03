@@ -86,24 +86,35 @@ export default abstract class ApiDataSource<TContext extends ContextSession = an
     this.httpCache = new ContextHTTPCache(config.cache);
   }
 
-  get session(): any {
-    if (!this.context.session) {
+  /**
+   * Wrapper-method to get an API-scoped session data
+   * @param {TContext} context Current resolver context
+   * @returns {any} API-scoped session data
+   */
+  getSession(context: TContext): any {
+    if (!context.session) {
       return {};
     }
 
-    if (!(this.name in this.context.session)) {
-      this.context.session[this.name] = {};
+    if (!(this.name in context.session)) {
+      context.session[this.name] = {};
     }
 
-    return this.context.session[this.name];
+    return context.session[this.name];
   }
 
-  set session(value: any) {
-    if (!this.context.session) {
-      this.context.session = {};
+  /**
+   * Wrapper-method to set an API-scoped session data
+   * @param {TContext} context Current resolver context
+   * @param {any} value Value to be set to the API session
+   * @return {undefined}
+   */
+  setSession(context: TContext, value: any) {
+    if (!context.session) {
+      context.session = {};
     }
 
-    this.context.session[this.name] = value;
+    context.session[this.name] = value;
   }
 
   /**

@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop, import/no-extraneous-dependencies */
 import 'jest-extended';
 import ApiDataSource from './ApiDataSource';
-import { ContextRequestOptions, ContextFetchRequest, ContextFetchResponse } from '../types';
+import { ContextRequestOptions, ContextData, ContextFetchRequest, ContextFetchResponse } from '../types';
 
 import nock = require('nock');
 
@@ -266,35 +266,31 @@ describe('ApiDataSource', () => {
   describe('Session', () => {
     it('Should return an empty object if context.session does not exist', async () => {
       const customApiDataSource: CustomApiDataSource = new CustomApiDataSource({});
-      await customApiDataSource.initialize({
-        context: {}
-      } as any);
-      expect(customApiDataSource.session).toEqual({});
-      expect(customApiDataSource.context).toEqual({});
+      const context: ContextData = {};
+      await customApiDataSource.initialize({ context } as any);
+      expect(customApiDataSource.getSession(context)).toEqual({});
+      expect(context).toEqual({});
     });
 
     it('Should work with a named object in context.session', async () => {
       const customApiDataSource: CustomApiDataSource = new CustomApiDataSource({});
-      await customApiDataSource.initialize({
-        context: {
-          session: {}
-        }
-      } as any);
-      expect(customApiDataSource.session).toEqual({});
-      expect(customApiDataSource.context.session).toEqual({ CustomApiDataSource: {} });
+      const context: ContextData = { session: {} };
+      await customApiDataSource.initialize({ context } as any);
+      expect(customApiDataSource.getSession(context)).toEqual({});
+      expect(context.session).toEqual({ CustomApiDataSource: {} });
 
-      customApiDataSource.session.foo = 'bar';
-      expect(customApiDataSource.context.session).toEqual({ CustomApiDataSource: { foo: 'bar' } });
+      customApiDataSource.getSession(context).foo = 'bar';
+      expect(context.session).toEqual({ CustomApiDataSource: { foo: 'bar' } });
 
-      customApiDataSource.session = {};
-      expect(customApiDataSource.context.session).toEqual({ CustomApiDataSource: {} });
+      customApiDataSource.setSession(context, {});
+      expect(context.session).toEqual({ CustomApiDataSource: {} });
 
       await customApiDataSource.initialize({
         context: {}
       } as any);
 
-      customApiDataSource.session = { foo: 'bar' };
-      expect(customApiDataSource.context.session).toEqual({ CustomApiDataSource: { foo: 'bar' } });
+      customApiDataSource.setSession(context, { foo: 'bar' });
+      expect(context.session).toEqual({ CustomApiDataSource: { foo: 'bar' } });
     });
   });
 });
