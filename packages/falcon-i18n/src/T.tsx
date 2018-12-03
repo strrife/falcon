@@ -56,7 +56,7 @@ export class T extends React.Component<TProps> {
   options?: I18nContextOptions = undefined;
 
   render() {
-    const { id, children, ...options } = this.props;
+    const { id, children, ...translationOptions } = this.props;
 
     return (
       <I18nContext.Consumer>
@@ -73,12 +73,15 @@ export class T extends React.Component<TProps> {
           }
 
           if (children && typeof children === 'function') {
-            return (children as InjectTranslationFunction)(t);
+            return (children as InjectTranslationFunction)((key, options) =>
+              t(key, { ...translationOptions, ...(options || {}) })
+            );
           }
+
           // children (if exists) needs to be string here
           const key = id || (children as string) || undefined;
 
-          return key ? t(key, options) : null;
+          return key ? t(key, translationOptions) : null;
         }}
       </I18nContext.Consumer>
     );

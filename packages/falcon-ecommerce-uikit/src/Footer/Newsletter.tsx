@@ -19,11 +19,15 @@ export const NewsletterLayout = themed({
 });
 
 export const Newsletter: React.SFC<{}> = () => (
-  <T>
-    {t => (
-      <NewsletterLayout>
-        <H3>{t('newsletter.title')}</H3>
-        <Text>{t('newsletter.message')}</Text>
+  <NewsletterLayout>
+    <H3>
+      <T id="newsletter.title" />
+    </H3>
+    <Text>
+      <T id="newsletter.message" />
+    </Text>
+    <T>
+      {t => (
         <form>
           <Group>
             <Input
@@ -39,7 +43,7 @@ export const Newsletter: React.SFC<{}> = () => (
             <Checkbox id="subscribe" required mr="xs" /> {t('newsletter.consent')}
           </Label>
         </form>
-      </NewsletterLayout>
-    )}
-  </T>
+      )}
+    </T>
+  </NewsletterLayout>
 );
