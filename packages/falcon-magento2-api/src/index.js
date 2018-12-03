@@ -827,7 +827,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Customer>} - new customer data
    */
   async signUp(data) {
-    const { email, firstname, lastname, password } = data;
+    const { email, firstname, lastname, password, autoSignIn } = data;
     const { cart: { quoteId = null } = {} } = this.context.magento2;
     const customerData = {
       customer: {
@@ -842,9 +842,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     };
 
     try {
-      const result = await this.post('/customers', customerData);
-      result.data = this.convertKeys(result.data);
-      return result;
+      await this.post('/customers', customerData);
+
+      if (autoSignIn) {
+        return this.signIn({ email, password });
+      }
+
+      return true;
     } catch (e) {
       // todo: use new version of error handler
 

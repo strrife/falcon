@@ -24,7 +24,6 @@ export const Newsletter: React.SFC<{}> = () => (
       <NewsletterLayout>
         <H3>{t('newsletter.title')}</H3>
         <Text>{t('newsletter.message')}</Text>
-
         <form>
           <Group>
             <Input

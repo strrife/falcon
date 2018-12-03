@@ -190,7 +190,7 @@ export class Product extends React.PureComponent<{ product: any }> {
                   </Text>
                   <H1 gridArea={Area.title}>{product.name}</H1>
 
-                  <Price mb="sm" fontSize="xl" gridArea={Area.price} value={product.price} />
+                  <Price fontSize="xl" gridArea={Area.price} value={product.price} />
                   <ProductConfigurableOptions
                     options={product.configurableOptions}
                     error={errors.configurableOptions}
@@ -206,6 +206,7 @@ export class Product extends React.PureComponent<{ product: any }> {
                   <FlexLayout alignItems="center" gridArea={Area.cta} mt="xs">
                     <NumberInput
                       mr="sm"
+                      mt="sm"
                       min="1"
                       name="qty"
                       aria-label={t('product.quantity')}
@@ -217,11 +218,11 @@ export class Product extends React.PureComponent<{ product: any }> {
                       <Button
                         type="submit"
                         height="xl"
-                        px="md"
+                        mt="sm"
                         disabled={loading}
                         variant={loading ? 'loader' : undefined}
                       >
-                        {!loading && <Icon src="cart" stroke="white" size="md" mr="xs" />}
+                        {!loading && <Icon src="cart" stroke="white" size="md" mr="sm" />}
                         {t('product.addToCart')}
                       </Button>
                     </FlexLayout>

@@ -27,7 +27,7 @@ extend type Mutation {
   removeCartItem(input: RemoveCartItemInput!): RemoveCartItemResponse
   applyCoupon(input: CouponInput!): Boolean
   cancelCoupon: Boolean
-  signUp(input: SignUp!): Customer
+  signUp(input: SignUp!): Boolean
   signIn(input: SignIn!): Boolean
   signOut: Boolean
   editCustomerData(input: CustomerInput!): Customer
@@ -396,8 +396,8 @@ input SignUp {
   firstname: String
   lastname: String
   password: String
-  passwordConfirmation: String
   address: AddressInput
+  autoSignIn: Boolean
 }
 
 input SignIn {

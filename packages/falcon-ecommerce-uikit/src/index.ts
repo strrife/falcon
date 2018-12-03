@@ -15,3 +15,4 @@ export * from './Blog';
 export * from './Query';
 export * from './Locale';
 export * from './Sidebar';
+export * from './Forms';
