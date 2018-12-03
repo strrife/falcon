@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { AsyncComponentProvider } from 'react-async-component';
 import MemoryRouter from 'react-router-dom/MemoryRouter';
-import { I18nextProvider } from 'react-i18next-with-context';
+import { I18nProvider } from '@deity/falcon-i18n';
 import i18nFactory from './../src/i18n/__mocks__/i18nFactory';
 
 /**
@@ -23,9 +23,7 @@ const FalconClient = ({ apollo, router, asyncComponent, i18next, children }) => 
   <MockedProvider mocks={[]} addTypename={false} {...apollo}>
     <AsyncComponentProvider {...asyncComponent}>
       <MemoryRouter {...router}>
-        <I18nextProvider i18n={i18nFactory()} {...i18next}>
-          {children}
-        </I18nextProvider>
+        <I18nProvider i18n={i18nFactory(i18next)}>{children}</I18nProvider>
       </MemoryRouter>
     </AsyncComponentProvider>
   </MockedProvider>
@@ -46,10 +44,12 @@ FalconClient.propTypes = {
     rehydrateState: PropTypes.shape({})
   }),
   i18next: PropTypes.shape({
-    i18n: PropTypes.shape({}),
+    lng: PropTypes.string,
+    fallbackLng: PropTypes.string,
+    whitelist: PropTypes.arrayOf(PropTypes.string),
+    debug: PropTypes.bool,
     defaultNS: PropTypes.string,
-    initialI18nStore: PropTypes.shape({}),
-    initialLanguage: PropTypes.string
+    resources: PropTypes.shape({})
   })
 };
 

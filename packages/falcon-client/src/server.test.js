@@ -4,9 +4,9 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { asyncComponent } from 'react-async-component';
 import { Route, Switch } from 'react-router-dom';
-import { translate } from 'react-i18next-with-context';
 import Koa from 'koa';
 import supertest from 'supertest';
+import { T } from '@deity/falcon-i18n';
 import { Server } from './server';
 import DynamicRoute from './components/DynamicRoute';
 import defaultConfiguration from './clientApp/defaultConfiguration';
@@ -49,12 +49,14 @@ describe('Server', () => {
 
   it('Should render Home page (SSR)', async () => {
     Helmet.canUseDOM = false;
-    const Home = translate()(({ t }) => (
+    const Home = () => (
       <div>
         <h2>Foo</h2>
-        <p>{t('key')}</p>
+        <p>
+          <T id="key" />
+        </p>
       </div>
-    ));
+    );
 
     const App = () => (
       <Switch>
@@ -80,7 +82,7 @@ describe('Server', () => {
       },
       i18n: {
         lng: 'en',
-        resources: { en: { common: { key: 'foo bar baz' } } }
+        resources: { en: { translations: { key: 'foo bar baz' } } }
       }
     });
     const bootstrap = {
