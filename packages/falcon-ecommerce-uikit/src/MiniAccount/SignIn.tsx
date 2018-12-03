@@ -46,13 +46,7 @@ const NewCustomer = () => (
         <Button
           justifySelf="end"
           variant="secondary"
-          onClick={() =>
-            openSidebar({
-              variables: {
-                contentType: 'signUp'
-              }
-            })
-          }
+          onClick={() => openSidebar({ variables: { contentType: 'signUp' } })}
         >
           <T id="newCustomer.createAnAccount" />
         </Button>

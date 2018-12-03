@@ -58,7 +58,11 @@
     "empty": "Shopping cart is empty"
   },
   "signIn": {
-    "formTitle": "Sign In"
+    "formTitle": "Sign In",
+    "button": "Sign in"
+  },
+  "signOut": {
+    "button": "Logout"
   },
   "newCustomer": {
     "title": "New Customers",
