@@ -145,13 +145,7 @@ export const deityGreenTheme = createTheme({
     },
 
     navbar: {
-      bgFullWidth: 'secondaryLight',
       css: { zIndex: 2 }
-    },
-
-    navbarItem: {
-      fontWeight: 'bold',
-      color: 'secondaryText'
     },
 
     sidebar: {

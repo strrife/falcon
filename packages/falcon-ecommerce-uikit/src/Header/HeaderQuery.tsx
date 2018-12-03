@@ -10,6 +10,10 @@ const GET_HEADER_DATA = gql`
           url
           children
         }
+        banner {
+          name
+          url
+        }
       }
     }
   }
@@ -23,6 +27,7 @@ export type HeaderData = {
   config: {
     menus: {
       header: MenuItem[];
+      banner: MenuItem[];
     };
   };
 };

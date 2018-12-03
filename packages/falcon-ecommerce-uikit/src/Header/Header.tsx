@@ -18,14 +18,30 @@ import { CartQuery } from '../Cart';
 import { HeaderData, MenuItem } from './HeaderQuery';
 import { OpenSidebarMutation } from '../Sidebar';
 
-const brandLine: DefaultThemeProps = {
-  brandLine: {
-    bgFullWidth: 'primaryLight',
+const bannerLayoutTheme: DefaultThemeProps = {
+  bannerLayout: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    bgFullWidth: 'secondaryLight',
+    m: 'none',
+    p: 'none',
     css: {
-      height: 3
+      listStyle: 'none'
     }
   }
 };
+
+export const Banner: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
+  <List defaultTheme={bannerLayoutTheme}>
+    {items.map(item => (
+      <ListItem p="sm" key={item.name}>
+        <Link as={RouterLink} to={item.url}>
+          {item.name}
+        </Link>
+      </ListItem>
+    ))}
+  </List>
+);
 
 export const Nav: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
   <Navbar>
@@ -66,7 +82,7 @@ const searchBarLayoutTheme: DefaultThemeProps = {
     gridGap: 'sm',
     // prettier-ignore
     gridTemplate: toGridTemplate([
-      ['50px',            '1fr',                'auto',               'auto'            ],
+      ['200px',            '1fr',                'auto',               'auto'            ],
       [SearchBarArea.logo, SearchBarArea.search, SearchBarArea.signIn, SearchBarArea.cart]
     ]),
     css: {
@@ -77,7 +93,7 @@ const searchBarLayoutTheme: DefaultThemeProps = {
 
 export const Searchbar = () => (
   <Box defaultTheme={searchBarLayoutTheme}>
-    <Link height="xl" as={RouterLink} gridArea={SearchBarArea.logo} to="/">
+    <Link pl="sm" height="xxl" as={RouterLink} gridArea={SearchBarArea.logo} to="/">
       <Icon src="logo" />
     </Link>
     <OpenSidebarMutation>
@@ -119,11 +135,11 @@ export const Searchbar = () => (
 
 export const Header: React.SFC<HeaderData> = ({
   config: {
-    menus: { header }
+    menus: { header, banner }
   }
 }) => (
   <header>
-    <Box defaultTheme={brandLine} />
+    <Banner items={banner} />
     <Searchbar />
     <nav>
       <Nav items={header} />
