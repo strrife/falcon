@@ -4,7 +4,7 @@ import { LanguageItem } from './FooterQuery';
 
 type LanguageSwitcherProps = {
   languages: LanguageItem[];
-  onChange?: any;
+  onChange?: (x: LanguageItem) => any;
 };
 
 export const LanguageSwitcher: React.SFC<LanguageSwitcherProps> = ({ languages, onChange }) => {
