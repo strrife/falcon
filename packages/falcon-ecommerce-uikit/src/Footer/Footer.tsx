@@ -88,9 +88,7 @@ export const Footer: React.SFC<FooterData> = ({
     <Newsletter />
     <FooterSections sections={footer} />
     <Box defaultTheme={languageSectionTheme}>
-      <I18n>
-        {({ i18n }) => <LanguageSwitcher languages={languages} onChange={x => i18n.changeLanguage(x.code)} />}
-      </I18n>
+      <I18n>{i18n => <LanguageSwitcher languages={languages} onChange={x => i18n.changeLanguage(x.code)} />}</I18n>
     </Box>
     <Box defaultTheme={copyrightLayoutTheme}>
       <Copyright />
