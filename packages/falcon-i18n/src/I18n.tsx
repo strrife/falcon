@@ -10,13 +10,13 @@ export type I18nRenderProps = {
 export type I18nProps = {
   children: (renderProps: I18nRenderProps) => any;
 };
-export class I18n extends React.Component<{}> {
+export class I18n extends React.Component<I18nProps> {
   static propTypes = {
     children: PropTypes.oneOfType([PropTypes.func]).isRequired
   };
 
   render() {
-    const { children } = this.props as any;
+    const { children } = this.props;
 
     return <I18nContext.Consumer>{({ i18n, t }) => children({ i18n, t })}</I18nContext.Consumer>;
   }
