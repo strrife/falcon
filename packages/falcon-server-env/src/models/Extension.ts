@@ -1,7 +1,13 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
 import ApiDataSource from './ApiDataSource';
-import { ApiUrlPriority, ConfigurableConstructorParams, ExtensionContainer, FetchUrlResult } from '../types';
+import {
+  ApiUrlPriority,
+  ConfigurableConstructorParams,
+  ExtensionContainer,
+  FetchUrlParams,
+  FetchUrlResult
+} from '../types';
 
 export type ConfigurableContainerConstructorParams = ConfigurableConstructorParams & {
   extensionContainer: ExtensionContainer;
@@ -61,5 +67,10 @@ export default abstract class Extension<TApiConfig = object> {
     return this.api && this.api.getFetchUrlPriority ? this.api.getFetchUrlPriority(url) : ApiUrlPriority.OFF;
   }
 
-  async fetchUrl?(obj: object, args: any, context: any, info: GraphQLResolveInfo): Promise<FetchUrlResult>;
+  async fetchUrl?(
+    root: object,
+    params: FetchUrlParams,
+    context: any,
+    info: GraphQLResolveInfo
+  ): Promise<FetchUrlResult>;
 }

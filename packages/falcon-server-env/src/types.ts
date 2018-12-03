@@ -83,6 +83,10 @@ export type ContextFetchRequest = Request & ContextData;
 
 export type ContextFetchResponse = Response & ContextData;
 
+export type FetchUrlParams = {
+  path: string;
+};
+
 export interface ApiDataSourceEndpoint {
   path: string;
   methods: string[];

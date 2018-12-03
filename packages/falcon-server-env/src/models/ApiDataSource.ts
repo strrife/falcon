@@ -1,11 +1,12 @@
+import * as Logger from '@deity/falcon-logger';
 import { DataSourceConfig } from 'apollo-datasource';
 import { RESTDataSource } from 'apollo-datasource-rest';
 import { Body, Request } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URL, URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
+import { GraphQLResolveInfo } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
 import { stringify } from 'qs';
 import { format } from 'url';
-import * as Logger from '@deity/falcon-logger';
 import ContextHTTPCache from '../cache/ContextHTTPCache';
 import {
   ApiContainer,
@@ -19,6 +20,8 @@ import {
   ContextRequestInit,
   ContextRequestOptions,
   ContextSession,
+  FetchUrlParams,
+  FetchUrlResult,
   PaginationData
 } from '../types';
 
@@ -124,6 +127,13 @@ export default abstract class ApiDataSource<TContext extends ContextSession = an
    * @return {number} Priority index
    */
   getFetchUrlPriority?(url: string): number;
+
+  async fetchUrl?(
+    root: object,
+    params: FetchUrlParams,
+    context: TContext,
+    info: GraphQLResolveInfo
+  ): Promise<FetchUrlResult>;
 
   /**
    * Returns a list of REST endpoints to be handled by this module
