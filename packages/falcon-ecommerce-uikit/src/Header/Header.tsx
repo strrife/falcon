@@ -66,7 +66,7 @@ const searchBarLayoutTheme: DefaultThemeProps = {
     gridGap: 'sm',
     // prettier-ignore
     gridTemplate: toGridTemplate([
-      ['200px',            '1fr',                'auto',               'auto'            ],
+      ['50px',            '1fr',                'auto',               'auto'            ],
       [SearchBarArea.logo, SearchBarArea.search, SearchBarArea.signIn, SearchBarArea.cart]
     ]),
     css: {
@@ -77,7 +77,7 @@ const searchBarLayoutTheme: DefaultThemeProps = {
 
 export const Searchbar = () => (
   <Box defaultTheme={searchBarLayoutTheme}>
-    <Link height="xxxl" as={RouterLink} gridArea={SearchBarArea.logo} to="/">
+    <Link height="xl" as={RouterLink} gridArea={SearchBarArea.logo} to="/">
       <Icon src="logo" />
     </Link>
     <OpenSidebarMutation>
