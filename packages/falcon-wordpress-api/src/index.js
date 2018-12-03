@@ -363,14 +363,13 @@ module.exports = class WordpressApi extends ApiDataSource {
    * @param {object} context.session GQL session object
    * @return {Object} response - with reduced and converted data
    */
-  async fetchUrl(root, { path }, { session }) {
-    const params = { path };
+  async fetchUrl(root, params, { session }) {
     const { locale } = session;
 
     return this.get('url', params, {
       context: {
-        authRequired: this.isDraft(path),
-        didReceiveResult: result => this.reduceUrl(result, path, this.languageMap[locale])
+        authRequired: this.isDraft(params.path),
+        didReceiveResult: result => this.reduceUrl(result, params.path, this.languageMap[locale])
       }
     });
   }

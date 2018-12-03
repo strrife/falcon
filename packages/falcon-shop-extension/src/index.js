@@ -1,7 +1,6 @@
 const { Extension, ApiUrlPriority } = require('@deity/falcon-server-env');
 const { resolve } = require('path');
 const typeDefs = require('fs').readFileSync(resolve(__dirname, 'schema.graphql'), 'utf8');
-const get = require('lodash.get');
 
 /**
  * Extension that implements shop features
@@ -37,7 +36,6 @@ module.exports = class Shop extends Extension {
           removeCartItem: (root, data) => this.api.removeCartItem(data.input),
           signUp: (root, data) => this.api.signUp(data.input),
           signIn: (root, data) => this.api.signIn(data.input),
-          // todo: unify signature - pass data.input even if it's empty
           signOut: (root, data) => this.api.signOut(data),
           editCustomerData: (root, data) => this.api.editCustomerData(data.input),
           addCustomerAddress: (root, data) => this.api.addCustomerAddress(data.input),
@@ -47,7 +45,6 @@ module.exports = class Shop extends Extension {
           resetCustomerPassword: (root, data) => this.api.resetCustomerPassword(data.input),
           changeCustomerPassword: (root, data) => this.api.changeCustomerPassword(data.input),
           applyCoupon: (root, data, { session }) => this.api.applyCoupon(data.input, session),
-          // todo: unify signature - pass data.input and session even if it's empty
           cancelCoupon: (root, data) => this.api.cancelCoupon(data),
           estimateShippingMethods: (root, data) => this.api.estimateShippingMethods(data.input),
           setShipping: (root, data) => this.api.setShipping(data.input),
@@ -59,8 +56,8 @@ module.exports = class Shop extends Extension {
           shop: () => this.apiConfig
         },
         ShopConfig: {
-          activeCurrency: (root, params, { session }) => get(session, `${this.api.name}.currency`),
-          activeStore: (root, params, { session }) => get(session, `${this.api.name}.storeCode`)
+          activeCurrency: (root, params, context) => this.api.getSession(context).currency,
+          activeStore: (root, params, context) => this.api.getSession(context).storeCode
         }
       }
     };
@@ -76,8 +73,7 @@ module.exports = class Shop extends Extension {
     return path.endsWith('.html') ? ApiUrlPriority.HIGH : ApiUrlPriority.NORMAL;
   }
 
-  async fetchUrl(root, { path }, { session = {} }) {
-    const { language, storeCode, currency } = session;
-    return this.api.fetchUrl({ path, language, storeCode, currency });
+  async fetchUrl(root, params, context) {
+    return this.api.fetchUrl(root, params, context);
   }
 };
