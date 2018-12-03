@@ -21,14 +21,7 @@ export const SignUpForm: React.SFC<SignUpFormProps> = ({ onCompleted }) => (
           } as SignUpVariables
         }
         onSubmit={(values: SignUpVariables) => {
-          signUp({
-            variables: {
-              input: {
-                ...values,
-                autoSignIn: true
-              }
-            }
-          });
+          signUp({ variables: { input: { ...values, autoSignIn: true } } });
         }}
       >
         {() => (

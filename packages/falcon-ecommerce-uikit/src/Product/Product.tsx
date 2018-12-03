@@ -98,15 +98,7 @@ const ProductForm = adopt({
   ),
   // mutation provides addToCart method which should be called with proper data
   addToCartMutation: ({ render, openSidebarMutation }) => (
-    <AddToCartMutation
-      onCompleted={() =>
-        openSidebarMutation.openSidebar({
-          variables: {
-            contentType: 'cart'
-          }
-        })
-      }
-    >
+    <AddToCartMutation onCompleted={() => openSidebarMutation.openSidebar({ variables: { contentType: 'cart' } })}>
       {(addToCart, result) => render({ addToCart, result })}
     </AddToCartMutation>
   ),

@@ -90,11 +90,7 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
           onClick={() =>
             removeCartItem({
               variables: { input: { itemId: product.itemId } },
-              optimisticResponse: {
-                removeCartItem: {
-                  itemId: product.itemId
-                }
-              }
+              optimisticResponse: { removeCartItem: { itemId: product.itemId } }
             })
           }
         >
@@ -103,9 +99,7 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
             stroke="secondaryDark"
             src="remove"
             mr="xs"
-            css={({ theme }) => ({
-              ':hover': { stroke: theme.colors.primary }
-            })}
+            css={({ theme }) => ({ ':hover': { stroke: theme.colors.primary } })}
           />
         </Link>
       )}
