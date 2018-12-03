@@ -13,41 +13,50 @@ export const SignIn = () => (
 
         <Divider my="lg" />
         <GridLayout>
-          <H4 mb="xs">
-            <T id="newCustomer.title" />
-          </H4>
-          <Text>
-            <T id="newCustomer.benefitsHeader" />
-          </Text>
-
-          <List>
-            {t('newCustomer.benefitsList', { returnObjects: true }).map((x: string) => (
-              <ListItem key={x} display="flex" mb="sm">
-                <Icon src="check" size="md" mr="xs" stroke="primaryLight" />
-                {x}
-              </ListItem>
-            ))}
-          </List>
-
-          <OpenSidebarMutation>
-            {openSidebar => (
-              <Button
-                justifySelf="end"
-                variant="secondary"
-                onClick={() =>
-                  openSidebar({
-                    variables: {
-                      contentType: 'signUp'
-                    }
-                  })
-                }
-              >
-                <T id="newCustomer.createAnAccount" />
-              </Button>
-            )}
-          </OpenSidebarMutation>
+          <NewCustomer />
         </GridLayout>
       </MiniFormLayout>
     )}
   </T>
+);
+
+const NewCustomer = () => (
+  <GridLayout>
+    <H4 mb="xs">
+      <T id="newCustomer.title" />
+    </H4>
+    <Text>
+      <T id="newCustomer.benefitsHeader" />
+    </Text>
+    <List>
+      <T returnObjects>
+        {t =>
+          t('newCustomer.benefitsList').map((x: string) => (
+            <ListItem key={x} display="flex" mb="sm">
+              <Icon src="check" size="md" mr="xs" stroke="primaryLight" />
+              {x}
+            </ListItem>
+          ))
+        }
+      </T>
+    </List>
+
+    <OpenSidebarMutation>
+      {openSidebar => (
+        <Button
+          justifySelf="end"
+          variant="secondary"
+          onClick={() =>
+            openSidebar({
+              variables: {
+                contentType: 'signUp'
+              }
+            })
+          }
+        >
+          <T id="newCustomer.createAnAccount" />
+        </Button>
+      )}
+    </OpenSidebarMutation>
+  </GridLayout>
 );
