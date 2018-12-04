@@ -16,15 +16,15 @@ export const SignIn = () => (
 
       <List>
         <ListItem display="flex" mb="sm">
-          <Icon src="check" size="md" mr="xs" stroke="primaryLight" />
+          <Icon src="checkCircle" size="md" mr="xs" stroke="primaryLight" />
           check out faster
         </ListItem>
         <ListItem display="flex" mb="sm">
-          <Icon src="check" size="md" mr="xs" stroke="primaryLight" />
+          <Icon src="checkCircle" size="md" mr="xs" stroke="primaryLight" />
           keep more than one address
         </ListItem>
         <ListItem display="flex" mb="sm">
-          <Icon src="check" size="md" mr="xs" stroke="primaryLight" />
+          <Icon src="checkCircle" size="md" mr="xs" stroke="primaryLight" />
           track orders and more
         </ListItem>
       </List>
