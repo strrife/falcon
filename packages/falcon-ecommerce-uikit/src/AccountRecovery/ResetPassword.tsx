@@ -8,11 +8,10 @@ import { OpenSidebarMutation } from '../Sidebar';
 import { MiniFormLayout } from '../MiniAccount';
 
 type ResetPasswordProps = {
-  customerId: number;
   resetToken: string;
 };
-export const ResetPassword: React.SFC<ResetPasswordProps> = ({ customerId, resetToken }) => (
-  <ValidatePasswordTokenQuery variables={{ id: customerId, token: resetToken }}>
+export const ResetPassword: React.SFC<ResetPasswordProps> = ({ resetToken }) => (
+  <ValidatePasswordTokenQuery variables={{ token: resetToken }}>
     {({ validatePasswordToken }) => {
       const tokenIsInvalid = !validatePasswordToken;
 
@@ -20,7 +19,7 @@ export const ResetPassword: React.SFC<ResetPasswordProps> = ({ customerId, reset
         <GridLayout gridGap="md" py="md">
           <H1 justifySelf="center">Reset Password</H1>
           {tokenIsInvalid && <InvalidToken />}
-          {!tokenIsInvalid && <ResetPasswordForm customerId={customerId} resetToken={resetToken} />}
+          {!tokenIsInvalid && <ResetPasswordForm resetToken={resetToken} />}
         </GridLayout>
       );
     }}
@@ -52,7 +51,7 @@ export const InvalidToken: React.SFC = () => (
   </OpenSidebarMutation>
 );
 
-export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ customerId, resetToken }) => (
+export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken }) => (
   <ResetCustomerPasswordMutation>
     {(resetCustomerPassword, { loading, error, called }) => {
       const submitSucceed = called && !loading && !error;
@@ -64,7 +63,6 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ customerId, r
         <Formik
           initialValues={
             {
-              customerId,
               resetToken,
               password: ''
             } as ResetCustomerPasswordVariables
@@ -80,7 +78,6 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ customerId, r
           {() => (
             <MiniFormLayout>
               <Form>
-                <FormField id="resetPasswordCustomerId" name="customerId" type="hidden" />
                 <FormField id="resetPasswordResetToken" name="resetToken" type="hidden" />
 
                 <FormField
