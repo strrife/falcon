@@ -9,12 +9,12 @@ import {
   GET_CUSTOMER_WITH_ADDRESSES,
   toGridTemplate
 } from '@deity/falcon-ecommerce-uikit';
-import CheckoutCartSummary from './Checkout/components/CheckoutCartSummary';
-import CustomerSelector from './Checkout/components/CustomerSelector';
-import ShippingSection from './Checkout/components/ShippingSection';
-import PaymentSection from './Checkout/components/PaymentSection';
-import AddressSection from './Checkout/components/AddressSection';
-import ErrorList from './components/ErrorList';
+import CheckoutCartSummary from './CheckoutCartSummary';
+import CustomerSelector from './CustomerSelector';
+import ShippingMethodSection from './ShippingMethodSection';
+import PaymentMethodSection from './PaymentMethodSection';
+import AddressSection from './AddressSection';
+import ErrorList from '../components/ErrorList';
 
 const CHECKOUT_STEPS = {
   EMAIL: 'EMAIL',
@@ -173,7 +173,7 @@ class CheckoutWizard extends React.Component {
     let defaultShippingAddress;
     let defaultBillingAddress;
 
-    // detect ifuser is logged in - if so and he has address list then use it for address sections
+    // detect if user is logged in - if so and he has address list then use it for address sections
     if (customerData && customerData.addresses && customerData.addresses.length) {
       ({ addresses } = customerData);
       defaultShippingAddress = addresses.find(item => item.defaultShipping);
@@ -245,7 +245,7 @@ class CheckoutWizard extends React.Component {
 
                     <Divider my="md" />
 
-                    <ShippingSection
+                    <ShippingMethodSection
                       open={currentStep === CHECKOUT_STEPS.SHIPPING}
                       onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.SHIPPING)}
                       shippingAddress={values.shippingAddress}
@@ -258,7 +258,7 @@ class CheckoutWizard extends React.Component {
 
                     <Divider my="md" />
 
-                    <PaymentSection
+                    <PaymentMethodSection
                       open={currentStep === CHECKOUT_STEPS.PAYMENT}
                       onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.PAYMENT)}
                       selectedPayment={values.paymentMethod}

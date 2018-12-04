@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Image, Text, Divider } from '@deity/falcon-ui';
 import { Price, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
-import CartTotals from '../../components/CartTotals';
+import CartTotals from '../components/CartTotals';
 
 const ItemArea = {
   thumb: 'thumb',

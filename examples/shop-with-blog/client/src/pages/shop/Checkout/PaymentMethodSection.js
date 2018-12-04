@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, FlexLayout, Label, Details, DetailsContent, Text, Radio, Button } from '@deity/falcon-ui';
 import SectionHeader from './CheckoutSectionHeader';
-import ErrorList from '../../components/ErrorList';
+import ErrorList from '../components/ErrorList';
 
 // we have to filter the methods until we have implementation for all of them
 const ALLOWED_PAYMENT_METHODS = ['checkmo'];
