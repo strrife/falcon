@@ -1,18 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field, ErrorMessage } from 'formik';
-import { toGridTemplate } from '@deity/falcon-ecommerce-uikit';
-import {
-  Box,
-  Input,
-  Label,
-  Text,
-  Button,
-  Dropdown,
-  DropdownLabel,
-  DropdownMenu,
-  DropdownMenuItem
-} from '@deity/falcon-ui';
+import { FormField, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
+import { Box, Label, Text, Button, Dropdown, DropdownLabel, DropdownMenu, DropdownMenuItem } from '@deity/falcon-ui';
 
 const AddressFormArea = {
   firstName: 'firstName',
@@ -49,57 +39,6 @@ const addressFormLayout = {
       [AddressFormArea.submit     ]
     ])
   }
-};
-
-// creates 'validate' function that runs all the passed validators against field value and returns
-// error returned by the first validator
-const validateWith = validators => value => {
-  const foundValidator = validators.find(validator => validator(value));
-  return foundValidator ? foundValidator(value) : null;
-};
-
-const FormField = ({ type = 'text', name, label, required, validators = [], gridArea, ...rest }) => {
-  // if field is marked as required then add 'required' validator
-  if (required) {
-    validators.unshift(x => !x && 'This field is required');
-  }
-
-  const isHidden = type === 'hidden';
-
-  return (
-    <Field
-      name={name}
-      validate={validateWith(validators)}
-      render={({ field, form, ...props }) => (
-        <Box gridArea={gridArea} {...rest}>
-          {!isHidden && (
-            <Label htmlFor={name}>
-              {label} {required && '*'}
-            </Label>
-          )}
-          <Input type={type} {...field} {...props} />
-          {!isHidden && (
-            <ErrorMessage
-              name={name}
-              render={msg => (
-                <Text fontSize="xs" color="error">
-                  {msg}
-                </Text>
-              )}
-            />
-          )}
-        </Box>
-      )}
-    />
-  );
-};
-
-FormField.propTypes = {
-  type: PropTypes.string,
-  name: PropTypes.string,
-  label: PropTypes.string,
-  validators: PropTypes.arrayOf(PropTypes.func),
-  gridArea: PropTypes.string
 };
 
 const AddressForm = ({ countries = [], submitLabel = 'Save' }) => (
