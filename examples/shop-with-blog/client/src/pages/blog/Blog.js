@@ -19,7 +19,7 @@ const Blog = props => (
       }}
     >
       {({ blogPosts, translations }) => (
-        <>
+        <React.Fragment>
           <BlogPostsLayout>
             {blogPosts.items.map((item, index) => (
               <BlogPostExcerpt
@@ -32,7 +32,7 @@ const Blog = props => (
           </BlogPostsLayout>
 
           <BlogPostsPaginator pagination={blogPosts.pagination} translations={translations} />
-        </>
+        </React.Fragment>
       )}
     </BlogPostsQuery>
   </Box>

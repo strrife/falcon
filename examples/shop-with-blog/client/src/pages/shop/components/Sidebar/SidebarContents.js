@@ -25,7 +25,7 @@ export default ({ contentType }) => {
   // using hidden attribute will cause react to consider rendering it as low priority
   // (in version > 16.6) - https://github.com/oliviertassinari/react-swipeable-views/issues/453#issuecomment-417939459
   return (
-    <>
+    <React.Fragment>
       <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.cart} css={{ height: '100%' }}>
         <MiniCartQuery>{data => <MiniCart {...data} />}</MiniCartQuery>
       </ContentBox>
@@ -39,7 +39,7 @@ export default ({ contentType }) => {
       <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.forgotPassword}>
         <ForgotPassword />
       </ContentBox>
-    </>
+    </React.Fragment>
   );
 };
 

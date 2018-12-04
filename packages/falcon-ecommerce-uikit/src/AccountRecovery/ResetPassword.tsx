@@ -30,7 +30,7 @@ export const ResetPassword: React.SFC<ResetPasswordProps> = ({ customerId, reset
 export const InvalidToken: React.SFC = () => (
   <OpenSidebarMutation>
     {openSidebar => (
-      <>
+      <React.Fragment>
         <Text justifySelf="center" fontSize="md" color="error">
           The reset password token you provided is invalid or has expired.
         </Text>
@@ -47,7 +47,7 @@ export const InvalidToken: React.SFC = () => (
             Request another one
           </Button>
         </Box>
-      </>
+      </React.Fragment>
     )}
   </OpenSidebarMutation>
 );
@@ -109,7 +109,7 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ customerId, r
 const ResetPasswordSuccess: React.SFC = () => (
   <OpenSidebarMutation>
     {openSidebar => (
-      <>
+      <React.Fragment>
         <Text justifySelf="center" fontSize="md">
           Your password has been reset successfully!
         </Text>
@@ -126,7 +126,7 @@ const ResetPasswordSuccess: React.SFC = () => (
             Sign In
           </Button>
         </Box>
-      </>
+      </React.Fragment>
     )}
   </OpenSidebarMutation>
 );
