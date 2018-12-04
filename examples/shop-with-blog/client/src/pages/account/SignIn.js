@@ -1,6 +1,11 @@
 import React from 'react';
-import { SignInForm, SignInFormContent } from '@deity/falcon-ecommerce-uikit';
+import { Box, H1 } from '@deity/falcon-ui';
+import { SignInForm } from '@deity/falcon-ecommerce-uikit';
 
-const SignIn = () => <SignInForm>{props => <SignInFormContent {...props} />}</SignInForm>;
+const SignIn = () => (
+  <Box>
+    <H1>Sign in</H1> <SignInForm />
+  </Box>
+);
 
 export default SignIn;
