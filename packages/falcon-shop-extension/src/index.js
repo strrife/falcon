@@ -7,7 +7,7 @@ const typeDefs = require('fs').readFileSync(resolve(__dirname, 'schema.graphql')
 /**
  * Extension that implements shop features
  */
-module.exports = class Shop extends Extension {
+class Shop extends Extension {
   async initialize() {
     await super.initialize();
     return this.initConfig();
@@ -92,4 +92,7 @@ module.exports = class Shop extends Extension {
     const { language, storeCode, currency } = session;
     return this.api.fetchUrl({ path, language, storeCode, currency });
   }
-};
+}
+
+module.exports = Shop;
+module.exports.Schema = typeDefs;

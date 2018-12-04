@@ -14,7 +14,7 @@ import {
 
 import { toGridTemplate } from '../helpers';
 import { MiniCartIcon } from '../MiniCart';
-import { CartQuery } from '../Cart';
+import { CartQuery, CartData } from '../Cart';
 import { HeaderData, MenuItem } from './HeaderQuery';
 import { OpenSidebarMutation } from '../Sidebar';
 
@@ -113,7 +113,7 @@ export const Searchbar = () => (
           />
 
           <CartQuery>
-            {(data: any) => (
+            {(data: CartData) => (
               <MiniCartIcon
                 onClick={() =>
                   openSidebar({
@@ -123,7 +123,7 @@ export const Searchbar = () => (
                   })
                 }
                 gridArea={SearchBarArea.cart}
-                itemsQty={data.cart.itemsQty}
+                itemsQty={data.cart ? data.cart.itemsQty : 0}
               />
             )}
           </CartQuery>

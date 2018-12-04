@@ -35,8 +35,12 @@ export const Button = themed({
         ':active': {
           transform: 'scale(0.95)'
         },
-        ':hover': {
+        ':hover:enabled': {
           backgroundColor: theme.colors.primaryLight
+        },
+        ':disabled': {
+          opacity: 0.6,
+          cursor: 'arrow'
         }
       }),
 

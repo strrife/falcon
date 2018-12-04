@@ -50,6 +50,11 @@ const ResetPassword = AsyncComponent(() =>
 );
 const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/blog" */ './pages/blog/Blog'));
 const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/post" */ './pages/blog/Post'));
+const Cart = AsyncComponent(() => import(/* webpackChunkName: "shop/cart" */ './pages/shop/Cart'));
+const Checkout = AsyncComponent(() => import(/* webpackChunkName: "shop/checkout" */ './pages/shop/Checkout'));
+const CheckoutConfirmation = AsyncComponent(() =>
+  import(/* webpackChunkName: "shop/checkout" */ './pages/shop/CheckoutConfirmation')
+);
 const SidebarContents = AsyncComponent(() =>
   import(/* webpackChunkName: "shop/SidebarContents" */ './pages/shop/components/Sidebar/SidebarContents')
 );
@@ -72,11 +77,15 @@ const App = ({ online }) => (
             <HeadMetaTags />
             <AppLayout>
               <HeaderQuery>{data => <Header {...data} />}</HeaderQuery>
-              {!online && <p>your are offline.</p>}
+              {!online && <p>you are offline.</p>}
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/products" component={Category} />
                 <Route exact path="/blog/:page?" component={Blog} />
+                <Route exact path="/cart" component={Cart} />
+                <Route exact path="/checkout" component={Checkout} />
+                <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
+                <Route exact path="/reset-password" component={ResetPassword} />
                 <ProtectedRoute exact path="/account" component={Dashboard} />
                 <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
                 <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />

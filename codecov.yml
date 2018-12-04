@@ -25,5 +25,8 @@ coverage:
       falcon-wordpress-api:
         paths:
           - packages/falcon-wordpress-api/
+      falcon-ecommerce-uikit:
+        paths:
+          - packages/falcon-ecommerce-uikit/
 
 comment: off

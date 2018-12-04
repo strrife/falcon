@@ -1,8 +1,6 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import {
-  Sidebar,
-  Backdrop,
-  Portal,
   Icon,
   List,
   ListItem,
@@ -179,7 +177,7 @@ export const MiniCart: React.SFC<MiniCartData & { translations: MiniCartTranslat
 
         {items.length > 0 && (
           <Box gridArea={MiniCartLayoutArea.cta} py="sm" bgFullWidth="secondaryLight">
-            <Button css={{ width: '100%' }}>
+            <Button as={RouterLink} to="/cart" onClick={() => closeSidebar()} css={{ width: '100%' }} height="xl">
               <Icon stroke="white" size="md" mr="xs" src="lock" />
               {translations.cta}
             </Button>
