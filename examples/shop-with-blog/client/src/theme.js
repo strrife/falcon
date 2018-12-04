@@ -10,21 +10,49 @@ import Remove from 'react-feather/dist/icons/x-circle';
 import ChevronsRight from 'react-feather/dist/icons/chevrons-right';
 import ChevronsLeft from 'react-feather/dist/icons/chevrons-left';
 import Lock from 'react-feather/dist/icons/lock';
-
-import { createTheme } from '@deity/falcon-ui';
-import logo from './assets/logo.svg';
+import Check from 'react-feather/dist/icons/check-circle';
+import Eye from 'react-feather/dist/icons/eye';
+import EyeOff from 'react-feather/dist/icons/eye-off';
+import { Box, createTheme } from '@deity/falcon-ui';
 
 export const deityGreenTheme = createTheme({
   colors: {
     primary: '#607e07',
-    primaryLight: '#A9CF38'
+    primaryLight: '#95c110',
+    primaryDark: '#4a6006'
   },
+
+  fontWeights: {
+    bold: 500
+  },
+
   icons: {
     logo: {
-      icon: props => <img src={logo} alt="logo" {...props} />,
-      height: 'xxxl',
-      width: 'auto',
-      display: 'block'
+      icon: props => (
+        <svg {...props} viewBox="0 0 175 239">
+          <path
+            transform="translate(0 24)"
+            d="M110.733 145.16v-38.407L77.47 87.549l-33.262 19.204v38.408l33.262 19.204 33.263-19.204zM76.897 215L0 170.605V81.812l76.897-44.397 33.836 19.203V.29l43.06 24.93v145.383L76.897 215z"
+          />
+
+          <Box
+            as="path"
+            fill="primaryLight"
+            transform="translate(0 61)"
+            d="M44.209 69.752v.452L.113 44.745 76.898.415l33.837 19.202v50.135L77.47 50.548z"
+          />
+
+          <path transform="translate(110)" fill="#000" mask="url(#f)" d="M.451.001h.565v193.33H.451z" />
+          <path transform="translate(89 11)" fill="#000" d="M85.431 50.427L.275 1.262.557.773l85.156 49.164z" />
+          <path transform="translate(55 98)" fill="#000" d="M77.694 45.817L.531 1.267l.283-.49 77.162 44.55z" />
+        </svg>
+      ),
+      fill: 'primary',
+      stroke: 'none',
+      css: {
+        width: 'auto',
+        height: '100%'
+      }
     },
     loader: {
       icon: props => (
@@ -83,7 +111,10 @@ export const deityGreenTheme = createTheme({
       icon: ChevronsLeft,
       stroke: 'black'
     },
-    lock: { icon: Lock }
+    lock: { icon: Lock },
+    check: { icon: Check },
+    eye: { icon: Eye },
+    eyeOff: { icon: EyeOff }
   },
   keyframes: {
     loader: {
@@ -96,6 +127,10 @@ export const deityGreenTheme = createTheme({
     }
   },
   components: {
+    icon: {
+      stroke: 'primaryLight'
+    },
+
     breadcrumb: {
       css: ({ theme }) => ({
         ':last-child': {
@@ -108,12 +143,15 @@ export const deityGreenTheme = createTheme({
         }
       })
     },
+
     navbar: {
       css: { zIndex: 2 }
     },
+
     sidebar: {
       px: 'sm',
       pt: 'sm',
+      boxShadow: 'subtle',
       css: {
         boxSizing: 'border-box',
         width: {
@@ -124,7 +162,12 @@ export const deityGreenTheme = createTheme({
     },
 
     button: {
-      css: { transitionProperty: 'all' },
+      px: 'xl',
+      height: 'xl',
+      css: {
+        transitionProperty: 'all',
+        textTransform: 'capitalize'
+      },
 
       variants: {
         loader: {

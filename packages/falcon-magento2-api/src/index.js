@@ -827,7 +827,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Customer>} - new customer data
    */
   async signUp(data) {
-    const { email, firstname, lastname, password } = data;
+    const { email, firstname, lastname, password, autoSignIn } = data;
     const { cart: { quoteId = null } = {} } = this.context.magento2;
     const customerData = {
       customer: {
@@ -842,9 +842,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     };
 
     try {
-      const result = await this.post('/customers', customerData);
-      result.data = this.convertKeys(result.data);
-      return result;
+      await this.post('/customers', customerData);
+
+      if (autoSignIn) {
+        return this.signIn({ email, password });
+      }
+
+      return true;
     } catch (e) {
       // todo: use new version of error handler
 
@@ -1210,13 +1214,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   /**
    * Check if given password reset token is valid
    * @param {object} params - request params
-   * @param {number} params.id - customer id
    * @param {string} params.token - reset password token
    * @return {Promise<boolean>} true if token is valid
    */
   async validatePasswordToken(params) {
-    const { id, token } = params;
-    const validatePath = `/customers/${id}/password/resetLinkToken/${token}`;
+    const { token } = params;
+    const validatePath = `/customers/0/password/resetLinkToken/${token}`;
 
     try {
       const result = await this.get(validatePath);
@@ -1245,14 +1248,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   /**
    * Reset customer password using provided reset token
    * @param {CustomerPasswordReset} params - request params
-   * @param {string} params.customerId - customer email
    * @param {string} params.resetToken - reset token
    * @param {string} params.password - new password to set
    * @return {Promise<boolean>} true on success
    */
   async resetCustomerPassword(params) {
-    const { customerId: email, resetToken, password: newPassword } = params;
-    const result = await this.put('/customers/password/reset', { email, resetToken, newPassword });
+    const { resetToken, password: newPassword } = params;
+    const result = await this.put('/customers/password/reset', { email: '', resetToken, newPassword });
     return result.data;
   }
 

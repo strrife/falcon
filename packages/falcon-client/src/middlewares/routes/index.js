@@ -6,7 +6,7 @@ import i18next from './i18nextMiddleware';
 
 /**
  * @typedef {object} RenderAppShell
- * @property {object} configuration Initial configuration
+ * @property {object} config App configuration
  * @property {object} webpackAssets webpack assets
  */
 
@@ -15,8 +15,12 @@ import i18next from './i18nextMiddleware';
  * @param {RenderAppShell} params params
  * @return {function(ctx: object, next: function)[]} Koa middlewares
  */
-export function renderAppShell({ configuration, webpackAssets }) {
-  const { configSchema } = configuration;
+export function renderAppShell({ config, webpackAssets }) {
+  const configSchema = {
+    defaults: {
+      config
+    }
+  };
 
   return [apolloClientProvider({ clientStates: { configSchema } }), helmet(), appShell({ webpackAssets })];
 }
@@ -24,7 +28,7 @@ export function renderAppShell({ configuration, webpackAssets }) {
 /**
  * @typedef {object} RenderApp
  * @property {function} App React Component
- * @property {object} configuration Initial configuration
+ * @property {object} config App configuration
  * @property {object} clientApolloSchema Apollo State object
  * @property {object} webpackAssets webpack assets
  */
@@ -34,12 +38,13 @@ export function renderAppShell({ configuration, webpackAssets }) {
  * @param {RenderApp} params params
  * @return {function(ctx: object, next: function)[]} Koa middlewares
  */
-export function renderApp({ configuration, clientApolloSchema, App, webpackAssets }) {
-  const { config, configSchema } = configuration;
-  const { i18n, serverSideRendering } = config;
+export function renderApp({ config, clientApolloSchema, App, webpackAssets }) {
+  const { i18n, serverSideRendering, apolloClient } = config;
+  const configSchema = { defaults: { config } };
 
   return [
     apolloClientProvider({
+      config: apolloClient,
       clientStates: {
         configSchema,
         clientApolloSchema

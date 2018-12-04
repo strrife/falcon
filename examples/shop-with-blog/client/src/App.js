@@ -16,16 +16,13 @@ import {
   Footer,
   FooterQuery,
   HeaderQuery,
-  MiniCartQuery,
-  MiniCart,
-  MiniAccountQuery,
-  MiniAccount,
   LocaleProvider
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import AsyncComponent from 'src/components/Async';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
+import { Sidebar, SidebarContainer } from 'src/pages/shop/components/Sidebar';
 import { deityGreenTheme } from './theme';
 
 const HeadMetaTags = () => (
@@ -46,10 +43,16 @@ const HeadMetaTags = () => (
 
 const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
 const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
-const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/blog" */ './pages/blog/Blog'));
-const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/post" */ './pages/blog/Post'));
 const SignIn = AsyncComponent(() => import(/* webpackChunkName: "account/sign-in" */ './pages/account/SignIn'));
 const Dashboard = AsyncComponent(() => import(/* webpackChunkName: "account/dashboard" */ './pages/account/Dashboard'));
+const ResetPassword = AsyncComponent(() =>
+  import(/* webpackChunkName: "shop/resetpassword" */ './pages/shop/ResetPassword')
+);
+const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/blog" */ './pages/blog/Blog'));
+const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/post" */ './pages/blog/Post'));
+const SidebarContents = AsyncComponent(() =>
+  import(/* webpackChunkName: "shop/SidebarContents" */ './pages/shop/components/Sidebar/SidebarContents')
+);
 
 let ThemeEditorComponent;
 // ThemeEditor gets loaded only in dev mode
@@ -76,6 +79,7 @@ const App = ({ online }) => (
                 <Route exact path="/blog/:page?" component={Blog} />
                 <ProtectedRoute exact path="/account" component={Dashboard} />
                 <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
+                <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
                 <DynamicRoute
                   loaderComponent={Loader}
                   components={{
@@ -86,11 +90,17 @@ const App = ({ online }) => (
                 />
               </Switch>
               <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
-              <MiniAccountQuery>{data => <MiniAccount {...data} />}</MiniAccountQuery>
-              <MiniCartQuery>{data => <MiniCart {...data} />}</MiniCartQuery>
+
+              <SidebarContainer>
+                {sidebarProps => (
+                  <Sidebar {...sidebarProps}>
+                    {() => <SidebarContents contentType={sidebarProps.contentType} />}
+                  </Sidebar>
+                )}
+              </SidebarContainer>
             </AppLayout>
           </ThemeProvider>
-          {ThemeEditorComponent && <ThemeEditorComponent {...props} />}
+          {ThemeEditorComponent && <ThemeEditorComponent {...props} side="left" />}
         </React.Fragment>
       )}
     </ThemeEditorState>

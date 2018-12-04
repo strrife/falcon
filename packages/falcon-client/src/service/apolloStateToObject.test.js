@@ -1,7 +1,7 @@
-import { expandValue } from './ApolloClient';
+import { apolloStateToObject } from './apolloStateToObject';
 
 describe('ApolloClient', () => {
-  describe('expandValue', () => {
+  describe('apolloStateToObject', () => {
     it('Should correctly expand nested object', () => {
       const testStateObj = {
         root: {
@@ -14,7 +14,7 @@ describe('ApolloClient', () => {
           bar: true
         }
       };
-      expect(expandValue(testStateObj, 'root')).toEqual({
+      expect(apolloStateToObject(testStateObj, 'root')).toEqual({
         foo: {
           bar: true
         }
@@ -36,7 +36,7 @@ describe('ApolloClient', () => {
           }
         }
       };
-      expect(expandValue(testStateObj, 'root')).toEqual({
+      expect(apolloStateToObject(testStateObj, 'root')).toEqual({
         foo: {
           list: [1, 2]
         }
@@ -49,13 +49,13 @@ describe('ApolloClient', () => {
           foo: false
         }
       };
-      expect(expandValue(testStateObj, 'root')).toEqual({
+      expect(apolloStateToObject(testStateObj, 'root')).toEqual({
         foo: false
       });
     });
 
     it('Should handle unset value', () => {
-      expect(expandValue({}, '')).toEqual({});
+      expect(apolloStateToObject({}, '')).toEqual({});
     });
 
     it('Should handle undefined key value', () => {
@@ -70,7 +70,7 @@ describe('ApolloClient', () => {
           list: undefined
         }
       };
-      expect(expandValue(testStateObj, 'root')).toEqual({
+      expect(apolloStateToObject(testStateObj, 'root')).toEqual({
         foo: {}
       });
     });
@@ -87,7 +87,7 @@ describe('ApolloClient', () => {
           list: null
         }
       };
-      expect(expandValue(testStateObj, 'root')).toEqual({
+      expect(apolloStateToObject(testStateObj, 'root')).toEqual({
         foo: {
           list: null
         }

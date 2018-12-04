@@ -18,7 +18,7 @@ extend type Query {
   customer: Customer
   cmsPage(id: Int, identifier: String): CmsPage
   cmsBlock(identifier: String): CmsBlock
-  validatePasswordToken(id: Int!, token: String!): Boolean
+  validatePasswordToken(token: String!): Boolean
 }
 
 extend type Mutation {
@@ -27,7 +27,7 @@ extend type Mutation {
   removeCartItem(input: RemoveCartItemInput!): RemoveCartItemResponse
   applyCoupon(input: CouponInput!): Boolean
   cancelCoupon: Boolean
-  signUp(input: SignUp!): Customer
+  signUp(input: SignUp!): Boolean
   signIn(input: SignIn!): Boolean
   signOut: Boolean
   editCustomerData(input: CustomerInput!): Customer
@@ -126,14 +126,11 @@ input AddressInput {
 input CustomerPassword {
   currentPassword: String!
   password: String!
-  passwordConfirmation: String
 }
 
 input CustomerPasswordReset {
-  customerId: String!
   resetToken: String!
-  password: String
-  passwordConfirmation: String
+  password: String!
 }
 
 type Orders {
@@ -396,8 +393,8 @@ input SignUp {
   firstname: String
   lastname: String
   password: String
-  passwordConfirmation: String
   address: AddressInput
+  autoSignIn: Boolean
 }
 
 input SignIn {

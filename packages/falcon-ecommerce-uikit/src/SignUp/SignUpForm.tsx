@@ -1,19 +1,73 @@
 import React from 'react';
-import { Box, Icon, List, ListItem, Button, Text } from '@deity/falcon-ui';
+import { Formik } from 'formik';
+import { SignUpMutation, SignUpVariables } from './SignUpMutation';
+import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '../Forms';
 
-export const SignUpForm = () => (
-  <Box>
-    <Text>No account yet?</Text>
-    <Button type="submit" css={{ width: '100%' }}>
-      Create an account
-      <Icon src="buttonArrowRight" stroke="white" />
-    </Button>
-    <Text fontWeight="bold"> Creating an account has many benefits: </Text>
+type SignUpFormProps = {
+  onCompleted?: () => void;
+};
 
-    <List>
-      <ListItem>check out faster</ListItem>
-      <ListItem> keep more than one address </ListItem>
-      <ListItem> track orders and more </ListItem>
-    </List>
-  </Box>
+export const SignUpForm: React.SFC<SignUpFormProps> = ({ onCompleted }) => (
+  <SignUpMutation onCompleted={onCompleted}>
+    {(signUp, { loading, error }) => (
+      <Formik
+        // initial values need to be set because of: https://github.com/jaredpalmer/formik/issues/738
+        initialValues={
+          {
+            firstname: '',
+            lastname: '',
+            email: '',
+            password: ''
+          } as SignUpVariables
+        }
+        onSubmit={(values: SignUpVariables) => {
+          signUp({
+            variables: {
+              input: {
+                ...values,
+                autoSignIn: true
+              }
+            }
+          });
+        }}
+      >
+        {() => (
+          <Form>
+            <FormField
+              id="signUpFirstName"
+              label="First Name"
+              type="text"
+              required
+              name="firstname"
+              autoComplete="given-name"
+            />
+            <FormField
+              id="signUpLastName"
+              label="Last Name"
+              type="text"
+              required
+              name="lastname"
+              autoComplete="family-name"
+            />
+            <FormField id="signUpEmail" label="Email" type="email" required name="email" autoComplete="email" />
+
+            <FormField
+              id="signUpPassword"
+              label="Password"
+              required
+              name="password"
+              type="password"
+              autoComplete="new-password"
+              placeholder="At least 8 characters"
+            >
+              {inputProps => <PasswordRevealInput {...inputProps} />}
+            </FormField>
+
+            <FormSubmit submitting={loading} value="Create an account" />
+            <FormErrorSummary errors={error && [error.message]} />
+          </Form>
+        )}
+      </Formik>
+    )}
+  </SignUpMutation>
 );

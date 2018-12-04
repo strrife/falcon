@@ -5,10 +5,13 @@ export const BlogPostsLayout = themed({
   defaultTheme: {
     blogPostsLayout: {
       display: 'grid',
-      my: 'xxl',
+      my: 'lg',
       mx: 'none',
-      gridGap: 'xxxl',
-      gridTemplateColumns: '1fr',
+      gridGap: 'xl',
+      gridTemplateColumns: {
+        xs: '1fr',
+        md: 'repeat(6, 1fr)'
+      },
       p: 'none',
       css: {
         listStyle: 'none'
