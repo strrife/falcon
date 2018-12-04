@@ -1,3 +1,3 @@
 export * from './Router';
-export * from './AuthorizedRoute';
-export * from './OnlyUnauthorizedRoute';
+export * from './ProtectedRoute';
+export * from './OnlyUnauthenticatedRoute';

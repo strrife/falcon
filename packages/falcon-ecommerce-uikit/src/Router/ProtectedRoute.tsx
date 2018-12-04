@@ -3,11 +3,11 @@ import { Route, Redirect, RouteProps, RouteComponentProps } from 'react-router-d
 import PropTypes from 'prop-types';
 import { IsAuthenticatedQuery } from './../Customer/IsAuthenticatedQuery';
 
-type AuthorizedRouteProps = RouteProps & {
+type ProtectedRouteProps = RouteProps & {
   redirectTo: string;
 };
 
-export const AuthorizedRoute: React.SFC<AuthorizedRouteProps> = ({ component, redirectTo, ...rest }) => {
+export const ProtectedRoute: React.SFC<ProtectedRouteProps> = ({ component, redirectTo, ...rest }) => {
   const Component = component as React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any>;
 
   return (
@@ -32,10 +32,10 @@ export const AuthorizedRoute: React.SFC<AuthorizedRouteProps> = ({ component, re
     />
   );
 };
-AuthorizedRoute.defaultProps = {
+ProtectedRoute.defaultProps = {
   redirectTo: '/sign-in'
 };
-AuthorizedRoute.propTypes = {
+ProtectedRoute.propTypes = {
   ...(Route as any).propTypes,
   redirectTo: PropTypes.string
 };

@@ -10,8 +10,8 @@ import isOnline from '@deity/falcon-client/src/components/isOnline';
 import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
 import {
   AppLayout,
-  AuthorizedRoute,
-  OnlyUnauthorizedRoute,
+  ProtectedRoute,
+  OnlyUnauthenticatedRoute,
   Header,
   Footer,
   FooterQuery,
@@ -74,8 +74,8 @@ const App = ({ online }) => (
                 <Route exact path="/" component={Home} />
                 <Route exact path="/products" component={Category} />
                 <Route exact path="/blog/:page?" component={Blog} />
-                <AuthorizedRoute exact path="/account" component={Dashboard} />
-                <OnlyUnauthorizedRoute exact path="/sign-in" component={SignIn} />
+                <ProtectedRoute exact path="/account" component={Dashboard} />
+                <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
                 <DynamicRoute
                   loaderComponent={Loader}
                   components={{
