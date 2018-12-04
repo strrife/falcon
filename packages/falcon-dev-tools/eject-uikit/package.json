@@ -1,0 +1,17 @@
+{
+  "name": "@deity/falcon-eject-uikit",
+  "version": "0.0.1",
+  "license": "OSL-3.0",
+  "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-dev-tools/eject-uikit",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "eject-uikit": "./eject.js"
+  },
+  "dependencies": {
+    "fs-extra": "^7.0.1",
+    "klaw-sync": "^6.0.0",
+    "transform-imports": "^2.0.0"
+  }
+}
