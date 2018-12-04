@@ -48,7 +48,7 @@ const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category
 const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
 const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/blog" */ './pages/blog/Blog'));
 const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/post" */ './pages/blog/Post'));
-const SignIn = AsyncComponent(() => import(/* webpackChunkName: "sign-in" */ './pages/signIn/SignIn'));
+const SignIn = AsyncComponent(() => import(/* webpackChunkName: "account/sign-in" */ './pages/account/SignIn'));
 const Dashboard = AsyncComponent(() => import(/* webpackChunkName: "account/dashboard" */ './pages/account/Dashboard'));
 
 let ThemeEditorComponent;
