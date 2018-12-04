@@ -93,7 +93,7 @@ const searchBarLayoutTheme: DefaultThemeProps = {
 
 export const Searchbar = () => (
   <Box defaultTheme={searchBarLayoutTheme}>
-    <Link as={RouterLink} gridArea={SearchBarArea.logo} to="/">
+    <Link pl="sm" height="xxl" as={RouterLink} gridArea={SearchBarArea.logo} to="/">
       <Icon src="logo" />
     </Link>
     <OpenSidebarMutation>

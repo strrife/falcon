@@ -34,6 +34,9 @@ const HeadMetaTags = () => (
 
 const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
 const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
+const ResetPassword = AsyncComponent(() =>
+  import(/* webpackChunkName: "shop/resetpassword" */ './pages/shop/ResetPassword')
+);
 const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/Blog" */ './pages/blog/Blog'));
 const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/Post" */ './pages/blog/Post'));
 const Cart = AsyncComponent(() => import(/* webpackChunkName: "shop/cart" */ './pages/shop/Cart'));
@@ -71,6 +74,7 @@ const App = ({ online }) => (
                 <Route exact path="/cart" component={Cart} />
                 <Route exact path="/checkout" component={Checkout} />
                 <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
+                <Route exact path="/reset-password" component={ResetPassword} />
                 <DynamicRoute
                   loaderComponent={Loader}
                   components={{
@@ -91,7 +95,7 @@ const App = ({ online }) => (
               </SidebarContainer>
             </AppLayout>
           </ThemeProvider>
-          {ThemeEditorComponent && <ThemeEditorComponent {...props} />}
+          {ThemeEditorComponent && <ThemeEditorComponent {...props} side="left" />}
         </React.Fragment>
       )}
     </ThemeEditorState>

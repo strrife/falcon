@@ -1,6 +1,13 @@
 import React from 'react';
 import { Box } from '@deity/falcon-ui';
-import { MiniCartQuery, MiniAccountQuery, MiniCart, MiniAccount, SignUp } from '@deity/falcon-ecommerce-uikit';
+import {
+  MiniCartQuery,
+  MiniAccountQuery,
+  MiniCart,
+  MiniAccount,
+  SignUp,
+  ForgotPassword
+} from '@deity/falcon-ecommerce-uikit';
 import { SIDEBAR_CONTENT_TYPES } from './SidebarQuery';
 
 export default ({ contentType }) => {
@@ -19,15 +26,30 @@ export default ({ contentType }) => {
   // (in version > 16.6) - https://github.com/oliviertassinari/react-swipeable-views/issues/453#issuecomment-417939459
   return (
     <React.Fragment>
-      <Box hidden={contentType !== SIDEBAR_CONTENT_TYPES.cart} css={{ height: '100%' }}>
+      <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.cart} css={{ height: '100%' }}>
         <MiniCartQuery>{data => <MiniCart {...data} />}</MiniCartQuery>
-      </Box>
-      <div hidden={contentType !== SIDEBAR_CONTENT_TYPES.account}>
+      </ContentBox>
+
+      <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.account}>
         <MiniAccountQuery>{data => <MiniAccount {...data} />}</MiniAccountQuery>
-      </div>
-      <div hidden={contentType !== SIDEBAR_CONTENT_TYPES.signUp}>
+      </ContentBox>
+      <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.signUp}>
         <SignUp />
-      </div>
+      </ContentBox>
+      <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.forgotPassword}>
+        <ForgotPassword />
+      </ContentBox>
     </React.Fragment>
+  );
+};
+
+const ContentBox = ({ current, contentType, children, ...rest }) => {
+  const hidden = current !== contentType;
+  const key = contentType + hidden;
+
+  return (
+    <Box key={key} hidden={hidden} {...rest}>
+      {children}
+    </Box>
   );
 };

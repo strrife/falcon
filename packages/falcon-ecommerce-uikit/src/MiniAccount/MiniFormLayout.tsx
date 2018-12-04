@@ -8,9 +8,9 @@ const miniFormLayout: DefaultThemeProps = {
   }
 };
 
-export const MiniFormLayout: React.SFC<{ title: string }> = ({ title, children }) => (
+export const MiniFormLayout: React.SFC<{ title?: string }> = ({ title, children }) => (
   <Box defaultTheme={miniFormLayout}>
-    <H3>{title}</H3>
+    {title && <H3>{title}</H3>}
     <Box
       css={{
         maxWidth: 300,

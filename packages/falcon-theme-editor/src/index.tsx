@@ -14,7 +14,9 @@ import { fonts } from './fonts';
 export * from './ThemeEditorState';
 export * from './thememeta';
 
-export class ThemeEditor extends React.Component<ThemeEditorStateRenderProp> {
+type ThemeEditorProps = ThemeEditorStateRenderProp & { side?: 'left' | 'right' };
+
+export class ThemeEditor extends React.Component<ThemeEditorProps> {
   onChange = (themeKey: string, propName: string, isNumber?: boolean) => (e: React.ChangeEvent<HTMLInputElement>) => {
     this.props.updateTheme({
       [themeKey]: {
@@ -104,12 +106,14 @@ export class ThemeEditor extends React.Component<ThemeEditorStateRenderProp> {
       initialTheme
     } = this.props;
 
+    const side = this.props.side || 'right';
+
     return (
       <ThemeProvider theme={editorTheme} withoutRoot>
         <Sidebar
           as={Portal}
           visible={visible}
-          side="right"
+          side={side}
           css={{ position: 'fixed', overflowX: 'inherit' }}
           boxShadow="subtle"
           bg="white"
@@ -186,7 +190,7 @@ export class ThemeEditor extends React.Component<ThemeEditorStateRenderProp> {
 
           <Box
             position="absolute"
-            right="100%"
+            {...{ [side]: '100%' }}
             top="calc(50% - 35px)"
             display="flex"
             bg="white"
@@ -195,11 +199,19 @@ export class ThemeEditor extends React.Component<ThemeEditorStateRenderProp> {
             boxShadow="subtle"
             flexDirection="column"
             p="sm"
-            css={{
-              borderTopLeftRadius: 8,
-              borderBottomLeftRadius: 8,
-              boxShadow: '-2px 5px 5px rgba(0,0,0,.1)'
-            }}
+            css={
+              side === 'right'
+                ? {
+                    borderTopLeftRadius: 8,
+                    borderBottomLeftRadius: 8,
+                    boxShadow: '-2px 5px 5px rgba(0,0,0,.1)'
+                  }
+                : {
+                    borderTopRightRadius: 8,
+                    borderBottomRightRadius: 8,
+                    boxShadow: '2px 5px 5px rgba(0,0,0,.1)'
+                  }
+            }
           >
             <Box
               title={`${visible ? 'Close' : 'Open'} theme editor`}
