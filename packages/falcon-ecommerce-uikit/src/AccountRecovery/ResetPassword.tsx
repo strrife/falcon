@@ -94,7 +94,7 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ customerId, r
                   {inputProps => <PasswordRevealInput {...inputProps} />}
                 </FormField>
 
-                <FormSubmit submitting={loading} value="Reset my password" />
+                <FormSubmit justifySelf="center" submitting={loading} value="Reset my password" />
 
                 <FormErrorSummary errors={error && [error.message]} />
               </Form>
