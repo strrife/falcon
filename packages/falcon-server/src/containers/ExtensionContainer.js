@@ -2,6 +2,7 @@
 const Logger = require('@deity/falcon-logger');
 const { mergeSchemas, makeExecutableSchema } = require('graphql-tools');
 const { Events } = require('@deity/falcon-server-env');
+const BaseContainer = require('./BaseContainer');
 
 /**
  * @typedef {object} ExtensionInstanceConfig
@@ -19,15 +20,15 @@ const { Events } = require('@deity/falcon-server-env');
 /**
  * Holds extensions and expose running hooks for for them.
  */
-module.exports = class ExtensionContainer {
+module.exports = class ExtensionContainer extends BaseContainer {
   /**
    * Creates extensions container
    * @param {EventEmitter2} eventEmitter EventEmitter
    */
   constructor(eventEmitter) {
+    super(eventEmitter);
     /** @type {Map<string,Extension>} */
     this.extensions = new Map();
-    this.eventEmitter = eventEmitter;
   }
 
   /**
@@ -40,38 +41,30 @@ module.exports = class ExtensionContainer {
       if (Object.prototype.hasOwnProperty.call(extensions, extKey)) {
         const extension = extensions[extKey];
 
-        try {
-          const ExtensionClass = require(extension.package); // eslint-disable-line import/no-dynamic-require
-          const extensionInstance = new ExtensionClass({
-            config: extension.config || {},
-            name: extKey,
-            extensionContainer: this,
-            eventEmitter: this.eventEmitter
-          });
+        const ExtensionClass = this.importModule(extension.package);
+        const extensionInstance = new ExtensionClass({
+          config: extension.config || {},
+          name: extKey,
+          extensionContainer: this,
+          eventEmitter: this.eventEmitter
+        });
 
-          Logger.debug(`ExtensionContainer: "${extensionInstance.name}" added to the list of extensions`);
-          const { api: apiName } = extension.config || {};
-          if (apiName && dataSources.has(apiName)) {
-            extensionInstance.api = dataSources.get(apiName);
-            Logger.debug(
-              `ExtensionContainer: "${apiName}" API DataSource added to Extension "${extensionInstance.name}"`
-            );
-          } else {
-            Logger.debug(`ExtensionContainer: Extension "${extensionInstance.name}" has no API defined`);
-          }
-          this.extensions.set(extensionInstance.name, extensionInstance);
-
-          await this.eventEmitter.emitAsync(Events.EXTENSION_REGISTERED, {
-            instance: extensionInstance,
-            name: extensionInstance.name
-          });
-        } catch (ex) {
-          Logger.warn(
-            `ExtensionContainer: "${
-              extension.package
-            }" extension cannot be loaded. Make sure it is installed. Details: ${ex.stack}`
+        Logger.debug(`ExtensionContainer: "${extensionInstance.name}" added to the list of extensions`);
+        const { api: apiName } = extension.config || {};
+        if (apiName && dataSources.has(apiName)) {
+          extensionInstance.api = dataSources.get(apiName);
+          Logger.debug(
+            `ExtensionContainer: "${apiName}" API DataSource added to Extension "${extensionInstance.name}"`
           );
+        } else {
+          Logger.debug(`ExtensionContainer: Extension "${extensionInstance.name}" has no API defined`);
         }
+        this.extensions.set(extensionInstance.name, extensionInstance);
+
+        await this.eventEmitter.emitAsync(Events.EXTENSION_REGISTERED, {
+          instance: extensionInstance,
+          name: extensionInstance.name
+        });
       }
     }
   }
@@ -168,9 +161,6 @@ module.exports = class ExtensionContainer {
       schemas: [makeExecutableSchema({ typeDefs: config.schemas })],
       resolvers: config.resolvers
     });
-
-    const { dataSources } = config;
-    config.dataSources = () => dataSources;
 
     // remove processed fields
     delete config.contextModifiers;
