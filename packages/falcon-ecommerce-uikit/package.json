@@ -44,12 +44,13 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "prepare": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:jsSrc && npm run build:tsDeclarations",
+    "prepare": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:tsDeclarations",
     "build:tsDeclarations": "tsc",
     "build:esm": "babel src -d dist -x .ts,.tsx -s",
-    "build:jsSrc": "cross-env JS_SRC=true babel src -d dist/js-src -x .ts,.tsx && prettier  --write \"dist/js-src/**/*.js\"",
     "build:cjs": "rollup -c",
-    "watch": "babel src -d dist -x .ts,.tsx -s --watch"
+    "watch": "babel src -d dist -x .ts,.tsx -s --watch",
+    "test": "jest --watch",
+    "test:coverage": "jest --ci --coverage"
   },
   "peerDependencies": {
     "@deity/falcon-ui": "0.0.1",
@@ -72,8 +73,8 @@
     "@babel/preset-env": "7.1.6",
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.1.0",
-    "@deity/falcon-server": "^0.0.3",
     "@deity/falcon-shop-extension": "^0.0.3",
+    "@deity/falcon-server": "^0.0.3",
     "@deity/falcon-ui": "^0.0.3",
     "@types/enzyme": "^3.1.15",
     "@types/enzyme-adapter-react-16": "^1.0.3",
@@ -92,7 +93,6 @@
     "enzyme-adapter-react-16": "^1.7.0",
     "graphql-tag": "2.10.0",
     "graphql-tools": "^4.0.3",
-    "prettier": "^1.15.3",
     "prop-types": "15.6.2",
     "react": "~16.4.2",
     "react-apollo": "2.2.4",
