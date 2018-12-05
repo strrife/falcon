@@ -1,7 +1,6 @@
 import * as Logger from '@deity/falcon-logger';
 import { DataSourceConfig } from 'apollo-datasource';
-import { RESTDataSource } from 'apollo-datasource-rest';
-import { Body, Request } from 'apollo-datasource-rest/dist/RESTDataSource';
+import { Body, Request, RESTDataSource } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URL, URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
 import { GraphQLResolveInfo } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
@@ -19,7 +18,7 @@ import {
   ContextFetchRequest,
   ContextRequestInit,
   ContextRequestOptions,
-  ContextSession,
+  GraphQLContext,
   FetchUrlParams,
   FetchUrlResult,
   PaginationData
@@ -31,7 +30,7 @@ export type ConfigurableContainerConstructorParams = ConfigurableConstructorPara
   apiContainer: ApiContainer;
 };
 
-export default abstract class ApiDataSource<TContext extends ContextSession = any> extends RESTDataSource<TContext> {
+export default abstract class ApiDataSource<TContext extends GraphQLContext = any> extends RESTDataSource<TContext> {
   public name: string;
   public config: ApiDataSourceConfig;
   public fetchUrlPriority: number = ApiUrlPriority.NORMAL;
@@ -184,34 +183,34 @@ export default abstract class ApiDataSource<TContext extends ContextSession = an
   protected async get<TResult = any>(
     path: string,
     params?: URLSearchParamsInit,
-    init: ContextRequestInit = {}
+    init?: ContextRequestInit
   ): Promise<TResult> {
-    this.ensureContextPassed(init);
-    return super.get<TResult>(path, this.preprocessParams(params), init);
+    const processedInit: ContextRequestInit = this.ensureContextPassed(init);
+    return super.get<TResult>(path, this.preprocessParams(params), processedInit);
   }
 
-  protected async post<TResult = any>(path: string, body?: Body, init: ContextRequestInit = {}): Promise<TResult> {
-    this.ensureContextPassed(init);
-    return super.post<TResult>(path, body, init);
+  protected async post<TResult = any>(path: string, body?: Body, init?: ContextRequestInit): Promise<TResult> {
+    const processedInit: ContextRequestInit = this.ensureContextPassed(init);
+    return super.post<TResult>(path, body, processedInit);
   }
 
-  protected async patch<TResult = any>(path: string, body?: Body, init: ContextRequestInit = {}): Promise<TResult> {
-    this.ensureContextPassed(init);
-    return super.patch<TResult>(path, body, init);
+  protected async patch<TResult = any>(path: string, body?: Body, init?: ContextRequestInit): Promise<TResult> {
+    const processedInit: ContextRequestInit = this.ensureContextPassed(init);
+    return super.patch<TResult>(path, body, processedInit);
   }
 
-  protected async put<TResult = any>(path: string, body?: Body, init: ContextRequestInit = {}): Promise<TResult> {
-    this.ensureContextPassed(init);
-    return super.put<TResult>(path, body, init);
+  protected async put<TResult = any>(path: string, body?: Body, init?: ContextRequestInit): Promise<TResult> {
+    const processedInit: ContextRequestInit = this.ensureContextPassed(init);
+    return super.put<TResult>(path, body, processedInit);
   }
 
   protected async delete<TResult = any>(
     path: string,
     params?: URLSearchParamsInit,
-    init: ContextRequestInit = {}
+    init?: ContextRequestInit
   ): Promise<TResult> {
-    this.ensureContextPassed(init);
-    return super.delete<TResult>(path, this.preprocessParams(params), init);
+    const processedInit: ContextRequestInit = this.ensureContextPassed(init);
+    return super.delete<TResult>(path, this.preprocessParams(params), processedInit);
   }
 
   protected async didReceiveResponse<TResult = any>(res: ContextFetchResponse, req: Request): Promise<TResult> {
@@ -232,18 +231,20 @@ export default abstract class ApiDataSource<TContext extends ContextSession = an
     return cacheKey;
   }
 
-  private ensureContextPassed(init?: ContextRequestInit): void {
-    init = init || {};
+  private ensureContextPassed(init?: ContextRequestInit): ContextRequestInit {
+    const processedInit: ContextRequestInit = init || {};
 
-    if (!init.context) {
-      init.context = {};
+    if (!processedInit.context) {
+      processedInit.context = {};
     }
-    if (!init.cacheOptions) {
-      init.cacheOptions = {};
+    if (!processedInit.cacheOptions) {
+      processedInit.cacheOptions = {};
     }
-    if (typeof init.cacheOptions === 'object') {
-      (init.cacheOptions as ContextCacheOptions).context = init.context;
+    if (typeof processedInit!.cacheOptions === 'object') {
+      (processedInit.cacheOptions as ContextCacheOptions).context = processedInit.context;
     }
+
+    return processedInit;
   }
 
   /**

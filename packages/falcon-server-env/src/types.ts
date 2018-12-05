@@ -3,6 +3,7 @@ import { CacheOptions, RequestOptions } from 'apollo-datasource-rest/dist/RESTDa
 import { IMiddleware } from 'koa-router';
 import { RequestInit } from 'apollo-server-env';
 import { EventEmitter2 } from 'eventemitter2';
+import ApiDataSource from './models/ApiDataSource';
 
 export interface FetchUrlResult {
   id: string | number;
@@ -18,6 +19,10 @@ export enum ApiUrlPriority {
   LOWEST = 5,
   OFF = 0
 }
+
+export type DataSources = {
+  [name: string]: ApiDataSource<GraphQLContext>;
+};
 
 export interface ConfigurableConstructorParams<T = object> {
   config?: T;
@@ -57,13 +62,15 @@ export interface ContextData {
   context?: ContextType;
 }
 
-export interface ContextSession {
+export interface GraphQLContext {
   session?: {
     [propName: string]: any;
   };
   headers?: {
     [propName: string]: string;
   };
+  dataSources: DataSources;
+  [propName: string]: any;
 }
 
 export type ContextRequestInit = RequestInit & ContextData;
