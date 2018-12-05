@@ -7,6 +7,7 @@ const chalk = require('chalk');
 const babel = require('@babel/core');
 const recast = require('recast');
 const prettier = require('prettier');
+const install = require('install-packages');
 
 const prettierOptions = {
   tabWidth: 2,
@@ -55,10 +56,13 @@ async function run() {
   const targetDir = process.argv[3];
   const targetDirFullPath = path.join(process.cwd(), targetDir);
   const appSrc = path.join(process.cwd(), 'src');
+  const resolvedPackageDir = path.dirname(require.resolve(packageToEject));
+  const resolvedPackagePackageJsonPath = path.join(resolvedPackageDir, '../package.json');
+  // eslint-disable-next-line
+  const resolvedPackagePackageJsonDependencies = require(resolvedPackagePackageJsonPath).dependencies;
 
   console.log(chalk.green(`Ejecting ${bold(packageToEject)} package into ${bold(targetDirFullPath)} ...`));
 
-  const resolvedPackageDir = path.dirname(require.resolve(packageToEject));
   const packageSrcFiles = path.join(resolvedPackageDir, '../src');
 
   if (fs.pathExistsSync(targetDirFullPath)) {
@@ -123,6 +127,16 @@ async function run() {
     // eslint-disable-next-line
     await fs.writeFile(filePath, transformedContents, 'utf8');
   }
+  const dependenciesToInstall = Object.keys(resolvedPackagePackageJsonDependencies).map(
+    packageName => `${packageName}@${resolvedPackagePackageJsonDependencies[packageName]}`
+  );
+  console.log(
+    chalk.green(`${bold(packageToEject)} package dependencies in project...\n${dependenciesToInstall.join('\n')}`)
+  );
+  await install({
+    packages: Object.keys(resolvedPackagePackageJsonDependencies)
+  });
+
   console.log(chalk.green(`${bold(packageToEject)} package ejected!`));
 }
 
