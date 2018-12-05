@@ -9,20 +9,22 @@ const ALLOWED_PAYMENT_METHODS = ['checkmo'];
 
 const PaymentSelector = ({ availablePaymentMethods = [], onPaymentSelected }) => (
   <Box my="md">
-    {availablePaymentMethods.filter(option => ALLOWED_PAYMENT_METHODS.includes(option.code)).map(option => (
-      <FlexLayout key={option.code}>
-        <Radio
-          size="sm"
-          name="payment"
-          id={`opt-${option.code}`}
-          value={option.code}
-          onChange={() => onPaymentSelected(option)}
-        />
-        <Label mx="sm" flex="1" htmlFor={`opt-${option.code}`}>
-          {option.title}
-        </Label>
-      </FlexLayout>
-    ))}
+    {availablePaymentMethods
+      .filter(option => ALLOWED_PAYMENT_METHODS.includes(option.code))
+      .map(option => (
+        <FlexLayout key={option.code}>
+          <Radio
+            size="sm"
+            name="payment"
+            id={`opt-${option.code}`}
+            value={option.code}
+            onChange={() => onPaymentSelected(option)}
+          />
+          <Label mx="sm" flex="1" htmlFor={`opt-${option.code}`}>
+            {option.title}
+          </Label>
+        </FlexLayout>
+      ))}
   </Box>
 );
 

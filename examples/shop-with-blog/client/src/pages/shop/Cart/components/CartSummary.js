@@ -109,12 +109,11 @@ const CartSummary = ({ totals, couponCode, translations }) => (
               )}
               {couponCode ? translations.cancelCouponCode : translations.applyCouponCode}
             </Button>
-            {!errors.couponCode &&
-              !!applyCouponResult.error && (
-                <Text fontSize="xs" color="error">
-                  {applyCouponResult.error.message}
-                </Text>
-              )}
+            {!errors.couponCode && !!applyCouponResult.error && (
+              <Text fontSize="xs" color="error">
+                {applyCouponResult.error.message}
+              </Text>
+            )}
           </Box>
         )}
       </ApplyCouponForm>
