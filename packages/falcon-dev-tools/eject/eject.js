@@ -135,7 +135,8 @@ async function run() {
   );
 
   await install({
-    packages: Object.keys(resolvedPackagePackageJsonDependencies)
+    packages: Object.keys(resolvedPackagePackageJsonDependencies),
+    peerFilter: () => false
   });
 
   console.log(chalk.green(`${bold(packageToEject)} package ejected!`));
