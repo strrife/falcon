@@ -38,7 +38,6 @@ export class Query<TData = any, TVariables = OperationVariables, TTranslations =
             // TODO: check errorPolicy and if === 'all' then pass thru render props all extracted/formated errors with errorcodes instead of inline error message
             return (
               <p>
-                {/* <T ns="footer">newsletter.title</T> */}
                 {`Error!: ${errorCode}`}
                 <br /> {`${error}`}
               </p>
