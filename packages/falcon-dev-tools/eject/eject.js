@@ -51,6 +51,8 @@ const skipTypeDefinitionsFiles = src => !src.endsWith('d.ts');
 
 const bold = text => chalk.blue.underline.bold(text);
 
+const normalizeNewLines = src => src.replace(/\r?\n|\r/g, '\n');
+
 async function run() {
   const packageToEject = process.argv[2];
   const targetDir = process.argv[3];
@@ -92,12 +94,10 @@ async function run() {
     });
 
     // run prettier on transformed JS as recast preserves formatting such as whitespaces, but formats bit diferently thant prettier
-    let transformedContents = prettier.format(result.code, prettierOptions);
+    const transformedContents = prettier.format(result.code, prettierOptions);
     // write transformed code to file
-    // TODO: remove that when all formatting issues are sorted out
-    transformedContents = `/* eslint-disable */\n${transformedContents}`;
     // eslint-disable-next-line
-    await fs.writeFile(filePath, transformedContents, 'utf8');
+    await fs.writeFile(filePath, normalizeNewLines(transformedContents), 'utf8');
     // and rename file to .js extension
     const targetPathJs = filePath.replace(path.extname(filePath), '.js');
     // eslint-disable-next-line
@@ -125,7 +125,7 @@ async function run() {
     const transformedContents = prettier.format(result.code, prettierOptions);
 
     // eslint-disable-next-line
-    await fs.writeFile(filePath, transformedContents, 'utf8');
+    await fs.writeFile(filePath, normalizeNewLines(transformedContents), 'utf8');
   }
   const dependenciesToInstall = Object.keys(resolvedPackagePackageJsonDependencies).map(
     packageName => `${packageName}@${resolvedPackagePackageJsonDependencies[packageName]}`
@@ -133,6 +133,7 @@ async function run() {
   console.log(
     chalk.green(`${bold(packageToEject)} package dependencies in project...\n${dependenciesToInstall.join('\n')}`)
   );
+
   await install({
     packages: Object.keys(resolvedPackagePackageJsonDependencies)
   });
