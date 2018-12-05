@@ -6,15 +6,20 @@ import {
   ConfigurableConstructorParams,
   ExtensionContainer,
   FetchUrlParams,
-  FetchUrlResult
+  FetchUrlResult,
+  GraphQLContext
 } from '../types';
 
 export type ConfigurableContainerConstructorParams = ConfigurableConstructorParams & {
   extensionContainer: ExtensionContainer;
 };
 
+export interface ExtensionConfig {
+  api?: string;
+}
+
 export default abstract class Extension<TApiConfig = object> {
-  public config: object;
+  public config: ExtensionConfig;
   public name: string;
   public api?: ApiDataSource;
   public apiConfig: TApiConfig | null = null;
@@ -32,7 +37,7 @@ export default abstract class Extension<TApiConfig = object> {
   constructor(params: ConfigurableContainerConstructorParams) {
     const { config = {}, name, extensionContainer, eventEmitter } = params;
     this.name = name || this.constructor.name;
-    this.config = config;
+    this.config = config as ExtensionConfig;
     this.extensionContainer = extensionContainer;
     this.eventEmitter = eventEmitter;
   }
@@ -56,6 +61,16 @@ export default abstract class Extension<TApiConfig = object> {
    */
   async getGraphQLConfig(): Promise<object> {
     return {};
+  }
+
+  /**
+   * Gets API instance from DataSource by assigned API name
+   * @param {GraphQLContext} context GraphQL Resolver context object
+   * @return {ApiDataSource<GraphQLContext> | null} API DataSource instance if found
+   */
+  getApi(context: GraphQLContext): ApiDataSource<GraphQLContext> | null {
+    const { dataSources } = context;
+    return (this.config.api && dataSources[this.config.api]) || null;
   }
 
   /**
