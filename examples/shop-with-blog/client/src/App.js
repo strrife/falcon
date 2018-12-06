@@ -34,6 +34,9 @@ const HeadMetaTags = () => (
 
 const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
 const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
+const Dashboard = AsyncComponent(() =>
+  import(/* webpackChunkName: "shop/account/dashboard" */ './pages/shop/Account/Dashboard')
+);
 const ResetPassword = AsyncComponent(() =>
   import(/* webpackChunkName: "shop/resetpassword" */ './pages/shop/ResetPassword')
 );
@@ -75,6 +78,7 @@ const App = ({ online }) => (
                 <Route exact path="/checkout" component={Checkout} />
                 <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
                 <Route exact path="/reset-password" component={ResetPassword} />
+                <Route exact path="/account/dashboard" component={Dashboard} />
                 <DynamicRoute
                   loaderComponent={Loader}
                   components={{
