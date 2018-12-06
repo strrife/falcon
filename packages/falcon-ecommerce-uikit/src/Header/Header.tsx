@@ -15,6 +15,9 @@ import {
 import { toGridTemplate } from '../helpers';
 import { MiniCartIcon } from '../MiniCart';
 import { CartQuery, CartData } from '../Cart';
+import { CustomerQuery } from '../Customer';
+import { AccountIcon } from '../MiniAccount';
+import { SignInIcon } from '../SignIn';
 import { HeaderData, MenuItem } from './HeaderQuery';
 import { OpenSidebarMutation } from '../Sidebar';
 
@@ -99,19 +102,20 @@ export const Searchbar = () => (
     <OpenSidebarMutation>
       {openSidebar => (
         <React.Fragment>
-          <Icon
-            gridArea={SearchBarArea.signIn}
-            src="user"
-            onClick={() =>
-              openSidebar({
-                variables: {
-                  contentType: 'account'
-                }
-              })
+          <CustomerQuery>
+            {({ customer }) =>
+              customer ? (
+                <Link as={RouterLink} to="/customer/account" gridArea={SearchBarArea.signIn}>
+                  <AccountIcon />
+                </Link>
+              ) : (
+                <SignInIcon
+                  gridArea={SearchBarArea.signIn}
+                  onClick={() => openSidebar({ variables: { contentType: 'account' } })}
+                />
+              )
             }
-            css={{ cursor: 'pointer' }}
-          />
-
+          </CustomerQuery>
           <CartQuery>
             {(data: CartData) => (
               <MiniCartIcon
