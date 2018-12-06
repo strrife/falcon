@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Icon, Text } from '@deity/falcon-ui';
 
-export const AccountIcon: React.SFC<{
+export const SignInIcon: React.SFC<{
   onClick?: Function;
   gridArea?: string;
 }> = ({ onClick, gridArea }) => (
@@ -16,13 +16,14 @@ export const AccountIcon: React.SFC<{
       fontSize="xs"
       fontWeight="bold"
       css={{
+        whiteSpace: 'nowrap',
         position: 'absolute',
         bottom: '-10px',
         left: '50%',
         transform: 'translate(-50%, 0)'
       }}
     >
-      Account
+      Sign in
     </Text>
   </Box>
 );
