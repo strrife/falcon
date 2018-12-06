@@ -3,6 +3,7 @@ import { Value } from 'react-powerplug';
 
 import { themed } from '../theme';
 import { Box } from './Box';
+import { ListItem } from './List';
 
 export const Navbar = themed({
   tag: 'ul',
@@ -32,8 +33,7 @@ const NavbarItemInnerDOM: React.SFC<any> = props => (
   <Value initial={false}>
     {({ set, value }) => (
       <NavbarItemContext.Provider value={{ open: value }}>
-        <Box
-          as="li"
+        <ListItem
           {...props}
           onMouseEnter={() => set(true)}
           onMouseLeave={() => set(false)}
@@ -92,6 +92,54 @@ export const NavbarItemMenu = themed({
         left: 0,
         right: 0
       }
+    }
+  }
+});
+
+export const Menu = themed({
+  tag: 'ul',
+
+  defaultTheme: {
+    menu: {
+      p: 'none',
+      m: 'none',
+      bg: 'primary',
+      color: 'primaryText',
+      css: {
+        display: 'flex',
+        flexDirection: 'column',
+        listStyle: 'none',
+        position: 'relative'
+      }
+    }
+  }
+});
+
+export const MenuItem = themed({
+  tag: NavbarItemInnerDOM,
+
+  defaultTheme: {
+    navbarItem: {
+      fontSize: 'sm',
+      fontWeight: 'bold',
+      display: 'flex',
+      color: 'primaryText',
+
+      css: ({ theme }) => ({
+        cursor: 'pointer',
+        userSelect: 'none',
+        listStyle: 'none',
+
+        ':not(:last-child)': {
+          borderBottom: theme.borders.regular,
+          borderColor: theme.colors.secondaryDark
+        },
+
+        ':hover': {
+          background: theme.colors.primaryLight,
+          borderColor: theme.colors.secondaryLight
+        }
+      })
     }
   }
 });
