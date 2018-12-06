@@ -20,7 +20,7 @@
     "fs-extra": "^7.0.1",
     "install-packages": "^0.2.5",
     "klaw-sync": "^6.0.0",
-    "prettier": "^1.15.3",
+    "prettier": "1.15.3",
     "recast": "^0.16.1"
   }
 }

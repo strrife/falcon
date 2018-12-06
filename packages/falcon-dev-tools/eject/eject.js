@@ -38,7 +38,6 @@ async function run() {
     console.log(
       chalk.red(`Looks like ${bold(packageToEject)} has been already ejected ${bold(targetDir)} dir already exists.`)
     );
-    process.exit(-1);
 
     return;
   }
@@ -110,9 +109,8 @@ function convertToJs(ejectedFilesMeta) {
 }
 
 function replaceImports(appFilesMeta, originalImport, replacementImport) {
-  for (let i = 0; i < appFilesMeta.length; i++) {
-    const filePath = appFilesMeta[i].path;
-
+  appFilesMeta.forEach(meta => {
+    const filePath = meta.path;
     const fileContents = fs.readFileSync(filePath, 'utf8');
     // run babel transforms that preserve formatting while replacing imports
     const result = babel.transformSync(fileContents, {
@@ -128,7 +126,7 @@ function replaceImports(appFilesMeta, originalImport, replacementImport) {
     const transformedContents = prettier.format(result.code, prettierOptions);
 
     fs.writeFileSync(filePath, normalizeNewLines(transformedContents), 'utf8');
-  }
+  });
 }
 
 // recast plugin overrides parser and generator of babel to use recast's ones
@@ -148,7 +146,7 @@ function pluginRecast() {
     }
   };
 }
-// it accepts two args (src, dest) that are strings
+// accepts two args (src, dest) - designed to work with fs-extra package:
 // https://github.com/jprichardson/node-fs-extra/blob/master/docs/copy.md
 function filterOnlyTSSourceFiles(src) {
   const ext = path.extname(src);
@@ -160,7 +158,7 @@ function filterOnlyTSSourceFiles(src) {
   return true;
 }
 
-// it accepts single argument - designed to work with
+// accepts single argument (object with path) - designed to work with klaw package:
 // https://github.com/manidlou/node-klaw-sync#klawsyncdirectory-options
 function filterOnlyAppJsFiles(targetDir) {
   return item => {
