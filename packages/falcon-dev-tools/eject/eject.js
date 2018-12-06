@@ -36,7 +36,7 @@ async function run() {
   // don't run any further if targetDir already exists, we don't want to overwrite anything
   if (fs.pathExistsSync(targetDirFullPath)) {
     console.log(
-      chalk.red(`Looks like ${bold(packageToEject)} has been already ejected ${bold(targetDir)} dir already exists.`)
+      chalk.red(`Looks like ${bold(packageToEject)} has been already ejected because ${bold(targetDir)} dir already exists.`)
     );
 
     return;
@@ -63,7 +63,7 @@ async function run() {
     packageName => `${packageName}@${resolvedPackagePackageJsonDependencies[packageName]}`
   );
 
-  console.log(chalk.green(`Installing ${bold(packageToEject)} package dependencies in the project...`));
+  console.log(chalk.green(`Installing dependencies of ${bold(packageToEject)} package in the project...`));
 
   try {
     await install({
