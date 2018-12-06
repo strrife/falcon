@@ -41,21 +41,28 @@ const addressFormLayout = {
   }
 };
 
-const AddressForm = ({ countries = [], submitLabel = 'Save' }) => (
-  <Box as={Form} defaultTheme={addressFormLayout}>
-    <FormField name="email" type="email" label="Email" required gridArea={AddressFormArea.email} />
-    <FormField name="firstname" label="First name" required gridArea={AddressFormArea.firstName} />
-    <FormField name="lastname" label="Last name" required gridArea={AddressFormArea.lastName} />
-    <FormField name="street" label="Street" required gridArea={AddressFormArea.street} />
-    <FormField name="postcode" label="Post code" required gridArea={AddressFormArea.postCode} />
-    <FormField name="city" label="City" required gridArea={AddressFormArea.city} />
+const AddressForm = ({ countries = [], submitLabel = 'Save', id = '' }) => (
+  <Box id={id} as={Form} defaultTheme={addressFormLayout}>
+    <FormField name="email" type="email" label="Email" id={`${id}-email`} required gridArea={AddressFormArea.email} />
+    <FormField
+      name="firstname"
+      label="First name"
+      id={`${id}-firstname`}
+      required
+      gridArea={AddressFormArea.firstName}
+    />
+    <FormField name="lastname" label="Last name" id={`${id}-lastname`} required gridArea={AddressFormArea.lastName} />
+    <FormField name="street" label="Street" id={`${id}-street`} required gridArea={AddressFormArea.street} />
+    <FormField name="postcode" label="Post code" id={`${id}-postcode`} required gridArea={AddressFormArea.postCode} />
+    <FormField name="city" label="City" id={`${id}-city`} required gridArea={AddressFormArea.city} />
 
     <Field
       name="countryId"
       render={({ field, form }) => (
         <Box gridArea={AddressForm.country}>
-          <Label htmlFor={field.name}>Country *</Label>
+          <Label htmlFor={`${id}-${field.name}`}>Country *</Label>
           <Dropdown
+            id={`${id}-${field.name}`}
             onChange={value => {
               form.setFieldValue(field.name, value);
             }}
@@ -87,7 +94,7 @@ const AddressForm = ({ countries = [], submitLabel = 'Save' }) => (
         </Box>
       )}
     />
-    <FormField name="telephone" label="Phone" required gridArea={AddressFormArea.phone} />
+    <FormField name="telephone" label="Phone" id={`${id}-telephone`} required gridArea={AddressFormArea.phone} />
     <Box gridArea={AddressFormArea.submit}>
       <Button type="submit">{submitLabel}</Button>
     </Box>
@@ -95,6 +102,7 @@ const AddressForm = ({ countries = [], submitLabel = 'Save' }) => (
 );
 
 AddressForm.propTypes = {
+  id: PropTypes.string.isRequired,
   submitLabel: PropTypes.string,
   countries: PropTypes.arrayOf(
     PropTypes.shape({

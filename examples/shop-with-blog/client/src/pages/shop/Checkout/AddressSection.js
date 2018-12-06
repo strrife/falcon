@@ -36,6 +36,7 @@ class AddressSection extends React.Component {
 
   render() {
     const {
+      id,
       open,
       title,
       labelUseTheSame,
@@ -99,12 +100,12 @@ class AddressSection extends React.Component {
           <AddressPicker
             addresses={availableAddresses}
             selectedAddressId={selectedAvailableAddress ? selectedAvailableAddress.id : 0}
-            onChange={id => this.setState({ selectedAddressId: id })}
+            onChange={addrId => this.setState({ selectedAddressId: addrId })}
           />
         )}
         {!selectedAvailableAddress && (
           <Formik initialValues={initialAddressValue} onSubmit={this.submitAddress}>
-            {() => <AddressForm countries={countries} submitLabel={submitLabel} />}
+            {() => <AddressForm id={id} countries={countries} submitLabel={submitLabel} />}
           </Formik>
         )}
         {!!selectedAvailableAddress && (
@@ -142,7 +143,7 @@ class AddressSection extends React.Component {
     } else {
       content = (
         <Formik initialValues={initialAddressValue} onSubmit={this.submitAddress}>
-          {() => <AddressForm countries={countries} submitLabel={submitLabel} />}
+          {() => <AddressForm id={id} countries={countries} submitLabel={submitLabel} />}
         </Formik>
       );
     }
@@ -160,23 +161,38 @@ class AddressSection extends React.Component {
 }
 
 AddressSection.propTypes = {
+  // id of the form - used for generating unique ids for form fields inside
+  id: PropTypes.string,
+  // flag that indicates if the section is currently open
   open: PropTypes.bool,
+  // title of the section
   title: PropTypes.string,
+  // currently selected address
   selectedAddress: PropTypes.shape({}),
+  // callback that sets the address
   setAddress: PropTypes.func,
+  // callback that should be called when user requests edit of this particular section
   onEditRequested: PropTypes.func,
+  // flag indicates if "use the same address" is selected - if so then address form is hidden
   useTheSame: PropTypes.bool,
+  // callback that sets value for "use the same address" feature
   setUseTheSame: PropTypes.func,
+  // label for "use the same address" feature
   labelUseTheSame: PropTypes.string,
+  // label for submit button
   submitLabel: PropTypes.string,
+  // list of available addresses to pick from - if not passed then address selection field won't be presented
   availableAddresses: PropTypes.arrayOf(PropTypes.shape({})),
+  // default selected address - address that should be selected when address picker is shown
   defaultSelected: PropTypes.shape({}),
+  // list of available countries
   countries: PropTypes.arrayOf(
     PropTypes.shape({
       code: PropTypes.string,
       localName: PropTypes.string
     })
   ),
+  // errors passed from outside that should be displayed for this section
   errors: PropTypes.arrayOf(
     PropTypes.shape({
       message: PropTypes.string
