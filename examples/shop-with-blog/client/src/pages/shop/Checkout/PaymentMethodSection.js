@@ -7,26 +7,22 @@ import ErrorList from '../components/ErrorList';
 // we have to filter the methods until we have implementation for all of them
 const ALLOWED_PAYMENT_METHODS = ['checkmo'];
 
-const PaymentSelector = ({ availablePaymentMethods = [], onPaymentSelected }) => (
-  <Box my="md">
-    {availablePaymentMethods
-      .filter(option => ALLOWED_PAYMENT_METHODS.includes(option.code))
-      .map(option => (
-        <FlexLayout key={option.code}>
-          <Radio
-            size="sm"
-            name="payment"
-            id={`opt-${option.code}`}
-            value={option.code}
-            onChange={() => onPaymentSelected(option)}
-          />
-          <Label mx="sm" flex="1" htmlFor={`opt-${option.code}`}>
-            {option.title}
+const PaymentSelector = ({ availablePaymentMethods = [], onPaymentSelected }) => {
+  const paymentMethods = availablePaymentMethods.filter(option => ALLOWED_PAYMENT_METHODS.includes(option.code));
+
+  return (
+    <Box my="md">
+      {paymentMethods.map(x => (
+        <FlexLayout key={x.code}>
+          <Radio size="sm" name="payment" id={`opt-${x.code}`} value={x.code} onChange={() => onPaymentSelected(x)} />
+          <Label mx="sm" flex="1" htmlFor={`opt-${x.code}`}>
+            {x.title}
           </Label>
         </FlexLayout>
       ))}
-  </Box>
-);
+    </Box>
+  );
+};
 
 PaymentSelector.propTypes = {
   availablePaymentMethods: PropTypes.arrayOf(PropTypes.shape({})),

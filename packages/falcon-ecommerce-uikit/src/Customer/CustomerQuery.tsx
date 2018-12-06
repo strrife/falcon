@@ -27,6 +27,9 @@ export class CustomerQuery extends Query<CustomerQueryData> {
   static defaultProps = {
     query: GET_CUSTOMER
   };
+  static propTypes = {
+    ...Query.propTypes
+  };
 }
 
 export const GET_CUSTOMER_WITH_ADDRESSES = gql`
