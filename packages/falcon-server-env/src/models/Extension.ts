@@ -18,11 +18,10 @@ export interface ExtensionConfig {
   api?: string;
 }
 
-export default abstract class Extension<TApiConfig = object> {
+export default abstract class Extension {
   public config: ExtensionConfig;
   public name: string;
   public api?: ApiDataSource;
-  public apiConfig: TApiConfig | null = null;
 
   protected extensionContainer: ExtensionContainer;
   protected eventEmitter: EventEmitter2;
@@ -40,19 +39,6 @@ export default abstract class Extension<TApiConfig = object> {
     this.config = config as ExtensionConfig;
     this.extensionContainer = extensionContainer;
     this.eventEmitter = eventEmitter;
-  }
-
-  /**
-   * Initializes extension in this method
-   * Must return a result from "api.preInitialize()"
-   * @return {Promise<TApiConfig|null>} API DataSource preInitialize result
-   */
-  async initialize(): Promise<TApiConfig | null> {
-    if (this.api) {
-      this.apiConfig = await this.api.preInitialize<TApiConfig>();
-    }
-
-    return this.apiConfig;
   }
 
   /**
