@@ -1,5 +1,5 @@
 import React from 'react';
-import { ForgotPasswordForm } from '../AccountRecovery';
+import { ForgotPasswordForm } from '../AccountRecovery/ForgotPasswordForm';
 import { MiniFormLayout } from './MiniFormLayout';
 
 export const ForgotPassword = () => (
