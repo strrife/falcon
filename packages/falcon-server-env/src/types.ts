@@ -45,10 +45,13 @@ export interface PaginationData {
   prevPage: number | null;
 }
 
-export interface ApiDataSourceConfig {
+export interface UrlConfig {
   host?: string;
   port?: number;
   protocol?: string;
+}
+
+export interface ApiDataSourceConfig extends UrlConfig {
   fetchUrlPriority?: number;
   perPage?: number;
   [propName: string]: any;
