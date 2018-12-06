@@ -214,6 +214,7 @@ class CheckoutWizard extends React.Component {
                     <Divider my="md" />
 
                     <AddressSection
+                      id="shipping-addr"
                       open={currentStep === CHECKOUT_STEPS.SHIPPING_ADDRESS}
                       countries={countries.items}
                       onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.SHIPPING_ADDRESS)}
@@ -229,6 +230,7 @@ class CheckoutWizard extends React.Component {
                     <Divider my="md" />
 
                     <AddressSection
+                      id="billing-addr"
                       open={currentStep === CHECKOUT_STEPS.BILLING_ADDRESS}
                       onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.BILLING_ADDRESS)}
                       title="Billing address"
