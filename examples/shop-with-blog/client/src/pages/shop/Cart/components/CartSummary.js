@@ -85,38 +85,41 @@ const CartSummary = ({ totals, couponCode, translations }) => (
           applyCouponMutation: { result: applyCouponResult },
           cancelCouponMutation: { result: cancelCouponResult },
           formik: { errors, handleChange, handleBlur, values }
-        }) => (
-          <Box display="flex" flexDirection="column" alignItems="stretch">
-            <Text>{translations.couponCode}</Text>
-            <Input
-              my="xs"
-              type="text"
-              disabled={!!couponCode}
-              name="couponCode"
-              onBlur={handleBlur}
-              onChange={handleChange}
-              defaultValue={couponCode}
-            />
-            <Button
-              type="submit"
-              disabled={
-                applyCouponResult.loading || cancelCouponResult.loading || !values.couponCode || errors.couponCode
-              }
-              my="xs"
-            >
-              {(applyCouponResult.loading || cancelCouponResult.loading) && (
-                <Icon src="loader" size="md" mr="sm" fill="secondaryLight" />
-              )}
-              {couponCode ? translations.cancelCouponCode : translations.applyCouponCode}
-            </Button>
-            {!errors.couponCode &&
-              !!applyCouponResult.error && (
+        }) => {
+          const errorMessage = !errors.couponCode && !!applyCouponResult.error && applyCouponResult.error.message;
+
+          return (
+            <Box display="flex" flexDirection="column" alignItems="stretch">
+              <Text>{translations.couponCode}</Text>
+              <Input
+                my="xs"
+                type="text"
+                disabled={!!couponCode}
+                name="couponCode"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                defaultValue={couponCode}
+              />
+              <Button
+                type="submit"
+                disabled={
+                  applyCouponResult.loading || cancelCouponResult.loading || !values.couponCode || errors.couponCode
+                }
+                my="xs"
+              >
+                {(applyCouponResult.loading || cancelCouponResult.loading) && (
+                  <Icon src="loader" size="md" mr="sm" fill="secondaryLight" />
+                )}
+                {couponCode ? translations.cancelCouponCode : translations.applyCouponCode}
+              </Button>
+              {errorMessage && (
                 <Text fontSize="xs" color="error">
-                  {applyCouponResult.error.message}
+                  {errorMessage}
                 </Text>
               )}
-          </Box>
-        )}
+            </Box>
+          );
+        }}
       </ApplyCouponForm>
     </Box>
     <Box
