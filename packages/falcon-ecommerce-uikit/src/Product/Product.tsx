@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
-import { T } from '@deity/falcon-i18n';
+import { I18n } from '@deity/falcon-i18n';
 import { themed, Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
 import { Breadcrumbs } from '../Breadcrumbs';
 import { ProductGallery } from './ProductGallery';
@@ -163,7 +163,7 @@ export class Product extends React.PureComponent<{ product: any }> {
     return (
       <ProductLayout>
         <Breadcrumbs breadcrumbs={product.breadcrumbs} />
-        <T>
+        <I18n>
           {t => (
             <ProductForm sku={product.sku} validate={this.createValidator(product, t)}>
               {({
@@ -227,7 +227,7 @@ export class Product extends React.PureComponent<{ product: any }> {
               )}
             </ProductForm>
           )}
-        </T>
+        </I18n>
       </ProductLayout>
     );
   }

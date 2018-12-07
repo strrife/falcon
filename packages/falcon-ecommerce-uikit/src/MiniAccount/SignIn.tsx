@@ -1,12 +1,12 @@
 import React from 'react';
 import { Divider, H4, Text, List, ListItem, Icon, Button, GridLayout } from '@deity/falcon-ui';
-import { T } from '@deity/falcon-i18n';
+import { I18n, T } from '@deity/falcon-i18n';
 import { SignInForm } from '../SignIn';
 import { MiniFormLayout } from './MiniFormLayout';
 import { OpenSidebarMutation } from '../Sidebar';
 
 export const SignIn = () => (
-  <T>
+  <I18n>
     {t => (
       <MiniFormLayout title={t('signIn.formTitle')}>
         <SignInForm />
@@ -17,7 +17,7 @@ export const SignIn = () => (
         </GridLayout>
       </MiniFormLayout>
     )}
-  </T>
+  </I18n>
 );
 
 const NewCustomer = () => (
@@ -29,16 +29,16 @@ const NewCustomer = () => (
       <T id="newCustomer.benefitsHeader" />
     </Text>
     <List>
-      <T returnObjects>
+      <I18n>
         {t =>
-          t('newCustomer.benefitsList').map((x: string) => (
+          t('newCustomer.benefitsList', { returnObjects: true }).map((x: string) => (
             <ListItem key={x} display="flex" mb="sm">
               <Icon src="check" size="md" mr="xs" stroke="primaryLight" />
               {x}
             </ListItem>
           ))
         }
-      </T>
+      </I18n>
     </List>
 
     <OpenSidebarMutation>

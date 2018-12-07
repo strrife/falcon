@@ -1,6 +1,6 @@
 import React from 'react';
 import { themed, H3, Text, Group, Input, Button, Checkbox, Label } from '@deity/falcon-ui';
-import { T } from '@deity/falcon-i18n';
+import { T, I18n } from '@deity/falcon-i18n';
 
 export const NewsletterLayout = themed({
   tag: 'div',
@@ -26,7 +26,7 @@ export const Newsletter: React.SFC<{}> = () => (
     <Text>
       <T id="newsletter.message" />
     </Text>
-    <T>
+    <I18n>
       {t => (
         <form>
           <Group>
@@ -44,6 +44,6 @@ export const Newsletter: React.SFC<{}> = () => (
           </Label>
         </form>
       )}
-    </T>
+    </I18n>
   </NewsletterLayout>
 );

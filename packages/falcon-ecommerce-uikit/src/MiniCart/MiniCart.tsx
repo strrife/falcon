@@ -15,7 +15,7 @@ import {
   NumberInput,
   FlexLayout
 } from '@deity/falcon-ui';
-import { T } from '@deity/falcon-i18n';
+import { I18n, T } from '@deity/falcon-i18n';
 import { MiniCartData } from './MiniCartQuery';
 import { RemoveCartItemMutation, UpdateCartItemMutation } from '../Cart/CartMutation';
 import { CloseSidebarMutation } from '../Sidebar';
@@ -107,7 +107,7 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
     <UpdateCartItemMutation>
       {(updateCartItem, { loading, error }) => (
         <Box gridArea={MiniCartProductArea.modify}>
-          <T>
+          <I18n>
             {t => (
               <NumberInput
                 disabled={loading}
@@ -128,7 +128,7 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
                 }
               />
             )}
-          </T>
+          </I18n>
 
           {!!error && <Text color="error">{error.message}</Text>}
         </Box>

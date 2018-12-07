@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import i18next from 'i18next';
+import i18next, { TranslationFunction } from 'i18next';
 import { I18nContext, I18nContextOptions } from './context';
 
 export type I18nProps = {
-  children: (i18n: i18next.i18n) => any;
+  children: (t: TranslationFunction, i18n: i18next.i18n) => any;
 };
 export class I18n extends React.Component<I18nProps> {
   static propTypes = {
@@ -38,11 +38,11 @@ export class I18n extends React.Component<I18nProps> {
 
     return (
       <I18nContext.Consumer>
-        {({ i18n, options: contextOptions }) => {
+        {({ i18n, t, options: contextOptions }) => {
           this.i18n = i18n;
           this.options = contextOptions;
 
-          return children(i18n);
+          return children(t, i18n);
         }}
       </I18nContext.Consumer>
     );

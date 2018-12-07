@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, Image, themed, Swipeable, SwipeableItem, Box } from '@deity/falcon-ui';
-import { T } from '@deity/falcon-i18n';
+import { I18n, T } from '@deity/falcon-i18n';
 
 type Item = {
   thumbnail: string;
@@ -52,7 +52,7 @@ export class ProductGallery extends React.Component<{ items: Item[] }> {
     }
 
     if (items.length === 1) {
-      return <T>{t => <Image src={items[0].full} alt={t('productGallery.imageAlt')} />}</T>;
+      return <I18n>{t => <Image src={items[0].full} alt={t('productGallery.imageAlt')} />}</I18n>;
     }
 
     const { activeIndex } = this.state;
@@ -89,16 +89,16 @@ export class ProductGallery extends React.Component<{ items: Item[] }> {
                 }
               }}
             >
-              <T>{t => <Image key={item.thumbnail} src={item.thumbnail} alt={t('productGallery.imageAlt')} />}</T>
+              <I18n>{t => <Image key={item.thumbnail} src={item.thumbnail} alt={t('productGallery.imageAlt')} />}</I18n>
             </Box>
           ))}
         </Box>
 
         <Swipeable gridArea="full" ref={this.scrollableEl} alignItems="center">
           {items.map(item => (
-            <T>
+            <I18n>
               {t => <SwipeableItem key={item.full} as={Image} src={item.full} alt={t('productGallery.imageAlt')} />}
-            </T>
+            </I18n>
           ))}
         </Swipeable>
       </ProductGalleryLayout>
