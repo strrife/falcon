@@ -7,13 +7,13 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "dist",
     "src"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "clean": "rimraf dist",
     "prepare": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:tsDeclarations",
@@ -23,7 +23,8 @@
     "watch": "babel src -d dist -x .ts,.tsx -s --watch"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0"
+    "@babel/runtime": "^7.0.0",
+    "i18next": "^12.0.0"
   },
   "devDependencies": {
     "@babel/cli": "7.1.5",
@@ -34,6 +35,8 @@
     "@babel/preset-env": "7.1.6",
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.1.0",
+    "babel-plugin-annotate-pure-calls": "0.4.0",
+    "babel-plugin-module-resolver": "3.1.1",
     "i18next": "^12.0.0",
     "prop-types": "^15.6.2",
     "react": "~16.4.2",
