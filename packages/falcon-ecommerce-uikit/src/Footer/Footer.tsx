@@ -74,7 +74,7 @@ const languageSectionTheme: DefaultThemeProps = {
 
 export const Copyright = () => (
   <>
-    <T key="copyright" /> {new Date().getFullYear()}
+    <T id="copyright" /> {new Date().getFullYear()}
   </>
 );
 

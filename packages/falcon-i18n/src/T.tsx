@@ -1,21 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import i18next, { TranslationFunction } from 'i18next';
+import i18next from 'i18next';
 import { I18nContext, I18nContextOptions } from './context';
 
-interface InjectTranslationFunction {
-  (t: TranslationFunction): any;
-}
-export type TRenderProps = string | InjectTranslationFunction;
 export type TProps = {
-  id?: string;
-  children?: TRenderProps;
+  id: string;
 } & i18next.TranslationOptions;
 
 export class T extends React.Component<TProps> {
   static propTypes = {
-    id: PropTypes.string,
-    children: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+    id: PropTypes.string.isRequired,
     defaultValue: PropTypes.oneOfType([PropTypes.string]),
     count: PropTypes.number,
     // eslint-disable-next-line react/forbid-prop-types
@@ -56,7 +50,7 @@ export class T extends React.Component<TProps> {
   options?: I18nContextOptions = undefined;
 
   render() {
-    const { id, children, ...translationOptions } = this.props;
+    const { id, ...translationOptions } = this.props;
 
     return (
       <I18nContext.Consumer>
@@ -64,24 +58,7 @@ export class T extends React.Component<TProps> {
           this.i18n = i18n;
           this.options = contextOptions;
 
-          if (children && id) {
-            const message = `Only id or children can be set at the same time.`;
-            if (process.env.NODE_ENV !== 'production') {
-              throw new Error(message);
-            }
-            console.error(message);
-          }
-
-          if (children && typeof children === 'function') {
-            return (children as InjectTranslationFunction)((key, options) =>
-              t(key, { ...translationOptions, ...(options || {}) })
-            );
-          }
-
-          // children (if exists) needs to be string here
-          const key = id || (children as string) || undefined;
-
-          return key ? t(key, translationOptions) : null;
+          return t(id, translationOptions);
         }}
       </I18nContext.Consumer>
     );
