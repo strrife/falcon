@@ -70,10 +70,7 @@ export const ShowMore: React.SFC<{ text: string; onClick?: MouseEventHandler; lo
   loading
 }) => (
   <Box my="sm" onClick={onClick || (() => {})}>
-    <Button variant="secondary">
-      {loading && <Icon src="loader" mr="xs" size="md" />}
-      {text}
-    </Button>
+    <Button variant={loading ? 'loader' : 'secondary'}>{text}</Button>
   </Box>
 );
 

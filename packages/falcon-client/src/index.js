@@ -2,10 +2,9 @@ import http from 'http';
 import Logger from '@deity/falcon-logger';
 
 function falconWebServer() {
-  const server = require('./server').default;
-  // eslint-disable-next-line
+  const { Server } = require('./server');
   const app = require('./clientApp');
-  const bootstrap = require('./clientApp/bootstrap').default;
+  const bootstrap = require('./clientApp/bootstrap');
   // eslint-disable-next-line
   const assetsManifest = require(process.env.ASSETS_MANIFEST);
 
@@ -14,10 +13,10 @@ function falconWebServer() {
    * @param {ServerAppConfig} props Application parameters
    * @return {WebServer} Falcon web server
    */
-  return server({
+  return Server({
     App: app.default,
     clientApolloSchema: app.clientApolloSchema,
-    configuration: bootstrap,
+    bootstrap: bootstrap.default,
     webpackAssets: {
       clientJs: assetsManifest.client.js,
       clientCss: assetsManifest.client.css,

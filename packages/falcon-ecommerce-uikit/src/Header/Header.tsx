@@ -13,8 +13,10 @@ import {
 } from '@deity/falcon-ui';
 
 import { toGridTemplate } from '../helpers';
-import { ToggleMiniCartMutation, MiniCartIcon, MiniCartQuery } from '../MiniCart';
+import { MiniCartIcon } from '../MiniCart';
+import { CartQuery, CartData } from '../Cart';
 import { HeaderData, MenuItem } from './HeaderQuery';
+import { OpenSidebarMutation } from '../Sidebar';
 
 const bannerLayoutTheme: DefaultThemeProps = {
   bannerLayout: {
@@ -32,7 +34,7 @@ const bannerLayoutTheme: DefaultThemeProps = {
 export const Banner: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
   <List defaultTheme={bannerLayoutTheme}>
     {items.map(item => (
-      <ListItem p="sm" key={item.name}>
+      <ListItem p="xs" key={item.name}>
         <Link as={RouterLink} to={item.url}>
           {item.name}
         </Link>
@@ -68,7 +70,7 @@ export const Nav: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
 
 export enum SearchBarArea {
   logo = 'logo',
-  login = 'login',
+  signIn = 'signIn',
   cart = 'cart',
   search = 'search'
 }
@@ -80,8 +82,8 @@ const searchBarLayoutTheme: DefaultThemeProps = {
     gridGap: 'sm',
     // prettier-ignore
     gridTemplate: toGridTemplate([
-      [ '200px',             '1fr',                'auto',               'auto'             ],
-      [ SearchBarArea.logo,  SearchBarArea.search,  SearchBarArea.login,  SearchBarArea.cart],
+      ['200px',            '1fr',                'auto',               'auto'            ],
+      [SearchBarArea.logo, SearchBarArea.search, SearchBarArea.signIn, SearchBarArea.cart]
     ]),
     css: {
       alignItems: 'center'
@@ -91,17 +93,43 @@ const searchBarLayoutTheme: DefaultThemeProps = {
 
 export const Searchbar = () => (
   <Box defaultTheme={searchBarLayoutTheme}>
-    <Link as={RouterLink} gridArea={SearchBarArea.logo} to="/">
+    <Link aria-label="DEITY" pl="sm" height="xxl" as={RouterLink} gridArea={SearchBarArea.logo} to="/">
       <Icon src="logo" />
     </Link>
-    <Icon gridArea={SearchBarArea.login} src="user" />
-    <ToggleMiniCartMutation>
-      {toggle => (
-        <MiniCartQuery>
-          {(data: any) => <MiniCartIcon onClick={toggle} gridArea={SearchBarArea.cart} itemsQty={data.cart.itemsQty} />}
-        </MiniCartQuery>
+    <OpenSidebarMutation>
+      {openSidebar => (
+        <React.Fragment>
+          <Icon
+            gridArea={SearchBarArea.signIn}
+            src="user"
+            onClick={() =>
+              openSidebar({
+                variables: {
+                  contentType: 'account'
+                }
+              })
+            }
+            css={{ cursor: 'pointer' }}
+          />
+
+          <CartQuery>
+            {(data: CartData) => (
+              <MiniCartIcon
+                onClick={() =>
+                  openSidebar({
+                    variables: {
+                      contentType: 'cart'
+                    }
+                  })
+                }
+                gridArea={SearchBarArea.cart}
+                itemsQty={data.cart ? data.cart.itemsQty : 0}
+              />
+            )}
+          </CartQuery>
+        </React.Fragment>
       )}
-    </ToggleMiniCartMutation>
+    </OpenSidebarMutation>
   </Box>
 );
 

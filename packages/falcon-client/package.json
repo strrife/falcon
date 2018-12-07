@@ -4,6 +4,9 @@
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-client",
   "license": "OSL-3.0",
   "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "falcon-client": "./bin/falcon-client.js"
   },
@@ -63,7 +66,6 @@
     "promise": "^8.0.1",
     "raf": "^3.4.0",
     "razzle-dev-utils": "2.4.0",
-    "react-apollo": "^2.2.3",
     "react-async-bootstrapper2": "^2.1.2",
     "react-async-component": "^2.0.0",
     "react-dev-utils": "^6.0.4",
@@ -93,7 +95,7 @@
     "i18next": "^11.6.0",
     "prop-types": "^15.6.2",
     "react": "~16.4.2",
-    "react-apollo": "^2.2.3",
+    "react-apollo": "2.2.4",
     "react-async-component": "^2.0.0",
     "react-dom": "~16.4.2",
     "react-i18next": "^7.11.0",
@@ -105,7 +107,7 @@
     "i18next": "^11.6.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
-    "react-apollo": "^2.2.4",
+    "react-apollo": "2.2.4",
     "react-async-component": "^2.0.0",
     "react-dom": "~16.4.2",
     "react-i18next": "^7.11.0",

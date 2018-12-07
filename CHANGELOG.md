@@ -16,6 +16,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon UI v0.0.4
 
 - docs: comprehensive documentation added ([#115](https://github.com/deity-io/falcon/pull/115))
+- feat: support for keyframe animations defined in theme ([#153](https://github.com/deity-io/falcon/pull/153))
 
 ### Falcon Theme Editor v0.0.4
 
@@ -25,6 +26,9 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 - feat: basic blog UI (listing posts, displaying single post) ([#137](https://github.com/deity-io/falcon/pull/137))
 - feat: added queries and mutations for cart operations (add to cart, remove from cart, change cart item) ([#114](https://github.com/deity-io/falcon/pull/114))
+- feat: added queries and mutations for sign in / sign out operations ([#152](https://github.com/deity-io/falcon/pull/152))
+- feat: added `ProtectedRoute` and `OnlyUnauthenticatedRoute` route components ([#163](https://github.com/deity-io/falcon/pull/163))
+- feat: added queries and mutations for checkout process and implemented checkout logic abstraction ([#182](https://github.com/deity-io/falcon/pull/182))
 
 ### Create Falcon App v1.0.7 (2018-10-25)
 

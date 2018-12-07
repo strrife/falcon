@@ -3,25 +3,26 @@ import PropTypes from 'prop-types';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
 import Helmet from 'react-helmet';
-import AsyncComponent from 'src/components/Async';
-import Home from 'src/pages/Home';
 import { Loader } from '@deity/falcon-ecommerce-uikit';
 import { ThemeProvider } from '@deity/falcon-ui';
 import DynamicRoute from '@deity/falcon-client/src/components/DynamicRoute';
 import isOnline from '@deity/falcon-client/src/components/isOnline';
-import logo from 'src/assets/logo.png';
+import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
 import {
   AppLayout,
+  ProtectedRoute,
+  OnlyUnauthenticatedRoute,
   Header,
   Footer,
   FooterQuery,
   HeaderQuery,
-  MiniCartQuery,
-  MiniCart,
   LocaleProvider
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
-
+import AsyncComponent from 'src/components/Async';
+import Home from 'src/pages/Home';
+import logo from 'src/assets/logo.png';
+import { Sidebar, SidebarContainer } from 'src/pages/shop/components/Sidebar';
 import { deityGreenTheme } from './theme';
 
 const HeadMetaTags = () => (
@@ -42,11 +43,33 @@ const HeadMetaTags = () => (
 
 const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
 const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
-const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/Blog" */ './pages/blog/Blog'));
-const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/Post" */ './pages/blog/Post'));
+const SignIn = AsyncComponent(() => import(/* webpackChunkName: "account/sign-in" */ './pages/account/SignIn'));
+const Dashboard = AsyncComponent(() => import(/* webpackChunkName: "account/dashboard" */ './pages/account/Dashboard'));
+const ResetPassword = AsyncComponent(() =>
+  import(/* webpackChunkName: "shop/resetpassword" */ './pages/shop/ResetPassword')
+);
+const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/blog" */ './pages/blog/Blog'));
+const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/post" */ './pages/blog/Post'));
+const Cart = AsyncComponent(() => import(/* webpackChunkName: "shop/cart" */ './pages/shop/Cart'));
+const Checkout = AsyncComponent(() => import(/* webpackChunkName: "shop/checkout" */ './pages/shop/Checkout'));
+const CheckoutConfirmation = AsyncComponent(() =>
+  import(/* webpackChunkName: "shop/checkout" */ './pages/shop/CheckoutConfirmation')
+);
+const SidebarContents = AsyncComponent(() =>
+  import(/* webpackChunkName: "shop/SidebarContents" */ './pages/shop/components/Sidebar/SidebarContents')
+);
+
+let ThemeEditorComponent;
+// ThemeEditor gets loaded only in dev mode
+// condition below helps with tree shaking of unused exports
+// so ThemeEditor gets dead code eliminated in production mode
+if (process.env.NODE_ENV !== 'production') {
+  ThemeEditorComponent = ThemeEditor;
+}
 
 const App = ({ online }) => (
   <LocaleProvider>
+    <ScrollToTop />
     <ThemeEditorState initial={deityGreenTheme}>
       {props => (
         <React.Fragment>
@@ -54,11 +77,18 @@ const App = ({ online }) => (
             <HeadMetaTags />
             <AppLayout>
               <HeaderQuery>{data => <Header {...data} />}</HeaderQuery>
-              {!online && <p>your are offline.</p>}
+              {!online && <p>you are offline.</p>}
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/products" component={Category} />
                 <Route exact path="/blog/:page?" component={Blog} />
+                <Route exact path="/cart" component={Cart} />
+                <Route exact path="/checkout" component={Checkout} />
+                <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
+                <Route exact path="/reset-password" component={ResetPassword} />
+                <ProtectedRoute exact path="/account" component={Dashboard} />
+                <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
+                <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
                 <DynamicRoute
                   loaderComponent={Loader}
                   components={{
@@ -69,10 +99,17 @@ const App = ({ online }) => (
                 />
               </Switch>
               <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
-              <MiniCartQuery>{data => <MiniCart {...data} />}</MiniCartQuery>
+
+              <SidebarContainer>
+                {sidebarProps => (
+                  <Sidebar {...sidebarProps}>
+                    {() => <SidebarContents contentType={sidebarProps.contentType} />}
+                  </Sidebar>
+                )}
+              </SidebarContainer>
             </AppLayout>
           </ThemeProvider>
-          <ThemeEditor {...props} />
+          {ThemeEditorComponent && <ThemeEditorComponent {...props} side="left" />}
         </React.Fragment>
       )}
     </ThemeEditorState>

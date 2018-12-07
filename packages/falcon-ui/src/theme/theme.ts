@@ -2,19 +2,19 @@ export const defaultBaseTheme = {
   colors: {
     primary: '#A9CF38',
     primaryLight: '#CBDE6E',
-    primaryDark: '#A9CF38',
-    primaryText: '#fff',
+    primaryDark: '#95B82C',
+    primaryText: '#FFFFFF',
 
-    secondary: '#eef0f2',
-    secondaryLight: '#f8f8f8',
-    secondaryDark: '#e8e8e8',
-    secondaryText: '#5f6367',
+    secondary: '#EEF0F2',
+    secondaryLight: '#F8F8F8',
+    secondaryDark: '#E8E8E8',
+    secondaryText: '#5F6367',
 
     error: '#E74C3C',
     errorText: '#000000',
 
     black: '#5f6367',
-    white: '#ffffff',
+    white: '#FFFFFF',
     transparent: 'transparent'
   },
 
@@ -43,7 +43,8 @@ export const defaultBaseTheme = {
   },
 
   fontSizes: {
-    xs: 13,
+    xxs: 12,
+    xs: 14,
     sm: 16,
     md: 20,
     lg: 26,
@@ -60,7 +61,7 @@ export const defaultBaseTheme = {
 
   lineHeights: {
     small: 1,
-    default: 1.4,
+    default: 1.5,
     large: 2
   },
 
@@ -103,6 +104,8 @@ export const defaultBaseTheme = {
     standard: '250ms',
     long: '375ms'
   },
+
+  keyframes: {},
 
   zIndex: {
     dropDownMenu: 600,

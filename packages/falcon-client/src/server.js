@@ -13,20 +13,20 @@ import { renderAppShell, renderApp } from './middlewares/routes';
  * @param {ServerAppConfig} props Application parameters
  * @return {WebServer} Falcon web server
  */
-export default ({ App, clientApolloSchema, configuration, webpackAssets }) => {
-  const { config } = configuration;
+export function Server({ App, clientApolloSchema, bootstrap, webpackAssets }) {
+  const { config } = bootstrap;
   Logger.setLogLevel(config.logLevel);
 
   const instance = new Koa();
-  configuration.onServerCreated(instance);
+  bootstrap.onServerCreated(instance);
 
   const publicDir = process.env.PUBLIC_DIR;
   const router = new Router();
   router.get('/sw.js', serve(publicDir, { maxage: 0 }));
   router.get('/static/*', serve(publicDir, { maxage: process.env.NODE_ENV === 'production' ? 31536000000 : 0 }));
   router.get('/*', serve(publicDir));
-  router.get('/app-shell', ...renderAppShell({ configuration, webpackAssets }));
-  router.get('/*', ...renderApp({ App, clientApolloSchema, configuration, webpackAssets }));
+  router.get('/app-shell', ...renderAppShell({ config, webpackAssets }));
+  router.get('/*', ...renderApp({ App, clientApolloSchema, config, webpackAssets }));
 
   instance
     .use(helmet())
@@ -36,19 +36,19 @@ export default ({ App, clientApolloSchema, configuration, webpackAssets }) => {
     .use(router.routes())
     .use(router.allowedMethods());
 
-  configuration.onServerInitialized(instance);
+  bootstrap.onServerInitialized(instance);
 
   return {
     instance,
     callback: () => instance.callback(),
-    started: () => configuration.onServerStarted(instance)
+    started: () => bootstrap.onServerStarted(instance)
   };
-};
+}
 
 /**
  * @typedef {object} ServerAppConfig
  * @property {function} App Root application component
- * @property {object} configuration Initial configuration
+ * @property {{config, onServerCreated, onServerInitialized, onServerStarted }} bootstrap Initial configuration
  * @property {object} clientApolloSchema Apollo State object
  * @property {object} webpackAssets webpack assets
  */

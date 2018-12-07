@@ -1,5 +1,4 @@
-import gql from 'graphql-tag';
-
+import { GET_SIDEBAR_STATE } from './pages/shop/components/Sidebar';
 /**
  * Defines client-side state resolvers
  */
@@ -29,20 +28,13 @@ const sortOrders = [
   }
 ];
 
-const GET_MINI_CART_STATE = gql`
-  query MiniCartState {
-    miniCart @client {
-      open
-    }
-  }
-`;
-
 export default {
   defaults: {
-    miniCart: {
-      open: false
+    sidebar: {
+      contentType: null,
+      side: 'right',
+      isOpen: false
     },
-
     // todo: this is temporary, these values should be fetched from shop settings
     localeSettings: {
       locale: 'en',
@@ -53,29 +45,33 @@ export default {
   resolvers: {
     Query: {
       languages: () => languages,
-      sortOrders: () => sortOrders,
-
-      // todo: this resolver makes sure, that when refetchQuery is refreshing also miniCart its state will
-      // be loaded from cache, not from defaults as we don't want the refetch mechanism to toggle miniCart
-      miniCart: (_, _variables, { cache }) => {
-        const { miniCart } = cache.readQuery({
-          query: GET_MINI_CART_STATE
-        });
-        return miniCart;
-      }
+      sortOrders: () => sortOrders
     },
 
     Mutation: {
-      toggleMiniCart: (_, _variables, { cache }) => {
-        const { miniCart } = cache.readQuery({
-          query: GET_MINI_CART_STATE
-        });
-
+      openSidebar: (_, { contentType, side }, { cache }) => {
         const data = {
-          miniCart: { ...miniCart, open: !miniCart.open }
+          sidebar: {
+            contentType,
+            side: side || 'right',
+            isOpen: true
+          }
         };
 
-        cache.writeData({ data });
+        cache.writeQuery({ query: GET_SIDEBAR_STATE, data });
+
+        return null;
+      },
+
+      closeSidebar: (_, _variables, { cache }) => {
+        const queryResponse = cache.readQuery({ query: GET_SIDEBAR_STATE });
+        const sidebar = { ...queryResponse.sidebar };
+        sidebar.isOpen = false;
+
+        cache.writeQuery({
+          query: GET_SIDEBAR_STATE,
+          data: { sidebar }
+        });
 
         return null;
       }

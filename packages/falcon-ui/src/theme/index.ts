@@ -30,6 +30,7 @@ export interface Theme {
   boxShadows: ThemeBoxShadows;
   easingFunctions: ThemeEasingFunctions;
   transitionDurations: ThemeTransitionDurations;
+  keyframes: ThemeKeyframes;
   zIndex: ThemeZIndex;
   components: ThemedComponents;
   icons: ThemedIcons;
@@ -78,14 +79,14 @@ export type ThemedComponentPropsWithCss<T = {}> = {
     | (PropsMappings[ComponentProp] extends ThemedPropMapping
         ? Extract<keyof Theme[PropsMappings[ComponentProp]['themeProp']], string>
         : PropsMappings[ComponentProp] extends ResponsivePropMapping
-          ? CssProps[PropsMappings[ComponentProp]['cssProp']]
-          : (string | number))
+        ? CssProps[PropsMappings[ComponentProp]['cssProp']]
+        : (string | number))
     | {
         [Breakpoint in keyof Theme['breakpoints']]?: PropsMappings[ComponentProp] extends ThemedPropMapping
           ? Extract<keyof Theme[PropsMappings[ComponentProp]['themeProp']], string>
           : PropsMappings[ComponentProp] extends ResponsivePropMapping
-            ? CssProps[PropsMappings[ComponentProp]['cssProp']]
-            : (string | number)
+          ? CssProps[PropsMappings[ComponentProp]['cssProp']]
+          : (string | number)
       }
 } & { css?: InlineCss<T> };
 
@@ -141,6 +142,10 @@ export interface ThemeEasingFunctions extends EasingFunctions {}
 
 type TransitionDurations = typeof defaultBaseTheme.transitionDurations;
 export interface ThemeTransitionDurations extends TransitionDurations {}
+
+export interface ThemeKeyframes {
+  [key: string]: CSSObject;
+}
 
 type ZIndex = typeof defaultBaseTheme.zIndex;
 export interface ThemeZIndex extends ZIndex {}
