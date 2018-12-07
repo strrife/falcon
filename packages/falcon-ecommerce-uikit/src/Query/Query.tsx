@@ -5,12 +5,11 @@ import { Loader } from './Loader';
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
-export class Query<TData = any, TVariables = OperationVariables, TTranslations = {}> extends React.Component<
+export class Query<TData = any, TVariables = OperationVariables> extends React.Component<
   Omit<QueryProps<TData, TVariables>, 'children'> & {
-    children: (result: TData & { translations: TTranslations }) => React.ReactNode;
+    children: (result: TData) => React.ReactNode;
   } & {
     fetchMore?: (data: TData, fetchMore: QueryResult<TData, TVariables>['fetchMore']) => any;
-    translationsNamespaces?: string[];
   }
 > {
   static propTypes = {
