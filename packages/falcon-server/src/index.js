@@ -3,10 +3,13 @@ const Router = require('koa-router');
 const session = require('koa-session');
 const cors = require('@koa/cors');
 const get = require('lodash/get');
+const capitalize = require('lodash/capitalize');
 const { ApolloServer } = require('apollo-server-koa');
+const { InMemoryLRUCache } = require('apollo-server-caching');
 const Logger = require('@deity/falcon-logger');
 const ApiContainer = require('./containers/ApiContainer');
 const ExtensionContainer = require('./containers/ExtensionContainer');
+const EndpointContainer = require('./containers/EndpointContainer');
 const { EventEmitter2 } = require('eventemitter2');
 const { resolve: resolvePath } = require('path');
 const { readFileSync } = require('fs');
@@ -47,7 +50,7 @@ class FalconServer {
   async initialize() {
     await this.eventEmitter.emitAsync(Events.BEFORE_INITIALIZED, this);
     await this.initializeServerApp();
-    await this.initializeExtensions();
+    await this.initializeContainers();
     await this.initializeApolloServer();
     await this.registerEndpoints();
     await this.eventEmitter.emitAsync(Events.AFTER_INITIALIZED, this);
@@ -59,10 +62,18 @@ class FalconServer {
 
     const apolloServerConfig = await this.extensionContainer.createGraphQLConfig({
       schemas: [BaseSchema],
-      dataSources: this.apiContainer.dataSources.values(),
+      dataSources: () => {
+        Logger.debug('FalconServer: Initializing GraphQL DataSources');
+        const dataSources = {};
+        this.apiContainer.dataSources.forEach((value, key) => {
+          dataSources[key] = value();
+        });
+        return dataSources;
+      },
       formatError: error => this.formatGraphqlError(error),
       // inject session and headers into GraphQL context
       context: ({ ctx }) => ({
+        cache,
         headers: ctx.req.headers,
         session: ctx.req.session
       }),
@@ -143,7 +154,7 @@ class FalconServer {
   /**
    * @private
    */
-  async initializeExtensions() {
+  async initializeContainers() {
     await this.eventEmitter.emitAsync(Events.BEFORE_API_CONTAINER_CREATED, this.config.apis);
     /** @type {ApiContainer} */
     this.apiContainer = new ApiContainer(this.eventEmitter);
@@ -158,6 +169,9 @@ class FalconServer {
 
     this.backendConfig = await this.extensionContainer.initialize();
     await this.eventEmitter.emitAsync(Events.AFTER_EXTENSION_CONTAINER_INITIALIZED, this.extensionContainer);
+
+    this.endpointContainer = new EndpointContainer();
+    await this.endpointContainer.registerEndpoints(this.config.endpoints);
   }
 
   /**
@@ -179,31 +193,29 @@ class FalconServer {
    * @return {Object} instance of cache backend
    */
   getCacheInstance() {
-    const { enabled = false, package: pkg, options = {} } = this.config.cache || {};
-    if (enabled) {
-      try {
-        // eslint-disable-next-line import/no-dynamic-require
-        const CacheBackend = require(pkg);
-        return new CacheBackend(options);
-      } catch (ex) {
-        Logger.error(
-          `FalconServer: Cannot initialize cache backend using "${
-            this.config.cache.package
-          }" package, GraphQL server will operate without cache`
-        );
-      }
+    const { type, options = {} } = this.config.cache || {};
+    const packageName = type ? `apollo-server-cache-${type}` : null;
+    try {
+      // eslint-disable-next-line import/no-dynamic-require
+      const CacheBackend = packageName ? require(packageName)[`${capitalize(type)}Cache`] : InMemoryLRUCache;
+      return new CacheBackend(options);
+    } catch (ex) {
+      Logger.error(
+        `FalconServer: Cannot initialize cache backend using "${packageName}" package, GraphQL server will operate without cache`
+      );
     }
   }
 
   /**
+   * Registers API Provider endpoints
    * @private
    */
   async registerEndpoints() {
     Logger.debug(`FalconServer: registering API endpoints`);
-    await this.eventEmitter.emitAsync(Events.BEFORE_ENDPOINTS_REGISTERED, this.apiContainer.endpoints);
-    this.apiContainer.endpoints.forEach(endpoint => {
-      (Array.isArray(endpoint.methods) ? endpoint.methods : [endpoint.methods]).forEach(method => {
-        this.router[method](endpoint.path, endpoint.handler);
+    await this.eventEmitter.emitAsync(Events.BEFORE_ENDPOINTS_REGISTERED, this.endpointContainer.entries);
+    this.endpointContainer.entries.forEach(({ methods, path: routerPath, handler }) => {
+      (Array.isArray(methods) ? methods : [methods]).forEach(method => {
+        this.router[method.toLowerCase()](routerPath, handler);
       });
     });
 
