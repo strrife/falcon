@@ -7,7 +7,7 @@
     "access": "public"
   },
   "bin": {
-    "eject": "./eject.js"
+    "eject": "./bin/eject.js"
   },
   "dependencies": {
     "@babel/core": "^7.2.0",

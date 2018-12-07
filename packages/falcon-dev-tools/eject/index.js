@@ -1,6 +1,5 @@
-#!/usr/bin/env node
-
 /* eslint-disable no-use-before-define, import/no-dynamic-require */
+
 const path = require('path');
 const fs = require('fs-extra');
 const klawSync = require('klaw-sync');
@@ -19,9 +18,21 @@ const prettierOptions = {
   endOfLine: 'lf'
 };
 
-async function run() {
-  const packageToEject = process.argv[2];
-  const targetDir = process.argv[3];
+module.exports = {
+  eject
+};
+
+async function eject(packageToEject, targetDir) {
+  if (!packageToEject) {
+    console.log(chalk.red(`Please, provide package to eject arg`));
+    return;
+  }
+
+  if (!targetDir) {
+    console.log(chalk.red(`Please, provide target dir where package will be ejected`));
+    return;
+  }
+
   const targetDirFullPath = path.join(process.cwd(), targetDir);
   const appSrc = path.join(process.cwd(), 'src');
   // assumption is that resolvedPackageDir points to dist folder that is one level deep inside root package dir
@@ -36,7 +47,9 @@ async function run() {
   // don't run any further if targetDir already exists, we don't want to overwrite anything
   if (fs.pathExistsSync(targetDirFullPath)) {
     console.log(
-      chalk.red(`Looks like ${bold(packageToEject)} has been already ejected because ${bold(targetDir)} dir already exists.`)
+      chalk.red(
+        `Looks like ${bold(packageToEject)} has been already ejected because ${bold(targetDir)} dir already exists.`
+      )
     );
 
     return;
@@ -83,8 +96,6 @@ async function run() {
 
   console.log(chalk.green(`${bold(packageToEject)} package ejected!`));
 }
-
-run();
 
 function convertToJs(ejectedFilesMeta) {
   ejectedFilesMeta.forEach(meta => {
