@@ -63,7 +63,7 @@ class FalconServer {
     const apolloServerConfig = await this.extensionContainer.createGraphQLConfig({
       schemas: [BaseSchema],
       dataSources: () => {
-        Logger.debug('FalconServer: Initializing GraphQL DataSources');
+        Logger.debug('FalconServer: Instantiating GraphQL DataSources');
         const dataSources = {};
         this.apiContainer.dataSources.forEach((value, key) => {
           dataSources[key] = value();

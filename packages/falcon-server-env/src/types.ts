@@ -1,4 +1,5 @@
 import { Response, Request } from 'apollo-server-env';
+import { KeyValueCache } from 'apollo-server-caching';
 import { CacheOptions, RequestOptions } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { IMiddleware } from 'koa-router';
 import { RequestInit } from 'apollo-server-env';
@@ -72,6 +73,7 @@ export interface GraphQLContext {
   headers?: {
     [propName: string]: string;
   };
+  cache: KeyValueCache;
   dataSources: DataSources;
   [propName: string]: any;
 }

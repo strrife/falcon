@@ -52,7 +52,7 @@ module.exports = class ApiContainer extends BaseContainer {
             name: apiInstance.name
           });
 
-          Logger.debug(`ApiContainer: "${apiInstance.name}" added to the list of API DataSources`);
+          Logger.debug(`ApiContainer: "${apiInstance.name}" API DataSource instantiated`);
 
           return apiInstance;
         };

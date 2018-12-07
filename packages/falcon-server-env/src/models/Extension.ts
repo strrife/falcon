@@ -1,5 +1,7 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLSchema, GraphQLObjectType } from 'graphql';
+import { makeExecutableSchema } from 'graphql-tools';
 import { EventEmitter2 } from 'eventemitter2';
+import * as Logger from '@deity/falcon-logger';
 import ApiDataSource from './ApiDataSource';
 import {
   ApiUrlPriority,
@@ -17,6 +19,18 @@ export type ConfigurableContainerConstructorParams = ConfigurableConstructorPara
 export interface ExtensionConfig {
   api?: string;
 }
+
+export interface RootFieldTypes {
+  [name: string]: Array<string>;
+}
+
+export type GraphQLFieldResolver = (parent: any, args: any, context: GraphQLContext, info: GraphQLResolveInfo) => any;
+
+export type GraphQLResolverMap = {
+  [name: string]: {
+    [name: string]: GraphQLFieldResolver;
+  };
+};
 
 export default abstract class Extension {
   public config: ExtensionConfig;
@@ -43,10 +57,28 @@ export default abstract class Extension {
 
   /**
    * GraphQL configuration getter
+   * @param {string} typeDefs Extension's GQL schema type definitions
    * @return {object} GraphQL configuration object
    */
-  async getGraphQLConfig(): Promise<object> {
-    return {};
+  async getGraphQLConfig(typeDefs: string = ''): Promise<object> {
+    if (!typeDefs) {
+      Logger.warn(`${this.name}: typeDefs is empty! Make sure you call "super.getGraphQLConfig(typeDefs)" properly`);
+    }
+    const rootTypes: RootFieldTypes = this.getRootTypeFields(typeDefs);
+    const resolvers: GraphQLResolverMap = {};
+
+    Object.keys(rootTypes).forEach((typeName: string) => {
+      resolvers[typeName] = {};
+      rootTypes[typeName].forEach((fieldName: string) => {
+        resolvers[typeName][fieldName] = (parent: any, args: any, context: GraphQLContext, info: GraphQLResolveInfo) =>
+          (this.getApi(context) as any)[fieldName](parent, args, context, info);
+      });
+    });
+
+    return {
+      schema: [typeDefs],
+      resolvers
+    };
   }
 
   /**
@@ -60,18 +92,70 @@ export default abstract class Extension {
   }
 
   /**
-   * Should be implemented if extension wants to deliver content for dynamic urls. It should return priority value for passed url.
-   * @param {string} url - url for which the priority should be returned
-   * @return {number|null} Priority index or null (if "dynamic URL" is not supported)
+   * Returns a session object from the assigned API Provider
+   * @param {GraphQLContext} context GraphQL Resolver context object
+   * @return {object} Session object
    */
-  getFetchUrlPriority(url: string): number | null {
-    return this.api && this.api.getFetchUrlPriority ? this.api.getFetchUrlPriority(url) : ApiUrlPriority.OFF;
+  getApiSession(context: GraphQLContext): any {
+    return this.getApi(context)!.session;
   }
 
-  async fetchUrl?(
-    root: object,
-    params: FetchUrlParams,
-    context: any,
-    info: GraphQLResolveInfo
-  ): Promise<FetchUrlResult>;
+  /**
+   * Should be implemented if extension wants to deliver content for dynamic urls. It should return priority value for passed url.
+   * @param {GraphQLContext} context GraphQL Resolver context object
+   * @param {string} path - url for which the priority should be returned
+   * @return {number|null} Priority index or null (if "dynamic URL" is not supported)
+   */
+  getFetchUrlPriority(context: GraphQLContext, path: string): number | null {
+    const apiDataSource: ApiDataSource<GraphQLContext> | null = this.getApi(context);
+    return apiDataSource && apiDataSource.getFetchUrlPriority
+      ? apiDataSource.getFetchUrlPriority(path)
+      : ApiUrlPriority.OFF;
+  }
+
+  /**
+   * Returns a map of fields by GQL type name
+   * @param {string} typeDefs Extension GQL schema type definitions
+   * @return {RootFieldTypes} Map of GQL type-fields
+   */
+  protected getRootTypeFields(typeDefs: string): RootFieldTypes {
+    const result: RootFieldTypes = {};
+    if (!typeDefs) {
+      return result;
+    }
+    try {
+      const executableSchema: GraphQLSchema = makeExecutableSchema({
+        typeDefs: [
+          typeDefs
+            // Removing "extend type X" to avoid
+            .replace(/extend\s+type/gm, 'type')
+            // Removing references of base schema types
+            .replace(/:\s*(\w+)/gm, ': Int')
+            .replace(/\[\s*(\w+)\s*]/gm, '[Int]')
+        ]
+      });
+
+      [executableSchema.getQueryType(), executableSchema.getMutationType()].forEach(
+        (type: GraphQLObjectType | undefined | null) => {
+          if (!type) {
+            return;
+          }
+          const typeName: string = (type as GraphQLObjectType).name;
+          Object.keys((type as GraphQLObjectType).getFields()).forEach((field: string) => {
+            if (!(typeName in result)) {
+              result[typeName] = [];
+            }
+            result[typeName].push(field as string);
+          });
+        }
+      );
+    } catch (error) {
+      error.message = `${this.name}: Failed to get root type fields - ${error.message}`;
+      throw error;
+    }
+
+    return result;
+  }
+
+  async fetchUrl?(obj: object, args: FetchUrlParams, context: any, info: GraphQLResolveInfo): Promise<FetchUrlResult>;
 }

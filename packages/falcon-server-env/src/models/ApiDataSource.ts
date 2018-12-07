@@ -102,7 +102,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
    * @param {any} value Value to be set to the API session
    * @return {undefined}
    */
-  set session(value: any): never {
+  set session(value: any) {
     if (!this.context.session) {
       this.context.session = {};
     }
@@ -119,8 +119,8 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
   getFetchUrlPriority?(url: string): number;
 
   async fetchUrl?(
-    root: object,
-    params: FetchUrlParams,
+    obj: object,
+    args: FetchUrlParams,
     context: TContext,
     info: GraphQLResolveInfo
   ): Promise<FetchUrlResult>;
