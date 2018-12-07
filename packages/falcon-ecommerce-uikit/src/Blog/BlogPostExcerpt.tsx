@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, H2, Text, Image, DefaultThemeProps, Link } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
+import { Box, H3, Text, Image, DefaultThemeProps, Link } from '@deity/falcon-ui';
 import { BlogPostExcerptType } from './BlogPostsQuery';
 import { DateFormat } from '../Locale';
 import { toGridTemplate } from '../helpers';
@@ -25,18 +25,10 @@ const blogPostExcerptLayout: DefaultThemeProps = {
       xs: toGridTemplate([
         [ '1fr',                      ],
         [ BlogPostEcerptArea.image    ],
-        [ BlogPostEcerptArea.title    ],
         [ BlogPostEcerptArea.date     ],
+        [ BlogPostEcerptArea.title    ],
         [ BlogPostEcerptArea.excerpt  ],
         [ BlogPostEcerptArea.readMore ]
-      ]),
-
-      md: toGridTemplate([
-        [ '2fr',                      '1fr'                               ],
-        [ BlogPostEcerptArea.date,     BlogPostEcerptArea.image           ],
-        [ BlogPostEcerptArea.title,    BlogPostEcerptArea.image           ],
-        [ BlogPostEcerptArea.excerpt,  BlogPostEcerptArea.image           ],
-        [ BlogPostEcerptArea.readMore, BlogPostEcerptArea.image,     '1fr'],
       ])
     },
     css: {
@@ -45,18 +37,21 @@ const blogPostExcerptLayout: DefaultThemeProps = {
   }
 };
 
-export const BlogPostExcerpt: React.SFC<{ excerpt: BlogPostExcerptType }> = ({ excerpt }) => (
-  <Box as="li">
+export const BlogPostExcerpt: React.SFC<{ excerpt: BlogPostExcerptType }> = ({ excerpt, ...rest }) => (
+  <Box as="li" {...rest}>
     <Link as={RouterLink} to={excerpt.slug} defaultTheme={blogPostExcerptLayout}>
       {excerpt.image && (
-        <Image gridArea={BlogPostEcerptArea.image} src={excerpt.image.url} alt={excerpt.image.description} />
+        <Image
+          css={{ height: 300 }}
+          gridArea={BlogPostEcerptArea.image}
+          src={excerpt.image.url}
+          alt={excerpt.image.description}
+        />
       )}
-      <H2 gridArea={BlogPostEcerptArea.title}>{excerpt.title}</H2>
+      <H3 gridArea={BlogPostEcerptArea.title}>{excerpt.title}</H3>
       <DateFormat gridArea={BlogPostEcerptArea.date} value={excerpt.date} />
-      <Text fontSize="md" gridArea={BlogPostEcerptArea.excerpt}>
-        {excerpt.excerpt}
-      </Text>
-      <Text gridArea={BlogPostEcerptArea.readMore}>
+      <Text gridArea={BlogPostEcerptArea.excerpt}>{excerpt.excerpt}</Text>
+      <Text gridArea={BlogPostEcerptArea.readMore} css={{ textDecoration: 'underline' }}>
         <T id="blog.readMore" />
       </Text>
     </Link>

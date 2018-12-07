@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Icon,
   List,
@@ -172,7 +173,7 @@ export const MiniCart: React.SFC<MiniCartData> = ({ cart: { quoteCurrency, items
 
         {items.length > 0 && (
           <Box gridArea={MiniCartLayoutArea.cta} py="sm" bgFullWidth="secondaryLight">
-            <Button css={{ width: '100%' }}>
+            <Button as={RouterLink} to="/cart" onClick={() => closeSidebar()} css={{ width: '100%' }} height="xl">
               <Icon stroke="white" size="md" mr="xs" src="lock" />
               <T id="miniCart.checkout" />
             </Button>

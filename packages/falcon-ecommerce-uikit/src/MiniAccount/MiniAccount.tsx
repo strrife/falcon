@@ -3,7 +3,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Box, Icon, Link, List, ListItem, Button, Text, H2 } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 import { MiniAccountData } from './MiniAccountQuery';
-
 import { SignIn } from './SignIn';
 import { SignOutMutation } from '../SignOut';
 

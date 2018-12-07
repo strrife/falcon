@@ -191,7 +191,6 @@ export class Product extends React.PureComponent<{ product: any }> {
                     }
                   />
                   <ProductDescriptionLayout
-                    my="xs"
                     dangerouslySetInnerHTML={{ __html: product.description }}
                     gridArea={Area.description}
                   />
@@ -206,18 +205,16 @@ export class Product extends React.PureComponent<{ product: any }> {
                       defaultValue={String(values.qty)}
                       onChange={ev => setFieldValue('qty', ev.target.value, !!submitCount)}
                     />
-                    <FlexLayout justifyContent="center" css={{ width: 170 }}>
-                      <Button
-                        type="submit"
-                        height="xl"
-                        mt="sm"
-                        disabled={loading}
-                        variant={loading ? 'loader' : undefined}
-                      >
-                        {!loading && <Icon src="cart" stroke="white" size="md" mr="sm" />}
-                        {t('product.addToCart')}
-                      </Button>
-                    </FlexLayout>
+                    <Button
+                      type="submit"
+                      height="xl"
+                      mt="sm"
+                      disabled={loading}
+                      variant={loading ? 'loader' : undefined}
+                    >
+                      {!loading && <Icon src="cart" stroke="white" size="md" mr="sm" />}
+                      {t('product.addToCart')}
+                    </Button>
                   </FlexLayout>
                   <Box gridArea={Area.error}>
                     <ErrorMessage name="qty" render={msg => <Text color="error">{msg}</Text>} />
