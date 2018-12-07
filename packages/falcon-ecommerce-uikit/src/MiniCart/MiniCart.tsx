@@ -22,14 +22,14 @@ import { CloseSidebarMutation } from '../Sidebar';
 import { toGridTemplate, prettyScrollbars } from '../helpers';
 import { Price } from '../Locale';
 
-export enum MiniCartProductArea {
-  empty = '.',
-  thumb = 'thumb',
-  price = 'price',
-  productName = 'productName',
-  modify = 'modify',
-  remove = 'remove'
-}
+export const MiniCartProductArea = {
+  empty: '.',
+  thumb: 'thumb',
+  price: 'price',
+  productName: 'productName',
+  modify: 'modify',
+  remove: 'remove'
+};
 
 const miniCartProductTheme: DefaultThemeProps = {
   miniCartProduct: {
@@ -45,11 +45,11 @@ const miniCartProductTheme: DefaultThemeProps = {
   }
 };
 
-export enum MiniCartLayoutArea {
-  title = 'title',
-  items = 'items',
-  cta = 'cta'
-}
+export const MiniCartLayoutArea = {
+  title: 'title',
+  items: 'items',
+  cta: 'cta'
+};
 
 const miniCartLayout: DefaultThemeProps = {
   miniCartLayout: {
