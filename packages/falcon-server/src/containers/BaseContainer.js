@@ -20,7 +20,7 @@ module.exports = class BaseContainer {
     let module;
     try {
       module = require(pathOrPackage); // eslint-disable-line import/no-dynamic-require
-      Logger.debug(`${this.constructor.name}: "${pathOrPackage}" loaded as package`);
+      Logger.debug(`${this.constructor.name}: "${pathOrPackage}" loaded as a package`);
     } catch (packageError) {
       try {
         const modulePath = resolve(process.cwd(), pathOrPackage);

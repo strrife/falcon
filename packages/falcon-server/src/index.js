@@ -211,10 +211,10 @@ class FalconServer {
    * @private
    */
   async registerEndpoints() {
-    Logger.debug(`FalconServer: registering API endpoints`);
     await this.eventEmitter.emitAsync(Events.BEFORE_ENDPOINTS_REGISTERED, this.endpointContainer.entries);
     this.endpointContainer.entries.forEach(({ methods, path: routerPath, handler }) => {
       (Array.isArray(methods) ? methods : [methods]).forEach(method => {
+        Logger.debug(`FalconServer: registering endpoint ${method.toUpperCase()}: "${routerPath}"`);
         this.router[method.toLowerCase()](routerPath, handler);
       });
     });
