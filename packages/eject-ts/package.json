@@ -1,13 +1,13 @@
 {
-  "name": "@deity/falcon-eject",
+  "name": "eject-ts",
   "version": "0.0.1",
   "license": "OSL-3.0",
-  "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-dev-tools/eject",
+  "repository": "https://github.com/deity-io/falcon/tree/master/packages/eject-ts",
   "publishConfig": {
     "access": "public"
   },
   "bin": {
-    "eject": "./bin/eject.js"
+    "eject-ts": "./bin/eject.js"
   },
   "dependencies": {
     "@babel/core": "^7.2.0",
