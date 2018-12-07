@@ -1,5 +1,6 @@
 import * as Logger from '@deity/falcon-logger';
 import { DataSourceConfig } from 'apollo-datasource';
+import { KeyValueCache } from 'apollo-server-caching';
 import { Body, Request, RESTDataSource } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URL, URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
 import { GraphQLResolveInfo } from 'graphql';
@@ -11,7 +12,6 @@ import {
   ApiContainer,
   ApiUrlPriority,
   ApiDataSourceConfig,
-  ApiDataSourceEndpoint,
   ConfigurableConstructorParams,
   ContextCacheOptions,
   ContextFetchResponse,
@@ -38,6 +38,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
 
   protected apiContainer: ApiContainer;
   protected eventEmitter: EventEmitter2;
+  protected cache?: KeyValueCache;
 
   /**
    * @param {ConfigurableContainerConstructorParams} params Constructor params
@@ -74,49 +75,39 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
     this['trace'] = this.traceLog.bind(this);
   }
 
-  /**
-   * This method should be used for "pre-initializing" API DataSource instance,
-   * for example - for fetching API backend configuration required for Server start up
-   * @return {Promise<TResult|null>} Result object
-   */
-  async preInitialize<TResult = any>(): Promise<TResult | null> {
-    return null;
-  }
-
   initialize(config: DataSourceConfig<TContext>): void {
     super.initialize(config);
-    this.httpCache = new ContextHTTPCache(config.cache);
+    this.cache = config.cache;
+    this.httpCache = new ContextHTTPCache(this.cache);
   }
 
   /**
    * Wrapper-method to get an API-scoped session data
-   * @param {TContext} context Current resolver context
    * @returns {any} API-scoped session data
    */
-  getSession(context: TContext): any {
-    if (!context.session) {
+  get session(): any {
+    if (!this.context.session) {
       return {};
     }
 
-    if (!(this.name in context.session)) {
-      context.session[this.name] = {};
+    if (!(this.name in this.context.session)) {
+      this.context.session[this.name] = {};
     }
 
-    return context.session[this.name];
+    return this.context.session[this.name];
   }
 
   /**
    * Wrapper-method to set an API-scoped session data
-   * @param {TContext} context Current resolver context
    * @param {any} value Value to be set to the API session
    * @return {undefined}
    */
-  setSession(context: TContext, value: any) {
-    if (!context.session) {
-      context.session = {};
+  set session(value: any): never {
+    if (!this.context.session) {
+      this.context.session = {};
     }
 
-    context.session[this.name] = value;
+    this.context.session[this.name] = value;
   }
 
   /**
@@ -133,14 +124,6 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
     context: TContext,
     info: GraphQLResolveInfo
   ): Promise<FetchUrlResult>;
-
-  /**
-   * Returns a list of REST endpoints to be handled by this module
-   * @return {ApiDataSourceEndpoint[]} List of API routes (endpoints)
-   */
-  getEndpoints(): ApiDataSourceEndpoint[] {
-    return [];
-  }
 
   protected async willSendRequest(request: ContextRequestOptions): Promise<void> {
     const { context } = request;

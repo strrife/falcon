@@ -97,8 +97,17 @@ export type FetchUrlParams = {
   path: string;
 };
 
-export interface ApiDataSourceEndpoint {
-  path: string;
-  methods: string[];
+export interface EndpointEntry {
+  methods: Array<RequestMethod>;
   handler: IMiddleware;
+  path: string;
+}
+
+export enum RequestMethod {
+  GET = 'get',
+  POST = 'post',
+  PUT = 'put',
+  DELETE = 'delete',
+  PATCH = 'patch',
+  ALL = 'all'
 }

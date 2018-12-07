@@ -1,21 +1,6 @@
 import { EventEmitter2 } from 'eventemitter2';
 import { Context } from 'koa';
-import { ConfigurableConstructorParams, UrlConfig } from '../types';
-
-export interface EndpointEntry {
-  methods: Array<RequestMethod>;
-  handler: (ctx: Context, next: Function) => Promise<any>;
-  path: String;
-}
-
-export enum RequestMethod {
-  GET = 'get',
-  POST = 'post',
-  PUT = 'put',
-  DELETE = 'delete',
-  PATCH = 'patch',
-  ALL = 'all'
-}
+import { ConfigurableConstructorParams, EndpointEntry, UrlConfig } from '../types';
 
 export default abstract class EndpointManager {
   public config: UrlConfig;
