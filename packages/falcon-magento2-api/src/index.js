@@ -33,6 +33,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         baseCurrency: () => this.session.baseCurrency,
         timezone: () => this.session.timezone,
         weightUnit: () => this.session.weightUnit
+      },
+      SearchResults: {
+        products: parent => {
+          console.log('SearchResults.products resolver');
+          console.log(JSON.stringify(parent, null, 2));
+          return parent.products.items.map(item => this.product(null, item));
+        }
       }
     };
     Logger.debug(`${this.name}: Adding additional resolve functions`);
@@ -1543,5 +1550,73 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   removeCartData() {
     delete this.session.cart;
     this.context.session.save();
+  }
+
+  async search(parent, params) {
+    const { query } = params;
+    const queryParams = {
+      searchCriteria: {
+        requestName: 'quick_search_container',
+        currentPage: 1,
+        pageSize: 4,
+        filterGroups: [
+          {
+            filters: [
+              {
+                // field: 'search_term',
+                field: 'configurator_quick_search_container',
+                value: query
+                // value: `%25${query}%25`
+              },
+              {
+                field: 'category_ids',
+                value: 2
+              },
+              {
+                field: 'price.from',
+                value: 1
+              },
+              {
+                field: 'price.to',
+                value: 10000
+              },
+              {
+                field: 'price_dynamic_algorithm',
+                value: 'auto'
+              }
+            ]
+          }
+        ]
+      }
+    };
+    queryParams.withAttributeFilters = ['size'];
+    try {
+      const resp = await this.get('/search', queryParams);
+      // console.log('raw data', JSON.stringify(resp, null, 2));
+      const data = this.convertKeys(resp.data);
+      debugger;
+
+      // const ids = resp.data.items.map(item => item.id);
+      // console.log('ids to load', ids);
+      // const loadParams = {};
+      // this.addSearchFilter(loadParams, 'id', `[${ids.join(',')}]`, 'in');
+
+      // const resp2 = await this.fetchList('/products', loadParams);
+      // console.log(
+      //   'raw data 2:',
+      //   JSON.stringify(resp2.data.items.map(item => ({ id: item.id, sku: item.sku })), null, 2)
+      // );
+
+      // return data;
+      return {
+        products: {
+          items: data.items.map(item => ({
+            id: item.id
+          }))
+        }
+      };
+    } catch (ex) {
+      console.log('ex', JSON.stringify(ex, null, 2));
+    }
   }
 };

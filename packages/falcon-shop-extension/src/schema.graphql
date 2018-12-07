@@ -19,6 +19,13 @@ extend type Query {
   cmsPage(id: Int, identifier: String): CmsPage
   cmsBlock(identifier: String): CmsBlock
   validatePasswordToken(token: String!): Boolean
+  search(
+    query: String
+    filters: [SearchFilterInput]
+    sortOrders: [SortOrderInput]
+    pagination: [PaginationInput]
+    options: [SearchOptions]
+  ): SearchResults
 }
 
 extend type Mutation {
@@ -501,4 +508,63 @@ type CmsPage {
   id: String
   title: String
   content: String
+}
+
+input SearchFilterInput {
+  """
+  Property that should be used for filtering
+  """
+  property: String
+  """
+  Configuration of the property
+  """
+  value: FilterValue
+}
+
+input FilterValue {
+  """
+  Equals
+  """
+  eq: String
+  """
+  Not equals
+  """
+  neq: String
+  """
+  Less then
+  """
+  lt: String
+  """
+  Greater then
+  """
+  gt: String
+  """
+  Less then or equals
+  """
+  lteq: String
+  """
+  Greater then or equals
+  """
+  gteq: String
+}
+
+"""
+Extra options that can be passed to search query
+"""
+input SearchOptions {
+  """
+  Name of the option
+  """
+  name: String!
+  """
+  Value of the option
+  """
+  value: String!
+}
+
+"""
+Base result of the search
+"""
+type SearchResults {
+  products: ProductList
 }
