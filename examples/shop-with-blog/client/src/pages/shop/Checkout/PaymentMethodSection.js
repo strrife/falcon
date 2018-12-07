@@ -76,11 +76,17 @@ class PaymentSection extends React.Component {
 }
 
 PaymentSection.propTypes = {
+  // flag that indicates if the section is currently open
   open: PropTypes.bool,
+  // all available payment methods
   availablePaymentMethods: PropTypes.arrayOf(PropTypes.shape({})),
+  // currently selected payment method
   selectedPayment: PropTypes.shape({}),
+  // callback that should be called when user requests edit of this particular section
   onEditRequested: PropTypes.func,
+  // callback that sets selected payment method
   setPayment: PropTypes.func,
+  // errors passed from outside that should be displayed for this section
   errors: PropTypes.arrayOf(
     PropTypes.shape({
       message: PropTypes.string

@@ -78,11 +78,17 @@ class ShippingSection extends React.Component {
 }
 
 ShippingSection.propTypes = {
+  // flag that indicates if the section is currently open
   open: PropTypes.bool,
+  // all available shipping methods
   availableShippingMethods: PropTypes.arrayOf(PropTypes.shape({})),
+  // callback that should be called when user requests edit of this particular section
   onEditRequested: PropTypes.func,
+  // currently selected shipping method
   selectedShipping: PropTypes.shape({}),
+  // callback that sets selected shipping method
   setShipping: PropTypes.func,
+  // errors passed from outside that should be displayed for this section
   errors: PropTypes.arrayOf(
     PropTypes.shape({
       message: PropTypes.string
