@@ -16,13 +16,14 @@ import i18next from './i18nextMiddleware';
  * @return {function(ctx: object, next: function)[]} Koa middlewares
  */
 export function renderAppShell({ config, webpackAssets }) {
-  const configSchema = {
-    defaults: {
-      config
-    }
-  };
+  const { apolloClient } = config;
+  const configSchema = { defaults: { config } };
 
-  return [apolloClientProvider({ clientStates: { configSchema } }), helmet(), appShell({ webpackAssets })];
+  return [
+    apolloClientProvider({ config: apolloClient, clientStates: { configSchema } }),
+    helmet(),
+    appShell({ webpackAssets })
+  ];
 }
 
 /**
