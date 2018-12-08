@@ -24,7 +24,7 @@ export interface RootFieldTypes {
   [name: string]: Array<string>;
 }
 
-export type GraphQLFieldResolver = (parent: any, args: any, context: GraphQLContext, info: GraphQLResolveInfo) => any;
+export type GraphQLFieldResolver = (obj: any, args: any, context: GraphQLContext, info: GraphQLResolveInfo) => any;
 
 export type GraphQLResolverMap = {
   [name: string]: {
@@ -70,8 +70,22 @@ export default abstract class Extension {
     Object.keys(rootTypes).forEach((typeName: string) => {
       resolvers[typeName] = {};
       rootTypes[typeName].forEach((fieldName: string) => {
-        resolvers[typeName][fieldName] = (parent: any, args: any, context: GraphQLContext, info: GraphQLResolveInfo) =>
-          (this.getApi(context) as any)[fieldName](parent, args, context, info);
+        Logger.debug(
+          `${this.name}: binding "${typeName}.${fieldName} => ${
+            this.config.api
+          }.${fieldName}(obj, args, context, info)" resolver`
+        );
+        resolvers[typeName][fieldName] = async (
+          obj: any,
+          args: any,
+          context: GraphQLContext,
+          info: GraphQLResolveInfo
+        ) => {
+          if (typeof (this.getApi(context) as any)[fieldName] !== 'function') {
+            throw new Error(`${this.name}: ${this.config.api}.${fieldName}() resolver method is not defined!`);
+          }
+          return (this.getApi(context) as any)[fieldName](obj, args, context, info);
+        };
       });
     });
 
@@ -104,13 +118,17 @@ export default abstract class Extension {
    * Should be implemented if extension wants to deliver content for dynamic urls. It should return priority value for passed url.
    * @param {GraphQLContext} context GraphQL Resolver context object
    * @param {string} path - url for which the priority should be returned
-   * @return {number|null} Priority index or null (if "dynamic URL" is not supported)
+   * @return {number|null} Priority index or ApiUrlPriority.OFF (if "dynamic URL" is not supported)
    */
   getFetchUrlPriority(context: GraphQLContext, path: string): number | null {
     const apiDataSource: ApiDataSource<GraphQLContext> | null = this.getApi(context);
-    return apiDataSource && apiDataSource.getFetchUrlPriority
+    return apiDataSource && apiDataSource.getFetchUrlPriority && apiDataSource.fetchUrl
       ? apiDataSource.getFetchUrlPriority(path)
       : ApiUrlPriority.OFF;
+  }
+
+  async fetchUrl(obj: object, args: FetchUrlParams, context: any, info: GraphQLResolveInfo): Promise<FetchUrlResult> {
+    return this.getApi(context)!.fetchUrl!(obj, args, context, info);
   }
 
   /**
@@ -127,9 +145,9 @@ export default abstract class Extension {
       const executableSchema: GraphQLSchema = makeExecutableSchema({
         typeDefs: [
           typeDefs
-            // Removing "extend type X" to avoid
+            // Removing "extend type X" to avoid "X type missing" errors
             .replace(/extend\s+type/gm, 'type')
-            // Removing references of base schema types
+            // Removing type references from the base schema types
             .replace(/:\s*(\w+)/gm, ': Int')
             .replace(/\[\s*(\w+)\s*]/gm, '[Int]')
         ]
@@ -156,6 +174,4 @@ export default abstract class Extension {
 
     return result;
   }
-
-  async fetchUrl?(obj: object, args: FetchUrlParams, context: any, info: GraphQLResolveInfo): Promise<FetchUrlResult>;
 }
