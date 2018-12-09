@@ -1,10 +1,15 @@
 import { Response, Request } from 'apollo-server-env';
-import { KeyValueCache } from 'apollo-server-caching';
 import { CacheOptions, RequestOptions } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { IMiddleware } from 'koa-router';
 import { RequestInit } from 'apollo-server-env';
 import { EventEmitter2 } from 'eventemitter2';
 import ApiDataSource from './models/ApiDataSource';
+import Cache from './cache/Cache';
+
+export interface DataSourceConfig<TContext> {
+  context: TContext;
+  cache: Cache;
+}
 
 export interface FetchUrlResult {
   id: string | number;
@@ -73,7 +78,7 @@ export interface GraphQLContext {
   headers?: {
     [propName: string]: string;
   };
-  cache: KeyValueCache;
+  cache: Cache;
   dataSources: DataSources;
   [propName: string]: any;
 }

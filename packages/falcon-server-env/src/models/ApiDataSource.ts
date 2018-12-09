@@ -1,12 +1,11 @@
 import * as Logger from '@deity/falcon-logger';
-import { DataSourceConfig } from 'apollo-datasource';
-import { KeyValueCache } from 'apollo-server-caching';
 import { Body, Request, RESTDataSource } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URL, URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
 import { GraphQLResolveInfo } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
 import { stringify } from 'qs';
 import { format } from 'url';
+import Cache from '../cache/Cache';
 import ContextHTTPCache from '../cache/ContextHTTPCache';
 import {
   ApiContainer,
@@ -18,6 +17,7 @@ import {
   ContextFetchRequest,
   ContextRequestInit,
   ContextRequestOptions,
+  DataSourceConfig,
   GraphQLContext,
   FetchUrlParams,
   FetchUrlResult,
@@ -38,7 +38,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
 
   protected apiContainer: ApiContainer;
   protected eventEmitter: EventEmitter2;
-  protected cache?: KeyValueCache;
+  protected cache?: Cache;
 
   /**
    * @param {ConfigurableContainerConstructorParams} params Constructor params
