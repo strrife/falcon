@@ -19,7 +19,7 @@ import {
   LocaleProvider
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
-import AsyncComponent from 'src/components/Async';
+import loadable from 'src/components/loadable';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
 import { Sidebar, SidebarContainer } from 'src/pages/shop/components/Sidebar';
@@ -41,21 +41,19 @@ const HeadMetaTags = () => (
   </Helmet>
 );
 
-const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
-const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
-const SignIn = AsyncComponent(() => import(/* webpackChunkName: "account/sign-in" */ './pages/account/SignIn'));
-const Dashboard = AsyncComponent(() => import(/* webpackChunkName: "account/dashboard" */ './pages/account/Dashboard'));
-const ResetPassword = AsyncComponent(() =>
-  import(/* webpackChunkName: "shop/resetpassword" */ './pages/shop/ResetPassword')
-);
-const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/blog" */ './pages/blog/Blog'));
-const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/post" */ './pages/blog/Post'));
-const Cart = AsyncComponent(() => import(/* webpackChunkName: "shop/cart" */ './pages/shop/Cart'));
-const Checkout = AsyncComponent(() => import(/* webpackChunkName: "shop/checkout" */ './pages/shop/Checkout'));
-const CheckoutConfirmation = AsyncComponent(() =>
+const Category = loadable(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
+const Product = loadable(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
+const SignIn = loadable(() => import(/* webpackChunkName: "account/sign-in" */ './pages/account/SignIn'));
+const Dashboard = loadable(() => import(/* webpackChunkName: "account/dashboard" */ './pages/account/Dashboard'));
+const ResetPassword = loadable(() => import(/* webpackChunkName: "shop/resetpassword" */ './pages/shop/ResetPassword'));
+const Blog = loadable(() => import(/* webpackChunkName: "blog/blog" */ './pages/blog/Blog'));
+const BlogPost = loadable(() => import(/* webpackChunkName: "blog/post" */ './pages/blog/Post'));
+const Cart = loadable(() => import(/* webpackChunkName: "shop/cart" */ './pages/shop/Cart'));
+const Checkout = loadable(() => import(/* webpackChunkName: "shop/checkout" */ './pages/shop/Checkout'));
+const CheckoutConfirmation = loadable(() =>
   import(/* webpackChunkName: "shop/checkout" */ './pages/shop/CheckoutConfirmation')
 );
-const SidebarContents = AsyncComponent(() =>
+const SidebarContents = loadable(() =>
   import(/* webpackChunkName: "shop/SidebarContents" */ './pages/shop/components/Sidebar/SidebarContents')
 );
 
