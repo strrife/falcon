@@ -100,9 +100,12 @@ export const FormField: React.SFC<FormFieldProps> = props => {
       {({ id: formId, name: formName }) => (
         <I18n>
           {t => {
-            const label = fieldLabel || t(`${formName}.${fieldName}${fieldLabelSuffix}`, { defaultValue: '' });
+            const label =
+              fieldLabel || t(`${formName}.${fieldName}${fieldLabelSuffix}`, { defaultValue: '' }) || undefined;
             const placeholder =
-              fieldPlaceholder || t(`${formName}.${fieldName}${fieldPlaceholderSuffix}`, { defaultValue: '' });
+              fieldPlaceholder ||
+              t(`${formName}.${fieldName}${fieldPlaceholderSuffix}`, { defaultValue: '' }) ||
+              undefined;
 
             return (
               <Field
