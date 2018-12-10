@@ -617,6 +617,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
           e.userMessage = true;
           e.noLogging = true;
         }
+      } else if (e.message.match(/^No such entity with cartId/)) {
+        this.removeCartData();
+        delete this.context.magento2.cart;
+        this.context.session.save();
+        e.code = 'INVALID_CART';
       }
 
       throw e;
@@ -677,14 +682,15 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async cart() {
     const quoteId = this.session.cart && this.session.cart.quoteId;
+    const emptyCart = {
+      active: false,
+      itemsQty: 0,
+      items: [],
+      totals: []
+    };
 
     if (!this.session.cart || !this.session.cart.quoteId) {
-      return {
-        active: false,
-        itemsQty: 0,
-        items: [],
-        totals: []
-      };
+      return emptyCart;
     }
 
     if (!quoteId) {
@@ -693,24 +699,30 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     // todo avoid calling both endpoints if not necessary
     const cartPath = this.getCartPath();
-    const [{ data: quote }, { data: totals }] = await Promise.all([
-      this.get(
-        cartPath,
-        {},
-        {
-          context: { didReceiveResult: result => this.convertKeys(result) }
-        }
-      ),
-      this.get(
-        `${cartPath}/totals`,
-        {},
-        {
-          context: { didReceiveResult: result => this.convertKeys(result) }
-        }
-      )
-    ]);
 
-    return this.convertCartData(quote, totals);
+    try {
+      const [{ data: quote }, { data: totals }] = await Promise.all([
+        this.get(
+          cartPath,
+          {},
+          {
+            context: { didReceiveResult: result => this.convertKeys(result) }
+          }
+        ),
+        this.get(
+          `${cartPath}/totals`,
+          {},
+          {
+            context: { didReceiveResult: result => this.convertKeys(result) }
+          }
+        )
+      ]);
+      return this.convertCartData(quote, totals);
+    } catch (ex) {
+      // can't fetch cart so remove its data from session
+      this.removeCartData();
+      return emptyCart;
+    }
   }
 
   /**
@@ -1257,13 +1269,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * Check if given password reset token is valid
    * @param {object} obj Parent object
    * @param {object} params - request params
-   * @param {number} params.id - customer id
    * @param {string} params.token - reset password token
    * @return {Promise<boolean>} true if token is valid
    */
   async validatePasswordToken(obj, params) {
-    const { id, token } = params;
-    const validatePath = `/customers/${id}/password/resetLinkToken/${token}`;
+    const { token } = params;
+    const validatePath = `/customers/0/password/resetLinkToken/${token}`;
 
     try {
       const result = await this.get(validatePath);
@@ -1300,8 +1311,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<boolean>} true on success
    */
   async resetCustomerPassword(obj, { input }) {
-    const { customerId: email, resetToken, password: newPassword } = input;
-    const result = await this.put('/customers/password/reset', { email, resetToken, newPassword });
+    const { resetToken, password: newPassword } = input;
+    const result = await this.put('/customers/password/reset', { email: '', resetToken, newPassword });
     return result.data;
   }
 
@@ -1354,7 +1365,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     try {
-      return await this.put(`${route}/coupons/${input.couponCode}`);
+      const result = await this.put(`${route}/coupons/${input.couponCode}`);
+      return result.data;
     } catch (e) {
       if (e.statusCode === 404) {
         e.userMessage = true;
@@ -1374,13 +1386,16 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const route = this.getCartPath();
 
     if (cart && cart.quoteId) {
-      return this.delete(`${route}/coupons`);
+      const result = this.delete(`${route}/coupons`);
+      return result.data;
     }
 
     throw new Error('Trying to remove coupon without quoteId in session');
   }
 
   async estimateShippingMethods(obj, { input }) {
+    input.address = this.prepareAddressForOrder(input.address);
+
     const response = await this.performCartAction(
       '/estimate-shipping-methods',
       'post',
@@ -1395,6 +1410,19 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     });
 
     return this.convertKeys(response.data);
+  }
+
+  /**
+   * Removes unnecesary fields from address entry so Magento doesn't crash
+   * @param {AddressInput} address - address to process
+   * @return {AddresInput} processed address
+   */
+  prepareAddressForOrder(address) {
+    const data = { ...address };
+    delete data.defaultBilling;
+    delete data.defaultShipping;
+    delete data.id;
+    return data;
   }
 
   /**
@@ -1439,7 +1467,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async setShipping(obj, { input }) {
     const magentoData = {
-      addressInformation: input
+      addressInformation: {
+        ...input,
+        billingAddress: this.prepareAddressForOrder(input.billingAddress),
+        shippingAddress: this.prepareAddressForOrder(input.shippingAddress)
+      }
     };
 
     const response = await this.performCartAction('/shipping-information', 'post', magentoData);
@@ -1504,10 +1536,15 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       return {};
     }
 
-    const response = await this.get(`/orders/${lastOrderId}`);
+    const response = await this.get(`/orders/${lastOrderId}`, {}, { context: { useAdminToken: true } });
     response.data = this.convertKeys(response.data);
     response.data.paymentMethodName = response.data.payment.method;
 
     return response.data;
+  }
+
+  removeCartData() {
+    delete this.context.magento2.cart;
+    this.context.session.save();
   }
 };

@@ -48,5 +48,16 @@
     "emailPlaceholder": "Enter your email address",
     "consent": "I would like to subscribe to updates"
   },
-  "copyright": "© Copyright"
+  "copyright": "© Copyright",
+  "cart": {
+    "title": "Your cart",
+    "emptyCart": "There's nothing in your cart yet",
+    "goShopping": "Let's go shopping!",
+    "couponCode": "Vouchercode",
+    "applyCouponCode": "Activate",
+    "cancelCouponCode": "Cancel code",
+    "invalidCouponCode": "Invalid coupon code",
+    "checkout": "Checkout",
+    "continueShopping": "Shopping"
+  }
 }

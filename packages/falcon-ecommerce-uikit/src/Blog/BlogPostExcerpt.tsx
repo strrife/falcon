@@ -1,17 +1,17 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, H2, Text, Image, DefaultThemeProps, Link } from '@deity/falcon-ui';
+import { Box, H3, Text, Image, DefaultThemeProps, Link } from '@deity/falcon-ui';
 import { BlogPostsTranslations, BlogPostExcerptType } from './BlogPostsQuery';
 import { DateFormat } from '../Locale';
 import { toGridTemplate } from '../helpers';
 
-enum BlogPostEcerptArea {
-  image = 'image',
-  title = 'title',
-  date = 'date',
-  excerpt = 'excerpt',
-  readMore = 'readMore'
-}
+const BlogPostEcerptArea = {
+  image: 'image',
+  title: 'title',
+  date: 'date',
+  excerpt: 'excerpt',
+  readMore: 'readMore'
+};
 
 const blogPostExcerptLayout: DefaultThemeProps = {
   blogPostExcerptLayout: {
@@ -24,18 +24,10 @@ const blogPostExcerptLayout: DefaultThemeProps = {
       xs: toGridTemplate([
         [ '1fr',                      ],
         [ BlogPostEcerptArea.image    ],
-        [ BlogPostEcerptArea.title    ],
         [ BlogPostEcerptArea.date     ],
+        [ BlogPostEcerptArea.title    ],
         [ BlogPostEcerptArea.excerpt  ],
         [ BlogPostEcerptArea.readMore ]
-      ]),
-
-      md: toGridTemplate([
-        [ '2fr',                      '1fr'                               ],
-        [ BlogPostEcerptArea.date,     BlogPostEcerptArea.image           ],
-        [ BlogPostEcerptArea.title,    BlogPostEcerptArea.image           ],
-        [ BlogPostEcerptArea.excerpt,  BlogPostEcerptArea.image           ],
-        [ BlogPostEcerptArea.readMore, BlogPostEcerptArea.image,     '1fr'],
       ])
     },
     css: {
@@ -46,19 +38,25 @@ const blogPostExcerptLayout: DefaultThemeProps = {
 
 export const BlogPostExcerpt: React.SFC<{ excerpt: BlogPostExcerptType; translations: BlogPostsTranslations }> = ({
   excerpt,
-  translations
+  translations,
+  ...rest
 }) => (
-  <Box as="li">
+  <Box as="li" {...rest}>
     <Link as={RouterLink} to={excerpt.slug} defaultTheme={blogPostExcerptLayout}>
       {excerpt.image && (
-        <Image gridArea={BlogPostEcerptArea.image} src={excerpt.image.url} alt={excerpt.image.description} />
+        <Image
+          css={{ height: 300 }}
+          gridArea={BlogPostEcerptArea.image}
+          src={excerpt.image.url}
+          alt={excerpt.image.description}
+        />
       )}
-      <H2 gridArea={BlogPostEcerptArea.title}>{excerpt.title}</H2>
+      <H3 gridArea={BlogPostEcerptArea.title}>{excerpt.title}</H3>
       <DateFormat gridArea={BlogPostEcerptArea.date} value={excerpt.date} />
-      <Text fontSize="md" gridArea={BlogPostEcerptArea.excerpt}>
-        {excerpt.excerpt}
+      <Text gridArea={BlogPostEcerptArea.excerpt}>{excerpt.excerpt}</Text>
+      <Text css={{ textDecoration: 'underline' }} gridArea={BlogPostEcerptArea.readMore}>
+        {translations.readMore}
       </Text>
-      <Text gridArea={BlogPostEcerptArea.readMore}>{translations.readMore}</Text>
     </Link>
   </Box>
 );

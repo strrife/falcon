@@ -29,9 +29,12 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 - feat: basic blog UI (listing posts, displaying single post) ([#137](https://github.com/deity-io/falcon/pull/137))
 - feat: added queries and mutations for cart operations (add to cart, remove from cart, change cart item) ([#114](https://github.com/deity-io/falcon/pull/114))
 - feat: added queries and mutations for sign in / sign out operations ([#152](https://github.com/deity-io/falcon/pull/152))
+- feat: added `ProtectedRoute` and `OnlyUnauthenticatedRoute` route components ([#163](https://github.com/deity-io/falcon/pull/163))
+- feat: added queries and mutations for checkout process and implemented checkout logic abstraction ([#182](https://github.com/deity-io/falcon/pull/182))
 
 ### Create Falcon App v1.0.7 (2018-10-25)
 
+- feat: allow ejecting `falcon-ecommerce-uikit` package via `eject` command (https://github.com/deity-io/falcon/pull/212))
 - docs: updated documentation ([#47](https://github.com/deity-io/falcon/pull/47))
 - fix: fixed problem with React 16.6.0 ([#109](https://github.com/deity-io/falcon/pull/109))
 
@@ -41,6 +44,10 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ([#176](https://github.com/deity-io/falcon/pull/176))
 - feat: `ApiDataSource` and `Extension` models are now accept `eventEmitter` instance
 ([#176](https://github.com/deity-io/falcon/pull/176))
+
+### eject-ts v0.0.1
+
+- feat: eject-ts CLI ([#212](https://github.com/deity-io/falcon/pull/212))
 
 ---
 

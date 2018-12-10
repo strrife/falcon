@@ -14,7 +14,7 @@ import {
 
 import { toGridTemplate } from '../helpers';
 import { MiniCartIcon } from '../MiniCart';
-import { CartQuery } from '../Cart';
+import { CartQuery, CartData } from '../Cart';
 import { HeaderData, MenuItem } from './HeaderQuery';
 import { OpenSidebarMutation } from '../Sidebar';
 
@@ -34,7 +34,7 @@ const bannerLayoutTheme: DefaultThemeProps = {
 export const Banner: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
   <List defaultTheme={bannerLayoutTheme}>
     {items.map(item => (
-      <ListItem p="sm" key={item.name}>
+      <ListItem p="xs" key={item.name}>
         <Link as={RouterLink} to={item.url}>
           {item.name}
         </Link>
@@ -68,12 +68,12 @@ export const Nav: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
   </Navbar>
 );
 
-export enum SearchBarArea {
-  logo = 'logo',
-  signIn = 'signIn',
-  cart = 'cart',
-  search = 'search'
-}
+export const SearchBarArea = {
+  logo: 'logo',
+  signIn: 'signIn',
+  cart: 'cart',
+  search: 'search'
+};
 
 const searchBarLayoutTheme: DefaultThemeProps = {
   searchbarLayout: {
@@ -93,7 +93,7 @@ const searchBarLayoutTheme: DefaultThemeProps = {
 
 export const Searchbar = () => (
   <Box defaultTheme={searchBarLayoutTheme}>
-    <Link as={RouterLink} gridArea={SearchBarArea.logo} to="/">
+    <Link aria-label="DEITY" pl="sm" height="xxl" as={RouterLink} gridArea={SearchBarArea.logo} to="/">
       <Icon src="logo" />
     </Link>
     <OpenSidebarMutation>
@@ -113,7 +113,7 @@ export const Searchbar = () => (
           />
 
           <CartQuery>
-            {(data: any) => (
+            {(data: CartData) => (
               <MiniCartIcon
                 onClick={() =>
                   openSidebar({
@@ -123,7 +123,7 @@ export const Searchbar = () => (
                   })
                 }
                 gridArea={SearchBarArea.cart}
-                itemsQty={data.cart.itemsQty}
+                itemsQty={data.cart ? data.cart.itemsQty : 0}
               />
             )}
           </CartQuery>

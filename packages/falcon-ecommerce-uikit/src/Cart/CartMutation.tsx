@@ -35,6 +35,7 @@ export class RemoveCartItemMutation extends Mutation {
   static defaultProps = {
     mutation: REMOVE_CART_ITEM,
     refetchQueries: ['Cart'],
+    awaitRefetchQueries: true,
     update: (
       store: any,
       {
@@ -69,6 +70,35 @@ export const UPDATE_CART_ITEM = gql`
 export class UpdateCartItemMutation extends Mutation {
   static defaultProps = {
     mutation: UPDATE_CART_ITEM,
+    awaitRefetchQueries: true,
     refetchQueries: ['MiniCart', 'Cart']
+  };
+}
+
+export const APPLY_COUPON = gql`
+  mutation ApplyCoupon($input: CouponInput!) {
+    applyCoupon(input: $input)
+  }
+`;
+
+export class ApplyCouponMutation extends Mutation {
+  static defaultProps = {
+    mutation: APPLY_COUPON,
+    awaitRefetchQueries: true,
+    refetchQueries: ['Cart']
+  };
+}
+
+export const CANCEL_COUPON = gql`
+  mutation CancelCoupon {
+    cancelCoupon
+  }
+`;
+
+export class CancelCouponMutation extends Mutation {
+  static defaultProps = {
+    mutation: CANCEL_COUPON,
+    awaitRefetchQueries: true,
+    refetchQueries: ['Cart']
   };
 }

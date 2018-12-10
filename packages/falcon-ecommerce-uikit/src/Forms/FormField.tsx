@@ -4,11 +4,11 @@ import { Box, Label, Input, DefaultThemeProps, ThemedComponentProps, extractThem
 import { toGridTemplate } from '../helpers';
 import { Validator, passwordValidator, emailValidator, requiredValidator } from './validators';
 
-export enum FormFieldAreas {
-  label = 'label',
-  input = 'input',
-  error = 'error'
-}
+export const FormFieldAreas = {
+  label: 'label',
+  input: 'input',
+  error: 'error'
+};
 
 const formFieldLayout: DefaultThemeProps = {
   formFieldLayout: {
@@ -37,7 +37,7 @@ const formFieldErrorLayout: DefaultThemeProps = {
 };
 
 export type FormFieldProps = {
-  label: string;
+  label?: string;
   name: string;
   validators?: Validator[];
   children?: (props: React.InputHTMLAttributes<HTMLInputElement> & ThemedComponentProps) => React.ReactNode;
@@ -62,6 +62,7 @@ const getDefaultInputTypeValidator = (inputType: string | undefined) => {
 
 // TODO: when new i18n support is ready use it to translate label and placeholder props
 export const FormField: React.SFC<FormFieldProps> = ({
+  id,
   label,
   required,
   name,
@@ -71,7 +72,7 @@ export const FormField: React.SFC<FormFieldProps> = ({
 }) => {
   const hasCustomValidators = validators !== undefined;
   const inputType = remaingProps.type;
-
+  const isHidden = inputType === 'hidden';
   if (required) {
     if (!validators) {
       validators = [];
@@ -88,7 +89,7 @@ export const FormField: React.SFC<FormFieldProps> = ({
   return (
     <Field
       name={name}
-      validate={validateSequentially(validators, label)}
+      validate={validateSequentially(validators, label || '')}
       render={(fieldProps: FieldProps) => {
         const { themableProps, rest } = extractThemableProps(remaingProps);
 
@@ -97,20 +98,24 @@ export const FormField: React.SFC<FormFieldProps> = ({
         const error = getIn(form.errors, name);
         const invalid = !!touch && !!error;
 
+        // TODO: is there a better way of handling input ids (more automated)?
+        // is fallback to name correct?
+        const inputId = id || name;
+
         const inputProps = {
           ...field,
           ...rest,
           gridArea: FormFieldAreas.input,
           height: 'xl',
-          id: name,
+          id: inputId,
           invalid
         };
 
         const defaultInput = <Input {...inputProps} />;
 
         return (
-          <Box defaultTheme={formFieldLayout} {...themableProps}>
-            <Label htmlFor={name} gridArea={FormFieldAreas.label} fontSize="xs" fontWeight="bold">
+          <Box defaultTheme={formFieldLayout} {...themableProps} display={isHidden ? 'none' : undefined}>
+            <Label htmlFor={inputId} gridArea={FormFieldAreas.label} fontSize="xs" fontWeight="bold">
               {label}
             </Label>
             {children ? children(inputProps) : defaultInput}

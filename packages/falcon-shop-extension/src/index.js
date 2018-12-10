@@ -5,7 +5,7 @@ const typeDefs = require('fs').readFileSync(resolve(__dirname, 'schema.graphql')
 /**
  * Extension that implements shop features
  */
-module.exports = class Shop extends Extension {
+class Shop extends Extension {
   async getGraphQLConfig() {
     const gqlConfig = await super.getGraphQLConfig(typeDefs);
 
@@ -22,4 +22,7 @@ module.exports = class Shop extends Extension {
 
     return gqlConfig;
   }
-};
+}
+
+module.exports = Shop;
+module.exports.Schema = typeDefs;
