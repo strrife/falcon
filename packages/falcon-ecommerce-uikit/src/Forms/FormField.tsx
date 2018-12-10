@@ -38,14 +38,6 @@ const formFieldErrorLayout: DefaultThemeProps = {
   }
 };
 
-export type FormFieldProps = {
-  name: string;
-  label?: string;
-  validators?: Validator[];
-  children?: (props: React.InputHTMLAttributes<HTMLInputElement> & ThemedComponentProps) => React.ReactNode;
-} & ThemedComponentProps &
-  React.InputHTMLAttributes<HTMLInputElement>;
-
 const validateSequentially = (validators: Validator[] = [], label: string) => (value: string) => {
   const firstInvalid = validators.find(validator => validator(value, label) !== undefined);
   return firstInvalid ? firstInvalid(value, label) : undefined;
@@ -64,6 +56,14 @@ const getDefaultInputTypeValidator = (inputType: string | undefined) => {
 
 const fieldLabelSuffix = 'FieldLabel';
 const fieldPlaceholderSuffix = 'FieldPlaceholder';
+
+export type FormFieldProps = {
+  name: string;
+  label?: string;
+  validators?: Validator[];
+  children?: (props: React.InputHTMLAttributes<HTMLInputElement> & ThemedComponentProps) => React.ReactNode;
+} & ThemedComponentProps &
+  React.InputHTMLAttributes<HTMLInputElement>;
 
 // TODO: when new i18n support is ready use it to translate label and placeholder props
 export const FormField: React.SFC<FormFieldProps> = props => {
