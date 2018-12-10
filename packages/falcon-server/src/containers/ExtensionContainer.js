@@ -54,7 +54,7 @@ module.exports = class ExtensionContainer extends BaseContainer {
         if (apiName && dataSources.has(apiName)) {
           extensionInstance.api = dataSources.get(apiName);
           Logger.debug(
-            `ExtensionContainer: "${apiName}" API DataSource added to Extension "${extensionInstance.name}"`
+            `ExtensionContainer: "${apiName}" API DataSource assigned to "${extensionInstance.name}" extension`
           );
         } else {
           Logger.debug(`ExtensionContainer: Extension "${extensionInstance.name}" has no API defined`);
@@ -71,15 +71,19 @@ module.exports = class ExtensionContainer extends BaseContainer {
 
   /**
    * Initializes each registered extension (in sequence)
+   * @param {object} obj Parent object
+   * @param {object} args GQL args
+   * @param {object} context GQL context
+   * @param {object} info GQL info
    * @return {BackendConfig} Merged config
    */
-  async initialize() {
+  async fetchBackendConfig(obj, args, context, info) {
     const configs = [];
 
     // initialization of extensions cannot be done in parallel because of race condition
     for (const [extName, ext] of this.extensions) {
-      Logger.debug(`ExtensionContainer: initializing "${extName}" extension`);
-      const extConfig = await ext.initialize();
+      Logger.debug(`ExtensionContainer: Fetching "${extName}" API backend config`);
+      const extConfig = await ext.fetchApiBackendConfig(obj, args, context, info);
       if (extConfig) {
         configs.push(extConfig);
       }

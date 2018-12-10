@@ -5,7 +5,6 @@ const cors = require('@koa/cors');
 const get = require('lodash/get');
 const capitalize = require('lodash/capitalize');
 const { ApolloServer } = require('apollo-server-koa');
-const { InMemoryLRUCache } = require('apollo-server-caching');
 const Logger = require('@deity/falcon-logger');
 const ApiContainer = require('./containers/ApiContainer');
 const ExtensionContainer = require('./containers/ExtensionContainer');
@@ -14,7 +13,7 @@ const { EventEmitter2 } = require('eventemitter2');
 const { resolve: resolvePath } = require('path');
 const { readFileSync } = require('fs');
 const { codes } = require('@deity/falcon-errors');
-const { Events } = require('@deity/falcon-server-env');
+const { Events, Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
 const DynamicRouteResolver = require('./resolvers/DynamicRouteResolver');
 
 const BaseSchema = readFileSync(resolvePath(__dirname, './schema.graphql'), 'utf8');
@@ -57,7 +56,7 @@ class FalconServer {
   }
 
   async getApolloServerConfig() {
-    const cache = this.getCacheInstance();
+    const cache = new Cache(this.getCacheProvider());
     const dynamicRouteResolver = new DynamicRouteResolver(this.extensionContainer);
 
     const apolloServerConfig = await this.extensionContainer.createGraphQLConfig({
@@ -66,7 +65,7 @@ class FalconServer {
         Logger.debug('FalconServer: Instantiating GraphQL DataSources');
         const dataSources = {};
         this.apiContainer.dataSources.forEach((value, key) => {
-          dataSources[key] = value();
+          dataSources[key] = value(apolloServerConfig);
         });
         return dataSources;
       },
@@ -80,16 +79,14 @@ class FalconServer {
       cache,
       resolvers: {
         Query: {
-          url: (...params) => dynamicRouteResolver.fetchUrl(...params),
-          // returning an empty object to make BackendConfig custom resolvers work
-          backendConfig: () => ({})
+          url: async (...params) => dynamicRouteResolver.fetchUrl(...params),
+          backendConfig: async (...params) => this.fetchBackendConfig(...params)
         },
         Mutation: {
           setLocale: (...params) => this.setLocale(...params)
         },
         BackendConfig: {
-          locales: () => this.backendConfig.locales,
-          activeLocale: (root, params, { session: ctxSession }) => ctxSession.locale
+          activeLocale: (_, __, { session: _session }) => _session.locale
         }
       },
       tracing: this.config.debug,
@@ -167,9 +164,6 @@ class FalconServer {
     await this.extensionContainer.registerExtensions(this.config.extensions, this.apiContainer.dataSources);
     await this.eventEmitter.emitAsync(Events.AFTER_EXTENSION_CONTAINER_CREATED, this.extensionContainer);
 
-    this.backendConfig = await this.extensionContainer.initialize();
-    await this.eventEmitter.emitAsync(Events.AFTER_EXTENSION_CONTAINER_INITIALIZED, this.extensionContainer);
-
     this.endpointContainer = new EndpointContainer();
     await this.endpointContainer.registerEndpoints(this.config.endpoints);
   }
@@ -190,9 +184,9 @@ class FalconServer {
   /**
    * Create instance of cache backend based on configuration ("cache" key from config)
    * @private
-   * @return {Object} instance of cache backend
+   * @return {KeyValueCache} instance of cache backend
    */
-  getCacheInstance() {
+  getCacheProvider() {
     const { type, options = {} } = this.config.cache || {};
     const packageName = type ? `apollo-server-cache-${type}` : null;
     try {
@@ -223,9 +217,13 @@ class FalconServer {
     await this.eventEmitter.emitAsync(Events.AFTER_ENDPOINTS_REGISTERED, this.router);
   }
 
-  async setLocale(root, { locale }, { session: ctxSession }) {
-    ctxSession.locale = locale;
-    return this.backendConfig;
+  async setLocale(_, args, context, info) {
+    context.session.locale = args.locale;
+    return this.fetchBackendConfig(_, args, context, info);
+  }
+
+  async fetchBackendConfig(_, args, context, info) {
+    return this.extensionContainer.fetchBackendConfig(_, args, context, info);
   }
 
   formatGraphqlError(error) {

@@ -38,13 +38,14 @@ module.exports = class ApiContainer extends BaseContainer {
 
         const { package: pkg, config = {} } = api;
         const ApiClass = this.importModule(pkg);
-        const apiInstanceCb = () => {
+        const apiInstanceCb = apolloServerConfig => {
           /** @type {ApiDataSource} */
           const apiInstance = new ApiClass({
             config,
             name: apiKey,
             apiContainer: this,
-            eventEmitter: this.eventEmitter
+            eventEmitter: this.eventEmitter,
+            gqlServerConfig: apolloServerConfig
           });
 
           this.eventEmitter.emit(Events.API_DATA_SOURCE_REGISTERED, {

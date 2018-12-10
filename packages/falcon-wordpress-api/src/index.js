@@ -31,7 +31,7 @@ module.exports = class WordpressApi extends ApiDataSource {
     const { apiPrefix } = this.config;
     const { baseLanguage, languageSupported, languageMap } = this;
 
-    const language = languageSupported && locale ? languageMap[locale] : baseLanguage;
+    const language = languageSupported && locale && languageMap[locale] ? languageMap[locale] : baseLanguage;
     // for base lang do not add prefix
     const langPrefix = language && language !== baseLanguage ? `/${language}` : '';
 
@@ -65,11 +65,7 @@ module.exports = class WordpressApi extends ApiDataSource {
     };
   }
 
-  async preInitialize() {
-    if (!this.context) {
-      this.initialize({ context: {} });
-    }
-
+  async fetchBackendConfig() {
     const config = await this.get('blog/info');
     const { languages = {} } = config;
     this.languageSupported = !!Object.keys(languages).length;
@@ -92,11 +88,11 @@ module.exports = class WordpressApi extends ApiDataSource {
   /**
    * Fetch single published post by slug
    * @query
-   * @param {object} root GraphQL root object
+   * @param {object} _ GraphQL root object
    * @param {string} path WP "slug" value
    * @return {Object} Post data
    */
-  async blogPost(root, { path }) {
+  async blogPost(_, { path }) {
     const slug = path.replace('/', '');
 
     const query = {
@@ -123,12 +119,12 @@ module.exports = class WordpressApi extends ApiDataSource {
   /**
    * Fetch published posts.
    * @query
-   * @param {object} root GraphQL root object
+   * @param {object} _ GraphQL root object
    * @param {object} query Query object
-   * @param {object} session Web-server session data
+   * @param {object} pagination Pagination
    * @return {Object[]} posts data
    */
-  async blogPosts(root, { query, pagination }) {
+  async blogPosts(_, { query, pagination }) {
     const payload = {
       ...query
     };
@@ -356,22 +352,24 @@ module.exports = class WordpressApi extends ApiDataSource {
   /**
    * Fetch wordpress url based on pathname and check if it contains any redirect.
    * Convert response based on data type (page | post | category )
-   * @param {object} root GQL root object
+   * @param {object} _ GQL root object
    * @param {object} params GQL params object
    * @param {string} params.path URL path param
-   * @param {object} context GQL context object
-   * @param {object} context.session GQL session object
    * @return {Object} response - with reduced and converted data
    */
-  async fetchUrl(root, params, { session }) {
-    const { locale } = session;
+  async fetchUrl(_, { path }) {
+    const { locale } = this.context.session;
 
-    return this.get('url', params, {
-      context: {
-        authRequired: this.isDraft(params.path),
-        didReceiveResult: result => this.reduceUrl(result, params.path, this.languageMap[locale])
+    return this.get(
+      'url',
+      { path },
+      {
+        context: {
+          authRequired: this.isDraft(path),
+          didReceiveResult: result => this.reduceUrl(result, path, this.languageMap[locale])
+        }
       }
-    });
+    );
   }
 
   reduceUrl(result, path, language) {

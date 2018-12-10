@@ -8,28 +8,18 @@ const typeDefs = require('fs').readFileSync(resolve(__dirname, 'schema.graphql')
  * Features:
  * - list posts
  * - show single post
- * - show shop products inside post
  */
 module.exports = class Blog extends Extension {
   async getGraphQLConfig() {
-    return {
-      schema: [typeDefs],
-      dataSources: {
-        [this.api.name]: this.api
-      },
-      resolvers: {
-        Query: {
-          blogPost: async (...params) => this.api.blogPost(...params),
-          blogPosts: async (...params) => this.api.blogPosts(...params)
-        },
-        BackendConfig: {
-          blog: () => this.apiConfig
-        }
-      }
-    };
-  }
+    const gqlConfig = await super.getGraphQLConfig(typeDefs);
 
-  async fetchUrl(...params) {
-    return this.api.fetchUrl(...params);
+    Object.assign(gqlConfig.resolvers, {
+      BackendConfig: {
+        // Returning an empty object to make BlogConfig resolvers work
+        blog: () => ({})
+      }
+    });
+
+    return gqlConfig;
   }
 };
