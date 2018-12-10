@@ -131,6 +131,19 @@ export default abstract class Extension {
     return this.getApi(context)!.fetchUrl!(obj, args, context, info);
   }
 
+  fetchApiBackendConfig(
+    obj: object,
+    args: object,
+    context: any,
+    info: GraphQLResolveInfo
+  ): Promise<object | undefined> {
+    const apiDataSource: ApiDataSource<GraphQLContext> | null = this.getApi(context);
+
+    return apiDataSource && apiDataSource.fetchBackendConfig
+      ? apiDataSource.fetchBackendConfig(obj, args, context, info)
+      : Promise.resolve(undefined);
+  }
+
   /**
    * Returns a map of fields by GQL type name
    * @param {string} typeDefs Extension GQL schema type definitions

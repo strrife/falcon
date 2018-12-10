@@ -125,6 +125,8 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
     info: GraphQLResolveInfo
   ): Promise<FetchUrlResult>;
 
+  async fetchBackendConfig?(obj: object, args: object, context: TContext, info: GraphQLResolveInfo): Promise<object>;
+
   protected async willSendRequest(request: ContextRequestOptions): Promise<void> {
     const { context } = request;
     if (context && context.isAuthRequired && this.authorizeRequest) {

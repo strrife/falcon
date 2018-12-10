@@ -249,7 +249,7 @@ describe('ApiDataSource', () => {
       );
     });
 
-    it('Should pass "memoizedResults" map for GET requests', async () => {
+    it('Should skip "memoizedResults" map for GET requests', async () => {
       const customApi: CustomApiDataSource = new CustomApiDataSource({
         config: { host: 'example.com' }
       });
@@ -268,7 +268,7 @@ describe('ApiDataSource', () => {
       const customApiDataSource: CustomApiDataSource = new CustomApiDataSource({});
       const context: ContextData = {};
       await customApiDataSource.initialize({ context } as any);
-      expect(customApiDataSource.getSession(context)).toEqual({});
+      expect(customApiDataSource.session).toEqual({});
       expect(context).toEqual({});
     });
 
@@ -276,20 +276,16 @@ describe('ApiDataSource', () => {
       const customApiDataSource: CustomApiDataSource = new CustomApiDataSource({});
       const context: ContextData = { session: {} };
       await customApiDataSource.initialize({ context } as any);
-      expect(customApiDataSource.getSession(context)).toEqual({});
+      expect(customApiDataSource.session).toEqual({});
       expect(context.session).toEqual({ CustomApiDataSource: {} });
 
-      customApiDataSource.getSession(context).foo = 'bar';
+      customApiDataSource.session.foo = 'bar';
       expect(context.session).toEqual({ CustomApiDataSource: { foo: 'bar' } });
 
-      customApiDataSource.setSession(context, {});
+      customApiDataSource.session = {};
       expect(context.session).toEqual({ CustomApiDataSource: {} });
 
-      await customApiDataSource.initialize({
-        context: {}
-      } as any);
-
-      customApiDataSource.setSession(context, { foo: 'bar' });
+      customApiDataSource.session = { foo: 'bar' };
       expect(context.session).toEqual({ CustomApiDataSource: { foo: 'bar' } });
     });
   });
