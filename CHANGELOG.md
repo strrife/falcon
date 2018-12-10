@@ -32,8 +32,13 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 ### Create Falcon App v1.0.7 (2018-10-25)
 
+- feat: allow ejecting `falcon-ecommerce-uikit` package via `eject` command (https://github.com/deity-io/falcon/pull/212))
 - docs: updated documentation ([#47](https://github.com/deity-io/falcon/pull/47))
 - fix: fixed problem with React 16.6.0 ([#109](https://github.com/deity-io/falcon/pull/109))
+
+### eject-ts v0.0.1
+
+- feat: eject-ts CLI ([#212](https://github.com/deity-io/falcon/pull/212))
 
 ---
 

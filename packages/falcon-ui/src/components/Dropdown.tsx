@@ -88,7 +88,7 @@ export const DropdownLabel = themed({
 
 const DropdownMenuInnerDOM: React.SFC<any> = props => (
   <DropdownContext.Consumer>
-    {({ open }) => <Box as="ul" {...props} display={open ? 'block' : 'none'} />}
+    {({ open }) => (open ? <Box as="ul" {...props} display={open ? 'block' : 'none'} /> : null)}
   </DropdownContext.Consumer>
 );
 
