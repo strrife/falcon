@@ -96,7 +96,7 @@ export const FormField: React.SFC<FormFieldProps> = props => {
 
   return (
     <FormContext.Consumer>
-      {({ name: formName }) => (
+      {({ id: formId, name: formName }) => (
         <I18n>
           {t => {
             const label = fieldLabel || t(`${formName}.${fieldName}${fieldLabelSuffix}`, { defaultValue: '' });
@@ -116,7 +116,7 @@ export const FormField: React.SFC<FormFieldProps> = props => {
 
                   // TODO: is there a better way of handling input ids (more automated)?
                   // is fallback to name correct?
-                  const id = fieldId || fieldName;
+                  const id = fieldId || `${formId}-${fieldName}`;
                   const inputProps = {
                     ...field,
                     ...rest,
