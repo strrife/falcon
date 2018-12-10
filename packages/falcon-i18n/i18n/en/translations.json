@@ -90,12 +90,21 @@
   "resetPassword": {
     "title": "Reset Password",
     "passwordFieldLabel": "New Password",
+    "passwordFieldPlaceholder": "At least 8 characters",
     "failureMessage": "The reset password token you provided is invalid or has expired.",
     "requestAnotherToken": "Request another one",
     "successMessage": "Your password has been reset successfully!"
   },
   "signOut": {
     "button": "Logout"
+  },
+  "signUp": {
+    "title": "Register",
+    "firstnameFieldLabel": "First Name",
+    "lastnameFieldLabel": "Last Name",
+    "emailFieldLabel": "Email",
+    "passwordFieldLabel": "Password",
+    "passwordFieldPlaceholder": "At least 8 characters"
   },
   "newCustomer": {
     "title": "New Customers",

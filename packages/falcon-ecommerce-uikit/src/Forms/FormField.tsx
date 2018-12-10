@@ -70,6 +70,7 @@ export const FormField: React.SFC<FormFieldProps> = props => {
   const {
     id: fieldId,
     label: fieldLabel,
+    placeholder: fieldPlaceholder,
     required,
     name: fieldName,
     validators: validate,
@@ -100,7 +101,8 @@ export const FormField: React.SFC<FormFieldProps> = props => {
         <I18n>
           {t => {
             const label = fieldLabel || t(`${formName}.${fieldName}${fieldLabelSuffix}`, { defaultValue: '' });
-            // const placeholder = placeholder  ||  typeof translations === 'object' &&;
+            const placeholder =
+              fieldPlaceholder || t(`${formName}.${fieldName}${fieldPlaceholderSuffix}`, { defaultValue: '' });
 
             return (
               <Field
@@ -123,6 +125,7 @@ export const FormField: React.SFC<FormFieldProps> = props => {
                     gridArea: FormFieldAreas.input,
                     height: 'xl',
                     id,
+                    placeholder,
                     invalid
                   };
 
