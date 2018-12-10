@@ -17,8 +17,8 @@
   ],
   "peerDependencies": {
     "@deity/falcon-ui": "^0.0.2",
-    "react": "~16.4.2",
-    "react-dom": "~16.4.2"
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
   },
   "scripts": {
     "clean": "rimraf dist",
@@ -42,8 +42,8 @@
     "@types/stringify-object": "^3.2.0",
     "babel-plugin-annotate-pure-calls": "0.4.0",
     "babel-plugin-module-resolver": "3.1.1",
-    "react": "~16.4.2",
-    "react-dom": "~16.4.2",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "rimraf": "2.6.2",
     "rollup": "0.66.4",
     "rollup-plugin-babel": "4.0.3",
