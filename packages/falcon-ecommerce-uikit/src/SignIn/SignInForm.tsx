@@ -30,16 +30,14 @@ export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted }) => (
         }
       >
         {() => (
-          <Form>
-            <FormField id="signInEmail" label="Email" name="email" required type="email" autoComplete="email" />
+          <Form name="signIn">
+            <FormField name="email" type="email" required autoComplete="email" />
             <FormField
-              id="signInPassword"
-              label="Password"
               name="password"
+              type="password"
               // pass empty array, so default password strength validator does not get triggered
               validators={[]}
               required
-              type="password"
               autoComplete="current-password"
             >
               {inputProps => <PasswordRevealInput {...inputProps} />}

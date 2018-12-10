@@ -8,7 +8,7 @@ import { OpenSidebarMutation } from '../Sidebar';
 export const SignIn = () => (
   <I18n>
     {t => (
-      <MiniFormLayout title={t('signIn.formTitle')}>
+      <MiniFormLayout title={t('signIn.title')}>
         <SignInForm />
 
         <Divider my="lg" />
