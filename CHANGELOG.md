@@ -11,8 +11,12 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 ### Falcon Server v0.0.4
 
-- feat: added `backendConfig` resolver ([#176](https://github.com/deity-io/falcon/pull/176))
-- fix: removed duplicated context data ([#176](https://github.com/deity-io/falcon/pull/176))
+- feat: Basic Cache implementation was introduced ([#176](https://github.com/deity-io/falcon/pull/176))
+- feat: (Breaking change) changed Event flow for ApiContainer and its entries - every ApiDataSource instance is being
+created on GQL request ([#176](https://github.com/deity-io/falcon/pull/176))
+- feat: added `backendConfig` Query type ([#176](https://github.com/deity-io/falcon/pull/176))
+- feat: `type BackendConfig`, `enum SortOrderDirection`, `input SortOrder` were introduced in the base Schema ([#176](https://github.com/deity-io/falcon/pull/176))
+- fix: added separate `endpoints` config section and dedicated base class ([#176](https://github.com/deity-io/falcon/pull/176))
 - refactor: `Events` enum has been moved from `falcon-server` to `falcon-server-env` package ([#176](https://github.com/deity-io/falcon/pull/176))
 
 ### Falcon UI v0.0.4
@@ -40,10 +44,18 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 ### Falcon Server Env v0.0.4
 
+- feat: Provided `Cache` wrapper class and built-in `InMemoryLRUCache` cache provider ([#176](https://github.com/deity-io/falcon/pull/176))
 - feat: added getter and setter methods to work with "named" session object from the context in ApiDataSource
 ([#176](https://github.com/deity-io/falcon/pull/176))
 - feat: `ApiDataSource` and `Extension` models are now accept `eventEmitter` instance
 ([#176](https://github.com/deity-io/falcon/pull/176))
+- feat: Provided `EndpointManager` base class ([#176](https://github.com/deity-io/falcon/pull/176))
+- feat: Base `Extension` class provides auto-binding for its own GraphQL Schema to the assigned ApiDataSource instance
+(via `getGraphQLConfig()` method) ([#176](https://github.com/deity-io/falcon/pull/176))
+
+### Falcon Magento2 API v0.0.4
+
+- feat: Magento Admin token is now being stored in cache ([#176](https://github.com/deity-io/falcon/pull/176))
 
 ### eject-ts v0.0.1
 
