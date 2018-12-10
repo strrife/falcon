@@ -12,6 +12,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const VirtualModulesPlugin = require('webpack-virtual-modules');
 const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
+const LoadablePlugin = require('@loadable/webpack-plugin');
 
 const paths = require('./../../paths');
 const { colors } = require('./../tools');
@@ -379,7 +380,11 @@ module.exports = (target = 'web', options, buildConfig) => {
         filename: 'assets.json',
         includeAllFileTypes: true,
         prettyPrint: true
-      })
+      }),
+
+      // loadable components  plugin
+      // https://www.smooth-code.com/open-source/loadable-components/docs/server-side-rendering/
+      new LoadablePlugin({ writeToDisk: true, filename: paths.loadableStats })
     ];
 
     if (IS_DEV) {
@@ -590,8 +595,6 @@ module.exports = (target = 'web', options, buildConfig) => {
     '@deity/falcon-client/build-utils/polyfills',
     'react',
     'react-apollo',
-    'react-async-bootstrapper2',
-    'react-async-component',
     'react-dom',
     'react-google-tag-manager',
     `react-helmet`,
