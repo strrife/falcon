@@ -57,6 +57,11 @@
     "checkout": "Veilig uitchecken",
     "empty": "Winkelwagen is leeg"
   },
+  "signIn": {
+    "form": {
+      "passwordLabel": "Wachtwoord"
+    }
+  },
   "newCustomer": {
     "title": "Nieuwe Klanten",
     "benefitsHeader": "Het maken van een account heeft veel voordelen:",

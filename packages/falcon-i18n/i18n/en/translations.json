@@ -68,9 +68,31 @@
     "checkout": "Checkout",
     "continueShopping": "Shopping"
   },
+  "form": {
+    "passwordRevealTitle_show": "Show password",
+    "passwordRevealTitle_hide": "Hide password"
+  },
   "signIn": {
-    "formTitle": "Sign In",
-    "button": "Sign in"
+    "title": "Sign In",
+    "emailFieldLabel": "Email",
+    "passwordFieldLabel": "Password",
+    "button": "Sign in",
+    "forgotPasswordQuestion": "Forgot password?",
+    "form": {
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password"
+    }
+  },
+  "forgotPassword": {
+    "title": "Forgot Password",
+    "emailFieldLabel": "Email"
+  },
+  "resetPassword": {
+    "title": "Reset Password",
+    "passwordFieldLabel": "New Password",
+    "failureMessage": "The reset password token you provided is invalid or has expired.",
+    "requestAnotherToken": "Request another one",
+    "successMessage": "Your password has been reset successfully!"
   },
   "signOut": {
     "button": "Logout"
