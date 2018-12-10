@@ -1,7 +1,7 @@
 import * as Logger from '@deity/falcon-logger';
 import { Body, Request, RESTDataSource } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URL, URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLSchema } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
 import { stringify } from 'qs';
 import { format } from 'url';
@@ -26,8 +26,13 @@ import {
 
 export type PaginationValue = number | string | null;
 
+export interface GqlServerConfig {
+  schema: GraphQLSchema;
+}
+
 export type ConfigurableContainerConstructorParams = ConfigurableConstructorParams<ApiDataSourceConfig> & {
   apiContainer: ApiContainer;
+  gqlServerConfig: any;
 };
 
 export default abstract class ApiDataSource<TContext extends GraphQLContext = any> extends RESTDataSource<TContext> {
@@ -39,6 +44,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
   protected apiContainer: ApiContainer;
   protected eventEmitter: EventEmitter2;
   protected cache?: Cache;
+  protected gqlServerConfig: GraphQLSchema;
 
   /**
    * @param {ConfigurableContainerConstructorParams} params Constructor params
@@ -51,6 +57,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
     super();
     const { config, name, apiContainer, eventEmitter } = params;
 
+    this.gqlServerConfig = params.gqlServerConfig;
     this.name = name || this.constructor.name;
     this.config = config || {};
     this.apiContainer = apiContainer;
