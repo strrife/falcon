@@ -31,22 +31,4 @@ describe('Extension', () => {
     expect(ext.config).toEqual({});
     expect(ext.name).toBe('CustomExtension');
   });
-
-  it('Should not throw an error while initializing when there is no API DataSource assigned', async () => {
-    expect(async () => {
-      await ext.initialize();
-    }).not.toThrow();
-  });
-
-  it('Should initialize correctly (with the assigned API DataSource instance)', async () => {
-    const api: CustomApiDataSource = new CustomApiDataSource({});
-    const preInitializeSpy: jest.SpyInstance = jest.spyOn(api, 'preInitialize');
-    ext.api = api;
-
-    expect(async () => {
-      await ext.initialize();
-    }).not.toThrow();
-
-    preInitializeSpy.mockRestore();
-  });
 });
