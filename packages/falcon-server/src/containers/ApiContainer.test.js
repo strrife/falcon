@@ -19,21 +19,16 @@ describe('ApiContainer', () => {
     const container = new ApiContainer(ee);
     await container.registerApis(apis);
     expect(container.dataSources.size).toBe(1);
-    expect(container.endpoints).toHaveLength(1);
 
     const apiInstance = container.dataSources.get('fake-api');
     expect(apiInstance).toBeTruthy();
-    expect(apiInstance.name).toBe('fake-api');
-
-    const endpoint = container.endpoints[0];
-    expect(endpoint.path).toBe('/info');
+    expect(apiInstance().name).toBe('fake-api');
   });
 
   it('Should do nothing for an empty API list', async () => {
     const container = new ApiContainer(ee);
     await container.registerApis();
     expect(container.dataSources.size).toBe(0);
-    expect(container.endpoints).toHaveLength(0);
   });
 
   it('Should not fail for missing API DataSource package', async () => {

@@ -23,6 +23,9 @@ module.exports = class EndpointContainer extends BaseContainer {
         const endpointManagerConfig = config[endpointKey];
 
         const EndpointManagerClass = this.importModule(endpointManagerConfig.package);
+        if (!EndpointManagerClass) {
+          return;
+        }
         const endpointManager = new EndpointManagerClass({
           config: endpointManagerConfig.config || {},
           name: endpointKey,

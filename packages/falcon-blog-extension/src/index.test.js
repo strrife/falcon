@@ -1,3 +1,5 @@
+global.__SERVER__ = true; // eslint-disable-line no-underscore-dangle
+
 const { mockServer } = require('graphql-tools');
 const { BaseSchema } = require('@deity/falcon-server');
 const { ApiDataSource } = require('@deity/falcon-server-env');

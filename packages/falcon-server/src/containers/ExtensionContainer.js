@@ -42,6 +42,9 @@ module.exports = class ExtensionContainer extends BaseContainer {
         const extension = extensions[extKey];
 
         const ExtensionClass = this.importModule(extension.package);
+        if (!ExtensionClass) {
+          return;
+        }
         const extensionInstance = new ExtensionClass({
           config: extension.config || {},
           name: extKey,

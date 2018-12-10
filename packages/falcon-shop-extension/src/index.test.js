@@ -1,7 +1,9 @@
-const { mockServer } = require('graphql-tools');
-const { ApiDataSource } = require('@deity/falcon-server-env');
-const Shop = require('.');
+global.__SERVER__ = true; // eslint-disable-line no-underscore-dangle
+
 const { BaseSchema } = require('@deity/falcon-server');
+const { ApiDataSource } = require('@deity/falcon-server-env');
+const { mockServer } = require('graphql-tools');
+const Shop = require('.');
 
 class CustomApi extends ApiDataSource {
   async getPosts() {
@@ -81,12 +83,12 @@ describe('Falcon Shop Extension', () => {
   describe('Schema', () => {
     let schema;
     let server;
-    beforeAll(() => {
+    beforeAll(async () => {
       const shop = new Shop({ extensionContainer: {} });
       shop.api = new CustomApi({});
 
       // prepare server with mocks for tests
-      ({ schema } = shop.getGraphQLConfig());
+      ({ schema } = await shop.getGraphQLConfig());
       schema.push(BaseSchema);
       server = mockServer(schema, mocks);
     });
