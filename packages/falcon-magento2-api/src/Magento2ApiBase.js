@@ -2,7 +2,6 @@ const Logger = require('@deity/falcon-logger');
 const { ApiDataSource } = require('@deity/falcon-server-env');
 const { AuthenticationError } = require('@deity/falcon-errors');
 const util = require('util');
-const { CronJob } = require('cron');
 const addMinutes = require('date-fns/add_minutes');
 const isPlainObject = require('lodash/isPlainObject');
 const camelCase = require('lodash/camelCase');
@@ -28,7 +27,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     this.magentoConfig = {};
     this.storeList = [];
     this.storeConfigMap = {};
-    this.setupAdminTokenRefreshJob();
   }
 
   /**
@@ -36,16 +34,26 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    * Gets basic store configuration from Magento
    * @return {object} Magento config
    */
-  async preInitialize() {
-    if (!this.context) {
-      this.initialize({ context: {} });
-    }
+  async fetchBackendConfig() {
+    const getCachedValue = async url => {
+      const value = await this.cache.get({
+        key: [this.name, this.session.storeCode || 'default', url].join(':'),
+        callback: async () => {
+          const rawValue = await this.get(url);
+          return JSON.stringify(rawValue);
+        },
+        options: {
+          ttl: 10 * 60 * 1000 // 10 min
+        }
+      });
+      return JSON.parse(value);
+    };
 
     const [storeConfigs, storeViews, storeGroups, storeWebsites] = await Promise.all([
-      this.get('/store/storeConfigs'),
-      this.get('/store/storeViews'),
-      this.get('/store/storeGroups'),
-      this.get('/store/websites')
+      getCachedValue('/store/storeConfigs'),
+      getCachedValue('/store/storeViews'),
+      getCachedValue('/store/storeGroups'),
+      getCachedValue('/store/websites')
     ]);
 
     // Processing "active" items only
@@ -105,10 +113,13 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       });
     });
 
+    this.ensureStoreCode();
+
     return this.magentoConfig;
   }
 
-  async setShopStore(root, { storeCode }) {
+  async setShopStore(obj, { storeCode }) {
+    await this.fetchBackendConfig();
     const storeConfig = this.findStoreConfig(storeCode);
     if (storeConfig) {
       this.session.storeCode = storeCode;
@@ -122,7 +133,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     return this.magentoConfig;
   }
 
-  async setShopCurrency(root, { currency }) {
+  async setShopCurrency(obj, { currency }) {
+    await this.fetchBackendConfig();
     const currentStoreConfig = this.getActiveStoreConfig();
     _.forEach(this.storeConfigMap, storeConfig => {
       if (currentStoreConfig.store_group_id === storeConfig.store_group_id) {
@@ -145,91 +157,11 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   initialize(config) {
     super.initialize(config);
 
-    if (!this.context.session) {
-      return;
-    }
-
     const { customerToken } = this.session;
     if (customerToken && !this.isCustomerTokenValid(customerToken)) {
       this.session = {};
       this.context.session.save();
     }
-
-    this.ensureStoreCode();
-  }
-
-  /**
-   * Setup cronjob to check if  admin token is valid and refresh it if required
-   */
-  setupAdminTokenRefreshJob() {
-    // run every minute
-    this.refresh = new CronJob(
-      '* * * * *',
-      async () => {
-        if (this.token && !this.isAdminTokenValid()) {
-          Logger.debug(`${this.name}: Refresh admin token`);
-          await this.retrieveAdminToken();
-        }
-      },
-      null,
-      true
-    );
-  }
-
-  /**
-   * Check if admin token is still valid
-   * @return {boolean} true if token is valid
-   */
-  isAdminTokenValid() {
-    return !this.tokenExpirationTime || (this.tokenExpirationTime && this.tokenExpirationTime > Date.now());
-  }
-
-  /**
-   * Make request to the backend for admin token
-   * @return {Promise<string>} admin token
-   */
-  async retrieveAdminToken() {
-    Logger.info(`${this.name}: Retrieving admin token.`);
-
-    const response = await this.retrieveToken({ username: this.config.username, password: this.config.password });
-
-    // data available only if retrieveToken is not wrapped with cache.
-    const tokenData = this.convertKeys(response.data || response);
-    const { token, validTime } = tokenData;
-    if (token === undefined) {
-      const noTokenError = new Error(
-        'Magento Admin token not found. Did you install the falcon-magento2-module on magento?'
-      );
-
-      noTokenError.statusCode = 501;
-      noTokenError.code = codes.CUSTOMER_TOKEN_NOT_FOUND;
-      throw noTokenError;
-    } else {
-      Logger.info(`${this.name}: Admin token found.`);
-    }
-    this.token = token;
-    this.tokenExpirationTime = null;
-
-    if (validTime) {
-      // convert validTime from hours to milliseconds and subtract 5 minutes buffer
-      const tokenTimeInMinutes = validTime * 60 - 5;
-      const tokenExpirationTime = addMinutes(Date.now(), tokenTimeInMinutes);
-
-      this.tokenExpirationTime = tokenExpirationTime.getTime();
-      Logger.debug(`${this.name}: Admin token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
-    }
-
-    return this.token;
-  }
-
-  /**
-   * Retrieve token for given user.
-   * @param {string} username magento2 user
-   * @param {string} password magento2 user password
-   * @return {object} response data
-   */
-  async retrieveToken({ username, password }) {
-    return this.post('/integration/admin/token', { username, password }, { context: { skipAuth: true } });
   }
 
   /**
@@ -328,22 +260,69 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
-   * Get Magento api authorized admin token or perform request to create it.
+   * Retrieves admin token
+   * @return {{ value: string, options: { ttl: number } }} Result
+   */
+  async retrieveAdminToken() {
+    const result = {
+      value: undefined,
+      options: {
+        ttl: undefined
+      }
+    };
+    Logger.info(`${this.name}: Retrieving admin token.`);
+
+    const response = await this.post(
+      '/integration/admin/token',
+      {
+        username: this.config.username,
+        password: this.config.password
+      },
+      { context: { skipAuth: true } }
+    );
+
+    const tokenData = this.convertKeys(response.data || response);
+    const { token, validTime } = tokenData;
+    if (token === undefined) {
+      const noTokenError = new Error(
+        'Magento Admin token not found. Did you install the falcon-magento2-module on magento?'
+      );
+
+      noTokenError.statusCode = 501;
+      noTokenError.code = codes.CUSTOMER_TOKEN_NOT_FOUND;
+      throw noTokenError;
+    } else {
+      Logger.info(`${this.name}: Admin token found.`);
+    }
+
+    result.value = token;
+    this.tokenExpirationTime = null;
+
+    if (validTime) {
+      // convert validTime from hours to milliseconds and subtract 5 minutes buffer
+      const tokenTimeInMinutes = validTime * 60 - 5;
+      const tokenExpirationTime = addMinutes(Date.now(), tokenTimeInMinutes);
+
+      result.options.ttl = tokenTimeInMinutes * 60 * 1000;
+      Logger.debug(`${this.name}: Admin token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
+    }
+
+    return result;
+  }
+
+  /**
+   * Get Magento API authorized admin token or perform request to create it.
+   * "reqToken" property is being used for parallel calls
    * @return {Promise<string>} token value
    */
   async getAdminToken() {
-    if (!this.token) {
-      if (!this.reqToken) {
-        this.reqToken = this.retrieveAdminToken();
-      }
-
-      Logger.debug(`${this.name}: Waiting for admin token.`);
-
-      // this is called multiple times and may cause some problems with error handling
-      return this.reqToken;
+    if (!this.reqToken) {
+      this.reqToken = this.cache.get({
+        key: [this.name, 'admin_token'].join(':'),
+        callback: async () => this.retrieveAdminToken()
+      });
     }
-
-    return this.token;
+    return this.reqToken;
   }
 
   /**
@@ -412,6 +391,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Ensuring that user gets storeCode in the session with the first hit.
+   * @param {object} context Context object
    */
   ensureStoreCode() {
     const { storeCode } = this.session;
