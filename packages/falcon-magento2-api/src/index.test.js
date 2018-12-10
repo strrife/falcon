@@ -1,10 +1,14 @@
 global.__SERVER__ = true; // eslint-disable-line no-underscore-dangle
 
+const { Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
+const { codes } = require('@deity/falcon-errors');
+const { BaseSchema } = require('@deity/falcon-server');
+const { Schema } = require('@deity/falcon-shop-extension');
+const { makeExecutableSchema } = require('graphql-tools');
+const { EventEmitter2 } = require('eventemitter2');
 const nock = require('nock');
 const Magento2Api = require('./index');
 const magentoResponses = require('./__mocks__/apiResponses');
-const { EventEmitter2 } = require('eventemitter2');
-const { codes } = require('@deity/falcon-errors');
 
 const URL = 'http://example.com';
 const ee = new EventEmitter2();
@@ -14,12 +18,24 @@ const apiConfig = {
     protocol: 'http'
   },
   name: 'api-magento2',
-  eventEmitter: ee
+  eventEmitter: ee,
+  gqlServerConfig: {
+    schema: makeExecutableSchema({
+      typeDefs: [BaseSchema, Schema]
+    })
+  }
 };
 const createMagentoUrl = path => `/rest/default/V1${path}`;
 
 describe('Magento2Api', () => {
   let api;
+  let cache;
+
+  beforeEach(() => {
+    cache = new Cache(new InMemoryLRUCache());
+    api = new Magento2Api(apiConfig);
+    api.initialize({ context: {}, cache });
+  });
 
   beforeAll(async () => {
     nock(URL)
@@ -70,9 +86,6 @@ describe('Magento2Api', () => {
           id: 'oof'
         }
       ]);
-
-    api = new Magento2Api(apiConfig);
-    await api.preInitialize();
   });
 
   afterAll(() => {
@@ -80,7 +93,7 @@ describe('Magento2Api', () => {
   });
 
   it('Should correctly fetch admin token', async () => {
-    const result = await api.retrieveAdminToken();
+    const result = await api.getAdminToken();
     expect(result).toEqual(magentoResponses.adminToken.data.token);
   });
 
@@ -90,7 +103,7 @@ describe('Magento2Api', () => {
       .reply(200, magentoResponses.category.data);
 
     api.session.storeCode = '';
-    const result = await api.category({ id: 20 });
+    const result = await api.category({}, { id: 20 });
     expect(result.data.id).toEqual(magentoResponses.category.data.id);
   });
 
@@ -105,7 +118,7 @@ describe('Magento2Api', () => {
       });
 
     try {
-      await api.products({});
+      await api.products({}, {});
     } catch (error) {
       expect(error.extensions.code).toBe(codes.UNAUTHENTICATED);
       expect(error.message).toBe('Consumer is not authorized to access Magento_Catalog::categories');

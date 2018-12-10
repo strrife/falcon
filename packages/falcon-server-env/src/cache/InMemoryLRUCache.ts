@@ -7,7 +7,7 @@ export interface LRUOptions {
 
 /**
  * Note: overriding the whole InMemoryLRUCache class from "apollo-server-caching",
- * because it doesn't expose "store" property
+ * because it doesn't pass "options.ttl" flag to LRU method nor expose "store" property
  */
 export default class InMemoryLRUCache implements KeyValueCache {
   protected store: LRU.Cache<string, string>;

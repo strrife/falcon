@@ -32,7 +32,7 @@ describe('WordPress API', () => {
         }
       });
 
-    await wpApi.initialize({ context: {} });
+    await wpApi.initialize({ context: { session: {} } });
 
     const result = await wpApi.fetchUrl({}, { path: '/foo/' }, { session: {} });
     expect(result).toEqual({
