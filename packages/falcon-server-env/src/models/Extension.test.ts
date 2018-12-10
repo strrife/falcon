@@ -6,10 +6,6 @@ import Extension from './Extension';
 import ApiDataSource from './ApiDataSource';
 import { FetchUrlResult } from '../types';
 
-global.__SERVER__ = true; // eslint-disable-line no-underscore-dangle
-
-Logger.setLogLevel('off');
-
 class CustomExtension extends Extension {
   getFetchUrlPriority(url: string): number {
     return 0;
