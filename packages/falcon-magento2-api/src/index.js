@@ -24,6 +24,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async addTypeResolvers() {
     const resolvers = {
+      BackendConfig: {
+        shop: () => this.fetchBackendConfig()
+      },
       ShopConfig: {
         stores: () => this.getActiveStores(),
         currencies: () => this.getActiveCurrencies(),
@@ -47,7 +50,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const currentStoreConfig = this.getActiveStoreConfig();
     const currencies = [];
     forEach(this.storeConfigMap, storeConfig => {
-      if (currentStoreConfig.store_group_id === storeConfig.store_group_id) {
+      if (currentStoreConfig && currentStoreConfig.store_group_id === storeConfig.store_group_id) {
         currencies.push(storeConfig.default_display_currency_code);
       }
     });

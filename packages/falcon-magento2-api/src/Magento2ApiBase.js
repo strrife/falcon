@@ -113,13 +113,12 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       });
     });
 
-    this.ensureStoreCode();
+    await this.ensureStoreCode();
 
     return this.magentoConfig;
   }
 
   async setShopStore(obj, { storeCode }) {
-    await this.fetchBackendConfig();
     const storeConfig = this.findStoreConfig(storeCode);
     if (storeConfig) {
       this.session.storeCode = storeCode;
@@ -134,7 +133,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   async setShopCurrency(obj, { currency }) {
-    await this.fetchBackendConfig();
     const currentStoreConfig = this.getActiveStoreConfig();
     _.forEach(this.storeConfigMap, storeConfig => {
       if (currentStoreConfig.store_group_id === storeConfig.store_group_id) {
@@ -393,7 +391,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    * Ensuring that user gets storeCode in the session with the first hit.
    * @param {object} context Context object
    */
-  ensureStoreCode() {
+  async ensureStoreCode() {
     const { storeCode } = this.session;
 
     // Checking if current storeCode is valid
@@ -405,6 +403,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     Logger.debug(`${this.name}: ${storeCode ? 'is invalid' : 'store code is missing'}, removing cart data`);
     delete this.session.storeCode;
     delete this.session.cart;
-    this.setShopStore({}, { storeCode: 'default' });
+    await this.setShopStore({}, { storeCode: 'default' });
   }
 };

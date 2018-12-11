@@ -4,6 +4,7 @@ const session = require('koa-session');
 const cors = require('@koa/cors');
 const get = require('lodash/get');
 const capitalize = require('lodash/capitalize');
+const trim = require('lodash/trim');
 const { ApolloServer } = require('apollo-server-koa');
 const Logger = require('@deity/falcon-logger');
 const ApiContainer = require('./containers/ApiContainer');
@@ -36,7 +37,15 @@ class FalconServer {
     });
 
     this.eventEmitter.on(Events.ERROR, async error => {
-      Logger.error(`FalconServer: ${error.message}`, error);
+      const stacktrace = get(error, 'extensions.exception.stacktrace', []);
+      let { message } = error;
+      if (stacktrace.length > 0) {
+        message = stacktrace[0];
+        if (stacktrace[1]) {
+          message += ` ${trim(stacktrace[1])}`;
+        }
+      }
+      Logger.error(`FalconServer: ${message}`, error);
     });
 
     if (verboseEvents) {
