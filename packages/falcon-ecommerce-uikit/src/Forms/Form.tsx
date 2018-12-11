@@ -8,7 +8,7 @@ export type FormContextValue = {
   i18nId?: string;
 };
 
-export const FormContext = React.createContext<FormContextValue>({});
+export const FormContext = React.createContext<FormContextValue>({} as any);
 
 export type FormProps = { id: number | string; name?: string; i18nId?: string } & FormikFormProps &
   ThemedComponentProps;
