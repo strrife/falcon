@@ -60,7 +60,7 @@ const fieldPlaceholderSuffix = 'FieldPlaceholder';
 export type FormFieldProps = {
   name: string;
   label?: string;
-  validators?: Validator[];
+  validate?: Validator[];
   children?: (props: React.InputHTMLAttributes<HTMLInputElement> & ThemedComponentProps) => React.ReactNode;
 } & ThemedComponentProps &
   React.InputHTMLAttributes<HTMLInputElement>;
@@ -73,26 +73,27 @@ export const FormField: React.SFC<FormFieldProps> = props => {
     placeholder: fieldPlaceholder,
     required,
     name: fieldName,
-    validators: validate,
+    validate,
     children,
     ...remainingProps
   } = props;
   const inputType = remainingProps.type;
   const isHidden = inputType === 'hidden';
 
-  let validators = validate;
-  const hasCustomValidators = validators !== undefined;
+  // eslint-disable-next-line
+  let _validate = validate;
+  const hasCustomValidators = _validate !== undefined;
   if (required) {
-    if (!validators) {
-      validators = [];
+    if (!_validate) {
+      _validate = [];
     }
-    validators.unshift(requiredValidator);
+    _validate.unshift(requiredValidator);
   }
 
   const defaultInputTypeValidator = !hasCustomValidators && getDefaultInputTypeValidator(inputType);
 
-  if (defaultInputTypeValidator && validators) {
-    validators.push(defaultInputTypeValidator);
+  if (defaultInputTypeValidator && _validate) {
+    _validate.push(defaultInputTypeValidator);
   }
 
   return (
@@ -110,7 +111,7 @@ export const FormField: React.SFC<FormFieldProps> = props => {
             return (
               <Field
                 name={fieldName}
-                validate={validateSequentially(validators, label)}
+                validate={validateSequentially(_validate, label)}
                 render={(fieldProps: FieldProps) => {
                   const { themableProps, rest } = extractThemableProps(remainingProps);
 
