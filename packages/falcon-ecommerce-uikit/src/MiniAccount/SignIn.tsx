@@ -9,7 +9,7 @@ export const SignIn = () => (
   <I18n>
     {t => (
       <MiniFormLayout title={t('signIn.title')}>
-        <SignInForm />
+        <SignInForm id="sign-in-sidebar" />
 
         <Divider my="lg" />
         <GridLayout>

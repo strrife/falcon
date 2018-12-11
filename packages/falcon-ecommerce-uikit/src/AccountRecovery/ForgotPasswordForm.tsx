@@ -18,7 +18,7 @@ export const ForgotPasswordForm: React.SFC<ForgotPasswordProps> = ({ onCompleted
           onSubmit={values => requestPasswordReset({ variables: { input: { email: values.email } } })}
         >
           {({ values }) => (
-            <Form name="forgotPassword">
+            <Form id="forgot-password" i18nId="forgotPassword">
               <FormField name="email" required type="email" autoComplete="email" />
               <FormSubmit submitting={loading} value="Reset my password" />
               <FormErrorSummary errors={error && [error.message]} />

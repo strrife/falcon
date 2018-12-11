@@ -98,14 +98,17 @@ export const FormField: React.SFC<FormFieldProps> = props => {
 
   return (
     <FormContext.Consumer>
-      {({ id: formId, name: formName }) => (
+      {({ id: formId, i18nId }) => (
         <I18n>
           {t => {
             const label =
-              fieldLabel || t(`${formName}.${fieldName}${fieldLabelSuffix}`, { defaultValue: '' }) || undefined;
+              fieldLabel ||
+              (i18nId && t(`${i18nId}.${fieldName}${fieldLabelSuffix}`, { defaultValue: '' })) ||
+              undefined;
+
             const placeholder =
               fieldPlaceholder ||
-              t(`${formName}.${fieldName}${fieldPlaceholderSuffix}`, { defaultValue: '' }) ||
+              (i18nId && t(`${i18nId}.${fieldName}${fieldPlaceholderSuffix}`, { defaultValue: '' })) ||
               undefined;
 
             return (

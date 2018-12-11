@@ -8,7 +8,7 @@ const SignIn = () => (
     <H1>
       <T id="signIn.title" />
     </H1>
-    <SignInForm />
+    <SignInForm id="sign-in-page" />
   </Box>
 );
 

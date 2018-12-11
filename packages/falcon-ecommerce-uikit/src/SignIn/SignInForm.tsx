@@ -7,10 +7,11 @@ import { SignInMutation } from './SignInMutation';
 import { ForgotPasswordTrigger } from './ForgotPasswordTrigger';
 
 type SignInFormProps = {
+  id: string;
   onCompleted?: () => void;
 };
 
-export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted }) => (
+export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted, id }) => (
   <SignInMutation onCompleted={onCompleted}>
     {(signIn, { loading, error }) => (
       <Formik
@@ -30,7 +31,7 @@ export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted }) => (
         }
       >
         {() => (
-          <Form name="signIn">
+          <Form id={id} i18nId="signIn">
             <FormField name="email" type="email" required autoComplete="email" />
             <FormField
               name="password"

@@ -66,7 +66,7 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken })
         >
           {() => (
             <MiniFormLayout>
-              <Form name="resetPassword">
+              <Form id="reset-password" i18nId="resetPassword">
                 <FormField name="resetToken" type="hidden" />
                 <FormField name="password" required type="password" autoComplete="new-password">
                   {inputProps => <PasswordRevealInput {...inputProps} />}
