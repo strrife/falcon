@@ -14,7 +14,7 @@
   "dependencies": {
     "@deity/falcon-logger": "^0.0.3",
     "@deity/falcon-server-env": "^0.0.3",
-    "graphql-tools": "^4.0.0"
+    "graphql-tools": "4.0.3"
   },
   "devDependencies": {
     "@deity/falcon-server": "^0.0.3"

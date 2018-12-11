@@ -6,21 +6,12 @@ describe('Falcon Server', () => {
     debug: true,
     port: 4000,
     logLevel: 'error',
-    apis: [
-      {
-        name: 'fake-api',
+    endpoints: {
+      'fake-api': {
         package: 'fake-backend-api',
         config: {}
       }
-    ],
-    extensions: [
-      {
-        package: 'fake-shop-extension',
-        config: {
-          api: 'fake-api'
-        }
-      }
-    ],
+    },
     session: {
       keys: ['secret']
     }
