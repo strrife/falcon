@@ -6,11 +6,11 @@ import { FormContext } from './Form';
 import { toGridTemplate } from '../helpers';
 import { Validator, passwordValidator, emailValidator, requiredValidator } from './validators';
 
-export enum FormFieldAreas {
-  label = 'label',
-  input = 'input',
-  error = 'error'
-}
+export const FormFieldAreas = {
+  label: 'label',
+  input: 'input',
+  error: 'error'
+};
 
 const formFieldLayout: DefaultThemeProps = {
   formFieldLayout: {

@@ -68,12 +68,12 @@ export const Nav: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
   </Navbar>
 );
 
-export enum SearchBarArea {
-  logo = 'logo',
-  signIn = 'signIn',
-  cart = 'cart',
-  search = 'search'
-}
+export const SearchBarArea = {
+  logo: 'logo',
+  signIn: 'signIn',
+  cart: 'cart',
+  search: 'search'
+};
 
 const searchBarLayoutTheme: DefaultThemeProps = {
   searchbarLayout: {
