@@ -384,7 +384,9 @@ module.exports = (target = 'web', options, buildConfig) => {
 
       // loadable components  plugin
       // https://www.smooth-code.com/open-source/loadable-components/docs/server-side-rendering/
-      new LoadablePlugin({ writeToDisk: true, filename: paths.loadableStats })
+      // TODO: add change args to { writeToDisk: true, filename: paths.loadableStats } when
+      // https://github.com/smooth-code/loadable-components/issues/179 gets fixed
+      new LoadablePlugin({ writeToDisk: true })
     ];
 
     if (IS_DEV) {
@@ -489,8 +491,8 @@ module.exports = (target = 'web', options, buildConfig) => {
           // https://github.com/facebook/create-react-app/issues/2415
           allChunks: true
         }),
-        new webpack.HashedModuleIdsPlugin(),
-        new webpack.optimize.AggressiveMergingPlugin()
+        new webpack.HashedModuleIdsPlugin()
+        // new webpack.optimize.AggressiveMergingPlugin()
       ];
 
       if (options.analyze) {
