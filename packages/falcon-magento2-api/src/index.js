@@ -622,8 +622,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         }
       } else if (e.message.match(/^No such entity with cartId/)) {
         this.removeCartData();
-        delete this.context.magento2.cart;
-        this.context.session.save();
         e.code = 'INVALID_CART';
       }
 
