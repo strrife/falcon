@@ -689,12 +689,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       totals: []
     };
 
-    if (!this.session.cart || !this.session.cart.quoteId) {
-      return emptyCart;
-    }
-
     if (!quoteId) {
-      throw Error('Trying to fetch cart data without quoteId param');
+      return emptyCart;
     }
 
     // todo avoid calling both endpoints if not necessary

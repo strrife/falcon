@@ -110,9 +110,9 @@ enum SortOrderDirection {
 }
 
 """
-Sort order input (it's used to sort the requested data on the backend)
+Sort order input (it's being used to sort the requested data on the backend)
 """
-input SortOrder {
+input SortOrderInput {
   """
   Perform sorting by this field
   """

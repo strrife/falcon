@@ -5,7 +5,7 @@ extend type Query {
     categoryId: Int
     includeSubcategories: Boolean
     query: ShopPageQuery
-    sortOrders: [SortOrder]
+    sortOrders: [SortOrderInput]
     filters: [Filter]
     skus: [String]
   ): ProductList

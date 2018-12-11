@@ -402,7 +402,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     }
 
     // Fixing invalid storeCode
-    Logger.debug(`${this.name}: ${storeCode} is invalid, removing cart data`);
+    Logger.debug(`${this.name}: ${storeCode ? 'is invalid' : 'store code is missing'}, removing cart data`);
     delete this.session.storeCode;
     delete this.session.cart;
     this.setShopStore({}, { storeCode: 'default' });
