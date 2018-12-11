@@ -14,11 +14,11 @@ export type FormProps = { id: number | string; name?: string; i18nId?: string } 
   ThemedComponentProps;
 
 export const Form: React.SFC<FormProps> = props => {
-  const { id, name, i18nId } = props;
+  const { i18nId, ...restProps } = props;
 
   return (
-    <FormContext.Provider value={{ id, name, i18nId }}>
-      <Box {...props} as={FormikForm as any} defaultTheme={{ formLayout: { display: 'grid', gridGap: 'sm' } }} />
+    <FormContext.Provider value={{ id: props.id, name: props.name, i18nId: props.i18nId }}>
+      <Box {...restProps} as={FormikForm as any} defaultTheme={{ formLayout: { display: 'grid', gridGap: 'sm' } }} />
     </FormContext.Provider>
   );
 };
