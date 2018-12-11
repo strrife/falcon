@@ -1543,7 +1543,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   removeCartData() {
-    delete this.context.magento2.cart;
+    delete this.session.cart;
     this.context.session.save();
   }
 };
