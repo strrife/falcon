@@ -5,6 +5,9 @@ on how to migrate your previously generated Falcon-based project to a newer vers
 
 ## Falcon 0.1.0 to 0.2.0
 
+> Make sure you remove your `node_modules` folders from both `client` and `server` apps
+> to ensure proper installation of NPM packages.
+
 ### Falcon-Server 0.2.0
 
 - Change your `apis` and `extensions` config keys to the following structure:
