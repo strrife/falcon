@@ -3,14 +3,22 @@
   "port": 4000,
   "logLevel": "info",
   "verboseEvents": false,
+  "endpoints": {
+    "magento": {
+      "package": "@deity/falcon-magento2-api/src/endpoints",
+      "config": {
+        "host": "magento.deity.io",
+        "protocol": "https"
+      }
+    }
+  },
   "apis": {
     "api-wordpress": {
       "package": "@deity/falcon-wordpress-api",
       "config": {
         "host": "wordpress.deity.io",
         "protocol": "https",
-        "apiPrefix": "/wp-json",
-        "apiSuffix": "/wp/v2"
+        "apiPrefix": "/wp-json/wp/v2"
       }
     },
     "api-magento2": {

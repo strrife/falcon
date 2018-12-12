@@ -27,14 +27,16 @@ module.exports = class DynamicRouteResolver {
   /**
    * Reorder handlers based on request path to boost performance,
    * for example 99% urls ending with .html are Magento generated
-   *
+   * @param {object} context GQL context
    * @param {String} path - request path
    * @return {Object[]} list of apis that supports url method
    */
-  getDynamicRouteHandlers(path) {
+  getDynamicRouteHandlers(context, path) {
     return this.extensionContainer
-      .getExtensionsByCriteria(ext => ext.getFetchUrlPriority && ext.getFetchUrlPriority(path) > 0)
-      .sort((first, second) => (second.getFetchUrlPriority(path) < first.getFetchUrlPriority(path) ? 1 : -1));
+      .getExtensionsByCriteria(ext => ext.getFetchUrlPriority && ext.getFetchUrlPriority(context, path) > 0)
+      .sort((first, second) =>
+        second.getFetchUrlPriority(context, path) < first.getFetchUrlPriority(context, path) ? 1 : -1
+      );
   }
 
   /**
@@ -49,7 +51,7 @@ module.exports = class DynamicRouteResolver {
     const { path } = args;
 
     let response;
-    const resolvers = this.getDynamicRouteHandlers(path);
+    const resolvers = this.getDynamicRouteHandlers(context, path);
 
     /* eslint-disable no-restricted-syntax */
     /* eslint-disable no-await-in-loop */

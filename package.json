@@ -9,7 +9,7 @@
     "cleanup": "rimraf packages/**/{dist,coverage} packages/create-falcon-app/examples ./**/node_modules",
     "cleanup:all": "rimraf -yarn.lock && yarn cleanup",
     "test": "lerna run test:coverage",
-    "coverage": "lerna exec --scope=@deity/falcon-* -- codecov",
+    "coverage": "codecov -p packages",
     "prepublish": "lerna run --scope=@deity/falcon-ui --stream prepare",
     "prepare": "lerna run --stream prepare",
     "lint": "eslint ./"

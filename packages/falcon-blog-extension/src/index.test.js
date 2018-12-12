@@ -1,3 +1,5 @@
+global.__SERVER__ = true; // eslint-disable-line no-underscore-dangle
+
 const { mockServer } = require('graphql-tools');
 const { BaseSchema } = require('@deity/falcon-server');
 const { ApiDataSource } = require('@deity/falcon-server-env');
@@ -97,7 +99,7 @@ describe('Falcon Blog Extension', () => {
     let server;
     beforeAll(async () => {
       const blog = new Blog({ extensionContainer: {} });
-      blog.api = new CustomApi();
+      blog.api = new CustomApi({});
 
       // prepare server with mocks for tests
       ({ schema } = await blog.getGraphQLConfig());
