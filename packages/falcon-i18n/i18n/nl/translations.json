@@ -1,6 +1,6 @@
 {
   "welcome": "Welcome to @deity",
-  "copyright": "© Copyright",
+  "copyright": "© Copyright {{year}}",
   "newsletter": {
     "title": "Nieuwsbrief",
     "message": "Word lid van onze mailinglijst om de nieuwste aanbiedingen en meer te ontvangen!",

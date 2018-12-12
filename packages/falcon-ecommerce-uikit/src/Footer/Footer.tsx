@@ -72,12 +72,6 @@ const languageSectionTheme: DefaultThemeProps = {
   }
 };
 
-export const Copyright = () => (
-  <>
-    <T id="copyright" /> {new Date().getFullYear()}
-  </>
-);
-
 export const Footer: React.SFC<FooterData> = ({
   config: {
     menus: { footer },
@@ -93,7 +87,7 @@ export const Footer: React.SFC<FooterData> = ({
       </I18n>
     </Box>
     <Box defaultTheme={copyrightLayoutTheme}>
-      <Copyright />
+      <T id="copyright" year={new Date().getFullYear()} />
     </Box>
   </Box>
 );
