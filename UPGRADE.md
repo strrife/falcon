@@ -3,10 +3,10 @@
 **Note:** This is a cumulative upgrade notes file, that provides detailed instructions
 on how to migrate your previously generated Falcon-based project to a newer version.
 
-## Falcon 0.1.0 to 0.2.0
-
 > Make sure you remove your `node_modules` folders from both `client` and `server` apps
-> to ensure proper installation of NPM packages.
+> to ensure a proper installation of NPM packages before any upgrade between Falcon versions.
+
+## Falcon 0.1.0 to 0.2.0
 
 ### Falcon-Server 0.2.0
 
