@@ -7,7 +7,7 @@
   "scripts": {
     "new-package": "node scripts/new-package.js",
     "cleanup": "rimraf packages/**/{dist,coverage} packages/create-falcon-app/examples ./**/node_modules",
-    "cleanup:all": "rimraf -yarn.lock && yarn cleanup",
+    "cleanup:all": "rimraf yarn.lock && yarn cleanup",
     "test": "lerna run test:coverage",
     "coverage": "codecov -p packages",
     "prepublish": "lerna run --scope=@deity/falcon-ui --stream prepare",
