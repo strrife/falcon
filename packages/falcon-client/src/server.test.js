@@ -2,7 +2,7 @@
 import 'jest-extended';
 import React from 'react';
 import Helmet from 'react-helmet';
-import { asyncComponent } from 'react-async-component';
+import loadable from '@loadable/component';
 import { Route, Switch } from 'react-router-dom';
 import { translate } from 'react-i18next';
 import Koa from 'koa';
@@ -61,12 +61,8 @@ describe('Server', () => {
         <Route exact path="/" component={Home} />
         <DynamicRoute
           components={{
-            shop: asyncComponent({
-              resolve: () => import('./__mocks__/pages/Shop')
-            }),
-            post: asyncComponent({
-              resolve: () => import('./__mocks__/pages/Post')
-            })
+            shop: loadable(() => import('./__mocks__/pages/Shop')),
+            post: loadable(() => import('./__mocks__/pages/Post'))
           }}
         />
       </Switch>
@@ -99,7 +95,17 @@ describe('Server', () => {
       App,
       bootstrap,
       clientApolloSchema,
-      webpackAssets: {}
+      webpackAssets: {},
+      loadableStats: {
+        namedChunkGroups: {
+          client: {
+            chunks: [],
+            assets: [],
+            children: {},
+            childAssets: {}
+          }
+        }
+      }
     }).callback();
     const response = await supertest(serverHandler).get('/');
 
