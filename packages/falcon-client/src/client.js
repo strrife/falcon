@@ -1,7 +1,7 @@
 import 'app-webmanifest';
 import React from 'react';
 import { hydrate, render } from 'react-dom';
-import BrowserRouter from 'react-router-dom/BrowserRouter';
+import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo';
 import { loadableReady } from '@loadable/component';
 import { I18nextProvider } from 'react-i18next';
