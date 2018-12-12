@@ -6,9 +6,9 @@ schema {
 
 type Mutation {
   """
-  Temporary placeholder field
+  Sets the locale (for example, "en_US")
   """
-  _: Boolean
+  setLocale(locale: String!): BackendConfig
 }
 
 type Subscription {
@@ -19,7 +19,13 @@ type Subscription {
 }
 
 type Query {
+  """
+  Returns a compiled backend config
+  """
   backendConfig: BackendConfig
+  """
+  URL-resolve query
+  """
   url(path: String!): Url
 }
 
@@ -27,9 +33,21 @@ type Query {
 Dynamic URL type
 """
 type Url {
+  """
+  Entity ID
+  """
   id: Int!
+  """
+  Canonical URL for the found entity
+  """
   path: String!
+  """
+  Entity type (this is being used by Dynamic Routing)
+  """
   type: String!
+  """
+  Redirect flag if the given URL must be redirected to the specified "path" URL
+  """
   redirect: Boolean
 }
 
@@ -37,7 +55,14 @@ type Url {
 Returns a compiled config object for all supported backends
 """
 type BackendConfig {
-  languages: [String!]
+  """
+  List of supported locales (for example: `["en_US", "nl_NL"]`)
+  """
+  locales: [String]
+  """
+  Current active locale (for example, `en_US`)
+  """
+  activeLocale: String
 }
 
 """
@@ -61,19 +86,53 @@ type Pagination {
   """
   currentPage: Int!
   """
-  Next page index (if not the last one)
+  Next page index (unless "currentPage" != "totalPages")
   """
   nextPage: Int
   """
-  Prevoius page index (if not the first one)
+  Previous page index (unless "currentPage" != 1)
   """
   prevPage: Int
 }
 
 """
-Pagination input (used for quering the data)
+Sort order direction enumeration, defines direction of sorting
+"""
+enum SortOrderDirection {
+  """
+  A -> Z (0 -> 9)
+  """
+  asc
+  """
+  Z -> A (9 -> 0)
+  """
+  desc
+}
+
+"""
+Sort order input (it's being used to sort the requested data on the backend)
+"""
+input SortOrderInput {
+  """
+  Perform sorting by this field
+  """
+  field: String!
+  """
+  Sort order direction
+  """
+  direction: SortOrderDirection
+}
+
+"""
+Pagination input (it's used for querying paginated data)
 """
 input PaginationInput {
+  """
+  Current page
+  """
   page: Int
+  """
+  Limit items per page
+  """
   perPage: Int
 }

@@ -1,29 +1,91 @@
 global.__SERVER__ = true; // eslint-disable-line no-underscore-dangle
 
+const { Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
+const { codes } = require('@deity/falcon-errors');
+const { BaseSchema } = require('@deity/falcon-server');
+const { Schema } = require('@deity/falcon-shop-extension');
+const { makeExecutableSchema } = require('graphql-tools');
+const { EventEmitter2 } = require('eventemitter2');
 const nock = require('nock');
 const Magento2Api = require('./index');
 const magentoResponses = require('./__mocks__/apiResponses');
-const { codes } = require('@deity/falcon-errors');
 
 const URL = 'http://example.com';
+const ee = new EventEmitter2();
 const apiConfig = {
   config: {
     host: 'example.com',
     protocol: 'http'
   },
-  name: 'api-magento2'
+  name: 'api-magento2',
+  eventEmitter: ee,
+  gqlServerConfig: {
+    schema: makeExecutableSchema({
+      typeDefs: [BaseSchema, Schema]
+    })
+  }
 };
 const createMagentoUrl = path => `/rest/default/V1${path}`;
 
 describe('Magento2Api', () => {
   let api;
+  let cache;
+
+  beforeEach(() => {
+    cache = new Cache(new InMemoryLRUCache());
+    api = new Magento2Api(apiConfig);
+    api.initialize({ context: {}, cache });
+  });
 
   beforeAll(async () => {
     nock(URL)
+      .persist(true)
       .post(createMagentoUrl('/integration/admin/token'))
       .reply(200, magentoResponses.adminToken.data);
-    api = new Magento2Api(apiConfig);
-    await api.preInitialize();
+
+    nock(URL)
+      .persist(true)
+      .get(createMagentoUrl('/store/storeConfigs'))
+      .reply(200, [
+        {
+          locale: 'en_US',
+          extension_attributes: {},
+          code: 'default'
+        }
+      ]);
+
+    nock(URL)
+      .persist(true)
+      .get(createMagentoUrl('/store/storeViews'))
+      .reply(200, [
+        {
+          website_id: 1,
+          code: 'default',
+          store_group_id: 'bar',
+          extension_attributes: {
+            is_active: true
+          }
+        }
+      ]);
+
+    nock(URL)
+      .persist(true)
+      .get(createMagentoUrl('/store/storeGroups'))
+      .reply(200, [
+        {
+          id: 'bar',
+          website_id: 'oof'
+        }
+      ]);
+
+    nock(URL)
+      .persist(true)
+      .get(createMagentoUrl('/store/websites'))
+      .reply(200, [
+        {
+          id: 'oof'
+        }
+      ]);
   });
 
   afterAll(() => {
@@ -31,7 +93,7 @@ describe('Magento2Api', () => {
   });
 
   it('Should correctly fetch admin token', async () => {
-    const result = await api.retrieveAdminToken();
+    const result = await api.getAdminToken();
     expect(result).toEqual(magentoResponses.adminToken.data.token);
   });
 
@@ -40,8 +102,8 @@ describe('Magento2Api', () => {
       .get(uri => /\/categories\/20/.test(uri)) // regexp as query params might be there
       .reply(200, magentoResponses.category.data);
 
-    api.context = { magento2: { storeCode: '' } };
-    const result = await api.category({ id: 20 });
+    api.session.storeCode = '';
+    const result = await api.category({}, { id: 20 });
     expect(result.data.id).toEqual(magentoResponses.category.data.id);
   });
 
@@ -56,7 +118,7 @@ describe('Magento2Api', () => {
       });
 
     try {
-      await api.products({});
+      await api.products({}, {});
     } catch (error) {
       expect(error.extensions.code).toBe(codes.UNAUTHENTICATED);
       expect(error.message).toBe('Consumer is not authorized to access Magento_Catalog::categories');

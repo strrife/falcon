@@ -3,6 +3,17 @@ extend type Query {
   blogPosts(query: BlogPageQuery, pagination: PaginationInput): BlogPostListing
 }
 
+extend type BackendConfig {
+  blog: BlogConfig
+}
+
+type BlogConfig {
+  """
+  _Placeholder field until Blog config gets defined_
+  """
+  _: Boolean
+}
+
 input BlogPageQuery {
   category: String
 }

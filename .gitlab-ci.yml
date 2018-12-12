@@ -16,7 +16,8 @@ before_script:
     paths:
       - .yarn_cache/
   script:
-    - yarn --non-interactive
+    - yarn --non-interactive --frozen-lockfile
+    # - yarn audit
     - yarn lint
     - yarn test
     - yarn coverage
