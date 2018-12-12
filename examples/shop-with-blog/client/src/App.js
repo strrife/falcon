@@ -20,10 +20,11 @@ import {
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
+import { ErrorBoundary } from 'src/components/ErrorBoundary';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
 import { Sidebar, SidebarContainer } from 'src/pages/shop/components/Sidebar';
-import { deityGreenTheme } from './theme';
+import { deityGreenTheme, normalizeCss } from './theme';
 
 const HeadMetaTags = () => (
   <Helmet defaultTitle="Deity Shop with Blog" titleTemplate="%s | Deity Shop with Blog">
@@ -71,40 +72,41 @@ const App = ({ online }) => (
     <ThemeEditorState initial={deityGreenTheme}>
       {props => (
         <React.Fragment>
-          <ThemeProvider theme={props.theme}>
+          <ThemeProvider theme={props.theme} normalizeStyles={normalizeCss}>
             <HeadMetaTags />
             <AppLayout>
               <HeaderQuery>{data => <Header {...data} />}</HeaderQuery>
               {!online && <p>you are offline.</p>}
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route exact path="/products" component={Category} />
-                <Route exact path="/blog/:page?" component={Blog} />
-                <Route exact path="/cart" component={Cart} />
-                <Route exact path="/checkout" component={Checkout} />
-                <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
-                <Route exact path="/reset-password" component={ResetPassword} />
-                <ProtectedRoute exact path="/account" component={Dashboard} />
-                <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
-                <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
-                <DynamicRoute
-                  loaderComponent={Loader}
-                  components={{
-                    'blog-post': BlogPost,
-                    'shop-category': Category,
-                    'shop-product': Product
-                  }}
-                />
-              </Switch>
-              <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
+              <ErrorBoundary>
+                <Switch>
+                  <Route exact path="/" component={Home} />
+                  <Route exact path="/blog/:page?" component={Blog} />
+                  <Route exact path="/cart" component={Cart} />
+                  <Route exact path="/checkout" component={Checkout} />
+                  <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
+                  <Route exact path="/reset-password" component={ResetPassword} />
+                  <ProtectedRoute exact path="/account" component={Dashboard} />
+                  <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
+                  <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
+                  <DynamicRoute
+                    loaderComponent={Loader}
+                    components={{
+                      'blog-post': BlogPost,
+                      'shop-category': Category,
+                      'shop-product': Product
+                    }}
+                  />
+                </Switch>
+                <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
 
-              <SidebarContainer>
-                {sidebarProps => (
-                  <Sidebar {...sidebarProps}>
-                    {() => <SidebarContents contentType={sidebarProps.contentType} />}
-                  </Sidebar>
-                )}
-              </SidebarContainer>
+                <SidebarContainer>
+                  {sidebarProps => (
+                    <Sidebar {...sidebarProps}>
+                      {() => <SidebarContents contentType={sidebarProps.contentType} />}
+                    </Sidebar>
+                  )}
+                </SidebarContainer>
+              </ErrorBoundary>
             </AppLayout>
           </ThemeProvider>
           {ThemeEditorComponent && <ThemeEditorComponent {...props} side="left" />}
