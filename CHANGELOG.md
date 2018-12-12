@@ -65,7 +65,7 @@ created on GQL request ([#176](https://github.com/deity-io/falcon/pull/176))
 
 ### Falcon-i18n v0.0.4
 
-- feat: added `i18nProvider` with `I18n` and `T` components to easy internationalization support ([#205](https://github.com/deity-io/falcon/pull/205))
+- feat: added `i18nProvider` with `I18n` and `T` components to ease internationalization support ([#205](https://github.com/deity-io/falcon/pull/205))
 
 ---
 
