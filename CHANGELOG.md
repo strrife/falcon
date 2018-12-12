@@ -1,3 +1,5 @@
+# CHANGELOG
+
 **Note:** This is a cumulative changelog that outlines all of the changes to all the packages from [packages](./packages) folder.
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
@@ -6,8 +8,8 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 ### Falcon Client v0.0.8
 
-- feat: removed razzle ([#87](https://github.com/deity-io/falcon/pull/87))
 - feat: support for Google Analytics added ([#78](https://github.com/deity-io/falcon/pull/78))
+- improvement: removed razzle ([#87](https://github.com/deity-io/falcon/pull/87))
 
 ### Falcon Server v0.0.4
 
