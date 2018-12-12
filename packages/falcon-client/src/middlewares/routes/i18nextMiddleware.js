@@ -15,16 +15,13 @@ import i18nFactory from '../../i18n/i18nServerFactory';
  * @argument {Options} options - options
  * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
-export default options =>
-  // TODO: load available languages from falcon-server using apollo client
-  // TODO: this means that we need to create SINGLE instance of Apollo Client and inject it into middleware instead of creating it each time!
+export default options => async (ctx, next) => {
+  // TODO: merge options.availableLanguages with these retrieved from falcon-server
+  const i18nInstance = await i18nFactory(options);
 
-  async (ctx, next) => {
-    const i18nInstance = await i18nFactory(options);
-
-    return koaI18next(i18nInstance, {
-      lookupCookie: 'i18n',
-      order: ['cookie'],
-      next: true // if koa is version 2
-    })(ctx, next);
-  };
+  return koaI18next(i18nInstance, {
+    lookupCookie: 'i18n',
+    order: ['cookie'],
+    next: true // because of koa v2
+  })(ctx, next);
+};
