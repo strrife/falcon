@@ -1,6 +1,7 @@
 import React from 'react';
 import { Formik } from 'formik';
 import { Button, FlexLayout } from '@deity/falcon-ui';
+import { T } from '@deity/falcon-i18n';
 
 import { FormField, Form, PasswordRevealInput, FormErrorSummary } from '../Forms';
 import { SignInMutation } from './SignInMutation';
@@ -46,7 +47,7 @@ export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted, id }) => (
             <FlexLayout justifyContent="space-between" alignItems="center" mt="md">
               <ForgotPasswordTrigger />
               <Button type="submit" variant={loading ? 'loader' : undefined}>
-                Sign in
+                <T id="signIn.button" />
               </Button>
             </FlexLayout>
 
