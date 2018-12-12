@@ -26,6 +26,13 @@ on how to migrate your previously generated Falcon-based project to a newer vers
      },
    },
 ```
+- If you were using "endpoints" within your ApiDataSource class - you have to move them to a separate config
+section (read more about Endpoints [here](https://falcon.deity.io/docs/falcon-server/endpoints))
+- `Events` enum object has been moved to `@deity/falcon-server-env` package:
+```diff
+- const { Events } = require('@deity/falcon-server');
++ const { Events } = require('@deity/falcon-server-env');
+```
 
 ### Falcon-Client 0.2.0
 
