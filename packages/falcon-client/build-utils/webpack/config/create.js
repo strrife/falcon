@@ -491,8 +491,8 @@ module.exports = (target = 'web', options, buildConfig) => {
           // https://github.com/facebook/create-react-app/issues/2415
           allChunks: true
         }),
-        new webpack.HashedModuleIdsPlugin()
-        // new webpack.optimize.AggressiveMergingPlugin()
+        new webpack.HashedModuleIdsPlugin(),
+        new webpack.optimize.AggressiveMergingPlugin()
       ];
 
       if (options.analyze) {
