@@ -119,7 +119,7 @@ export const MenuItem = themed({
   tag: NavbarItemInnerDOM,
 
   defaultTheme: {
-    navbarItem: {
+    menuItem: {
       fontSize: 'sm',
       fontWeight: 'bold',
       display: 'flex',
