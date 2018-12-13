@@ -5,7 +5,7 @@ import { H1, GridLayout } from '@deity/falcon-ui';
 import { ProductsList, ProductsListQuery } from '@deity/falcon-ecommerce-uikit';
 
 const Home = () => (
-  <GridLayout gridGap="md" py="md">
+  <GridLayout gridGap="md" py="lg">
     <I18n ns={['shop']}>{t => <H1 css={{ textAlign: 'center' }}>{t('home.hotSellers')}</H1>}</I18n>
 
     <ProductsListQuery>{({ products }) => <ProductsList products={products.items} />}</ProductsListQuery>
