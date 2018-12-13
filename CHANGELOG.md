@@ -1,34 +1,38 @@
+# CHANGELOG
+
 **Note:** This is a cumulative changelog that outlines all of the changes to all the packages from [packages](./packages) folder.
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
 
-## Falcon v0.2
+---
 
-### Falcon Client v0.0.8
+## Falcon v0.2 (2018-12-12)
 
-- feat: removed razzle ([#87](https://github.com/deity-io/falcon/pull/87))
+### Falcon Client v0.1.0 (2018-12-12)
+
 - feat: support for Google Analytics added ([#78](https://github.com/deity-io/falcon/pull/78))
+- improvement: removed razzle ([#87](https://github.com/deity-io/falcon/pull/87))
 
-### Falcon Server v0.0.4
+### Falcon Server v0.1.0 (2018-12-12)
 
 - feat: Basic Cache implementation was introduced ([#176](https://github.com/deity-io/falcon/pull/176))
 - feat: (Breaking change) changed Event flow for ApiContainer and its entries - every ApiDataSource instance is being
-created on GQL request ([#176](https://github.com/deity-io/falcon/pull/176))
+  created on GQL request ([#176](https://github.com/deity-io/falcon/pull/176))
 - feat: added `backendConfig` Query type ([#176](https://github.com/deity-io/falcon/pull/176))
-- feat: `type BackendConfig`, `enum SortOrderDirection`, `input SortOrder` were introduced in the base Schema ([#176](https://github.com/deity-io/falcon/pull/176))
+- feat: `type BackendConfig`, `enum SortOrderDirection`, `input SortOrderInput` were introduced in the base Schema ([#176](https://github.com/deity-io/falcon/pull/176))
 - fix: added separate `endpoints` config section and dedicated base class ([#176](https://github.com/deity-io/falcon/pull/176))
 - refactor: `Events` enum has been moved from `falcon-server` to `falcon-server-env` package ([#176](https://github.com/deity-io/falcon/pull/176))
 
-### Falcon UI v0.0.4
+### Falcon UI v0.1.0 (2018-12-12)
 
 - docs: comprehensive documentation added ([#115](https://github.com/deity-io/falcon/pull/115))
 - feat: support for keyframe animations defined in theme ([#153](https://github.com/deity-io/falcon/pull/153))
 
-### Falcon Theme Editor v0.0.4
+### Falcon Theme Editor v0.1.0 (2018-12-12)
 
 - feat: inspect mode, more props, improved performance, layout tweaks ([#115](https://github.com/deity-io/falcon/pull/115))
 
-### Falcon E-commerce UI Kit v0.0.4
+### Falcon E-commerce UI Kit v0.1.0 (2018-12-12)
 
 - feat: basic blog UI (listing posts, displaying single post) ([#137](https://github.com/deity-io/falcon/pull/137))
 - feat: added queries and mutations for cart operations (add to cart, remove from cart, change cart item) ([#114](https://github.com/deity-io/falcon/pull/114))
@@ -36,28 +40,31 @@ created on GQL request ([#176](https://github.com/deity-io/falcon/pull/176))
 - feat: added `ProtectedRoute` and `OnlyUnauthenticatedRoute` route components ([#163](https://github.com/deity-io/falcon/pull/163))
 - feat: added queries and mutations for checkout process and implemented checkout logic abstraction ([#182](https://github.com/deity-io/falcon/pull/182))
 
-### Create Falcon App v1.0.7 (2018-10-25)
+### Create Falcon App v1.1.1 (2018-12-12)
 
 - feat: allow ejecting `falcon-ecommerce-uikit` package via `eject` command (https://github.com/deity-io/falcon/pull/212))
+
+### Create Falcon App v1.0.7 (2018-10-25)
+
 - docs: updated documentation ([#47](https://github.com/deity-io/falcon/pull/47))
 - fix: fixed problem with React 16.6.0 ([#109](https://github.com/deity-io/falcon/pull/109))
 
-### Falcon Server Env v0.0.4
+### Falcon Server Env v0.1.0 (2018-12-12)
 
 - feat: Provided `Cache` wrapper class and built-in `InMemoryLRUCache` cache provider ([#176](https://github.com/deity-io/falcon/pull/176))
 - feat: added getter and setter methods to work with "named" session object from the context in ApiDataSource
-([#176](https://github.com/deity-io/falcon/pull/176))
+  ([#176](https://github.com/deity-io/falcon/pull/176))
 - feat: `ApiDataSource` and `Extension` models are now accept `eventEmitter` instance
-([#176](https://github.com/deity-io/falcon/pull/176))
+  ([#176](https://github.com/deity-io/falcon/pull/176))
 - feat: Provided `EndpointManager` base class ([#176](https://github.com/deity-io/falcon/pull/176))
 - feat: Base `Extension` class provides auto-binding for its own GraphQL Schema to the assigned ApiDataSource instance
-(via `getGraphQLConfig()` method) ([#176](https://github.com/deity-io/falcon/pull/176))
+  (via `getGraphQLConfig()` method) ([#176](https://github.com/deity-io/falcon/pull/176))
 
-### Falcon Magento2 API v0.0.4
+### Falcon Magento2 API v0.1.0 (2018-12-12)
 
 - feat: Magento Admin token is now being stored in cache ([#176](https://github.com/deity-io/falcon/pull/176))
 
-### eject-ts v0.0.1
+### eject-ts v0.1.0 (2018-12-12)
 
 - feat: eject-ts CLI ([#212](https://github.com/deity-io/falcon/pull/212))
 

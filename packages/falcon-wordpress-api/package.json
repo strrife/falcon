@@ -2,7 +2,7 @@
   "name": "@deity/falcon-wordpress-api",
   "license": "OSL-3.0",
   "main": "src/index.js",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-wordpress-api",
   "publishConfig": {
     "access": "public"
@@ -12,8 +12,8 @@
     "test:coverage": "jest --ci --coverage"
   },
   "dependencies": {
-    "@deity/falcon-logger": "^0.0.3",
-    "@deity/falcon-server-env": "^0.0.3",
+    "@deity/falcon-logger": "^0.1.0",
+    "@deity/falcon-server-env": "^0.1.0",
     "graphql": "^14.0.2",
     "lodash": "4.17.11",
     "qs": "^6.5.2"
