@@ -105,7 +105,7 @@ export const Searchbar = () => (
           <CustomerQuery>
             {({ customer }) =>
               customer ? (
-                <Link as={RouterLink} to="/customer/account" gridArea={SearchBarArea.signIn}>
+                <Link as={RouterLink} to="/account" gridArea={SearchBarArea.signIn}>
                   <AccountIcon />
                 </Link>
               ) : (
@@ -119,13 +119,7 @@ export const Searchbar = () => (
           <CartQuery>
             {(data: CartData) => (
               <MiniCartIcon
-                onClick={() =>
-                  openSidebar({
-                    variables: {
-                      contentType: 'cart'
-                    }
-                  })
-                }
+                onClick={() => openSidebar({ variables: { contentType: 'cart' } })}
                 gridArea={SearchBarArea.cart}
                 itemsQty={data.cart ? data.cart.itemsQty : 0}
               />
