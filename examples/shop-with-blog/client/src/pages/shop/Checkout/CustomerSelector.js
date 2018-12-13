@@ -174,10 +174,15 @@ class EmailSection extends React.Component {
 }
 
 EmailSection.propTypes = {
+  // data form GET_CUSTOMER query
   data: PropTypes.shape({}),
+  // currently selected email
   email: PropTypes.string,
+  // callback that sets email
   setEmail: PropTypes.func.isRequired,
+  // callback that should be called when user requests edit of this particular section
   onEditRequested: PropTypes.func,
+  // flag that indicates if the section is currently open
   open: PropTypes.bool
 };
 

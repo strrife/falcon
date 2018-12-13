@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Icon, Link, List, ListItem, Button, Text, H2 } from '@deity/falcon-ui';
 import { MiniAccountData } from './MiniAccountQuery';
-
 import { SignIn } from './SignIn';
 import { SignOutMutation } from '../SignOut';
 

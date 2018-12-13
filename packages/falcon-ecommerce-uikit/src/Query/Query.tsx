@@ -15,6 +15,10 @@ export class Query<TData = any, TVariables = OperationVariables, TTranslations =
     translationsNamespaces?: string[];
   }
 > {
+  static propTypes = {
+    ...ApolloQuery.propTypes
+  };
+
   getErrorCode(error?: ApolloError): string | undefined {
     if (error) {
       const { graphQLErrors } = error;

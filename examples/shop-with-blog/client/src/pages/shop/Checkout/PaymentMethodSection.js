@@ -7,24 +7,22 @@ import ErrorList from '../components/ErrorList';
 // we have to filter the methods until we have implementation for all of them
 const ALLOWED_PAYMENT_METHODS = ['checkmo'];
 
-const PaymentSelector = ({ availablePaymentMethods = [], onPaymentSelected }) => (
-  <Box my="md">
-    {availablePaymentMethods.filter(option => ALLOWED_PAYMENT_METHODS.includes(option.code)).map(option => (
-      <FlexLayout key={option.code}>
-        <Radio
-          size="sm"
-          name="payment"
-          id={`opt-${option.code}`}
-          value={option.code}
-          onChange={() => onPaymentSelected(option)}
-        />
-        <Label mx="sm" flex="1" htmlFor={`opt-${option.code}`}>
-          {option.title}
-        </Label>
-      </FlexLayout>
-    ))}
-  </Box>
-);
+const PaymentSelector = ({ availablePaymentMethods = [], onPaymentSelected }) => {
+  const paymentMethods = availablePaymentMethods.filter(option => ALLOWED_PAYMENT_METHODS.includes(option.code));
+
+  return (
+    <Box my="md">
+      {paymentMethods.map(x => (
+        <FlexLayout key={x.code}>
+          <Radio size="sm" name="payment" id={`opt-${x.code}`} value={x.code} onChange={() => onPaymentSelected(x)} />
+          <Label mx="sm" flex="1" htmlFor={`opt-${x.code}`}>
+            {x.title}
+          </Label>
+        </FlexLayout>
+      ))}
+    </Box>
+  );
+};
 
 PaymentSelector.propTypes = {
   availablePaymentMethods: PropTypes.arrayOf(PropTypes.shape({})),
@@ -78,11 +76,17 @@ class PaymentSection extends React.Component {
 }
 
 PaymentSection.propTypes = {
+  // flag that indicates if the section is currently open
   open: PropTypes.bool,
+  // all available payment methods
   availablePaymentMethods: PropTypes.arrayOf(PropTypes.shape({})),
+  // currently selected payment method
   selectedPayment: PropTypes.shape({}),
+  // callback that should be called when user requests edit of this particular section
   onEditRequested: PropTypes.func,
+  // callback that sets selected payment method
   setPayment: PropTypes.func,
+  // errors passed from outside that should be displayed for this section
   errors: PropTypes.arrayOf(
     PropTypes.shape({
       message: PropTypes.string

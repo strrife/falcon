@@ -45,6 +45,55 @@ describe('ExtensionContainer', () => {
     expect(container.extensions.get('shop').config.apiUrl).toEqual('https://example.com');
   });
 
+  it('Should merge objects', () => {
+    const testCases = [
+      [
+        [
+          {
+            locales: ['en_US']
+          },
+          {
+            locales: ['pl_PL']
+          }
+        ],
+        {
+          locales: []
+        }
+      ],
+      [
+        [
+          {
+            locales: ['en_US', 'nl_NL']
+          },
+          {
+            locales: ['pl_PL', 'en_US']
+          }
+        ],
+        {
+          locales: ['en_US']
+        }
+      ],
+      [
+        [
+          {
+            foo: 'bar'
+          },
+          {
+            locales: ['pl_PL', 'en_US']
+          },
+          null
+        ],
+        {
+          locales: ['pl_PL', 'en_US']
+        }
+      ]
+    ];
+
+    testCases.forEach(([incoming, expected]) => {
+      expect(container.mergeConfigs(incoming)).toEqual(expected);
+    });
+  });
+
   describe('Schema stitching', () => {
     it('Should not throw errors during GraphQL config computing', () => {
       expect(async () => {

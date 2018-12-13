@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon-theme-editor",
   "license": "OSL-3.0",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-theme-editor",
   "main": "dist/falcon-theme-editor.cjs.js",
   "module": "dist/index.js",

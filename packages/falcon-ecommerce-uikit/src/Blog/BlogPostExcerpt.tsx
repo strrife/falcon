@@ -5,13 +5,13 @@ import { BlogPostsTranslations, BlogPostExcerptType } from './BlogPostsQuery';
 import { DateFormat } from '../Locale';
 import { toGridTemplate } from '../helpers';
 
-enum BlogPostEcerptArea {
-  image = 'image',
-  title = 'title',
-  date = 'date',
-  excerpt = 'excerpt',
-  readMore = 'readMore'
-}
+const BlogPostEcerptArea = {
+  image: 'image',
+  title: 'title',
+  date: 'date',
+  excerpt: 'excerpt',
+  readMore: 'readMore'
+};
 
 const blogPostExcerptLayout: DefaultThemeProps = {
   blogPostExcerptLayout: {

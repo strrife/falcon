@@ -8,7 +8,16 @@ import { ThemeProvider } from '@deity/falcon-ui';
 import DynamicRoute from '@deity/falcon-client/src/components/DynamicRoute';
 import isOnline from '@deity/falcon-client/src/components/isOnline';
 import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
-import { AppLayout, Header, Footer, FooterQuery, HeaderQuery, LocaleProvider } from '@deity/falcon-ecommerce-uikit';
+import {
+  AppLayout,
+  ProtectedRoute,
+  OnlyUnauthenticatedRoute,
+  Header,
+  Footer,
+  FooterQuery,
+  HeaderQuery,
+  LocaleProvider
+} from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import AsyncComponent from 'src/components/Async';
 import Home from 'src/pages/Home';
@@ -34,14 +43,16 @@ const HeadMetaTags = () => (
 
 const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
 const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
-const Dashboard = AsyncComponent(() =>
-  import(/* webpackChunkName: "shop/account/dashboard" */ './pages/shop/Account/Dashboard')
-);
+// const Dashboard = AsyncComponent(() =>
+//   import(/* webpackChunkName: "shop/account/dashboard" */ './pages/shop/Account/Dashboard')
+// );
+const SignIn = AsyncComponent(() => import(/* webpackChunkName: "account/sign-in" */ './pages/account/SignIn'));
+const Dashboard = AsyncComponent(() => import(/* webpackChunkName: "account/dashboard" */ './pages/account/Dashboard'));
 const ResetPassword = AsyncComponent(() =>
   import(/* webpackChunkName: "shop/resetpassword" */ './pages/shop/ResetPassword')
 );
-const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/Blog" */ './pages/blog/Blog'));
-const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/Post" */ './pages/blog/Post'));
+const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/blog" */ './pages/blog/Blog'));
+const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/post" */ './pages/blog/Post'));
 const Cart = AsyncComponent(() => import(/* webpackChunkName: "shop/cart" */ './pages/shop/Cart'));
 const Checkout = AsyncComponent(() => import(/* webpackChunkName: "shop/checkout" */ './pages/shop/Checkout'));
 const CheckoutConfirmation = AsyncComponent(() =>
@@ -78,7 +89,10 @@ const App = ({ online }) => (
                 <Route exact path="/checkout" component={Checkout} />
                 <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
                 <Route exact path="/reset-password" component={ResetPassword} />
-                <Route exact path="/account/dashboard" component={Dashboard} />
+                {/* <Route exact path="/account/dashboard" component={Dashboard} /> */}
+                <ProtectedRoute exact path="/account" component={Dashboard} />
+                <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
+                <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
                 <DynamicRoute
                   loaderComponent={Loader}
                   components={{

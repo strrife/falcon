@@ -37,7 +37,7 @@ const bannerLayoutTheme: DefaultThemeProps = {
 export const Banner: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
   <List defaultTheme={bannerLayoutTheme}>
     {items.map(item => (
-      <ListItem p="sm" key={item.name}>
+      <ListItem p="xs" key={item.name}>
         <Link as={RouterLink} to={item.url}>
           {item.name}
         </Link>
@@ -71,12 +71,12 @@ export const Nav: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
   </Navbar>
 );
 
-export enum SearchBarArea {
-  logo = 'logo',
-  signIn = 'signIn',
-  cart = 'cart',
-  search = 'search'
-}
+export const SearchBarArea = {
+  logo: 'logo',
+  signIn: 'signIn',
+  cart: 'cart',
+  search: 'search'
+};
 
 const searchBarLayoutTheme: DefaultThemeProps = {
   searchbarLayout: {
@@ -96,7 +96,7 @@ const searchBarLayoutTheme: DefaultThemeProps = {
 
 export const Searchbar = () => (
   <Box defaultTheme={searchBarLayoutTheme}>
-    <Link pl="sm" height="xxl" as={RouterLink} gridArea={SearchBarArea.logo} to="/">
+    <Link aria-label="DEITY" pl="sm" height="xxl" as={RouterLink} gridArea={SearchBarArea.logo} to="/">
       <Icon src="logo" />
     </Link>
     <OpenSidebarMutation>
