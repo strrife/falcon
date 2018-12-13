@@ -42,7 +42,7 @@ const HeadMetaTags = () => (
 
 const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
 const SignIn = AsyncComponent(() => import(/* webpackChunkName: "account/sign-in" */ './pages/account/SignIn'));
-const Account = AsyncComponent(() => import(/* webpackChunkName: "account/index" */ './pages/shop/Account/Index'));
+const Account = AsyncComponent(() => import(/* webpackChunkName: "account" */ './pages/shop/Account'));
 const ResetPassword = AsyncComponent(() =>
   import(/* webpackChunkName: "shop/resetpassword" */ './pages/shop/ResetPassword')
 );
