@@ -19,7 +19,7 @@
     "olderEntries": "Oudere Ingangen"
   },
   "product": {
-    "sku": "SKU",
+    "sku": "SKU: {{sku}}",
     "inStock": "In stock",
     "notInStock": "Not in stock",
     "reviews": "{{count}} review",

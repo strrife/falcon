@@ -19,7 +19,7 @@
     "olderEntries": "Older Entries"
   },
   "product": {
-    "sku": "SKU",
+    "sku": "SKU: {{sku}}",
     "inStock": "In stock",
     "notInStock": "Not in stock",
     "reviews": "{{count}} review",

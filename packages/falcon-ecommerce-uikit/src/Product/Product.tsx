@@ -178,7 +178,7 @@ export class Product extends React.PureComponent<{ product: any }> {
                     <ProductGallery items={product.gallery} />
                   </FlexLayout>
                   <Text fontSize="sm" gridArea={Area.sku}>
-                    {`${t('product.sku')}: ${product.sku}`}
+                    {t('product.sku', { sku: product.sku })}
                   </Text>
                   <H1 gridArea={Area.title}>{product.name}</H1>
 
