@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import i18next from 'i18next';
-import { I18nContext, I18nContextOptions } from './context';
+import { I18nContext } from './context';
 
 export type TProps = {
   id: string;
@@ -27,40 +27,9 @@ export class T extends React.Component<TProps> {
     interpolation: PropTypes.shape({})
   };
 
-  constructor(props) {
-    super(props);
-
-    this.onI18nChanged = this.onI18nChanged.bind(this);
-  }
-
-  componentDidMount() {
-    this.options!.rerenderOn.forEach(x => this.i18n!.on(x, this.onI18nChanged));
-  }
-
-  componentWillUnmount() {
-    this.options!.rerenderOn.forEach(x => this.i18n!.off(x, this.onI18nChanged));
-  }
-
-  onI18nChanged() {
-    // eslint-disable-next-line react/no-unused-state
-    this.setState({ i18nChangedAt: new Date() });
-  }
-
-  i18n?: i18next.i18n = undefined;
-  options?: I18nContextOptions = undefined;
-
   render() {
     const { id, ...translationOptions } = this.props;
 
-    return (
-      <I18nContext.Consumer>
-        {({ t, i18n, options: contextOptions }) => {
-          this.i18n = i18n;
-          this.options = contextOptions;
-
-          return t(id, translationOptions);
-        }}
-      </I18nContext.Consumer>
-    );
+    return <I18nContext.Consumer>{({ t }) => t(id, translationOptions)}</I18nContext.Consumer>;
   }
 }

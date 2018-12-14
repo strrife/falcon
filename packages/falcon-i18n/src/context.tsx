@@ -7,6 +7,7 @@ export const defaultOptions = {
 };
 
 export type I18nContextValue = {
+  updatedAt: Date;
   i18n: i18next.i18n;
   t: i18next.TranslationFunction;
   language: string;
@@ -24,6 +25,7 @@ export function getI18n(): i18next.i18n {
 }
 
 export const I18nContext = React.createContext<I18nContextValue>({
+  updatedAt: new Date(),
   i18n: undefined as any,
   language: undefined as any,
   t: x => x,
