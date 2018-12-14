@@ -3,13 +3,7 @@ import i18next from 'i18next';
 
 export type I18nContextOptions = typeof defaultOptions;
 export const defaultOptions = {
-  wait: false,
-  withRef: false,
-  rerenderOn: ['languageChanged', 'loaded', 'added', 'removed'],
-  translateFuncName: 't',
-  nsMode: 'default',
-  usePureComponent: false,
-  omitBoundRerender: true
+  rerenderOn: ['languageChanged', 'loaded', 'added', 'removed']
 };
 
 export type I18nContextValue = {
