@@ -1,11 +1,9 @@
 import React from 'react';
-import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import Helmet from 'react-helmet';
 import { I18nextProvider } from 'react-i18next';
-import { AsyncComponentProvider, createAsyncContext } from 'react-async-component';
-import asyncBootstrapper from 'react-async-bootstrapper2';
+import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import HtmlHead from '../../components/HtmlHead';
 
 /**
@@ -13,16 +11,18 @@ import HtmlHead from '../../components/HtmlHead';
  * @param {{App: React.Component}} App - React Component to render
  * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
-export default ({ App }) => async (ctx, next) => {
+
+export default ({ App, loadableStats }) => async (ctx, next) => {
   const { client, serverTiming } = ctx.state;
   const { i18next } = ctx;
   const context = {};
-  const asyncContext = createAsyncContext();
+
+  const extractor = new ChunkExtractor({ stats: loadableStats, entrypoints: ['client'] });
   const i18nextUsedNamespaces = new Set();
 
   const markup = (
     <ApolloProvider client={client}>
-      <AsyncComponentProvider asyncContext={asyncContext}>
+      <ChunkExtractorManager extractor={extractor}>
         <I18nextProvider
           i18n={i18next}
           reportNS={ns => {
@@ -36,25 +36,19 @@ export default ({ App }) => async (ctx, next) => {
             </React.Fragment>
           </StaticRouter>
         </I18nextProvider>
-      </AsyncComponentProvider>
+      </ChunkExtractorManager>
     </ApolloProvider>
   );
 
-  // First 'getDataFromTree' call - fetching data for static components
-  await serverTiming.profile(async () => getDataFromTree(markup), 'getDataFromTree() #1');
-
-  // Mounting async components (defined by GraphQL response)
-  await serverTiming.profile(async () => asyncBootstrapper(markup), 'asyncBootstrapper() #1');
-
-  // Second 'getDataFromTree' call - fetching data for newly mounted dynamic components (DynamicRoute)
-  await serverTiming.profile(async () => getDataFromTree(markup), 'getDataFromTree() #2');
-
-  await serverTiming.profile(() => {
-    renderToString(markup);
-  }, 'SSR renderToString()');
+  await serverTiming.profile(async () => getDataFromTree(markup), 'getDataFromTree()');
 
   ctx.state.AppMarkup = markup;
-  ctx.state.asyncContext = asyncContext.getState();
+  // loadable components provides prefetch links, style and script tags and waits on the client for all script tags before rendering
+  // https://www.smooth-code.com/open-source/loadable-components/docs/server-side-rendering/
+  ctx.state.prefetchLinkElements = extractor.getLinkElements();
+  ctx.state.scriptElements = extractor.getScriptElements();
+  ctx.state.styleElements = extractor.getStyleElements();
+
   ctx.state.helmetContext = Helmet.renderStatic();
 
   // filterResourceStoreByNs(i18next.services.resourceStore.data, i18nextUsedNamespaces);

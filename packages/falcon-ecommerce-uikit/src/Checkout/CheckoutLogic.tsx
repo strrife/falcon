@@ -153,7 +153,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
     this.setLoading(true, () => {
       // trigger mutationt that will return available shipping options
       this.props.client
-        .mutate({
+        .mutate<any>({
           mutation: ESTIMATE_SHIPPING_METHODS,
           variables: {
             input: {
@@ -206,7 +206,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
     this.setLoading(true, () => {
       // trigger mutation that will reutrn available payment options
       this.props.client
-        .mutate({
+        .mutate<any>({
           mutation: SET_SHIPPING,
           // refetch cart because totals have changed once shipping has been selected
           refetchQueries: ['Cart'],
