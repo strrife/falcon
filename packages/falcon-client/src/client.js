@@ -17,17 +17,15 @@ const apolloInitialState = window.__APOLLO_STATE__ || {};
 const asyncComponentState = window.ASYNC_COMPONENTS_STATE;
 const i18nextState = window.I18NEXT_STATE || {};
 
-(async () => {
-  const config = apolloStateToObject(apolloInitialState, '$ROOT_QUERY.config');
+const config = apolloStateToObject(apolloInitialState, '$ROOT_QUERY.config');
+const apolloClient = new ApolloClient({
+  isBrowser: true,
+  clientState: clientApolloSchema,
+  initialState: apolloInitialState,
+  apolloClientConfig: config.apolloClient
+});
 
-  const apolloClient = new ApolloClient({
-    isBrowser: true,
-    clientState: clientApolloSchema,
-    initialState: apolloInitialState,
-    apolloClientConfig: config.apolloClient
-  });
-  const i18next = await i18nFactory({ ...config.i18n, lng: i18nextState.language });
-
+i18nFactory({ ...config.i18n, lng: i18nextState.language }).then(i18next => {
   const renderApp = config.serverSideRendering
     ? (element, container, callback) => asyncBootstrapper(element).then(() => hydrate(element, container, callback))
     : render;
@@ -54,7 +52,7 @@ const i18nextState = window.I18NEXT_STATE || {};
   } else {
     unregisterAll();
   }
-})();
+});
 
 if (module.hot) {
   module.hot.accept();
