@@ -61,12 +61,13 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
+    "@emotion/cache": "^10.0.0",
     "@emotion/core": "^10.0.5",
     "@emotion/is-prop-valid": "^0.7.3",
-    "emotion-theming": "^10.0.5",
     "@emotion/styled-base": "^10.0.5",
     "csstype": "^2.5.7",
     "deepmerge": "^2.1.1",
+    "emotion-theming": "^10.0.5",
     "is-plain-object": "^2.0.4",
     "react-powerplug": "1.0.0"
   },

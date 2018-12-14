@@ -1317,7 +1317,7 @@
     find-root "^1.1.0"
     source-map "^0.7.2"
 
-"@emotion/cache@10.0.0":
+"@emotion/cache@10.0.0", "@emotion/cache@^10.0.0":
   version "10.0.0"
   resolved "https://registry.npmjs.org/@emotion/cache/-/cache-10.0.0.tgz#e22eadcb770de4131ec707c84207e9e1ce210413"
   integrity sha512-1/sT6GNyvWmxCtJek8ZDV+b+a+NMDx8/61UTnnF3rqrTY7bLTjw+fmXO7WgUIH0owuWKxza/J/FfAWC/RU4G7A==
