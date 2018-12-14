@@ -13,10 +13,14 @@
     "@deity/falcon-blog-extension": "^0.1.0",
     "@deity/falcon-magento2-api": "^0.1.0",
     "@deity/falcon-server": "^0.1.0",
+    "@deity/falcon-server-env": "^0.1.0",
     "@deity/falcon-shop-extension": "^0.1.0",
     "@deity/falcon-wordpress-api": "^0.1.0",
+    "apollo-link-http": "^1.5.7",
     "config": "^2.0.1",
-    "cross-env": "^5.2.0"
+    "cross-env": "^5.2.0",
+    "graphql-tools": "^4.0.3",
+    "node-fetch": "^2.3.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.7"

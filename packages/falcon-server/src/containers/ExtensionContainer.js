@@ -164,8 +164,22 @@ module.exports = class ExtensionContainer extends BaseContainer {
       return ctx;
     };
 
+    const types = [];
+    const schemas = [];
+
+    config.schemas.forEach(schema => {
+      if (typeof schema === 'string') {
+        types.push(schema);
+      } else {
+        schemas.push(schema);
+      }
+    });
+
+    schemas.push(makeExecutableSchema({ typeDefs: types }));
+
     config.schema = mergeSchemas({
-      schemas: [makeExecutableSchema({ typeDefs: config.schemas })],
+      // schemas: [makeExecutableSchema({ typeDefs: config.schemas })],
+      schemas,
       resolvers: config.resolvers
     });
 
@@ -193,7 +207,7 @@ module.exports = class ExtensionContainer extends BaseContainer {
           valueArray.forEach(schemaItem => {
             if (typeof schemaItem !== 'string') {
               Logger.warn(
-                `ExtensionContainer: "${extensionName}" extension contains non-string GraphQL Schema definition,` +
+                `ExtensionContainer: "${extensionName}" extension contains non-string GraphQL Schema definition, ` +
                   `please check its "${name}" configuration and make sure all items are represented as strings. ${schemaItem}`
               );
             }

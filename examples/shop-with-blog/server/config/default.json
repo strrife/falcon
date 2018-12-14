@@ -72,6 +72,10 @@
       "config": {
         "api": "api-magento2"
       }
+    },
+    "magento-search": {
+      "package": "src/MagentoSearch",
+      "config": {}
     }
   },
   "session": {

@@ -7,7 +7,7 @@ const isPlainObject = require('lodash/isPlainObject');
 const addMinutes = require('date-fns/add_minutes');
 const { ApiUrlPriority, htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
-const { addResolveFunctionsToSchema } = require('graphql-tools');
+const { addResolveFunctionsToSchema, makeRemoteExecutableSchema } = require('graphql-tools');
 const Magento2ApiBase = require('./Magento2ApiBase');
 
 /**
@@ -295,7 +295,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       query: { page = 1, perPage } = {},
       filters: filterGroups = [],
       includeSubcategories = false,
-      withAttributeFilters = [],
+      withAttributeFilters = ['size', 'color', 'price'],
       sortOrders = {}
     } = params;
     const searchCriteria = {
@@ -1552,7 +1552,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     this.context.session.save();
   }
 
-  async search(parent, params) {
+  async search3(parent, params, ctx, info) {
+    const schema = makeRemoteExecutableSchema({});
+  }
+
+  async search2(parent, params) {
     const { query } = params;
     const queryParams = {
       searchCriteria: {
