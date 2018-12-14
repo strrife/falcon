@@ -13,7 +13,7 @@ export const Details = themed({
       flexDirection: 'column',
 
       css: props => ({
-        '> :not(summary)': {
+        '> :not(summary, style)': {
           display: props.open ? 'block' : 'none',
           flex: props.open ? '1' : 0
         },

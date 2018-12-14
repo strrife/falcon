@@ -2,12 +2,12 @@ const qs = require('qs');
 const isEmpty = require('lodash/isEmpty');
 const pick = require('lodash/pick');
 const has = require('lodash/has');
-const { Events, htmlHelpers } = require('@deity/falcon-server-env');
+const forEach = require('lodash/forEach');
 const isPlainObject = require('lodash/isPlainObject');
 const addMinutes = require('date-fns/add_minutes');
-const { addResolveFunctionsToSchema } = require('graphql-tools');
+const { ApiUrlPriority, htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
-
+const { addResolveFunctionsToSchema } = require('graphql-tools');
 const Magento2ApiBase = require('./Magento2ApiBase');
 
 /**
@@ -16,54 +16,55 @@ const Magento2ApiBase = require('./Magento2ApiBase');
 module.exports = class Magento2Api extends Magento2ApiBase {
   constructor(params) {
     super(params);
-    this.eventEmitter.on(Events.BEFORE_APOLLO_SERVER_CREATED, serverConfig => this.addTypeResolvers(serverConfig));
+    this.addTypeResolvers();
   }
 
   /**
    * Adds additional resolve functions to the stitched GQL schema for the sake of data-splitting
-   * @param {object} serverConfig Apollo Server config object
    */
-  async addTypeResolvers(serverConfig) {
+  async addTypeResolvers() {
     const resolvers = {
-      Product: {
-        breadcrumbs: (...params) => this.breadcrumbs(...params)
+      BackendConfig: {
+        shop: () => this.fetchBackendConfig()
       },
-      Category: {
-        breadcrumbs: (...params) => this.breadcrumbs(...params)
+      ShopConfig: {
+        stores: () => this.getActiveStores(),
+        currencies: () => this.getActiveCurrencies(),
+        baseCurrency: () => this.session.baseCurrency,
+        timezone: () => this.session.timezone,
+        weightUnit: () => this.session.weightUnit
       }
     };
-
-    Logger.debug(`${this.name} Adding additional resolve functions`);
-    addResolveFunctionsToSchema({ schema: serverConfig.schema, resolvers });
+    Logger.debug(`${this.name}: Adding additional resolve functions`);
+    addResolveFunctionsToSchema({ schema: this.gqlServerConfig.schema, resolvers });
   }
 
-  /**
-   * Set shop configuration
-   * @param {StoreConfigInput} params - params to be set
-   * @return {boolean} true when change has been successful
-   */
-  setStoreConfig(params) {
-    const { storeCode } = params;
-    if (storeCode) {
-      this.context.magento2.storeCode = storeCode;
-    }
-    return true;
+  async getActiveStores() {
+    return this.storeList.map(storeWebsite => ({
+      name: storeWebsite.name,
+      code: storeWebsite.defaultStore.code
+    }));
+  }
+
+  async getActiveCurrencies() {
+    const currentStoreConfig = this.getActiveStoreConfig();
+    const currencies = [];
+    forEach(this.storeConfigMap, storeConfig => {
+      if (currentStoreConfig && currentStoreConfig.store_group_id === storeConfig.store_group_id) {
+        currencies.push(storeConfig.default_display_currency_code);
+      }
+    });
+    return currencies;
   }
 
   /**
    * Fetch category data
-   * @param {object} params - params with id of category
-   * @param {number} params.id - id of the requested category
+   * @param {object} obj Parent object
+   * @param {number} id - id of the requested category
    * @return {Promise<Category>} - converted response with category data
    */
-  async category(params) {
-    const response = await this.get(
-      `/categories/${params.id}`,
-      {
-        storeCode: this.context.magento2.storeCode
-      },
-      { context: { useAdminToken: true } }
-    );
+  async category(obj, { id }) {
+    const response = await this.get(`/categories/${id}`, {}, { context: { useAdminToken: true } });
     return this.convertCategoryData(response);
   }
 
@@ -164,6 +165,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Get list of products based on filters from params
+   * @param {object} obj Parent object
    * @param {object} params - request params
    * @param {number} [params.categoryId] - id of the category to search in
    * @param {boolean} [params.includeSubcategories] - flag indicates if products from subcategories should be included
@@ -173,7 +175,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {string[]} [skus] - skus of products that search should be narrowed to
    * @return {Promise<Product[]>} - response with list of products
    */
-  async products(params) {
+  async products(obj, params) {
     const { filters: simpleFilters = [], categoryId, skus } = params;
     // params.filters =  contains "simple" key-value filters (will be transpiled to Magento-like filters)
     const filtersToCheck = {};
@@ -316,7 +318,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       }
     );
 
-    return this.convertList(response, this.context.magento2.currency);
+    return this.convertList(response, this.session.currency);
   }
 
   /**
@@ -356,23 +358,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {string} [params.path] - request path to be checked against api urls
    * @return {Promise} - request promise
    */
-  async fetchUrl({ path }) {
-    return this.get(
-      '/url',
-      { url: path },
-      {
-        context: {
-          // unify the types so client receives 'shop-page, 'shop-product', 'shop-category', etc.
-          didReceiveResult: result => ({
-            id: result.entity_id,
-            canonicalUrl: result.canonical_url,
-            path: result.canonical_url,
-            type: `shop-${result.entity_type.toLowerCase().replace('cms-', '')}`
-          })
-        }
-      }
-    );
-  }
 
   /**
    * Reduce cms page data
@@ -485,6 +470,75 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
+   * Returns a priority factor for the given path (how likely it is to be handled by this middleware)
+   * @param {String} path - path to check
+   * @returns {Number} - priority factor
+   */
+  getFetchUrlPriority(path) {
+    return path.endsWith('.html') ? ApiUrlPriority.HIGH : ApiUrlPriority.NORMAL;
+  }
+
+  /**
+   * Special endpoint to fetch any magento entity by it's url, for example product, cms page
+   * @param {object} _ Parent object
+   * @param {object} params - request params
+   * @param {string} [params.path] - request path to be checked against api urls
+   * @param {boolean} [params.loadEntityData] - flag to mark whether endpoint should return entity data as well
+   * @return {Promise} - request promise
+   */
+  async fetchUrl(_, params) {
+    const { path, loadEntityData = false } = params;
+
+    return this.get(
+      '/url/',
+      {
+        request_path: path,
+        load_entity_data: loadEntityData
+      },
+      {
+        context: {
+          didReceiveResult: result => this.reduceUrl(result, this.session.currency)
+        }
+      }
+    );
+  }
+
+  /**
+   * Reduce url endpoint data.
+   * Find entity reducer and use it.
+   *
+   * @param {object} data - parsed response Api Response
+   * @param {string} [currency] currency code
+   * @return {CmsPage | Product | Category} reduced data
+   */
+  reduceUrl(data, currency = null) {
+    const type = data.entity_type;
+    const entityData = data[type.replace('-', '_')];
+    // unify the types so client receives 'shop-page, 'shop-product', 'shop-category, etc.
+    const unifiedType = `shop-${type.replace('cms-', '')}`;
+
+    if (entityData === null) {
+      return { id: data.entity_id, type: unifiedType };
+    }
+
+    let reducer;
+
+    if (type === 'cms-page') {
+      reducer = this.reduceCmsPage;
+    } else if (type === 'product') {
+      reducer = this.reduceProduct;
+    } else if (type === 'category') {
+      reducer = this.reduceCategory;
+    } else {
+      throw new Error(`Unknown url entity type: ${type} in magento api.`);
+    }
+
+    const reducedEntityData = reducer.call(this, { data: entityData }, currency);
+
+    return Object.assign(reducedEntityData.data, { type: unifiedType });
+  }
+
+  /**
    * Reduce category data
    * @param {object} response - api response
    * @return {Category} reduced data
@@ -497,36 +551,24 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Search for product with id
-   * @param {object} params - request params
-   * @param {number} params.id - product id called by magento entity_id
+   * @param {object} obj Parent object
+   * @param {number} id - product id called by magento entity_id
    * @return {Promise<Product>} product data
    */
-  async product({ id }) {
-    return this.get(
-      `/products/${id}`,
-      {},
-      {
-        didReceiveResult: res => this.reduceProduct(res, this.context.magento2.currency)
-      }
-    );
-  }
-
-  async breadcrumbs({ data }, params, context) {
-    const { id, sku } = data;
-    console.log({ id, sku }, params, context);
-    console.log('--------- loading breadcrumbs');
-    return [];
+  async product(obj, { id }) {
+    const urlPath = `catalog/product/view/id/${id}`;
+    return this.fetchUrl(obj, { path: urlPath, loadEntityData: true });
   }
 
   /**
    * Add product to cart
-   *
+   * @param {object} obj Parent object
    * @param {object} input - product data
    * @param {string} input.sku - added product sku
    * @param {number} input.qty - added product qty
    * @return {Promise<CartItemPayload>} - cart item data
    */
-  async addToCart(input) {
+  async addToCart(obj, { input }) {
     const cartData = await this.ensureCart();
     const cartPath = this.getCartPath();
 
@@ -575,8 +617,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         }
       } else if (e.message.match(/^No such entity with cartId/)) {
         this.removeCartData();
-        delete this.context.magento2.cart;
-        this.context.session.save();
         e.code = 'INVALID_CART';
       }
 
@@ -590,7 +630,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {object} - new cart data
    */
   async ensureCart() {
-    const { cart, customerToken: { token } = {} } = this.context.magento2;
+    const { cart, customerToken: { token } = {} } = this.session;
+
     if (cart && cart.quoteId) {
       return cart;
     }
@@ -598,9 +639,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const cartPath = token ? '/carts/mine' : '/guest-carts';
     const response = await this.post(cartPath);
 
-    this.context.magento2.cart = { quoteId: response.data };
+    this.session.cart = { quoteId: response.data };
 
-    return this.context.magento2.cart;
+    return this.session.cart;
   }
 
   /**
@@ -608,7 +649,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {string} - prefix for cart endpoints
    */
   getCartPath() {
-    const { cart, customerToken = {} } = this.context.magento2;
+    const { cart, customerToken = {} } = this.session;
 
     if (!customerToken.token && !cart) {
       throw new Error('No cart in session for not registered user.');
@@ -636,8 +677,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Cart>} - customer cart data
    */
   async cart() {
-    const { magento2 } = this.context;
-    const quoteId = magento2.cart && magento2.cart.quoteId;
+    const quoteId = this.session.cart && this.session.cart.quoteId;
     const emptyCart = {
       active: false,
       itemsQty: 0,
@@ -645,12 +685,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       totals: []
     };
 
-    if (!magento2.cart || !magento2.cart.quoteId) {
-      return emptyCart;
-    }
-
     if (!quoteId) {
-      throw Error('Trying to fetch cart data without quoteId param');
+      return emptyCart;
     }
 
     // todo avoid calling both endpoints if not necessary
@@ -752,21 +788,22 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Make request for customer token
-   * @param {SignIn} data - form data
-   * @param {string} data.email - user email
-   * @param {string} data.password - user password
+   * @param {object} obj Parent object
+   * @param {SignIn} input - form data
+   * @param {string} input.email - user email
+   * @param {string} input.password - user password
    * @return {Promise<boolean>} true if login was successful
    */
-  async signIn(data) {
-    const { cart: { quoteId = null } = {} } = this.context.magento2;
+  async signIn(obj, { input }) {
+    const { cart: { quoteId = null } = {} } = this.session;
     const dateNow = Date.now();
 
     try {
       const response = await this.post(
         '/integration/customer/token',
         {
-          username: data.email,
-          password: data.password,
+          username: input.email,
+          password: input.password,
           guest_quote_id: quoteId
         },
         { context: { skipAuth: true } }
@@ -776,15 +813,15 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       // calculate token expiration date and subtract 1 minute for margin
       const tokenValidationTimeInMinutes = validTime * 60 - 1;
       const tokenExpirationTime = addMinutes(dateNow, tokenValidationTimeInMinutes);
-      Logger.debug(`Customer token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
+      Logger.debug(`${this.name}: Customer token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
 
-      this.context.magento2.customerToken = {
+      this.session.customerToken = {
         token,
         expirationTime: tokenExpirationTime.getTime()
       };
 
       // Remove guest cart. Magento merges guest cart with cart of authorized user so we'll have to refresh it
-      delete this.context.magento2.cart;
+      delete this.session.cart;
       // make sure that cart is correctly loaded for signed in user
       await this.ensureCart();
 
@@ -809,25 +846,26 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async signOut() {
     /* Remove logged in customer data */
-    delete this.context.magento2.customerToken;
-    delete this.context.magento2.cart;
+    delete this.session.customerToken;
+    delete this.session.cart;
 
     return true;
   }
 
   /**
    * Create customer account
-   * @param {SignUp} data - registration form data
-   * @param {string} data.email - customer email
-   * @param {string} data.firstname - customer first name
-   * @param {String} data.lastname - customer last name
-   * @param {String} data.password - customer password
-   * @param {string|number} params.cart.quoteId - cart id
+   * @param {object} obj Parent object
+   * @param {SignUp} input - registration form data
+   * @param {string} input.email - customer email
+   * @param {string} input.firstname - customer first name
+   * @param {String} input.lastname - customer last name
+   * @param {String} input.password - customer password
+   * @param {string|number} input.cart.quoteId - cart id
    * @return {Promise<Customer>} - new customer data
    */
-  async signUp(data) {
-    const { email, firstname, lastname, password, autoSignIn } = data;
-    const { cart: { quoteId = null } = {} } = this.context.magento2;
+  async signUp(obj, { input }) {
+    const { email, firstname, lastname, password, autoSignIn } = input;
+    const { cart: { quoteId = null } = {} } = this.session;
     const customerData = {
       customer: {
         email,
@@ -865,7 +903,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Customer>} - converted customer data
    */
   async customer() {
-    const { customerToken = {} } = this.context.magento2;
+    const { customerToken = {} } = this.session;
 
     if (!customerToken.token) {
       // returning null cause that it is easier to check on client side if User is authenticated
@@ -911,17 +949,18 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Fetch collection of customer orders
+   * @param {object} obj Parent object
    * @param {object} params - request params
    * @param {object} params.query - request query params
    * @param {number} params.query.page - pagination page
    * @param {number} params.query.perPage - number of items per page
    * @return {Orders} parsed orders with pagination info
    */
-  async orders(params) {
+  async orders(obj, params) {
     const {
       query: { page, perPage }
     } = params;
-    const { customerToken = {} } = this.context.magento2;
+    const { customerToken = {} } = this.session;
 
     if (!customerToken.token) {
       throw new Error('Trying to fetch customer orders without valid customer token');
@@ -948,21 +987,22 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Fetch info about customer order based on order id
+   * @param {object} obj Parent object
    * @param {object} params - request params
    * @param {number} params.id - order id
    * @return {Promise<Order>} - order info
    */
-  async order(params) {
+  async order(obj, params) {
     const { id } = params;
-    const { customerToken = {} } = this.context.magento2;
+    const { customerToken = {} } = this.session;
 
     if (!id) {
-      Logger.error(`${this.name} Trying to fetch customer order info without order id`);
+      Logger.error(`${this.name}: Trying to fetch customer order info without order id`);
       throw new Error('Failed to load an order.');
     }
 
     if (!customerToken.token) {
-      Logger.error(`${this.name} Trying to fetch customer order info without customer token`);
+      Logger.error(`${this.name}: Trying to fetch customer order info without customer token`);
       throw new Error('Failed to load an order.');
     }
 
@@ -1053,6 +1093,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Update items in cart
+   * @param {object} obj Parent object
    * @param {UpdateCartItemInput} input - cart item data
    * @param {string} [input.sku] - item sku
    * @param {number} [input.qty] - item qty
@@ -1063,8 +1104,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {String|Number} [params.cart.quoteId] - cart id
    * @return {Promise<CartItemPayload>} - updated item data
    */
-  async updateCartItem(input) {
-    const { cart } = this.context.magento2;
+  async updateCartItem(obj, { input }) {
+    const { cart } = this.session;
     const { quoteId } = cart;
     const { itemId, sku, qty } = input;
 
@@ -1092,13 +1133,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Remove item from cart
+   * @param {object} obj Parent object
    * @param {RemoveCartItemInput} input - cart item data
    * @param {string} [input.itemId] - item id
    * @param {string|number} [params.cart.quoteId] - cart id
    * @return {Promise<RemoveCartItemResponse>} - RemoveCartItemResponse with itemId when operation was successfull
    */
-  async removeCartItem(input) {
-    const { cart } = this.context.magento2;
+  async removeCartItem(obj, { input }) {
+    const { cart } = this.session;
     const { itemId } = input;
     const cartPath = this.getCartPath();
 
@@ -1113,57 +1155,62 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       return {};
     }
 
-    Logger.warn(`${this.name} Trying to remove cart item without quoteId`);
+    Logger.warn(`${this.name}: Trying to remove cart item without quoteId`);
 
     return {};
   }
 
   /**
    * Updates customer profile data
+   * @param {object} obj Parent object
    * @param {CustomerInput} data - data to be saved
    * @return {Promise<Customer>} updated customer data
    */
-  async editCustomerData(data) {
-    const response = await this.put('/customers/me', { customer: { ...data } });
+  async editCustomerData(obj, { input }) {
+    const response = await this.put('/customers/me', { customer: { ...input } });
 
     return this.convertKeys(response.data);
   }
 
   /**
    * Request customer address
+   * @param {object} obj Parent object
    * @param {object} params - request params
    * @param {number} params.id - address id
    * @return {Promise<Address>} requested address data
    */
-  async address(params) {
+  async address(obj, params) {
     return this.forwardAddressAction(params);
   }
 
   /**
    * Add new customer address
+   * @param {object} obj Parent object
    * @param {AddressInput} data - address data
    * @return {Promise<Address>} added address data
    */
-  async addCustomerAddress(data) {
-    return this.forwardAddressAction({ data, method: 'post' });
+  async addCustomerAddress(obj, { input }) {
+    return this.forwardAddressAction({ data: input, method: 'post' });
   }
 
   /**
    * Change customer address data
+   * @param {object} obj Parent object
    * @param {AddressInput} data - data to change
    * @return {Promise<Address>} updated address data
    */
-  async editCustomerAddress(data) {
-    return this.forwardAddressAction({ data, method: 'put' });
+  async editCustomerAddress(obj, { input }) {
+    return this.forwardAddressAction({ data: input, method: 'put' });
   }
 
   /**
    * Remove customer address data
+   * @param {object} obj Parent object
    * @param {EntityIdInput} data - address to remove
    * @return {boolean} true when removed successfully
    */
-  async removeCustomerAddress(data) {
-    return this.forwardAddressAction({ id: data.id, method: 'delete' });
+  async removeCustomerAddress(obj, { input }) {
+    return this.forwardAddressAction({ id: input.id, method: 'delete' });
   }
 
   /**
@@ -1178,13 +1225,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async forwardAddressAction(params = {}) {
     const { id, path = '/customers/me/address', method = 'get', data = null } = params;
-    const { customerToken = {} } = this.context.magento2;
+    const { customerToken = {} } = this.session;
 
     let addressPath = path;
     let addressData = data;
 
     if (!customerToken.token) {
-      Logger.error(`${this.name} Trying to edit customer data without customer token`);
+      Logger.error(`${this.name}: Trying to edit customer data without customer token`);
       throw new Error('You do not have an access to edit address data');
     }
 
@@ -1212,11 +1259,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Check if given password reset token is valid
+   * @param {object} obj Parent object
    * @param {object} params - request params
    * @param {string} params.token - reset password token
    * @return {Promise<boolean>} true if token is valid
    */
-  async validatePasswordToken(params) {
+  async validatePasswordToken(obj, params) {
     const { token } = params;
     const validatePath = `/customers/0/password/resetLinkToken/${token}`;
 
@@ -1234,42 +1282,46 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Generate customer password reset token
-   * @param {EmailInput} params - request params
-   * @param {string} params.email - user email
+   * @param {object} obj Parent object
+   * @param {EmailInput} input - request params
+   * @param {string} input.email - user email
    * @return {Promise<boolean>} always true to avoid spying for registered emails
    */
-  async requestCustomerPasswordResetToken(params) {
-    const { email } = params;
+  async requestCustomerPasswordResetToken(obj, { input }) {
+    const { email } = input;
     await this.put('/customers/password', { email, template: 'email_reset' });
     return true;
   }
 
   /**
    * Reset customer password using provided reset token
-   * @param {CustomerPasswordReset} params - request params
-   * @param {string} params.resetToken - reset token
-   * @param {string} params.password - new password to set
+   * @param {object} obj Parent object
+   * @param {CustomerPasswordReset} input - request params
+   * @param {string} input.customerId - customer email
+   * @param {string} input.resetToken - reset token
+   * @param {string} input.password - new password to set
    * @return {Promise<boolean>} true on success
    */
-  async resetCustomerPassword(params) {
-    const { resetToken, password: newPassword } = params;
+  async resetCustomerPassword(obj, { input }) {
+    const { resetToken, password: newPassword } = input;
     const result = await this.put('/customers/password/reset', { email: '', resetToken, newPassword });
     return result.data;
   }
 
   /**
    * Change customer password
-   * @param {CustomerPasswordReset} params - request params
-   * @param {string} params.password - new password
-   * @param {string} params.currentPassword - current password
+   * @param {object} obj Parent object
+   * @param {CustomerPasswordReset} input - request params
+   * @param {string} input.password - new password
+   * @param {string} input.currentPassword - current password
    * @return {Promise<boolean>} true on success
    */
-  async changeCustomerPassword(params) {
-    const { password: newPassword, currentPassword } = params;
-    const { customerToken = {} } = this.context.magento2;
+  async changeCustomerPassword(obj, { input }) {
+    const { password: newPassword, currentPassword } = input;
+    const { customerToken = {} } = this.session;
 
     if (!customerToken.token) {
-      Logger.error(`${this.name} Trying to edit customer data without customer token`);
+      Logger.error(`${this.name}: Trying to edit customer data without customer token`);
       throw new Error('You do not have an access to edit account data');
     }
 
@@ -1291,12 +1343,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Apply coupon to cart
+   * @param {object} obj Parent object
    * @param {CouponInput} input - request data
    * @param {string} [input.couponCode] - coupon code
    * @return {Promise<boolean>} true on success
    */
-  async applyCoupon(input) {
-    const { cart } = this.context.magento2,
+  async applyCoupon(obj, { input }) {
+    const { cart } = this.session,
       route = this.getCartPath();
 
     if (!cart || !cart.quoteId) {
@@ -1321,7 +1374,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<boolean>} true on success
    */
   async cancelCoupon() {
-    const { cart } = this.context.magento2;
+    const { cart } = this.session;
     const route = this.getCartPath();
 
     if (cart && cart.quoteId) {
@@ -1332,8 +1385,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     throw new Error('Trying to remove coupon without quoteId in session');
   }
 
-  async estimateShippingMethods(params) {
-    params.address = this.prepareAddressForOrder(params.address);
+  async estimateShippingMethods(obj, { input }) {
+    input.address = this.prepareAddressForOrder(input.address);
 
     const response = await this.performCartAction(
       '/estimate-shipping-methods',
@@ -1341,11 +1394,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       // todo: check why params cannot be passed here directly. In this case params.constructor === undefined
       // and because of that RESTDataSource.fetch() cannot properly serialize to before sending
       // Using Object.assign() fixes the problem with constructor property so fetch() works correctly then
-      Object.assign({}, params)
+      Object.assign({}, input)
     );
 
     response.data.forEach(method => {
-      method.currency = this.context.magento2.currency;
+      method.currency = this.session.currency;
     });
 
     return this.convertKeys(response.data);
@@ -1372,7 +1425,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<object>} response data
    */
   async performCartAction(path, method, data) {
-    const { cart } = this.context.magento2;
+    const { cart } = this.session;
 
     if (!cart.quoteId) {
       const errorMessage = `Quote id is empty, cannot perform api call for ${path}`;
@@ -1400,15 +1453,16 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Sets shipping method for the order
-   * @param {ShippingInput} data - shipping configuration
+   * @param {object} obj Parent object
+   * @param {ShippingInput} input - shipping configuration
    * @return {Promise<ShippingInformation>} shipping configuration info
    */
-  async setShipping(data) {
+  async setShipping(obj, { input }) {
     const magentoData = {
       addressInformation: {
-        ...data,
-        billingAddress: this.prepareAddressForOrder(data.billingAddress),
-        shippingAddress: this.prepareAddressForOrder(data.shippingAddress)
+        ...input,
+        billingAddress: this.prepareAddressForOrder(input.billingAddress),
+        shippingAddress: this.prepareAddressForOrder(input.shippingAddress)
       }
     };
 
@@ -1419,13 +1473,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Place order
-   * @param {PlaceOrderInput} data - form data
+   * @param {object} obj Parent object
+   * @param {PlaceOrderInput} input - form data
    * @return {Promise<PlaceOrderResult>} order data
    */
-  async placeOrder(data) {
+  async placeOrder(obj, { input }) {
     let response;
     try {
-      response = await this.performCartAction('/deity-order', 'put', Object.assign({}, data), this.context.magneto2);
+      response = await this.performCartAction('/deity-order', 'put', Object.assign({}, input));
     } catch (e) {
       // todo: use new version of error handler
       if (e.statusCode === 400) {
@@ -1442,13 +1497,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       response.data = orderData;
     }
 
-    this.context.magento2.orderId = orderData.orderId;
+    this.session.orderId = orderData.orderId;
 
-    if (!this.context.magento2.orderId) {
+    if (!this.session.orderId) {
       throw new Error('no order id from magento.');
     }
 
-    this.context.magento2.orderQuoteId = this.context.magento2.cart.quoteId;
+    this.session.orderQuoteId = this.session.cart.quoteId;
 
     return response.data;
   }
@@ -1458,7 +1513,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Order>} last order data
    */
   async lastOrder() {
-    const { orderId, paypalExpressHash } = this.context.magento2;
+    const { orderId, paypalExpressHash } = this.session;
     let lastOrderId = orderId;
 
     if (!orderId && paypalExpressHash) {
@@ -1481,7 +1536,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   removeCartData() {
-    delete this.context.magento2.cart;
+    delete this.session.cart;
     this.context.session.save();
   }
 };

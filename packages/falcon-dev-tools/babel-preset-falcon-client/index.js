@@ -25,7 +25,10 @@ module.exports = (/* api */) => {
       // Adds syntax support for import()
       require.resolve('babel-plugin-syntax-dynamic-import'),
       // Add support for async/await
-      require.resolve('@babel/plugin-transform-runtime')
+      require.resolve('@babel/plugin-transform-runtime'),
+      // Add support for loadable components SSR
+      // https://www.smooth-code.com/open-source/loadable-components/docs/server-side-rendering/
+      require.resolve('@loadable/babel-plugin')
     ]
   };
 

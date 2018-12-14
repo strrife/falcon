@@ -11,15 +11,7 @@ describe('DynamicRouteResolver', () => {
       getFetchUrlPriority(path) {
         return path.startsWith('/blog/') ? ApiUrlPriority.HIGHEST : ApiUrlPriority.LOW;
       }
-    };
-    const Api2 = class extends ApiDataSource {
-      getFetchUrlPriority(path) {
-        return path.endsWith('.html') ? ApiUrlPriority.HIGH : ApiUrlPriority.NORMAL;
-      }
-    };
-
-    const Ext1 = class extends Extension {
-      async fetchUrl(root, { path }) {
+      async fetchUrl(_, { path }) {
         return {
           id: 1,
           path,
@@ -27,8 +19,11 @@ describe('DynamicRouteResolver', () => {
         };
       }
     };
-    const Ext2 = class extends Extension {
-      async fetchUrl(root, { path }) {
+    const Api2 = class extends ApiDataSource {
+      getFetchUrlPriority(path) {
+        return path.endsWith('.html') ? ApiUrlPriority.HIGH : ApiUrlPriority.NORMAL;
+      }
+      async fetchUrl(_, { path }) {
         return {
           id: 2,
           path,
@@ -36,10 +31,17 @@ describe('DynamicRouteResolver', () => {
         };
       }
     };
-    const ext1 = new Ext1({ name: 'Ext1' });
-    ext1.api = new Api1();
-    const ext2 = new Ext2({ name: 'Ext2' });
-    ext2.api = new Api2();
+
+    const Ext1 = class extends Extension {};
+    const Ext2 = class extends Extension {};
+
+    const ext1 = new Ext1({ name: 'Ext1', config: { api: 'api1' } });
+    const ext2 = new Ext2({ name: 'Ext2', config: { api: 'api2' } });
+
+    const dataSources = {
+      api1: new Api1({}),
+      api2: new Api2({})
+    };
 
     const spyExt1 = jest.spyOn(ext1, 'fetchUrl');
     const spyExt2 = jest.spyOn(ext2, 'fetchUrl');
@@ -48,7 +50,7 @@ describe('DynamicRouteResolver', () => {
     extensionContainer.extensions.set(ext2.name, ext2);
     const dynamicResolver = new DynamicRouteResolver(extensionContainer);
 
-    const result = await dynamicResolver.fetchUrl({}, { path: 'foo.html' });
+    const result = await dynamicResolver.fetchUrl({}, { path: 'foo.html' }, { dataSources });
     expect(result).toEqual({ id: 2, path: 'foo.html', type: 'bar' });
     expect(spyExt2).toHaveBeenCalled();
     expect(spyExt1).not.toHaveBeenCalled();
@@ -56,7 +58,7 @@ describe('DynamicRouteResolver', () => {
     spyExt1.mockClear();
     spyExt2.mockClear();
 
-    const result2 = await dynamicResolver.fetchUrl({}, { path: '/blog/bar/page' });
+    const result2 = await dynamicResolver.fetchUrl({}, { path: '/blog/bar/page' }, { dataSources });
     expect(result2).toEqual({ id: 1, path: '/blog/bar/page', type: 'foo' });
     expect(spyExt1).toHaveBeenCalled();
     expect(spyExt2).not.toHaveBeenCalled();

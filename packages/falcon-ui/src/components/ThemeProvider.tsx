@@ -14,18 +14,18 @@ const tinyNormalizeStyles = {
 };
 
 type ThemeProviderProps = Partial<PropsWithTheme> & {
-  normalizeStyles?: CSSObject;
+  globalCss?: CSSObject;
   withoutRoot?: boolean;
 };
 
 export const ThemeProvider: React.SFC<ThemeProviderProps> = ({
   theme = createTheme(),
-  normalizeStyles = tinyNormalizeStyles,
+  globalCss = tinyNormalizeStyles,
   withoutRoot = false,
   ...rest
 }) => (
   <Provider theme={theme}>
-    <Global styles={normalizeStyles} />
+    <Global styles={globalCss} />
     {withoutRoot ? rest.children : <Root {...rest} />}
   </Provider>
 );

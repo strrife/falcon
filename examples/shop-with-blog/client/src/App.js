@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Route from 'react-router-dom/Route';
-import Switch from 'react-router-dom/Switch';
+import { Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { Loader } from '@deity/falcon-ecommerce-uikit';
 import { ThemeProvider } from '@deity/falcon-ui';
@@ -19,11 +18,12 @@ import {
   LocaleProvider
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
-import AsyncComponent from 'src/components/Async';
+import loadable from 'src/components/loadable';
+import { ErrorBoundary } from 'src/components/ErrorBoundary';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
 import { Sidebar, SidebarContainer } from 'src/pages/shop/components/Sidebar';
-import { deityGreenTheme } from './theme';
+import { deityGreenTheme, globalCss } from './theme';
 
 const HeadMetaTags = () => (
   <Helmet defaultTitle="Deity Shop with Blog" titleTemplate="%s | Deity Shop with Blog">
@@ -41,21 +41,19 @@ const HeadMetaTags = () => (
   </Helmet>
 );
 
-const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
-const Product = AsyncComponent(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
-const SignIn = AsyncComponent(() => import(/* webpackChunkName: "account/sign-in" */ './pages/account/SignIn'));
-const Dashboard = AsyncComponent(() => import(/* webpackChunkName: "account/dashboard" */ './pages/account/Dashboard'));
-const ResetPassword = AsyncComponent(() =>
-  import(/* webpackChunkName: "shop/resetpassword" */ './pages/shop/ResetPassword')
-);
-const Blog = AsyncComponent(() => import(/* webpackChunkName: "blog/blog" */ './pages/blog/Blog'));
-const BlogPost = AsyncComponent(() => import(/* webpackChunkName: "blog/post" */ './pages/blog/Post'));
-const Cart = AsyncComponent(() => import(/* webpackChunkName: "shop/cart" */ './pages/shop/Cart'));
-const Checkout = AsyncComponent(() => import(/* webpackChunkName: "shop/checkout" */ './pages/shop/Checkout'));
-const CheckoutConfirmation = AsyncComponent(() =>
+const Category = loadable(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
+const Product = loadable(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
+const SignIn = loadable(() => import(/* webpackChunkName: "account/sign-in" */ './pages/account/SignIn'));
+const Dashboard = loadable(() => import(/* webpackChunkName: "account/dashboard" */ './pages/account/Dashboard'));
+const ResetPassword = loadable(() => import(/* webpackChunkName: "shop/resetpassword" */ './pages/shop/ResetPassword'));
+const Blog = loadable(() => import(/* webpackChunkName: "blog/blog" */ './pages/blog/Blog'));
+const BlogPost = loadable(() => import(/* webpackChunkName: "blog/post" */ './pages/blog/Post'));
+const Cart = loadable(() => import(/* webpackChunkName: "shop/cart" */ './pages/shop/Cart'));
+const Checkout = loadable(() => import(/* webpackChunkName: "shop/checkout" */ './pages/shop/Checkout'));
+const CheckoutConfirmation = loadable(() =>
   import(/* webpackChunkName: "shop/checkout" */ './pages/shop/CheckoutConfirmation')
 );
-const SidebarContents = AsyncComponent(() =>
+const SidebarContents = loadable(() =>
   import(/* webpackChunkName: "shop/SidebarContents" */ './pages/shop/components/Sidebar/SidebarContents')
 );
 
@@ -73,40 +71,41 @@ const App = ({ online }) => (
     <ThemeEditorState initial={deityGreenTheme}>
       {props => (
         <React.Fragment>
-          <ThemeProvider theme={props.theme}>
+          <ThemeProvider theme={props.theme} globalCss={globalCss}>
             <HeadMetaTags />
             <AppLayout>
               <HeaderQuery>{data => <Header {...data} />}</HeaderQuery>
               {!online && <p>you are offline.</p>}
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route exact path="/products" component={Category} />
-                <Route exact path="/blog/:page?" component={Blog} />
-                <Route exact path="/cart" component={Cart} />
-                <Route exact path="/checkout" component={Checkout} />
-                <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
-                <Route exact path="/reset-password" component={ResetPassword} />
-                <ProtectedRoute exact path="/account" component={Dashboard} />
-                <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
-                <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
-                <DynamicRoute
-                  loaderComponent={Loader}
-                  components={{
-                    'blog-post': BlogPost,
-                    'shop-category': Category,
-                    'shop-product': Product
-                  }}
-                />
-              </Switch>
-              <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
+              <ErrorBoundary>
+                <Switch>
+                  <Route exact path="/" component={Home} />
+                  <Route exact path="/blog/:page?" component={Blog} />
+                  <Route exact path="/cart" component={Cart} />
+                  <Route exact path="/checkout" component={Checkout} />
+                  <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
+                  <Route exact path="/reset-password" component={ResetPassword} />
+                  <ProtectedRoute exact path="/account" component={Dashboard} />
+                  <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
+                  <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
+                  <DynamicRoute
+                    loaderComponent={Loader}
+                    components={{
+                      'blog-post': BlogPost,
+                      'shop-category': Category,
+                      'shop-product': Product
+                    }}
+                  />
+                </Switch>
+                <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
 
-              <SidebarContainer>
-                {sidebarProps => (
-                  <Sidebar {...sidebarProps}>
-                    {() => <SidebarContents contentType={sidebarProps.contentType} />}
-                  </Sidebar>
-                )}
-              </SidebarContainer>
+                <SidebarContainer>
+                  {sidebarProps => (
+                    <Sidebar {...sidebarProps}>
+                      {() => <SidebarContents contentType={sidebarProps.contentType} />}
+                    </Sidebar>
+                  )}
+                </SidebarContainer>
+              </ErrorBoundary>
             </AppLayout>
           </ThemeProvider>
           {ThemeEditorComponent && <ThemeEditorComponent {...props} side="left" />}

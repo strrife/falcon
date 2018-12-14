@@ -2,6 +2,7 @@
 const Logger = require('@deity/falcon-logger');
 const { mergeSchemas, makeExecutableSchema } = require('graphql-tools');
 const { Events } = require('@deity/falcon-server-env');
+const BaseContainer = require('./BaseContainer');
 
 /**
  * @typedef {object} ExtensionInstanceConfig
@@ -11,17 +12,23 @@ const { Events } = require('@deity/falcon-server-env');
  */
 
 /**
+ * @typedef {object} BackendConfig
+ * @property {string[]} locales
+ * @property {string} defaultLocale
+ */
+
+/**
  * Holds extensions and expose running hooks for for them.
  */
-module.exports = class ExtensionContainer {
+module.exports = class ExtensionContainer extends BaseContainer {
   /**
    * Creates extensions container
    * @param {EventEmitter2} eventEmitter EventEmitter
    */
   constructor(eventEmitter) {
+    super(eventEmitter);
     /** @type {Map<string,Extension>} */
     this.extensions = new Map();
-    this.eventEmitter = eventEmitter;
   }
 
   /**
@@ -34,52 +41,91 @@ module.exports = class ExtensionContainer {
       if (Object.prototype.hasOwnProperty.call(extensions, extKey)) {
         const extension = extensions[extKey];
 
-        try {
-          const ExtensionClass = require(extension.package); // eslint-disable-line import/no-dynamic-require
-          const extensionInstance = new ExtensionClass({
-            config: extension.config || {},
-            name: extKey,
-            extensionContainer: this,
-            eventEmitter: this.eventEmitter
-          });
-
-          Logger.debug(`ExtensionContainer: "${extensionInstance.name}" added to the list of extensions`);
-          const { api: apiName } = extension.config || {};
-          if (apiName && dataSources.has(apiName)) {
-            extensionInstance.api = dataSources.get(apiName);
-            Logger.debug(
-              `ExtensionContainer: "${apiName}" API DataSource added to Extension "${extensionInstance.name}"`
-            );
-          } else {
-            Logger.debug(`ExtensionContainer: Extension "${extensionInstance.name}" has no API defined`);
-          }
-          this.extensions.set(extensionInstance.name, extensionInstance);
-
-          await this.eventEmitter.emitAsync(Events.EXTENSION_REGISTERED, {
-            instance: extensionInstance,
-            name: extensionInstance.name
-          });
-        } catch (ex) {
-          Logger.warn(
-            `ExtensionContainer: "${
-              extension.package
-            }" extension cannot be loaded. Make sure it is installed. Details: ${ex.stack}`
-          );
+        const ExtensionClass = this.importModule(extension.package);
+        if (!ExtensionClass) {
+          return;
         }
+        const extensionInstance = new ExtensionClass({
+          config: extension.config || {},
+          name: extKey,
+          extensionContainer: this,
+          eventEmitter: this.eventEmitter
+        });
+
+        Logger.debug(`ExtensionContainer: "${extensionInstance.name}" added to the list of extensions`);
+        const { api: apiName } = extension.config || {};
+        if (apiName && dataSources.has(apiName)) {
+          extensionInstance.api = dataSources.get(apiName);
+          Logger.debug(
+            `ExtensionContainer: "${apiName}" API DataSource assigned to "${extensionInstance.name}" extension`
+          );
+        } else {
+          Logger.debug(`ExtensionContainer: Extension "${extensionInstance.name}" has no API defined`);
+        }
+        this.extensions.set(extensionInstance.name, extensionInstance);
+
+        await this.eventEmitter.emitAsync(Events.EXTENSION_REGISTERED, {
+          instance: extensionInstance,
+          name: extensionInstance.name
+        });
       }
     }
   }
 
   /**
    * Initializes each registered extension (in sequence)
-   * @return {undefined}
+   * @param {object} obj Parent object
+   * @param {object} args GQL args
+   * @param {object} context GQL context
+   * @param {object} info GQL info
+   * @return {BackendConfig} Merged config
    */
-  async initialize() {
+  async fetchBackendConfig(obj, args, context, info) {
+    const configs = [];
+
     // initialization of extensions cannot be done in parallel because of race condition
     for (const [extName, ext] of this.extensions) {
-      Logger.debug(`ExtensionContainer: initializing "${extName}" extension`);
-      await ext.initialize();
+      Logger.debug(`ExtensionContainer: Fetching "${extName}" API backend config`);
+      const extConfig = await ext.fetchApiBackendConfig(obj, args, context, info);
+      if (extConfig) {
+        configs.push(extConfig);
+      }
     }
+
+    return this.mergeConfigs(configs);
+  }
+
+  /**
+   * Merges
+   * @param {Object[]} configs List of API config
+   * @return {BackendConfig} Merged config
+   */
+  mergeConfigs(configs) {
+    return configs.reduce((prev, current) => {
+      if (!current) {
+        return prev;
+      }
+
+      const { locales: prevLocales } = prev;
+      const { locales: currLocales } = current;
+
+      const isPrevLocalesArr = Array.isArray(prevLocales);
+      const isCurrLocalesArr = Array.isArray(currLocales);
+
+      let mergedLocales;
+
+      // Merging "locales" values (leaving only those that exist on every API)
+      if (isCurrLocalesArr && isPrevLocalesArr) {
+        mergedLocales = currLocales.filter(loc => prevLocales.indexOf(loc) >= 0);
+      } else {
+        mergedLocales = isCurrLocalesArr && !isPrevLocalesArr ? currLocales : prevLocales;
+      }
+
+      return {
+        defaultLocale: prev.defaultLocale || current.defaultLocale,
+        locales: mergedLocales
+      };
+    }, {});
   }
 
   /**
@@ -122,9 +168,6 @@ module.exports = class ExtensionContainer {
       schemas: [makeExecutableSchema({ typeDefs: config.schemas })],
       resolvers: config.resolvers
     });
-
-    const { dataSources } = config;
-    config.dataSources = () => dataSources;
 
     // remove processed fields
     delete config.contextModifiers;

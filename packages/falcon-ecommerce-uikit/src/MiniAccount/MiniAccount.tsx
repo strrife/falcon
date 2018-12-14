@@ -26,38 +26,6 @@ export const MiniAccount: React.SFC<MiniAccountData> = ({ customer }) =>
           )}
         </SignOutMutation>
       </Box>
-      <List mt="lg">
-        <ListItem>
-          <Link as={RouterLink} to="/dashboard">
-            Dashboard
-          </Link>
-        </ListItem>
-        <ListItem>
-          <Link as={RouterLink} to="/personal-information">
-            Personal Information
-          </Link>
-        </ListItem>
-        <ListItem>
-          <Link as={RouterLink} to="/address-book">
-            Address Book
-          </Link>
-        </ListItem>
-        <ListItem>
-          <Link as={RouterLink} to="/orders">
-            Orders
-          </Link>
-        </ListItem>
-        <ListItem>
-          <Link as={RouterLink} to="/product-reviews">
-            Product Reviews
-          </Link>
-        </ListItem>
-        <ListItem>
-          <Link as={RouterLink} to="/wish-list">
-            Wish List
-          </Link>
-        </ListItem>
-      </List>
     </Box>
   ) : (
     <SignIn />

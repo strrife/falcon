@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon-theme-editor",
   "license": "OSL-3.0",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-theme-editor",
   "main": "dist/falcon-theme-editor.cjs.js",
   "module": "dist/index.js",
@@ -17,8 +17,8 @@
   ],
   "peerDependencies": {
     "@deity/falcon-ui": "^0.0.2",
-    "react": "~16.4.2",
-    "react-dom": "~16.4.2"
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
   },
   "scripts": {
     "clean": "rimraf dist",
@@ -37,13 +37,13 @@
     "@babel/preset-env": "7.1.6",
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.1.0",
-    "@types/react": "16.7.13",
-    "@types/react-dom": "16.0.9",
+    "@types/react": "16.7.17",
+    "@types/react-dom": "16.0.11",
     "@types/stringify-object": "^3.2.0",
     "babel-plugin-annotate-pure-calls": "0.4.0",
     "babel-plugin-module-resolver": "3.1.1",
-    "react": "~16.4.2",
-    "react-dom": "~16.4.2",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "rimraf": "2.6.2",
     "rollup": "0.66.4",
     "rollup-plugin-babel": "4.0.3",

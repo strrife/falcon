@@ -2,15 +2,12 @@ const Logger = require('@deity/falcon-logger');
 const { ApiDataSource } = require('@deity/falcon-server-env');
 const { AuthenticationError } = require('@deity/falcon-errors');
 const util = require('util');
-const { CronJob } = require('cron');
 const addMinutes = require('date-fns/add_minutes');
 const isPlainObject = require('lodash/isPlainObject');
 const camelCase = require('lodash/camelCase');
 const keys = require('lodash/keys');
-const has = require('lodash/has');
 const isEmpty = require('lodash/isEmpty');
-
-const DEFAULT_KEY = '*';
+const _ = require('lodash');
 
 const { codes } = require('@deity/falcon-errors');
 
@@ -21,97 +18,148 @@ const { codes } = require('@deity/falcon-errors');
 module.exports = class Magento2ApiBase extends ApiDataSource {
   /**
    * Create Magento api wrapper instance
-   * @param {object} params ApiDataSource params
+   * @param {object} params configuration params
    */
   constructor(params) {
     super(params);
     this.storePrefix = this.config.storePrefix || 'default';
     this.cookie = null;
-    this.setupAdminTokenRefreshJob();
+    this.magentoConfig = {};
+    this.storeList = [];
+    this.storeConfigMap = {};
   }
 
   /**
    * Makes sure that context required for http calls exists
+   * Gets basic store configuration from Magento
+   * @return {object} Magento config
    */
-  async preInitialize() {
-    if (!this.context) {
-      this.initialize({ context: {} });
-    }
-  }
-
-  /**
-   * Setup cronjob to check if  admin token is valid and refresh it if required
-   */
-  setupAdminTokenRefreshJob() {
-    // run every minute
-    this.refresh = new CronJob(
-      '* * * * *',
-      async () => {
-        if (this.token && !this.isAdminTokenValid()) {
-          Logger.debug('Refresh admin token');
-          await this.retrieveAdminToken();
+  async fetchBackendConfig() {
+    const getCachedValue = async url => {
+      const value = await this.cache.get({
+        key: [this.name, this.session.storeCode || 'default', url].join(':'),
+        callback: async () => {
+          const rawValue = await this.get(url);
+          return JSON.stringify(rawValue);
+        },
+        options: {
+          ttl: 10 * 60 * 1000 // 10 min
         }
-      },
-      null,
-      true
+      });
+      return JSON.parse(value);
+    };
+
+    const [storeConfigs, storeViews, storeGroups, storeWebsites] = await Promise.all([
+      getCachedValue('/store/storeConfigs'),
+      getCachedValue('/store/storeViews'),
+      getCachedValue('/store/storeGroups'),
+      getCachedValue('/store/websites')
+    ]);
+
+    // Processing "active" items only
+    const activeStoreViews = storeViews.data.filter(
+      storeView => storeView.extension_attributes.is_active && storeView.website_id
     );
+    const activeStoreWebsites = storeWebsites.data.filter(storeWebsite => storeWebsite.id);
+    const activeStoreGroups = storeGroups.data.filter(storeGroup => storeGroup.id);
+
+    const activeStoreConfigs = storeConfigs.data.map(storeConfig => ({
+      ..._.pick(storeConfig, [
+        'id',
+        'code',
+        'website_id',
+        'locale',
+        'base_currency_code',
+        'default_display_currency_code',
+        'timezone',
+        'weight_unit'
+      ]),
+      ..._.pick(_.find(activeStoreViews, { id: storeConfig.id }), ['store_group_id', 'name'])
+    }));
+    this.storeConfigMap = _.keyBy(activeStoreConfigs, 'code');
+    this.magentoConfig.locales = _.uniq(_.map(activeStoreConfigs, 'locale'));
+    this.magentoConfig.defaultLocale = _.find(activeStoreConfigs, { code: 'default' }).locale;
+
+    activeStoreWebsites.forEach(storeWebsite => {
+      const groups = [];
+      let defaultGroup = null;
+      let defaultStore = null;
+
+      activeStoreGroups.forEach(storeGroup => {
+        if (storeGroup.website_id === storeWebsite.id) {
+          storeGroup.stores = [];
+          activeStoreConfigs.forEach(storeConfig => {
+            if (storeConfig.store_group_id === storeGroup.id) {
+              storeGroup.stores.push(storeConfig);
+
+              if (storeConfig.id === storeGroup.default_store_id) {
+                defaultStore = storeConfig;
+              }
+            }
+          });
+
+          groups.push(storeGroup);
+          if (storeGroup.id === storeWebsite.default_group_id) {
+            defaultGroup = storeGroup;
+          }
+        }
+      });
+
+      this.storeList.push({
+        ...storeWebsite,
+        groups,
+        defaultGroup,
+        defaultStore
+      });
+    });
+
+    await this.ensureStoreCode();
+
+    return this.magentoConfig;
   }
 
-  /**
-   * Check if admin token is still valid
-   * @return {boolean} true if token is valid
-   */
-  isAdminTokenValid() {
-    Logger.debug(`this.tokenExpirationTime: ${this.tokenExpirationTime}`);
-    return !this.tokenExpirationTime || (this.tokenExpirationTime && this.tokenExpirationTime > Date.now());
-  }
-
-  /**
-   * Make request to the backend for admin token
-   * @return {Promise<string>} admin token
-   */
-  async retrieveAdminToken() {
-    Logger.info('Retrieving Magento token.');
-
-    const response = await this.retrieveToken({ username: this.config.username, password: this.config.password });
-
-    // data available only if retrieveToken is not wrapped with cache.
-    const tokenData = this.convertKeys(response.data || response);
-    const { token, validTime } = tokenData;
-    if (token === undefined) {
-      const noTokenError = new Error(
-        'Magento Admin token not found. Did you install the falcon-magento2-module on magento?'
-      );
-
-      noTokenError.statusCode = 501;
-      noTokenError.code = codes.CUSTOMER_TOKEN_NOT_FOUND;
-      throw noTokenError;
-    } else {
-      Logger.info('Magento token found.');
+  async setShopStore(obj, { storeCode }) {
+    const storeConfig = this.findStoreConfig(storeCode);
+    if (storeConfig) {
+      this.session.storeCode = storeCode;
+      this.session.currency = storeConfig.default_display_currency_code;
+      this.session.baseCurrency = storeConfig.base_currency_code;
+      this.session.timezone = storeConfig.timezone;
+      this.session.weightUnit = storeConfig.weight_unit;
+      this.context.session.locale = storeConfig.locale;
     }
-    this.token = token;
-    this.tokenExpirationTime = null;
 
-    if (validTime) {
-      // convert validTime from hours to milliseconds and subtract 5 minutes buffer
-      const tokenTimeInMinutes = validTime * 60 - 5;
-      const tokenExpirationTime = addMinutes(Date.now(), tokenTimeInMinutes);
-
-      this.tokenExpirationTime = tokenExpirationTime.getTime();
-      Logger.debug(`Admin token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
-    }
-
-    return this.token;
+    return this.magentoConfig;
   }
 
-  /**
-   * Retrieve token for given user.
-   * @param {string} username magento2 user
-   * @param {string} password magento2 user password
-   * @return {object} response data
-   */
-  async retrieveToken({ username, password }) {
-    return this.post('/integration/admin/token', { username, password }, { context: { skipAuth: true } });
+  async setShopCurrency(obj, { currency }) {
+    const currentStoreConfig = this.getActiveStoreConfig();
+    _.forEach(this.storeConfigMap, storeConfig => {
+      if (currentStoreConfig.store_group_id === storeConfig.store_group_id) {
+        if (storeConfig.default_display_currency_code === currency) {
+          this.setShopStore({}, { storeCode: storeConfig.code });
+        }
+      }
+    });
+    return this.magentoConfig;
+  }
+
+  getActiveStoreConfig() {
+    return this.findStoreConfig(this.session.storeCode);
+  }
+
+  findStoreConfig(code) {
+    return this.storeConfigMap[code];
+  }
+
+  initialize(config) {
+    super.initialize(config);
+
+    const { customerToken } = this.session;
+    if (customerToken && !this.isCustomerTokenValid(customerToken)) {
+      this.session = {};
+      this.context.session.save();
+    }
   }
 
   /**
@@ -153,16 +201,9 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   async resolveURL(req) {
     const { path } = req;
-    let { storeCode } = this.context.magento2 || {};
-    if (storeCode) {
-      req.params.delete(storeCode);
-    } else {
-      storeCode = this.storePrefix;
-    }
+    const { storeCode = this.storePrefix } = this.session;
 
-    return super.resolveURL({
-      path: `/rest/${storeCode}/V1${path}`
-    });
+    return super.resolveURL({ path: `/rest/${storeCode}/V1${path}` });
   }
 
   /**
@@ -181,7 +222,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   async authorizeRequest(req) {
     const { useAdminToken } = req.context || {};
-    const { customerToken } = this.context.magento2 || {};
+    const { customerToken } = this.session || {};
 
     let token;
     // FIXME: it looks like `useAdminToken` flag is not used very often and do not cover all api requests
@@ -204,12 +245,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
-   * @typedef {object} AuthToken
-   * @property {string} token token
-   * @property {number} expirationTime expiration time
-   */
-
-  /**
    * Check if authentication token is valid
    * @param {AuthToken} authToken - authentication token
    * @return {boolean} - true if token is valid
@@ -223,22 +258,69 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
-   * Get Magento api authorized admin token or perform request to create it.
+   * Retrieves admin token
+   * @return {{ value: string, options: { ttl: number } }} Result
+   */
+  async retrieveAdminToken() {
+    const result = {
+      value: undefined,
+      options: {
+        ttl: undefined
+      }
+    };
+    Logger.info(`${this.name}: Retrieving admin token.`);
+
+    const response = await this.post(
+      '/integration/admin/token',
+      {
+        username: this.config.username,
+        password: this.config.password
+      },
+      { context: { skipAuth: true } }
+    );
+
+    const tokenData = this.convertKeys(response.data || response);
+    const { token, validTime } = tokenData;
+    if (token === undefined) {
+      const noTokenError = new Error(
+        'Magento Admin token not found. Did you install the falcon-magento2-module on magento?'
+      );
+
+      noTokenError.statusCode = 501;
+      noTokenError.code = codes.CUSTOMER_TOKEN_NOT_FOUND;
+      throw noTokenError;
+    } else {
+      Logger.info(`${this.name}: Admin token found.`);
+    }
+
+    result.value = token;
+    this.tokenExpirationTime = null;
+
+    if (validTime) {
+      // convert validTime from hours to milliseconds and subtract 5 minutes buffer
+      const tokenTimeInMinutes = validTime * 60 - 5;
+      const tokenExpirationTime = addMinutes(Date.now(), tokenTimeInMinutes);
+
+      result.options.ttl = tokenTimeInMinutes * 60 * 1000;
+      Logger.debug(`${this.name}: Admin token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
+    }
+
+    return result;
+  }
+
+  /**
+   * Get Magento API authorized admin token or perform request to create it.
+   * "reqToken" property is being used for parallel calls
    * @return {Promise<string>} token value
    */
   async getAdminToken() {
-    if (!this.token) {
-      if (!this.reqToken) {
-        this.reqToken = this.retrieveAdminToken();
-      }
-
-      Logger.debug('Waiting for Magento token.');
-
-      // this is called multiple times and may cause some problems with error handling
-      return this.reqToken;
+    if (!this.reqToken) {
+      this.reqToken = this.cache.get({
+        key: [this.name, 'admin_token'].join(':'),
+        callback: async () => this.retrieveAdminToken()
+      });
     }
-
-    return this.token;
+    return this.reqToken;
   }
 
   /**
@@ -307,240 +389,21 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
-   * Get basic store configuration from Magento
-   * @return {Promise<object>} - combined configuration
-   */
-  async getInfo() {
-    const [storeConfigs, storeViews, storeGroups, storeWebsites] = await Promise.all([
-      this.get('/store/storeConfigs'),
-      this.get('/store/storeViews'),
-      this.get('/store/storeGroups'),
-      this.get('/store/websites')
-    ]);
-
-    const { data } = storeConfigs;
-    const config = { ...data[0] };
-    const {
-      default_display_currency_code: baseCurrencyCode,
-      locale,
-      extension_attributes: extensionAttributes
-    } = config;
-
-    config.locale = locale.split('_')[0];
-    const postCodes = extensionAttributes.optional_post_codes;
-    const minPasswordLength = extensionAttributes.min_password_length;
-    const minPasswordCharClass = extensionAttributes.min_password_char_class;
-    const storeCodes = data.map(item => {
-      const itemView = storeViews.data.find(view => item.code === view.code);
-      const itemGroup = storeGroups.data.find(group => group.id === itemView.store_group_id);
-      const itemWebsite = storeWebsites.data.find(website => itemGroup.website_id === website.id);
-      const active = itemView.extension_attributes && itemView.extension_attributes.is_active;
-
-      return {
-        currency: item.default_display_currency_code,
-        locale: item.locale && item.locale.split('_')[0],
-        code: item.code,
-        id: itemView.id,
-        name: itemView.name,
-        groupName: itemGroup.name,
-        groupId: itemGroup.id,
-        websiteName: itemWebsite.name,
-        websiteId: itemWebsite.id,
-        active: active !== undefined ? active : 1
-      };
-    });
-
-    const activeStores = storeCodes.filter(item => item.active);
-
-    this.magentoConfig = {
-      ...config,
-      stores: data,
-      activeStores,
-      minPasswordLength,
-      minPasswordCharClass,
-      baseCurrencyCode,
-      postCodes
-    };
-
-    return this.magentoConfig;
-  }
-
-  /**
-   * Returns data that should be placed in global GraphQL execution context for the upcoming query
-   * @param {object} context - existing context data
-   * @return {object} additional data to be created
-   */
-  createContextData(context) {
-    if (!has(context, 'req.session')) {
-      const noSessionError = new Error('No session in context passed to Magento2Api.createContextData()');
-      noSessionError.statusCode = 501;
-      noSessionError.code = codes.SESSION_NOT_FOUND;
-      throw noSessionError;
-    }
-
-    if (!has(context, 'req.session.magento2')) {
-      this.initMagento2Session(context.req.session);
-    }
-
-    const { customerToken } = context.req.session.magento2;
-    if (customerToken && !this.isCustomerTokenValid(customerToken)) {
-      this.initMagento2Session(context.req.session);
-    }
-
-    this.ensureStoreCode(context.req);
-    this.ensureCurrency(context.req.session);
-
-    context.req.session.save();
-
-    // put all the required data as 'magento' alias inside context
-    // it's a reference to context.req.session.magento2 so change in context.magento will cause changes in the session
-    return {
-      magento2: context.req.session.magento2
-    };
-  }
-
-  initMagento2Session(session) {
-    delete session.magento2;
-    session.magento2 = {};
-  }
-
-  /**
    * Ensuring that user gets storeCode in the session with the first hit.
-   *
-   * Simple config structure:
-   * {
-   *     "store": {
-   *       "enableSwitcher": false,
-   *       "enableAutoDetection": true,
-   *       // todo rename to geo mapping ?
-   *       "mapping": {
-   *         "*": "default",
-   *         "UK": "uk_store_view",
-   *         "US": "us_store_view"
-   *       }
-   *     }
-   *   }
-   * }
-   *
-   * Key is country code from geo ip, and value is a Magento store code.
-   *
-   * More custom config structure with an extra-check for user's preferred language:
-   * {
-   *     "store": {
-   *       "enableSwitcher": false,
-   *       "enableAutoDetection": true,
-   *       "mapping": {
-   *         "*": "default",
-   *         "DK": {
-   *           "*": "dk_en_store_view",
-   *           "da": "dk_da_store_view"
-   *         },
-   *        "US": "us_store_view"
-   *       }
-   *     }
-   *   }
-   * }
-   *
-   * "*" - means value by default. It's required to have a default value, since it will be used as a fallback value.
-   * Each element in "mapping" object may contain a string value or sub-mapping per language.
-   *
-   * @param {Request} req Koa request object
+   * @param {object} context Context object
    */
-  ensureStoreCode(req) {
-    const clientCountryCode = req.headers['CountryCode']; // eslint-disable-line dot-notation
-    const { enableAutoDetection = false, geoMapping: storeMapping = {} } = this.config;
-    const { storeCode, cart } = req.session.magento2;
+  async ensureStoreCode() {
+    const { storeCode } = this.session;
 
-    if (storeCode) {
-      const isValidCode = this.magentoConfig.stores.find(({ code }) => code === storeCode);
-
-      if (isValidCode) {
-        Logger.debug(`Using existing session store code: ${storeCode}`);
-      } else {
-        Logger.warn(`Removing invalid user store code ${storeCode} from session.`);
-        if (cart) {
-          Logger.warn(`Removing cart from session assuming it was create in non existing
-            store with code: ${storeCode}`);
-          delete req.session.magento2.cart;
-        }
-        // api should use it's default if not present in session
-        delete req.session.magento2.storeCode;
-      }
-
+    // Checking if current storeCode is valid
+    if (this.getActiveStoreConfig()) {
       return;
     }
 
-    if (!enableAutoDetection) {
-      Logger.debug('Store code detection disabled.');
-      return;
-    }
-
-    Logger.debug(`Detecting store for ${clientCountryCode} country code.`);
-
-    const { [DEFAULT_KEY]: defaultStoreCode = 'default' } = storeMapping;
-
-    // removes string after occurrence of passed separator (including the separator)
-    const removeSubstring = (item, separator = ';') =>
-      item.indexOf(separator) > 0 ? item.substring(0, item.indexOf(separator)) : item;
-
-    let { [clientCountryCode]: clientStoreCode } = storeMapping;
-
-    clientStoreCode = clientStoreCode || defaultStoreCode;
-
-    if (clientStoreCode && typeof clientStoreCode === 'object') {
-      const { 'accept-language': acceptLanguage } = req.headers;
-      // Equals to a default mapped key
-      let activeLanguage = DEFAULT_KEY;
-      // Splitting accept-language header string with comma-separated values ("da,en-gb;q=0.8,en;q=0.7")
-      const acceptLanguages = (acceptLanguage ? acceptLanguage.split(',') : [])
-        // Extracting language parts (removing "priority" values, it's already sorted by priority)
-        .map(item => removeSubstring(item))
-        // Cleaning up the results ("en-US" -> "en")
-        .map(item => removeSubstring(item, '-'));
-
-      // Searching for available language in the language mapping for active country
-      acceptLanguages.some(lang => {
-        if (clientStoreCode[lang]) {
-          activeLanguage = lang;
-          return true;
-        }
-        return false;
-      });
-
-      clientStoreCode = clientStoreCode[activeLanguage];
-    }
-
-    if (clientStoreCode) {
-      Logger.debug(`Using country detected store code: ${clientStoreCode}`);
-      req.session.magento2.storeCode = clientStoreCode;
-    }
-  }
-
-  /**
-   * Ensure session has a currency code to be use for example for price formatting.
-   * @param {object} session object
-   */
-  ensureCurrency(session) {
-    const { storeCode } = session.magento2;
-
-    // todo: use sensible defaults instead of EUR
-    let userCurrency = this.config.currency && (this.config.currency.symbol || 'EUR');
-
-    Logger.debug('Detecting currency');
-
-    if (storeCode && this.magentoConfig.activeStores.length) {
-      const activeStore = this.magentoConfig.activeStores.find(item => item.code === storeCode);
-
-      if (activeStore) {
-        Logger.debug(`Found active store: ${activeStore.code}, currency changed to ${activeStore.currency}`);
-        userCurrency = activeStore.currency;
-      } else {
-        Logger.debug(`Not found active store for code: ${storeCode}, currency changed to default: ${this.currency}`);
-      }
-    } else {
-      Logger.debug('No store code or store inactive.');
-    }
-
-    session.magento2.currency = userCurrency;
+    // Fixing invalid storeCode
+    Logger.debug(`${this.name}: ${storeCode ? 'is invalid' : 'store code is missing'}, removing cart data`);
+    delete this.session.storeCode;
+    delete this.session.cart;
+    await this.setShopStore({}, { storeCode: 'default' });
   }
 };

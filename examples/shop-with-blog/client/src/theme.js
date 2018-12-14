@@ -206,3 +206,12 @@ export const deityGreenTheme = createTheme({
     }
   }
 });
+
+export const globalCss = {
+  body: {
+    margin: 0
+  },
+  html: {
+    overflowY: 'scroll'
+  }
+};

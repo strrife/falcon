@@ -1,7 +1,7 @@
-const { ApiDataSource } = require('@deity/falcon-server-env');
+const { EndpointManager } = require('@deity/falcon-server-env');
 
-module.exports = class FakeBackendApi extends ApiDataSource {
-  getEndpoints() {
+module.exports = class FakeBackendApi extends EndpointManager {
+  getEntries() {
     return [
       {
         path: '/info',

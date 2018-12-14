@@ -6,27 +6,27 @@ coverage:
         base: pr
       falcon-client:
         paths:
-          - packages/falcon-client/
+          - falcon-client/
       falcon-server:
         paths:
-          - packages/falcon-server/
+          - falcon-server/
       falcon-server-env:
         paths:
-          - packages/falcon-server-env/
+          - falcon-server-env/
       falcon-shop-extension:
         paths:
-          - packages/falcon-shop-extension/
+          - falcon-shop-extension/
       falcon-blog-extension:
         paths:
-          - packages/falcon-blog-extension/
+          - falcon-blog-extension/
       falcon-magento2-api:
         paths:
-          - packages/falcon-magento2-api/
+          - falcon-magento2-api/
       falcon-wordpress-api:
         paths:
-          - packages/falcon-wordpress-api/
+          - falcon-wordpress-api/
       falcon-ecommerce-uikit:
         paths:
-          - packages/falcon-ecommerce-uikit/
+          - falcon-ecommerce-uikit/
 
 comment: off

@@ -44,7 +44,7 @@ right before `<Switch></Switch>`):
 
 ```diff
 // other imports
-import Route from 'react-router-dom/Route';
+import { Route } from 'react-router-dom';
 + import trackPageView from '@deity/falcon-client/src/components/trackPageView';
 
 const App = () => {
@@ -84,9 +84,7 @@ class Custom extends React.Component {
   }
 
   render() {
-    return (
-      <button onClick={() => this.handleClick()}>Click me!</button>
-    );
+    return <button onClick={() => this.handleClick()}>Click me!</button>;
   }
 }
 
