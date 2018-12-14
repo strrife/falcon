@@ -17,6 +17,7 @@ function getClientEnv(target, options, envToBuildIn) {
         BUILD_TARGET: target === 'web' ? 'client' : 'server',
         PUBLIC_PATH: env === 'production' ? publicPath : undefined,
         ASSETS_MANIFEST: paths.appManifest,
+        LOADABLE_STATS: paths.loadableStats,
         PUBLIC_DIR: env === 'production' ? paths.appBuildPublic : paths.appPublic
       }
     );

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import withRouter from 'react-router-dom/withRouter';
+import { withRouter } from 'react-router-dom';
 import withAnalytics from './withAnalytics';
 
 export default WrappedComponent => {

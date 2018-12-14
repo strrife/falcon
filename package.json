@@ -60,9 +60,5 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  },
-  "resolutions": {
-    "ajv": "6.5.4",
-    "react": "16.4.2"
   }
 }

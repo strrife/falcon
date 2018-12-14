@@ -1,31 +1,31 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { extractI18nextState } from '../../i18n/i18nServerFactory';
-import Html from '../../components/Html';
+import Helmet from 'react-helmet';
+import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
+import { APP_INIT } from '../../graphql/config.gql';
+import HtmlHead from '../../components/HtmlHead';
 
 /**
- * Application shell renderer middleware.
- * @param {{webpackAssets: object}} params webpack assets
+ * App shell rendering middleware.
  * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
-export default ({ webpackAssets }) => async ctx => {
-  const { AppMarkup, client, asyncContext, helmetContext, serverTiming } = ctx.state;
-  const renderTimer = serverTiming.start('HTML renderToString()');
+export default ({ loadableStats }) => async (ctx, next) => {
+  const { client } = ctx.state;
+  const { config } = client.readQuery({ query: APP_INIT });
+  const extractor = new ChunkExtractor({ stats: loadableStats, entrypoints: ['client'] });
 
-  const htmlDocument = renderToString(
-    <Html
-      assets={webpackAssets}
-      asyncContext={asyncContext}
-      helmetContext={helmetContext}
-      state={client.extract()}
-      i18nextState={extractI18nextState(ctx)}
-    >
-      {AppMarkup}
-    </Html>
+  const markup = (
+    <ChunkExtractorManager extractor={extractor}>
+      <HtmlHead htmlLang={config.i18n.lng} />
+    </ChunkExtractorManager>
   );
 
-  serverTiming.stop(renderTimer);
+  renderToString(markup);
 
-  ctx.status = 200;
-  ctx.body = `<!doctype html>${htmlDocument}`;
+  ctx.state.scriptElements = extractor.getScriptElements();
+  ctx.state.styleElements = extractor.getStyleElements();
+
+  ctx.state.helmetContext = Helmet.renderStatic();
+
+  return next();
 };

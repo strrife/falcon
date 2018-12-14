@@ -6,6 +6,12 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 ---
 
+## Falcon v0.3 (unreleased)
+
+### Falcon Client v0.2
+
+- improvement: React 16.6 support ([#226](https://github.com/deity-io/falcon/pull/226))
+
 ## Falcon v0.2 (2018-12-12)
 
 ### Falcon Client v0.1.0 (2018-12-12)
@@ -44,7 +50,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 ### Create Falcon App v1.1.1 (2018-12-12)
 
-- feat: allow ejecting `falcon-ecommerce-uikit` package via `eject` command (https://github.com/deity-io/falcon/pull/212))
+- feat: allow ejecting `falcon-ecommerce-uikit` package via `eject` command ([#212](https://github.com/deity-io/falcon/pull/212))
 
 ### Create Falcon App v1.0.7 (2018-10-25)
 
