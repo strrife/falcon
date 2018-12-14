@@ -24,7 +24,16 @@ export default class Html extends Component {
   }
 
   render() {
-    const { assets, children, helmetContext, state, asyncContext, i18nextState } = this.props;
+    const {
+      assets,
+      children,
+      helmetContext,
+      prefetchLinkElements,
+      styleElements,
+      scriptElements,
+      state,
+      i18nextState
+    } = this.props;
 
     return (
       <html lang="en" {...helmetContext.htmlAttributes.toComponent()}>
@@ -39,9 +48,8 @@ export default class Html extends Component {
 
           <link rel="shortcut icon" href="/favicon.ico" />
           {assets.webmanifest && <link rel="manifest" href={assets.webmanifest} type="application/manifest+json" />}
-          {assets.clientCss && (
-            <link rel="stylesheet" href={assets.clientCss} type="text/css" media="screen, projection" charSet="UTF-8" />
-          )}
+          {prefetchLinkElements}
+          {styleElements}
           {helmetContext.link.toComponent()}
           {helmetContext.script.toComponent()}
         </head>
@@ -51,19 +59,10 @@ export default class Html extends Component {
           <div id="root">{children}</div>
 
           <SerializeState variable="__APOLLO_STATE__" value={state} />
-          <SerializeState variable="ASYNC_COMPONENTS_STATE" value={asyncContext} />
+
           <SerializeState variable="I18NEXT_STATE" value={i18nextState} />
 
-          {process.env.NODE_ENV === 'production' ? (
-            <script src={assets.vendorsJs} charSet="UTF-8" async />
-          ) : (
-            <script src={assets.vendorsJs} charSet="UTF-8" async crossOrigin="true" />
-          )}
-          {process.env.NODE_ENV === 'production' ? (
-            <script src={assets.clientJs} charSet="UTF-8" async />
-          ) : (
-            <script src={assets.clientJs} charSet="UTF-8" async crossOrigin="true" />
-          )}
+          {scriptElements}
         </body>
       </html>
     );
@@ -74,13 +73,12 @@ Html.propTypes = {
   children: PropTypes.node,
   helmetContext: PropTypes.shape({}).isRequired,
   assets: PropTypes.shape({
-    clientJs: PropTypes.string,
-    clientCss: PropTypes.string,
-    vendorsJs: PropTypes.string,
     webmanifest: PropTypes.string
   }),
   state: PropTypes.shape({}),
-  asyncContext: PropTypes.shape({}),
+  scriptElements: PropTypes.arrayOf(PropTypes.element),
+  styleElements: PropTypes.arrayOf(PropTypes.element),
+  prefetchLinkElements: PropTypes.arrayOf(PropTypes.element),
   i18nextState: PropTypes.shape({
     language: PropTypes.string,
     data: PropTypes.shape({})
@@ -89,8 +87,10 @@ Html.propTypes = {
 };
 
 Html.defaultProps = {
-  assets: { clientJs: '', clientCss: '', vendorsJs: '', webmanifest: '' },
-  asyncContext: {},
+  assets: { webmanifest: '' },
+  scriptElements: [],
+  styleElements: [],
+  prefetchLinkElements: [],
   state: {},
   i18nextState: {},
   googleTagManager: {}

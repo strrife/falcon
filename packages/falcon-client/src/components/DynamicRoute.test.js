@@ -1,7 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import { Switch } from 'react-router-dom';
-import { asyncComponent } from 'react-async-component';
+import loadable from '@loadable/component';
 import { FalconClientMock } from '../../test-utils';
 import { wait } from '../../../../test/helpers';
 import DynamicRoute from './DynamicRoute';
@@ -29,9 +29,7 @@ describe('DynamicRoute', () => {
           <DynamicRoute
             loaderComponent={() => <span>Loading...</span>}
             components={{
-              foo: asyncComponent({
-                resolve: () => import('./../__mocks__/pages/Foo')
-              })
+              foo: loadable(() => import('./../__mocks__/pages/Foo'))
             }}
           />
         </Switch>
