@@ -23,7 +23,7 @@ import { ErrorBoundary } from 'src/components/ErrorBoundary';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
 import { Sidebar, SidebarContainer } from 'src/pages/shop/components/Sidebar';
-import { deityGreenTheme, normalizeCss } from './theme';
+import { deityGreenTheme, globalCss } from './theme';
 
 const HeadMetaTags = () => (
   <Helmet defaultTitle="Deity Shop with Blog" titleTemplate="%s | Deity Shop with Blog">
@@ -72,7 +72,7 @@ const App = ({ online }) => (
     <ThemeEditorState initial={deityGreenTheme}>
       {props => (
         <React.Fragment>
-          <ThemeProvider theme={props.theme} normalizeStyles={normalizeCss}>
+          <ThemeProvider theme={props.theme} globalCss={globalCss}>
             <HeadMetaTags />
             <AppLayout>
               <HeaderQuery>{data => <Header {...data} />}</HeaderQuery>

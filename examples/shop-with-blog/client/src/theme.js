@@ -207,7 +207,7 @@ export const deityGreenTheme = createTheme({
   }
 });
 
-export const normalizeCss = {
+export const globalCss = {
   body: {
     margin: 0
   },

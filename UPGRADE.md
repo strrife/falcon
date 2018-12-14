@@ -17,6 +17,8 @@ If you were using `Async` components, please change them `loadable` instead:
 + import loadable from 'src/components/loadable';
 ```
 
+[`src/components/loadable` component source](https://github.com/deity-io/falcon/blob/master/examples/shop-with-blog/client/src/components/loadable.js)
+
 ```diff
 - const Category = AsyncComponent(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
 + const Category = loadable(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
