@@ -153,7 +153,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
     this.setLoading(true, () => {
       // trigger mutationt that will return available shipping options
       this.props.client
-        .mutate({
+        .mutate<any>({
           mutation: ESTIMATE_SHIPPING_METHODS,
           variables: {
             input: {
@@ -178,8 +178,9 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
               values.billingAddress = shippingAddress;
             }
 
+            const { estimateShippingMethods } = resp.data!;
             // if shipping methods has changed then remove already selected shipping method
-            if (!isEqual(resp.data!.estimateShippingMethods, this.state.availableShippingMethods)) {
+            if (!isEqual(estimateShippingMethods, this.state.availableShippingMethods)) {
               values.shippingMethod = null;
             }
 
@@ -187,7 +188,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
               loading: false,
               errors: {},
               values,
-              availableShippingMethods: resp.data!.estimateShippingMethods
+              availableShippingMethods: estimateShippingMethods
             });
           }
         })
@@ -206,7 +207,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
     this.setLoading(true, () => {
       // trigger mutation that will reutrn available payment options
       this.props.client
-        .mutate({
+        .mutate<any>({
           mutation: SET_SHIPPING,
           // refetch cart because totals have changed once shipping has been selected
           refetchQueries: ['Cart'],

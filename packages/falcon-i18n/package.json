@@ -1,6 +1,6 @@
 {
   "name": "@deity/falcon-i18n",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "license": "OSL-3.0",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-i18n",
   "main": "dist/falcon-i18n.cjs.js",
