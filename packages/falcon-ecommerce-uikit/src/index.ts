@@ -1,6 +1,7 @@
 export * from './AppLayout';
 export * from './Header';
 export * from './Product';
+export * from './Order';
 export * from './Footer';
 export * from './Category';
 export * from './Cart';
