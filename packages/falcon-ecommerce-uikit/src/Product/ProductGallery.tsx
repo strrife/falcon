@@ -96,7 +96,7 @@ export class ProductGallery extends React.Component<{ items: Item[] }> {
 
         <Swipeable gridArea="full" ref={this.scrollableEl} alignItems="center">
           {items.map(item => (
-            <I18n>
+            <I18n key={item.thumbnail}>
               {t => <SwipeableItem key={item.full} as={Image} src={item.full} alt={t('productGallery.imageAlt')} />}
             </I18n>
           ))}
