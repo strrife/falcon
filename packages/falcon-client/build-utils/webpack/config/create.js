@@ -384,9 +384,7 @@ module.exports = (target = 'web', options, buildConfig) => {
 
       // loadable components  plugin
       // https://www.smooth-code.com/open-source/loadable-components/docs/server-side-rendering/
-      // TODO: add change args to { writeToDisk: true, filename: paths.loadableStats } when
-      // https://github.com/smooth-code/loadable-components/issues/179 gets fixed
-      new LoadablePlugin({ writeToDisk: true })
+      new LoadablePlugin({ writeToDisk: true, path: paths.appBuild })
     ];
 
     if (IS_DEV) {

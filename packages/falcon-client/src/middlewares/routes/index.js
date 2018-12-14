@@ -15,13 +15,13 @@ import i18next from './i18nextMiddleware';
  * @param {RenderAppShell} params params
  * @return {function(ctx: object, next: function)[]} Koa middlewares
  */
-export function renderAppShell({ config, webpackAssets, loadableStats }) {
+export function renderAppShell({ config, webpackAssets }) {
   const { apolloClient } = config;
   const configSchema = { defaults: { config } };
 
   return [
     apolloClientProvider({ config: apolloClient, clientStates: { configSchema } }),
-    appShell({ loadableStats }),
+    appShell(),
     appHtml({ webpackAssets })
   ];
 }
@@ -39,7 +39,7 @@ export function renderAppShell({ config, webpackAssets, loadableStats }) {
  * @param {RenderApp} params params
  * @return {function(ctx: object, next: function)[]} Koa middlewares
  */
-export function renderApp({ config, clientApolloSchema, App, webpackAssets, loadableStats }) {
+export function renderApp({ config, clientApolloSchema, App, webpackAssets }) {
   const { i18n, serverSideRendering, apolloClient } = config;
   const configSchema = { defaults: { config } };
 
@@ -52,7 +52,7 @@ export function renderApp({ config, clientApolloSchema, App, webpackAssets, load
       }
     }),
     i18next({ ...i18n }),
-    serverSideRendering ? ssr({ App, loadableStats }) : appShell({ loadableStats }),
+    serverSideRendering ? ssr({ App }) : appShell(),
     appHtml({ webpackAssets })
   ].filter(x => x);
 }

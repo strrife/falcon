@@ -7,8 +7,6 @@ function falconWebServer() {
   const bootstrap = require('./clientApp/bootstrap');
   // eslint-disable-next-line
   const assetsManifest = require(process.env.ASSETS_MANIFEST);
-  // eslint-disable-next-line
-  const loadableStats = require(process.env.LOADABLE_STATS);
 
   /**
    * Creates an instance of Falcon web server
@@ -21,8 +19,7 @@ function falconWebServer() {
     bootstrap: bootstrap.default,
     webpackAssets: {
       webmanifest: assetsManifest[''].webmanifest
-    },
-    loadableStats
+    }
   });
 }
 

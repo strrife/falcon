@@ -9,10 +9,10 @@ import HtmlHead from '../../components/HtmlHead';
  * App shell rendering middleware.
  * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
-export default ({ loadableStats }) => async (ctx, next) => {
+export default () => async (ctx, next) => {
   const { client } = ctx.state;
   const { config } = client.readQuery({ query: APP_INIT });
-  const extractor = new ChunkExtractor({ stats: loadableStats, entrypoints: ['client'] });
+  const extractor = new ChunkExtractor({ statsFile: process.env.LOADABLE_STATS, entrypoints: ['client'] });
 
   const markup = (
     <ChunkExtractorManager extractor={extractor}>

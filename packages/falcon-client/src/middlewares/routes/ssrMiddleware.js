@@ -12,12 +12,12 @@ import HtmlHead from '../../components/HtmlHead';
  * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
 
-export default ({ App, loadableStats }) => async (ctx, next) => {
+export default ({ App }) => async (ctx, next) => {
   const { client, serverTiming } = ctx.state;
   const { i18next } = ctx;
   const context = {};
 
-  const extractor = new ChunkExtractor({ stats: loadableStats, entrypoints: ['client'] });
+  const extractor = new ChunkExtractor({ statsFile: process.env.LOADABLE_STATS, entrypoints: ['client'] });
   const i18nextUsedNamespaces = new Set();
 
   const markup = (
