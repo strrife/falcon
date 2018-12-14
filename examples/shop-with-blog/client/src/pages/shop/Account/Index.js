@@ -1,8 +1,8 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Link as RouterLink, Route, Switch, Redirect } from 'react-router-dom';
+import { Link as RouterLink, Switch, Redirect } from 'react-router-dom';
 import { Box, Link, Menu, MenuItem } from '@deity/falcon-ui';
-import { toGridTemplate } from '@deity/falcon-ecommerce-uikit';
+import { toGridTemplate, ProtectedRoute } from '@deity/falcon-ecommerce-uikit';
 import AccountDashboard from './Dashboard';
 import PersonalInformation from './PersonalInformation';
 import AddressBook from './AddressBook';
@@ -64,11 +64,11 @@ const Account = () => (
     <Box gridArea={AccountArea.content}>
       <Switch>
         <Redirect exact from="/account" to="/account/dashboard" />
-        <Route exact path="/account/dashboard" component={AccountDashboard} />
-        <Route exact path="/account/personal-information" component={PersonalInformation} />
-        <Route exact path="/account/address-book" component={AddressBook} />
-        <Route exact path="/account/orders-history" component={OrdersHistory} />
-        <Route exact path="/account/wish-list" component={WishList} />
+        <ProtectedRoute exact path="/account/dashboard" component={AccountDashboard} />
+        <ProtectedRoute exact path="/account/personal-information" component={PersonalInformation} />
+        <ProtectedRoute exact path="/account/address-book" component={AddressBook} />
+        <ProtectedRoute exact path="/account/orders-history" component={OrdersHistory} />
+        <ProtectedRoute exact path="/account/wish-list" component={WishList} />
         <DynamicRoute />
       </Switch>
     </Box>
