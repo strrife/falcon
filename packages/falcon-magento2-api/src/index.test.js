@@ -7,7 +7,6 @@ const { Schema } = require('@deity/falcon-shop-extension');
 const { makeExecutableSchema } = require('graphql-tools');
 const { EventEmitter2 } = require('eventemitter2');
 const nock = require('nock');
-const sinon = require('sinon');
 const Magento2Api = require('./index');
 const magentoResponses = require('./__mocks__/apiResponses');
 
@@ -135,7 +134,7 @@ describe('Magento2Api', () => {
 
   it('Should not call signIn() after account creation if autoSignIn flag was set to false', async () => {
     // mock signIn resolver - just return promise that resolves to true
-    api.signIn = sinon.fake.resolves(true);
+    api.signIn = jest.fn(() => Promise.resolve(true));
 
     nock(URL)
       .post(createMagentoUrl('/customers'))
@@ -152,13 +151,13 @@ describe('Magento2Api', () => {
       }
     );
 
-    expect(api.signIn.called).toBe(false);
+    expect(api.signIn.mock.calls.length).toBe(0);
     expect(resp).toBe(true);
   });
 
   it('Should call signIn() with proper params after successful account creation (if autoSignIn flag was set to true)', async () => {
     // mock signIn resolver - just return promise that resolves to true
-    api.signIn = sinon.fake.resolves(true);
+    api.signIn = jest.fn(() => Promise.resolve(true));
 
     nock(URL)
       .post(createMagentoUrl('/customers'))
@@ -173,8 +172,8 @@ describe('Magento2Api', () => {
       { input: { firstname: 'Test', lastname: 'Test', email: 'test@test.com', password: 'Deity123', autoSignIn: true } }
     );
 
-    expect(api.signIn.called).toBe(true);
-    expect(api.signIn.getCall(0).args[1]).toEqual({ input: { email: 'test@test.com', password: 'Deity123' } });
+    expect(api.signIn.mock.calls.length).toBe(1);
+    expect(api.signIn.mock.calls[0][1]).toEqual({ input: { email: 'test@test.com', password: 'Deity123' } });
     expect(resp).toBe(true);
   });
 });
