@@ -63,3 +63,18 @@ export class Query<TData = any, TVariables = OperationVariables> extends React.C
     );
   }
 }
+
+export type ShopPageQuery = {
+  aggregations?: string[];
+  page?: number;
+  perPage?: number;
+};
+
+export type Pagination = {
+  totalPages: number;
+  totalItems: number;
+  perPage: number;
+  currentPage: number;
+  nextPage: number;
+  prevPage: number;
+};
