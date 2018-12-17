@@ -52,30 +52,10 @@ export const fetchMore = (data: any, apolloFetchMore: any) =>
     }
   });
 
-function getTranslations(t: reactI18Next.TranslationFunction, data: any) {
-  const {
-    products: { items, pagination }
-  } = data;
-
-  return {
-    category: {
-      pagination: {
-        showingOutOf: t('category.pagination.showingOutOf', {
-          itemsCount: items.length,
-          totalItems: pagination.totalItems
-        }),
-        showMore: t('category.pagination.showMore')
-      }
-    }
-  };
-}
-
-export class CategoryQuery extends Query<any> {
+export class CategoryProductsQuery extends Query<any> {
   static defaultProps = {
     query: GET_CATEGORY_PRODUCTS,
     fetchMore,
-    notifyOnNetworkStatusChange: true,
-    getTranslations,
-    translationsNamespaces: ['shop']
+    notifyOnNetworkStatusChange: true
   };
 }

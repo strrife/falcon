@@ -161,24 +161,22 @@ export class ThemeEditor extends React.Component<ThemeEditorProps> {
                 />
               )}
 
-              {activeTab === 'component' &&
-                tabs.component.selectedComponents.length > 0 && (
-                  <ComponentsEditor
-                    selectedComponents={tabs.component.selectedComponents}
-                    onComponentThemeChange={this.onComponentThemeChange}
-                    theme={theme}
-                  />
-                )}
+              {activeTab === 'component' && tabs.component.selectedComponents.length > 0 && (
+                <ComponentsEditor
+                  selectedComponents={tabs.component.selectedComponents}
+                  onComponentThemeChange={this.onComponentThemeChange}
+                  theme={theme}
+                />
+              )}
 
-              {activeTab === 'component' &&
-                tabs.component.selectedComponents.length === 0 && (
-                  <Box fontSize="md">
-                    There are no components selected currenty, <br />
-                    use component finder
-                    <Icon onClick={toggleFinder} mx="sm" stroke={finderActive ? 'primary' : 'black'} src="finder" />
-                    to select one.
-                  </Box>
-                )}
+              {activeTab === 'component' && tabs.component.selectedComponents.length === 0 && (
+                <Box fontSize="md">
+                  There are no components selected currenty, <br />
+                  use component finder
+                  <Icon onClick={toggleFinder} mx="sm" stroke={finderActive ? 'primary' : 'black'} src="finder" />
+                  to select one.
+                </Box>
+              )}
 
               {activeTab === 'download' && <ThemeDownloader currentTheme={theme} initialTheme={initialTheme} />}
 

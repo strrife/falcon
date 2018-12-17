@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { T } from '@deity/falcon-i18n';
 import { Box, H3, Text, Image, DefaultThemeProps, Link } from '@deity/falcon-ui';
-import { BlogPostsTranslations, BlogPostExcerptType } from './BlogPostsQuery';
+import { BlogPostExcerptType } from './BlogPostsQuery';
 import { DateFormat } from '../Locale';
 import { toGridTemplate } from '../helpers';
 
@@ -36,11 +37,7 @@ const blogPostExcerptLayout: DefaultThemeProps = {
   }
 };
 
-export const BlogPostExcerpt: React.SFC<{ excerpt: BlogPostExcerptType; translations: BlogPostsTranslations }> = ({
-  excerpt,
-  translations,
-  ...rest
-}) => (
+export const BlogPostExcerpt: React.SFC<{ excerpt: BlogPostExcerptType }> = ({ excerpt, ...rest }) => (
   <Box as="li" {...rest}>
     <Link as={RouterLink} to={excerpt.slug} defaultTheme={blogPostExcerptLayout}>
       {excerpt.image && (
@@ -54,8 +51,8 @@ export const BlogPostExcerpt: React.SFC<{ excerpt: BlogPostExcerptType; translat
       <H3 gridArea={BlogPostEcerptArea.title}>{excerpt.title}</H3>
       <DateFormat gridArea={BlogPostEcerptArea.date} value={excerpt.date} />
       <Text gridArea={BlogPostEcerptArea.excerpt}>{excerpt.excerpt}</Text>
-      <Text css={{ textDecoration: 'underline' }} gridArea={BlogPostEcerptArea.readMore}>
-        {translations.readMore}
+      <Text gridArea={BlogPostEcerptArea.readMore} css={{ textDecoration: 'underline' }}>
+        <T id="blog.readMore" />
       </Text>
     </Link>
   </Box>
