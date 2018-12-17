@@ -40,8 +40,7 @@
     "eventemitter2": "5.0.1",
     "graphql": "14.0.2",
     "graphql-tools": "4.0.3",
-    "nock": "10.0.4",
-    "sinon": "^7.2.2"
+    "nock": "10.0.4"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }
