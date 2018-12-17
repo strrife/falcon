@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { Query } from '../Query/Query';
+import { Order } from './../Order';
 
 export type Country = {
   englishName: string;
@@ -28,16 +29,6 @@ export class CountriesQuery extends Query<CountriesData> {
     query: GET_COUNTRIES
   };
 }
-
-export type OrderItem = {
-  itemId: number;
-  name: string;
-};
-
-export type Order = {
-  incrementId: string;
-  items: OrderItem[];
-};
 
 export const GET_LAST_ORDER = gql`
   query LastOrder {
