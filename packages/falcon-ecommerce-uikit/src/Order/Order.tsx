@@ -7,11 +7,11 @@ import { Box, Text } from '@deity/falcon-ui';
 //   </Box>
 // }
 
-export const Order = () => (
-  <Box>
-    <Box>
-      <Text as="span">order</Text>
-      <Text as="span">09123123</Text>
-    </Box>
-  </Box>
-);
+// export const Order = () => (
+//   <Box>
+//     <Box>
+//       <Text as="span">order</Text>
+//       <Text as="span">09123123</Text>
+//     </Box>
+//   </Box>
+// );
