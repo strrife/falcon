@@ -6,7 +6,7 @@ import { toGridTemplate, ProtectedRoute } from '@deity/falcon-ecommerce-uikit';
 import AccountDashboard from './Dashboard';
 import PersonalInformation from './PersonalInformation';
 import AddressBook from './AddressBook';
-import OrdersList from './OrdersList';
+import Orders from './Orders';
 import WishList from './WishList';
 import DynamicRoute from './../../DynamicRoute';
 
@@ -67,7 +67,7 @@ const Account = () => (
         <ProtectedRoute exact path="/account/dashboard" component={AccountDashboard} />
         <ProtectedRoute exact path="/account/personal-information" component={PersonalInformation} />
         <ProtectedRoute exact path="/account/address-book" component={AddressBook} />
-        <ProtectedRoute exact path="/account/orders" component={OrdersList} />
+        <ProtectedRoute exact path="/account/orders" component={Orders} />
         <ProtectedRoute exact path="/account/wish-list" component={WishList} />
         <DynamicRoute />
       </Switch>

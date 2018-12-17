@@ -3,7 +3,7 @@ import { H1, Box } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 // import { OrdersListQuery, OrdersList } from '@deity/falcon-ecommerce-uikit';
 
-const OrdersList = () => (
+const Orders = () => (
   <Box>
     <H1>
       <T id="ordersList.title" />
@@ -12,4 +12,4 @@ const OrdersList = () => (
   </Box>
 );
 
-export default OrdersList;
+export default Orders;
