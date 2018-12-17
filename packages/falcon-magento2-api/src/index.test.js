@@ -151,7 +151,7 @@ describe('Magento2Api', () => {
       }
     );
 
-    expect(api.signIn.mock.calls.length).toBe(0);
+    expect(api.signIn).toHaveBeenCalledTimes(0);
     expect(resp).toBe(true);
   });
 
