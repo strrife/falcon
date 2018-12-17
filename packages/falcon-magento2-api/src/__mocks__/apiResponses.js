@@ -360,3 +360,33 @@ module.exports.products = {
     }
   }
 };
+
+module.exports.user = {
+  signUpSuccess: {
+    data: {
+      id: 84,
+      group_id: 1,
+      created_at: '2018-12-17 08:40:44',
+      updated_at: '2018-12-17 08:40:44',
+      created_in: 'Default Store View',
+      email: 'test@test.com',
+      firstname: 'Test',
+      lastname: 'Test',
+      store_id: 1,
+      website_id: 1,
+      addresses: [],
+      disable_auto_group_change: 0,
+      extension_attributes: {
+        is_subscribed: false,
+        newsletter_subscriber: false
+      }
+    }
+  },
+
+  signInSuccess: {
+    data: {
+      token: 'no8llwltzypxrf5w4paq00zv9a42fue5',
+      valid_time: 1
+    }
+  }
+};
