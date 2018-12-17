@@ -173,7 +173,7 @@ describe('Magento2Api', () => {
     );
 
     expect(api.signIn.mock.calls.length).toBe(1);
-    expect(api.signIn.mock.calls[0][1]).toEqual({ input: { email: 'test@test.com', password: 'Deity123' } });
+    expect(api.signIn).toHaveBeenCalledWith({}, { input: { email: 'test@test.com', password: 'Deity123' } });
     expect(resp).toBe(true);
   });
 });
