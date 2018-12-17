@@ -61,26 +61,8 @@ type CartItemOption = {
   value: string;
 };
 
-function getTranslations(t: reactI18Next.TranslationFunction) {
-  return {
-    title: t('cart.title'),
-    emptyCart: t('cart.emptyCart'),
-    goShopping: t('cart.goShopping'),
-    couponCode: t('cart.couponCode'),
-    applyCouponCode: t('cart.applyCouponCode'),
-    cancelCouponCode: t('cart.cancelCouponCode'),
-    invalidCouponCode: t('cart.invalidCouponCode'),
-    checkout: t('cart.checkout'),
-    continueShopping: t('cart.continueShopping')
-  };
-}
-
-export type CartTranslations = ReturnType<typeof getTranslations>;
-
 export class CartQuery extends Query<CartData> {
   static defaultProps = {
-    query: GET_CART,
-    getTranslations,
-    translationsNamespaces: ['shop']
+    query: GET_CART
   };
 }

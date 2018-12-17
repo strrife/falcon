@@ -1,17 +1,15 @@
 import React from 'react';
-import { translate } from 'react-i18next';
-import PropTypes from 'prop-types';
+import { T } from '@deity/falcon-i18n';
 
-const Cms = ({ id, path, type, t }) => (
+const Cms = ({ id, path, type }) => (
   <div>
-    <h1>{t('cms.title')}</h1>
+    <h1>
+      <T id="cms.title" />
+    </h1>
     <p>{`type: ${type}`}</p>
     <p>{`id: ${id}`}</p>
     <p>{`path: ${path}`}</p>
   </div>
 );
-Cms.propTypes = {
-  t: PropTypes.func.isRequired
-};
 
-export default translate('shop')(Cms);
+export default Cms;
