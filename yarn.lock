@@ -2282,7 +2282,7 @@
   resolved "https://registry.npmjs.org/@types/http-assert/-/http-assert-1.3.0.tgz#5e932606153da28e1d04f9043f4912cf61fd55dd"
   integrity sha512-RObYTpPMo0IY+ZksPtKHsXlYFRxsYIvUqd68e89Y7otDrXsjBy1VgMd53kxVV0JMsNlkCASjllFOlLlhxEv0iw==
 
-"@types/i18next@*":
+"@types/i18next@12.1.0":
   version "12.1.0"
   resolved "https://registry.npmjs.org/@types/i18next/-/i18next-12.1.0.tgz#7c3fd3dbe03f9531147033773bbd0ca4f474a180"
   integrity sha512-qLyqTkp3ZKHsSoX8CNVYcTyTkxlm0aRCUpaUVetgkSlSpiNCdWryOgaYwgbO04tJIfLgBXPcy0tJ3Nl/RagllA==
@@ -2399,14 +2399,6 @@
   resolved "https://registry.npmjs.org/@types/react-dom/-/react-dom-16.0.11.tgz#bd10ccb0d9260343f4b9a49d4f7a8330a5c1f081"
   integrity sha512-x6zUx9/42B5Kl2Vl9HlopV8JF64wLpX3c+Pst9kc1HgzrsH+mkehe/zmHMQTplIrR48H2gpU7ZqurQolYu8XBA==
   dependencies:
-    "@types/react" "*"
-
-"@types/react-i18next@7.8.3":
-  version "7.8.3"
-  resolved "https://registry.npmjs.org/@types/react-i18next/-/react-i18next-7.8.3.tgz#ba1820c91923c7f2b2abf6755d4372e503821c4b"
-  integrity sha512-VPopxbHXz/1Sjl+ljXQQchf6FHXaYLaH0a6TH6KnGOQGD4LzNbUVlofK26S30OIYfYibm8r/sAb2KeTst+AwTQ==
-  dependencies:
-    "@types/i18next" "*"
     "@types/react" "*"
 
 "@types/react-lazyload@^2.3.1":
@@ -8403,13 +8395,6 @@ html-minifier@^3.4.3, html-minifier@^3.5.19, html-minifier@^3.5.20:
     relateurl "0.2.x"
     uglify-js "3.4.x"
 
-html-parse-stringify2@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.npmjs.org/html-parse-stringify2/-/html-parse-stringify2-2.0.1.tgz#dc5670b7292ca158b7bc916c9a6735ac8872834a"
-  integrity sha1-3FZwtyksoVi3vJFsmmc1rIhyg0o=
-  dependencies:
-    void-elements "^2.0.1"
-
 htmlparser2@^3.9.1:
   version "3.10.0"
   resolved "https://registry.npmjs.org/htmlparser2/-/htmlparser2-3.10.0.tgz#5f5e422dcf6119c0d983ed36260ce9ded0bee464"
@@ -8563,10 +8548,10 @@ i18next-xhr-backend@^1.5.1:
   resolved "https://registry.npmjs.org/i18next-xhr-backend/-/i18next-xhr-backend-1.5.1.tgz#50282610780c6a696d880dfa7f4ac1d01e8c3ad5"
   integrity sha512-9OLdC/9YxDvTFcgsH5t2BHCODHEotHCa6h7Ly0EUlUC7Y2GS09UeoHOGj3gWKQ3HCqXz8NlH4gOrK3NNc9vPuw==
 
-i18next@^11.6.0:
-  version "11.10.2"
-  resolved "https://registry.npmjs.org/i18next/-/i18next-11.10.2.tgz#e5f10346f6320ecf15595419926c25255381a56c"
-  integrity sha512-1rowdX8PqrvsdFhYb3v0A/LlIHLQL1HTa4ia29IzhvNAg2fesNV7R1jXibWLmLQdz3FfTB8RuqSqDEjIawXruA==
+i18next@^12.1.0:
+  version "12.1.0"
+  resolved "https://registry.npmjs.org/i18next/-/i18next-12.1.0.tgz#387bf4b94d05b0160b6a41d001a6b360e384bdb1"
+  integrity sha512-AexmwGkKxwKfo5fGeXTWEY4xqzRPigQ1S/0InOUUVziGO54cd4fKyYK8ED1Thx9fd+WA3fRSZ+1iekvFQMbsFw==
 
 iconv-lite@0.4.13:
   version "0.4.13"
@@ -11710,15 +11695,15 @@ node-version@^1.1.3:
   integrity sha512-ma6oU4Sk0qOoKEAymVoTvk8EdXEobdS7m/mAGhDJ8Rouugho48crHBORAmy5BoOcv8wraPM6xumapQp5hl4iIQ==
 
 nodemon@^1.18.7:
-  version "1.18.8"
-  resolved "https://registry.npmjs.org/nodemon/-/nodemon-1.18.8.tgz#eb4c0052dc81395bdc503f3c8ae3cba86ca7146a"
-  integrity sha512-CgC/JdCf+CT7Z+K6wWaV30t8GU1DPtXpr/6PuXC1/LboXCmUQNKOaz0AEMjoWDTt2AdHOBFxgv41dyC0i79SbA==
+  version "1.18.9"
+  resolved "https://registry.npmjs.org/nodemon/-/nodemon-1.18.9.tgz#90b467efd3b3c81b9453380aeb2a2cba535d0ead"
+  integrity sha512-oj/eEVTEI47pzYAjGkpcNw0xYwTl4XSTUQv2NPQI6PpN3b75PhpuYk3Vb3U80xHCyM2Jm+1j68ULHXl4OR3Afw==
   dependencies:
     chokidar "^2.0.4"
     debug "^3.1.0"
     ignore-by-default "^1.0.1"
     minimatch "^3.0.4"
-    pstree.remy "^1.1.3"
+    pstree.remy "^1.1.6"
     semver "^5.5.0"
     supports-color "^5.2.0"
     touch "^3.1.0"
@@ -13147,10 +13132,10 @@ psl@^1.1.24, psl@^1.1.28:
   resolved "https://registry.npmjs.org/psl/-/psl-1.1.31.tgz#e9aa86d0101b5b105cbe93ac6b784cd547276184"
   integrity sha512-/6pt4+C+T+wZUieKR620OpzN/LlnNKuWjy1iFLQ/UG35JqHlR/89MP1d96dUfkf6Dne3TuLQzOYEYshJ+Hx8mw==
 
-pstree.remy@^1.1.3:
-  version "1.1.4"
-  resolved "https://registry.npmjs.org/pstree.remy/-/pstree.remy-1.1.4.tgz#a03d5dbc06ba639fb6dd4874644c4bad9882ec21"
-  integrity sha512-3kSyTN/iTJMxtL87idnFgTyOp2vQ6B/49QcHUO26kh2M2qahlUivFI1zWJ9FRFPoB+KgcP820JMOuIhkBJAP3Q==
+pstree.remy@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.npmjs.org/pstree.remy/-/pstree.remy-1.1.6.tgz#73a55aad9e2d95814927131fbf4dc1b62d259f47"
+  integrity sha512-NdF35+QsqD7EgNEI5mkI/X+UwaxVEbQaz9f4IooEmMUv6ZPmlTQYGjBPJGgrlzNdjSvIy4MWMg6Q6vCgBO2K+w==
 
 public-encrypt@^4.0.0:
   version "4.0.3"
@@ -13348,9 +13333,9 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     strip-json-comments "~2.0.1"
 
 re-resizable@^4.8.1:
-  version "4.10.0"
-  resolved "https://registry.npmjs.org/re-resizable/-/re-resizable-4.10.0.tgz#e5a4d5e0c79e9c94a1d68fda77aee91526eaff3e"
-  integrity sha512-g5Q5IswKX7LM+MtYFnuzaQrTEGr/kpserqGV8V6HYkjwbV60XnJv00VlKugLHEwlQ5pgrV08spm0TjyyYVbWmQ==
+  version "4.11.0"
+  resolved "https://registry.npmjs.org/re-resizable/-/re-resizable-4.11.0.tgz#d5df10bda445c4ec0945751a223bf195afb61890"
+  integrity sha512-dye+7rERqNf/6mDT1iwps+4Gf42420xuZgygF33uX178DxffqcyeuHbBuJ382FIcB5iP6mMZOhfW7kI0uXwb/Q==
 
 react-adopt@^0.6.0:
   version "0.6.0"
@@ -13516,6 +13501,16 @@ react-docgen@^3.0.0-rc.1:
     prop-types "^15.6.2"
     scheduler "^0.11.2"
 
+react-dom@~16.4.2:
+  version "16.4.2"
+  resolved "https://registry.npmjs.org/react-dom/-/react-dom-16.4.2.tgz#4afed569689f2c561d2b8da0b819669c38a0bda4"
+  integrity sha512-Usl73nQqzvmJN+89r97zmeUpQDKDlh58eX6Hbs/ERdDHzeBzWy+ENk7fsGQ+5KxArV1iOFPT46/VneklK9zoWw==
+  dependencies:
+    fbjs "^0.8.16"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.0"
+
 react-emotion@^9.2.8:
   version "9.2.12"
   resolved "https://registry.npmjs.org/react-emotion/-/react-emotion-9.2.12.tgz#74d1494f89e22d0b9442e92a33ca052461955c83"
@@ -13596,15 +13591,6 @@ react-hot-loader@4.3.6:
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
     shallowequal "^1.0.2"
-
-react-i18next@7.13.0, react-i18next@^7.11.0, react-i18next@^7.13.0:
-  version "7.13.0"
-  resolved "https://registry.npmjs.org/react-i18next/-/react-i18next-7.13.0.tgz#a6f64fd749215ec70400f90da6cbde2a9c5b1588"
-  integrity sha512-35M+MZFPqHwVIas7tXWQKFrf+ozCJukNplUTiGqL8mczSk+VRBsHxxXuuQKRkz/4CcWkONGWbp/AzxfM6wZncg==
-  dependencies:
-    hoist-non-react-statics "^2.3.1"
-    html-parse-stringify2 "2.0.1"
-    prop-types "^15.6.0"
 
 react-imported-component@^4.6.2:
   version "4.6.2"
@@ -13762,6 +13748,16 @@ react-test-renderer@^16.0.0-0, react-test-renderer@^16.4.2, react-test-renderer@
     object-assign "^4.1.1"
     prop-types "^15.6.2"
     scheduler "^0.11.2"
+
+react@~16.4.2:
+  version "16.4.2"
+  resolved "https://registry.npmjs.org/react/-/react-16.4.2.tgz#2cd90154e3a9d9dd8da2991149fdca3c260e129f"
+  integrity sha512-dMv7YrbxO4y2aqnvA7f/ik9ibeLSHQJTI6TrYAenPSaQ6OXfb+Oti+oJiy8WBxgRzlKatYqtCjphTgDSCEiWFg==
+  dependencies:
+    fbjs "^0.8.16"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.0"
 
 read-cmd-shim@^1.0.1:
   version "1.0.1"
@@ -16567,11 +16563,6 @@ vm-browserify@0.0.4:
   integrity sha1-XX6kW7755Kb/ZflUOOCofDV9WnM=
   dependencies:
     indexof "0.0.1"
-
-void-elements@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.npmjs.org/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
-  integrity sha1-wGavtYK7HLQSjWDqkjkulNXp2+w=
 
 w3c-hr-time@^1.0.1:
   version "1.0.1"

@@ -1,2 +1,2 @@
 export * from './Category';
-export * from './CategoryQuery';
+export * from './CategoryProductsQuery';

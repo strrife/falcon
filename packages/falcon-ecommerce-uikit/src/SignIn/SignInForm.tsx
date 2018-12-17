@@ -1,16 +1,18 @@
 import React from 'react';
 import { Formik } from 'formik';
 import { Button, FlexLayout } from '@deity/falcon-ui';
+import { T } from '@deity/falcon-i18n';
 
 import { FormField, Form, PasswordRevealInput, FormErrorSummary } from '../Forms';
 import { SignInMutation } from './SignInMutation';
 import { ForgotPasswordTrigger } from './ForgotPasswordTrigger';
 
 type SignInFormProps = {
+  id: string;
   onCompleted?: () => void;
 };
 
-export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted }) => (
+export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted, id }) => (
   <SignInMutation onCompleted={onCompleted}>
     {(signIn, { loading, error }) => (
       <Formik
@@ -30,16 +32,14 @@ export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted }) => (
         }
       >
         {() => (
-          <Form>
-            <FormField id="signInEmail" label="Email" name="email" required type="email" autoComplete="email" />
+          <Form id={id} i18nId="signIn">
+            <FormField name="email" type="email" required autoComplete="email" />
             <FormField
-              id="signInPassword"
-              label="Password"
               name="password"
-              // pass empty array, so default password strength validator does not get triggered
-              validators={[]}
-              required
               type="password"
+              // pass empty array, so default password strength validator does not get triggered
+              validate={[]}
+              required
               autoComplete="current-password"
             >
               {inputProps => <PasswordRevealInput {...inputProps} />}
@@ -47,7 +47,7 @@ export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted }) => (
             <FlexLayout justifyContent="space-between" alignItems="center" mt="md">
               <ForgotPasswordTrigger />
               <Button type="submit" variant={loading ? 'loader' : undefined}>
-                Sign in
+                <T id="signIn.button" />
               </Button>
             </FlexLayout>
 

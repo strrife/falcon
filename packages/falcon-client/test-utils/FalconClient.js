@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import { MemoryRouter } from 'react-router-dom';
-import { I18nextProvider } from 'react-i18next';
+import { I18nProvider } from '@deity/falcon-i18n';
 import i18nFactory from './../src/i18n/__mocks__/i18nFactory';
 
 /**
@@ -11,7 +11,7 @@ import i18nFactory from './../src/i18n/__mocks__/i18nFactory';
  * @property {Object} apollo react-apollo MockProvider props
  * @property {Object} router react-router-dom MemoryRouter props
 
- * @property {Object} i18next react-i18next I18nextProvider props
+ * @property {Object} i18next i18next options
  */
 
 /**
@@ -26,9 +26,7 @@ const FalconClient = ({ apollo, router, i18next, children }) => {
     <MockedProvider mocks={[]} addTypename={false} {...apollo}>
       <ChunkExtractorManager extractor={extractor}>
         <MemoryRouter {...router}>
-          <I18nextProvider i18n={i18nFactory()} {...i18next}>
-            {children}
-          </I18nextProvider>
+          <I18nProvider i18n={i18nFactory(i18next)}>{children}</I18nProvider>
         </MemoryRouter>
       </ChunkExtractorManager>
     </MockedProvider>
@@ -48,10 +46,12 @@ FalconClient.propTypes = {
   }),
 
   i18next: PropTypes.shape({
-    i18n: PropTypes.shape({}),
+    lng: PropTypes.string,
+    fallbackLng: PropTypes.string,
+    whitelist: PropTypes.arrayOf(PropTypes.string),
+    debug: PropTypes.bool,
     defaultNS: PropTypes.string,
-    initialI18nStore: PropTypes.shape({}),
-    initialLanguage: PropTypes.string
+    resources: PropTypes.shape({})
   })
 };
 

@@ -1,51 +1,56 @@
 import React from 'react';
 import { Divider, H4, Text, List, ListItem, Icon, Button, GridLayout } from '@deity/falcon-ui';
+import { I18n, T } from '@deity/falcon-i18n';
 import { SignInForm } from '../SignIn';
 import { MiniFormLayout } from './MiniFormLayout';
 import { OpenSidebarMutation } from '../Sidebar';
 
 export const SignIn = () => (
-  <MiniFormLayout title="Sign In">
-    <SignInForm />
+  <I18n>
+    {t => (
+      <MiniFormLayout title={t('signIn.title')}>
+        <SignInForm id="sign-in-sidebar" />
 
-    <Divider my="lg" />
-    <GridLayout>
-      <H4 mb="xs">New Customers</H4>
+        <Divider my="lg" />
+        <GridLayout>
+          <NewCustomer />
+        </GridLayout>
+      </MiniFormLayout>
+    )}
+  </I18n>
+);
 
-      <Text>Creating an account has many benefits:</Text>
+const NewCustomer = () => (
+  <GridLayout>
+    <H4 mb="xs">
+      <T id="newCustomer.title" />
+    </H4>
+    <Text>
+      <T id="newCustomer.benefitsHeader" />
+    </Text>
+    <List>
+      <I18n>
+        {t =>
+          [].concat(t('newCustomer.benefitsList', { returnObjects: true })).map((x: string) => (
+            <ListItem key={x} display="flex" mb="sm">
+              <Icon src="check" size="md" mr="xs" stroke="primaryLight" />
+              {x}
+            </ListItem>
+          ))
+        }
+      </I18n>
+    </List>
 
-      <List>
-        <ListItem display="flex" mb="sm">
-          <Icon src="checkCircle" size="md" mr="xs" stroke="primaryLight" />
-          check out faster
-        </ListItem>
-        <ListItem display="flex" mb="sm">
-          <Icon src="checkCircle" size="md" mr="xs" stroke="primaryLight" />
-          keep more than one address
-        </ListItem>
-        <ListItem display="flex" mb="sm">
-          <Icon src="checkCircle" size="md" mr="xs" stroke="primaryLight" />
-          track orders and more
-        </ListItem>
-      </List>
-
-      <OpenSidebarMutation>
-        {openSidebar => (
-          <Button
-            justifySelf="end"
-            variant="secondary"
-            onClick={() =>
-              openSidebar({
-                variables: {
-                  contentType: 'signUp'
-                }
-              })
-            }
-          >
-            Create an account
-          </Button>
-        )}
-      </OpenSidebarMutation>
-    </GridLayout>
-  </MiniFormLayout>
+    <OpenSidebarMutation>
+      {openSidebar => (
+        <Button
+          justifySelf="end"
+          variant="secondary"
+          onClick={() => openSidebar({ variables: { contentType: 'signUp' } })}
+        >
+          <T id="newCustomer.createAnAccount" />
+        </Button>
+      )}
+    </OpenSidebarMutation>
+  </GridLayout>
 );
