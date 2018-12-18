@@ -1,9 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { themed, Box, Image, Text, DefaultThemeProps, List, ListItem } from '@deity/falcon-ui';
+import { themed, Box, Text, DefaultThemeProps, List, ListItem } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 import { Price, DateFormat } from '../Locale';
-import { OrdersData } from './OrdersListQuery';
 import { toGridTemplate } from './../helpers';
 import { Order } from '../Order/OrderQuery';
 
