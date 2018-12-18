@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types';
 import { Link as RouterLink, Switch, Redirect } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { Box, Link, Menu, MenuItem } from '@deity/falcon-ui';
-import { toGridTemplate, ProtectedRoute } from '@deity/falcon-ecommerce-uikit';
+import { toGridTemplate, ProtectedRoute, SignOutLogic } from '@deity/falcon-ecommerce-uikit';
 import AccountDashboard from './Dashboard';
 import PersonalInformation from './PersonalInformation';
 import AddressBook from './AddressBook';
@@ -72,9 +72,18 @@ const Account = () => (
         <MenuLink to="/account/wish-list">
           <T id="account.wishListLink" />
         </MenuLink>
+        <MenuItem>
+          <SignOutLogic>
+            {({ signOut }) => (
+              <Link p="xs" flex={1} onClick={() => signOut()}>
+                <T id="signOut.link" />
+              </Link>
+            )}
+          </SignOutLogic>
+        </MenuItem>
       </Menu>
     </Box>
-    <Box gridArea={AccountArea.content}>
+    <Box gridArea={AccountArea.content} min-height="100%">
       <Switch>
         <Redirect exact from="/account" to="/account/dashboard" />
         <ProtectedRoute exact path="/account/dashboard" component={AccountDashboard} />
