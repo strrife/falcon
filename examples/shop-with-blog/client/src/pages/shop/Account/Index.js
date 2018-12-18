@@ -1,6 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { Link as RouterLink, Switch, Redirect } from 'react-router-dom';
+import { T } from '@deity/falcon-i18n';
 import { Box, Link, Menu, MenuItem } from '@deity/falcon-ui';
 import { toGridTemplate, ProtectedRoute } from '@deity/falcon-ecommerce-uikit';
 import AccountDashboard from './Dashboard';
@@ -53,12 +54,24 @@ const Account = () => (
   <Box defaultTheme={accountLayout}>
     <Box gridArea={AccountArea.menu} display="flex" flexDirection="column" alignItems="stretch" my="md">
       <Menu>
-        <MenuLink to="/account/dashboard">dashboard</MenuLink>
-        <MenuLink to="/account/personal-information">Personal Information</MenuLink>
-        <MenuLink to="/account/address-book">Address Book</MenuLink>
-        <MenuLink to="/account/orders">Orders</MenuLink>
-        <MenuLink to="/product-reviews">Product Reviews</MenuLink>
-        <MenuLink to="/account/wish-list">Wish List</MenuLink>
+        <MenuLink to="/account/dashboard">
+          <T id="account.dashboardLink" />
+        </MenuLink>
+        <MenuLink to="/account/personal-information">
+          <T id="account.personalInformationLink" />
+        </MenuLink>
+        <MenuLink to="/account/address-book">
+          <T id="account.addressBookLink" />
+        </MenuLink>
+        <MenuLink to="/account/orders">
+          <T id="account.ordersLink" />
+        </MenuLink>
+        <MenuLink to="/product-reviews">
+          <T id="account.productReviewsLink" />
+        </MenuLink>
+        <MenuLink to="/account/wish-list">
+          <T id="account.wishListLink" />
+        </MenuLink>
       </Menu>
     </Box>
     <Box gridArea={AccountArea.content}>

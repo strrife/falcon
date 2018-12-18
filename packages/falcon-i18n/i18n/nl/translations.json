@@ -58,9 +58,9 @@
     "empty": "Winkelwagen is leeg"
   },
   "signIn": {
-    "form": {
-      "passwordLabel": "Wachtwoord"
-    }
+    "link": "Aanmelden",
+    "emailFieldPlaceholder": "Email",
+    "passwordFieldPlaceholder": "Wachtwoord"
   },
   "newCustomer": {
     "title": "Nieuwe Klanten",
