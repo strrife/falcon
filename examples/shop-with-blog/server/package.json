@@ -3,7 +3,7 @@
   "private": true,
   "license": "OSL-3.0",
   "main": "index.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon index.js",
     "start:dbg": "cross-env NODE_ENV=development nodemon --inspect index.js",
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@deity/falcon-blog-extension": "^0.1.0",
-    "@deity/falcon-magento2-api": "^0.1.0",
+    "@deity/falcon-magento2-api": "^0.1.1",
     "@deity/falcon-server": "^0.1.0",
     "@deity/falcon-shop-extension": "^0.1.0",
     "@deity/falcon-wordpress-api": "^0.1.0",

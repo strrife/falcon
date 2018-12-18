@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon-ecommerce-uikit",
   "license": "OSL-3.0",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-ecommerce-uikit",
   "main": "dist/falcon-ecommerce-uikit.cjs.js",
   "module": "dist/index.js",

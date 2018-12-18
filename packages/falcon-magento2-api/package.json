@@ -2,7 +2,7 @@
   "name": "@deity/falcon-magento2-api",
   "license": "OSL-3.0",
   "main": "src/index.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-magento2-api",
   "publishConfig": {
     "access": "public"
