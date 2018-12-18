@@ -14,7 +14,7 @@ export const MiniAccount: React.SFC<MiniAccountData> = ({ customer }) =>
         <SignOutMutation>
           {(signOut, { loading }) => (
             <Button css={{ width: '100%' }} mt="md" disabled={loading} onClick={() => signOut()}>
-              <T id="signOut.button" />
+              <T id="signOut.link" />
               <Icon
                 src={loading ? 'loader' : 'logOut'}
                 stroke="white"
