@@ -1,4 +1,5 @@
 import React from 'react';
+import { T } from '@deity/falcon-i18n';
 import { Box, Icon, Text } from '@deity/falcon-ui';
 
 export const AccountIcon: React.SFC<{
@@ -22,7 +23,7 @@ export const AccountIcon: React.SFC<{
         transform: 'translate(-50%, 0)'
       }}
     >
-      Account
+      <T id="account.link" />
     </Text>
   </Box>
 );

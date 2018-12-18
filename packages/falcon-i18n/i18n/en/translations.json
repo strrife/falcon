@@ -112,7 +112,7 @@
     "createAnAccount": "Create an account"
   },
   "account": {
-    "accountLink": "Account",
+    "link": "Account",
     "dashboardLink": "Dashboard",
     "personalInformationLink": "Personal Information",
     "addressBookLink": "Address Book",
