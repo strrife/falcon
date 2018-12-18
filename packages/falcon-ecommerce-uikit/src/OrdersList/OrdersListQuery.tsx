@@ -3,7 +3,7 @@ import { Query, FetchMore, ShopPageQuery, Pagination } from '../Query';
 import { Order } from './../Order';
 
 export const GET_ORDERS_LIST = gql`
-  query Orders($page: Int = 1, $perPage: Int = 2) {
+  query Orders($page: Int = 1, $perPage: Int = 10) {
     orders(query: { page: $page, perPage: $perPage }) {
       items {
         incrementId

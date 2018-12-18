@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { themed, Box, Image, Text, List, ListItem } from '@deity/falcon-ui';
+import { themed, Box, Image, Text, DefaultThemeProps, List, ListItem } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 import { Price, DateFormat } from '../Locale';
 import { OrdersData } from './OrdersListQuery';
@@ -15,38 +15,29 @@ const OrderListItemArea = {
   status: 'status'
 };
 
-export const OrdersList: React.SFC<{ orders: OrdersData }> = ({ orders }) => {
-  const { items } = orders;
-
-  return (
-    <>
-      <OrderListHeader />
-      <OrdersListLayout>
-        {items.map(x => (
-          <OrderListItem key={x.incrementId} {...x} />
-        ))}
-      </OrdersListLayout>
-      {/* TODO: add pagination component (load more) */}
-    </>
-  );
-};
+export const OrdersList: React.SFC<{ items: Order[] }> = ({ items }) => (
+  <OrdersListLayout>
+    <OrderListHeader />
+    <List css={{ listStyle: 'none' }}>
+      {items.map(x => (
+        <OrderListItem key={x.incrementId} {...x} />
+      ))}
+    </List>
+  </OrdersListLayout>
+);
 
 export const OrdersListLayout = themed({
-  tag: List,
+  tag: Box,
   defaultTheme: {
     ordersListLayout: {
       display: 'flex',
       flexDirection: 'column',
-      m: 'none',
-      p: 'none',
-      css: {
-        listStyle: 'none'
-      }
+      mb: 'md'
     }
   }
 });
 
-const orderListItemLayout = {
+const orderListItemLayout: DefaultThemeProps = {
   orderListItemLayout: {
     display: 'grid',
     gridGap: {
@@ -58,15 +49,15 @@ const orderListItemLayout = {
     // prettier-ignore
     gridTemplate: {
       xs: toGridTemplate([
-        ['1fr'],
-        [OrderListItemArea.id],
-        [OrderListItemArea.createdAt],
-        [OrderListItemArea.shipTo],
+        ['1fr'                       ],
+        [OrderListItemArea.id        ],
+        [OrderListItemArea.createdAt ],
+        [OrderListItemArea.shipTo    ],
         [OrderListItemArea.grandTotal],
-        [OrderListItemArea.status],
+        [OrderListItemArea.status    ]
       ]),
       md: toGridTemplate([
-        ['1fr', '1fr', '2fr', '1fr', '1fr',],
+        ['1fr',                '1fr',                       '2fr',                    '1fr',                        '1fr'                   ],
         [OrderListItemArea.id, OrderListItemArea.createdAt, OrderListItemArea.shipTo, OrderListItemArea.grandTotal, OrderListItemArea.status]
       ])
     }
@@ -126,7 +117,7 @@ const CellLabel = themed({
   }
 });
 
-const orderListHeaderLayout = {
+const orderListHeaderLayout: DefaultThemeProps = {
   orderListHeaderLayout: {
     ...orderListItemLayout.orderListItemLayout,
     fontWeight: 'bold',

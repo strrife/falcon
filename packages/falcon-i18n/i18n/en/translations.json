@@ -118,7 +118,8 @@
     "createdAtLabel": "Date",
     "shipToLabel": "Ship to",
     "grandTotalLabel": "Order total",
-    "statusLabel": "Status"
+    "statusLabel": "Status",
+    "showMore": "Show more orders"
   },
   "order": {
     "status": "Status"
