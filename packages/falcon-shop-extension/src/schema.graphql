@@ -1,14 +1,15 @@
 extend type Query {
   category(id: Int!): Category
   product(id: Int!): Product
-  products(
-    categoryId: Int
-    includeSubcategories: Boolean
-    query: ShopPageQuery
-    sortOrders: [SortOrderInput]
-    filters: [Filter]
-    skus: [String]
-  ): ProductList
+  #  products(
+  #    categoryId: Int
+  #    includeSubcategories: Boolean
+  #    query: ShopPageQuery
+  #    sortOrders: [SortOrderInput]
+  #    filters: [Filter]
+  #    skus: [String]
+  #  ): ProductList
+  myStoreConfig: MyStoreConfig
   cart: Cart
   countries: CountryList
   order(id: Int!): Order
@@ -567,4 +568,13 @@ Base result of the search
 """
 type SearchResults {
   products: ProductList
+}
+
+type MyStoreConfig {
+  id: String
+  code: String
+  url: String
+  name: String
+  front: String
+  base_url: String
 }
