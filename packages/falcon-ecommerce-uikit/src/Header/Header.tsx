@@ -1,4 +1,5 @@
 import React from 'react';
+import { T } from '@deity/falcon-i18n';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Navbar,
@@ -18,6 +19,7 @@ import { CartQuery, CartData } from '../Cart';
 import { CustomerQuery } from '../Customer';
 import { AccountIcon } from '../MiniAccount';
 import { SignInIcon } from '../SignIn';
+import { SignOutLogic } from '../SignOut';
 import { HeaderData, MenuItem } from './HeaderQuery';
 import { OpenSidebarMutation } from '../Sidebar';
 
@@ -36,6 +38,17 @@ const bannerLayoutTheme: DefaultThemeProps = {
 
 export const Banner: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
   <List defaultTheme={bannerLayoutTheme}>
+    <SignOutLogic>
+      {({ isSignedIn, signOut }: any) =>
+        isSignedIn && (
+          <ListItem p="xs">
+            <Link onClick={() => signOut()}>
+              <T id="signOut.link" />
+            </Link>
+          </ListItem>
+        )
+      }
+    </SignOutLogic>
     {items.map(item => (
       <ListItem p="xs" key={item.name}>
         <Link as={RouterLink} to={item.url}>
