@@ -62,6 +62,9 @@
     "emailFieldPlaceholder": "Email",
     "passwordFieldPlaceholder": "Wachtwoord"
   },
+  "signOut": {
+    "link": "Uitloggen"
+  },
   "newCustomer": {
     "title": "Nieuwe Klanten",
     "benefitsHeader": "Het maken van een account heeft veel voordelen:",

@@ -95,7 +95,7 @@
     "successMessage": "Your password has been reset successfully!"
   },
   "signOut": {
-    "button": "Logout"
+    "link": "Logout"
   },
   "signUp": {
     "title": "Register",
@@ -120,6 +120,11 @@
     "productReviewsLink": "Product Reviews",
     "wishListLink": "Wish List"
   },
+  "dashboard": {
+    "title": "Dashboard",
+    "recentOrder": "Recent order",
+    "viewAllOrders": "View all"
+  },
   "ordersList": {
     "title": "Orders",
     "link": "Orders",
@@ -128,7 +133,8 @@
     "shipToLabel": "Ship to",
     "grandTotalLabel": "Order total",
     "statusLabel": "Status",
-    "showMore": "Show more orders"
+    "showMore": "Show more orders",
+    "empty": "You have not made any purchases yet."
   },
   "order": {
     "status": "Status"
