@@ -161,7 +161,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
             }
           }
         })
-        .then(resp => {
+        .then((resp: FetchResult) => {
           if (resp.errors) {
             this.setPartialState({
               loading: false,
@@ -219,7 +219,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
             }
           }
         })
-        .then(resp => {
+        .then((resp: FetchResult) => {
           if (resp.errors) {
             this.setPartialState({
               loading: false,
