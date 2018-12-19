@@ -8,7 +8,6 @@ import AccountDashboard from './Dashboard';
 import PersonalInformation from './PersonalInformation';
 import AddressBook from './AddressBook';
 import Orders from './Orders';
-import WishList from './WishList';
 import DynamicRoute from './../../DynamicRoute';
 
 const AccountArea = {
@@ -66,12 +65,6 @@ const Account = () => (
         <MenuLink to="/account/orders">
           <T id="account.ordersLink" />
         </MenuLink>
-        <MenuLink to="/product-reviews">
-          <T id="account.productReviewsLink" />
-        </MenuLink>
-        <MenuLink to="/account/wish-list">
-          <T id="account.wishListLink" />
-        </MenuLink>
         <MenuItem>
           <SignOutLogic>
             {({ signOut }) => (
@@ -90,7 +83,8 @@ const Account = () => (
         <ProtectedRoute exact path="/account/personal-information" component={PersonalInformation} />
         <ProtectedRoute exact path="/account/address-book" component={AddressBook} />
         <ProtectedRoute exact path="/account/orders" component={Orders} />
-        <ProtectedRoute exact path="/account/wish-list" component={WishList} />
+        {/* <ProtectedRoute exact path="/product-reviews" component={} /> */}
+        {/* <ProtectedRoute exact path="/account/wish-list" component={WishList} /> */}
         <DynamicRoute />
       </Switch>
     </Box>
