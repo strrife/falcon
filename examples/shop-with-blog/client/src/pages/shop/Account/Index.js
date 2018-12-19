@@ -56,14 +56,14 @@ const Account = () => (
         <MenuLink to="/account/dashboard">
           <T id="account.dashboardLink" />
         </MenuLink>
-        <MenuLink to="/account/personal-information">
-          <T id="account.personalInformationLink" />
+        <MenuLink to="/account/orders">
+          <T id="account.ordersLink" />
         </MenuLink>
         <MenuLink to="/account/address-book">
           <T id="account.addressBookLink" />
         </MenuLink>
-        <MenuLink to="/account/orders">
-          <T id="account.ordersLink" />
+        <MenuLink to="/account/personal-information">
+          <T id="account.personalInformationLink" />
         </MenuLink>
         <MenuItem>
           <SignOutLogic>
@@ -80,9 +80,9 @@ const Account = () => (
       <Switch>
         <Redirect exact from="/account" to="/account/dashboard" />
         <ProtectedRoute exact path="/account/dashboard" component={AccountDashboard} />
+        <ProtectedRoute exact path="/account/orders" component={Orders} />
         <ProtectedRoute exact path="/account/personal-information" component={PersonalInformation} />
         <ProtectedRoute exact path="/account/address-book" component={AddressBook} />
-        <ProtectedRoute exact path="/account/orders" component={Orders} />
         {/* <ProtectedRoute exact path="/product-reviews" component={} /> */}
         {/* <ProtectedRoute exact path="/account/wish-list" component={WishList} /> */}
         <DynamicRoute />
