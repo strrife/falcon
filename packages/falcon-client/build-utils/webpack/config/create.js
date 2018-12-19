@@ -72,7 +72,7 @@ function getBabelLoaderOptions(babelRcPath) {
 }
 
 function getFalconI18nPlugin(options) {
-  const { resourcePackages = [], filter } = options || {};
+  const { resourcePackages = [], filter = {} } = options || {};
 
   return new FalconI18nLocalesPlugin({
     mainSource: path.join(paths.appPath, 'i18n'),
@@ -600,7 +600,6 @@ module.exports = (target = 'web', options, buildConfig) => {
     'react-dom',
     'react-google-tag-manager',
     `react-helmet`,
-    'react-i18next',
     'react-router',
     'react-router-dom',
     'history'

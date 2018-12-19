@@ -1,6 +1,6 @@
 import React from 'react';
-import { Image, themed, Swipeable, SwipeableItem, Box } from '@deity/falcon-ui';
-import { ProductTranslations } from './ProductQuery';
+import { Text, Image, themed, Swipeable, SwipeableItem, Box } from '@deity/falcon-ui';
+import { I18n, T } from '@deity/falcon-i18n';
 
 type Item = {
   thumbnail: string;
@@ -27,7 +27,7 @@ const ProductGalleryLayout = themed({
   }
 });
 
-export class ProductGallery extends React.Component<{ items: Item[]; translations: ProductTranslations }> {
+export class ProductGallery extends React.Component<{ items: Item[] }> {
   state = {
     activeIndex: 0
   };
@@ -45,10 +45,14 @@ export class ProductGallery extends React.Component<{ items: Item[]; translation
   scrollableEl = React.createRef<HTMLDivElement>();
 
   render() {
-    const { items, translations } = this.props;
-    if (!items.length) return null;
+    const { items } = this.props;
+
+    if (!items.length) {
+      return <NoProductImage />;
+    }
+
     if (items.length === 1) {
-      return <Image src={items[0].full} alt={translations.galleryItem} />;
+      return <I18n>{t => <Image src={items[0].full} alt={t('productGallery.imageAlt')} />}</I18n>;
     }
 
     const { activeIndex } = this.state;
@@ -85,17 +89,25 @@ export class ProductGallery extends React.Component<{ items: Item[]; translation
                 }
               }}
             >
-              <Image key={item.thumbnail} src={item.thumbnail} alt={translations.galleryItem} />
+              <I18n>{t => <Image key={item.thumbnail} src={item.thumbnail} alt={t('productGallery.imageAlt')} />}</I18n>
             </Box>
           ))}
         </Box>
 
         <Swipeable gridArea="full" ref={this.scrollableEl} alignItems="center">
           {items.map(item => (
-            <SwipeableItem key={item.full} as={Image} src={item.full} alt={translations.galleryItem} />
+            <I18n key={item.thumbnail}>
+              {t => <SwipeableItem key={item.full} as={Image} src={item.full} alt={t('productGallery.imageAlt')} />}
+            </I18n>
           ))}
         </Swipeable>
       </ProductGalleryLayout>
     );
   }
 }
+
+export const NoProductImage = () => (
+  <Text>
+    <T id="productGallery.noImage" />
+  </Text>
+);

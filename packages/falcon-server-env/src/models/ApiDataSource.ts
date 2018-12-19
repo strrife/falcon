@@ -63,7 +63,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
     this.apiContainer = apiContainer;
     this.eventEmitter = eventEmitter;
 
-    const { host, port, protocol } = this.config;
+    const { host, port, protocol, fetchUrlPriority, perPage } = this.config;
     if (host) {
       this.baseURL = format({
         protocol: protocol === 'https' || Number(port) === 443 ? 'https' : 'http',
@@ -71,8 +71,6 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
         port: Number(port) || undefined
       });
     }
-
-    const { fetchUrlPriority, perPage } = this.config;
 
     this.fetchUrlPriority = fetchUrlPriority || this.fetchUrlPriority;
     this.perPage = perPage || this.perPage;
