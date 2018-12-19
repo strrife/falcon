@@ -53,9 +53,9 @@ const Account = () => (
   <Box defaultTheme={accountLayout}>
     <Box gridArea={AccountArea.menu} display="flex" flexDirection="column" alignItems="stretch" my="md">
       <Menu>
-        {/* <MenuLink to="/account/dashboard">
+        <MenuLink to="/account/dashboard">
           <T id="account.dashboardLink" />
-        </MenuLink> */}
+        </MenuLink>
         <MenuLink to="/account/orders">
           <T id="account.ordersLink" />
         </MenuLink>
