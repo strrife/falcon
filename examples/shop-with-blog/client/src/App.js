@@ -98,7 +98,6 @@ const App = ({ online }) => (
                   />
                 </Switch>
                 <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
-
                 <SidebarContainer>
                   {sidebarProps => (
                     <Sidebar {...sidebarProps}>

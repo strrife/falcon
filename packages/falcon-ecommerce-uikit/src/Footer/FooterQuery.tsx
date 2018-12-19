@@ -38,25 +38,8 @@ export type FooterData = {
   };
 };
 
-function getTranslations(t: reactI18Next.TranslationFunction) {
-  return {
-    newsletter: {
-      title: t('newsletter.title'),
-      message: t('newsletter.message'),
-      subscribe: t('newsletter.subscribe'),
-      emailPlaceholder: t('newsletter.emailPlaceholder'),
-      consent: t('newsletter.consent')
-    },
-    copyright: t('copyright')
-  };
-}
-
-export type FooterTranslations = ReturnType<typeof getTranslations>;
-
-export class FooterQuery extends Query<FooterData, {}, FooterTranslations> {
+export class FooterQuery extends Query<FooterData, {}> {
   static defaultProps = {
-    query: GET_FOOTER_DATA,
-    getTranslations,
-    translationsNamespaces: ['shop']
+    query: GET_FOOTER_DATA
   };
 }

@@ -57,10 +57,10 @@ export default abstract class Extension {
 
   /**
    * GraphQL configuration getter
-   * @param {string} typeDefs Extension's GQL schema type definitions
+   * @param {string|Array<string>} typeDefs Extension's GQL schema type definitions
    * @return {object} GraphQL configuration object
    */
-  async getGraphQLConfig(typeDefs: string = ''): Promise<object> {
+  async getGraphQLConfig(typeDefs: string | Array<string> = ''): Promise<object> {
     if (!typeDefs) {
       Logger.warn(`${this.name}: typeDefs is empty! Make sure you call "super.getGraphQLConfig(typeDefs)" properly`);
     }
@@ -146,10 +146,10 @@ export default abstract class Extension {
 
   /**
    * Returns a map of fields by GQL type name
-   * @param {string} typeDefs Extension GQL schema type definitions
+   * @param {string|Array<string>} typeDefs Extension GQL schema type definitions
    * @return {RootFieldTypes} Map of GQL type-fields
    */
-  protected getRootTypeFields(typeDefs: string): RootFieldTypes {
+  protected getRootTypeFields(typeDefs: string | Array<string>): RootFieldTypes {
     const result: RootFieldTypes = {};
     if (!typeDefs) {
       return result;
@@ -157,12 +157,14 @@ export default abstract class Extension {
     try {
       const executableSchema: GraphQLSchema = makeExecutableSchema({
         typeDefs: [
-          typeDefs
-            // Removing "extend type X" to avoid "X type missing" errors
-            .replace(/extend\s+type/gm, 'type')
-            // Removing type references from the base schema types
-            .replace(/:\s*(\w+)/gm, ': Int')
-            .replace(/\[\s*(\w+)\s*]/gm, '[Int]')
+          Array.isArray(typeDefs)
+            ? typeDefs.join('\n')
+            : typeDefs
+                // Removing "extend type X" to avoid "X type missing" errors
+                .replace(/extend\s+type/gm, 'type')
+                // Removing type references from the base schema types
+                .replace(/:\s*(\w+)/gm, ': Int')
+                .replace(/\[\s*(\w+)\s*]/gm, '[Int]')
         ]
       });
 

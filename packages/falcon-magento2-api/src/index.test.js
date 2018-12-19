@@ -131,4 +131,49 @@ describe('Magento2Api', () => {
     // null should not not be converted
     expect(api.convertPathToUrl(null)).toBe(null);
   });
+
+  it('Should not call signIn() after account creation if autoSignIn flag was set to false', async () => {
+    // mock signIn resolver - just return promise that resolves to true
+    api.signIn = jest.fn(() => Promise.resolve(true));
+
+    nock(URL)
+      .post(createMagentoUrl('/customers'))
+      .reply(200, magentoResponses.user.signUpSuccess);
+
+    nock(URL)
+      .post(createMagentoUrl('/guest-carts'))
+      .reply(200, {});
+
+    const resp = await api.signUp(
+      {},
+      {
+        input: { firstname: 'Test', lastname: 'Test', email: 'test@test.com', password: 'Deity123', autoSignIn: false }
+      }
+    );
+
+    expect(api.signIn).toHaveBeenCalledTimes(0);
+    expect(resp).toBe(true);
+  });
+
+  it('Should call signIn() with proper params after successful account creation (if autoSignIn flag was set to true)', async () => {
+    // mock signIn resolver - just return promise that resolves to true
+    api.signIn = jest.fn(() => Promise.resolve(true));
+
+    nock(URL)
+      .post(createMagentoUrl('/customers'))
+      .reply(200, magentoResponses.user.signUpSuccess);
+
+    nock(URL)
+      .post(createMagentoUrl('/guest-carts'))
+      .reply(200, {});
+
+    const resp = await api.signUp(
+      {},
+      { input: { firstname: 'Test', lastname: 'Test', email: 'test@test.com', password: 'Deity123', autoSignIn: true } }
+    );
+
+    expect(api.signIn).toHaveBeenCalledTimes(1);
+    expect(api.signIn).toHaveBeenCalledWith({}, { input: { email: 'test@test.com', password: 'Deity123' } });
+    expect(resp).toBe(true);
+  });
 });

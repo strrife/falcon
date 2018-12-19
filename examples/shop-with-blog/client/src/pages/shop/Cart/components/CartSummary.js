@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ApplyCouponMutation, CancelCouponMutation, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
-import { Box, Input, Button, Text, Icon } from '@deity/falcon-ui';
 import { Formik, Form } from 'formik';
 import { adopt } from 'react-adopt';
+import { ApplyCouponMutation, CancelCouponMutation, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
+import { Box, Input, Button, Text, Icon } from '@deity/falcon-ui';
+import { I18n } from '@deity/falcon-i18n';
 import CartTotals from '../../components/CartTotals';
 
 export const CartSummaryArea = {
@@ -68,93 +69,95 @@ const ApplyCouponForm = adopt({
   )
 });
 
-const CartSummary = ({ totals, couponCode, translations }) => (
-  <Box mt="md" defaultTheme={cartSummaryLayout}>
-    <Box gridArea={CartSummaryArea.coupon}>
-      <ApplyCouponForm
-        couponCode={couponCode}
-        validate={values => {
-          if (!values.couponCode) {
-            return {
-              couponCode: translations.invalidCouponCode
-            };
-          }
-        }}
-      >
-        {({
-          applyCouponMutation: { result: applyCouponResult },
-          cancelCouponMutation: { result: cancelCouponResult },
-          formik: { errors, handleChange, handleBlur, values }
-        }) => {
-          const errorMessage = !errors.couponCode && !!applyCouponResult.error && applyCouponResult.error.message;
+const CartSummary = ({ totals, couponCode }) => (
+  <I18n>
+    {t => (
+      <Box mt="md" defaultTheme={cartSummaryLayout}>
+        <Box gridArea={CartSummaryArea.coupon}>
+          <ApplyCouponForm
+            couponCode={couponCode}
+            validate={values => {
+              if (!values.couponCode) {
+                return { couponCode: t('cart.invalidCouponCode') };
+              }
+            }}
+          >
+            {({
+              applyCouponMutation: { result: applyCouponResult },
+              cancelCouponMutation: { result: cancelCouponResult },
+              formik: { errors, handleChange, handleBlur, values }
+            }) => {
+              const errorMessage = !errors.couponCode && !!applyCouponResult.error && applyCouponResult.error.message;
 
-          return (
-            <Box display="flex" flexDirection="column" alignItems="stretch">
-              <Text>{translations.couponCode}</Text>
-              <Input
-                my="xs"
-                type="text"
-                disabled={!!couponCode}
-                name="couponCode"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                defaultValue={couponCode}
-              />
-              <Button
-                type="submit"
-                disabled={
-                  applyCouponResult.loading || cancelCouponResult.loading || !values.couponCode || errors.couponCode
-                }
-                my="xs"
-              >
-                {(applyCouponResult.loading || cancelCouponResult.loading) && (
-                  <Icon src="loader" size="md" mr="sm" fill="secondaryLight" />
-                )}
-                {couponCode ? translations.cancelCouponCode : translations.applyCouponCode}
-              </Button>
-              {errorMessage && (
-                <Text fontSize="xs" color="error">
-                  {errorMessage}
-                </Text>
-              )}
-            </Box>
-          );
-        }}
-      </ApplyCouponForm>
-    </Box>
-    <Box
-      gridArea={CartSummaryArea.divider}
-      css={({ theme }) => ({
-        ':after': {
-          content: '" "',
-          display: 'block',
-          width: '100%',
-          height: '100%',
-          minWidth: '1px',
-          minHeight: '1px',
-          backgroundColor: theme.colors.secondaryDark
-        }
-      })}
-    />
-    <CartTotals
-      gridArea={CartSummaryArea.totals}
-      totalsData={totals}
-      totalsToDisplay={[
-        CartTotals.TOTALS.SUBTOTAL,
-        CartTotals.TOTALS.SHIPPING,
-        CartTotals.TOTALS.DISCOUNT,
-        'divider',
-        CartTotals.TOTALS.GRAND_TOTAL
-      ]}
-      bold={[CartTotals.TOTALS.GRAND_TOTAL]}
-      css={({ theme }) => ({
-        '> hr': {
-          marginTop: theme.spacing.xs,
-          marginBottom: theme.spacing.xs
-        }
-      })}
-    />
-  </Box>
+              return (
+                <Box display="flex" flexDirection="column" alignItems="stretch">
+                  <Text>{t(`cart.couponCode`)}</Text>
+                  <Input
+                    my="xs"
+                    type="text"
+                    disabled={!!couponCode}
+                    name="couponCode"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    defaultValue={couponCode}
+                  />
+                  <Button
+                    type="submit"
+                    disabled={
+                      applyCouponResult.loading || cancelCouponResult.loading || !values.couponCode || errors.couponCode
+                    }
+                    my="xs"
+                  >
+                    {(applyCouponResult.loading || cancelCouponResult.loading) && (
+                      <Icon src="loader" size="md" mr="sm" fill="secondaryLight" />
+                    )}
+                    {couponCode ? t(`cart.cancelCouponCode`) : t(`cart.applyCouponCode`)}
+                  </Button>
+                  {errorMessage && (
+                    <Text fontSize="xs" color="error">
+                      {errorMessage}
+                    </Text>
+                  )}
+                </Box>
+              );
+            }}
+          </ApplyCouponForm>
+        </Box>
+        <Box
+          gridArea={CartSummaryArea.divider}
+          css={({ theme }) => ({
+            ':after': {
+              content: '" "',
+              display: 'block',
+              width: '100%',
+              height: '100%',
+              minWidth: '1px',
+              minHeight: '1px',
+              backgroundColor: theme.colors.secondaryDark
+            }
+          })}
+        />
+        <CartTotals
+          gridArea={CartSummaryArea.totals}
+          totalsData={totals}
+          totalsToDisplay={[
+            CartTotals.TOTALS.SUBTOTAL,
+            CartTotals.TOTALS.SHIPPING,
+            CartTotals.TOTALS.DISCOUNT,
+            'divider',
+            CartTotals.TOTALS.GRAND_TOTAL
+          ]}
+          bold={[CartTotals.TOTALS.GRAND_TOTAL]}
+          css={({ theme }) => ({
+            '> hr': {
+              marginTop: theme.spacing.xs,
+              marginBottom: theme.spacing.xs
+            }
+          })}
+        />
+      </Box>
+    )}
+  </I18n>
 );
 
 CartSummary.propTypes = {
@@ -165,13 +168,7 @@ CartSummary.propTypes = {
       value: PropTypes.number
     })
   ),
-  couponCode: PropTypes.string,
-  translations: PropTypes.shape({
-    couponCode: PropTypes.string,
-    applyCouponCode: PropTypes.string,
-    cancelCouponCode: PropTypes.string,
-    invalidCouponCode: PropTypes.string
-  })
+  couponCode: PropTypes.string
 };
 
 export default CartSummary;

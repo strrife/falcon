@@ -5,7 +5,6 @@ import {
   H1,
   Text,
   Divider,
-  Icon,
   Button,
   Box,
   FlexLayout,
@@ -14,7 +13,8 @@ import {
   DropdownMenu,
   DropdownMenuItem
 } from '@deity/falcon-ui';
-import { ProductsList } from '../Product/Products';
+import { T } from '@deity/falcon-i18n';
+import { ProductsList } from '../ProductsList/ProductsList';
 
 const CategoryLayout = themed({
   tag: 'div',
@@ -31,79 +31,64 @@ const CategoryLayout = themed({
   }
 });
 
-export const SortOrderDropdown: React.SFC<any> = ({ sortOrders, onChange }) => {
-  const activeSortOrder = sortOrders.filter((sortOrder: any) => sortOrder.active)[0];
-
-  return (
-    <Box display="flex">
-      <Dropdown css={{ width: '100%' }} onChange={onChange}>
-        <DropdownLabel>{activeSortOrder.name}</DropdownLabel>
-
-        <DropdownMenu>
-          {sortOrders.map((sortOrder: any) => (
-            <DropdownMenuItem key={sortOrder.name} value={sortOrder}>
-              {sortOrder.name}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenu>
-      </Dropdown>
-    </Box>
-  );
-};
-export const CategoryToolbar: React.SFC<{ translations: { showingOutOf: string }; sortOrders: any }> = ({
-  translations,
-
-  sortOrders
-}) => (
-  <FlexLayout justifyContent="space-between" alignItems="center">
-    <Text>{translations.showingOutOf}</Text>
-    <FlexLayout alignItems="center">
-      <Text mr="sm">Sort by</Text>
-      <SortOrderDropdown sortOrders={sortOrders} />
-    </FlexLayout>
-  </FlexLayout>
-);
-
-export const ShowMore: React.SFC<{ text: string; onClick?: MouseEventHandler; loading: boolean }> = ({
-  text,
-  onClick,
-  loading
-}) => (
-  <Box my="sm" onClick={onClick || (() => {})}>
-    <Button variant={loading ? 'loader' : 'secondary'}>{text}</Button>
-  </Box>
-);
-
 export const Category: React.SFC<{
   category: { name: string };
   products: any;
   sortOrders: any[];
-  translations: any;
   fetchMore: any;
   networkStatus: NetworkStatus;
-}> = ({ category, products, sortOrders, translations, fetchMore, networkStatus }) => {
+}> = ({ category, products, sortOrders, fetchMore, networkStatus }) => {
   const { pagination, items } = products;
 
   return (
     <CategoryLayout>
       <H1>{category.name}</H1>
-      <CategoryToolbar
-        sortOrders={sortOrders}
-        translations={{ showingOutOf: translations.category.pagination.showingOutOf }}
-      />
+      <FlexLayout justifyContent="space-between" alignItems="center">
+        <ShowingOutOf itemsCount={items.length} totalItems={pagination.totalItems} />
+        <SortOrderDropdown sortOrders={sortOrders} />
+      </FlexLayout>
       <Divider />
       <ProductsList products={items} />
-
-      {pagination.nextPage && (
-        <React.Fragment>
-          <Divider />
-          <ShowMore
-            text={translations.category.pagination.showMore}
-            onClick={fetchMore}
-            loading={networkStatus === NetworkStatus.fetchMore}
-          />
-        </React.Fragment>
-      )}
+      {pagination.nextPage && <Divider />}
+      {pagination.nextPage && <ShowMore onClick={fetchMore} loading={networkStatus === NetworkStatus.fetchMore} />}
     </CategoryLayout>
   );
 };
+
+export const ShowingOutOf: React.SFC<{ itemsCount: number; totalItems: number }> = ({ itemsCount, totalItems }) => (
+  <Text>
+    <T id="productsList.pagination.showingOutOf" {...{ itemsCount, totalItems }} />
+  </Text>
+);
+
+export const SortOrderDropdown: React.SFC<any> = ({ sortOrders, onChange }) => {
+  const activeSortOrder = sortOrders.filter((sortOrder: any) => sortOrder.active)[0];
+
+  return (
+    <FlexLayout alignItems="center">
+      <Text mr="sm">
+        <T id="productsList.sort.title" />
+      </Text>
+      <Box display="flex">
+        <Dropdown css={{ width: '100%' }} onChange={onChange}>
+          <DropdownLabel>{activeSortOrder.name}</DropdownLabel>
+          <DropdownMenu>
+            {sortOrders.map((sortOrder: any) => (
+              <DropdownMenuItem key={sortOrder.name} value={sortOrder}>
+                {sortOrder.name}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenu>
+        </Dropdown>
+      </Box>
+    </FlexLayout>
+  );
+};
+
+export const ShowMore: React.SFC<{ onClick: MouseEventHandler; loading: boolean }> = ({ onClick, loading }) => (
+  <Box>
+    <Button onClick={onClick} variant={loading ? 'loader' : 'secondary'} height="xl" my="sm">
+      <T id="productsList.pagination.showMore" />
+    </Button>
+  </Box>
+);
