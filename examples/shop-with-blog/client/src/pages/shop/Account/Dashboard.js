@@ -14,10 +14,10 @@ const Dashboard = () => (
         {({ orders: { items } }) => (
           <>
             <FlexLayout justifyContent="flex-start" alignItems="baseline">
-              <H2 mr="md">
+              <H2>
                 <T id="dashboard.recentOrder" />
               </H2>
-              <Link as={RouterLink} to="/account/orders">
+              <Link as={RouterLink} to="/account/orders" ml="md">
                 <T id="dashboard.viewAllOrders" />
               </Link>
             </FlexLayout>
@@ -26,7 +26,24 @@ const Dashboard = () => (
         )}
       </OrdersListQuery>
     </Box>
-
+    <Box mt="md">
+      <FlexLayout justifyContent="flex-start" alignItems="baseline">
+        <H2>
+          <T id="dashboard.addressBook" />
+        </H2>
+        <Link as={RouterLink} to="/account/address-book" ml="md">
+          <T id="dashboard.manageAddresses" />
+        </Link>
+      </FlexLayout>
+      {/* <CustomerQuery>
+        {({ customer }) => (
+          <Box>
+            <Text>{`${customer.firstname} ${customer.lastname}`}</Text>
+            <Text> {customer.email}</Text>
+          </Box>
+        )}
+      </CustomerQuery> */}
+    </Box>
     <Box mt="md">
       <H2>
         <T id="dashboard.personalInformation" />
