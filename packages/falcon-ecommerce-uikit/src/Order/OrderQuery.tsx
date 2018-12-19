@@ -1,3 +1,6 @@
+import gql from 'graphql-tag';
+import { Query } from '../Query/Query';
+
 export type Order = {
   incrementId: string;
   createdAt?: string;
@@ -13,3 +16,21 @@ export type OrderItem = {
   itemId: number;
   name: string;
 };
+
+export const GET_LAST_ORDER = gql`
+  query LastOrder {
+    lastOrder {
+      incrementId
+      items {
+        itemId
+        name
+      }
+    }
+  }
+`;
+
+export class LastOrderQuery extends Query<Order> {
+  static defaultProps = {
+    query: GET_LAST_ORDER
+  };
+}
