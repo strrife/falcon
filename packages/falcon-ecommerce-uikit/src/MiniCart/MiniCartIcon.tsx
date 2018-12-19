@@ -6,7 +6,7 @@ export const MiniCartIcon: React.SFC<{
   gridArea: string;
   itemsQty: number;
 }> = ({ onClick, gridArea, itemsQty }) => (
-  <Box gridArea={gridArea} onClick={() => onClick()} css={{ cursor: 'pointer', position: 'relative' }}>
+  <Box gridArea={gridArea} onClick={() => onClick()} css={{ cursor: 'pointer', position: 'relative', fontSize: '0px' }}>
     <Icon src="cart" />
     {itemsQty > 0 && (
       <Badge

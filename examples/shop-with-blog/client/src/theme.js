@@ -15,6 +15,7 @@ import Check from 'react-feather/dist/icons/check';
 import CheckCircle from 'react-feather/dist/icons/check-circle';
 import Eye from 'react-feather/dist/icons/eye';
 import EyeOff from 'react-feather/dist/icons/eye-off';
+import Search from 'react-feather/dist/icons/search';
 import { createTheme } from '@deity/falcon-ui';
 
 export const deityGreenTheme = createTheme({
@@ -31,20 +32,60 @@ export const deityGreenTheme = createTheme({
   icons: {
     logo: {
       icon: props => (
-        <svg {...props} viewBox="0 0 175 239">
-          <path
-            transform="translate(0 24)"
-            d="M110.733 145.16v-38.407L77.47 87.549l-33.262 19.204v38.408l33.262 19.204 33.263-19.204zM76.897 215L0 170.605V81.812l76.897-44.397 33.836 19.203V.29l43.06 24.93v145.383L76.897 215z"
-            fill="#A9CF38"
-          />
-          <path
-            transform="translate(0 61)"
-            d="M44.209 69.752v.452L.113 44.745 76.898.415l33.837 19.202v50.135L77.47 50.548z"
-            fill="#CCDE6E"
-          />
-          <path transform="translate(110)" fill="#000" mask="url(#f)" d="M.451.001h.565v193.33H.451z" />
-          <path transform="translate(89 11)" fill="#000" d="M85.431 50.427L.275 1.262.557.773l85.156 49.164z" />
-          <path transform="translate(55 98)" fill="#000" d="M77.694 45.817L.531 1.267l.283-.49 77.162 44.55z" />
+        <svg
+          {...props}
+          width="40px"
+          height="40px"
+          viewBox="0 0 14 16"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        >
+          <defs>
+            <polyline
+              id="path-1"
+              points="7.153 0.004 0.413 3.896 0.413 11.681 7.155 15.574 13.898 11.681 13.898 3.896 7.157 0.004"
+            />
+            <polyline
+              id="path-3"
+              points="7.153 0.004 0.413 3.896 0.413 11.681 7.155 15.574 13.898 11.681 13.898 3.896 7.157 0.004"
+            />
+          </defs>
+          <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+            <g id="Group-9" transform="translate(0.000000, -1.000000)">
+              <polygon
+                id="Fill-1"
+                fill="#A9CF38"
+                points="7.1534 1.0003 0.4134 4.8933 0.4134 12.6783 7.1554 16.5703 13.8974 12.6783 13.8974 4.8933 7.1564 1.0003"
+              />
+              <g id="Group-8" transform="translate(0.000000, 0.996600)">
+                <g id="Group-4">
+                  <mask id="mask-2" fill="white">
+                    <use xlinkHref="#path-1" />
+                  </mask>
+                  <g id="Clip-3" />
+                  <path
+                    d="M11.7011,9.3142 C9.9491,8.2502 8.3071,8.8672 6.6651,9.4782 C7.5221,9.4002 8.3791,9.3222 9.2791,9.2412 C8.0521,12.7992 9.2151,15.8512 10.8601,18.8232 C10.8021,18.8822 10.7431,18.9412 10.6841,19.0002 C9.8201,18.2222 8.9281,17.4722 8.0971,16.6592 C6.3621,14.9642 5.2401,12.9352 4.9001,10.5062 C4.8851,10.3972 4.8591,10.2882 4.8471,10.1772 C4.6631,8.3452 4.8801,8.0432 6.6841,7.6132 C6.8731,7.5682 7.0601,7.5182 7.2491,7.4712 C8.4461,7.1702 8.5341,6.9682 7.9551,5.8672 C6.8271,3.7222 4.9161,2.8372 2.4431,3.3712 C1.5821,3.5572 0.7461,3.8572 0.0001,4.0762 C1.9631,2.5202 5.2981,2.1232 7.6641,3.5292 C8.0851,3.7782 8.4171,4.1732 8.7981,4.4922 C9.0901,4.7362 9.3631,5.0312 9.6981,5.1912 C11.5551,6.0782 12.0941,7.1222 11.7011,9.3142"
+                    id="Fill-2"
+                    fill="#FFFFFF"
+                    mask="url(#mask-2)"
+                  />
+                </g>
+                <g id="Group-7">
+                  <mask id="mask-4" fill="white">
+                    <use xlinkHref="#path-3" />
+                  </mask>
+                  <g id="Clip-6" />
+                  <path
+                    d="M2.4931,4.4182 L5.8271,4.4182 C5.4891,4.9602 5.2671,5.3152 4.9641,5.8012 C4.4671,4.5442 3.4891,4.5482 2.4931,4.4182"
+                    id="Fill-5"
+                    fill="#FFFFFF"
+                    mask="url(#mask-4)"
+                  />
+                </g>
+              </g>
+            </g>
+          </g>
         </svg>
       ),
       stroke: 'none',
@@ -78,6 +119,7 @@ export const deityGreenTheme = createTheme({
     },
     cart: { icon: ShoppingCart },
     user: { icon: User },
+    search: { icon: Search },
     arrowRight: { icon: ChevronRight },
     dropdownArrowDown: {
       icon: ChevronDown,
@@ -129,8 +171,35 @@ export const deityGreenTheme = createTheme({
     }
   },
   components: {
+    appLayout: {
+      px: {
+        md: 'xxl',
+        xs: 'md'
+      }
+    },
+
     icon: {
-      stroke: 'black'
+      stroke: 'black',
+      size: 'md'
+    },
+
+    searchbarLayout: {
+      gridTemplate: '"none none none logo search signIn cart" / 24px 24px 24px 1fr auto auto auto',
+      alignItems: 'center',
+      my: 'none',
+      gridGap: 'sm',
+      py: 'sm',
+      css: {
+        justifyItems: 'center'
+      }
+    },
+
+    bannerLayout: {
+      bgFullWidth: 'secondary'
+    },
+
+    listItem: {
+      fontWeight: 'light'
     },
 
     breadcrumb: {
@@ -147,10 +216,16 @@ export const deityGreenTheme = createTheme({
     },
 
     navbar: {
-      bgFullWidth: 'primary',
+      bgFullWidth: 'secondary',
+      color: 'black',
       css: {
-        zIndex: 2
+        zIndex: 2,
+        justifyContent: 'center'
       }
+    },
+
+    navbarItem: {
+      color: 'black'
     },
 
     sidebar: {
@@ -173,7 +248,7 @@ export const deityGreenTheme = createTheme({
 
     button: {
       px: 'xl',
-      height: 'xl',
+      height: 'lg',
       bg: 'black',
       css: {
         transitionProperty: 'all',

@@ -34,7 +34,7 @@ const bannerLayoutTheme: DefaultThemeProps = {
 export const Banner: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
   <List defaultTheme={bannerLayoutTheme}>
     {items.map(item => (
-      <ListItem p="xs" key={item.name}>
+      <ListItem fontSize="xs" py="xs" ml="sm" key={item.name}>
         <Link as={RouterLink} to={item.url}>
           {item.name}
         </Link>
@@ -93,9 +93,10 @@ const searchBarLayoutTheme: DefaultThemeProps = {
 
 export const Searchbar = () => (
   <Box defaultTheme={searchBarLayoutTheme}>
-    <Link aria-label="DEITY" pl="sm" height="xxl" as={RouterLink} gridArea={SearchBarArea.logo} to="/">
+    <Link aria-label="DEITY" height="xl" as={RouterLink} gridArea={SearchBarArea.logo} to="/">
       <Icon src="logo" />
     </Link>
+    <Icon src="search" gridArea={SearchBarArea.search} />
     <OpenSidebarMutation>
       {openSidebar => (
         <React.Fragment>

@@ -38,11 +38,12 @@ export const defaultBaseTheme = {
   },
 
   fonts: {
-    sans: '"Segoe UI", system-ui, sans-serif',
+    sans: 'Fira Sans, system-ui, sans-serif',
     mono: '"SF Mono", monospace'
   },
 
   fontSizes: {
+    zero: 0,
     xxs: 12,
     xs: 14,
     sm: 16,
