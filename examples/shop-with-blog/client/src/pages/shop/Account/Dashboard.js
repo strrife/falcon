@@ -9,21 +9,7 @@ const Dashboard = () => (
     <H1>
       <T id="dashboard.title" />
     </H1>
-    <Box>
-      <H2>
-        <T id="dashboard.personalInformation" />
-      </H2>
-      <CustomerQuery>
-        {({ customer }) => (
-          <Box>
-            <Text>{`${customer.firstname} ${customer.lastname}`}</Text>
-            <Text> {customer.email}</Text>
-          </Box>
-        )}
-      </CustomerQuery>
-    </Box>
-
-    <Box mt="lg">
+    <Box mt="md">
       <OrdersListQuery variables={{ perPage: 1, page: 1 }}>
         {({ orders: { items } }) => (
           <>
@@ -39,6 +25,20 @@ const Dashboard = () => (
           </>
         )}
       </OrdersListQuery>
+    </Box>
+
+    <Box mt="md">
+      <H2>
+        <T id="dashboard.personalInformation" />
+      </H2>
+      <CustomerQuery>
+        {({ customer }) => (
+          <Box>
+            <Text>{`${customer.firstname} ${customer.lastname}`}</Text>
+            <Text> {customer.email}</Text>
+          </Box>
+        )}
+      </CustomerQuery>
     </Box>
   </Box>
 );

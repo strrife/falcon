@@ -123,6 +123,7 @@
   "dashboard": {
     "title": "Dashboard",
     "recentOrder": "Recent order",
+    "personalInformation": "Personal information",
     "viewAllOrders": "View all"
   },
   "ordersList": {
