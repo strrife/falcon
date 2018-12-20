@@ -16,6 +16,29 @@ export type AddressData = {
   defaultShipping: boolean;
 };
 
+export const GET_ADDRESS = gql`
+  query Address($id: Int!) {
+    address(id: $id) {
+      id
+      firstname
+      lastname
+      telephone
+      city
+      postcode
+      region
+      regionId
+      countryId
+      defaultBilling
+      defaultShipping
+    }
+  }
+`;
+export class AddressQuery extends Query<AddressData> {
+  static defaultProps = {
+    query: GET_ADDRESS
+  };
+}
+
 export type AddressesListData = {
   addresses: {
     items: AddressData[];
