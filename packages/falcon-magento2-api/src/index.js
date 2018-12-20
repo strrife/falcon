@@ -1189,6 +1189,17 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
+   * Request customer addresses
+   * @return {Promise<AddressList>} requested addresses data
+   */
+  async addresses() {
+    const response = await this.get('/customers/me/address');
+    const items = response.data.items || [];
+
+    return { items: items.map(x => this.convertAddressData(x)) };
+  }
+
+  /**
    * Add new customer address
    * @param {object} obj Parent object
    * @param {AddressInput} data - address data

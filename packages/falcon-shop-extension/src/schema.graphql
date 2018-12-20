@@ -15,6 +15,7 @@ extend type Query {
   lastOrder: Order
   orders(query: ShopPageQuery): Orders
   address(id: Int!): Address
+  addresses: AddressList
   customer: Customer
   cmsPage(id: Int, identifier: String): CmsPage
   cmsBlock(identifier: String): CmsBlock
@@ -403,6 +404,10 @@ type Address {
   regionId: Int
   street: [String]
   telephone: String
+}
+
+type AddressList {
+  items: [Address]!
 }
 
 input SignUp {
