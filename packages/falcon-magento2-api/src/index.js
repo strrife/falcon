@@ -1185,7 +1185,10 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Address>} requested address data
    */
   async address(obj, params) {
-    return this.forwardAddressAction(params);
+    const { id } = params;
+    const response = await this.get(`/customers/me/address/${id}`);
+
+    return this.convertAddressData(response.data);
   }
 
   /**
