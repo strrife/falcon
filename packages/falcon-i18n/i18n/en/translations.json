@@ -150,5 +150,20 @@
     "title": "Address Book",
     "defaultBilling": "Invoice address",
     "defaultShipping": "Delivery address"
+  },
+  "editAddress": {
+    "title": "Address Edit",
+    "title_shipping": "Edit the default Delivery Address",
+    "title_billing": "Edit the default Invoice Address",
+    "companyFieldLabel": "Company",
+    "firstnameFieldLabel": "First Name",
+    "lastnameFieldLabel": "Last Name",
+    "telephoneFieldLabel": "Phone Number",
+
+    "streetFieldLabel": "Street",
+    "postcodeFieldLabel": "ZIP Code",
+    "cityFieldLabel": "City",
+    "countryFieldLabel": "Country",
+    "submitButton": "Update Address"
   }
 }
