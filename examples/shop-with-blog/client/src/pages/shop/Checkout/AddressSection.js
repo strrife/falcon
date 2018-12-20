@@ -1,19 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
-import { Box, FlexLayout, Checkbox, Label, Details, DetailsContent, Text, Button } from '@deity/falcon-ui';
+import { FlexLayout, Checkbox, Label, Details, DetailsContent, Button } from '@deity/falcon-ui';
+import { AddressDetails } from '@deity/falcon-ecommerce-uikit';
 import AddressForm from '../components/AddressForm';
 import ErrorList from '../components/ErrorList';
 import SectionHeader from './CheckoutSectionHeader';
 import AddressPicker from './AddressPicker';
-
-const AddressSummary = ({ address = {} }) => (
-  <Box>
-    <Text>{`${address.firstname} ${address.lastname}`}</Text>
-    <Text>{address.street}</Text>
-    <Text>{`${address.postcode} ${address.city}`}</Text>
-  </Box>
-);
 
 class AddressSection extends React.Component {
   constructor(props) {
@@ -71,7 +64,7 @@ class AddressSection extends React.Component {
           onActionClick={onEditRequested}
           editLabel="Edit"
           complete
-          summary={<AddressSummary address={selectedAddress} />}
+          summary={<AddressDetails {...selectedAddress} />}
         />
       );
     } else {
