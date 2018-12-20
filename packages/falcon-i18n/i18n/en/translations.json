@@ -145,5 +145,10 @@
   "orderStatus": {
     "": "N/A",
     "pending": "Pending"
+  },
+  "addressBook": {
+    "title": "Address Book",
+    "defaultBilling": "Invoice address",
+    "defaultShipping": "Delivery address"
   }
 }
