@@ -1219,7 +1219,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Address>} updated address data
    */
   async editCustomerAddress(obj, { input }) {
-    return this.forwardAddressAction({ data: input, method: 'put' });
+    const response = await this.put(`/customers/me/address`, { address: { ...input } });
+
+    return this.convertAddressData(response.data);
   }
 
   /**
