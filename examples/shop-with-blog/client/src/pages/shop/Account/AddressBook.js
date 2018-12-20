@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
-import { H1, H2, Box, Divider } from '@deity/falcon-ui';
+import { H1, H2, Box, Link, Divider } from '@deity/falcon-ui';
 import {
   AddressesListQuery,
   AddressCardLayout,
@@ -30,7 +31,9 @@ const AddressBook = () => (
                         <T id="addressBook.defaultBilling" />
                       </H2>
                       <AddressDetails {...defaultBilling} />
-                      <Box>Edit | Delete</Box>
+                      <Box>
+                        <EditAddressLink id={defaultBilling.id} /> | Delete
+                      </Box>
                     </AddressCardLayout>
                   )}
                   {defaultShipping && (
@@ -39,18 +42,22 @@ const AddressBook = () => (
                         <T id="addressBook.defaultShipping" />
                       </H2>
                       <AddressDetails {...defaultShipping} />
-                      <Box>Edit | Delete</Box>
+                      <Box>
+                        <EditAddressLink id={defaultShipping.id} /> | Delete
+                      </Box>
                     </AddressCardLayout>
                   )}
                 </AddressesListLayout>
                 <Divider my="lg" />
               </>
             )}
-            <AddressesListLayout>
+            <AddressesListLayout gridTemplateColumns={{ md: 'repeat(3, 1fr)' }}>
               {restAddresses.map(x => (
-                <AddressCardLayout>
+                <AddressCardLayout key={x.id}>
                   <AddressDetails {...x} />
-                  <Box>Edit | Delete</Box>
+                  <Box>
+                    <EditAddressLink id={x.id} /> | Delete
+                  </Box>
                 </AddressCardLayout>
               ))}
             </AddressesListLayout>
@@ -62,3 +69,9 @@ const AddressBook = () => (
 );
 
 export default AddressBook;
+
+const EditAddressLink = ({ id }) => (
+  <Link as={RouterLink} to={`/account/address-book/edit/${id}`} flex={1}>
+    Edit
+  </Link>
+);
