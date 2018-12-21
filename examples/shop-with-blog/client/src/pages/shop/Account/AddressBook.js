@@ -6,7 +6,8 @@ import {
   AddressesListQuery,
   AddressCardLayout,
   AddressDetails,
-  AddressesListLayout
+  AddressesListLayout,
+  RemoveAddressMutation
 } from '@deity/falcon-ecommerce-uikit';
 
 const AddressBook = () => (
@@ -56,7 +57,7 @@ const AddressBook = () => (
                 <AddressCardLayout key={x.id}>
                   <AddressDetails {...x} />
                   <Box>
-                    <EditAddressLink id={x.id} /> | Delete
+                    <EditAddressLink id={x.id} /> | <RemoveAddressLink id={x.id} />
                   </Box>
                 </AddressCardLayout>
               ))}
@@ -74,4 +75,14 @@ const EditAddressLink = ({ id }) => (
   <Link as={RouterLink} to={`/account/address-book/edit/${id}`} flex={1}>
     Edit
   </Link>
+);
+
+const RemoveAddressLink = ({ id }) => (
+  <RemoveAddressMutation>
+    {(removeAddress /* , { loading, error } */) => (
+      <Link onClick={() => removeAddress({ variables: { id } })} flex={1}>
+        Delete
+      </Link>
+    )}
+  </RemoveAddressMutation>
 );

@@ -1184,8 +1184,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {number} params.id - address id
    * @return {Promise<Address>} requested address data
    */
-  async address(obj, params) {
-    const { id } = params;
+  async address(obj, { id }) {
     const response = await this.get(`/customers/me/address/${id}`);
 
     return this.convertAddressData(response.data);
@@ -1227,11 +1226,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   /**
    * Remove customer address data
    * @param {object} obj Parent object
-   * @param {EntityIdInput} data - address to remove
+   * @param {object} params - request params
+   * @param {number} params.id - address id
    * @return {boolean} true when removed successfully
    */
-  async removeCustomerAddress(obj, { input }) {
-    return this.forwardAddressAction({ id: input.id, method: 'delete' });
+  async removeCustomerAddress(obj, { id }) {
+    return this.forwardAddressAction({ id, method: 'delete' });
   }
 
   /**

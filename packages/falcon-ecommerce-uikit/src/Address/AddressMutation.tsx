@@ -16,3 +16,17 @@ export class EditAddressMutation extends Mutation {
     refetchQueries: ['Addresses']
   };
 }
+
+export const REMOVE_ADDRESS = gql`
+  mutation RemoveAddress($id: Int!) {
+    removeCustomerAddress(id: $id)
+  }
+`;
+
+export class RemoveAddressMutation extends Mutation {
+  static defaultProps = {
+    mutation: REMOVE_ADDRESS,
+    awaitRefetchQueries: true,
+    refetchQueries: ['Addresses']
+  };
+}

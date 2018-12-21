@@ -38,7 +38,7 @@ extend type Mutation {
   editCustomerAddress(input: AddressInput!): Address
   addCustomerAddress(input: AddressInput!): Address
   estimateShippingMethods(input: EstimateShippingInput!): [ShippingMethod]
-  removeCustomerAddress(input: EntityIdInput!): Boolean
+  removeCustomerAddress(id: Int!): Boolean
   requestCustomerPasswordResetToken(input: EmailInput!): Boolean
   changeCustomerPassword(input: CustomerPassword!): Boolean
   resetCustomerPassword(input: CustomerPasswordReset!): Boolean
@@ -64,10 +64,6 @@ type ShopConfig {
 type ShopStoreEntry {
   name: String
   code: String
-}
-
-input EntityIdInput {
-  id: Int!
 }
 
 input EmailInput {
