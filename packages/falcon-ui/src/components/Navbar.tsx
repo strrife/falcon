@@ -69,7 +69,14 @@ export const NavbarItem = themed({
 
 const NavbarItemMenuInnerDOM: React.SFC<any> = props => (
   <NavbarItemContext.Consumer>
-    {({ open }) => <Box {...props} display={open ? 'block' : 'none'} />}
+    {({ open }) => (
+      <Box
+        {...props}
+        css={{ opacity: open ? 1 : 0, visibility: open ? 'visible' : 'hidden' }}
+        transitionTimingFunction="easeInOut"
+        transitionDuration="standard"
+      />
+    )}
   </NavbarItemContext.Consumer>
 );
 

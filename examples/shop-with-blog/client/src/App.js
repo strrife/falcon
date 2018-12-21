@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
-import { Loader } from '@deity/falcon-ecommerce-uikit';
 import { ThemeProvider } from '@deity/falcon-ui';
 import DynamicRoute from '@deity/falcon-client/src/components/DynamicRoute';
 import isOnline from '@deity/falcon-client/src/components/isOnline';
@@ -15,11 +14,13 @@ import {
   Footer,
   FooterQuery,
   HeaderQuery,
-  LocaleProvider
+  LocaleProvider,
+  Loader
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
 import { ErrorBoundary } from 'src/components/ErrorBoundary';
+import OfflineNotification from 'src/components/OfflineNotification';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
 import { Sidebar, SidebarContainer } from 'src/pages/shop/components/Sidebar';
@@ -74,8 +75,8 @@ const App = ({ online }) => (
           <ThemeProvider theme={props.theme} globalCss={globalCss}>
             <HeadMetaTags />
             <AppLayout>
+              {!online && <OfflineNotification />}
               <HeaderQuery>{data => <Header {...data} />}</HeaderQuery>
-              {!online && <p>you are offline.</p>}
               <ErrorBoundary>
                 <Switch>
                   <Route exact path="/" component={Home} />

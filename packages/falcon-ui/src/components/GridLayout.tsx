@@ -6,7 +6,8 @@ export const GridLayout = themed({
   defaultTheme: {
     gridLayout: {
       display: 'grid',
-      gridGap: 'sm'
+      gridGap: 'sm',
+      position: 'relative'
     }
   }
 });

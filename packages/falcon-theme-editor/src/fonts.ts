@@ -6,6 +6,14 @@ export const fonts = [
     value: '"SF Mono", monospace'
   },
   {
+    value: 'Playfair Display',
+    google: 'Playfair Display:300,400,700'
+  },
+  {
+    value: 'Source Sans Pro, sans-serif',
+    google: 'Source Sans Pro:300,400,700'
+  },
+  {
     value: 'Work Sans',
     google: 'Work Sans:300,400,700'
   },

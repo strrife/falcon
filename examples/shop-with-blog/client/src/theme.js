@@ -25,6 +25,10 @@ export const deityGreenTheme = createTheme({
     black: '#000000'
   },
 
+  fonts: {
+    sans: 'Source Sans Pro, sans-serif'
+  },
+
   fontWeights: {
     bold: 500
   },
@@ -180,7 +184,14 @@ export const deityGreenTheme = createTheme({
 
     icon: {
       stroke: 'black',
-      size: 'md'
+      size: 'md',
+      transitionTimingFunction: 'easeInOut',
+      transitionDuration: 'standard',
+      css: {
+        ':hover': {
+          transform: 'scale(1.20)'
+        }
+      }
     },
 
     searchbarLayout: {
@@ -199,7 +210,15 @@ export const deityGreenTheme = createTheme({
     },
 
     listItem: {
-      fontWeight: 'light'
+      fontWeight: 'light',
+      transitionTimingFunction: 'easeIn',
+      transitionDuration: 'short',
+
+      css: ({ theme }) => ({
+        ':hover': {
+          color: theme.colors.primaryLight
+        }
+      })
     },
 
     breadcrumb: {
@@ -225,7 +244,16 @@ export const deityGreenTheme = createTheme({
     },
 
     navbarItem: {
-      color: 'black'
+      color: 'black',
+      fontSize: 'xs',
+      transitionTimingFunction: 'easeIn',
+      transitionDuration: 'short',
+
+      css: ({ theme }) => ({
+        ':hover': {
+          color: theme.colors.primaryLight
+        }
+      })
     },
 
     sidebar: {
