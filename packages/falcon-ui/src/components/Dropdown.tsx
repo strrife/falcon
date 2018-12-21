@@ -114,9 +114,9 @@ export const DropdownMenu = themed({
   }
 });
 
-const DropdownMenuItemInnerDOM: React.SFC<{ value: any }> = props => (
+const DropdownMenuItemInnerDOM: React.SFC<any> = props => (
   <DropdownContext.Consumer>
-    {({ onChange }) => <Box as="li" {...props} onClick={() => onChange && onChange(props.value)} />}
+    {({ onChange }) => <Box as="li" {...props} onClick={onChange && onChange(props.value)} />}
   </DropdownContext.Consumer>
 );
 
