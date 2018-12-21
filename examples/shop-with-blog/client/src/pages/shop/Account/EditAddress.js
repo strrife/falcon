@@ -4,9 +4,9 @@ import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
 import { H1, Box, Button, FlexLayout } from '@deity/falcon-ui';
 import {
+  toGridTemplate,
   FormField,
   Form,
-  toGridTemplate,
   FormErrorSummary,
   AddressQuery,
   EditAddressMutation
@@ -44,7 +44,7 @@ const editAddressFormLayout = {
   }
 };
 
-const EditAddress = ({ match }) => {
+const EditAddress = ({ match, history }) => {
   const id = parseInt(match.params.id, 10);
 
   return (
@@ -64,26 +64,29 @@ const EditAddress = ({ match }) => {
                   initialValues={{
                     firstname: address.firstname,
                     lastname: address.lastname,
-                    street: (Array.isArray(address.street) && address.street[0]) || '',
+                    street: address.street[0],
                     postcode: address.postcode,
                     city: address.city,
-                    country: address.country,
+                    countryId: address.countryId,
+                    company: address.company,
                     telephone: address.telephone
                   }}
                   onSubmit={values =>
                     editAddress({
                       variables: {
                         input: {
+                          id,
                           firstname: values.firstname,
                           lastname: values.lastname,
                           street: [values.street],
                           postcode: values.postcode,
                           city: values.city,
-                          country: values.country,
+                          countryId: values.countryId,
+                          company: values.company,
                           telephone: values.telephone
                         }
                       }
-                    })
+                    }).then(() => history.push('/account/address-book'))
                   }
                 >
                   {() => (
@@ -94,7 +97,7 @@ const EditAddress = ({ match }) => {
                         gridGap="sm"
                         css={{ alignContent: 'start' }}
                       >
-                        <FormField name="company" required />
+                        <FormField name="company" />
                         <FormField name="firstname" required />
                         <FormField name="lastname" required />
                         <FormField name="telephone" required />
@@ -108,12 +111,12 @@ const EditAddress = ({ match }) => {
                         <FormField name="street" required />
                         <FormField name="postcode" required />
                         <FormField name="city" required />
-                        <FormField name="country" required />
+                        <FormField name="countryId" required />
                       </Box>
 
                       <FlexLayout justifyContent="space-between" alignItems="center" mt="md">
                         <Button type="submit" variant={loading ? 'loader' : undefined}>
-                          <T id="editAddress.saveButton" />
+                          <T id="editAddress.submitButton" />
                         </Button>
                       </FlexLayout>
                       <FormErrorSummary errors={error && [error.message]} />

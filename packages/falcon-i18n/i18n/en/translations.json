@@ -163,7 +163,7 @@
     "streetFieldLabel": "Street",
     "postcodeFieldLabel": "ZIP Code",
     "cityFieldLabel": "City",
-    "countryFieldLabel": "Country",
+    "countryIdFieldLabel": "Country",
     "submitButton": "Update Address"
   }
 }
