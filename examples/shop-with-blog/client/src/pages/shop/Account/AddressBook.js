@@ -24,7 +24,7 @@ const AddressBook = () => (
           <>
             {(defaultBilling || defaultShipping) && (
               <>
-                <AddressesListLayout>
+                <AddressesListLayout key={defaultBilling.id}>
                   {defaultBilling && (
                     <AddressCardLayout>
                       <H2>
@@ -37,7 +37,7 @@ const AddressBook = () => (
                     </AddressCardLayout>
                   )}
                   {defaultShipping && (
-                    <AddressCardLayout>
+                    <AddressCardLayout key={defaultShipping.id}>
                       <H2>
                         <T id="addressBook.defaultShipping" />
                       </H2>
