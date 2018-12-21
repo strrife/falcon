@@ -1,0 +1,10 @@
+{
+  "name": "@deity/falcon-adyen-api",
+  "version": "0.0.1",
+  "license": "OSL-3.0",
+  "repository": "https://github.com/deity-io/falcon/tree/master/packages/payment/falcon-adyen-api",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "src/index.js"
+}

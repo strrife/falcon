@@ -1,0 +1,10 @@
+{
+  "name": "@deity/falcon-payment-env",
+  "version": "0.0.1",
+  "license": "OSL-3.0",
+  "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-payment-env",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "src/index.js"
+}

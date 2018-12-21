@@ -1,0 +1,10 @@
+{
+  "name": "@deity/falcon-paypal-plugin",
+  "version": "0.0.1",
+  "license": "OSL-3.0",
+  "repository": "https://github.com/deity-io/falcon/tree/master/packages/payment/falcon-paypal-plugin",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "src/index.js"
+}

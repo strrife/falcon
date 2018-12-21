@@ -1,0 +1,15 @@
+{
+  "name": "@deity/falcon-payment-extension",
+  "version": "0.0.1",
+  "license": "OSL-3.0",
+  "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-payment-extension",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "src/index.js",
+  "peerDependencies": {
+    "@deity/falcon-shop-extension": "^0.1.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
