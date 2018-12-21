@@ -121,8 +121,8 @@ const EditAddress = ({ match, history }) => {
                           render={({ field, form }) => (
                             <Box>
                               <Label htmlFor={`${id}-${field.name}`}>Country *</Label>
-                              <CountriesQuery>
-                                {({ countries }) => (
+                              <CountriesQuery passLoading>
+                                {({ countries = { items: [] } }) => (
                                   <CountrySelector
                                     items={countries.items}
                                     value={field.value}
