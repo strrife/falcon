@@ -393,6 +393,7 @@ type Customer {
 
 type Address {
   id: Int!
+  company: String
   firstname: String!
   lastname: String!
   street: [String]!
@@ -402,6 +403,7 @@ type Address {
   region: String
   regionId: Int
   telephone: String
+  fax: String
   defaultBilling: Boolean!
   defaultShipping: Boolean!
 }

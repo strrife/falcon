@@ -3,15 +3,17 @@ import { Query } from '../Query';
 
 export type AddressData = {
   id: number;
+  company?: string;
   firstname: string;
   lastname: string;
+  telephone?: string;
+  fax?: string;
   street: string[];
   postcode: string;
   city: string;
   region?: string;
   regionId?: number;
   countryId: string;
-  telephone?: string;
   defaultBilling: boolean;
   defaultShipping: boolean;
 };
@@ -23,11 +25,13 @@ export const GET_ADDRESS = gql`
       firstname
       lastname
       telephone
+      street
       city
       postcode
       region
       regionId
       countryId
+      company
       defaultBilling
       defaultShipping
     }
@@ -53,11 +57,13 @@ export const GET_ADDRESSES_LIST = gql`
         firstname
         lastname
         telephone
+        street
         city
         postcode
         region
         regionId
         countryId
+        company
         defaultBilling
         defaultShipping
       }
