@@ -15,6 +15,7 @@ export * from './SignOut';
 export * from './SignUp';
 export * from './Customer';
 export * from './Address';
+export * from './Countries';
 export * from './Blog';
 export * from './Query';
 export * from './Locale';
