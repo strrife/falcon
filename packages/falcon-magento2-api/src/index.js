@@ -1231,7 +1231,10 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {boolean} true when removed successfully
    */
   async removeCustomerAddress(obj, { id }) {
-    return this.forwardAddressAction({ id, method: 'delete' });
+    // return this.forwardAddressAction({ id, method: 'delete' });
+    const response = await this.delete(`/customers/me/address/${id}`);
+
+    return response.data;
   }
 
   /**
