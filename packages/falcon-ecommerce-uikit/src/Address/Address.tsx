@@ -11,22 +11,19 @@ export const addressDetailsTheme: DefaultThemeProps = {
     color: 'secondaryText'
   }
 };
-export const AddressDetails: React.SFC<AddressData> = props => (
-  <Box defaultTheme={addressDetailsTheme}>
-    <Text fontWeight="bold" color="secondaryText" mb="xs">{`${props.firstname} ${props.lastname}`}</Text>
-    {props.street && (
-      <Box>
-        {props.street.map(x => (
-          <Text>{x}</Text>
-        ))}
-      </Box>
-    )}
-    <Text>{`${props.postcode} ${props.city}`}</Text>
-    {/* <Text>{`${props.regionId} ${props.region}`}</Text> */}
-    <Text>{props.countryId}</Text>
-    <Text>{props.telephone}</Text>
-  </Box>
-);
+export const AddressDetails: React.SFC<AddressData> = props => {
+  const { company, firstname, lastname, street, postcode, city, countryId, telephone } = props;
+
+  return (
+    <Box defaultTheme={addressDetailsTheme}>
+      {company && <Text fontWeight="bold" color="secondaryText">{`${company}`}</Text>}
+      <Text fontWeight="bold" color="secondaryText" mb="xs">{`${firstname} ${lastname}`}</Text>
+      {street && street.map(x => <Text id={x}>{x}</Text>)}
+      <Text>{`${postcode} ${city}, ${countryId}`}</Text>
+      {telephone && <Text>{telephone}</Text>}
+    </Box>
+  );
+};
 
 export const AddressCardLayout = themed({
   tag: 'li',
