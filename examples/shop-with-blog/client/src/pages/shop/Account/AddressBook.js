@@ -31,10 +31,7 @@ const AddressBook = () => (
                       <H2>
                         <T id="addressBook.defaultBilling" />
                       </H2>
-                      <AddressDetails {...defaultBilling} />
-                      <Box>
-                        <EditAddressLink id={defaultBilling.id} /> | Delete
-                      </Box>
+                      <AddressCardContent address={defaultBilling} />
                     </AddressCardLayout>
                   )}
                   {defaultShipping && (
@@ -42,10 +39,7 @@ const AddressBook = () => (
                       <H2>
                         <T id="addressBook.defaultShipping" />
                       </H2>
-                      <AddressDetails {...defaultShipping} />
-                      <Box>
-                        <EditAddressLink id={defaultShipping.id} /> | Delete
-                      </Box>
+                      <AddressCardContent address={defaultShipping} />
                     </AddressCardLayout>
                   )}
                 </AddressesListLayout>
@@ -55,10 +49,7 @@ const AddressBook = () => (
             <AddressesListLayout gridTemplateColumns={{ md: 'repeat(3, 1fr)' }}>
               {restAddresses.map(x => (
                 <AddressCardLayout key={x.id}>
-                  <AddressDetails {...x} />
-                  <Box>
-                    <EditAddressLink id={x.id} /> | <RemoveAddressLink id={x.id} />
-                  </Box>
+                  <AddressCardContent address={x} />
                 </AddressCardLayout>
               ))}
             </AddressesListLayout>
@@ -70,6 +61,15 @@ const AddressBook = () => (
 );
 
 export default AddressBook;
+
+const AddressCardContent = ({ address }) => (
+  <>
+    <AddressDetails {...address} />
+    <Box>
+      <EditAddressLink id={address.id} /> | <RemoveAddressLink id={address.id} />
+    </Box>
+  </>
+);
 
 const EditAddressLink = ({ id }) => (
   <Link as={RouterLink} to={`/account/address-book/edit/${id}`} flex={1}>
