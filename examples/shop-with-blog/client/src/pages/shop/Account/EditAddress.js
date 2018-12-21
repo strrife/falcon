@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik, Field, ErrorMessage } from 'formik';
 import { T } from '@deity/falcon-i18n';
-import { H1, Box, Label, Text, Button, FlexLayout } from '@deity/falcon-ui';
+import { H1, Box, Label, Text, Button, FlexLayout, Checkbox } from '@deity/falcon-ui';
 import {
   toGridTemplate,
   FormField,
@@ -70,7 +70,9 @@ const EditAddress = ({ match, history }) => {
                     city: address.city,
                     countryId: address.countryId,
                     company: address.company,
-                    telephone: address.telephone
+                    telephone: address.telephone,
+                    defaultBilling: address.defaultBilling,
+                    defaultShipping: address.defaultShipping
                   }}
                   onSubmit={values =>
                     editAddress({
@@ -84,7 +86,9 @@ const EditAddress = ({ match, history }) => {
                           city: values.city,
                           countryId: values.countryId,
                           company: values.company,
-                          telephone: values.telephone
+                          telephone: values.telephone,
+                          defaultBilling: values.defaultBilling,
+                          defaultShipping: values.defaultShipping
                         }
                       }
                     }).then(() => history.push('/account/address-book'))
@@ -126,6 +130,54 @@ const EditAddress = ({ match, history }) => {
                                   />
                                 )}
                               </CountriesQuery>
+                              <ErrorMessage
+                                name={field.name}
+                                render={msg => (
+                                  <Text fontSize="xxs" color="error">
+                                    {msg}
+                                  </Text>
+                                )}
+                              />
+                            </Box>
+                          )}
+                        />
+                        <Field
+                          name="defaultBilling"
+                          render={({ field, form }) => (
+                            <Box>
+                              <FlexLayout mb="md">
+                                <Checkbox
+                                  id={`${id}-${field.name}`}
+                                  size="sm"
+                                  checked={field.value}
+                                  onChange={e => form.setFieldValue(field.name, e.target.checked)}
+                                />
+                                <Label htmlFor={`${id}-${field.name}`}>defaultBilling</Label>
+                              </FlexLayout>
+                              <ErrorMessage
+                                name={field.name}
+                                render={msg => (
+                                  <Text fontSize="xxs" color="error">
+                                    {msg}
+                                  </Text>
+                                )}
+                              />
+                            </Box>
+                          )}
+                        />
+                        <Field
+                          name="defaultShipping"
+                          render={({ field, form }) => (
+                            <Box>
+                              <FlexLayout mb="md">
+                                <Checkbox
+                                  id={`${id}-${field.name}`}
+                                  size="sm"
+                                  checked={field.value}
+                                  onChange={e => form.setFieldValue(field.name, e.target.checked)}
+                                />
+                                <Label htmlFor={`${id}-${field.name}`}>defaultShipping</Label>
+                              </FlexLayout>
                               <ErrorMessage
                                 name={field.name}
                                 render={msg => (
