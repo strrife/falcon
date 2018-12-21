@@ -57,7 +57,7 @@ export const Dropdown = themed({
   }
 });
 
-const DropdownLabelInnerDOM: React.SFC<any> = ({ children, ...rest }) => (
+const DropdownLabelInnerDOM: React.SFC<React.Props<any>> = ({ children, ...rest }) => (
   <DropdownContext.Consumer>
     {({ open }) => (
       <Box {...rest}>
@@ -86,7 +86,7 @@ export const DropdownLabel = themed({
   }
 });
 
-const DropdownMenuInnerDOM: React.SFC<any> = props => (
+const DropdownMenuInnerDOM: React.SFC<React.Props<any>> = props => (
   <DropdownContext.Consumer>
     {({ open }) => (open ? <Box as="ul" {...props} display={open ? 'block' : 'none'} /> : null)}
   </DropdownContext.Consumer>
@@ -114,9 +114,9 @@ export const DropdownMenu = themed({
   }
 });
 
-const DropdownMenuItemInnerDOM: React.SFC<any> = props => (
+const DropdownMenuItemInnerDOM: React.SFC<{ value: any }> = props => (
   <DropdownContext.Consumer>
-    {({ onChange }) => <Box as="li" {...props} onClick={onChange && onChange(props.value)} />}
+    {({ onChange }) => <Box as="li" {...props} onClick={() => onChange && onChange(props.value)} />}
   </DropdownContext.Consumer>
 );
 
