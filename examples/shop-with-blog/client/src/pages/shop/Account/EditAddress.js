@@ -1,15 +1,16 @@
 import React from 'react';
-// import { Link as RouterLink } from 'react-router-dom';
-import { Formik } from 'formik';
+import { Formik, Field, ErrorMessage } from 'formik';
 import { T } from '@deity/falcon-i18n';
-import { H1, Box, Button, FlexLayout } from '@deity/falcon-ui';
+import { H1, Box, Label, Text, Button, FlexLayout } from '@deity/falcon-ui';
 import {
   toGridTemplate,
   FormField,
   Form,
   FormErrorSummary,
   AddressQuery,
-  EditAddressMutation
+  EditAddressMutation,
+  CountriesQuery,
+  CountrySelector
 } from '@deity/falcon-ecommerce-uikit';
 
 const AddressFormArea = {
@@ -100,7 +101,7 @@ const EditAddress = ({ match, history }) => {
                         <FormField name="company" />
                         <FormField name="firstname" required />
                         <FormField name="lastname" required />
-                        <FormField name="telephone" required />
+                        <FormField name="telephone" />
                       </Box>
                       <Box
                         gridArea={AddressFormArea.address}
@@ -111,7 +112,31 @@ const EditAddress = ({ match, history }) => {
                         <FormField name="street" required />
                         <FormField name="postcode" required />
                         <FormField name="city" required />
-                        <FormField name="countryId" required />
+                        <Field
+                          name="countryId"
+                          render={({ field, form }) => (
+                            <Box>
+                              <Label htmlFor={`${id}-${field.name}`}>Country *</Label>
+                              <CountriesQuery>
+                                {({ countries }) => (
+                                  <CountrySelector
+                                    items={countries.items}
+                                    value={field.value}
+                                    onChange={x => form.setFieldValue(field.name, x)}
+                                  />
+                                )}
+                              </CountriesQuery>
+                              <ErrorMessage
+                                name={field.name}
+                                render={msg => (
+                                  <Text fontSize="xxs" color="error">
+                                    {msg}
+                                  </Text>
+                                )}
+                              />
+                            </Box>
+                          )}
+                        />
                       </Box>
 
                       <FlexLayout justifyContent="space-between" alignItems="center" mt="md">
