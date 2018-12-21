@@ -18,7 +18,7 @@ export const AddressDetails: React.SFC<AddressData> = props => {
     <Box defaultTheme={addressDetailsTheme}>
       {company && <Text fontWeight="bold" color="secondaryText">{`${company}`}</Text>}
       <Text fontWeight="bold" color="secondaryText" mb="xs">{`${firstname} ${lastname}`}</Text>
-      {street && street.map(x => <Text id={x}>{x}</Text>)}
+      {street && street.map(x => <Text key={x}>{x}</Text>)}
       <Text>{`${postcode} ${city}, ${countryId}`}</Text>
       {telephone && <Text>{telephone}</Text>}
     </Box>
