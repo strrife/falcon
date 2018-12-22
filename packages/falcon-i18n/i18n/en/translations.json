@@ -148,8 +148,9 @@
   },
   "addressBook": {
     "title": "Address Book",
-    "defaultBilling": "Invoice address",
-    "defaultShipping": "Delivery address"
+    "defaultBilling": "Default Invoice Address",
+    "defaultShipping": "Default Delivery Address",
+    "defaultBillingAndShipping": "Default Address"
   },
   "editAddress": {
     "title": "Address Edit",
