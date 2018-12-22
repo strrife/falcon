@@ -20,27 +20,40 @@ const AddressBook = () => (
         const defaultBilling = items.find(x => x.defaultBilling) || {};
         const defaultShipping = items.find(x => x.defaultShipping) || {};
         const restAddresses = items.filter(x => !x.defaultBilling && !x.defaultShipping) || [];
+        const anyDefaults = defaultBilling || defaultShipping;
+        const defaultsEqual = (defaultBilling && defaultBilling.id) === (defaultShipping && defaultShipping.id);
 
         return (
           <>
-            {(defaultBilling || defaultShipping) && (
+            {anyDefaults && (
               <>
                 <AddressesListLayout>
-                  {defaultBilling && (
+                  {defaultsEqual ? (
                     <AddressCardLayout>
                       <H2>
-                        <T id="addressBook.defaultBilling" />
+                        <T id="addressBook.defaultBillingAndShipping" />
                       </H2>
                       <AddressCardContent address={defaultBilling} />
                     </AddressCardLayout>
-                  )}
-                  {defaultShipping && (
-                    <AddressCardLayout>
-                      <H2>
-                        <T id="addressBook.defaultShipping" />
-                      </H2>
-                      <AddressCardContent address={defaultShipping} />
-                    </AddressCardLayout>
+                  ) : (
+                    <>
+                      {defaultBilling && (
+                        <AddressCardLayout>
+                          <H2>
+                            <T id="addressBook.defaultBilling" />
+                          </H2>
+                          <AddressCardContent address={defaultBilling} />
+                        </AddressCardLayout>
+                      )}
+                      {defaultShipping && (
+                        <AddressCardLayout>
+                          <H2>
+                            <T id="addressBook.defaultShipping" />
+                          </H2>
+                          <AddressCardContent address={defaultShipping} />
+                        </AddressCardLayout>
+                      )}
+                    </>
                   )}
                 </AddressesListLayout>
                 <Divider my="lg" />
