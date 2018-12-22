@@ -9,16 +9,16 @@ type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type ApolloFetchMore<TData, TVariables> = QueryResult<TData, TVariables>['fetchMore'];
 export type FetchMore<TData, TVariables> = (data: TData, fetchMore: ApolloFetchMore<TData, TVariables>) => any;
 
-export type QueryRenderProps<TData> = TData & {
+export type QueryRenderProps<TData = any> = TData & {
   loading: boolean;
   networkStatus: NetworkStatus;
   fetchMore: (() => any) | undefined;
 };
 
-export type QueryProps<TData, TVariables> = Omit<ApolloQueryProps<TData, TVariables>, 'children'> & {
-  children: (result: QueryRenderProps<{} | TData>) => React.ReactNode;
+export type QueryProps<TData = any, TVariables = any> = Omit<ApolloQueryProps<TData, TVariables>, 'children'> & {
+  children: (result: QueryRenderProps<TData>) => React.ReactNode;
   fetchMore?: FetchMore<TData, TVariables>;
-  passLoading: boolean;
+  passLoading?: boolean;
 };
 
 export class Query<TData = any, TVariables = OperationVariables> extends React.Component<
@@ -66,7 +66,7 @@ export class Query<TData = any, TVariables = OperationVariables> extends React.C
           }
 
           return children({
-            ...(data || {}),
+            ...data!,
             loading,
             networkStatus,
             fetchMore: fetchMore ? () => fetchMore(data!, apolloFetchMore) : undefined
