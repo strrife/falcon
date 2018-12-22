@@ -7,7 +7,11 @@
     "access": "public"
   },
   "main": "src/index.js",
-  "dependencies": {
-    "react-credit-cards": "0.7.0"
+  "dependencies": {},
+  "devDependencies": {
+    "@deity/falcon-payment-plugin": "^0.0.1"
+  },
+  "peerDependencies": {
+    "@deity/falcon-payment-plugin": "^0.0.1"
   }
 }

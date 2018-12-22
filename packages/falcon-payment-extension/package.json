@@ -7,9 +7,13 @@
     "access": "public"
   },
   "main": "src/index.js",
-  "peerDependencies": {
+  "dependencies": {},
+  "devDependencies": {
+    "@deity/falcon-server-env": "^0.1.0",
     "@deity/falcon-shop-extension": "^0.1.0"
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "peerDependencies": {
+    "@deity/falcon-server-env": "^0.1.0",
+    "@deity/falcon-shop-extension": "^0.1.0"
+  }
 }
