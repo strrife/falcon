@@ -887,7 +887,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       await this.post('/customers', customerData);
 
       if (autoSignIn) {
-        return this.signIn({ email, password });
+        return this.signIn(obj, { input: { email, password } });
       }
 
       return true;
