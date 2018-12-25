@@ -5,6 +5,7 @@ import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import fetch from 'node-fetch';
 import deepMerge from 'deepmerge';
+import { resolvers } from './resolvers';
 
 /**
  * @typedef {object} FalconApolloClientConfig
@@ -37,6 +38,7 @@ export function ApolloClient(config = {}) {
   const { httpLink, connectToDevTools, ...restApolloClientConfig } = apolloClientConfig;
   const addTypename = false; // disabling 'addTypename' option to avoid manual setting "__typename" field
 
+  clientState.resolvers = deepMerge(clientState.resolvers, resolvers);
   const cache = new InMemoryCache({ addTypename }).restore(initialState);
   const apolloClientStateLink = withClientState({ cache, ...clientState });
   const apolloHttpLink = createHttpLink({ ...httpLink, fetch, credentials: 'include', headers });
