@@ -15,6 +15,7 @@ const { resolve: resolvePath } = require('path');
 const { readFileSync } = require('fs');
 const { codes } = require('@deity/falcon-errors');
 const { Events, Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
+const GraphQLJSON = require('graphql-type-json');
 const DynamicRouteResolver = require('./resolvers/DynamicRouteResolver');
 
 const BaseSchema = readFileSync(resolvePath(__dirname, './schema.graphql'), 'utf8');
@@ -96,7 +97,8 @@ class FalconServer {
         },
         BackendConfig: {
           activeLocale: (_, __, { session: _session }) => _session.locale
-        }
+        },
+        JSON: GraphQLJSON
       },
       tracing: this.config.debug,
       playground: this.config.debug && {
