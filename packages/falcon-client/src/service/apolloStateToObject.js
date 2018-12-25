@@ -11,18 +11,19 @@ export const apolloStateToObject = (state, key) => {
     if (!vValue) {
       return;
     }
-    if (typeof vValue === 'object' && vValue.generated && vValue.id) {
-      value[vKey] = apolloStateToObject(state, vValue.id);
-    }
-    if (vValue.type === 'json') {
-      value[vKey] = vValue.json;
-    }
     if (Array.isArray(vValue)) {
+      value[vKey] = [];
       vValue.forEach((vv, vi) => {
         if (vv && typeof vv === 'object' && vv.generated && vv.id) {
           value[vKey][vi] = apolloStateToObject(state, vv.id);
         }
       });
+    } else if (typeof vValue === 'object') {
+      if (vValue.generated && vValue.id) {
+        value[vKey] = apolloStateToObject(state, vValue.id);
+      } else if (vValue.type === 'json') {
+        value[vKey] = vValue.json;
+      }
     }
   });
   return value;

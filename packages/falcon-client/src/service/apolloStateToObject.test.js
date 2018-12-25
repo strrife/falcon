@@ -33,6 +33,27 @@ describe('ApolloClient', () => {
           ]
         }
       });
+      // Source object should not be changed
+      expect(testStateObj).toEqual({
+        root: {
+          foo: {
+            generated: true,
+            id: 'foo'
+          }
+        },
+        foo: {
+          bar: true,
+          nested: [
+            {
+              generated: true,
+              id: 'nested.0'
+            }
+          ]
+        },
+        'nested.0': {
+          foo: 'bar'
+        }
+      });
     });
 
     it('Should correctly process Array value', () => {
