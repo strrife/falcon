@@ -11,12 +11,26 @@ describe('ApolloClient', () => {
           }
         },
         foo: {
-          bar: true
+          bar: true,
+          nested: [
+            {
+              generated: true,
+              id: 'nested.0'
+            }
+          ]
+        },
+        'nested.0': {
+          foo: 'bar'
         }
       };
       expect(apolloStateToObject(testStateObj, 'root')).toEqual({
         foo: {
-          bar: true
+          bar: true,
+          nested: [
+            {
+              foo: 'bar'
+            }
+          ]
         }
       });
     });

@@ -8,11 +8,21 @@ export const apolloStateToObject = (state, key) => {
   const value = Object.assign({}, state[key]);
   Object.keys(value).forEach(vKey => {
     const vValue = value[vKey];
-    if (vValue && typeof vValue === 'object' && vValue.generated && vValue.id) {
+    if (!vValue) {
+      return;
+    }
+    if (typeof vValue === 'object' && vValue.generated && vValue.id) {
       value[vKey] = apolloStateToObject(state, vValue.id);
     }
-    if (vValue && vValue.type === 'json') {
+    if (vValue.type === 'json') {
       value[vKey] = vValue.json;
+    }
+    if (Array.isArray(vValue)) {
+      vValue.forEach((vv, vi) => {
+        if (vv && typeof vv === 'object' && vv.generated && vv.id) {
+          value[vKey][vi] = apolloStateToObject(state, vv.id);
+        }
+      });
     }
   });
   return value;

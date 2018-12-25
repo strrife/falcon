@@ -2806,6 +2806,10 @@ address@1.0.3, address@^1.0.1:
   resolved "https://registry.npmjs.org/address/-/address-1.0.3.tgz#b5f50631f8d6cec8bd20c963963afb55e06cbce9"
   integrity sha512-z55ocwKBRLryBs394Sm3ushTtBeg6VAeuku7utSoSnsJKvKcnXFIyC6vh27n3rXyxSgkJBBCAvyOn7gSUcTYjg==
 
+"adyen-cse-web@git+https://github.com/Adyen/adyen-cse-web.git#v0.1.24":
+  version "0.1.24"
+  resolved "git+https://github.com/Adyen/adyen-cse-web.git#9fb78cbbdaf72fa796cb2f5f6d10f3cda343ed58"
+
 agent-base@4, agent-base@^4.1.0, agent-base@~4.2.0:
   version "4.2.1"
   resolved "https://registry.npmjs.org/agent-base/-/agent-base-4.2.1.tgz#d89e5999f797875674c07d87f260fc41e83e8ca9"
