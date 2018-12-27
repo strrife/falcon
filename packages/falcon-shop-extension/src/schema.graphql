@@ -35,8 +35,8 @@ extend type Mutation {
   signIn(input: SignIn!): Boolean
   signOut: Boolean
   editCustomerData(input: CustomerInput!): Customer
-  editCustomerAddress(input: AddressInput!): Address
-  addCustomerAddress(input: AddressInput!): Address
+  editCustomerAddress(input: EditAddressInput!): Address
+  addCustomerAddress(input: AddAddressInput!): Address
   estimateShippingMethods(input: EstimateShippingInput!): [ShippingMethod]
   removeCustomerAddress(id: Int!): Boolean
   requestCustomerPasswordResetToken(input: EmailInput!): Boolean
@@ -134,6 +134,35 @@ input AddressInput {
   regionId: Int
   street: [String]
   telephone: String
+}
+
+input AddAddressInput {
+  company: String
+  firstname: String!
+  lastname: String!
+  telephone: String
+  street: [String]
+  postcode: String!
+  city: String!
+  countryId: String!
+  defaultBilling: Boolean
+  defaultShipping: Boolean
+  regionId: Int
+}
+
+input EditAddressInput {
+  id: Int!
+  company: String
+  firstname: String!
+  lastname: String!
+  telephone: String
+  street: [String]
+  postcode: String!
+  city: String!
+  countryId: String!
+  defaultBilling: Boolean
+  defaultShipping: Boolean
+  regionId: Int
 }
 
 input CustomerPassword {

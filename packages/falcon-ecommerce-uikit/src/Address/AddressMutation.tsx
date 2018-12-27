@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
 export const EDIT_ADDRESS = gql`
-  mutation EditAddress($input: AddressInput!) {
+  mutation EditAddress($input: EditAddressInput!) {
     editCustomerAddress(input: $input) {
       id
     }
@@ -17,7 +17,7 @@ export class EditAddressMutation extends Mutation {
 }
 
 export const ADD_ADDRESS = gql`
-  mutation AddAddress($input: AddressInput!) {
+  mutation AddAddress($input: AddAddressInput!) {
     addCustomerAddress(input: $input) {
       id
     }
