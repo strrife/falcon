@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T, I18n } from '@deity/falcon-i18n';
-import { H1, H2, Box, Link, Button, Divider, FlexLayout } from '@deity/falcon-ui';
+import { H1, H2, Box, Link, Icon, Button, Divider, FlexLayout } from '@deity/falcon-ui';
 import {
   AddressesListQuery,
   AddressCardLayout,
@@ -89,35 +89,39 @@ export default AddressBook;
 const AddressCardContent = ({ address }) => (
   <>
     <AddressDetails {...address} />
-    <Box>
-      <EditAddressLink id={address.id} /> | <RemoveAddressLink id={address.id} />
-    </Box>
+    <FlexLayout flexDirection="row" mt="xs">
+      <EditAddressLink id={address.id} />
+      <Divider variant="horizontal" mx="xs" />
+      <RemoveAddressLink id={address.id} />
+    </FlexLayout>
   </>
 );
 
 const EditAddressLink = ({ id }) => (
-  <Link as={RouterLink} to={`/account/address-book/edit/${id}`} flex={1}>
-    Edit
+  <Link as={RouterLink} to={`/account/address-book/edit/${id}`}>
+    <T id="addressBook.editButton" />
   </Link>
 );
 
 const RemoveAddressLink = ({ id }) => (
-  <I18n>
-    {t => (
-      <RemoveAddressMutation>
-        {(removeAddress /* , { loading, error } */) => (
-          <Link
-            onClick={() => {
-              if (window.confirm(t('addressBook.removeConfirmationMessage'))) {
-                removeAddress({ variables: { id } });
-              }
-            }}
-            flex={1}
-          >
-            {t('addressBook.removeButton')}
-          </Link>
+  <RemoveAddressMutation>
+    {(removeAddress, { loading }) => (
+      <I18n>
+        {t => (
+          <>
+            <Link
+              onClick={() => {
+                if (window.confirm(t('addressBook.removeConfirmationMessage'))) {
+                  removeAddress({ variables: { id } });
+                }
+              }}
+            >
+              {t('addressBook.removeButton')}
+            </Link>
+            {loading && <Icon ml="xs" src="loader" size="md" />}
+          </>
         )}
-      </RemoveAddressMutation>
+      </I18n>
     )}
-  </I18n>
+  </RemoveAddressMutation>
 );
