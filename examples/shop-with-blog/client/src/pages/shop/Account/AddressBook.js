@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { T } from '@deity/falcon-i18n';
+import { T, I18n } from '@deity/falcon-i18n';
 import { H1, H2, Box, Link, Button, Divider, FlexLayout } from '@deity/falcon-ui';
 import {
   AddressesListQuery,
@@ -17,55 +17,61 @@ const AddressBook = () => (
     </H1>
     <AddressesListQuery>
       {({ addresses: { items } }) => {
-        const defaultBilling = items.find(x => x.defaultBilling) || {};
-        const defaultShipping = items.find(x => x.defaultShipping) || {};
+        const defaultBilling = items.find(x => x.defaultBilling);
+        const defaultShipping = items.find(x => x.defaultShipping);
         const restAddresses = items.filter(x => !x.defaultBilling && !x.defaultShipping) || [];
         const anyDefaults = defaultBilling || defaultShipping;
         const defaultsEqual = (defaultBilling && defaultBilling.id) === (defaultShipping && defaultShipping.id);
+        const anyRest = restAddresses.length > 0;
 
         return (
           <>
             {anyDefaults && (
-              <>
-                <AddressesListLayout>
-                  {defaultsEqual ? (
-                    <AddressCardLayout>
-                      <H2>
-                        <T id="addressBook.defaultBillingAndShipping" />
-                      </H2>
-                      <AddressCardContent address={defaultBilling} />
-                    </AddressCardLayout>
-                  ) : (
-                    <>
-                      {defaultBilling && (
-                        <AddressCardLayout>
-                          <H2>
-                            <T id="addressBook.defaultBilling" />
-                          </H2>
-                          <AddressCardContent address={defaultBilling} />
-                        </AddressCardLayout>
-                      )}
-                      {defaultShipping && (
-                        <AddressCardLayout>
-                          <H2>
-                            <T id="addressBook.defaultShipping" />
-                          </H2>
-                          <AddressCardContent address={defaultShipping} />
-                        </AddressCardLayout>
-                      )}
-                    </>
-                  )}
-                </AddressesListLayout>
-                <Divider my="lg" />
-              </>
+              <AddressesListLayout my="md">
+                {defaultsEqual ? (
+                  <AddressCardLayout>
+                    <H2>
+                      <T id="addressBook.defaultBillingAndShipping" />
+                    </H2>
+                    <AddressCardContent address={defaultBilling} />
+                  </AddressCardLayout>
+                ) : (
+                  <>
+                    {defaultBilling && (
+                      <AddressCardLayout>
+                        <H2>
+                          <T id="addressBook.defaultBilling" />
+                        </H2>
+                        <AddressCardContent address={defaultBilling} />
+                      </AddressCardLayout>
+                    )}
+                    {defaultShipping && (
+                      <AddressCardLayout>
+                        <H2>
+                          <T id="addressBook.defaultShipping" />
+                        </H2>
+                        <AddressCardContent address={defaultShipping} />
+                      </AddressCardLayout>
+                    )}
+                  </>
+                )}
+              </AddressesListLayout>
             )}
-            <AddressesListLayout gridTemplateColumns={{ md: 'repeat(3, 1fr)' }} my="lg">
-              {restAddresses.map(x => (
-                <AddressCardLayout key={x.id}>
-                  <AddressCardContent address={x} />
-                </AddressCardLayout>
-              ))}
-            </AddressesListLayout>
+            {anyDefaults && anyRest && <Divider />}
+            {anyRest && (
+              <Box my="md">
+                <H2>
+                  <T id="addressBook.otherAddresses" />
+                </H2>
+                <AddressesListLayout gridTemplateColumns={{ md: 'repeat(3, 1fr)' }}>
+                  {restAddresses.map(x => (
+                    <AddressCardLayout key={x.id}>
+                      <AddressCardContent address={x} />
+                    </AddressCardLayout>
+                  ))}
+                </AddressesListLayout>
+              </Box>
+            )}
             <FlexLayout flexDirection="column" alignItems="center" p="sm">
               <Button as={RouterLink} to="/account/address-book/add" flex={1}>
                 <T id="addressBook.addNewButton" />
@@ -96,11 +102,22 @@ const EditAddressLink = ({ id }) => (
 );
 
 const RemoveAddressLink = ({ id }) => (
-  <RemoveAddressMutation>
-    {(removeAddress /* , { loading, error } */) => (
-      <Link onClick={() => removeAddress({ variables: { id } })} flex={1}>
-        Delete
-      </Link>
+  <I18n>
+    {t => (
+      <RemoveAddressMutation>
+        {(removeAddress /* , { loading, error } */) => (
+          <Link
+            onClick={() => {
+              if (window.confirm(t('addressBook.removeConfirmationMessage'))) {
+                removeAddress({ variables: { id } });
+              }
+            }}
+            flex={1}
+          >
+            {t('addressBook.removeButton')}
+          </Link>
+        )}
+      </RemoveAddressMutation>
     )}
-  </RemoveAddressMutation>
+  </I18n>
 );

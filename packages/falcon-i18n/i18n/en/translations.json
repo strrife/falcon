@@ -151,7 +151,11 @@
     "defaultBilling": "Default Invoice Address",
     "defaultShipping": "Default Delivery Address",
     "defaultBillingAndShipping": "Default Address",
-    "addNewButton": "Add new Address"
+    "otherAddresses": "Other Addresses",
+    "addNewButton": "Add new Address",
+    "editButton": "Edit",
+    "removeButton": "Delete",
+    "removeConfirmationMessage": "Are you sure?"
   },
   "editAddress": {
     "title": "Address Edit",
