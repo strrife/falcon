@@ -154,8 +154,11 @@
   },
   "editAddress": {
     "title": "Address Edit",
-    "title_shipping": "Edit the default Delivery Address",
-    "title_billing": "Edit the default Invoice Address",
+    "defaultAddressLabel_billing": "It's a default Invoice address.",
+    "defaultAddressLabel_shipping": "It's a default Delivery Address.",
+    "defaultAddressLabel_billing&shipping": "It's a default Invoice and Delivery Address.",
+    "defaultShippingFieldLabel": "Use as my default Delivery Address",
+    "defaultBillingFieldLabel": "Use as my default Invoice Address",
     "companyFieldLabel": "Company",
     "firstnameFieldLabel": "First Name",
     "lastnameFieldLabel": "Last Name",
