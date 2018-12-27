@@ -7,6 +7,7 @@ import {
   Form,
   FormErrorSummary,
   AddressQuery,
+  GET_ADDRESS,
   EditAddressMutation,
   AddressFormLayoutArea,
   addressFormLayout,
@@ -18,7 +19,7 @@ const EditAddress = ({ match, history }) => {
   const id = parseInt(match.params.id, 10);
 
   return (
-    <AddressQuery variables={{ id }} fetchPolicy="cache-and-network">
+    <AddressQuery variables={{ id }}>
       {({ address }) => (
         <Box>
           <H1>
@@ -38,7 +39,7 @@ const EditAddress = ({ match, history }) => {
               />
             </Text>
           )}
-          <EditAddressMutation>
+          <EditAddressMutation refetchQueries={['Addresses', { query: GET_ADDRESS, variables: { id } }]}>
             {(editAddress, { loading, error }) => (
               <Formik
                 initialValues={{
