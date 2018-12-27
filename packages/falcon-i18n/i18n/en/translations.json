@@ -160,11 +160,22 @@
     "firstnameFieldLabel": "First Name",
     "lastnameFieldLabel": "Last Name",
     "telephoneFieldLabel": "Phone Number",
-
     "streetFieldLabel": "Street",
     "postcodeFieldLabel": "ZIP Code",
     "cityFieldLabel": "City",
     "countryIdFieldLabel": "Country",
     "submitButton": "Update Address"
+  },
+  "addAddress": {
+    "title": "Add Address",
+    "companyFieldLabel": "$t(editAddress.companyFieldLabel)",
+    "firstnameFieldLabel": "$t(editAddress.firstnameFieldLabel)",
+    "lastnameFieldLabel": "$t(editAddress.lastnameFieldLabel)",
+    "telephoneFieldLabel": "$t(editAddress.telephoneFieldLabel)",
+    "streetFieldLabel": "$t(editAddress.streetFieldLabel)",
+    "postcodeFieldLabel": "$t(editAddress.postcodeFieldLabel)",
+    "cityFieldLabel": "$t(editAddress.cityFieldLabel)",
+    "countryIdFieldLabel": "$t(editAddress.countryIdFieldLabel)",
+    "submitButton": "Save Address"
   }
 }
