@@ -18,7 +18,7 @@ const EditAddress = ({ match, history }) => {
   const id = parseInt(match.params.id, 10);
 
   return (
-    <AddressQuery variables={{ id }}>
+    <AddressQuery variables={{ id }} fetchPolicy="cache-and-network">
       {({ address }) => (
         <Box>
           <H1>
