@@ -3,58 +3,16 @@ import { Formik, Field, ErrorMessage } from 'formik';
 import { T } from '@deity/falcon-i18n';
 import { H1, Box, Label, Text, Button, FlexLayout, Checkbox } from '@deity/falcon-ui';
 import {
-  toGridTemplate,
   FormField,
   Form,
   FormErrorSummary,
   AddressQuery,
   EditAddressMutation,
+  AddressFormLayoutArea,
+  addressFormLayout,
   CountriesQuery,
   CountrySelector
 } from '@deity/falcon-ecommerce-uikit';
-
-const AddressFormArea = {
-  company: 'company',
-  firstName: 'firstName',
-  lastname: 'lastname',
-  telephone: 'telephone',
-  street: 'street',
-  postcode: 'postcode',
-  city: 'city',
-  country: 'country'
-};
-
-const editAddressFormLayout = {
-  formLayout: {
-    my: 'lg',
-    display: 'grid',
-    gridColumnGap: { xs: 'sm', md: 'xxl' },
-    gridRowGap: { xs: 'sm', md: 'md' },
-    // prettier-ignore
-    gridTemplate: {
-      xs: toGridTemplate([
-        ['1fr'                    ],
-        [AddressFormArea.company  ],
-        [AddressFormArea.firstName],
-        [AddressFormArea.lastname ],
-        [AddressFormArea.telephone],
-        [AddressFormArea.street   ],
-        [AddressFormArea.postcode ],
-        [AddressFormArea.city     ],
-        [AddressFormArea.country  ]
-        
-      ]),
-      md: toGridTemplate([
-        ['1fr',                     '1fr'],
-        [AddressFormArea.company,   AddressFormArea.street],
-        [AddressFormArea.firstName, AddressFormArea.postcode],
-        [AddressFormArea.lastname,  AddressFormArea.city],
-        [AddressFormArea.telephone, AddressFormArea.country],
-        
-      ])
-    }
-  }
-};
 
 const EditAddress = ({ match, history }) => {
   const id = parseInt(match.params.id, 10);
@@ -106,19 +64,19 @@ const EditAddress = ({ match, history }) => {
                   }
                 >
                   {() => (
-                    <Form id={id} i18nId="editAddress" defaultTheme={editAddressFormLayout}>
-                      <FormField name="company" gridArea={AddressFormArea.company} />
-                      <FormField name="firstname" required gridArea={AddressFormArea.firstName} />
-                      <FormField name="lastname" required gridArea={AddressFormArea.lastname} />
-                      <FormField name="telephone" gridArea={AddressFormArea.telephone} />
+                    <Form id={id} i18nId="editAddress" defaultTheme={addressFormLayout}>
+                      <FormField name="company" gridArea={AddressFormLayoutArea.company} />
+                      <FormField name="firstname" required gridArea={AddressFormLayoutArea.firstName} />
+                      <FormField name="lastname" required gridArea={AddressFormLayoutArea.lastname} />
+                      <FormField name="telephone" gridArea={AddressFormLayoutArea.telephone} />
 
-                      <FormField name="street" required gridArea={AddressFormArea.street} />
-                      <FormField name="postcode" required gridArea={AddressFormArea.postcode} />
-                      <FormField name="city" required gridArea={AddressFormArea.city} />
+                      <FormField name="street" required gridArea={AddressFormLayoutArea.street} />
+                      <FormField name="postcode" required gridArea={AddressFormLayoutArea.postcode} />
+                      <FormField name="city" required gridArea={AddressFormLayoutArea.city} />
                       <Field
                         name="countryId"
                         render={({ field, form }) => (
-                          <Box gridArea={AddressFormArea.country}>
+                          <Box gridArea={AddressFormLayoutArea.country}>
                             <Label htmlFor={`${id}-${field.name}`}>Country *</Label>
                             <CountriesQuery passLoading>
                               {({ countries = { items: [] } }) => (
@@ -142,7 +100,7 @@ const EditAddress = ({ match, history }) => {
                       />
 
                       <Box
-                        gridArea={AddressFormArea.address}
+                        gridArea={AddressFormLayoutArea.address}
                         display="grid"
                         gridGap="sm"
                         css={{ alignContent: 'start' }}
