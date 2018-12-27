@@ -141,54 +141,58 @@ const EditAddress = ({ match, history }) => {
                             </Box>
                           )}
                         />
-                        <Field
-                          name="defaultBilling"
-                          render={({ field, form }) => (
-                            <Box>
-                              <FlexLayout mb="md">
-                                <Checkbox
-                                  id={`${id}-${field.name}`}
-                                  size="sm"
-                                  checked={field.value}
-                                  onChange={e => form.setFieldValue(field.name, e.target.checked)}
+                        {address.defaultBilling === false && (
+                          <Field
+                            name="defaultBilling"
+                            render={({ field, form }) => (
+                              <Box>
+                                <FlexLayout mb="md">
+                                  <Checkbox
+                                    id={`${id}-${field.name}`}
+                                    size="sm"
+                                    checked={field.value}
+                                    onChange={e => form.setFieldValue(field.name, e.target.checked)}
+                                  />
+                                  <Label htmlFor={`${id}-${field.name}`}>defaultBilling</Label>
+                                </FlexLayout>
+                                <ErrorMessage
+                                  name={field.name}
+                                  render={msg => (
+                                    <Text fontSize="xxs" color="error">
+                                      {msg}
+                                    </Text>
+                                  )}
                                 />
-                                <Label htmlFor={`${id}-${field.name}`}>defaultBilling</Label>
-                              </FlexLayout>
-                              <ErrorMessage
-                                name={field.name}
-                                render={msg => (
-                                  <Text fontSize="xxs" color="error">
-                                    {msg}
-                                  </Text>
-                                )}
-                              />
-                            </Box>
-                          )}
-                        />
-                        <Field
-                          name="defaultShipping"
-                          render={({ field, form }) => (
-                            <Box>
-                              <FlexLayout mb="md">
-                                <Checkbox
-                                  id={`${id}-${field.name}`}
-                                  size="sm"
-                                  checked={field.value}
-                                  onChange={e => form.setFieldValue(field.name, e.target.checked)}
+                              </Box>
+                            )}
+                          />
+                        )}
+                        {address.defaultShipping === false && (
+                          <Field
+                            name="defaultShipping"
+                            render={({ field, form }) => (
+                              <Box>
+                                <FlexLayout mb="md">
+                                  <Checkbox
+                                    id={`${id}-${field.name}`}
+                                    size="sm"
+                                    checked={field.value}
+                                    onChange={e => form.setFieldValue(field.name, e.target.checked)}
+                                  />
+                                  <Label htmlFor={`${id}-${field.name}`}>defaultShipping</Label>
+                                </FlexLayout>
+                                <ErrorMessage
+                                  name={field.name}
+                                  render={msg => (
+                                    <Text fontSize="xxs" color="error">
+                                      {msg}
+                                    </Text>
+                                  )}
                                 />
-                                <Label htmlFor={`${id}-${field.name}`}>defaultShipping</Label>
-                              </FlexLayout>
-                              <ErrorMessage
-                                name={field.name}
-                                render={msg => (
-                                  <Text fontSize="xxs" color="error">
-                                    {msg}
-                                  </Text>
-                                )}
-                              />
-                            </Box>
-                          )}
-                        />
+                              </Box>
+                            )}
+                          />
+                        )}
                       </Box>
 
                       <FlexLayout justifyContent="space-between" alignItems="center" mt="md">
