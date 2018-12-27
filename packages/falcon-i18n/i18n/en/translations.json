@@ -150,7 +150,8 @@
     "title": "Address Book",
     "defaultBilling": "Default Invoice Address",
     "defaultShipping": "Default Delivery Address",
-    "defaultBillingAndShipping": "Default Address"
+    "defaultBillingAndShipping": "Default Address",
+    "addNewButton": "Add new Address"
   },
   "editAddress": {
     "title": "Address Edit",

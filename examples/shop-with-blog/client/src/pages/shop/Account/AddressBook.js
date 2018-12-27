@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
-import { H1, H2, Box, Link, Divider } from '@deity/falcon-ui';
+import { H1, H2, Box, Link, Button, Divider, FlexLayout } from '@deity/falcon-ui';
 import {
   AddressesListQuery,
   AddressCardLayout,
@@ -59,13 +59,18 @@ const AddressBook = () => (
                 <Divider my="lg" />
               </>
             )}
-            <AddressesListLayout gridTemplateColumns={{ md: 'repeat(3, 1fr)' }}>
+            <AddressesListLayout gridTemplateColumns={{ md: 'repeat(3, 1fr)' }} my="lg">
               {restAddresses.map(x => (
                 <AddressCardLayout key={x.id}>
                   <AddressCardContent address={x} />
                 </AddressCardLayout>
               ))}
             </AddressesListLayout>
+            <FlexLayout flexDirection="column" alignItems="center" p="sm">
+              <Button as={RouterLink} to="/account/address-book/add" flex={1}>
+                <T id="addressBook.addNewButton" />
+              </Button>
+            </FlexLayout>
           </>
         );
       }}
