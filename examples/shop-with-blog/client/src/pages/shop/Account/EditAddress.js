@@ -14,32 +14,43 @@ import {
 } from '@deity/falcon-ecommerce-uikit';
 
 const AddressFormArea = {
-  contact: 'contact',
-  address: 'address'
+  company: 'company',
+  firstName: 'firstName',
+  lastname: 'lastname',
+  telephone: 'telephone',
+  street: 'street',
+  postcode: 'postcode',
+  city: 'city',
+  country: 'country'
 };
 
 const editAddressFormLayout = {
   formLayout: {
-    display: 'grid',
-    gridColumnGap: {
-      xs: 'sm',
-      md: 'xxl'
-    },
-    gridRowGap: {
-      xs: 'sm',
-      md: 'md'
-    },
     my: 'lg',
+    display: 'grid',
+    gridColumnGap: { xs: 'sm', md: 'xxl' },
+    gridRowGap: { xs: 'sm', md: 'md' },
     // prettier-ignore
     gridTemplate: {
       xs: toGridTemplate([
-        ['1fr'],
-        [AddressFormArea.contact],
-        [AddressFormArea.address]
+        ['1fr'                    ],
+        [AddressFormArea.company  ],
+        [AddressFormArea.firstName],
+        [AddressFormArea.lastname ],
+        [AddressFormArea.telephone],
+        [AddressFormArea.street   ],
+        [AddressFormArea.postcode ],
+        [AddressFormArea.city     ],
+        [AddressFormArea.country  ]
+        
       ]),
       md: toGridTemplate([
-        ['1fr', '1fr'],
-        [AddressFormArea.contact, AddressFormArea.address]
+        ['1fr',                     '1fr'],
+        [AddressFormArea.company,   AddressFormArea.street],
+        [AddressFormArea.firstName, AddressFormArea.postcode],
+        [AddressFormArea.lastname,  AddressFormArea.city],
+        [AddressFormArea.telephone, AddressFormArea.country],
+        
       ])
     }
   }
@@ -96,51 +107,46 @@ const EditAddress = ({ match, history }) => {
                 >
                   {() => (
                     <Form id={id} i18nId="editAddress" defaultTheme={editAddressFormLayout}>
-                      <Box
-                        gridArea={AddressFormArea.contact}
-                        display="grid"
-                        gridGap="sm"
-                        css={{ alignContent: 'start' }}
-                      >
-                        <FormField name="company" />
-                        <FormField name="firstname" required />
-                        <FormField name="lastname" required />
-                        <FormField name="telephone" />
-                      </Box>
+                      <FormField name="company" gridArea={AddressFormArea.company} />
+                      <FormField name="firstname" required gridArea={AddressFormArea.firstName} />
+                      <FormField name="lastname" required gridArea={AddressFormArea.lastname} />
+                      <FormField name="telephone" gridArea={AddressFormArea.telephone} />
+
+                      <FormField name="street" required gridArea={AddressFormArea.street} />
+                      <FormField name="postcode" required gridArea={AddressFormArea.postcode} />
+                      <FormField name="city" required gridArea={AddressFormArea.city} />
+                      <Field
+                        name="countryId"
+                        render={({ field, form }) => (
+                          <Box gridArea={AddressFormArea.country}>
+                            <Label htmlFor={`${id}-${field.name}`}>Country *</Label>
+                            <CountriesQuery passLoading>
+                              {({ countries = { items: [] } }) => (
+                                <CountrySelector
+                                  items={countries.items}
+                                  value={field.value}
+                                  onChange={x => form.setFieldValue(field.name, x)}
+                                />
+                              )}
+                            </CountriesQuery>
+                            <ErrorMessage
+                              name={field.name}
+                              render={msg => (
+                                <Text fontSize="xxs" color="error">
+                                  {msg}
+                                </Text>
+                              )}
+                            />
+                          </Box>
+                        )}
+                      />
+
                       <Box
                         gridArea={AddressFormArea.address}
                         display="grid"
                         gridGap="sm"
                         css={{ alignContent: 'start' }}
                       >
-                        <FormField name="street" required />
-                        <FormField name="postcode" required />
-                        <FormField name="city" required />
-                        <Field
-                          name="countryId"
-                          render={({ field, form }) => (
-                            <Box>
-                              <Label htmlFor={`${id}-${field.name}`}>Country *</Label>
-                              <CountriesQuery passLoading>
-                                {({ countries = { items: [] } }) => (
-                                  <CountrySelector
-                                    items={countries.items}
-                                    value={field.value}
-                                    onChange={x => form.setFieldValue(field.name, x)}
-                                  />
-                                )}
-                              </CountriesQuery>
-                              <ErrorMessage
-                                name={field.name}
-                                render={msg => (
-                                  <Text fontSize="xxs" color="error">
-                                    {msg}
-                                  </Text>
-                                )}
-                              />
-                            </Box>
-                          )}
-                        />
                         {address.defaultBilling === false && (
                           <Field
                             name="defaultBilling"
