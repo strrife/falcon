@@ -7,6 +7,7 @@ import { toGridTemplate, ProtectedRoute, SignOutLogic } from '@deity/falcon-ecom
 import AccountDashboard from './Dashboard';
 import PersonalInformation from './PersonalInformation';
 import AddressBook from './AddressBook';
+import AddAddress from './AddAddress';
 import EditAddress from './EditAddress';
 import Orders from './Orders';
 import DynamicRoute from './../../DynamicRoute';
@@ -84,6 +85,7 @@ const Account = () => (
         <ProtectedRoute exact path="/account/orders" component={Orders} />
         <ProtectedRoute exact path="/account/personal-information" component={PersonalInformation} />
         <ProtectedRoute exact path="/account/address-book" component={AddressBook} />
+        <ProtectedRoute exact path="/account/address-book/add" component={AddAddress} />
         <ProtectedRoute exact path="/account/address-book/edit/:id" component={EditAddress} />
         {/* <ProtectedRoute exact path="/product-reviews" component={} /> */}
         {/* <ProtectedRoute exact path="/account/wish-list" component={WishList} /> */}
