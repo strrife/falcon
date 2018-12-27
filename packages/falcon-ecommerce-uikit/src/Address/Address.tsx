@@ -1,8 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Box, Text, themed, DefaultThemeProps } from '@deity/falcon-ui';
 import { AddressData } from './AddressQuery';
 import { toGridTemplate } from './../helpers';
+
+export const addressToString = (address: AddressData) =>
+  [
+    address.company,
+    `${address.firstname} ${address.lastname}`,
+    address.street && `${address.street.join(' ')}`,
+    `${address.postcode} ${address.city}, ${address.countryId}`
+  ]
+    .filter(x => x)
+    .join(', ');
 
 export const addressDetailsTheme: DefaultThemeProps = {
   addressDetails: {
