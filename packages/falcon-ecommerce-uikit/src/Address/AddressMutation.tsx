@@ -8,10 +8,24 @@ export const EDIT_ADDRESS = gql`
     }
   }
 `;
-
 export class EditAddressMutation extends Mutation {
   static defaultProps = {
     mutation: EDIT_ADDRESS,
+    awaitRefetchQueries: true,
+    refetchQueries: ['Addresses']
+  };
+}
+
+export const ADD_ADDRESS = gql`
+  mutation AddAddress($input: AddressInput!) {
+    addCustomerAddress(input: $input) {
+      id
+    }
+  }
+`;
+export class AddAddressMutation extends Mutation {
+  static defaultProps = {
+    mutation: ADD_ADDRESS,
     awaitRefetchQueries: true,
     refetchQueries: ['Addresses']
   };
@@ -22,7 +36,6 @@ export const REMOVE_ADDRESS = gql`
     removeCustomerAddress(id: $id)
   }
 `;
-
 export class RemoveAddressMutation extends Mutation {
   static defaultProps = {
     mutation: REMOVE_ADDRESS,
