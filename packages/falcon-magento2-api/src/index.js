@@ -1208,7 +1208,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Address>} added address data
    */
   async addCustomerAddress(obj, { input }) {
-    return this.forwardAddressAction({ data: input, method: 'post' });
+    const response = await this.post('/customers/me/address', { address: { ...input } });
+
+    return this.convertAddressData(response.data);
   }
 
   /**
@@ -1231,52 +1233,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {boolean} true when removed successfully
    */
   async removeCustomerAddress(obj, { id }) {
-    // return this.forwardAddressAction({ id, method: 'delete' });
     const response = await this.delete(`/customers/me/address/${id}`);
-
-    return response.data;
-  }
-
-  /**
-   * Request address management action
-   * @param {object} params - request params
-   * @param {string} params.customerToken - customer token
-   * @param {number} params.id - address id
-   * @param {string} params.storeCode - selected store code
-   * @param {string} params.path - REST API path where default path is 'customers/me/address'
-   * @param {string} params.method - request method, where default method is 'get'
-   * @return {Promise<Address|Address[]|boolean>} - address data, list of addresses or true after successful delete
-   */
-  async forwardAddressAction(params = {}) {
-    const { id, path = '/customers/me/address', method = 'get', data = null } = params;
-    const { customerToken = {} } = this.session;
-
-    let addressPath = path;
-    let addressData = data;
-
-    if (!customerToken.token) {
-      Logger.error(`${this.name}: Trying to edit customer data without customer token`);
-      throw new Error('You do not have an access to edit address data');
-    }
-
-    if (id) {
-      addressPath = `${path}/${id}`;
-    }
-
-    if (method !== 'get' && method !== 'delete') {
-      addressData = {
-        address: {
-          ...data,
-          street: Array.isArray(data.street) ? data.street : [data.street]
-        }
-      };
-    }
-
-    const response = await this[method](addressPath, method === 'get' || method === 'delete' ? null : addressData);
-
-    if (method !== 'delete') {
-      return this.convertAddressData(response.data);
-    }
 
     return response.data;
   }
