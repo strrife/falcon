@@ -76,7 +76,7 @@ export const addressFormLayout = {
     my: 'lg',
     display: 'grid',
     gridColumnGap: { xs: 'sm', md: 'xxl' },
-    gridRowGap: { xs: 'sm', md: 'md' },
+    gridRowGap: { xs: 'sm' },
     // prettier-ignore
     gridTemplate: {
       xs: toGridTemplate([
