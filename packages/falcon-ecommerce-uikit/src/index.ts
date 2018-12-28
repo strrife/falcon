@@ -6,6 +6,7 @@ export * from './Footer';
 export * from './Category';
 export * from './Cart';
 export * from './Checkout';
+export * from './Config';
 export * from './MiniCart';
 export * from './MiniAccount';
 export * from './SignIn';
