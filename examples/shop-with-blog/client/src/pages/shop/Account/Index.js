@@ -6,6 +6,7 @@ import { Box, Link, Menu, MenuItem } from '@deity/falcon-ui';
 import { toGridTemplate, ProtectedRoute, SignOutLogic } from '@deity/falcon-ecommerce-uikit';
 import AccountDashboard from './Dashboard';
 import PersonalInformation from './PersonalInformation';
+import ChangePassword from './ChangePassword';
 import AddressBook from './AddressBook';
 import AddAddress from './AddAddress';
 import EditAddress from './EditAddress';
@@ -83,6 +84,7 @@ const Account = () => (
         <ProtectedRoute exact path="/account" component={AccountDashboard} />
         <ProtectedRoute exact path="/account/orders" component={Orders} />
         <ProtectedRoute exact path="/account/personal-information" component={PersonalInformation} />
+        <ProtectedRoute exact path="/account/change-password" component={ChangePassword} />
         <ProtectedRoute exact path="/account/address-book" component={AddressBook} />
         <ProtectedRoute exact path="/account/address-book/add" component={AddAddress} />
         <ProtectedRoute exact path="/account/address-book/edit/:id" component={EditAddress} />
