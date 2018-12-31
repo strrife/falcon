@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
-import { H1, Box, FlexLayout, GridLayout, Button } from '@deity/falcon-ui';
+import { H1, FlexLayout, GridLayout, Button } from '@deity/falcon-ui';
 import {
   FormField,
   Form,
@@ -13,11 +13,11 @@ import {
 } from '@deity/falcon-ecommerce-uikit';
 
 const ChangePassword = ({ history }) => (
-  <Box>
+  <GridLayout mb="md" gridGap="md">
     <H1>
       <T id="changePassword.title" />
     </H1>
-    <TwoColumnsLayout mt="lg">
+    <TwoColumnsLayout>
       <ChangePasswordMutation>
         {(changePassword, { loading, error }) => (
           <Formik
@@ -66,7 +66,7 @@ const ChangePassword = ({ history }) => (
         )}
       </ChangePasswordMutation>
     </TwoColumnsLayout>
-  </Box>
+  </GridLayout>
 );
 
 export default ChangePassword;
