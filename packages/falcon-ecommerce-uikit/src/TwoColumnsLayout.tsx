@@ -11,6 +11,7 @@ export const TwoColumnsLayout = themed({
   defaultTheme: {
     twoColumnsLayout: {
       display: 'grid',
+      alignItems: 'flex-start',
       gridColumnGap: { xs: 'sm', md: 'xxl' },
       gridRowGap: { xs: 'sm' },
 
