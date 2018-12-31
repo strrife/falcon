@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik } from 'formik';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
-import { H1, Box, FlexLayout, GridLayout, Button, Link } from '@deity/falcon-ui';
+import { H1, FlexLayout, GridLayout, Button, Link } from '@deity/falcon-ui';
 import {
   FormField,
   Form,
@@ -14,9 +14,9 @@ import {
 } from '@deity/falcon-ecommerce-uikit';
 
 const PersonalInformation = () => (
-  <Box>
+  <GridLayout mb="md" gridGap="md">
     <H1>Personal Information</H1>
-    <TwoColumnsLayout mt="lg">
+    <TwoColumnsLayout my="md">
       <CustomerQuery>
         {({ customer }) => (
           <EditCustomerMutation>
@@ -62,7 +62,7 @@ const PersonalInformation = () => (
         )}
       </CustomerQuery>
     </TwoColumnsLayout>
-  </Box>
+  </GridLayout>
 );
 
 export default PersonalInformation;

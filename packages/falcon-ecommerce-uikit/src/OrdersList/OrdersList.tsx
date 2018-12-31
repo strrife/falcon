@@ -29,8 +29,7 @@ export const OrdersListLayout = themed({
   defaultTheme: {
     ordersListLayout: {
       display: 'flex',
-      flexDirection: 'column',
-      mb: 'md'
+      flexDirection: 'column'
     }
   }
 });

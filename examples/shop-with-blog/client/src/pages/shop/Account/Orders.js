@@ -1,11 +1,11 @@
 import React from 'react';
 import { NetworkStatus } from 'apollo-client';
-import { H1, Box, Button, FlexLayout } from '@deity/falcon-ui';
+import { H1, GridLayout, Button, FlexLayout } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 import { OrdersListQuery, OrdersList, NoOrders } from '@deity/falcon-ecommerce-uikit';
 
 const Orders = () => (
-  <Box>
+  <GridLayout mb="md" gridGap="md">
     <H1>
       <T id="ordersList.title" />
     </H1>
@@ -31,7 +31,7 @@ const Orders = () => (
         )
       }
     </OrdersListQuery>
-  </Box>
+  </GridLayout>
 );
 
 export default Orders;

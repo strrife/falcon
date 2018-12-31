@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
-import { Box, H1, H2, Text, Link, Divider, FlexLayout } from '@deity/falcon-ui';
+import { Box, H1, H2, Text, Link, Divider, FlexLayout, GridLayout } from '@deity/falcon-ui';
 import { CustomerQuery, OrdersListQuery, NoOrders, OrdersList } from '@deity/falcon-ecommerce-uikit';
 
 const Dashboard = () => (
-  <Box>
+  <GridLayout mb="md" gridGap="md">
     <H1>
       <T id="dashboard.title" />
     </H1>
-    <Box mt="md">
+    <Box>
       <OrdersListQuery variables={{ perPage: 1, page: 1 }}>
         {({ orders: { items } }) => (
           <>
@@ -26,7 +26,7 @@ const Dashboard = () => (
         )}
       </OrdersListQuery>
     </Box>
-    <Box mt="md">
+    <Box>
       <FlexLayout justifyContent="flex-start" alignItems="baseline">
         <H2>
           <T id="dashboard.addressBook" />
@@ -44,13 +44,13 @@ const Dashboard = () => (
         )}
       </CustomerQuery> */}
     </Box>
-    <Box mt="md">
+    <Box>
       <H2>
         <T id="dashboard.personalInformation" />
       </H2>
       <CustomerQuery>
         {({ customer }) => (
-          <Box>
+          <>
             <Text>{`${customer.firstname} ${customer.lastname}`}</Text>
             <Text>{customer.email}</Text>
             <FlexLayout flexDirection="row" mt="xs">
@@ -62,11 +62,11 @@ const Dashboard = () => (
                 <T id="dashboard.changePasswordLink" />
               </Link>
             </FlexLayout>
-          </Box>
+          </>
         )}
       </CustomerQuery>
     </Box>
-  </Box>
+  </GridLayout>
 );
 
 export default Dashboard;
