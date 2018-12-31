@@ -1,6 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Link as RouterLink, Switch, Redirect } from 'react-router-dom';
+import { Link as RouterLink, Switch } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { Box, Link, Menu, MenuItem } from '@deity/falcon-ui';
 import { toGridTemplate, ProtectedRoute, SignOutLogic } from '@deity/falcon-ecommerce-uikit';
@@ -55,7 +55,7 @@ const Account = () => (
   <Box defaultTheme={accountLayout}>
     <Box gridArea={AccountArea.menu} display="flex" flexDirection="column" alignItems="stretch" my="md">
       <Menu>
-        <MenuLink to="/account/dashboard">
+        <MenuLink to="/account">
           <T id="account.dashboardLink" />
         </MenuLink>
         <MenuLink to="/account/orders">
@@ -80,8 +80,7 @@ const Account = () => (
     </Box>
     <Box gridArea={AccountArea.content} min-height="100%">
       <Switch>
-        <Redirect exact from="/account" to="/account/dashboard" />
-        <ProtectedRoute exact path="/account/dashboard" component={AccountDashboard} />
+        <ProtectedRoute exact path="/account" component={AccountDashboard} />
         <ProtectedRoute exact path="/account/orders" component={Orders} />
         <ProtectedRoute exact path="/account/personal-information" component={PersonalInformation} />
         <ProtectedRoute exact path="/account/address-book" component={AddressBook} />
