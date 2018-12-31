@@ -1,6 +1,7 @@
 export * from './AppLayout';
 export * from './Header';
 export * from './Footer';
+export * from './TwoColumnsLayout';
 export * from './Product';
 export * from './ProductsList';
 export * from './Category';
