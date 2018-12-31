@@ -55,11 +55,11 @@ const Dashboard = () => (
             <Text>{customer.email}</Text>
             <FlexLayout flexDirection="row" mt="xs">
               <Link as={RouterLink} to="/account/personal-information">
-                <T id="dashboard.editButton" />
+                <T id="dashboard.editCustomerLink" />
               </Link>
               <Divider variant="horizontal" mx="xs" />
-              <Link as={RouterLink} to="/account/personal-information">
-                <T id="dashboard.changePasswordButton" />
+              <Link as={RouterLink} to="/account/change-password">
+                <T id="dashboard.changePasswordLink" />
               </Link>
             </FlexLayout>
           </Box>
