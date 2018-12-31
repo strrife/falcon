@@ -189,6 +189,8 @@
   "editCustomer": {
     "firstnameFieldLabel": "$t(signUp.firstnameFieldLabel)",
     "lastnameFieldLabel": "$t(signUp.lastnameFieldLabel)",
-    "emailFieldLabel": "$t(signUp.emailFieldLabel)"
+    "emailFieldLabel": "$t(signUp.emailFieldLabel)",
+    "submitButton": "Update",
+    "changePassword": "Change password"
   }
 }
