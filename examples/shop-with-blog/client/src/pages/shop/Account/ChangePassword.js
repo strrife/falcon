@@ -11,7 +11,7 @@ import {
   TwoColumnsLayoutArea
 } from '@deity/falcon-ecommerce-uikit';
 
-const ChangePassword = () => (
+const ChangePassword = ({ history }) => (
   <Box>
     <H1>
       <T id="changePassword.title" />
@@ -29,7 +29,7 @@ const ChangePassword = () => (
                     password: values.password
                   }
                 }
-              })
+              }).then(() => history.push('/account'))
             }
           >
             {() => (
