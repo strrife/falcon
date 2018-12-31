@@ -185,5 +185,10 @@
     "cityFieldLabel": "$t(editAddress.cityFieldLabel)",
     "countryIdFieldLabel": "$t(editAddress.countryIdFieldLabel)",
     "submitButton": "Save Address"
+  },
+  "editCustomer": {
+    "firstnameFieldLabel": "$t(signUp.firstnameFieldLabel)",
+    "lastnameFieldLabel": "$t(signUp.lastnameFieldLabel)",
+    "emailFieldLabel": "$t(signUp.emailFieldLabel)"
   }
 }
