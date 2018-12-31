@@ -1,7 +1,8 @@
 import React from 'react';
 import { Formik } from 'formik';
+import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
-import { H1, Box, FlexLayout, GridLayout, Button } from '@deity/falcon-ui';
+import { H1, Box, FlexLayout, GridLayout, Button, Link } from '@deity/falcon-ui';
 import {
   FormField,
   Form,
@@ -45,7 +46,9 @@ const PersonalInformation = () => (
                     <FormField name="lastname" />
                     <FormField name="email" />
                     <FlexLayout justifyContent="space-between" alignItems="center" mt="md">
-                      <T id="editCustomer.changePassword" />
+                      <Link as={RouterLink} to="/account/change-password">
+                        <T id="editCustomer.changePassword" />
+                      </Link>
                       <Button type="submit" variant={loading ? 'loader' : undefined}>
                         <T id="editCustomer.submitButton" />
                       </Button>
