@@ -8,7 +8,8 @@ import {
   FormErrorSummary,
   ChangePasswordMutation,
   TwoColumnsLayout,
-  TwoColumnsLayoutArea
+  TwoColumnsLayoutArea,
+  PasswordRevealInput
 } from '@deity/falcon-ecommerce-uikit';
 
 const ChangePassword = ({ history }) => (
@@ -34,8 +35,25 @@ const ChangePassword = ({ history }) => (
           >
             {() => (
               <GridLayout as={Form} id="change-password" i18nId="changePassword" gridArea={TwoColumnsLayoutArea.left}>
-                <FormField name="currentPassword" />
-                <FormField name="password" />
+                <FormField
+                  name="currentPassword"
+                  type="password"
+                  // pass empty array, so default password strength validator does not get triggered
+                  validate={[]}
+                  required
+                >
+                  {inputProps => <PasswordRevealInput {...inputProps} />}
+                </FormField>
+                <FormField
+                  name="password"
+                  type="password"
+                  // pass empty array, so default password strength validator does not get triggered
+                  validate={[]}
+                  required
+                  autoComplete="new-password"
+                >
+                  {inputProps => <PasswordRevealInput {...inputProps} />}
+                </FormField>
                 <FlexLayout justifyContent="flex-end" alignItems="center" mt="md">
                   <Button type="submit" variant={loading ? 'loader' : undefined}>
                     <T id="changePassword.submitButton" />

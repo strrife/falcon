@@ -76,11 +76,11 @@
     "title": "Sign In",
     "link": "Sign in",
     "emailFieldLabel": "Email",
-    "passwordFieldLabel": "Password",
-    "button": "Sign in",
-    "forgotPasswordQuestion": "Forgot password?",
     "emailFieldPlaceholder": "Email",
-    "passwordFieldPlaceholder": "Password"
+    "passwordFieldLabel": "Password",
+    "passwordFieldPlaceholder": "Password",
+    "button": "Sign in",
+    "forgotPasswordQuestion": "Forgot password?"
   },
   "forgotPassword": {
     "title": "Forgot Password",
@@ -126,7 +126,9 @@
     "personalInformation": "Personal information",
     "viewAllOrders": "View all",
     "addressBook": "Address book",
-    "manageAddresses": "Manage addresses"
+    "manageAddresses": "Manage addresses",
+    "editCustomerLink": "Edit",
+    "changePasswordLink": "Change password"
   },
   "ordersList": {
     "title": "Orders",
@@ -187,10 +189,18 @@
     "submitButton": "Save Address"
   },
   "editCustomer": {
+    "title": "Personal Information",
     "firstnameFieldLabel": "$t(signUp.firstnameFieldLabel)",
     "lastnameFieldLabel": "$t(signUp.lastnameFieldLabel)",
     "emailFieldLabel": "$t(signUp.emailFieldLabel)",
     "submitButton": "Update",
     "changePassword": "Change password"
+  },
+  "changePassword": {
+    "title": "Change Password",
+    "currentPasswordFieldLabel": "Password",
+    "passwordFieldLabel": "New Password",
+    "passwordFieldPlaceholder": "At least 8 characters",
+    "submitButton": "Update"
   }
 }
