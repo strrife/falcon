@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
-import { Box, H1, H2, Text, Link, FlexLayout } from '@deity/falcon-ui';
+import { Box, H1, H2, Text, Link, Divider, FlexLayout } from '@deity/falcon-ui';
 import { CustomerQuery, OrdersListQuery, NoOrders, OrdersList } from '@deity/falcon-ecommerce-uikit';
 
 const Dashboard = () => (
@@ -52,7 +52,16 @@ const Dashboard = () => (
         {({ customer }) => (
           <Box>
             <Text>{`${customer.firstname} ${customer.lastname}`}</Text>
-            <Text> {customer.email}</Text>
+            <Text>{customer.email}</Text>
+            <FlexLayout flexDirection="row" mt="xs">
+              <Link as={RouterLink} to="/account/personal-information">
+                <T id="dashboard.editButton" />
+              </Link>
+              <Divider variant="horizontal" mx="xs" />
+              <Link as={RouterLink} to="/account/personal-information">
+                <T id="dashboard.changePasswordButton" />
+              </Link>
+            </FlexLayout>
           </Box>
         )}
       </CustomerQuery>
