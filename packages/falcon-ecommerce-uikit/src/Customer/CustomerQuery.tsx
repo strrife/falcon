@@ -9,6 +9,7 @@ export const GET_CUSTOMER = gql`
       firstname
       lastname
       email
+      websiteId
     }
   }
 `;
@@ -18,6 +19,7 @@ export type Customer = {
   firstname: string;
   lastname: string;
   email: string;
+  websiteId: number;
   addresses?: AddressData[];
 };
 
