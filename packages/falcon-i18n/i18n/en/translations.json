@@ -150,7 +150,10 @@
     "shippingAddressLabel": "Delivery address",
     "createdAtLabel": "Ordered at",
     "shippingMethodLabel": "Delivery method",
-    "paymentMethodLabel": "Payment method"
+    "paymentMethodLabel": "Payment method",
+    "subtotalLabel": "Subtotal",
+    "shippingAmountLabel": "Shipping & Handling",
+    "grandTotalLabel": "Total"
   },
   "addressBook": {
     "title": "Address Book",

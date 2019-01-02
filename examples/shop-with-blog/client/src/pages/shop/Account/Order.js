@@ -1,7 +1,14 @@
 import React from 'react';
 import { H1, Text, Divider, Box, FlexLayout, GridLayout } from '@deity/falcon-ui';
-import { T } from '@deity/falcon-i18n';
-import { GetOrderQuery, toGridTemplate, AddressDetails, DateFormat, TotalRow } from '@deity/falcon-ecommerce-uikit';
+import { I18n, T } from '@deity/falcon-i18n';
+import {
+  GetOrderQuery,
+  toGridTemplate,
+  AddressDetails,
+  DateFormat,
+  TotalRow,
+  LocaleProvider
+} from '@deity/falcon-ecommerce-uikit';
 
 const orderLayoutArea = {
   items: 'checkout',
@@ -46,18 +53,21 @@ const Order = ({ match }) => {
             <T id="order.status" context={order.status || 'na'} />
           </FlexLayout>
           <Box defaultTheme={orderLayout}>
-            <GridLayout gridArea={orderLayoutArea.items} alignContent="flex-start">
-              <Divider />
-              <TotalRow title="subtotal" value={order.subtotal} currency={order.orderCurrencyCode} />
-              <TotalRow title="shippingAmount" value={order.shippingAmount} currency={order.orderCurrencyCode} />
-              <Divider />
-              <TotalRow
-                title="grandTotal"
-                value={order.grandTotal}
-                currency={order.orderCurrencyCode}
-                fontWeight="bold"
-              />
-            </GridLayout>
+            <I18n>
+              {t => (
+                <GridLayout gridArea={orderLayoutArea.items} alignContent="flex-start">
+                  <LocaleProvider currency={order.orderCurrencyCode}>
+                    <Divider />
+                    <Box>
+                      <TotalRow title={t('order.subtotalLabel')} value={order.subtotal} />
+                      <TotalRow title={t('order.shippingAmountLabel')} value={order.shippingAmount} />
+                    </Box>
+                    <Divider />
+                    <TotalRow title={t('order.grandTotalLabel')} value={order.grandTotal} fontWeight="bold" />
+                  </LocaleProvider>
+                </GridLayout>
+              )}
+            </I18n>
             <Divider gridArea={orderLayoutArea.divider} />
             <GridLayout gridArea={orderLayoutArea.summary} alignContent="flex-start">
               <Box>
