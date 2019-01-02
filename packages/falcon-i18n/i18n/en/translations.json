@@ -142,6 +142,7 @@
     "empty": "You have not made any purchases yet."
   },
   "order": {
+    "title": "#{{orderId}}",
     "status": "Status"
   },
   "orderStatus": {

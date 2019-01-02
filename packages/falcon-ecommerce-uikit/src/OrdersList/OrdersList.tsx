@@ -1,6 +1,7 @@
 import React from 'react';
-import { themed, Box, Text, DefaultThemeProps, List, ListItem } from '@deity/falcon-ui';
+import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
+import { themed, Box, Text, DefaultThemeProps, Link, List, ListItem } from '@deity/falcon-ui';
 import { Price, DateFormat } from '../Locale';
 import { toGridTemplate } from './../helpers';
 import { Order } from '../Order/OrderQuery';
@@ -67,7 +68,9 @@ export const OrderListItem: React.SFC<Order> = props => (
       <CellLabel>
         <T id="ordersList.idLabel" />
       </CellLabel>
-      {props.incrementId}
+      <Link as={RouterLink} to={`/account/orders/${props.incrementId}`}>
+        {props.incrementId}
+      </Link>
     </Box>
     <Box gridArea={OrderListItemArea.createdAt} display="flex" alignContent="flex-start">
       <CellLabel>

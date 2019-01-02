@@ -11,6 +11,7 @@ import AddressBook from './AddressBook';
 import AddAddress from './AddAddress';
 import EditAddress from './EditAddress';
 import Orders from './Orders';
+import Order from './Order';
 import DynamicRoute from './../../DynamicRoute';
 
 const AccountArea = {
@@ -83,6 +84,7 @@ const Account = () => (
       <Switch>
         <ProtectedRoute exact path="/account" component={AccountDashboard} />
         <ProtectedRoute exact path="/account/orders" component={Orders} />
+        <ProtectedRoute exact path="/account/orders/:id" component={Order} />
         <ProtectedRoute exact path="/account/personal-information" component={PersonalInformation} />
         <ProtectedRoute exact path="/account/change-password" component={ChangePassword} />
         <ProtectedRoute exact path="/account/address-book" component={AddressBook} />
