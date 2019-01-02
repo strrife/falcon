@@ -1,7 +1,7 @@
 import React from 'react';
 import { H1, Text, Divider, Box, FlexLayout, GridLayout } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
-import { GetOrderQuery, toGridTemplate, AddressDetails, DateFormat } from '@deity/falcon-ecommerce-uikit';
+import { GetOrderQuery, toGridTemplate, AddressDetails, DateFormat, TotalRow } from '@deity/falcon-ecommerce-uikit';
 
 const orderLayoutArea = {
   items: 'checkout',
@@ -46,9 +46,20 @@ const Order = ({ match }) => {
             <T id="order.status" context={order.status || 'na'} />
           </FlexLayout>
           <Box defaultTheme={orderLayout}>
-            <GridLayout gridArea={orderLayoutArea.items}>items</GridLayout>
+            <GridLayout gridArea={orderLayoutArea.items} alignContent="flex-start">
+              <Divider />
+              <TotalRow title="subtotal" value={order.subtotal} currency={order.orderCurrencyCode} />
+              <TotalRow title="shippingAmount" value={order.shippingAmount} currency={order.orderCurrencyCode} />
+              <Divider />
+              <TotalRow
+                title="grandTotal"
+                value={order.grandTotal}
+                currency={order.orderCurrencyCode}
+                fontWeight="bold"
+              />
+            </GridLayout>
             <Divider gridArea={orderLayoutArea.divider} />
-            <GridLayout gridArea={orderLayoutArea.summary}>
+            <GridLayout gridArea={orderLayoutArea.summary} alignContent="flex-start">
               <Box>
                 <Text fontWeight="bold">
                   <T id="order.billingAddressLabel" />

@@ -34,14 +34,17 @@ export const GET_ORDER = gql`
       customerFirstname
       customerLastname
       status
+      subtotal
+      shippingAmount
       grandTotal
       orderCurrencyCode
+      shippingDescription
+      paymentMethodName
       items {
         itemId
         sku
         name
       }
-      paymentMethodName
       billingAddress {
         company
         firstname
@@ -52,7 +55,6 @@ export const GET_ORDER = gql`
         countryId
         telephone
       }
-      shippingDescription
       shippingAddress {
         company
         firstname
