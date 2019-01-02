@@ -1011,7 +1011,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       throw new Error('Failed to load an order.');
     }
 
-    const result = this.get(`/orders/${id}/order-info`);
+    const result = await this.get(`/orders/${id}/order-info`);
 
     return this.convertOrder(result);
   }
