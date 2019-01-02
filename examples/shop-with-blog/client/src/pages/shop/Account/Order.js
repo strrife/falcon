@@ -54,9 +54,9 @@ const Order = ({ match }) => {
             <T id="order.status" context={order.status || 'na'} />
           </FlexLayout>
           <Box defaultTheme={orderLayout}>
-            <I18n>
-              {t => (
-                <GridLayout gridArea={orderLayoutArea.items} alignContent="flex-start">
+            <GridLayout gridArea={orderLayoutArea.items} alignContent="flex-start">
+              <I18n>
+                {t => (
                   <LocaleProvider currency={order.orderCurrencyCode}>
                     <Divider />
                     {order.items.map(x => (
@@ -73,9 +73,9 @@ const Order = ({ match }) => {
                     <Divider />
                     <TotalRow title={t('order.grandTotalLabel')} value={order.grandTotal} fontWeight="bold" />
                   </LocaleProvider>
-                </GridLayout>
-              )}
-            </I18n>
+                )}
+              </I18n>
+            </GridLayout>
             <Divider gridArea={orderLayoutArea.divider} />
             <GridLayout gridArea={orderLayoutArea.summary} alignContent="flex-start">
               <Box>
