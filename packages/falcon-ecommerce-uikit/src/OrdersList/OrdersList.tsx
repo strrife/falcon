@@ -11,7 +11,8 @@ const OrderListItemArea = {
   createdAt: 'createdAt',
   shipTo: 'shipTo',
   grandTotal: 'grandTotal',
-  status: 'status'
+  status: 'status',
+  actions: 'actions'
 };
 
 export const OrdersList: React.SFC<{ items: Order[] }> = ({ items }) => (
@@ -52,11 +53,12 @@ const orderListItemLayout: DefaultThemeProps = {
         [OrderListItemArea.createdAt ],
         [OrderListItemArea.shipTo    ],
         [OrderListItemArea.grandTotal],
-        [OrderListItemArea.status    ]
+        [OrderListItemArea.status    ],
+        [OrderListItemArea.actions   ]
       ]),
       md: toGridTemplate([
-        ['1fr',                '1fr',                       '2fr',                    '1fr',                        '1fr'                   ],
-        [OrderListItemArea.id, OrderListItemArea.createdAt, OrderListItemArea.shipTo, OrderListItemArea.grandTotal, OrderListItemArea.status]
+        ['1fr',                '1fr',                       '2fr',                    '1fr',                        '1fr',                    '1fr'                    ],
+        [OrderListItemArea.id, OrderListItemArea.createdAt, OrderListItemArea.shipTo, OrderListItemArea.grandTotal, OrderListItemArea.status, OrderListItemArea.actions]
       ])
     }
   }
@@ -95,6 +97,11 @@ export const OrderListItem: React.SFC<Order> = props => (
         <T id="ordersList.statusLabel" />
       </CellLabel>
       <T id="order.status" context={props.status || 'na'} />
+    </Box>
+    <Box gridArea={OrderListItemArea.actions} display="flex" alignContent="flex-start">
+      <Link as={RouterLink} to={`/account/orders/${props.entityId}`}>
+        <T id="ordersList.viewOrderLink" />
+      </Link>
     </Box>
   </ListItem>
 );
@@ -142,6 +149,9 @@ export const OrderListHeader = () => (
     </Box>
     <Box gridArea={OrderListItemArea.status}>
       <T id="ordersList.statusLabel" />
+    </Box>
+    <Box gridArea={OrderListItemArea.actions}>
+      <T id="ordersList.actionsLabel" />
     </Box>
   </Box>
 );

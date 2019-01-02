@@ -138,6 +138,8 @@
     "shipToLabel": "Ship to",
     "grandTotalLabel": "Order total",
     "statusLabel": "$t(order.statusLabel)",
+    "actionsLabel": "Actions",
+    "viewOrderLink": "View",
     "showMore": "Show more orders",
     "empty": "You have not made any purchases yet."
   },
