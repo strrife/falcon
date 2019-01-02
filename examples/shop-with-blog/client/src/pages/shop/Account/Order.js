@@ -7,7 +7,8 @@ import {
   AddressDetails,
   DateFormat,
   TotalRow,
-  LocaleProvider
+  LocaleProvider,
+  OrderItemSummary
 } from '@deity/falcon-ecommerce-uikit';
 
 const orderLayoutArea = {
@@ -57,7 +58,13 @@ const Order = ({ match }) => {
               {t => (
                 <GridLayout gridArea={orderLayoutArea.items} alignContent="flex-start">
                   <LocaleProvider currency={order.orderCurrencyCode}>
-                    <Divider />
+                    {order.items.map(x => (
+                      <>
+                        <OrderItemSummary key={x.sku} {...x} />
+                        <Divider key={`${x.sku}divider`} />
+                      </>
+                    ))}
+
                     <Box>
                       <TotalRow title={t('order.subtotalLabel')} value={order.subtotal} />
                       <TotalRow title={t('order.shippingAmountLabel')} value={order.shippingAmount} />

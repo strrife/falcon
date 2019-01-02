@@ -272,7 +272,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
         .mutate({
           mutation: PLACE_ORDER,
           // update cart once order is placed successfully
-          refetchQueries: ['Cart'],
+          refetchQueries: ['Cart', 'Orders'],
           awaitRefetchQueries: true,
           // when refetchQueries and awaitRefetchQueries are set then we cannot use promise
           // because it's not called (Apollo's bug), but we can update state based on

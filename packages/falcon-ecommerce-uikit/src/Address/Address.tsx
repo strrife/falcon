@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Text, themed, DefaultThemeProps } from '@deity/falcon-ui';
 import { AddressData } from './AddressQuery';
-import { toGridTemplate } from './../helpers';
 
 export const addressToString = (address: AddressData) =>
   [

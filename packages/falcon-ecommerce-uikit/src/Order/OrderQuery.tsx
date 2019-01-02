@@ -22,7 +22,10 @@ export type OrderItem = {
   itemId: number;
   sku: string;
   name: string;
-  price: number;
+  rowTotalInclTax: number;
+  thumbnailUrl: string;
+  qty: number;
+  link: string;
 };
 
 export const GET_ORDER = gql`
@@ -44,6 +47,10 @@ export const GET_ORDER = gql`
         itemId
         sku
         name
+        rowTotalInclTax
+        qty
+        thumbnailUrl
+        link
       }
       billingAddress {
         company
