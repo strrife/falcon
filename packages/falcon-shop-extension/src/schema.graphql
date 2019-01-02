@@ -1,14 +1,14 @@
 extend type Query {
   category(id: Int!): Category
   product(id: Int!): Product
-  #  products(
-  #    categoryId: Int
-  #    includeSubcategories: Boolean
-  #    query: ShopPageQuery
-  #    sortOrders: [SortOrderInput]
-  #    filters: [Filter]
-  #    skus: [String]
-  #  ): ProductList
+  products(
+    categoryId: Int
+    includeSubcategories: Boolean
+    query: ShopPageQuery
+    sortOrders: [SortOrderInput]
+    filters: [Filter]
+    skus: [String]
+  ): ProductList
   myStoreConfig: MyStoreConfig
   cart: Cart
   countries: CountryList
