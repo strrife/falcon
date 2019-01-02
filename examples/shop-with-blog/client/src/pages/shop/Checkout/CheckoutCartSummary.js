@@ -50,16 +50,11 @@ const CartItem = ({ item }) => (
 );
 
 const OptionRow = ({ option }) => (
-  <Box display="flex" key={option.label}>
-    <Text flex="1" fontSize="xs">
-      {option.label}:
-    </Text>
-    <Text flex="2" fontSize="xs">
-      {option.value}
-    </Text>
+  <Box display="flex" fontSize="xs">
+    <Text flex="1">{option.label}:</Text>
+    <Text flex="2">{option.value}</Text>
   </Box>
 );
-
 OptionRow.propTypes = {
   option: PropTypes.shape({
     label: PropTypes.string,
