@@ -13,13 +13,11 @@ const TOTALS = {
 // helper that returns particular total by its code
 const getTotalByCode = (totals, code) => totals.find(total => total.code === code);
 
-const TotalRow = ({ total, fontWeight = 'normal' }) =>
+const TotalRow = ({ total, ...props }) =>
   total ? (
-    <Box display="flex">
-      <Text fontWeight={fontWeight} flex="1">
-        {total.title}
-      </Text>
-      <Price fontWeight={fontWeight} value={total.value} />
+    <Box display="flex" {...props}>
+      <Text flex="1">{total.title}</Text>
+      <Price value={total.value} />
     </Box>
   ) : null;
 
