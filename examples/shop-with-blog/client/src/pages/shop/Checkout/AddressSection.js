@@ -18,7 +18,7 @@ class AddressSection extends React.Component {
   }
 
   submitAddress = values => {
-    this.props.setAddress(values);
+    this.props.setAddress({ ...values, street: [values.street] });
   };
 
   submitSelectedAddress = () => {
