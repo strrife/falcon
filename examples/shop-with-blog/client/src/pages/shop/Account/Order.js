@@ -58,11 +58,12 @@ const Order = ({ match }) => {
               {t => (
                 <GridLayout gridArea={orderLayoutArea.items} alignContent="flex-start">
                   <LocaleProvider currency={order.orderCurrencyCode}>
+                    <Divider />
                     {order.items.map(x => (
-                      <>
-                        <OrderItemSummary key={x.sku} {...x} />
-                        <Divider key={`${x.sku}divider`} />
-                      </>
+                      <React.Fragment key={x.sku}>
+                        <OrderItemSummary {...x} />
+                        <Divider />
+                      </React.Fragment>
                     ))}
 
                     <Box>
