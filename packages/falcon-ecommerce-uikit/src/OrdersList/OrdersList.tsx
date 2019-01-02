@@ -68,7 +68,7 @@ export const OrderListItem: React.SFC<Order> = props => (
       <CellLabel>
         <T id="ordersList.idLabel" />
       </CellLabel>
-      <Link as={RouterLink} to={`/account/orders/${props.incrementId}`}>
+      <Link as={RouterLink} to={`/account/orders/${props.entityId}`}>
         {props.incrementId}
       </Link>
     </Box>

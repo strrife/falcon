@@ -6,6 +6,7 @@ export const GET_ORDERS_LIST = gql`
   query Orders($page: Int = 1, $perPage: Int = 10) {
     orders(query: { page: $page, perPage: $perPage }) {
       items {
+        entityId
         incrementId
         createdAt
         customerFirstname
