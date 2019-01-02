@@ -1,5 +1,5 @@
 import React from 'react';
-import { H1, GridLayout } from '@deity/falcon-ui';
+import { H1, GridLayout, Text } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 import { GetOrderQuery } from '@deity/falcon-ecommerce-uikit';
 
@@ -13,6 +13,9 @@ const Order = ({ match }) => {
           <H1>
             <T id="order.title" orderId={order.incrementId} />
           </H1>
+          <Text>
+            <T id="order.status" context={order.status || 'na'} />
+          </Text>
         </GridLayout>
       )}
     </GetOrderQuery>

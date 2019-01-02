@@ -137,17 +137,15 @@
     "createdAtLabel": "Date",
     "shipToLabel": "Ship to",
     "grandTotalLabel": "Order total",
-    "statusLabel": "Status",
+    "statusLabel": "$t(order.statusLabel)",
     "showMore": "Show more orders",
     "empty": "You have not made any purchases yet."
   },
   "order": {
     "title": "#{{orderId}}",
-    "status": "Status"
-  },
-  "orderStatus": {
-    "": "N/A",
-    "pending": "Pending"
+    "statusLabel": "Status",
+    "status_na": "N/A",
+    "status_pending": "Pending"
   },
   "addressBook": {
     "title": "Address Book",

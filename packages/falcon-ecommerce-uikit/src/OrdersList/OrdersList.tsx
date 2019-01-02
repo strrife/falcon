@@ -94,7 +94,7 @@ export const OrderListItem: React.SFC<Order> = props => (
       <CellLabel>
         <T id="ordersList.statusLabel" />
       </CellLabel>
-      <T id={`orderStatus.${props.status || ''}`} />
+      <T id="order.status" context={props.status || 'na'} />
     </Box>
   </ListItem>
 );
