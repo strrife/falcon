@@ -82,6 +82,36 @@ const EditAddress = ({ match, history }) => {
                         <FormField name="firstname" required />
                         <FormField name="lastname" required />
                         <FormField name="telephone" />
+                      </GridLayout>
+                      <GridLayout gridArea={TwoColumnsLayoutArea.right}>
+                        <FormField name="street" required />
+                        <FormField name="postcode" required />
+                        <FormField name="city" required />
+                        <Field
+                          name="countryId"
+                          render={({ field, form }) => (
+                            <Box>
+                              <Label htmlFor={`${id}-${field.name}`}>Country *</Label>
+                              <CountriesQuery passLoading>
+                                {({ countries = { items: [] } }) => (
+                                  <CountrySelector
+                                    items={countries.items}
+                                    value={field.value}
+                                    onChange={x => form.setFieldValue(field.name, x)}
+                                  />
+                                )}
+                              </CountriesQuery>
+                              <ErrorMessage
+                                name={field.name}
+                                render={msg => (
+                                  <Text fontSize="xxs" color="error">
+                                    {msg}
+                                  </Text>
+                                )}
+                              />
+                            </Box>
+                          )}
+                        />
                         {address.defaultBilling === false && (
                           <Field
                             name="defaultBilling"
@@ -134,36 +164,6 @@ const EditAddress = ({ match, history }) => {
                             )}
                           />
                         )}
-                      </GridLayout>
-                      <GridLayout gridArea={TwoColumnsLayoutArea.right}>
-                        <FormField name="street" required />
-                        <FormField name="postcode" required />
-                        <FormField name="city" required />
-                        <Field
-                          name="countryId"
-                          render={({ field, form }) => (
-                            <Box>
-                              <Label htmlFor={`${id}-${field.name}`}>Country *</Label>
-                              <CountriesQuery passLoading>
-                                {({ countries = { items: [] } }) => (
-                                  <CountrySelector
-                                    items={countries.items}
-                                    value={field.value}
-                                    onChange={x => form.setFieldValue(field.name, x)}
-                                  />
-                                )}
-                              </CountriesQuery>
-                              <ErrorMessage
-                                name={field.name}
-                                render={msg => (
-                                  <Text fontSize="xxs" color="error">
-                                    {msg}
-                                  </Text>
-                                )}
-                              />
-                            </Box>
-                          )}
-                        />
                       </GridLayout>
                     </TwoColumnsLayout>
                     <FlexLayout justifyContent="flex-end" alignItems="center" mt="md">
