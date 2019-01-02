@@ -35,14 +35,6 @@ const Dashboard = () => (
           <T id="dashboard.manageAddresses" />
         </Link>
       </FlexLayout>
-      {/* <CustomerQuery>
-        {({ customer }) => (
-          <Box>
-            <Text>{`${customer.firstname} ${customer.lastname}`}</Text>
-            <Text> {customer.email}</Text>
-          </Box>
-        )}
-      </CustomerQuery> */}
     </Box>
     <Box>
       <H2>
