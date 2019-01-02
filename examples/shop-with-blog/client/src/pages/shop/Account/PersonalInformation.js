@@ -15,7 +15,9 @@ import {
 
 const PersonalInformation = () => (
   <GridLayout mb="md" gridGap="md">
-    <H1>Personal Information</H1>
+    <H1>
+      <T id="editCustomer.title" />
+    </H1>
     <TwoColumnsLayout my="md">
       <CustomerQuery>
         {({ customer }) => (
