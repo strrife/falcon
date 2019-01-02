@@ -145,7 +145,12 @@
     "title": "#{{orderId}}",
     "statusLabel": "Status",
     "status_na": "N/A",
-    "status_pending": "Pending"
+    "status_pending": "Pending",
+    "billingAddressLabel": "Invoice address",
+    "shippingAddressLabel": "Delivery address",
+    "createdAtLabel": "Ordered at",
+    "shippingMethodLabel": "Delivery method",
+    "paymentMethodLabel": "Payment method"
   },
   "addressBook": {
     "title": "Address Book",

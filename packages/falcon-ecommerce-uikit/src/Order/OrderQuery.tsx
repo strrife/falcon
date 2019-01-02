@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { Query } from '../Query/Query';
+import { AddressData } from './../Address/AddressQuery';
 
 export type Order = {
   entityId: number;
@@ -11,6 +12,10 @@ export type Order = {
   grandTotal?: string;
   orderCurrencyCode?: string;
   items: OrderItem[];
+  paymentMethodName: string;
+  billingAddress: AddressData;
+  shippingDescription: string;
+  shippingAddress: AddressData;
 };
 
 export type OrderItem = {
@@ -35,6 +40,28 @@ export const GET_ORDER = gql`
         itemId
         sku
         name
+      }
+      paymentMethodName
+      billingAddress {
+        company
+        firstname
+        lastname
+        street
+        city
+        postcode
+        countryId
+        telephone
+      }
+      shippingDescription
+      shippingAddress {
+        company
+        firstname
+        lastname
+        street
+        city
+        postcode
+        countryId
+        telephone
       }
     }
   }
