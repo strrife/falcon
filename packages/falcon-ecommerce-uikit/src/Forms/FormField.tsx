@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field, getIn, FieldProps } from 'formik';
+import { Field, FieldProps, getIn } from 'formik';
 import { I18n } from '@deity/falcon-i18n';
 import { Box, Label, Input, DefaultThemeProps, ThemedComponentProps, extractThemableProps } from '@deity/falcon-ui';
 import { FormContext } from './Form';
@@ -57,6 +57,9 @@ const getDefaultInputTypeValidator = (inputType: string | undefined) => {
 const fieldLabelSuffix = 'FieldLabel';
 const fieldPlaceholderSuffix = 'FieldPlaceholder';
 
+// export type FieldProps = {};
+// export const Field: React.SFC<FieldProps> = props => {};
+
 export type FormFieldProps = {
   name: string;
   label?: string;
@@ -112,13 +115,10 @@ export const FormField: React.SFC<FormFieldProps> = props => {
               undefined;
 
             return (
-              <Field
-                name={fieldName}
-                validate={validateSequentially(_validate, label)}
-                render={(fieldProps: FieldProps) => {
+              <Field name={fieldName} validate={validateSequentially(_validate, label)}>
+                {({ field, form }: FieldProps) => {
                   const { themableProps, rest } = extractThemableProps(remainingProps);
 
-                  const { field, form } = fieldProps;
                   const touch = getIn(form.touched, fieldName);
                   const error = getIn(form.errors, fieldName);
                   const invalid = !!touch && !!error;
@@ -153,7 +153,7 @@ export const FormField: React.SFC<FormFieldProps> = props => {
                     </Box>
                   );
                 }}
-              />
+              </Field>
             );
           }}
         </I18n>
