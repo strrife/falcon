@@ -76,6 +76,58 @@ const EditAddress = ({ match, history }) => {
               >
                 {() => (
                   <Form id={id} i18nId="editAddress">
+                    {address.defaultBilling === false && (
+                      <Field
+                        name="defaultBilling"
+                        render={({ field, form }) => (
+                          <Box>
+                            <FlexLayout my="xs">
+                              <Checkbox
+                                id={`${id}-${field.name}`}
+                                size="sm"
+                                checked={field.value}
+                                onChange={e => form.setFieldValue(field.name, e.target.checked)}
+                              />
+                              <Label htmlFor={`${id}-${field.name}`}>defaultBilling</Label>
+                            </FlexLayout>
+                            <ErrorMessage
+                              name={field.name}
+                              render={msg => (
+                                <Text fontSize="xxs" color="error">
+                                  {msg}
+                                </Text>
+                              )}
+                            />
+                          </Box>
+                        )}
+                      />
+                    )}
+                    {address.defaultShipping === false && (
+                      <Field
+                        name="defaultShipping"
+                        render={({ field, form }) => (
+                          <Box>
+                            <FlexLayout my="xs">
+                              <Checkbox
+                                id={`${id}-${field.name}`}
+                                size="sm"
+                                checked={field.value}
+                                onChange={e => form.setFieldValue(field.name, e.target.checked)}
+                              />
+                              <Label htmlFor={`${id}-${field.name}`}>defaultShipping</Label>
+                            </FlexLayout>
+                            <ErrorMessage
+                              name={field.name}
+                              render={msg => (
+                                <Text fontSize="xxs" color="error">
+                                  {msg}
+                                </Text>
+                              )}
+                            />
+                          </Box>
+                        )}
+                      />
+                    )}
                     <TwoColumnsLayout>
                       <GridLayout gridArea={TwoColumnsLayoutArea.left}>
                         <FormField name="company" />
@@ -112,58 +164,6 @@ const EditAddress = ({ match, history }) => {
                             </Box>
                           )}
                         />
-                        {address.defaultBilling === false && (
-                          <Field
-                            name="defaultBilling"
-                            render={({ field, form }) => (
-                              <Box>
-                                <FlexLayout my="xs">
-                                  <Checkbox
-                                    id={`${id}-${field.name}`}
-                                    size="sm"
-                                    checked={field.value}
-                                    onChange={e => form.setFieldValue(field.name, e.target.checked)}
-                                  />
-                                  <Label htmlFor={`${id}-${field.name}`}>defaultBilling</Label>
-                                </FlexLayout>
-                                <ErrorMessage
-                                  name={field.name}
-                                  render={msg => (
-                                    <Text fontSize="xxs" color="error">
-                                      {msg}
-                                    </Text>
-                                  )}
-                                />
-                              </Box>
-                            )}
-                          />
-                        )}
-                        {address.defaultShipping === false && (
-                          <Field
-                            name="defaultShipping"
-                            render={({ field, form }) => (
-                              <Box>
-                                <FlexLayout my="xs">
-                                  <Checkbox
-                                    id={`${id}-${field.name}`}
-                                    size="sm"
-                                    checked={field.value}
-                                    onChange={e => form.setFieldValue(field.name, e.target.checked)}
-                                  />
-                                  <Label htmlFor={`${id}-${field.name}`}>defaultShipping</Label>
-                                </FlexLayout>
-                                <ErrorMessage
-                                  name={field.name}
-                                  render={msg => (
-                                    <Text fontSize="xxs" color="error">
-                                      {msg}
-                                    </Text>
-                                  )}
-                                />
-                              </Box>
-                            )}
-                          />
-                        )}
                       </GridLayout>
                     </TwoColumnsLayout>
                     <FlexLayout justifyContent="flex-end" alignItems="center" mt="md">
