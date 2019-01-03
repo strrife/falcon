@@ -14,6 +14,10 @@ const validateSequentially: ValidateSequentially = (validators, label) => value 
 const LABEL_SUFFIX = 'FieldLabel';
 const PLACEHOLDER_SUFFIX = 'FieldPlaceholder';
 
+export const getLabelI18nId = (formI18nId: string, fieldName: string) => `${formI18nId}.${fieldName}${LABEL_SUFFIX}`;
+export const getPlaceholderI18nId = (formI18nId: string, fieldName: string) =>
+  `${formI18nId}.${fieldName}${PLACEHOLDER_SUFFIX}`;
+
 export type FieldRenderProps<TValue = any> = {
   form: FormikFieldProps<TValue>['form'] & {
     id?: number | string;
@@ -48,8 +52,8 @@ export const Field: React.SFC<FieldProps> = props => {
           {t => {
             const i18nIds = formI18nId
               ? {
-                  label: `${formI18nId}.${name}${LABEL_SUFFIX}`,
-                  placeholder: `${formI18nId}.${name}${PLACEHOLDER_SUFFIX}`
+                  label: getLabelI18nId(formI18nId, name),
+                  placeholder: getPlaceholderI18nId(formI18nId, name)
                 }
               : {};
 
