@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Label, Input, extractThemableProps, themed } from '@deity/falcon-ui';
-import { Field, FieldProps, FieldRenderProps } from './Field';
+import { Field } from './Field';
 import { toGridTemplate } from '../helpers';
 import { Validator, passwordValidator, emailValidator, requiredValidator } from './validators';
 
