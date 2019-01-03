@@ -1,45 +1,56 @@
 import React from 'react';
-import { Box, Label, Input, DefaultThemeProps, ThemedComponentProps, extractThemableProps } from '@deity/falcon-ui';
+import { Box, Label, Input, extractThemableProps, themed } from '@deity/falcon-ui';
 import { Field, FieldProps, FieldRenderProps } from './Field';
 import { toGridTemplate } from '../helpers';
 import { Validator, passwordValidator, emailValidator, requiredValidator } from './validators';
 
-export const FormFieldAreas = {
+export const FormFieldArea = {
   label: 'label',
   input: 'input',
   error: 'error'
 };
 
-const formFieldLayout: DefaultThemeProps = {
-  formFieldLayout: {
-    display: 'grid',
-    gridGap: 'none',
-    // prettier-ignore
-    gridTemplate: toGridTemplate([
-      ['1fr'                      ],
-      [FormFieldAreas.label       ],
-      [FormFieldAreas.input       ],
-      [FormFieldAreas.error, '0px']
-    ])
-  }
-};
-
-const formFieldErrorLayout: DefaultThemeProps = {
-  formFieldErrorLayout: {
-    gridArea: FormFieldAreas.error,
-    color: 'error',
-    fontSize: 'xxs',
-    css: {
-      pointerEvents: 'none',
-      justifySelf: 'end'
+export const FormFieldLayout = themed({
+  tag: Box,
+  defaultTheme: {
+    formFieldLayout: {
+      display: 'grid',
+      gridGap: 'none',
+      // prettier-ignore
+      gridTemplate: toGridTemplate([
+        ['1fr'                     ],
+        [FormFieldArea.label       ],
+        [FormFieldArea.input       ],
+        [FormFieldArea.error, '0px']
+      ])
     }
   }
-};
+});
 
-const validateSequentially = (validators: Validator[] = [], label: string) => (value: string) => {
-  const firstInvalid = validators.find(validator => validator(value, label) !== undefined);
-  return firstInvalid ? firstInvalid(value, label) : undefined;
-};
+export const FormFieldLabel = themed({
+  tag: Label,
+  defaultProps: {
+    gridArea: FormFieldArea.label
+  }
+});
+
+export const FormFieldError = themed({
+  tag: Box,
+  defaultProps: {
+    gridArea: FormFieldArea.error
+  },
+  defaultTheme: {
+    formFieldError: {
+      gridArea: FormFieldArea.error,
+      color: 'error',
+      fontSize: 'xxs',
+      css: {
+        pointerEvents: 'none',
+        justifySelf: 'end'
+      }
+    }
+  }
+});
 
 const getDefaultInputTypeValidator = (inputType: string | undefined) => {
   switch (inputType) {
@@ -63,7 +74,7 @@ export type FormFieldProps = {
 
 // TODO: when new i18n support is ready use it to translate label and placeholder props
 export const FormField: React.SFC<FormFieldProps> = props => {
-  const { id: fieldId, name, label, placeholder, validate, required, children, ...restProps } = props;
+  const { id: fieldId, name, label: lbl, placeholder, validate, required, children, ...restProps } = props;
   const inputType = restProps.type;
 
   // eslint-disable-next-line
@@ -83,9 +94,9 @@ export const FormField: React.SFC<FormFieldProps> = props => {
   }
 
   return (
-    <Field name={name} label={label} placeholder={placeholder} validate={_validate}>
-      {({ field, form, i18nIds }) => {
-        const { invalid, error, ...fieldRest } = field;
+    <Field name={name} label={lbl} placeholder={placeholder} validate={_validate}>
+      {({ field, form }) => {
+        const { error, label, ...fieldRest } = field;
         const { themableProps, rest } = extractThemableProps(restProps);
 
         const id = fieldId || [form.id, name].filter(x => x).join('-');
@@ -93,35 +104,56 @@ export const FormField: React.SFC<FormFieldProps> = props => {
         const inputProps = {
           ...fieldRest,
           id,
-          placeholder,
-          invalid
+          placeholder
         };
 
         return (
-          <Box defaultTheme={formFieldLayout} {...themableProps}>
-            {field.label && (
-              <Label
-                htmlFor={id}
-                gridArea={FormFieldAreas.label}
-                defaultTheme={{ formFieldLabel: { fontSize: 'xs', fontWeight: 'bold' } }}
-              >
-                {field.label}
-              </Label>
-            )}
+          <FormFieldLayout {...themableProps}>
+            {field.label && <FormFieldLabel htmlFor={id}>{field.label}</FormFieldLabel>}
 
             {children ? (
               children({
                 ...inputProps,
-                height: 'xl',
-                gridArea: FormFieldAreas.input
+                gridArea: FormFieldArea.input
               } as any)
             ) : (
-              <Input {...inputProps} height="xl" gridArea={FormFieldAreas.input} />
+              <Input {...inputProps} gridArea={FormFieldArea.input} />
             )}
-            <Box defaultTheme={formFieldErrorLayout}>{invalid ? field.error : null}</Box>
-          </Box>
+            <FormFieldError>{field.invalid ? field.error : null}</FormFieldError>
+          </FormFieldLayout>
         );
       }}
     </Field>
   );
 };
+
+// export type FormInputProps = {
+//   id: string;
+//   label?: string;
+//   form: any;
+//   field: any;
+// };
+// export const FormInput: React.SFC<FormInputProps> = props => {
+//   const { id, label, form, field, children, ...rest } = props;
+
+//   return (
+//     <FormFieldLayout {...rest}>
+//       {label && (
+//         <FormFieldLabel htmlFor={id} gridArea={FormFieldArea.label}>
+//           {label}
+//         </FormFieldLabel>
+//       )}
+
+//       {children ? (
+//         children({
+//           ...inputProps,
+//           height: 'xl',
+//           gridArea: FormFieldArea.input
+//         } as any)
+//       ) : (
+//         <Input {...inputProps} height="xl" gridArea={FormFieldArea.input} />
+//       )}
+//       <FormFieldError>{field.invalid ? field.error : null}</FormFieldError>
+//     </FormFieldLayout>
+//   );
+// };
