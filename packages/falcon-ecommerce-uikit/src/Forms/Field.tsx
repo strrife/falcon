@@ -23,11 +23,11 @@ export type FieldRenderProps<TValue = any> = {
     id?: number | string;
   };
   field: FormikFieldProps<TValue>['field'] & {
-    label?: string;
     placeholder?: string;
     invalid: boolean;
-    error: any;
   };
+  label?: string;
+  error?: string;
   i18nIds: {
     label?: string;
     placeholder?: string;
@@ -40,6 +40,9 @@ export type FieldProps<TValue = any> = {
   placeholder?: string;
   validate?: Validator[];
   children?: (props: FieldRenderProps<TValue>) => React.ReactNode;
+  // type?: string;
+  // validate?: ((value: any) => string | Promise<void> | undefined);
+  // innerRef?: (instance: any) => void;
 };
 
 export const Field: React.SFC<FieldProps> = props => {
@@ -75,11 +78,11 @@ export const Field: React.SFC<FieldProps> = props => {
                     field: {
                       ...restProps,
                       ...formikField,
-                      label: fieldLabel,
                       placeholder: fieldPlaceholder,
-                      invalid,
-                      error
+                      invalid
                     },
+                    error,
+                    label: fieldLabel,
                     i18nIds
                   });
                 }}

@@ -95,21 +95,20 @@ export const FormField: React.SFC<FormFieldProps> = props => {
 
   return (
     <Field name={name} label={lbl} placeholder={placeholder} validate={_validate}>
-      {({ field, form }) => {
-        const { error, label, ...fieldRest } = field;
+      {({ form, field, label, error }) => {
         const { themableProps, rest } = extractThemableProps(restProps);
 
         const id = fieldId || [form.id, name].filter(x => x).join('-');
 
         const inputProps = {
-          ...fieldRest,
+          ...field,
           id,
           placeholder
         };
 
         return (
           <FormFieldLayout {...themableProps}>
-            {field.label && <FormFieldLabel htmlFor={id}>{field.label}</FormFieldLabel>}
+            {label && <FormFieldLabel htmlFor={id}>{label}</FormFieldLabel>}
 
             {children ? (
               children({
@@ -119,7 +118,7 @@ export const FormField: React.SFC<FormFieldProps> = props => {
             ) : (
               <Input {...inputProps} gridArea={FormFieldArea.input} />
             )}
-            <FormFieldError>{field.invalid ? field.error : null}</FormFieldError>
+            <FormFieldError>{field.invalid ? error : null}</FormFieldError>
           </FormFieldLayout>
         );
       }}
