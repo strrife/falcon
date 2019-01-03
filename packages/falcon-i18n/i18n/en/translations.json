@@ -187,6 +187,8 @@
   },
   "addAddress": {
     "title": "Add Address",
+    "defaultShippingFieldLabel": "$t(editAddress.defaultShippingFieldLabel)",
+    "defaultBillingFieldLabel": "$t(editAddress.defaultBillingFieldLabel)",
     "companyFieldLabel": "$t(editAddress.companyFieldLabel)",
     "firstnameFieldLabel": "$t(editAddress.firstnameFieldLabel)",
     "lastnameFieldLabel": "$t(editAddress.lastnameFieldLabel)",
