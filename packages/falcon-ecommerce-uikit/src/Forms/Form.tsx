@@ -3,15 +3,14 @@ import { Form as FormikForm, FormikFormProps } from 'formik';
 import { ThemedComponentProps, DefaultThemeProps, Box } from '@deity/falcon-ui';
 
 export type FormContextValue = {
-  id: number | string;
+  id: string;
   name?: string;
   i18nId?: string;
 };
 
 export const FormContext = React.createContext<FormContextValue>({} as any);
 
-export type FormProps = { id: number | string; name?: string; i18nId?: string } & FormikFormProps &
-  ThemedComponentProps;
+export type FormProps = { id: string; name?: string; i18nId?: string } & FormikFormProps & ThemedComponentProps;
 
 const formLayout: DefaultThemeProps = {
   formLayout: {

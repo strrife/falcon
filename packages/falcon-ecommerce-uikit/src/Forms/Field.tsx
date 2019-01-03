@@ -23,6 +23,7 @@ export type FieldRenderProps<TValue = any> = {
     id?: number | string;
   };
   field: FormikFieldProps<TValue>['field'] & {
+    id?: string;
     placeholder?: string;
     invalid: boolean;
   };
@@ -35,6 +36,7 @@ export type FieldRenderProps<TValue = any> = {
 };
 
 export type FieldProps<TValue = any> = {
+  id?: string;
   name: string;
   label?: string;
   placeholder?: string;
@@ -47,6 +49,8 @@ export type FieldProps<TValue = any> = {
 
 export const Field: React.SFC<FieldProps> = props => {
   const { name, label, placeholder, validate, children, ...restProps } = props;
+
+  if (!children) return null;
 
   return (
     <FormContext.Consumer>
@@ -69,17 +73,15 @@ export const Field: React.SFC<FieldProps> = props => {
                 {({ form: formikForm, field: formikField }: FormikFieldProps) => {
                   const touch = getIn(formikForm.touched, name);
                   const error = getIn(formikForm.errors, name);
-                  const invalid = !!touch && !!error;
-
-                  if (!children) return null;
 
                   return children({
                     form: { ...formikForm, id: formId },
                     field: {
+                      id: `${formId}-${name}`,
                       ...restProps,
                       ...formikField,
                       placeholder: fieldPlaceholder,
-                      invalid
+                      invalid: !!touch && !!error
                     },
                     error,
                     label: fieldLabel,

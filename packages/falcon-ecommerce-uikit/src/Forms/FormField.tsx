@@ -74,8 +74,9 @@ export type FormFieldProps = {
 
 // TODO: when new i18n support is ready use it to translate label and placeholder props
 export const FormField: React.SFC<FormFieldProps> = props => {
-  const { id: fieldId, name, label: lbl, placeholder, validate, required, children, ...restProps } = props;
-  const inputType = restProps.type;
+  const { name, validate, required, children, ...formFieldRestProps } = props;
+  const inputType = formFieldRestProps.type;
+  const { themableProps, rest } = extractThemableProps(formFieldRestProps);
 
   // eslint-disable-next-line
   let _validate = validate;
@@ -86,42 +87,28 @@ export const FormField: React.SFC<FormFieldProps> = props => {
     }
     _validate.unshift(requiredValidator);
   }
-
   const defaultInputTypeValidator = !hasCustomValidators && getDefaultInputTypeValidator(inputType);
-
   if (defaultInputTypeValidator && _validate) {
     _validate.push(defaultInputTypeValidator);
   }
 
   return (
-    <Field name={name} label={lbl} placeholder={placeholder} validate={_validate}>
-      {({ form, field, label, error }) => {
-        const { themableProps, rest } = extractThemableProps(restProps);
+    <Field name={name} validate={_validate} {...rest}>
+      {({ field, label, error }) => (
+        <FormFieldLayout {...themableProps}>
+          {label && <FormFieldLabel htmlFor={field.id}>{label}</FormFieldLabel>}
 
-        const id = fieldId || [form.id, name].filter(x => x).join('-');
-
-        const inputProps = {
-          ...field,
-          id,
-          placeholder
-        };
-
-        return (
-          <FormFieldLayout {...themableProps}>
-            {label && <FormFieldLabel htmlFor={id}>{label}</FormFieldLabel>}
-
-            {children ? (
-              children({
-                ...inputProps,
-                gridArea: FormFieldArea.input
-              } as any)
-            ) : (
-              <Input {...inputProps} gridArea={FormFieldArea.input} />
-            )}
-            <FormFieldError>{field.invalid ? error : null}</FormFieldError>
-          </FormFieldLayout>
-        );
-      }}
+          {children ? (
+            children({
+              ...field,
+              gridArea: FormFieldArea.input
+            } as any)
+          ) : (
+            <Input {...field} gridArea={FormFieldArea.input} />
+          )}
+          <FormFieldError>{field.invalid ? error : null}</FormFieldError>
+        </FormFieldLayout>
+      )}
     </Field>
   );
 };
