@@ -1,8 +1,6 @@
 import React from 'react';
-import { Field, FieldProps, getIn } from 'formik';
-import { I18n } from '@deity/falcon-i18n';
 import { Box, Label, Input, DefaultThemeProps, ThemedComponentProps, extractThemableProps } from '@deity/falcon-ui';
-import { FormContext } from './Form';
+import { Field, FieldProps, FieldRenderProps } from './Field';
 import { toGridTemplate } from '../helpers';
 import { Validator, passwordValidator, emailValidator, requiredValidator } from './validators';
 
@@ -54,34 +52,19 @@ const getDefaultInputTypeValidator = (inputType: string | undefined) => {
   }
 };
 
-const fieldLabelSuffix = 'FieldLabel';
-const fieldPlaceholderSuffix = 'FieldPlaceholder';
-
-// export type FieldProps = {};
-// export const Field: React.SFC<FieldProps> = props => {};
-
 export type FormFieldProps = {
+  id?: number | string;
   name: string;
   label?: string;
+  placeholder?: string;
   validate?: Validator[];
-  children?: (props: React.InputHTMLAttributes<HTMLInputElement> & ThemedComponentProps) => React.ReactNode;
-} & ThemedComponentProps &
-  React.InputHTMLAttributes<HTMLInputElement>;
+  children?: (props: React.InputHTMLAttributes<HTMLInputElement> /* & ThemedComponentProps */) => React.ReactNode;
+} & React.InputHTMLAttributes<HTMLInputElement>; // ThemedComponentProps &
 
 // TODO: when new i18n support is ready use it to translate label and placeholder props
 export const FormField: React.SFC<FormFieldProps> = props => {
-  const {
-    id: fieldId,
-    label: fieldLabel,
-    placeholder: fieldPlaceholder,
-    required,
-    name: fieldName,
-    validate,
-    children,
-    ...remainingProps
-  } = props;
-  const inputType = remainingProps.type;
-  const isHidden = inputType === 'hidden';
+  const { id: fieldId, name, label, placeholder, validate, required, children, ...restProps } = props;
+  const inputType = restProps.type;
 
   // eslint-disable-next-line
   let _validate = validate;
@@ -100,64 +83,45 @@ export const FormField: React.SFC<FormFieldProps> = props => {
   }
 
   return (
-    <FormContext.Consumer>
-      {({ id: formId, i18nId }) => (
-        <I18n>
-          {t => {
-            const label =
-              fieldLabel ||
-              (i18nId && t(`${i18nId}.${fieldName}${fieldLabelSuffix}`, { defaultValue: '' })) ||
-              undefined;
+    <Field name={name} label={label} placeholder={placeholder} validate={_validate}>
+      {({ field, form, i18nIds }) => {
+        const { invalid, error, ...fieldRest } = field;
+        const { themableProps, rest } = extractThemableProps(restProps);
 
-            const placeholder =
-              fieldPlaceholder ||
-              (i18nId && t(`${i18nId}.${fieldName}${fieldPlaceholderSuffix}`, { defaultValue: '' })) ||
-              undefined;
+        const id = fieldId || [form.id, name].filter(x => x).join('-');
 
-            return (
-              <Field name={fieldName} validate={validateSequentially(_validate, label)}>
-                {({ field, form }: FieldProps) => {
-                  const { themableProps, rest } = extractThemableProps(remainingProps);
+        const inputProps = {
+          ...fieldRest,
+          id,
+          placeholder,
+          invalid
+        };
 
-                  const touch = getIn(form.touched, fieldName);
-                  const error = getIn(form.errors, fieldName);
-                  const invalid = !!touch && !!error;
+        return (
+          <Box defaultTheme={formFieldLayout} {...themableProps}>
+            {field.label && (
+              <Label
+                htmlFor={id}
+                gridArea={FormFieldAreas.label}
+                defaultTheme={{ formFieldLabel: { fontSize: 'xs', fontWeight: 'bold' } }}
+              >
+                {field.label}
+              </Label>
+            )}
 
-                  // TODO: is there a better way of handling input ids (more automated)?
-                  // is fallback to name correct?
-                  const id = fieldId || `${formId}-${fieldName}`;
-                  const inputProps = {
-                    ...field,
-                    ...rest,
-                    gridArea: FormFieldAreas.input,
-                    height: 'xl',
-                    id,
-                    placeholder,
-                    invalid
-                  };
-
-                  return (
-                    <Box defaultTheme={formFieldLayout} {...themableProps} display={isHidden ? 'none' : undefined}>
-                      {label && (
-                        <Label
-                          htmlFor={id}
-                          gridArea={FormFieldAreas.label}
-                          defaultTheme={{ formFieldLabel: { fontSize: 'xs', fontWeight: 'bold' } }}
-                        >
-                          {label}
-                        </Label>
-                      )}
-
-                      {children ? children(inputProps) : <Input {...inputProps} />}
-                      <Box defaultTheme={formFieldErrorLayout}>{invalid ? error : null}</Box>
-                    </Box>
-                  );
-                }}
-              </Field>
-            );
-          }}
-        </I18n>
-      )}
-    </FormContext.Consumer>
+            {children ? (
+              children({
+                ...inputProps,
+                height: 'xl',
+                gridArea: FormFieldAreas.input
+              } as any)
+            ) : (
+              <Input {...inputProps} height="xl" gridArea={FormFieldAreas.input} />
+            )}
+            <Box defaultTheme={formFieldErrorLayout}>{invalid ? field.error : null}</Box>
+          </Box>
+        );
+      }}
+    </Field>
   );
 };
