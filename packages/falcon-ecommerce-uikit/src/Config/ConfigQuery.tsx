@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
-import { Query } from '../Query';
+import { Query } from '../Query/Query';
 
-const GET_CONFIG = gql`
+export const GET_CONFIG = gql`
   query ClientConfig($key: String!) {
     getConfig(key: $key) @client
   }
