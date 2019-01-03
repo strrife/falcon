@@ -1,2 +1,2 @@
 export * from './PaymentPlugin';
-export * from './PaymentType';
+export * from './types';
