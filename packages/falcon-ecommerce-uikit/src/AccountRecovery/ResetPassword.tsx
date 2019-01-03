@@ -1,5 +1,6 @@
 import React from 'react';
 import { Formik } from 'formik';
+import { T } from '@deity/falcon-i18n';
 import { Text, Button, GridLayout, H1, Box } from '@deity/falcon-ui';
 import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '../Forms';
 import { ResetCustomerPasswordMutation, ResetCustomerPasswordVariables } from './AccountRecoveryMutations';
@@ -17,7 +18,9 @@ export const ResetPassword: React.SFC<ResetPasswordProps> = ({ resetToken }) => 
 
       return (
         <GridLayout gridGap="md" py="md">
-          <H1 justifySelf="center">Reset Password</H1>
+          <H1 justifySelf="center">
+            <T id="resetPassword.title" />
+          </H1>
           {tokenIsInvalid && <InvalidToken />}
           {!tokenIsInvalid && <ResetPasswordForm resetToken={resetToken} />}
         </GridLayout>
@@ -31,19 +34,11 @@ export const InvalidToken: React.SFC = () => (
     {openSidebar => (
       <React.Fragment>
         <Text justifySelf="center" fontSize="md" color="error">
-          The reset password token you provided is invalid or has expired.
+          <T id="resetPassword.failureMessage" />
         </Text>
         <Box justifySelf="center">
-          <Button
-            onClick={() =>
-              openSidebar({
-                variables: {
-                  contentType: 'forgotPassword'
-                }
-              })
-            }
-          >
-            Request another one
+          <Button onClick={() => openSidebar({ variables: { contentType: 'forgotPassword' } })}>
+            <T id="resetPassword.requestAnotherToken" />
           </Button>
         </Box>
       </React.Fragment>
@@ -67,32 +62,16 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken })
               password: ''
             } as ResetCustomerPasswordVariables
           }
-          onSubmit={values =>
-            resetCustomerPassword({
-              variables: {
-                input: values
-              }
-            })
-          }
+          onSubmit={values => resetCustomerPassword({ variables: { input: values } })}
         >
           {() => (
             <MiniFormLayout>
-              <Form>
-                <FormField id="resetPasswordResetToken" name="resetToken" type="hidden" />
-
-                <FormField
-                  id="resetPasswordPassword"
-                  label="New Password"
-                  name="password"
-                  required
-                  type="password"
-                  autoComplete="new-password"
-                >
+              <Form id="reset-password" i18nId="resetPassword">
+                <FormField name="resetToken" type="hidden" />
+                <FormField name="password" required type="password" autoComplete="new-password">
                   {inputProps => <PasswordRevealInput {...inputProps} />}
                 </FormField>
-
                 <FormSubmit justifySelf="center" submitting={loading} value="Reset my password" />
-
                 <FormErrorSummary errors={error && [error.message]} />
               </Form>
             </MiniFormLayout>
@@ -108,19 +87,11 @@ const ResetPasswordSuccess: React.SFC = () => (
     {openSidebar => (
       <React.Fragment>
         <Text justifySelf="center" fontSize="md">
-          Your password has been reset successfully!
+          <T id="resetPassword.successMessage" />
         </Text>
         <Box justifySelf="center">
-          <Button
-            onClick={() =>
-              openSidebar({
-                variables: {
-                  contentType: 'account'
-                }
-              })
-            }
-          >
-            Sign In
+          <Button onClick={() => openSidebar({ variables: { contentType: 'account' } })}>
+            <T id="signIn.button" />
           </Button>
         </Box>
       </React.Fragment>

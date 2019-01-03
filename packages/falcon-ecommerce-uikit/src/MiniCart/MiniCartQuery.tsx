@@ -26,22 +26,8 @@ export type MiniCartData = {
   };
 };
 
-function getTranslations(t: reactI18Next.TranslationFunction) {
-  return {
-    title: t('miniCart.title'),
-    cta: t('miniCart.cta'),
-    continue: t('miniCart.continue'),
-    empty: t('miniCart.empty'),
-    quantity: t('product.quantity')
-  };
-}
-
-export type MiniCartTranslations = ReturnType<typeof getTranslations>;
-
-export class MiniCartQuery extends Query<MiniCartData, {}, MiniCartTranslations> {
+export class MiniCartQuery extends Query<MiniCartData, {}> {
   static defaultProps = {
-    query: GET_MINI_CART,
-    getTranslations,
-    translationsNamespaces: ['shop']
+    query: GET_MINI_CART
   };
 }

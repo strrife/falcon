@@ -11,6 +11,9 @@ before_script:
 .job_template: &job_definition
   stage: test
   retry: 2
+  only:
+    variables:
+      - $NIGHTLY_BUILD
   cache:
     key: '$CI_BUILD_NAME'
     paths:

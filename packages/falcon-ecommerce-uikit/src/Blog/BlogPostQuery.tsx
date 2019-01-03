@@ -19,22 +19,12 @@ export type BlogPostType = {
   };
 };
 
-function getTranslations(t: reactI18Next.TranslationFunction) {
-  return {
-    blogTitle: t('title')
-  };
-}
-
-export type BlogPostTranslations = ReturnType<typeof getTranslations>;
-
 export type BlogPostQueryVariables = {
   path: string;
 };
 
-export class BlogPostQuery extends Query<BlogPostType, BlogPostQueryVariables, BlogPostTranslations> {
+export class BlogPostQuery extends Query<BlogPostType, BlogPostQueryVariables> {
   static defaultProps = {
-    query: GET_BLOG_POST,
-    getTranslations,
-    translationsNamespaces: ['blog']
+    query: GET_BLOG_POST
   };
 }

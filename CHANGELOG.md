@@ -22,6 +22,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 - feat: support for Google Analytics added ([#78](https://github.com/deity-io/falcon/pull/78))
 - improvement: removed razzle ([#87](https://github.com/deity-io/falcon/pull/87))
+- feat: added translations for common app areas (except checkout) ([#205](https://github.com/deity-io/falcon/pull/205))
 
 ### Falcon Server v0.1.0 (2018-12-12)
 
@@ -49,6 +50,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 - feat: added queries and mutations for sign in / sign out operations ([#152](https://github.com/deity-io/falcon/pull/152))
 - feat: added `ProtectedRoute` and `OnlyUnauthenticatedRoute` route components ([#163](https://github.com/deity-io/falcon/pull/163))
 - feat: added queries and mutations for checkout process and implemented checkout logic abstraction ([#182](https://github.com/deity-io/falcon/pull/182))
+- feat: added `Form` component which provides translation context for `FormField`s ([#205](https://github.com/deity-io/falcon/pull/205))
 
 ### Create Falcon App v1.1.1 (2018-12-12)
 
@@ -77,6 +79,10 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### eject-ts v0.1.0 (2018-12-12)
 
 - feat: eject-ts CLI ([#212](https://github.com/deity-io/falcon/pull/212))
+
+### Falcon-i18n v0.0.4
+
+- feat: added `i18nProvider` with `I18n` and `T` components to ease internationalization support ([#205](https://github.com/deity-io/falcon/pull/205))
 
 ---
 

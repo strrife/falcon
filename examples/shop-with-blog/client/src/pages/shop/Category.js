@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CategoryQuery, Category } from '@deity/falcon-ecommerce-uikit';
+import { CategoryProductsQuery, Category } from '@deity/falcon-ecommerce-uikit';
 
 const CategoryPage = ({ id }) => (
-  <CategoryQuery variables={{ categoryId: id }}>{categoryProps => <Category {...categoryProps} />}</CategoryQuery>
+  <CategoryProductsQuery variables={{ categoryId: id }}>
+    {categoryProps => <Category {...categoryProps} />}
+  </CategoryProductsQuery>
 );
 CategoryPage.propTypes = {
   id: PropTypes.number.isRequired
