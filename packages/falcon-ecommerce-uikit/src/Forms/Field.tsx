@@ -45,28 +45,11 @@ export type FieldProps = {
   placeholder?: string;
   validate?: Validator[];
   children?: (props: FieldRenderProps) => React.ReactNode;
-} & React.InputHTMLAttributes<HTMLInputElement>; // & ThemedComponentProps
+};
 
 // TODO: when new i18n support is ready use it to translate label and placeholder props
 export const Field: React.SFC<FieldProps> = props => {
-  const { name, required, validate, children, ...remainingProps } = props;
-  const inputType = remainingProps.type;
-
-  // eslint-disable-next-line
-  let _validate = validate;
-  const hasCustomValidators = _validate !== undefined;
-  if (required) {
-    if (!_validate) {
-      _validate = [];
-    }
-    _validate.unshift(requiredValidator);
-  }
-
-  const defaultInputTypeValidator = !hasCustomValidators && getDefaultInputTypeValidator(inputType);
-
-  if (defaultInputTypeValidator && _validate) {
-    _validate.push(defaultInputTypeValidator);
-  }
+  const { name, label, placeholder, validate, children, ...restProps } = props;
 
   return (
     <FormContext.Consumer>
@@ -80,27 +63,24 @@ export const Field: React.SFC<FieldProps> = props => {
                 }
               : {};
 
-            const label = props.label || (i18nIds.label && t(i18nIds.label, { defaultValue: '' })) || undefined;
-            const placeholder =
-              props.placeholder || (i18nIds.placeholder && t(i18nIds.placeholder, { defaultValue: '' })) || undefined;
+            const fieldLabel = label || (i18nIds.label && t(i18nIds.label, { defaultValue: '' })) || undefined;
+            const fieldPlaceholder =
+              placeholder || (i18nIds.placeholder && t(i18nIds.placeholder, { defaultValue: '' })) || undefined;
 
             return (
-              <FormikField name={name} validate={validateSequentially(_validate, label)}>
-                {({ form, field }: FormikFieldProps) => {
-                  const touch = getIn(form.touched, name);
-                  const error = getIn(form.errors, name);
+              <FormikField name={name} validate={validateSequentially(validate, fieldLabel)}>
+                {({ form: formikForm, field: formikField }: FormikFieldProps) => {
+                  const touch = getIn(formikForm.touched, name);
+                  const error = getIn(formikForm.errors, name);
                   const invalid = !!touch && !!error;
 
                   const fieldRenderProps: FieldRenderProps = {
-                    form: {
-                      ...form,
-                      id: formId
-                    },
+                    form: { ...formikForm, id: formId },
                     field: {
-                      ...remainingProps,
-                      ...field,
-                      label,
-                      placeholder,
+                      ...restProps,
+                      ...formikField,
+                      label: fieldLabel,
+                      placeholder: fieldPlaceholder,
                       invalid,
                       error
                     },
