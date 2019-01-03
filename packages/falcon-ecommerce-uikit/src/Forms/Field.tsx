@@ -64,7 +64,9 @@ export const Field: React.SFC<FieldProps> = props => {
                   const error = getIn(formikForm.errors, name);
                   const invalid = !!touch && !!error;
 
-                  const fieldRenderProps: FieldRenderProps = {
+                  if (!children) return null;
+
+                  return children({
                     form: { ...formikForm, id: formId },
                     field: {
                       ...restProps,
@@ -75,13 +77,7 @@ export const Field: React.SFC<FieldProps> = props => {
                       error
                     },
                     i18nIds
-                  };
-
-                  if (children) {
-                    return children(fieldRenderProps);
-                  }
-
-                  return null;
+                  });
                 }}
               </FormikField>
             );
