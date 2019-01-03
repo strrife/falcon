@@ -487,17 +487,20 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise} - request promise
    */
   async fetchUrl(_, params) {
-    const { path, loadEntityData = false } = params;
+    const { path } = params;
 
     return this.get(
       '/url/',
       {
-        request_path: path,
-        load_entity_data: loadEntityData
+        url: path
       },
       {
         context: {
-          didReceiveResult: result => this.reduceUrl(result, this.session.currency)
+          didReceiveResult: result => ({
+            id: result.entity_id,
+            path: result.canonical_url,
+            type: `shop-${result.entity_type.toLowerCase().replace('cms-', '')}`
+          })
         }
       }
     );
@@ -556,8 +559,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Product>} product data
    */
   async product(obj, { id }) {
-    const urlPath = `catalog/product/view/id/${id}`;
-    return this.fetchUrl(obj, { path: urlPath, loadEntityData: true });
+    return this.get(`/products/${id}`);
   }
 
   /**
