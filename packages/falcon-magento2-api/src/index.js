@@ -1185,6 +1185,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Address>} requested address data
    */
   async address(obj, { id }) {
+    const { customerToken = {} } = this.session;
+    if (!customerToken.token) {
+      Logger.error(`${this.name}: Trying to read address data without customer token`);
+      throw new Error('You do not have an access to read address data');
+    }
+
     const response = await this.get(`/customers/me/address/${id}`);
 
     return this.convertAddressData(response.data);
@@ -1195,6 +1201,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<AddressList>} requested addresses data
    */
   async addresses() {
+    const { customerToken = {} } = this.session;
+    if (!customerToken.token) {
+      Logger.error(`${this.name}: Trying to read addresses data without customer token`);
+      throw new Error('You do not have an access to read addresses data');
+    }
+
     const response = await this.get('/customers/me/address');
     const items = response.data.items || [];
 
@@ -1208,6 +1220,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Address>} added address data
    */
   async addCustomerAddress(obj, { input }) {
+    const { customerToken = {} } = this.session;
+    if (!customerToken.token) {
+      Logger.error(`${this.name}: Trying to add address data without customer token`);
+      throw new Error('You do not have an access to add address data');
+    }
+
     const response = await this.post('/customers/me/address', { address: { ...input } });
 
     return this.convertAddressData(response.data);
@@ -1220,6 +1238,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Address>} updated address data
    */
   async editCustomerAddress(obj, { input }) {
+    const { customerToken = {} } = this.session;
+    if (!customerToken.token) {
+      Logger.error(`${this.name}: Trying to edit address data without customer token`);
+      throw new Error('You do not have an access to edit address data');
+    }
+
     const response = await this.put(`/customers/me/address`, { address: { ...input } });
 
     return this.convertAddressData(response.data);
@@ -1233,6 +1257,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {boolean} true when removed successfully
    */
   async removeCustomerAddress(obj, { id }) {
+    const { customerToken = {} } = this.session;
+    if (!customerToken.token) {
+      Logger.error(`${this.name}: Trying to remove address data without customer token`);
+      throw new Error('You do not have an access to remove address data');
+    }
+
     const response = await this.delete(`/customers/me/address/${id}`);
 
     return response.data;
