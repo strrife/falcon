@@ -1,6 +1,15 @@
 import React from 'react';
 import { FieldProps as FormikFieldProps } from 'formik';
-import { Box, Label, Input, extractThemableProps, ThemedComponentProps, themed } from '@deity/falcon-ui';
+import {
+  Box,
+  Label,
+  Input,
+  Checkbox,
+  FlexLayout,
+  extractThemableProps,
+  ThemedComponentProps,
+  themed
+} from '@deity/falcon-ui';
 import { Field } from './Field';
 import { toGridTemplate } from '../helpers';
 import { Validator, passwordValidator, emailValidator, requiredValidator } from './validators';
@@ -87,9 +96,8 @@ export type FormFieldProps<TValue = any> = {
 } & React.InputHTMLAttributes<HTMLInputElement>; // ThemedComponentProps &
 
 export const FormField: React.SFC<FormFieldProps> = props => {
-  const { name, validate, required, children, ...formFieldRestProps } = props;
-  const inputType = formFieldRestProps.type;
-  const { themableProps, rest } = extractThemableProps(formFieldRestProps);
+  const { name, validate, required, children, ...restProps } = props;
+  const { themableProps, rest } = extractThemableProps(restProps);
 
   // eslint-disable-next-line
   let _validate = validate;
@@ -100,7 +108,7 @@ export const FormField: React.SFC<FormFieldProps> = props => {
     }
     _validate.unshift(requiredValidator);
   }
-  const defaultInputTypeValidator = !hasCustomValidators && getDefaultInputTypeValidator(inputType);
+  const defaultInputTypeValidator = !hasCustomValidators && getDefaultInputTypeValidator(restProps.type);
   if (defaultInputTypeValidator && _validate) {
     _validate.push(defaultInputTypeValidator);
   }
@@ -122,33 +130,57 @@ export const FormField: React.SFC<FormFieldProps> = props => {
   );
 };
 
-// export type FormInputProps = {
-//   id: string;
-//   label?: string;
-//   form: any;
-//   field: any;
-// };
-// export const FormInput: React.SFC<FormInputProps> = props => {
-//   const { id, label, form, field, children, ...rest } = props;
+export const FormCheckboxLayout = themed({
+  tag: Box,
+  defaultTheme: {
+    formCheckboxLayout: {
+      display: 'grid',
+      gridGap: 'xs',
+      // prettier-ignore
+      gridTemplate: toGridTemplate([
+        ['auto',             '1fr'                      ],
+        [FormFieldArea.input, FormFieldArea.label       ],
+        [FormFieldArea.error, FormFieldArea.error, '0px']
+      ])
+    }
+  }
+});
 
-//   return (
-//     <FormFieldLayout {...rest}>
-//       {label && (
-//         <FormFieldLabel htmlFor={id} gridArea={FormFieldArea.label}>
-//           {label}
-//         </FormFieldLabel>
-//       )}
+export const FormCheckbox: React.SFC<FormFieldProps> = props => {
+  const { name, validate, required, children, ...restProps } = props;
+  const { themableProps, rest } = extractThemableProps(restProps);
 
-//       {children ? (
-//         children({
-//           ...inputProps,
-//           height: 'xl',
-//           gridArea: FormFieldArea.input
-//         } as any)
-//       ) : (
-//         <Input {...inputProps} height="xl" gridArea={FormFieldArea.input} />
-//       )}
-//       <FormFieldError>{field.invalid ? field.error : null}</FormFieldError>
-//     </FormFieldLayout>
-//   );
-// };
+  // eslint-disable-next-line
+  let _validate = validate;
+  const hasCustomValidators = _validate !== undefined;
+  if (required) {
+    if (!_validate) {
+      _validate = [];
+    }
+    _validate.unshift(requiredValidator);
+  }
+  const defaultInputTypeValidator = !hasCustomValidators && getDefaultInputTypeValidator(restProps.type);
+  if (defaultInputTypeValidator && _validate) {
+    _validate.push(defaultInputTypeValidator);
+  }
+
+  return (
+    <Field name={name} validate={_validate} {...rest}>
+      {({ form, field, label, error }) => (
+        <FormCheckboxLayout {...themableProps}>
+          <Checkbox
+            {...field}
+            gridArea={FormFieldArea.input}
+            checked={field.value}
+            onChange={e => form.setFieldValue(field.name, e.target.checked)}
+          />
+          <FlexLayout alignItems="center" gridArea={FormFieldArea.label}>
+            <Label htmlFor={field.id}>{label}</Label>
+          </FlexLayout>
+
+          <FormFieldError>{field.invalid ? error : null}</FormFieldError>
+        </FormCheckboxLayout>
+      )}
+    </Field>
+  );
+};
