@@ -212,6 +212,10 @@ export const deityGreenTheme = createTheme({
     label: {
       fontSize: 'xs',
       fontWeight: 'bold'
+    },
+
+    checkbox: {
+      mr: 'xs'
     }
   }
 });

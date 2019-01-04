@@ -15,7 +15,7 @@ export const FormFieldLayout = themed({
   defaultTheme: {
     formFieldLayout: {
       display: 'grid',
-      gridGap: 'none',
+      gridGap: 'xs',
       // prettier-ignore
       gridTemplate: toGridTemplate([
         ['1fr'                     ],
