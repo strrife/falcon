@@ -44,9 +44,9 @@ const PersonalInformation = () => (
               >
                 {() => (
                   <GridLayout as={Form} id="edit-customer" i18nId="editCustomer" gridArea={TwoColumnsLayoutArea.left}>
-                    <FormField name="firstname" />
-                    <FormField name="lastname" />
-                    <FormField name="email" />
+                    <FormField name="firstname" required />
+                    <FormField name="lastname" required />
+                    <FormField name="email" required />
                     <FlexLayout justifyContent="space-between" alignItems="center" mt="md">
                       <Link as={RouterLink} to="/account/change-password">
                         <T id="editCustomer.changePassword" />
