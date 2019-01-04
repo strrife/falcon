@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Label, Input, extractThemableProps, themed } from '@deity/falcon-ui';
+import { FieldProps as FormikFieldProps } from 'formik';
+import { Box, Label, Input, extractThemableProps, ThemedComponentProps, themed } from '@deity/falcon-ui';
 import { Field } from './Field';
 import { toGridTemplate } from '../helpers';
 import { Validator, passwordValidator, emailValidator, requiredValidator } from './validators';
@@ -63,16 +64,28 @@ const getDefaultInputTypeValidator = (inputType: string | undefined) => {
   }
 };
 
-export type FormFieldProps = {
+export type FormFieldRenderProps<TValue = any> = {
+  form: FormikFieldProps<TValue>['form'] & {
+    id?: number | string;
+  };
+  field: FormikFieldProps<TValue>['field'] &
+    React.InputHTMLAttributes<HTMLInputElement> &
+    ThemedComponentProps & {
+      id?: string;
+      placeholder?: string;
+      invalid: boolean;
+    };
+};
+
+export type FormFieldProps<TValue = any> = {
   id?: number | string;
   name: string;
   label?: string;
   placeholder?: string;
   validate?: Validator[];
-  children?: (props: React.InputHTMLAttributes<HTMLInputElement> /* & ThemedComponentProps */) => React.ReactNode;
+  children?: (props: FormFieldRenderProps<TValue>) => React.ReactNode;
 } & React.InputHTMLAttributes<HTMLInputElement>; // ThemedComponentProps &
 
-// TODO: when new i18n support is ready use it to translate label and placeholder props
 export const FormField: React.SFC<FormFieldProps> = props => {
   const { name, validate, required, children, ...formFieldRestProps } = props;
   const inputType = formFieldRestProps.type;
@@ -94,15 +107,11 @@ export const FormField: React.SFC<FormFieldProps> = props => {
 
   return (
     <Field name={name} validate={_validate} {...rest}>
-      {({ field, label, error }) => (
+      {({ form, field, label, error }) => (
         <FormFieldLayout {...themableProps}>
           {label && <FormFieldLabel htmlFor={field.id}>{label}</FormFieldLabel>}
-
           {children ? (
-            children({
-              ...field,
-              gridArea: FormFieldArea.input
-            } as any)
+            children({ form, field: { ...field, gridArea: FormFieldArea.input } })
           ) : (
             <Input {...field} gridArea={FormFieldArea.input} />
           )}
