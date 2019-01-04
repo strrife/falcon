@@ -5,7 +5,7 @@ import { H1, Text, Button, FlexLayout, GridLayout } from '@deity/falcon-ui';
 import {
   Form,
   FormField,
-  FormCheckbox,
+  CheckboxFormField,
   FormErrorSummary,
   AddressQuery,
   GET_ADDRESS,
@@ -77,8 +77,8 @@ const EditAddress = ({ match, history }) => {
               >
                 {() => (
                   <Form id={id} i18nId="editAddress">
-                    {address.defaultBilling === false && <FormCheckbox name="defaultBilling" />}
-                    {address.defaultShipping === false && <FormCheckbox name="defaultShipping" />}
+                    {address.defaultBilling === false && <CheckboxFormField name="defaultBilling" />}
+                    {address.defaultShipping === false && <CheckboxFormField name="defaultShipping" />}
                     <TwoColumnsLayout>
                       <GridLayout gridArea={TwoColumnsLayoutArea.left}>
                         <FormField name="company" />

@@ -130,10 +130,10 @@ export const FormField: React.SFC<FormFieldProps> = props => {
   );
 };
 
-export const FormCheckboxLayout = themed({
+export const CheckboxFormFieldLayout = themed({
   tag: Box,
   defaultTheme: {
-    formCheckboxLayout: {
+    checkboxFormFieldLayout: {
       display: 'grid',
       gridGap: 'xs',
       // prettier-ignore
@@ -146,7 +146,7 @@ export const FormCheckboxLayout = themed({
   }
 });
 
-export const FormCheckbox: React.SFC<FormFieldProps> = props => {
+export const CheckboxFormField: React.SFC<FormFieldProps> = props => {
   const { name, validate, required, children, ...restProps } = props;
   const { themableProps, rest } = extractThemableProps(restProps);
 
@@ -167,7 +167,7 @@ export const FormCheckbox: React.SFC<FormFieldProps> = props => {
   return (
     <Field name={name} validate={_validate} {...rest}>
       {({ form, field, label, error }) => (
-        <FormCheckboxLayout {...themableProps}>
+        <CheckboxFormFieldLayout {...themableProps}>
           <Checkbox
             {...field}
             gridArea={FormFieldArea.input}
@@ -179,7 +179,7 @@ export const FormCheckbox: React.SFC<FormFieldProps> = props => {
           </FlexLayout>
 
           <FormFieldError>{field.invalid ? error : null}</FormFieldError>
-        </FormCheckboxLayout>
+        </CheckboxFormFieldLayout>
       )}
     </Field>
   );

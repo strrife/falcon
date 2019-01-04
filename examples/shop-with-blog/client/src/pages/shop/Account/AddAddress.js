@@ -5,7 +5,7 @@ import { H1, Button, FlexLayout, GridLayout } from '@deity/falcon-ui';
 import {
   Form,
   FormField,
-  FormCheckbox,
+  CheckboxFormField,
   FormErrorSummary,
   TwoColumnsLayout,
   TwoColumnsLayoutArea,
@@ -58,8 +58,8 @@ const AddAddress = ({ history }) => (
 
             return (
               <Form id={id} i18nId="addAddress">
-                <FormCheckbox name="defaultBilling" />
-                <FormCheckbox name="defaultShipping" />
+                <CheckboxFormField name="defaultBilling" />
+                <CheckboxFormField name="defaultShipping" />
                 <TwoColumnsLayout>
                   <GridLayout gridArea={TwoColumnsLayoutArea.left}>
                     <FormField name="company" />
