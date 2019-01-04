@@ -35,7 +35,8 @@ const sampleShippingMethod = {
 
 const samplePaymentMethod = {
   code: 'sample-payment',
-  title: 'Sample Payment'
+  title: 'Sample Payment',
+  inputType: 'foo'
 };
 
 const resolversWithoutErrors = {
