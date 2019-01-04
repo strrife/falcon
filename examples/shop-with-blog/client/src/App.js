@@ -79,7 +79,6 @@ const App = ({ online }) => (
                   <Route exact path="/cart" component={Cart} />
                   <Route exact path="/checkout" component={Checkout} />
                   <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
-                  <Route exact path="/reset-password" component={ResetPassword} />
                   <ProtectedRoute path="/account" component={Account} />
                   <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
                   <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
