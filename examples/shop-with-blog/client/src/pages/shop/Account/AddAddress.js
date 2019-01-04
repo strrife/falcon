@@ -1,11 +1,11 @@
 import React from 'react';
 import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
-import { H1, Box, Label, Text, Button, FlexLayout, GridLayout, Checkbox } from '@deity/falcon-ui';
+import { H1, Button, FlexLayout, GridLayout } from '@deity/falcon-ui';
 import {
   Form,
-  Field,
   FormField,
+  FormCheckbox,
   FormErrorSummary,
   TwoColumnsLayout,
   TwoColumnsLayoutArea,
@@ -58,40 +58,8 @@ const AddAddress = ({ history }) => (
 
             return (
               <Form id={id} i18nId="addAddress">
-                <Field name="defaultBilling">
-                  {({ form, field, label, error: err }) => (
-                    <Box>
-                      <FlexLayout alignItems="center">
-                        <Checkbox
-                          id={field.id}
-                          checked={field.value}
-                          onChange={e => form.setFieldValue(field.name, e.target.checked)}
-                        />
-                        <Label htmlFor={field.id}>{label}</Label>
-                      </FlexLayout>
-                      <Text fontSize="xxs" color="error">
-                        {field.invalid ? err : null}
-                      </Text>
-                    </Box>
-                  )}
-                </Field>
-                <Field name="defaultShipping">
-                  {({ form, field, label, error: err }) => (
-                    <Box>
-                      <FlexLayout alignItems="center">
-                        <Checkbox
-                          id={field.id}
-                          checked={field.value}
-                          onChange={e => form.setFieldValue(field.name, e.target.checked)}
-                        />
-                        <Label htmlFor={field.id}>{label}</Label>
-                      </FlexLayout>
-                      <Text fontSize="xxs" color="error">
-                        {field.invalid ? err : null}
-                      </Text>
-                    </Box>
-                  )}
-                </Field>
+                <FormCheckbox name="defaultBilling" />
+                <FormCheckbox name="defaultShipping" />
                 <TwoColumnsLayout>
                   <GridLayout gridArea={TwoColumnsLayoutArea.left}>
                     <FormField name="company" />
