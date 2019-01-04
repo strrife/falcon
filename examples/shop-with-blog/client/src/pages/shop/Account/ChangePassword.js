@@ -42,7 +42,7 @@ const ChangePassword = ({ history }) => (
                   validate={[]}
                   required
                 >
-                  {inputProps => <PasswordRevealInput {...inputProps} />}
+                  {({ field }) => <PasswordRevealInput {...field} />}
                 </FormField>
                 <FormField
                   name="password"
@@ -52,7 +52,7 @@ const ChangePassword = ({ history }) => (
                   required
                   autoComplete="new-password"
                 >
-                  {inputProps => <PasswordRevealInput {...inputProps} />}
+                  {({ field }) => <PasswordRevealInput {...field} />}
                 </FormField>
                 <FlexLayout justifyContent="flex-end" alignItems="center" mt="md">
                   <Button type="submit" variant={loading ? 'loader' : undefined}>

@@ -42,7 +42,7 @@ export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted, id }) => (
               required
               autoComplete="current-password"
             >
-              {inputProps => <PasswordRevealInput {...inputProps} />}
+              {({ field }) => <PasswordRevealInput {...field} />}
             </FormField>
             <FlexLayout justifyContent="space-between" alignItems="center" mt="md">
               <ForgotPasswordTrigger />
