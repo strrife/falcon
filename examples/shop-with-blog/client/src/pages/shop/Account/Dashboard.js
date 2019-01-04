@@ -17,9 +17,11 @@ const Dashboard = () => (
               <H2>
                 <T id="dashboard.recentOrder" />
               </H2>
-              <Link as={RouterLink} to="/account/orders" ml="md">
-                <T id="dashboard.viewAllOrders" />
-              </Link>
+              {!!items.length && (
+                <Link as={RouterLink} to="/account/orders" ml="md">
+                  <T id="dashboard.viewAllOrders" />
+                </Link>
+              )}
             </FlexLayout>
             <Box>{items.length ? <OrdersList items={items} /> : <NoOrders />}</Box>
           </>
