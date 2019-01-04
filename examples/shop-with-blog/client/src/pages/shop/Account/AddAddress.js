@@ -1,10 +1,11 @@
 import React from 'react';
-import { Formik, Field, ErrorMessage } from 'formik';
+import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
 import { H1, Box, Label, Text, Button, FlexLayout, GridLayout, Checkbox } from '@deity/falcon-ui';
 import {
-  FormField,
   Form,
+  Field,
+  FormField,
   FormErrorSummary,
   TwoColumnsLayout,
   TwoColumnsLayoutArea,
@@ -57,54 +58,40 @@ const AddAddress = ({ history }) => (
 
             return (
               <Form id={id} i18nId="addAddress">
-                <Field
-                  name="defaultBilling"
-                  render={({ field, form }) => (
+                <Field name="defaultBilling">
+                  {({ form, field, label, error: err }) => (
                     <Box>
-                      <FlexLayout my="xs">
+                      <FlexLayout alignItems="center">
                         <Checkbox
-                          id={`${id}-${field.name}`}
-                          size="sm"
+                          id={field.id}
                           checked={field.value}
                           onChange={e => form.setFieldValue(field.name, e.target.checked)}
                         />
-                        <Label htmlFor={`${id}-${field.name}`}>defaultBilling</Label>
+                        <Label htmlFor={field.id}>{label}</Label>
                       </FlexLayout>
-                      <ErrorMessage
-                        name={field.name}
-                        render={msg => (
-                          <Text fontSize="xxs" color="error">
-                            {msg}
-                          </Text>
-                        )}
-                      />
+                      <Text fontSize="xxs" color="error">
+                        {field.invalid ? err : null}
+                      </Text>
                     </Box>
                   )}
-                />
-                <Field
-                  name="defaultShipping"
-                  render={({ field, form }) => (
+                </Field>
+                <Field name="defaultShipping">
+                  {({ form, field, label, error: err }) => (
                     <Box>
-                      <FlexLayout my="xs">
+                      <FlexLayout alignItems="center">
                         <Checkbox
-                          id={`${id}-${field.name}`}
-                          size="sm"
+                          id={field.id}
                           checked={field.value}
                           onChange={e => form.setFieldValue(field.name, e.target.checked)}
                         />
-                        <Label htmlFor={`${id}-${field.name}`}>defaultShipping</Label>
+                        <Label htmlFor={field.id}>{label}</Label>
                       </FlexLayout>
-                      <ErrorMessage
-                        name={field.name}
-                        render={msg => (
-                          <Text fontSize="xxs" color="error">
-                            {msg}
-                          </Text>
-                        )}
-                      />
+                      <Text fontSize="xxs" color="error">
+                        {field.invalid ? err : null}
+                      </Text>
                     </Box>
                   )}
-                />
+                </Field>
                 <TwoColumnsLayout>
                   <GridLayout gridArea={TwoColumnsLayoutArea.left}>
                     <FormField name="company" />
@@ -116,34 +103,21 @@ const AddAddress = ({ history }) => (
                     <FormField name="street" required />
                     <FormField name="postcode" required />
                     <FormField name="city" required />
-                    <Field
-                      name="countryId"
-                      render={({ field, form }) => (
-                        <Box>
-                          <Label htmlFor={`${id}-${field.name}`}>Country *</Label>
-                          <CountriesQuery passLoading>
-                            {({ countries = { items: [] } }) => (
-                              <CountrySelector
-                                items={countries.items}
-                                value={field.value}
-                                onChange={x => form.setFieldValue(field.name, x)}
-                              />
-                            )}
-                          </CountriesQuery>
-                          <ErrorMessage
-                            name={field.name}
-                            render={msg => (
-                              <Text fontSize="xxs" color="error">
-                                {msg}
-                              </Text>
-                            )}
-                          />
-                        </Box>
+                    <FormField name="countryId" required>
+                      {({ form, field }) => (
+                        <CountriesQuery passLoading>
+                          {({ countries = { items: [] } }) => (
+                            <CountrySelector
+                              {...field}
+                              onChange={x => form.setFieldValue(field.name, x)}
+                              items={countries.items}
+                            />
+                          )}
+                        </CountriesQuery>
                       )}
-                    />
+                    </FormField>
                   </GridLayout>
                 </TwoColumnsLayout>
-
                 <FlexLayout justifyContent="flex-end" alignItems="center" mt="md">
                   <Button type="submit" variant={loading ? 'loader' : undefined}>
                     <T id="addAddress.submitButton" />
