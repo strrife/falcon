@@ -140,7 +140,7 @@ input AddAddressInput {
   company: String
   firstname: String!
   lastname: String!
-  telephone: String
+  telephone: String!
   street: [String]
   postcode: String!
   city: String!
