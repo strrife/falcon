@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { Query } from '../Query/Query';
 
 export const GET_CATEGORY_PRODUCTS = gql`
-  query CategoryProducts($categoryId: Int!, $page: Int = 1) {
+  query CategoryProducts($categoryId: String!, $page: Int = 1) {
     category(id: $categoryId) {
       name
     }

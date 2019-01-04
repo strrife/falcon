@@ -48,7 +48,7 @@ const QUERY_TEST_CASES = [
   {
     name: 'products - should return correct products list',
     query: `
-      query Products($categoryId: Int) {
+      query Products($categoryId: String) {
         products(categoryId: $categoryId) {
           items {
             id

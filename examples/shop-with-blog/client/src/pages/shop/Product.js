@@ -8,7 +8,7 @@ const ProductPage = ({ id, location }) => (
   </ProductQuery>
 );
 ProductPage.propTypes = {
-  id: PropTypes.number.isRequired
+  id: PropTypes.string.isRequired
 };
 
 export default ProductPage;

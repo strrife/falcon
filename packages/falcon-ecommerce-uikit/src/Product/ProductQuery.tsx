@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { Query } from '../Query';
 
 export const GET_PRODUCT = gql`
-  query Product($id: Int!, $path: String!) {
+  query Product($id: String!, $path: String!) {
     product(id: $id) {
       id
       sku

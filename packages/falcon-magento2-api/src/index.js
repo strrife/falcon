@@ -33,6 +33,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         baseCurrency: () => this.session.baseCurrency,
         timezone: () => this.session.timezone,
         weightUnit: () => this.session.weightUnit
+      },
+      Product: {
+        breadcrumbs: (...args) => this.breadcrumbs(...args)
       }
     };
     Logger.debug(`${this.name}: Adding additional resolve functions`);
@@ -413,7 +416,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       }
 
       data.thumbnail = thumbnailUrl;
-      data.gallery = mediaGallerySizes;
+      data.gallery = mediaGallerySizes || [];
 
       if (minPrice) {
         data.minPrice = minPrice;
@@ -555,11 +558,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   /**
    * Search for product with id
    * @param {object} obj Parent object
-   * @param {number} id - product id called by magento entity_id
+   * @param {string} id - product id called by magento entity_id
    * @return {Promise<Product>} product data
    */
   async product(obj, { id }) {
-    return this.get(`/products/${id}`);
+    const productData = await this.get(`/products/${id}`);
+    const product = this.reduceProduct(productData);
+    return product;
   }
 
   /**
@@ -1540,5 +1545,23 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   removeCartData() {
     delete this.session.cart;
     this.context.session.save();
+  }
+
+  /**
+   * Fetches breadcrumbs for passed path
+   * @param {Object} obj - parent
+   * @param {Object} params - parameters passed to the resolver
+   * @return {Promise<[Object]>} breadcrumbs fetched from backend
+   */
+  async breadcrumbs(obj, { path }) {
+    return this.get(
+      `/breadcrumbs`,
+      { url: path },
+      {
+        context: {
+          didReceiveResult: resp => this.convertKeys(resp.data)
+        }
+      }
+    );
   }
 };

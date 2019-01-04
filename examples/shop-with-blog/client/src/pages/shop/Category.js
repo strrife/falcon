@@ -8,7 +8,7 @@ const CategoryPage = ({ id }) => (
   </CategoryProductsQuery>
 );
 CategoryPage.propTypes = {
-  id: PropTypes.number.isRequired
+  id: PropTypes.string.isRequired
 };
 
 export default CategoryPage;
