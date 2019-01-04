@@ -3,7 +3,7 @@ import { Mutation } from 'react-apollo';
 
 export const EDIT_ADDRESS = gql`
   mutation EditAddress($input: EditAddressInput!) {
-    editCustomerAddress(input: $input) {
+    editAddress(input: $input) {
       id
     }
   }
@@ -18,7 +18,7 @@ export class EditAddressMutation extends Mutation {
 
 export const ADD_ADDRESS = gql`
   mutation AddAddress($input: AddAddressInput!) {
-    addCustomerAddress(input: $input) {
+    addAddress(input: $input) {
       id
     }
   }

@@ -34,9 +34,9 @@ extend type Mutation {
   signUp(input: SignUp!): Boolean
   signIn(input: SignIn!): Boolean
   signOut: Boolean
-  editCustomerData(input: CustomerInput!): Customer
-  editCustomerAddress(input: EditAddressInput!): Address
-  addCustomerAddress(input: AddAddressInput!): Address
+  editCustomer(input: CustomerInput!): Customer
+  editAddress(input: EditAddressInput!): Address
+  addAddress(input: AddAddressInput!): Address
   estimateShippingMethods(input: EstimateShippingInput!): [ShippingMethod]
   removeCustomerAddress(id: Int!): Boolean
   requestCustomerPasswordResetToken(input: EmailInput!): Boolean

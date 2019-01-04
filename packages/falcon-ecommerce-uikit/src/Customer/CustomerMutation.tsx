@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
 export const EDIT_CUSTOMER = gql`
-  mutation EditCustomerData($input: CustomerInput!) {
-    editCustomerData(input: $input) {
+  mutation EditCustomer($input: CustomerInput!) {
+    editCustomer(input: $input) {
       id
     }
   }

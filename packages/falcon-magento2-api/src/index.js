@@ -1171,7 +1171,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {CustomerInput} data - data to be saved
    * @return {Promise<Customer>} updated customer data
    */
-  async editCustomerData(obj, { input }) {
+  async editCustomer(obj, { input }) {
     const response = await this.put('/customers/me', { customer: { ...input } });
 
     return this.convertKeys(response.data);
@@ -1219,7 +1219,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {AddressInput} data - address data
    * @return {Promise<Address>} added address data
    */
-  async addCustomerAddress(obj, { input }) {
+  async addAddress(obj, { input }) {
     const { customerToken = {} } = this.session;
     if (!customerToken.token) {
       Logger.error(`${this.name}: Trying to add address data without customer token`);
@@ -1237,7 +1237,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {AddressInput} data - data to change
    * @return {Promise<Address>} updated address data
    */
-  async editCustomerAddress(obj, { input }) {
+  async editAddress(obj, { input }) {
     const { customerToken = {} } = this.session;
     if (!customerToken.token) {
       Logger.error(`${this.name}: Trying to edit address data without customer token`);
