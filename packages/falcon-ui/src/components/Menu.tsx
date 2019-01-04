@@ -1,8 +1,8 @@
 import { themed } from '../theme';
-import { ListItem } from './List';
+import { List, ListItem } from './List';
 
 export const Menu = themed({
-  tag: 'ul',
+  tag: List,
 
   defaultTheme: {
     menu: {
