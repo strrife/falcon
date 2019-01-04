@@ -8,9 +8,26 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 ## Falcon v0.3 (unreleased)
 
-### Falcon Client v0.2
+### Falcon Client v0.3
 
 - improvement: React 16.6 support ([#226](https://github.com/deity-io/falcon/pull/226))
+
+### Falcon UI v0.3
+
+- feat: added `Menu` component ([#240](https://github.com/deity-io/falcon/pull/240))
+
+### Falcon E-commerce UI Kit v0.3
+
+- feat: added queries and mutations for: 
+  - getting all orders and by id
+  - addresses operations (add new address, remove address, change address)
+  - editing customer information and changing password ([#240](https://github.com/deity-io/falcon/pull/240))
+- feat: added `CheckboxFormField` ([#240](https://github.com/deity-io/falcon/pull/240))
+- improvement: extracted `Field` component in order to improve support for custom `FormField`'s component ([#240](https://github.com/deity-io/falcon/pull/240))
+
+### Falcon Shop Extension v0.3
+
+- feat: introduced resolver `addresses: AddressList` in order to retrieve all customer addresses, added types `EditAddressInput`, `AddAddressInput` ([#240](https://github.com/deity-io/falcon/pull/240))
 
 ## Falcon v0.2 (2018-12-12)
 
