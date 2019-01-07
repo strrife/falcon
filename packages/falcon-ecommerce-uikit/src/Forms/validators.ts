@@ -26,3 +26,14 @@ export const passwordValidator: Validator = value => {
   }
   return undefined;
 };
+
+export const getDefaultInputTypeValidator = (inputType: string | undefined) => {
+  switch (inputType) {
+    case 'password':
+      return passwordValidator;
+    case 'email':
+      return emailValidator;
+    default:
+      return undefined;
+  }
+};

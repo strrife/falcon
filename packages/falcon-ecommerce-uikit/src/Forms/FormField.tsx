@@ -12,7 +12,7 @@ import {
 } from '@deity/falcon-ui';
 import { Field } from './Field';
 import { toGridTemplate } from '../helpers';
-import { Validator, passwordValidator, emailValidator, requiredValidator } from './validators';
+import { Validator, requiredValidator, getDefaultInputTypeValidator } from './validators';
 
 export const FormFieldArea = {
   label: 'label',
@@ -62,17 +62,6 @@ export const FormFieldError = themed({
   }
 });
 
-const getDefaultInputTypeValidator = (inputType: string | undefined) => {
-  switch (inputType) {
-    case 'password':
-      return passwordValidator;
-    case 'email':
-      return emailValidator;
-    default:
-      return undefined;
-  }
-};
-
 export type FormFieldRenderProps<TValue = any> = {
   form: FormikFieldProps<TValue>['form'] & {
     id?: number | string;
@@ -93,7 +82,8 @@ export type FormFieldProps<TValue = any> = {
   placeholder?: string;
   validate?: Validator[];
   children?: (props: FormFieldRenderProps<TValue>) => React.ReactNode;
-} & React.InputHTMLAttributes<HTMLInputElement>; // ThemedComponentProps &
+} & React.InputHTMLAttributes<HTMLInputElement> &
+  ThemedComponentProps;
 
 export const FormField: React.SFC<FormFieldProps> = props => {
   const { name, validate, required, children, ...restProps } = props;
@@ -151,21 +141,21 @@ export const CheckboxFormField: React.SFC<FormFieldProps> = props => {
   const { themableProps, rest } = extractThemableProps(restProps);
 
   // eslint-disable-next-line
-  let _validate = validate;
-  const hasCustomValidators = _validate !== undefined;
+  let validators = validate;
+  const hasCustomValidators = validators !== undefined;
   if (required) {
-    if (!_validate) {
-      _validate = [];
+    if (!validators) {
+      validators = [];
     }
-    _validate.unshift(requiredValidator);
+    validators.unshift(requiredValidator);
   }
   const defaultInputTypeValidator = !hasCustomValidators && getDefaultInputTypeValidator(restProps.type);
-  if (defaultInputTypeValidator && _validate) {
-    _validate.push(defaultInputTypeValidator);
+  if (defaultInputTypeValidator && validators) {
+    validators.push(defaultInputTypeValidator);
   }
 
   return (
-    <Field name={name} validate={_validate} {...rest}>
+    <Field name={name} validate={validators} {...rest}>
       {({ form, field, label, error }) => (
         <CheckboxFormFieldLayout {...themableProps}>
           <Checkbox
