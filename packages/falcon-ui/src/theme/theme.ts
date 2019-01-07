@@ -57,6 +57,7 @@ export const defaultBaseTheme = {
   fontWeights: {
     light: 300,
     regular: 400,
+    demiBold: 600,
     bold: 700
   },
 

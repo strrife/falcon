@@ -11,6 +11,7 @@ import {
   DefaultThemeProps,
   Box
 } from '@deity/falcon-ui';
+import { T } from '@deity/falcon-i18n';
 
 import { toGridTemplate } from '../helpers';
 import { MiniCartIcon } from '../MiniCart';
@@ -32,15 +33,18 @@ const bannerLayoutTheme: DefaultThemeProps = {
 };
 
 export const Banner: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
-  <List defaultTheme={bannerLayoutTheme}>
-    {items.map(item => (
-      <ListItem fontSize="xs" py="xs" ml="sm" key={item.name}>
-        <Link as={RouterLink} to={item.url}>
-          {item.name}
-        </Link>
-      </ListItem>
-    ))}
-  </List>
+  // <List defaultTheme={bannerLayoutTheme}>
+  //   {items.map(item => (
+  //     <ListItem fontSize="xs" py="xs" ml="sm" key={item.name}>
+  //       <Link as={RouterLink} to={item.url}>
+  //         {item.name}
+  //       </Link>
+  //     </ListItem>
+  //   ))}
+  // </List>
+  <Box defaultTheme={bannerLayoutTheme}>
+    <T id="banner.summerSale" />
+  </Box>
 );
 
 export const Nav: React.SFC<{ items: MenuItem[] }> = ({ items }) => (

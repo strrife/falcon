@@ -1,8 +1,8 @@
 {
-  "debug": false,
+  "debug": true,
   "port": 4000,
-  "logLevel": "info",
-  "verboseEvents": false,
+  "logLevel": "debug",
+  "verboseEvents": true,
   "endpoints": {
     "magento": {
       "package": "@deity/falcon-magento2-api/src/endpoints",

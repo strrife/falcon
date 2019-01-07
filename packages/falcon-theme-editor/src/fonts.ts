@@ -14,6 +14,10 @@ export const fonts = [
     google: 'Source Sans Pro:300,400,700'
   },
   {
+    value: 'Montserrat, sans-serif',
+    google: 'Montserrrat:300,400,700'
+  },
+  {
     value: 'Work Sans',
     google: 'Work Sans:300,400,700'
   },

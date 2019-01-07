@@ -1,6 +1,9 @@
 {
   "welcome": "Welcome to @deity",
   "copyright": "© Copyright {{year}}",
+  "banner": {
+    "summerSale": "Summer Sale - Now on!"
+  },
   "newsletter": {
     "title": "Newsletter",
     "message": "Join our mailing list to receive the latest offers and more!",
@@ -9,7 +12,9 @@
     "consent": "I would like to subscribe to updates"
   },
   "home": {
-    "hotSellers": "Hot sellers"
+    "hotSellers": "Hot sellers",
+    "ourFavourites": "Our Favourites",
+    "shopLooks": "Shop the Looks"
   },
   "blog": {
     "title": "Blog",

@@ -22,15 +22,16 @@ export const deityGreenTheme = createTheme({
   colors: {
     primary: '#222222',
     primaryLight: '#95c110',
+    bannerPrimary: '#464646',
     black: '#000000'
   },
 
   fonts: {
-    sans: 'Source Sans Pro, sans-serif'
+    sans: 'Montserrat, sans-serif'
   },
 
   fontWeights: {
-    bold: 500
+    bold: 700
   },
 
   icons: {
@@ -175,12 +176,7 @@ export const deityGreenTheme = createTheme({
     }
   },
   components: {
-    appLayout: {
-      px: {
-        md: 'xxl',
-        xs: 'md'
-      }
-    },
+    appLayout: {},
 
     icon: {
       stroke: 'black',
@@ -199,14 +195,19 @@ export const deityGreenTheme = createTheme({
       alignItems: 'center',
       my: 'none',
       gridGap: 'sm',
-      py: 'sm',
+      py: 'lg',
       css: {
         justifyItems: 'center'
       }
     },
 
     bannerLayout: {
-      bgFullWidth: 'secondary'
+      bgFullWidth: 'bannerPrimary',
+      color: 'white',
+      fontSize: 'xs',
+      py: 'xs',
+      ml: 'sm',
+      justifyContent: 'center'
     },
 
     listItem: {
@@ -235,9 +236,10 @@ export const deityGreenTheme = createTheme({
     },
 
     navbar: {
-      bgFullWidth: 'secondary',
+      bgFullWidth: 'transparent',
       color: 'black',
       css: {
+        fontWeight: '500',
         zIndex: 2,
         justifyContent: 'center'
       }

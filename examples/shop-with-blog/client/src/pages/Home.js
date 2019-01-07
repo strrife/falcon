@@ -1,12 +1,29 @@
 import React from 'react';
-import { H1, GridLayout } from '@deity/falcon-ui';
+import { H1, H4, GridLayout } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 import { ProductsList, ProductsListQuery } from '@deity/falcon-ecommerce-uikit';
 import { BackgroundImage, Box } from '@deity/falcon-ui';
 import LazyLoad from 'react-lazyload';
+import gql from 'graphql-tag';
+// import FadeOverlay from '../components/FadeOverlay';
+
+const GET_PRODUCTS_LIST = gql`
+  query Products($query: ShopPageQuery) {
+    products(query: $query) {
+      items {
+        id
+        name
+        price
+        thumbnail
+        urlPath
+      }
+    }
+  }
+`;
 
 const Home = () => (
   <GridLayout gridGap="md" py="md">
+    {/* <FadeOverlay /> */}
     <LazyLoad>
       <BackgroundImage
         css={{ position: 'relative' }}
@@ -25,10 +42,12 @@ const Home = () => (
         </Box>
       </BackgroundImage>
     </LazyLoad>
-    <H1 css={{ textAlign: 'center' }}>
-      <T id="home.hotSellers" />
-    </H1>
-    <ProductsListQuery>{({ products }) => <ProductsList products={products.items} />}</ProductsListQuery>
+    <H4 css={{ textAlign: 'center', fontWeight: 'demiBold' }}>
+      <T id="home.shopLooks" />
+    </H4>
+    <ProductsListQuery query={GET_PRODUCTS_LIST} variables={{ query: { perPage: 3 } }}>
+      {({ products }) => <ProductsList products={products.items} />}
+    </ProductsListQuery>
   </GridLayout>
 );
 

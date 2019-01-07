@@ -61,6 +61,18 @@ export const NavbarItem = themed({
         ':hover': {
           background: theme.colors.secondary,
           color: theme.colors.secondaryText
+        },
+        '::before': {
+          content: '',
+          width: '200vw',
+          height: '100%',
+          background: 'white',
+          position: 'absolute',
+          left: '-50vw',
+          right: '50vw',
+          top: 0,
+          zIndex: -1,
+          boxShadow: '#0000002b 0px 11px 11px 1px'
         }
       })
     }
@@ -90,14 +102,14 @@ export const NavbarItemMenu = themed({
   defaultTheme: {
     navbarItemMenu: {
       p: 'sm',
-      bg: 'secondary',
+      bg: 'white',
       color: 'secondaryText',
-      boxShadow: 'subtle',
       css: {
         position: 'absolute',
         top: '100%',
         left: 0,
-        right: 0
+        right: 0,
+        borderTop: '1px solid'
       }
     }
   }
