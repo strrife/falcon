@@ -5854,7 +5854,7 @@ doctrine@^2.0.0, doctrine@^2.1.0:
   dependencies:
     esutils "^2.0.2"
 
-docz-core@^0.13.7:
+docz-core@0.13.7, docz-core@^0.13.7:
   version "0.13.7"
   resolved "https://registry.npmjs.org/docz-core/-/docz-core-0.13.7.tgz#524239fc82abc6e2ac0111455fa047648ac61efd"
   integrity sha512-VPQJj8yKepZMCTX/u/dxq3iW/1i8WkKaY1Aiet4NGz/pcvRHFHu1Pcwsp/3QM1wGNqbXw+96DJBOO7OpRVECXg==
