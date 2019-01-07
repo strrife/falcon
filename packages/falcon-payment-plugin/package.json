@@ -79,7 +79,7 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-test-renderer": "^16.6.3",
-    "rimraf": "2.6.2",
+    "rimraf": "2.6.3",
     "rollup": "0.66.4",
     "rollup-plugin-babel": "4.0.3",
     "rollup-plugin-commonjs": "9.1.8",
