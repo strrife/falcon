@@ -90,21 +90,18 @@ export const FormField: React.SFC<FormFieldProps> = props => {
   const { themableProps, rest } = extractThemableProps(restProps);
 
   // eslint-disable-next-line
-  let _validate = validate;
-  const hasCustomValidators = _validate !== undefined;
+  // eslint-disable-next-line
+  let validators = validate || [];
   if (required) {
-    if (!_validate) {
-      _validate = [];
-    }
-    _validate.unshift(requiredValidator);
+    validators.unshift(requiredValidator);
   }
-  const defaultInputTypeValidator = !hasCustomValidators && getDefaultInputTypeValidator(restProps.type);
-  if (defaultInputTypeValidator && _validate) {
-    _validate.push(defaultInputTypeValidator);
+  const defaultInputTypeValidator = !validate && getDefaultInputTypeValidator(restProps.type);
+  if (defaultInputTypeValidator) {
+    validators.push(defaultInputTypeValidator);
   }
 
   return (
-    <Field name={name} validate={_validate} {...rest}>
+    <Field name={name} validate={validators} {...rest}>
       {({ form, field, label, error }) => (
         <FormFieldLayout {...themableProps}>
           {label && <FormFieldLabel htmlFor={field.id}>{label}</FormFieldLabel>}
@@ -141,16 +138,12 @@ export const CheckboxFormField: React.SFC<FormFieldProps> = props => {
   const { themableProps, rest } = extractThemableProps(restProps);
 
   // eslint-disable-next-line
-  let validators = validate;
-  const hasCustomValidators = validators !== undefined;
+  let validators = validate || [];
   if (required) {
-    if (!validators) {
-      validators = [];
-    }
     validators.unshift(requiredValidator);
   }
-  const defaultInputTypeValidator = !hasCustomValidators && getDefaultInputTypeValidator(restProps.type);
-  if (defaultInputTypeValidator && validators) {
+  const defaultInputTypeValidator = !validate && getDefaultInputTypeValidator(restProps.type);
+  if (defaultInputTypeValidator) {
     validators.push(defaultInputTypeValidator);
   }
 
