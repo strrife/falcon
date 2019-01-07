@@ -185,7 +185,7 @@ export const deityGreenTheme = createTheme({
       transitionDuration: 'standard',
       css: {
         ':hover': {
-          transform: 'scale(1.20)'
+          opacity: '0.7'
         }
       }
     },
