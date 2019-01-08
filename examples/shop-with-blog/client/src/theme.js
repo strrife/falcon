@@ -301,6 +301,9 @@ export const deityGreenTheme = createTheme({
       px: 'xl',
       height: 'lg',
       bg: 'black',
+      fontSize: 'xs',
+      fontWeight: 'demiBold',
+      borderRadius: 'small',
       css: {
         transitionProperty: 'all',
         textTransform: 'capitalize'
@@ -326,6 +329,13 @@ export const deityGreenTheme = createTheme({
               borderColor: props.theme.colors.primaryLight,
               borderRightColor: props.theme.colors.white
             }
+          })
+        },
+        cta: {
+          height: 'xl',
+          css: props => ({
+            color: props.theme.colors.white,
+            backgroundColor: props.theme.colors.primary
           })
         }
       }

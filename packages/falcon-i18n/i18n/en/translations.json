@@ -14,7 +14,9 @@
   "home": {
     "hotSellers": "Hot sellers",
     "ourFavourites": "Our Favourites",
-    "shopLooks": "Shop the Looks"
+    "shopLooks": "Shop the Looks",
+    "ctaButton": "Shop now",
+    "heroText": "New Collection"
   },
   "blog": {
     "title": "Blog",
