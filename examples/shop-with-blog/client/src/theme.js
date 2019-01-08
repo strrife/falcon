@@ -30,6 +30,10 @@ export const deityGreenTheme = createTheme({
     sans: 'Montserrat, sans-serif'
   },
 
+  fontSizes: {
+    md: '16px'
+  },
+
   fontWeights: {
     bold: 700
   },

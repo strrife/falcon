@@ -16,6 +16,7 @@ const footerLayoutTheme: DefaultThemeProps = {
 const copyrightLayoutTheme: DefaultThemeProps = {
   copyrightLayout: {
     p: 'sm',
+    fontSize: 'xs',
     color: 'secondaryText',
     bgFullWidth: 'secondary',
     css: {
@@ -31,10 +32,13 @@ const footerSectionsTheme: DefaultThemeProps = {
     gridGap: 'sm',
     bgFullWidth: 'secondaryLight',
     py: 'sm',
+    px: 'xl',
     css: {
+      margin: 'auto',
+      maxWidth: 1280,
       justifyItems: {
         xs: 'center',
-        md: 'center'
+        md: 'flex-start'
       }
     }
   }
@@ -44,10 +48,12 @@ export const FooterSections: React.SFC<{ sections: MenuItem[] }> = ({ sections }
   <Box defaultTheme={footerSectionsTheme}>
     {sections.map(section => (
       <Box key={section.name} css={{ minWidth: 200 }}>
-        <H4 fontWeight="bold">{section.name}</H4>
+        <H4 fontSize="xs" fontWeight="demiBold">
+          {section.name}
+        </H4>
         <List>
           {section.children.map(item => (
-            <ListItem p="xs" key={item.name}>
+            <ListItem fontSize="xxs" py="xs" key={item.name}>
               <Link as={RouterLink} to={item.url}>
                 {item.name}
               </Link>
@@ -63,6 +69,7 @@ const languageSectionTheme: DefaultThemeProps = {
   languageSection: {
     bgFullWidth: 'secondaryLight',
     py: 'md',
+    fontSize: 'xs',
     css: {
       maxWidth: 160,
       margin: '0 auto',

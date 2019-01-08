@@ -1,12 +1,12 @@
 import React from 'react';
-import { themed, H3, Text, Group, Input, Button, Checkbox, Label } from '@deity/falcon-ui';
+import { themed, H4, Text, Group, Input, Button, Checkbox, Label } from '@deity/falcon-ui';
 import { T, I18n } from '@deity/falcon-i18n';
 
 export const NewsletterLayout = themed({
   tag: 'div',
   defaultProps: {
     bgFullWidth: 'secondaryLight',
-    py: 'md',
+    py: 'xl',
     gridGap: 'sm',
     display: 'grid',
     gridTemplateColumns: '1fr',
@@ -20,10 +20,10 @@ export const NewsletterLayout = themed({
 
 export const Newsletter: React.SFC<{}> = () => (
   <NewsletterLayout>
-    <H3>
+    <H4 fontWeight="demiBold">
       <T id="newsletter.title" />
-    </H3>
-    <Text>
+    </H4>
+    <Text fontSize="xxs">
       <T id="newsletter.message" />
     </Text>
     <I18n>
@@ -39,8 +39,8 @@ export const Newsletter: React.SFC<{}> = () => (
             />
             <Button as="input" type="submit" value={t('newsletter.subscribe')} flex="none" />
           </Group>
-          <Label htmlFor="subscribe" my="sm" display="flex" justifyContent="center" alignItems="center">
-            <Checkbox id="subscribe" required mr="xs" /> {t('newsletter.consent')}
+          <Label htmlFor="subscribe" my="sm" display="flex" justifyContent="center" alignItems="center" fontSize="xxs">
+            <Checkbox id="subscribe" required mr="xs" size="sm" /> {t('newsletter.consent')}
           </Label>
         </form>
       )}
