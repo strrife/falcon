@@ -231,6 +231,14 @@ export const deityGreenTheme = createTheme({
       justifyContent: 'center'
     },
 
+    productsCategory: {
+      p: 'xl',
+      css: {
+        margin: 'auto',
+        maxWidth: 1280
+      }
+    },
+
     listItem: {
       fontWeight: 'regular',
       transitionTimingFunction: 'easeIn',

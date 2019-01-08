@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { H1, H3, H4, GridLayout, Button } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 import { ProductsList, ProductsListQuery } from '@deity/falcon-ecommerce-uikit';
@@ -39,7 +40,7 @@ const Hero = () => (
         <H1 fontWeight="demiBold" css={{ textShadow: '3px 4px 20px #0000004f' }}>
           <T id="home.heroText" />
         </H1>
-        <Button as="a" href="/women.html" variant="cta">
+        <Button as={Link} to="/women.html" variant="cta">
           <T id="home.ctaButton" />
         </Button>
       </Box>
