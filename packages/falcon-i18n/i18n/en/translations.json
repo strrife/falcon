@@ -60,12 +60,13 @@
   "miniCart": {
     "title": "Shopping cart",
     "checkout": "Secure checkout",
-    "empty": "Shopping cart is empty"
+    "empty": "Shopping cart is empty",
+    "goShoppingButton": "$t(cart.goShoppingButton)"
   },
   "cart": {
     "title": "Your cart",
     "emptyCart": "There's nothing in your cart yet",
-    "goShopping": "Let's go shopping!",
+    "goShoppingButton": "Let's go shopping!",
     "couponCode": "Vouchercode",
     "applyCouponCode": "Activate",
     "cancelCouponCode": "Cancel code",
