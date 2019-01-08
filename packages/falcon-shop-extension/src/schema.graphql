@@ -230,6 +230,7 @@ type PaymentMethod {
 type Category {
   id: String
   name: String
+  children: [Category]
   description: String
   breadcrumbs(path: String): [Breadcrumb]
   products(pagination: PaginationInput, sort: SortOrderInput, filters: [FilterInput]): ProductList

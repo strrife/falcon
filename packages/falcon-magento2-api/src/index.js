@@ -39,7 +39,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         breadcrumbs: (...args) => this.breadcrumbs(...args)
       },
       Category: {
-        products: (...args) => this.categoryProducts(...args)
+        products: (...args) => this.categoryProducts(...args),
+        children: (...args) => this.categoryChildren(...args)
       }
     };
     Logger.debug(`${this.name}: Adding additional resolve functions`);
@@ -75,6 +76,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     return this.convertCategoryData(response);
   }
 
+  /**
+   * Fetch products for fetched category
+   * @param {Object} obj - fetched category
+   * @param {Object} params - query params
+   * @return {Promise<ProductList>} - fetched list of products
+   */
   async categoryProducts(obj, params) {
     const query = this.createSearchParams(params);
     const { pagination = {} } = params;
@@ -1625,10 +1632,22 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * Fetches breadcrumbs for passed path
    * @param {Object} obj - parent
    * @param {Object} params - parameters passed to the resolver
-   * @return {Promise<[Object]>} breadcrumbs fetched from backend
+   * @return {Promise<[Breadcrumb]>} breadcrumbs fetched from backend
    */
   async breadcrumbs(obj, { path }) {
     const resp = await this.get(`/breadcrumbs`, { url: path.replace(/^\//, '') });
     return this.convertKeys(resp.data);
+  }
+
+  /**
+   * Fetches subcategories of fetched category
+   * @param {Object} obj - parent object
+   * @param {*} params - query params
+   * @return {Promise<[Category]>} fetched subcategories
+   */
+  async categoryChildren(obj) {
+    return new Promise((res, rej) => {
+      Promise.all(obj.data.children.split(',').map(id => this.category(obj, { id }))).then(res, rej);
+    });
   }
 };
