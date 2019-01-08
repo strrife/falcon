@@ -69,6 +69,16 @@
         "url": "/blog"
       }
     ],
+    "leftMenu": [
+      {
+        "name": "Contact",
+        "url": "#"
+      },
+      {
+        "name": "Blog",
+        "url": "/blog"
+      }
+    ],
     "footer": [
       {
         "name": "Customer service",

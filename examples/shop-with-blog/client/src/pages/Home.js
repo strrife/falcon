@@ -22,8 +22,7 @@ const GET_PRODUCTS_LIST = gql`
 `;
 
 const Home = () => (
-  <GridLayout gridGap="md" py="md">
-    {/* <FadeOverlay /> */}
+  <React.Fragment>
     <LazyLoad>
       <BackgroundImage
         css={{ position: 'relative' }}
@@ -42,13 +41,15 @@ const Home = () => (
         </Box>
       </BackgroundImage>
     </LazyLoad>
-    <H4 css={{ textAlign: 'center', fontWeight: 'demiBold' }}>
-      <T id="home.shopLooks" />
-    </H4>
-    <ProductsListQuery query={GET_PRODUCTS_LIST} variables={{ query: { perPage: 3 } }}>
-      {({ products }) => <ProductsList products={products.items} />}
-    </ProductsListQuery>
-  </GridLayout>
+    <GridLayout gridGap="md">
+      <H4 css={{ textAlign: 'center', fontWeight: 'demiBold' }}>
+        <T id="home.shopLooks" />
+      </H4>
+      <ProductsListQuery query={GET_PRODUCTS_LIST} variables={{ query: { perPage: 3 } }}>
+        {({ products }) => <ProductsList products={products.items} />}
+      </ProductsListQuery>
+    </GridLayout>
+  </React.Fragment>
 );
 
 export default Home;

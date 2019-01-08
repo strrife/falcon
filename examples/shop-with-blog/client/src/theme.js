@@ -175,8 +175,19 @@ export const deityGreenTheme = createTheme({
       }
     }
   },
+
   components: {
-    appLayout: {},
+    appLayout: {
+      px: 0,
+      css: {
+        maxWidth: 'none'
+      }
+    },
+
+    gridLayout: {
+      px: 'lg',
+      py: 'lg'
+    },
 
     icon: {
       stroke: 'black',
@@ -184,6 +195,7 @@ export const deityGreenTheme = createTheme({
       transitionTimingFunction: 'easeInOut',
       transitionDuration: 'standard',
       css: {
+        strokeWidth: '1px',
         ':hover': {
           opacity: '0.7'
         }
@@ -191,11 +203,12 @@ export const deityGreenTheme = createTheme({
     },
 
     searchbarLayout: {
-      gridTemplate: '"none none none logo search signIn cart" / 24px 24px 24px 1fr auto auto auto',
+      gridTemplate: '"leftMenu logo rightMenu" / auto 1fr auto',
       alignItems: 'center',
       my: 'none',
       gridGap: 'sm',
       py: 'lg',
+      px: 'lg',
       css: {
         justifyItems: 'center'
       }
@@ -211,7 +224,7 @@ export const deityGreenTheme = createTheme({
     },
 
     listItem: {
-      fontWeight: 'light',
+      fontWeight: 'regular',
       transitionTimingFunction: 'easeIn',
       transitionDuration: 'short',
 
@@ -241,6 +254,8 @@ export const deityGreenTheme = createTheme({
       css: {
         fontWeight: '500',
         zIndex: 2,
+        borderTop: '1px solid #d0d0d0',
+        borderBottom: '1px solid #d0d0d0',
         justifyContent: 'center'
       }
     },
@@ -256,6 +271,12 @@ export const deityGreenTheme = createTheme({
           color: theme.colors.primaryLight
         }
       })
+    },
+
+    navbarItemMenu: {
+      css: {
+        borderTop: '1px solid #d0d0d0'
+      }
     },
 
     sidebar: {
