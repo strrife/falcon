@@ -56,7 +56,8 @@
     "test:coverage": "jest --ci --coverage"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0"
+    "@babel/runtime": "^7.0.0",
+    "@deity/falcon-payment-env": "^0.0.1"
   },
   "devDependencies": {
     "@babel/cli": "7.1.5",

@@ -37,7 +37,6 @@ export type CheckoutShippingMethod = {
 export type CheckoutPaymentMethod = {
   code: string;
   title: string;
-  inputType: string;
 };
 
 type CheckoutLogicData = {

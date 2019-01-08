@@ -7,7 +7,9 @@
     "access": "public"
   },
   "main": "src/index.js",
-  "dependencies": {},
+  "dependencies": {
+    "@deity/falcon-payment-env": "^0.0.1"
+  },
   "devDependencies": {
     "@deity/falcon-server-env": "^0.1.0",
     "@deity/falcon-shop-extension": "^0.1.0"
