@@ -280,8 +280,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     );
 
     const { data: token } = response;
-    console.log('TOKEN', token);
-
     // todo: validTime should be extracted from the response, but after recent changes Magento doesn't send it
     // so that should be changed once https://github.com/deity-io/falcon-magento2-development/issues/32 is resolved
     const validTime = 1;
@@ -337,6 +335,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     const cookies = (response.headers.get('set-cookie') || '').split('; ');
     const responseTags = response.headers.get('x-cache-tags');
     const data = await super.didReceiveResponse(response);
+
     const meta = {};
 
     if (responseTags) {

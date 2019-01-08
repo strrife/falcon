@@ -10,6 +10,7 @@ const Logger = require('@deity/falcon-logger');
 const { addResolveFunctionsToSchema } = require('graphql-tools');
 const Magento2ApiBase = require('./Magento2ApiBase');
 
+const DEFAULT_ITEMS_PER_PAGE = 20;
 /**
  * API for Magento2 store - provides resolvers for shop schema.
  */
@@ -36,6 +37,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       },
       Product: {
         breadcrumbs: (...args) => this.breadcrumbs(...args)
+      },
+      Category: {
+        products: (...args) => this.categoryProducts(...args)
       }
     };
     Logger.debug(`${this.name}: Adding additional resolve functions`);
@@ -69,6 +73,34 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   async category(obj, { id }) {
     const response = await this.get(`/categories/${id}`, {}, { context: { useAdminToken: true } });
     return this.convertCategoryData(response);
+  }
+
+  async categoryProducts(obj, params) {
+    const query = this.createSearchParams(params);
+    const { pagination = {} } = params;
+    let response;
+    try {
+      response = await this.get(`/categories/${obj.data.id}/products`, query, { context: { useAdminToken: true } });
+    } catch (ex) {
+      // if is_anchor is set to "0" then we cannot fetch category contents (as it doesn't have products)
+      // in that case if Magento returns error "Bucked does not exist" we return empty array to avoid displaying errors
+      if (ex.message.match(/Bucket does not exist/) && obj.data.custom_attributes.is_anchor === '0') {
+        return {
+          items: [],
+          pagination: this.processPagination(0)
+        };
+      }
+      throw ex;
+    }
+    const { data } = response;
+    return {
+      items: response.data.items.map(item => this.reduceProduct({ data: item })),
+      pagination: this.processPagination(
+        data.total_count,
+        pagination.page,
+        pagination.perPage || DEFAULT_ITEMS_PER_PAGE
+      )
+    };
   }
 
   /**
@@ -207,6 +239,41 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     return this.fetchProductList(params);
+  }
+
+  /**
+   * Converts passed params to format acceptable by Magento
+   * @param {Object} params - parameters passed to the resolver
+   * @return {Object} params converted to format acceptable by Magento
+   */
+  createSearchParams(params) {
+    const { filters = [], pagination, sort = {} } = params;
+    const processedFilters = {};
+
+    if (filters.length) {
+      filters.forEach(item => {
+        if (item.value) {
+          this.addSearchFilter(processedFilters, item.key, item.value);
+        }
+      });
+    }
+
+    const searchCriteria = {
+      filterGroups: processedFilters.filters,
+      sortOrders: sort
+    };
+
+    searchCriteria.currentPage = parseInt(pagination && pagination.page, 10) || 0;
+
+    if (pagination && pagination.perPage) {
+      searchCriteria.pageSize = pagination.perPage;
+    } else {
+      searchCriteria.pageSize = DEFAULT_ITEMS_PER_PAGE;
+    }
+
+    return {
+      searchCriteria
+    };
   }
 
   /**
@@ -390,9 +457,10 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     data = this.convertKeys(data);
     const { extensionAttributes = {}, customAttributes } = data;
     const catalogPrice = extensionAttributes.catalogDisplayPrice;
-    const price = catalogPrice || data.price;
+    const price =
+      catalogPrice || (typeof data.price.regularPrice !== 'undefined' ? data.price.regularPrice : data.price);
 
-    data.urlPath = this.convertPathToUrl(customAttributes.urlKey);
+    data.urlPath = this.convertPathToUrl(customAttributes.urlKey || extensionAttributes.urlKey);
     data.priceAmount = data.price;
     data.currency = currency;
     data.price = price;
@@ -415,7 +483,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         data.breadcrumbs = this.convertBreadcrumbs(breadcrumbs);
       }
 
-      data.thumbnail = thumbnailUrl;
+      // temporary workaround until Magento returns product id correctly
+      if (!data.id) {
+        data.id = data.sku;
+      }
+
+      // old API passes thumbnailUrl in extension_attributes, new api passes image field directly
+      data.thumbnail = thumbnailUrl || data.image;
       data.gallery = mediaGallerySizes || [];
 
       if (minPrice) {
@@ -1554,14 +1628,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<[Object]>} breadcrumbs fetched from backend
    */
   async breadcrumbs(obj, { path }) {
-    return this.get(
-      `/breadcrumbs`,
-      { url: path },
-      {
-        context: {
-          didReceiveResult: resp => this.convertKeys(resp.data)
-        }
-      }
-    );
+    const resp = await this.get(`/breadcrumbs`, { url: path.replace(/^\//, '') });
+    return this.convertKeys(resp.data);
   }
 };

@@ -32,12 +32,12 @@ const CategoryLayout = themed({
 });
 
 export const Category: React.SFC<{
-  category: { name: string };
-  products: any;
+  category: { name: string; products: any };
   sortOrders: any[];
   fetchMore: any;
   networkStatus: NetworkStatus;
-}> = ({ category, products, sortOrders, fetchMore, networkStatus }) => {
+}> = ({ category, sortOrders, fetchMore, networkStatus }) => {
+  const { products } = category;
   const { pagination, items } = products;
 
   return (

@@ -1,12 +1,12 @@
 extend type Query {
-  category(id: String!, pagination: PaginationInput, sort: SortOrderInput, filters: [Filter]): Category
+  category(id: String!): Category
   product(id: String!): Product
   products(
     categoryId: String
     includeSubcategories: Boolean
     query: ShopPageQuery
     sortOrders: [SortOrderInput]
-    filters: [Filter]
+    filters: [FilterInput]
     skus: [String]
   ): ProductList
   cart: Cart
@@ -101,7 +101,7 @@ input ShopPageQuery {
   page: Int
 }
 
-input Filter {
+input FilterInput {
   conditionType: String
   field: String
   value: String
@@ -184,7 +184,7 @@ type PlaceOrderResult {
 }
 
 type Product {
-  id: Int!
+  id: String
   sku: String!
   name: String!
   image: String
@@ -232,6 +232,7 @@ type Category {
   name: String
   description: String
   breadcrumbs(path: String): [Breadcrumb]
+  products(pagination: PaginationInput, sort: SortOrderInput, filters: [FilterInput]): ProductList
 }
 
 type ProductList {
