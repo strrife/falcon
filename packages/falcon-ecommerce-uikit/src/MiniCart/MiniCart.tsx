@@ -165,7 +165,7 @@ export const MiniCart: React.SFC<MiniCartData> = ({ cart: { quoteCurrency, items
                 <T id="miniCart.empty" />
               </Text>
               <Button onClick={() => closeSidebar()} mt="lg">
-                <T id="miniCart.continue" />
+                <T id="miniCart.goShoppingButton" />
               </Button>
             </FlexLayout>
           )}
