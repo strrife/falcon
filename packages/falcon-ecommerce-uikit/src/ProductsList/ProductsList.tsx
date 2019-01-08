@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { themed, Image, Text } from '@deity/falcon-ui';
+import { themed, Image, Text, Box } from '@deity/falcon-ui';
 import { Price } from '../Locale';
 
 export const ProductsList: React.SFC<{ products: any[] }> = ({ products }) => (
@@ -10,14 +10,34 @@ export const ProductsList: React.SFC<{ products: any[] }> = ({ products }) => (
       <li key={product.id}>
         <ProductCardLayout to={product.urlPath}>
           <LazyLoad height="100%" offset={150}>
-            <Image css={{ flex: '1 1 100%', minHeight: '0%' }} src={product.thumbnail} alt={product.name} />
+            <React.Fragment>
+              <Box css={{ display: 'flex', maxHeight: '100%', position: 'relative' }}>
+                <Box
+                  transitionTimingFunction="easeIn"
+                  transitionDuration="short"
+                  css={{
+                    backgroundColor: '#80808014',
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    zIndex: 100,
+                    ':hover': { opacity: '0' }
+                  }}
+                />
+                <Image
+                  css={{ flex: '1 1 100%', minHeight: '0%', padding: '20px' }}
+                  src={product.thumbnail}
+                  alt={product.name}
+                />
+              </Box>
+            </React.Fragment>
           </LazyLoad>
 
-          <Text py="xs" ellipsis>
+          <Text py="xs" ellipsis fontSize="xs" fontWeight="regular">
             {product.name}
           </Text>
 
-          <Price fontSize="md" value={product.price} />
+          <Price fontSize="xs" value={product.price} />
         </ProductCardLayout>
       </li>
     ))}

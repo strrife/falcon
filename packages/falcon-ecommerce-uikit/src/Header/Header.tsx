@@ -111,7 +111,7 @@ export const Searchbar: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
   <Box defaultTheme={searchBarLayoutTheme}>
     <List css={{ color: 'black' }} gridArea={SearchBarArea.leftMenu} display="flex">
       {items.map(item => (
-        <ListItem fontSize="xs" py="xs" ml="sm" key={item.name}>
+        <ListItem fontSize="xs" py="xs" mr="sm" key={item.name}>
           <Link as={RouterLink} to={item.url}>
             {item.name}
           </Link>

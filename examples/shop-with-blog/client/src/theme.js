@@ -185,8 +185,12 @@ export const deityGreenTheme = createTheme({
     },
 
     gridLayout: {
-      px: 'lg',
-      py: 'lg'
+      px: 'xl',
+      py: 'xl',
+      css: {
+        margin: 'auto',
+        maxWidth: 1280
+      }
     },
 
     icon: {
@@ -208,7 +212,7 @@ export const deityGreenTheme = createTheme({
       my: 'none',
       gridGap: 'sm',
       py: 'lg',
-      px: 'lg',
+      px: 'xl',
       css: {
         justifyItems: 'center'
       }

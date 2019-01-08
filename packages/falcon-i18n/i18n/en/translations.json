@@ -16,7 +16,11 @@
     "ourFavourites": "Our Favourites",
     "shopLooks": "Shop the Looks",
     "ctaButton": "Shop now",
-    "heroText": "New Collection"
+    "heroText": "New Collection",
+    "menTitle": "For Him",
+    "womenTitle": "For Her",
+    "menText": "Gentlemen's style",
+    "womenText": "Be irresistible"
   },
   "blog": {
     "title": "Blog",
