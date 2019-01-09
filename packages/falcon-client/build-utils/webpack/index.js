@@ -42,7 +42,8 @@ module.exports.startDevServer = async () => {
       host: process.env.HOST,
       port: parseInt(process.env.PORT, 10),
       devServerPort: parseInt(process.env.PORT, 10) + 1,
-      inspect: process.argv.find(x => x.match(/--inspect-brk(=|$)/) || x.match(/--inspect(=|$)/)) || undefined
+      inspect: process.argv.find(x => x.match(/--inspect-brk(=|$)/) || x.match(/--inspect(=|$)/)) || undefined,
+      paths
     };
 
     const clientConfig = createConfig('web', options, falconConfig);
@@ -95,6 +96,7 @@ module.exports.build = async () => {
     const options = {
       env: process.env.NODE_ENV,
       publicPath: process.env.PUBLIC_PATH || '/',
+      paths,
       isCI: process.env.CI && (typeof process.env.CI !== 'string' || process.env.CI.toLowerCase() !== 'false')
     };
 
@@ -155,6 +157,7 @@ module.exports.size = async () => {
     const options = {
       env: process.env.NODE_ENV,
       publicPath: process.env.PUBLIC_PATH || '/',
+      paths,
       analyze: true
     };
 
