@@ -116,7 +116,7 @@ module.exports = (target = 'web', options, buildConfig) => {
   // Define some useful shorthands.
   const IS_NODE = target === 'node';
   const IS_WEB = target === 'web';
-  const IS_PROD = env === 'productions';
+  const IS_PROD = env === 'production';
   const IS_DEV = env === 'development';
   process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
 
