@@ -27,11 +27,6 @@ const defaultOptions = {
       modules: false,
       minimize: true
     }
-  },
-  style: {},
-  resolveUrl: {
-    dev: {},
-    prod: {}
   }
 };
 
@@ -45,17 +40,15 @@ module.exports = (defaultConfig, { target, dev, paths }, webpack, userOptions = 
 
   const styleLoader = {
     loader: require.resolve('style-loader'),
-    options: options.style
+    options: {}
   };
 
   const cssLoader = {
-    loader: require.resolve('css-loader'),
-    options: options.css[ENV]
+    loader: require.resolve('css-loader')
   };
 
   const resolveUrlLoader = {
-    loader: require.resolve('resolve-url-loader'),
-    options: options.resolveUrl[ENV]
+    loader: require.resolve('resolve-url-loader')
   };
 
   const postCssLoader = {
