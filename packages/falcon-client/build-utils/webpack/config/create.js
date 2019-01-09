@@ -14,7 +14,6 @@ const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 
-const paths = require('./../../paths');
 const { colors } = require('./../tools');
 const { getClientEnv } = require('./env');
 const runPlugin = require('./runPlugin');
@@ -66,17 +65,6 @@ function getBabelLoaderOptions(babelRcPath) {
   return options;
 }
 
-function getFalconI18nPlugin(options) {
-  const { resourcePackages = [], filter = {} } = options || {};
-
-  return new FalconI18nLocalesPlugin({
-    mainSource: path.join(paths.appPath, 'i18n'),
-    defaultSources: resourcePackages.map(x => paths.resolvePackageDir(x)).map(x => path.join(x, 'i18n')),
-    output: 'build/i18n',
-    filter
-  });
-}
-
 function addVendorsBundle(modules = []) {
   const moduleFilter = new RegExp(
     `[\\\\/]node_modules[\\\\/](${modules.map(x => x.replace('/', '[\\\\/]')).join('|')})[\\\\/]`
@@ -110,8 +98,8 @@ function addVendorsBundle(modules = []) {
  * @returns {object} webpack config
  */
 module.exports = (target = 'web', options, buildConfig) => {
-  const { env, host, devServerPort } = options;
-  const { useWebmanifest, plugins, modify } = buildConfig;
+  const { env, host, devServerPort, paths } = options;
+  const { useWebmanifest, plugins, modify, i18n } = buildConfig;
 
   // Define some useful shorthands.
   const IS_NODE = target === 'node';
@@ -369,7 +357,12 @@ module.exports = (target = 'web', options, buildConfig) => {
   if (IS_WEB) {
     config.plugins = [
       new VirtualModulesPlugin({ [paths.ownWebmanifest]: '{}' }),
-      getFalconI18nPlugin(buildConfig.i18n),
+      new FalconI18nLocalesPlugin({
+        mainSource: path.join(paths.appPath, 'i18n'),
+        defaultSources: (i18n.resourcePackages || []).map(x => path.join(paths.resolvePackageDir(x), 'i18n')),
+        output: 'build/i18n',
+        filter: i18n.filter || {}
+      }),
       new AssetsPlugin({
         path: paths.appBuild,
         filename: 'assets.json',
