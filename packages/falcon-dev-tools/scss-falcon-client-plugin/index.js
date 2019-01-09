@@ -53,9 +53,9 @@ const defaultOptions = {
   }
 };
 
-module.exports = (defaultConfig, { target, dev }, webpack, userOptions = {}) => {
-  const isServer = target !== 'web';
-  const constantEnv = dev ? 'dev' : 'prod';
+module.exports = (defaultConfig, { target, dev /* , paths */ }, webpack, userOptions = {}) => {
+  const IS_NODE = target !== 'web';
+  const ENV = dev ? 'dev' : 'prod';
 
   const config = Object.assign({}, defaultConfig);
 
@@ -68,35 +68,35 @@ module.exports = (defaultConfig, { target, dev }, webpack, userOptions = {}) => 
 
   const cssLoader = {
     loader: require.resolve('css-loader'),
-    options: options.css[constantEnv]
+    options: options.css[ENV]
   };
 
   const resolveUrlLoader = {
     loader: require.resolve('resolve-url-loader'),
-    options: options.resolveUrl[constantEnv]
+    options: options.resolveUrl[ENV]
   };
 
   const postCssLoader = {
     loader: require.resolve('postcss-loader'),
-    options: Object.assign({}, options.postcss[constantEnv], {
+    options: Object.assign({}, options.postcss[ENV], {
       plugins: () => options.postcss.plugins
     })
   };
 
   const sassLoader = {
     loader: require.resolve('sass-loader'),
-    options: options.sass[constantEnv]
+    options: options.sass[ENV]
   };
 
   config.module.rules = [
     ...config.module.rules,
     {
       test: /\.(sa|sc)ss$/,
-      use: isServer
+      use: IS_NODE
         ? [
             {
               loader: require.resolve('css-loader/locals'),
-              options: options.css[constantEnv]
+              options: options.css[ENV]
             }
           ]
         : [dev ? styleLoader : MiniCssExtractPlugin.loader, cssLoader, resolveUrlLoader, postCssLoader, sassLoader]
