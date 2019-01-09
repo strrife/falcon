@@ -94,7 +94,7 @@ describe('Magento2Api', () => {
 
   it('Should correctly fetch admin token', async () => {
     const result = await api.getAdminToken();
-    expect(result).toEqual(magentoResponses.adminToken.data.token);
+    expect(result).toEqual(magentoResponses.adminToken.data);
   });
 
   it('Should correctly fetch category data', async () => {

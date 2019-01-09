@@ -65,7 +65,7 @@ module.exports.category = {
 };
 
 module.exports.adminToken = {
-  data: { token: 'u04au8og2a4nheu0k59hguix7t5lqsli', valid_time: 4 },
+  data: 'u04au8og2a4nheu0k59hguix7t5lqsli',
   meta: { tags: ['ApiMagento'] }
 };
 
