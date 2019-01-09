@@ -30,11 +30,9 @@ const defaultOptions = {
   }
 };
 
-module.exports = (defaultConfig, { target, dev, paths }, webpack, userOptions = {}) => {
+module.exports = (config, { target, dev, paths }, webpack, userOptions = {}) => {
   const IS_NODE = target !== 'web';
   const ENV = dev ? 'dev' : 'prod';
-
-  const config = Object.assign({}, defaultConfig);
 
   const options = Object.assign({}, defaultOptions, userOptions);
 
