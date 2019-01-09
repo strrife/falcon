@@ -1,26 +1,20 @@
 const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const PostCssFlexBugFixes = require('postcss-flexbugs-fixes');
-// const paths = require('razzle/config/paths');
+
+const postCssOptions = {
+  ident: 'postcss',
+  sourceMap: true,
+  plugins: () => [
+    PostCssFlexBugFixes,
+    autoprefixer({
+      browsers: ['>1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9'],
+      flexbox: 'no-2009'
+    })
+  ]
+};
 
 const defaultOptions = {
-  postcss: {
-    dev: {
-      sourceMap: true,
-      ident: 'postcss'
-    },
-    prod: {
-      sourceMap: false,
-      ident: 'postcss'
-    },
-    plugins: [
-      PostCssFlexBugFixes,
-      autoprefixer({
-        browsers: ['>1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9'],
-        flexbox: 'no-2009'
-      })
-    ]
-  },
   css: {
     dev: {
       sourceMap: true,
@@ -66,9 +60,7 @@ module.exports = (defaultConfig, { target, dev, paths }, webpack, userOptions = 
 
   const postCssLoader = {
     loader: require.resolve('postcss-loader'),
-    options: Object.assign({}, options.postcss[ENV], {
-      plugins: () => options.postcss.plugins
-    })
+    options: postCssOptions
   };
 
   const sassLoader = {
