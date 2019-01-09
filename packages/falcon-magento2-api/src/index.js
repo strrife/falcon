@@ -103,6 +103,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { data } = response;
     return {
       items: response.data.items.map(item => this.reduceProduct({ data: item })),
+      aggregations: this.processAggregations(data.filters),
       pagination: this.processPagination(
         data.total_count,
         pagination.page,
@@ -1650,5 +1651,22 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     return new Promise((res, rej) => {
       Promise.all(obj.data.children.split(',').map(id => this.category(obj, { id }))).then(res, rej);
     });
+  }
+
+  /**
+   * Convert raw aggregations from Magento to proper format
+   * @param {[Object]} rawAggregations - raw aggregations data
+   * @return {[Aggregation]} - processed aggregations
+   */
+  processAggregations(rawAggregations = []) {
+    return rawAggregations.map(item => ({
+      key: item.code,
+      name: item.label,
+      buckets: item.options.map(option => ({
+        value: option.value,
+        name: htmlHelpers.stripHtml(option.label),
+        count: option.count
+      }))
+    }));
   }
 };

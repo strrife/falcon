@@ -244,11 +244,13 @@ type ProductList {
 
 type Aggregation {
   key: String
+  name: String
   buckets: [AggregationBucket]
 }
 
 type AggregationBucket {
-  key: Int
+  value: String
+  name: String
   count: Int
 }
 
