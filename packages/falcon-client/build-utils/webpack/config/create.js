@@ -27,12 +27,7 @@ const postCssOptions = {
     // eslint-disable-next-line import/no-dynamic-require
     require('postcss-flexbugs-fixes'),
     autoprefixer({
-      browsers: [
-        '>1%',
-        'last 4 versions',
-        'Firefox ESR',
-        'not ie < 9' // React doesn't support IE8 anyway
-      ],
+      browsers: ['>1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9'],
       flexbox: 'no-2009'
     })
   ]
@@ -608,14 +603,14 @@ module.exports = (target = 'web', options, buildConfig) => {
   // Apply razzle plugins, if they are present in razzle.config.js
   if (Array.isArray(plugins)) {
     plugins.forEach(plugin => {
-      config = runPlugin(plugin, config, { target, dev: IS_DEV }, webpack);
+      config = runPlugin(plugin, config, { ...options, target, dev: IS_DEV }, webpack);
     });
   }
 
   // Check if razzle.config has a modify function. If it does, call it on the
   // configs we created.
   if (modify) {
-    config = modify(config, { target, dev: IS_DEV }, webpack);
+    config = modify(config, { ...options, target, dev: IS_DEV }, webpack);
   }
 
   return config;
