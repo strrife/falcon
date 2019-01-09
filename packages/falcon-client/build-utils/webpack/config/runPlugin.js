@@ -1,11 +1,6 @@
 // / { target, dev }
 
 function runPlugin(plugin, config, options, webpack) {
-  if (typeof plugin === 'string') {
-    // Apply the plugin with default options if passing only a string
-    return runPlugin({ name: plugin }, config, options, webpack);
-  }
-
   if (typeof plugin === 'function') {
     return plugin(config, options, webpack);
   }
@@ -15,16 +10,7 @@ function runPlugin(plugin, config, options, webpack) {
     return plugin.func(config, options, webpack, plugin.options);
   }
 
-  const completePluginName = `razzle-plugin-${plugin.name}`;
-
-  // Try to find the plugin in node_modules
-  // eslint-disable-next-line import/no-dynamic-require
-  const razzlePlugin = require(completePluginName);
-  if (!razzlePlugin) {
-    throw new Error(`Unable to find '${completePluginName}`);
-  }
-
-  return razzlePlugin(config, options, webpack, plugin.options);
+  throw new Error(`Unable to run plugin`);
 }
 
 module.exports = runPlugin;
