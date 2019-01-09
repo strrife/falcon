@@ -25,7 +25,6 @@ export const GET_CATEGORY_PRODUCTS = gql`
         }
       }
     }
-    sortOrders @client
   }
 `;
 

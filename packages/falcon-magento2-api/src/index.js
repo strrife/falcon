@@ -269,7 +269,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     const searchCriteria = {
       filterGroups: processedFilters.filters,
-      sortOrders: sort
+      sortOrders: [sort]
     };
 
     searchCriteria.currentPage = parseInt(pagination && pagination.page, 10) || 0;
