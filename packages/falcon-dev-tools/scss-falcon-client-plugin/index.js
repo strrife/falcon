@@ -21,18 +21,6 @@ const defaultOptions = {
       })
     ]
   },
-  sass: {
-    dev: {
-      sourceMap: true
-      // ,
-      // includePaths: [paths.appNodeModules]
-    },
-    prod: {
-      sourceMap: false
-      // ,
-      // includePaths: [paths.appNodeModules]
-    }
-  },
   css: {
     dev: {
       sourceMap: true,
@@ -53,7 +41,7 @@ const defaultOptions = {
   }
 };
 
-module.exports = (defaultConfig, { target, dev /* , paths */ }, webpack, userOptions = {}) => {
+module.exports = (defaultConfig, { target, dev, paths }, webpack, userOptions = {}) => {
   const IS_NODE = target !== 'web';
   const ENV = dev ? 'dev' : 'prod';
 
@@ -85,7 +73,10 @@ module.exports = (defaultConfig, { target, dev /* , paths */ }, webpack, userOpt
 
   const sassLoader = {
     loader: require.resolve('sass-loader'),
-    options: options.sass[ENV]
+    options: {
+      includePaths: [paths.appNodeModules],
+      sourceMap: true
+    }
   };
 
   config.module.rules = [
