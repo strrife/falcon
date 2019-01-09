@@ -12,7 +12,8 @@
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "i18n"
   ],
   "scripts": {
     "clean": "rimraf dist",
