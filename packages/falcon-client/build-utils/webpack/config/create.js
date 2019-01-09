@@ -21,9 +21,8 @@ const runPlugin = require('./runPlugin');
 const falconClientPolyfills = require.resolve('./../../polyfills');
 
 const postCssOptions = {
-  ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
+  ident: 'postcss',
   plugins: () => [
-    // eslint-disable-next-line import/no-dynamic-require
     require('postcss-flexbugs-fixes'),
     autoprefixer({
       browsers: ['>1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9'],
