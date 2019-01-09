@@ -202,7 +202,7 @@ type Product {
   configurableOptions: [ConfigurableProductOption]
   bundleOptions: [BundleProductOption]
   gallery: [GalleryEntry]
-  breadcrumbs(path: String): [Breadcrumb!]
+  breadcrumbs: [Breadcrumb!]
   seo: ProductSeo
 }
 
@@ -232,7 +232,7 @@ type Category {
   name: String
   children: [Category]
   description: String
-  breadcrumbs(path: String): [Breadcrumb]
+  breadcrumbs: [Breadcrumb]
   products(pagination: PaginationInput, sort: SortOrderInput, filters: [FilterInput]): ProductList
 }
 
@@ -430,11 +430,8 @@ type GalleryEntry {
 }
 
 type Breadcrumb {
-  id: Int
   name: String
   urlPath: String
-  urlKey: String
-  urlQuery: String
 }
 
 type ConfigurableProductOption {

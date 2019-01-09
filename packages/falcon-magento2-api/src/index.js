@@ -39,6 +39,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         breadcrumbs: (...args) => this.breadcrumbs(...args)
       },
       Category: {
+        breadcrumbs: (...args) => this.breadcrumbs(...args),
         products: (...args) => this.categoryProducts(...args),
         children: (...args) => this.categoryChildren(...args)
       }
@@ -1634,8 +1635,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {Object} params - parameters passed to the resolver
    * @return {Promise<[Breadcrumb]>} breadcrumbs fetched from backend
    */
-  async breadcrumbs(obj, { path }) {
-    const resp = await this.get(`/breadcrumbs`, { url: path.replace(/^\//, '') });
+  async breadcrumbs(obj) {
+    const resp = await this.get(`/breadcrumbs`, { url: obj.data.urlPath.replace(/^\//, '') });
     return this.convertKeys(resp.data);
   }
 
