@@ -176,7 +176,7 @@ module.exports = (target = 'web', options, buildConfig) => {
             /\.(ts|tsx)$/,
             /\.(graphql|gql)$/,
             /\.(less)$/,
-            /\.(s?css|sass)$/,
+            /\.(css|scss|sass)$/,
             /\.json$/,
             /\.html$/,
             /\.(vue)$/,
