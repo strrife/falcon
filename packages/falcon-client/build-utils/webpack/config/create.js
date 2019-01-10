@@ -98,38 +98,44 @@ module.exports = (target = 'web', options, buildConfig) => {
 
   const clientEnv = getClientEnv(target, options, buildConfig.envToBuildIn);
 
-  const getStyleLoaders = cssOptions =>
-    IS_NODE // Style-loader does not work in Node.js without some crazy magic. Luckily we just need css-loader.
-      ? [
-          {
-            loader: require.resolve('css-loader/locals'),
-            options: {
-              ...cssOptions,
-              minimize: false
-            }
+  const getStyleLoaders = cssLoaderOptions => {
+    const { sourceMap = false } = cssLoaderOptions;
+
+    if (IS_NODE) {
+      // Style-loader does not work in Node.js without some crazy magic. Luckily we just need css-loader.
+      return [
+        {
+          loader: require.resolve('css-loader/locals'),
+          options: {
+            ...cssLoaderOptions,
+            minimize: false
           }
-        ]
-      : [
-          IS_PROD ? MiniCssExtractPlugin.loader : require.resolve('style-loader'),
-          {
-            loader: require.resolve('css-loader'),
-            options: { ...cssOptions }
-          },
-          {
-            loader: require.resolve('postcss-loader'),
-            options: {
-              ident: 'postcss',
-              plugins: () => [
-                require('postcss-flexbugs-fixes'),
-                require('postcss-preset-env')({
-                  autoprefixer: { flexbox: 'no-2009' },
-                  stage: 3
-                })
-              ],
-              sourceMap: true
-            }
-          }
-        ];
+        }
+      ];
+    }
+
+    return [
+      IS_PROD ? MiniCssExtractPlugin.loader : require.resolve('style-loader'),
+      {
+        loader: require.resolve('css-loader'),
+        options: { ...cssLoaderOptions }
+      },
+      {
+        loader: require.resolve('postcss-loader'),
+        options: {
+          ident: 'postcss',
+          plugins: () => [
+            require('postcss-flexbugs-fixes'),
+            require('postcss-preset-env')({
+              autoprefixer: { flexbox: 'no-2009' },
+              stage: 3
+            })
+          ],
+          sourceMap
+        }
+      }
+    ];
+  };
 
   // This is our base webpack config.
   let config = {
