@@ -109,6 +109,60 @@ module.exports = (target = 'web', options, buildConfig) => {
 
   const clientEnv = getClientEnv(target, options, buildConfig.envToBuildIn);
 
+  const getStyleLoaders = (cssOptions /* , preProcessor */) => {
+    const result = IS_NODE // Style-loader does not work in Node.js without some crazy magic. Luckily we just need css-loader.
+      ? [
+          {
+            loader: require.resolve('css-loader/locals'),
+            options: {
+              ...cssOptions,
+              minimize: false
+            }
+          }
+        ]
+      : [
+          IS_PROD ? MiniCssExtractPlugin.loader : require.resolve('style-loader'),
+          {
+            loader: require.resolve('css-loader'),
+            options: { ...cssOptions }
+          },
+          {
+            loader: require.resolve('postcss-loader'),
+            options: postCssOptions
+          }
+        ];
+
+    return result;
+
+    // const loaders = [
+    //   IS_DEV && require.resolve('style-loader'),
+    //   IS_PROD && {
+    //     loader: MiniCssExtractPlugin.loader
+    //   },
+    //   {
+    //     loader: require.resolve('css-loader'),
+    //     options: cssOptions
+    //   },
+    //   {
+    //     // Options for PostCSS as we reference these options twice
+    //     // Adds vendor prefixing based on your specified browser support in
+    //     // package.json
+    //     loader: require.resolve('postcss-loader'),
+    //     options: postCssOptions
+    //   }
+    // ].filter(Boolean);
+
+    // if (preProcessor) {
+    //   loaders.push({
+    //     loader: require.resolve(preProcessor),
+    //     options: {
+    //       sourceMap: true
+    //     }
+    //   });
+    // }
+    // return loaders;
+  };
+
   // This is our base webpack config.
   let config = {
     mode: IS_DEV ? 'development' : 'production',
@@ -213,31 +267,11 @@ module.exports = (target = 'web', options, buildConfig) => {
         {
           test: /\.css$/,
           exclude: [paths.appBuild, /\.module\.css$/],
-          use: IS_NODE // Style-loader does not work in Node.js without some crazy magic. Luckily we just need css-loader.
-            ? [
-                {
-                  loader: require.resolve('css-loader'),
-                  options: {
-                    importLoaders: 1,
-                    modules: false
-                  }
-                }
-              ]
-            : [
-                IS_PROD ? MiniCssExtractPlugin.loader : require.resolve('style-loader'),
-                {
-                  loader: require.resolve('css-loader'),
-                  options: {
-                    importLoaders: 1,
-                    modules: false,
-                    minimize: IS_PROD
-                  }
-                },
-                {
-                  loader: require.resolve('postcss-loader'),
-                  options: postCssOptions
-                }
-              ],
+          use: getStyleLoaders({
+            importLoaders: 1,
+            modules: false,
+            minimize: IS_PROD
+          }),
           // Don't consider CSS imports dead code even if the containing package claims to have no side effects.
           // Remove this when webpack adds a warning or an error for this. See https://github.com/webpack/webpack/issues/6571
           sideEffects: true
@@ -246,33 +280,12 @@ module.exports = (target = 'web', options, buildConfig) => {
         {
           test: /\.module\.css$/,
           exclude: [paths.appBuild],
-          use: IS_NODE // on the server we do not need to embed the css and just want the identifier mappings https://github.com/webpack-contrib/css-loader#scope
-            ? [
-                {
-                  loader: require.resolve('css-loader/locals'),
-                  options: {
-                    importLoaders: 1,
-                    modules: true,
-                    localIdentName: '[path]__[name]___[local]'
-                  }
-                }
-              ]
-            : [
-                IS_PROD ? MiniCssExtractPlugin.loader : require.resolve('style-loader'),
-                {
-                  loader: require.resolve('css-loader'),
-                  options: {
-                    modules: true,
-                    importLoaders: 1,
-                    localIdentName: '[path]__[name]___[local]',
-                    minimize: IS_PROD
-                  }
-                },
-                {
-                  loader: require.resolve('postcss-loader'),
-                  options: postCssOptions
-                }
-              ],
+          use: getStyleLoaders({
+            importLoaders: 1,
+            modules: true,
+            localIdentName: '[path]_[name]_[local]',
+            minimize: IS_PROD
+          }),
           // Don't consider CSS imports dead code even if the containing package claims to have no side effects.
           // Remove this when webpack adds a warning or an error for this. See https://github.com/webpack/webpack/issues/6571
           sideEffects: true
