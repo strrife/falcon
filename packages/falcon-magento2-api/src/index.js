@@ -122,11 +122,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     this.convertAttributesSet(response);
 
-    const {
-      extension_attributes: extensionAttributes,
-      custom_attributes: customAttributes,
-      children_data: childrenData = []
-    } = data;
+    const { custom_attributes: customAttributes, children_data: childrenData = [] } = data;
 
     // for specific category record
     let urlPath = customAttributes.url_path;
@@ -142,10 +138,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     data.urlPath = urlPath && this.convertPathToUrl(urlPath);
     childrenData.map(item => this.convertCategoryData({ data: item }).data);
-
-    if (extensionAttributes && extensionAttributes.breadcrumbs) {
-      data.breadcrumbs = this.convertBreadcrumbs(extensionAttributes.breadcrumbs);
-    }
 
     return response;
   }
@@ -262,7 +254,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     if (filters.length) {
       filters.forEach(item => {
         if (item.value) {
-          this.addSearchFilter(processedFilters, item.key, item.value);
+          this.addSearchFilter(processedFilters, item.field, item.value);
         }
       });
     }
@@ -478,7 +470,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     if (extensionAttributes && !isEmpty(extensionAttributes)) {
       const {
-        breadcrumbs,
         thumbnailUrl,
         mediaGallerySizes,
         stockItem,
@@ -487,10 +478,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         configurableProductOptions,
         bundleProductOptions
       } = extensionAttributes;
-
-      if (breadcrumbs) {
-        data.breadcrumbs = this.convertBreadcrumbs(breadcrumbs);
-      }
 
       // temporary workaround until Magento returns product id correctly
       if (!data.id) {
@@ -1638,7 +1625,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async breadcrumbs(obj) {
     const resp = await this.get(`/breadcrumbs`, { url: obj.data.urlPath.replace(/^\//, '') });
-    return this.convertKeys(resp.data);
+    return this.convertBreadcrumbs(resp.data);
   }
 
   /**
@@ -1670,3 +1657,5 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }));
   }
 };
+
+module.exports.DEFAULT_ITEMS_PER_PAGE = DEFAULT_ITEMS_PER_PAGE;

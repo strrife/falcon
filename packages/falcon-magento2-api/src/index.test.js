@@ -176,4 +176,209 @@ describe('Magento2Api', () => {
     expect(api.signIn).toHaveBeenCalledWith({}, { input: { email: 'test@test.com', password: 'Deity123' } });
     expect(resp).toBe(true);
   });
+
+  describe('createSearchParams()', async () => {
+    it('Should properly create payload for magento', () => {
+      const input = {
+        filters: [
+          {
+            conditionType: 'eq',
+            field: 'price',
+            value: '10'
+          }
+        ],
+        sort: {
+          field: 'price',
+          direction: 'asc'
+        },
+        pagination: {
+          perPage: 10,
+          page: 2
+        }
+      };
+      const expectedOutput = {
+        searchCriteria: {
+          pageSize: 10,
+          currentPage: 2,
+          sortOrders: [{ field: 'price', direction: 'asc' }],
+          filterGroups: [
+            {
+              filters: [
+                {
+                  condition_type: 'eq',
+                  field: 'price',
+                  value: '10'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      expect(api.createSearchParams(input)).toEqual(expectedOutput);
+    });
+
+    it('Should properly handle case when there is no pagination parameter passed', () => {
+      const input = {
+        sort: {
+          field: 'price',
+          direction: 'asc'
+        }
+      };
+      const expectedOutput = {
+        searchCriteria: {
+          pageSize: Magento2Api.DEFAULT_ITEMS_PER_PAGE,
+          currentPage: 0,
+          sortOrders: [{ field: 'price', direction: 'asc' }]
+        }
+      };
+      expect(api.createSearchParams(input)).toEqual(expectedOutput);
+    });
+  });
+
+  it('breadcrumbs resolver should call proper endpoint with proper url from parent object', async () => {
+    nock(URL)
+      .get(createMagentoUrl('/breadcrumbs?url=sample-product.html'))
+      .reply(200, []);
+
+    const resp = await api.breadcrumbs({ data: { urlPath: 'sample-product.html' } });
+
+    expect(resp).toEqual([]);
+  });
+
+  it('processAggregations() should properly parse aggregations data from Magento', () => {
+    const expectedOutput = [
+      {
+        key: 'price',
+        name: 'Price',
+        buckets: [
+          {
+            name: '$10.00 - $19.99',
+            value: '10-20',
+            count: 3
+          },
+          {
+            name: '$20.00 - $29.99',
+            value: '20-30',
+            count: 8
+          }
+        ]
+      },
+      {
+        key: 'color',
+        name: 'Color',
+        buckets: [
+          {
+            name: 'Black',
+            value: '49',
+            count: 1
+          },
+          {
+            name: 'Blue',
+            value: '50',
+            count: 6
+          },
+          {
+            name: 'Gray',
+            value: '52',
+            count: 3
+          }
+        ]
+      },
+      {
+        key: 'material',
+        name: 'Material',
+        buckets: [
+          {
+            name: 'Cotton',
+            value: '33',
+            count: 1
+          },
+          {
+            name: 'Polyester',
+            value: '38',
+            count: 10
+          },
+          {
+            name: 'Organic Cotton',
+            value: '154',
+            count: 6
+          }
+        ]
+      }
+    ];
+
+    expect(api.processAggregations(magentoResponses.categoryProducts.data.filters)).toEqual(expectedOutput);
+  });
+
+  it('categoryChildren() should fetch category data for each children of the passed category', async () => {
+    // magento sends children as array joined with comma
+    const category = { data: { children: '12,13' } };
+    nock(URL)
+      .get(createMagentoUrl('/categories/12'))
+      .reply(200, {
+        id: 12
+      });
+
+    nock(URL)
+      .get(createMagentoUrl('/categories/13'))
+      .reply(200, {
+        id: 13
+      });
+
+    const result = await api.categoryChildren(category);
+    // compare only ids - these should be the same
+    expect(result.map(item => ({ id: item.data.id }))).toEqual([{ id: 12 }, { id: 13 }]);
+  });
+
+  describe('fetchUrl()', () => {
+    it('Should call /url endpoint with proper params', async () => {
+      nock(URL)
+        .get(createMagentoUrl('/url/?url=test.html'))
+        .reply(200, {
+          entity_type: 'PRODUCT',
+          entity_id: 1,
+          canonical_url: '/test.html'
+        });
+
+      const response = await api.fetchUrl({}, { path: 'test.html' });
+
+      expect(response.data.id).toEqual(1);
+    });
+
+    it('Should correctly parse entity types', async () => {
+      nock(URL)
+        .get(createMagentoUrl('/url/?url=test-product.html'))
+        .reply(200, {
+          entity_type: 'PRODUCT',
+          entity_id: 1,
+          canonical_url: '/test-product.html'
+        });
+
+      nock(URL)
+        .get(createMagentoUrl('/url/?url=test-category.html'))
+        .reply(200, {
+          entity_type: 'CATEGORY',
+          entity_id: 2,
+          canonical_url: '/test-category.html'
+        });
+
+      nock(URL)
+        .get(createMagentoUrl('/url/?url=test-page.html'))
+        .reply(200, {
+          entity_type: 'CMS-PAGE',
+          entity_id: 3,
+          canonical_url: '/test-page.html'
+        });
+
+      const [product, category, page] = await Promise.all([
+        api.fetchUrl({}, { path: 'test-product.html' }),
+        api.fetchUrl({}, { path: 'test-category.html' }),
+        api.fetchUrl({}, { path: 'test-page.html' })
+      ]);
+
+      expect(product.data.type).toEqual('shop-product');
+      expect(category.data.type).toEqual('shop-category');
+      expect(page.data.type).toEqual('shop-page');
+    });
+  });
 });
