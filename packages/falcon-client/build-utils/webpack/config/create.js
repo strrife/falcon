@@ -221,30 +221,23 @@ module.exports = (target = 'web', options, buildConfig) => {
                 }
               ]
             : [
-                ...(IS_DEV
-                  ? [
-                      require.resolve('style-loader'),
-                      {
-                        loader: require.resolve('css-loader'),
-                        options: { importLoaders: 1 }
-                      }
-                    ]
-                  : [
-                      MiniCssExtractPlugin.loader,
-                      {
-                        loader: require.resolve('css-loader'),
-                        options: {
-                          importLoaders: 1,
-                          modules: false,
-                          minimize: true
-                        }
-                      }
-                    ]),
+                IS_PROD ? MiniCssExtractPlugin.loader : require.resolve('style-loader'),
+                {
+                  loader: require.resolve('css-loader'),
+                  options: {
+                    importLoaders: 1,
+                    modules: false,
+                    minimize: IS_PROD
+                  }
+                },
                 {
                   loader: require.resolve('postcss-loader'),
                   options: postCssOptions
                 }
-              ]
+              ],
+          // Don't consider CSS imports dead code even if the containing package claims to have no side effects.
+          // Remove this when webpack adds a warning or an error for this. See https://github.com/webpack/webpack/issues/6571
+          sideEffects: true
         },
         // Adds support for CSS Modules (https://github.com/css-modules/css-modules) using the extension .module.css
         {
