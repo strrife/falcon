@@ -14,27 +14,8 @@ const postCssOptions = {
   ]
 };
 
-const defaultOptions = {
-  css: {
-    dev: {
-      sourceMap: true,
-      importLoaders: 1,
-      modules: false
-    },
-    prod: {
-      sourceMap: false,
-      importLoaders: 1,
-      modules: false,
-      minimize: true
-    }
-  }
-};
-
-module.exports = (config, { target, dev, paths }, webpack, userOptions = {}) => {
+module.exports = (config, { target, dev, paths } /* , webpack */) => {
   const IS_NODE = target !== 'web';
-  const ENV = dev ? 'dev' : 'prod';
-
-  const options = Object.assign({}, defaultOptions, userOptions);
 
   const styleLoader = {
     loader: require.resolve('style-loader'),
@@ -65,12 +46,19 @@ module.exports = (config, { target, dev, paths }, webpack, userOptions = {}) => 
   config.module.rules = [
     ...config.module.rules,
     {
-      test: /\.(sa|sc)ss$/,
+      test: /\.(sass|scss)$/,
       use: IS_NODE
         ? [
             {
               loader: require.resolve('css-loader/locals'),
-              options: options.css[ENV]
+              options: {
+                sourceMap: true,
+                importLoaders: 1
+                // modules: false
+                // prod: {
+                //   // minimize: true
+                // }
+              }
             }
           ]
         : [dev ? styleLoader : MiniCssExtractPlugin.loader, cssLoader, resolveUrlLoader, postCssLoader, sassLoader]
