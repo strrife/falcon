@@ -11,6 +11,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const VirtualModulesPlugin = require('webpack-virtual-modules');
 const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
+const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 
 const { colors } = require('./../tools');
@@ -18,18 +19,6 @@ const { getClientEnv } = require('./env');
 const runPlugin = require('./runPlugin');
 
 const falconClientPolyfills = require.resolve('./../../polyfills');
-
-const postCssOptions = {
-  ident: 'postcss',
-  plugins: () => [
-    require('postcss-flexbugs-fixes'),
-    require('postcss-preset-env')({
-      autoprefixer: { flexbox: 'no-2009' },
-      stage: 3
-    })
-  ],
-  sourceMap: true
-};
 
 function getEsLintLoaderOptions(eslintRcPath, isDev) {
   const options = {
@@ -109,8 +98,8 @@ module.exports = (target = 'web', options, buildConfig) => {
 
   const clientEnv = getClientEnv(target, options, buildConfig.envToBuildIn);
 
-  const getStyleLoaders = (cssOptions /* , preProcessor */) => {
-    const result = IS_NODE // Style-loader does not work in Node.js without some crazy magic. Luckily we just need css-loader.
+  const getStyleLoaders = cssOptions =>
+    IS_NODE // Style-loader does not work in Node.js without some crazy magic. Luckily we just need css-loader.
       ? [
           {
             loader: require.resolve('css-loader/locals'),
@@ -128,40 +117,19 @@ module.exports = (target = 'web', options, buildConfig) => {
           },
           {
             loader: require.resolve('postcss-loader'),
-            options: postCssOptions
+            options: {
+              ident: 'postcss',
+              plugins: () => [
+                require('postcss-flexbugs-fixes'),
+                require('postcss-preset-env')({
+                  autoprefixer: { flexbox: 'no-2009' },
+                  stage: 3
+                })
+              ],
+              sourceMap: true
+            }
           }
         ];
-
-    return result;
-
-    // const loaders = [
-    //   IS_DEV && require.resolve('style-loader'),
-    //   IS_PROD && {
-    //     loader: MiniCssExtractPlugin.loader
-    //   },
-    //   {
-    //     loader: require.resolve('css-loader'),
-    //     options: cssOptions
-    //   },
-    //   {
-    //     // Options for PostCSS as we reference these options twice
-    //     // Adds vendor prefixing based on your specified browser support in
-    //     // package.json
-    //     loader: require.resolve('postcss-loader'),
-    //     options: postCssOptions
-    //   }
-    // ].filter(Boolean);
-
-    // if (preProcessor) {
-    //   loaders.push({
-    //     loader: require.resolve(preProcessor),
-    //     options: {
-    //       sourceMap: true
-    //     }
-    //   });
-    // }
-    // return loaders;
-  };
 
   // This is our base webpack config.
   let config = {
@@ -283,9 +251,41 @@ module.exports = (target = 'web', options, buildConfig) => {
           use: getStyleLoaders({
             importLoaders: 1,
             modules: true,
-            localIdentName: '[path]_[name]_[local]',
+            getLocalIdent: getCSSModuleLocalIdent,
             minimize: IS_PROD
           }),
+          // Don't consider CSS imports dead code even if the containing package claims to have no side effects.
+          // Remove this when webpack adds a warning or an error for this. See https://github.com/webpack/webpack/issues/6571
+          sideEffects: true
+        },
+        {
+          test: /\.(scss|sass)$/,
+          exclude: /\.module\.(scss|sass)$/,
+          use: [
+            ...getStyleLoaders({
+              importLoaders: 2,
+              modules: false,
+              minimize: IS_PROD
+            }),
+            IS_WEB && { loader: require.resolve('sass-loader') }
+          ].filter(x => x),
+          // Don't consider CSS imports dead code even if the containing package claims to have no side effects.
+          // Remove this when webpack adds a warning or an error for this. See https://github.com/webpack/webpack/issues/6571
+          sideEffects: true
+        },
+        // Adds support for CSS Modules, but using SASS
+        // using the extension .module.scss or .module.sass
+        {
+          test: /\.module\.(scss|sass)$/,
+          use: [
+            ...getStyleLoaders({
+              importLoaders: 2,
+              modules: true,
+              getLocalIdent: getCSSModuleLocalIdent,
+              minimize: IS_PROD
+            }),
+            IS_WEB && { loader: require.resolve('sass-loader') }
+          ].filter(x => x),
           // Don't consider CSS imports dead code even if the containing package claims to have no side effects.
           // Remove this when webpack adds a warning or an error for this. See https://github.com/webpack/webpack/issues/6571
           sideEffects: true
