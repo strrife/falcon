@@ -1,3 +1,4 @@
+import React from 'react';
 import { themed } from '@deity/falcon-ui';
 
 export const AppLayout = themed({

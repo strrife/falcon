@@ -1,6 +1,8 @@
 import React from 'react';
-import Provider from '@emotion/provider';
-import { Global } from '@emotion/core';
+import { ThemeProvider as Provider } from 'emotion-theming';
+import { Global, CacheProvider } from '@emotion/core';
+import createCache from '@emotion/cache';
+
 import { createTheme, PropsWithTheme, CSSObject } from '../theme';
 import { Root } from './Root';
 
@@ -12,6 +14,12 @@ const tinyNormalizeStyles = {
     margin: 0
   }
 };
+// IMPORTANT: temporary hack/workaround for not rendering styles
+// when using emotion together with react-apollo after error on the server occured
+// falcon-ui ThemeProvider now renders CacheProvider with always new cache provided when running on the server
+// analogous to https://github.com/emotion-js/emotion/blob/master/packages/core/src/context.js#L54
+const isServer = typeof document === 'undefined';
+const cache = createCache();
 
 type ThemeProviderProps = Partial<PropsWithTheme> & {
   globalCss?: CSSObject;
@@ -24,8 +32,10 @@ export const ThemeProvider: React.SFC<ThemeProviderProps> = ({
   withoutRoot = false,
   ...rest
 }) => (
-  <Provider theme={theme}>
-    <Global styles={globalCss} />
-    {withoutRoot ? rest.children : <Root {...rest} />}
-  </Provider>
+  <CacheProvider value={isServer ? createCache() : cache}>
+    <Provider theme={theme}>
+      <Global styles={globalCss} />
+      {withoutRoot ? rest.children : <Root {...rest} />}
+    </Provider>
+  </CacheProvider>
 );
