@@ -1,17 +1,15 @@
-const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const PostCssFlexBugFixes = require('postcss-flexbugs-fixes');
 
 const postCssOptions = {
   ident: 'postcss',
-  sourceMap: true,
   plugins: () => [
-    PostCssFlexBugFixes,
-    autoprefixer({
-      browsers: ['>1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9'],
-      flexbox: 'no-2009'
+    require('postcss-flexbugs-fixes'),
+    require('postcss-preset-env')({
+      autoprefixer: { flexbox: 'no-2009' },
+      stage: 3
     })
-  ]
+  ],
+  sourceMap: true
 };
 
 module.exports = (config, { target, dev, paths } /* , webpack */) => {

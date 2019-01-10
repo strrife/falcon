@@ -24,8 +24,8 @@ const postCssOptions = {
   plugins: () => [
     require('postcss-flexbugs-fixes'),
     require('postcss-preset-env')({
-      browsers: ['>1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9'],
-      autoprefixer: { flexbox: 'no-2009' }
+      autoprefixer: { flexbox: 'no-2009' },
+      stage: 3
     })
   ],
   sourceMap: true
