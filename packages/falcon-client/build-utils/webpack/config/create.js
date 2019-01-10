@@ -5,7 +5,6 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const AssetsPlugin = require('assets-webpack-plugin');
 const StartServerPlugin = require('start-server-webpack-plugin');
-const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackBar = require('webpackbar');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -24,11 +23,12 @@ const postCssOptions = {
   ident: 'postcss',
   plugins: () => [
     require('postcss-flexbugs-fixes'),
-    autoprefixer({
+    require('postcss-preset-env')({
       browsers: ['>1%', 'last 4 versions', 'Firefox ESR', 'not ie < 9'],
-      flexbox: 'no-2009'
+      autoprefixer: { flexbox: 'no-2009' }
     })
-  ]
+  ],
+  sourceMap: true
 };
 
 function getEsLintLoaderOptions(eslintRcPath, isDev) {
