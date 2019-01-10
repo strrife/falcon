@@ -217,7 +217,10 @@ module.exports = (target = 'web', options, buildConfig) => {
             ? [
                 {
                   loader: require.resolve('css-loader'),
-                  options: { importLoaders: 1 }
+                  options: {
+                    importLoaders: 1,
+                    modules: false
+                  }
                 }
               ]
             : [
@@ -248,42 +251,31 @@ module.exports = (target = 'web', options, buildConfig) => {
                 {
                   loader: require.resolve('css-loader/locals'),
                   options: {
-                    modules: true,
                     importLoaders: 1,
+                    modules: true,
                     localIdentName: '[path]__[name]___[local]'
                   }
                 }
               ]
             : [
-                ...(IS_DEV
-                  ? [
-                      require.resolve('style-loader'),
-                      {
-                        loader: require.resolve('css-loader'),
-                        options: {
-                          modules: true,
-                          importLoaders: 1,
-                          localIdentName: '[path]__[name]___[local]'
-                        }
-                      }
-                    ]
-                  : [
-                      MiniCssExtractPlugin.loader,
-                      {
-                        loader: require.resolve('css-loader'),
-                        options: {
-                          modules: true,
-                          importLoaders: 1,
-                          minimize: true,
-                          localIdentName: '[path]__[name]___[local]'
-                        }
-                      }
-                    ]),
+                IS_PROD ? MiniCssExtractPlugin.loader : require.resolve('style-loader'),
+                {
+                  loader: require.resolve('css-loader'),
+                  options: {
+                    modules: true,
+                    importLoaders: 1,
+                    localIdentName: '[path]__[name]___[local]',
+                    minimize: IS_PROD
+                  }
+                },
                 {
                   loader: require.resolve('postcss-loader'),
                   options: postCssOptions
                 }
-              ]
+              ],
+          // Don't consider CSS imports dead code even if the containing package claims to have no side effects.
+          // Remove this when webpack adds a warning or an error for this. See https://github.com/webpack/webpack/issues/6571
+          sideEffects: true
         }
       ].filter(x => x)
     }
