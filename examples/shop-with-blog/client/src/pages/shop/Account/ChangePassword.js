@@ -22,16 +22,7 @@ const ChangePassword = ({ history }) => (
         {(changePassword, { loading, error }) => (
           <Formik
             initialValues={{ currentPassword: '', password: '' }}
-            onSubmit={values =>
-              changePassword({
-                variables: {
-                  input: {
-                    currentPassword: values.currentPassword,
-                    password: values.password
-                  }
-                }
-              }).then(() => history.push('/account'))
-            }
+            onSubmit={values => changePassword({ variables: { input: values } }).then(() => history.push('/account'))}
           >
             {() => (
               <GridLayout as={Form} id="change-password" i18nId="changePassword" gridArea={TwoColumnsLayoutArea.left}>
