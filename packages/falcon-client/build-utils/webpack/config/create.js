@@ -254,8 +254,8 @@ module.exports = (target = 'web', options, buildConfig) => {
           use: getStyleLoaders(target, env, {
             importLoaders: 1,
             modules: true,
-            getLocalIdent: getCSSModuleLocalIdent,
             minimize: IS_PROD,
+            getLocalIdent: getCSSModuleLocalIdent,
             sourceMap: !!devtoolSourceMap
           }),
           sideEffects: true // remove this when webpack adds a warning / error for this. See https://github.com/webpack/webpack/issues/6571
@@ -270,7 +270,7 @@ module.exports = (target = 'web', options, buildConfig) => {
               minimize: IS_PROD,
               sourceMap: !!devtoolSourceMap
             }),
-            IS_WEB && { loader: require.resolve('sass-loader') }
+            IS_WEB && require.resolve('sass-loader')
           ].filter(x => x),
           sideEffects: true // remove this when webpack adds a warning / error for this. See https://github.com/webpack/webpack/issues/6571
         },
@@ -280,11 +280,11 @@ module.exports = (target = 'web', options, buildConfig) => {
             ...getStyleLoaders(target, env, {
               importLoaders: 2,
               modules: true,
-              getLocalIdent: getCSSModuleLocalIdent,
               minimize: IS_PROD,
+              getLocalIdent: getCSSModuleLocalIdent,
               sourceMap: !!devtoolSourceMap
             }),
-            IS_WEB && { loader: require.resolve('sass-loader') }
+            IS_WEB && require.resolve('sass-loader')
           ].filter(x => x),
           sideEffects: true // remove this when webpack adds a warning / error for this. See https://github.com/webpack/webpack/issues/6571
         }
