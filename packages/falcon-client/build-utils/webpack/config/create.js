@@ -240,7 +240,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         {
           test: /\.css$/,
           exclude: [paths.appBuild, /\.module\.css$/],
-          use: getStyleLoaders({
+          use: getStyleLoaders(target, env, {
             importLoaders: 1,
             modules: false,
             minimize: IS_PROD,
@@ -251,7 +251,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         {
           test: /\.module\.css$/,
           exclude: [paths.appBuild],
-          use: getStyleLoaders({
+          use: getStyleLoaders(target, env, {
             importLoaders: 1,
             modules: true,
             getLocalIdent: getCSSModuleLocalIdent,
@@ -264,7 +264,7 @@ module.exports = (target = 'web', options, buildConfig) => {
           test: /\.(scss|sass)$/,
           exclude: /\.module\.(scss|sass)$/,
           use: [
-            ...getStyleLoaders({
+            ...getStyleLoaders(target, env, {
               importLoaders: 2,
               modules: false,
               minimize: IS_PROD,
@@ -277,7 +277,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         {
           test: /\.module\.(scss|sass)$/,
           use: [
-            ...getStyleLoaders({
+            ...getStyleLoaders(target, env, {
               importLoaders: 2,
               modules: true,
               getLocalIdent: getCSSModuleLocalIdent,
