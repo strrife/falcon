@@ -53,6 +53,53 @@ function getBabelLoaderOptions(babelRcPath) {
   return options;
 }
 
+function getStyleLoaders(target, env, cssLoaderOptions) {
+  const { sourceMap = false } = cssLoaderOptions;
+
+  // "postcss" loader applies autoprefixer to our CSS.
+  // "css" loader resolves paths in CSS and adds assets as dependencies.
+  // "style" loader turns CSS into JS modules that inject <style> tags.
+  // In production, we use a plugin to extract that CSS to a file, but
+  // in development "style" loader enables hot editing of CSS.
+  //
+  // Note: this yields the exact same CSS config as create-react-app.
+
+  if (target === 'node') {
+    // Style-loader does not work in Node.js without some crazy magic. Luckily we just need css-loader.
+    return [
+      {
+        loader: require.resolve('css-loader/locals'),
+        options: {
+          ...cssLoaderOptions,
+          minimize: false
+        }
+      }
+    ];
+  }
+
+  return [
+    env === 'production' ? MiniCssExtractPlugin.loader : require.resolve('style-loader'),
+    {
+      loader: require.resolve('css-loader'),
+      options: { ...cssLoaderOptions }
+    },
+    {
+      loader: require.resolve('postcss-loader'),
+      options: {
+        ident: 'postcss',
+        plugins: () => [
+          require('postcss-flexbugs-fixes'),
+          require('postcss-preset-env')({
+            autoprefixer: { flexbox: 'no-2009' },
+            stage: 3
+          })
+        ],
+        sourceMap
+      }
+    }
+  ];
+}
+
 function addVendorsBundle(modules = []) {
   const moduleFilter = new RegExp(
     `[\\\\/]node_modules[\\\\/](${modules.map(x => x.replace('/', '[\\\\/]')).join('|')})[\\\\/]`
@@ -78,8 +125,8 @@ function addVendorsBundle(modules = []) {
   };
 }
 
-// This is the Webpack configuration factory. It's the juice!
 /**
+ * Webpack configuration factory. It's the juice!
  * @param {'web' | 'node' } target target
  * @param {{ env: ('development' | 'production'), host: string, port: number, inspect: string, publicPath: string }} options environment
  * @param {object} buildConfig config
@@ -97,54 +144,15 @@ module.exports = (target = 'web', options, buildConfig) => {
   process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
 
   const clientEnv = getClientEnv(target, options, buildConfig.envToBuildIn);
-
-  const getStyleLoaders = cssLoaderOptions => {
-    const { sourceMap = false } = cssLoaderOptions;
-
-    if (IS_NODE) {
-      // Style-loader does not work in Node.js without some crazy magic. Luckily we just need css-loader.
-      return [
-        {
-          loader: require.resolve('css-loader/locals'),
-          options: {
-            ...cssLoaderOptions,
-            minimize: false
-          }
-        }
-      ];
-    }
-
-    return [
-      IS_PROD ? MiniCssExtractPlugin.loader : require.resolve('style-loader'),
-      {
-        loader: require.resolve('css-loader'),
-        options: { ...cssLoaderOptions }
-      },
-      {
-        loader: require.resolve('postcss-loader'),
-        options: {
-          ident: 'postcss',
-          plugins: () => [
-            require('postcss-flexbugs-fixes'),
-            require('postcss-preset-env')({
-              autoprefixer: { flexbox: 'no-2009' },
-              stage: 3
-            })
-          ],
-          sourceMap
-        }
-      }
-    ];
-  };
+  const devtoolSourceMap = 'cheap-module-source-map';
 
   // This is our base webpack config.
   let config = {
     mode: IS_DEV ? 'development' : 'production',
     context: process.cwd(), // Set webpack context to the current command's directory
     target,
-    devtool: 'cheap-module-source-map',
-    // We need to tell webpack how to resolve both Razzle's node_modules and
-    // the users', so we use resolve and resolveLoader.
+    devtool: devtoolSourceMap,
+    // webpack needs to known how to resolve both falcon-client's and the app's node_modules, so we use resolve and resolveLoader.
     resolve: {
       modules: ['node_modules', paths.appNodeModules].concat(paths.nodePath.split(path.delimiter).filter(Boolean)),
       extensions: ['.mjs', '.jsx', '.js', '.json', '.graphql', '.gql'],
@@ -158,9 +166,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         'app-webmanifest': useWebmanifest ? paths.appWebmanifest : paths.ownWebmanifest
       }
     },
-    resolveLoader: {
-      modules: [paths.appNodeModules, paths.ownNodeModules]
-    },
+    resolveLoader: { modules: [paths.appNodeModules, paths.ownNodeModules] },
     module: {
       strictExportPresence: true,
       rules: [
@@ -231,26 +237,17 @@ module.exports = (target = 'web', options, buildConfig) => {
             { loader: require.resolve('app-manifest-loader') }
           ]
         },
-        // "postcss" loader applies autoprefixer to our CSS.
-        // "css" loader resolves paths in CSS and adds assets as dependencies.
-        // "style" loader turns CSS into JS modules that inject <style> tags.
-        // In production, we use a plugin to extract that CSS to a file, but
-        // in development "style" loader enables hot editing of CSS.
-        //
-        // Note: this yields the exact same CSS config as create-react-app.
         {
           test: /\.css$/,
           exclude: [paths.appBuild, /\.module\.css$/],
           use: getStyleLoaders({
             importLoaders: 1,
             modules: false,
-            minimize: IS_PROD
+            minimize: IS_PROD,
+            sourceMap: !!devtoolSourceMap
           }),
-          // Don't consider CSS imports dead code even if the containing package claims to have no side effects.
-          // Remove this when webpack adds a warning or an error for this. See https://github.com/webpack/webpack/issues/6571
-          sideEffects: true
+          sideEffects: true // remove this when webpack adds a warning / error for this. See https://github.com/webpack/webpack/issues/6571
         },
-        // Adds support for CSS Modules (https://github.com/css-modules/css-modules) using the extension .module.css
         {
           test: /\.module\.css$/,
           exclude: [paths.appBuild],
@@ -258,11 +255,10 @@ module.exports = (target = 'web', options, buildConfig) => {
             importLoaders: 1,
             modules: true,
             getLocalIdent: getCSSModuleLocalIdent,
-            minimize: IS_PROD
+            minimize: IS_PROD,
+            sourceMap: !!devtoolSourceMap
           }),
-          // Don't consider CSS imports dead code even if the containing package claims to have no side effects.
-          // Remove this when webpack adds a warning or an error for this. See https://github.com/webpack/webpack/issues/6571
-          sideEffects: true
+          sideEffects: true // remove this when webpack adds a warning / error for this. See https://github.com/webpack/webpack/issues/6571
         },
         {
           test: /\.(scss|sass)$/,
@@ -271,16 +267,13 @@ module.exports = (target = 'web', options, buildConfig) => {
             ...getStyleLoaders({
               importLoaders: 2,
               modules: false,
-              minimize: IS_PROD
+              minimize: IS_PROD,
+              sourceMap: !!devtoolSourceMap
             }),
             IS_WEB && { loader: require.resolve('sass-loader') }
           ].filter(x => x),
-          // Don't consider CSS imports dead code even if the containing package claims to have no side effects.
-          // Remove this when webpack adds a warning or an error for this. See https://github.com/webpack/webpack/issues/6571
-          sideEffects: true
+          sideEffects: true // remove this when webpack adds a warning / error for this. See https://github.com/webpack/webpack/issues/6571
         },
-        // Adds support for CSS Modules, but using SASS
-        // using the extension .module.scss or .module.sass
         {
           test: /\.module\.(scss|sass)$/,
           use: [
@@ -288,13 +281,12 @@ module.exports = (target = 'web', options, buildConfig) => {
               importLoaders: 2,
               modules: true,
               getLocalIdent: getCSSModuleLocalIdent,
-              minimize: IS_PROD
+              minimize: IS_PROD,
+              sourceMap: !!devtoolSourceMap
             }),
             IS_WEB && { loader: require.resolve('sass-loader') }
           ].filter(x => x),
-          // Don't consider CSS imports dead code even if the containing package claims to have no side effects.
-          // Remove this when webpack adds a warning or an error for this. See https://github.com/webpack/webpack/issues/6571
-          sideEffects: true
+          sideEffects: true // remove this when webpack adds a warning / error for this. See https://github.com/webpack/webpack/issues/6571
         }
       ].filter(x => x)
     }
@@ -523,10 +515,8 @@ module.exports = (target = 'web', options, buildConfig) => {
             // Use multi-process parallel running to improve the build speed
             // Default number of concurrent runs: os.cpus().length - 1
             parallel: true,
-            // Enable file caching
-            cache: true,
-            // @todo add flag for sourcemaps
-            sourceMap: true
+            cache: true, // Enable file caching
+            sourceMap: !!devtoolSourceMap
           })
         ]
         // @todo automatic vendor bundle
