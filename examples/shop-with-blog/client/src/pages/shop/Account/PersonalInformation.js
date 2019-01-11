@@ -33,10 +33,8 @@ const PersonalInformation = () => (
                   editCustomer({
                     variables: {
                       input: {
-                        websiteId: customer.websiteId,
-                        firstname: values.firstname,
-                        lastname: values.lastname,
-                        email: values.email
+                        ...values,
+                        websiteId: customer.websiteId
                       }
                     }
                   })
