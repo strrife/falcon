@@ -392,155 +392,153 @@ module.exports.user = {
 };
 
 module.exports.categoryProducts = {
-  data: {
-    filters: [
-      {
-        label: 'Price',
-        code: 'price',
-        options: [
-          {
-            label: '<span class="price">$10.00</span> - <span class="price">$19.99</span>',
-            value: '10-20',
-            count: 3
-          },
-          {
-            label: '<span class="price">$20.00</span> - <span class="price">$29.99</span>',
-            value: '20-30',
-            count: 8
-          }
-        ],
-        attribute_id: 77,
-        type: 'decimal'
+  filters: [
+    {
+      label: 'Price',
+      code: 'price',
+      options: [
+        {
+          label: '<span class="price">$10.00</span> - <span class="price">$19.99</span>',
+          value: '10-20',
+          count: 3
+        },
+        {
+          label: '<span class="price">$20.00</span> - <span class="price">$29.99</span>',
+          value: '20-30',
+          count: 8
+        }
+      ],
+      attribute_id: 77,
+      type: 'decimal'
+    },
+    {
+      label: 'Color',
+      code: 'color',
+      options: [
+        {
+          label: 'Black',
+          value: '49',
+          count: 1
+        },
+        {
+          label: 'Blue',
+          value: '50',
+          count: 6
+        },
+        {
+          label: 'Gray',
+          value: '52',
+          count: 3
+        }
+      ],
+      attribute_id: 93,
+      type: 'int'
+    },
+    {
+      label: 'Material',
+      code: 'material',
+      options: [
+        {
+          label: 'Cotton',
+          value: '33',
+          count: 1
+        },
+        {
+          label: 'Polyester',
+          value: '38',
+          count: 10
+        },
+        {
+          label: 'Organic Cotton',
+          value: '154',
+          count: 6
+        }
+      ],
+      attribute_id: 142,
+      type: 'varchar'
+    }
+  ],
+  items: [
+    {
+      price: {
+        regular_price: 32,
+        special_price: null,
+        min_tier_price: null
       },
-      {
-        label: 'Color',
-        code: 'color',
-        options: [
-          {
-            label: 'Black',
-            value: '49',
-            count: 1
-          },
-          {
-            label: 'Blue',
-            value: '50',
-            count: 6
-          },
-          {
-            label: 'Gray',
-            value: '52',
-            count: 3
-          }
-        ],
-        attribute_id: 93,
-        type: 'int'
+      extension_attributes: {
+        url_key: 'helios-endurance-tank'
       },
-      {
-        label: 'Material',
-        code: 'material',
-        options: [
-          {
-            label: 'Cotton',
-            value: '33',
-            count: 1
-          },
-          {
-            label: 'Polyester',
-            value: '38',
-            count: 10
-          },
-          {
-            label: 'Organic Cotton',
-            value: '154',
-            count: 6
-          }
-        ],
-        attribute_id: 142,
-        type: 'varchar'
-      }
-    ],
-    items: [
-      {
-        price: {
-          regular_price: 32,
-          special_price: null,
-          min_tier_price: null
-        },
-        extension_attributes: {
-          url_key: 'helios-endurance-tank'
-        },
-        is_salable: 1,
-        sku: 'MT04',
-        name: 'Helios Endurance Tank',
-        image:
-          'https://dev.magento.deity.io/media/catalog/product/cache/537ba9f6490dad710d638896629f9bfe/m/t/mt04-blue_main.jpg',
-        url_path: 'men/tops-men/tanks-men/helios-endurance-tank.html'
+      is_salable: 1,
+      sku: 'MT04',
+      name: 'Helios Endurance Tank',
+      image:
+        'https://dev.magento.deity.io/media/catalog/product/cache/537ba9f6490dad710d638896629f9bfe/m/t/mt04-blue_main.jpg',
+      url_path: 'men/tops-men/tanks-men/helios-endurance-tank.html'
+    },
+    {
+      price: {
+        regular_price: 29,
+        special_price: null,
+        min_tier_price: null
       },
-      {
-        price: {
-          regular_price: 29,
-          special_price: null,
-          min_tier_price: null
-        },
-        extension_attributes: {
-          url_key: 'sinbad-fitness-tank'
-        },
-        is_salable: 1,
-        sku: 'MT09',
-        name: 'Sinbad Fitness Tank',
-        image:
-          'https://dev.magento.deity.io/media/catalog/product/cache/537ba9f6490dad710d638896629f9bfe/m/t/mt09-blue_main.jpg',
-        url_path: 'men/tops-men/tanks-men/sinbad-fitness-tank.html'
+      extension_attributes: {
+        url_key: 'sinbad-fitness-tank'
       },
-      {
-        price: {
-          regular_price: 29,
-          special_price: null,
-          min_tier_price: null
-        },
-        extension_attributes: {
-          url_key: 'sparta-gym-tank'
-        },
-        is_salable: 1,
-        sku: 'MT08',
-        name: 'Sparta Gym Tank',
-        image:
-          'https://dev.magento.deity.io/media/catalog/product/cache/537ba9f6490dad710d638896629f9bfe/m/t/mt08-green_main.jpg',
-        url_path: 'men/tops-men/tanks-men/sparta-gym-tank.html'
+      is_salable: 1,
+      sku: 'MT09',
+      name: 'Sinbad Fitness Tank',
+      image:
+        'https://dev.magento.deity.io/media/catalog/product/cache/537ba9f6490dad710d638896629f9bfe/m/t/mt09-blue_main.jpg',
+      url_path: 'men/tops-men/tanks-men/sinbad-fitness-tank.html'
+    },
+    {
+      price: {
+        regular_price: 29,
+        special_price: null,
+        min_tier_price: null
       },
-      {
-        price: {
-          regular_price: 29,
-          special_price: null,
-          min_tier_price: null
-        },
-        extension_attributes: {
-          url_key: 'primo-endurance-tank'
-        },
-        is_salable: 1,
-        sku: 'MT03',
-        name: 'Primo Endurance Tank',
-        image:
-          'https://dev.magento.deity.io/media/catalog/product/cache/537ba9f6490dad710d638896629f9bfe/m/t/mt03-red_main.jpg',
-        url_path: 'men/tops-men/tanks-men/primo-endurance-tank.html'
+      extension_attributes: {
+        url_key: 'sparta-gym-tank'
       },
-      {
-        price: {
-          regular_price: 29,
-          special_price: null,
-          min_tier_price: null
-        },
-        extension_attributes: {
-          url_key: 'tristan-endurance-tank'
-        },
-        is_salable: 1,
-        sku: 'MT02',
-        name: 'Tristan Endurance Tank',
-        image:
-          'https://dev.magento.deity.io/media/catalog/product/cache/537ba9f6490dad710d638896629f9bfe/m/t/mt02-white_main.jpg',
-        url_path: 'men/tops-men/tanks-men/tristan-endurance-tank.html'
-      }
-    ],
-    total_count: 12
-  }
+      is_salable: 1,
+      sku: 'MT08',
+      name: 'Sparta Gym Tank',
+      image:
+        'https://dev.magento.deity.io/media/catalog/product/cache/537ba9f6490dad710d638896629f9bfe/m/t/mt08-green_main.jpg',
+      url_path: 'men/tops-men/tanks-men/sparta-gym-tank.html'
+    },
+    {
+      price: {
+        regular_price: 29,
+        special_price: null,
+        min_tier_price: null
+      },
+      extension_attributes: {
+        url_key: 'primo-endurance-tank'
+      },
+      is_salable: 1,
+      sku: 'MT03',
+      name: 'Primo Endurance Tank',
+      image:
+        'https://dev.magento.deity.io/media/catalog/product/cache/537ba9f6490dad710d638896629f9bfe/m/t/mt03-red_main.jpg',
+      url_path: 'men/tops-men/tanks-men/primo-endurance-tank.html'
+    },
+    {
+      price: {
+        regular_price: 29,
+        special_price: null,
+        min_tier_price: null
+      },
+      extension_attributes: {
+        url_key: 'tristan-endurance-tank'
+      },
+      is_salable: 1,
+      sku: 'MT02',
+      name: 'Tristan Endurance Tank',
+      image:
+        'https://dev.magento.deity.io/media/catalog/product/cache/537ba9f6490dad710d638896629f9bfe/m/t/mt02-white_main.jpg',
+      url_path: 'men/tops-men/tanks-men/tristan-endurance-tank.html'
+    }
+  ],
+  total_count: 12
 };

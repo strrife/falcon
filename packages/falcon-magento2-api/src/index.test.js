@@ -245,6 +245,19 @@ describe('Magento2Api', () => {
     expect(resp).toEqual([]);
   });
 
+  it('categoryProducts() should correctly fetch category products', async () => {
+    nock(URL)
+      .get(createMagentoUrl('/categories/1/products'))
+      .query(() => true)
+      .reply(200, magentoResponses.categoryProducts);
+
+    const response = await api.categoryProducts({ data: { id: 1 } }, {});
+
+    expect(response.items).toHaveLength(5);
+    expect(response.aggregations).toHaveLength(3);
+    expect(response.pagination).toBeObject; // eslint-disable-line
+  });
+
   it('processAggregations() should properly parse aggregations data from Magento', () => {
     const expectedOutput = [
       {
@@ -307,7 +320,7 @@ describe('Magento2Api', () => {
       }
     ];
 
-    expect(api.processAggregations(magentoResponses.categoryProducts.data.filters)).toEqual(expectedOutput);
+    expect(api.processAggregations(magentoResponses.categoryProducts.filters)).toEqual(expectedOutput);
   });
 
   it('categoryChildren() should fetch category data for each children of the passed category', async () => {
