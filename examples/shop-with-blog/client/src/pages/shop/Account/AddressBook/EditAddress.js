@@ -59,17 +59,9 @@ const EditAddress = ({ match, history }) => {
                   editAddress({
                     variables: {
                       input: {
+                        ...values,
                         id,
-                        firstname: values.firstname,
-                        lastname: values.lastname,
-                        street: [values.street],
-                        postcode: values.postcode,
-                        city: values.city,
-                        countryId: values.countryId,
-                        company: values.company,
-                        telephone: values.telephone,
-                        defaultBilling: values.defaultBilling,
-                        defaultShipping: values.defaultShipping
+                        street: [values.street]
                       }
                     }
                   }).then(() => history.push('/account/address-book'))
