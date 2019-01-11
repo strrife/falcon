@@ -45,48 +45,44 @@ const AddAddress = ({ history }) => (
             }).then(() => history.push('/account/address-book'))
           }
         >
-          {() => {
-            const id = 'add-address';
-
-            return (
-              <Form id={id} i18nId="addAddress">
-                <CheckboxFormField name="defaultBilling" />
-                <CheckboxFormField name="defaultShipping" />
-                <TwoColumnsLayout>
-                  <GridLayout gridArea={TwoColumnsLayoutArea.left}>
-                    <FormField name="company" />
-                    <FormField name="firstname" required />
-                    <FormField name="lastname" required />
-                    <FormField name="telephone" />
-                  </GridLayout>
-                  <GridLayout gridArea={TwoColumnsLayoutArea.right}>
-                    <FormField name="street" required />
-                    <FormField name="postcode" required />
-                    <FormField name="city" required />
-                    <FormField name="countryId" required>
-                      {({ form, field }) => (
-                        <CountriesQuery passLoading>
-                          {({ countries = { items: [] } }) => (
-                            <CountrySelector
-                              {...field}
-                              onChange={x => form.setFieldValue(field.name, x)}
-                              items={countries.items}
-                            />
-                          )}
-                        </CountriesQuery>
-                      )}
-                    </FormField>
-                  </GridLayout>
-                </TwoColumnsLayout>
-                <FlexLayout justifyContent="flex-end" alignItems="center" mt="md">
-                  <Button type="submit" variant={loading ? 'loader' : undefined}>
-                    <T id="addAddress.submitButton" />
-                  </Button>
-                </FlexLayout>
-                <FormErrorSummary errors={error && [error.message]} />
-              </Form>
-            );
-          }}
+          {() => (
+            <Form id="add-address" i18nId="addAddress">
+              <CheckboxFormField name="defaultBilling" />
+              <CheckboxFormField name="defaultShipping" />
+              <TwoColumnsLayout>
+                <GridLayout gridArea={TwoColumnsLayoutArea.left}>
+                  <FormField name="company" />
+                  <FormField name="firstname" required />
+                  <FormField name="lastname" required />
+                  <FormField name="telephone" />
+                </GridLayout>
+                <GridLayout gridArea={TwoColumnsLayoutArea.right}>
+                  <FormField name="street" required />
+                  <FormField name="postcode" required />
+                  <FormField name="city" required />
+                  <FormField name="countryId" required>
+                    {({ form, field }) => (
+                      <CountriesQuery passLoading>
+                        {({ countries = { items: [] } }) => (
+                          <CountrySelector
+                            {...field}
+                            onChange={x => form.setFieldValue(field.name, x)}
+                            items={countries.items}
+                          />
+                        )}
+                      </CountriesQuery>
+                    )}
+                  </FormField>
+                </GridLayout>
+              </TwoColumnsLayout>
+              <FlexLayout justifyContent="flex-end" alignItems="center" mt="md">
+                <Button type="submit" variant={loading ? 'loader' : undefined}>
+                  <T id="addAddress.submitButton" />
+                </Button>
+              </FlexLayout>
+              <FormErrorSummary errors={error && [error.message]} />
+            </Form>
+          )}
         </Formik>
       )}
     </AddAddressMutation>
