@@ -7,11 +7,11 @@ import { toGridTemplate, ProtectedRoute, SignOutLogic } from '@deity/falcon-ecom
 import AccountDashboard from './Dashboard';
 import PersonalInformation from './PersonalInformation';
 import ChangePassword from './ChangePassword';
-import AddressBook from './AddressBook';
-import AddAddress from './AddAddress';
-import EditAddress from './EditAddress';
-import Orders from './Orders';
-import Order from './Order';
+import AddressBook from './AddressBook/AddressBook';
+import AddAddress from './AddressBook/AddAddress';
+import EditAddress from './AddressBook/EditAddress';
+import Orders from './Orders/Orders';
+import Order from './Orders/Order';
 import DynamicRoute from './../../DynamicRoute';
 
 const AccountArea = {
