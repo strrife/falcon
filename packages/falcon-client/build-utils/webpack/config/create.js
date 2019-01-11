@@ -142,24 +142,22 @@ module.exports = (target = 'web', options, buildConfig) => {
   const IS_PROD = env === 'production';
   const IS_DEV = env === 'development';
   process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
+  const devtool = 'cheap-module-source-map';
 
   const clientEnv = getClientEnv(target, options, buildConfig.envToBuildIn);
-  const devtoolSourceMap = 'cheap-module-source-map';
 
-  // This is our base webpack config.
   let config = {
     mode: IS_DEV ? 'development' : 'production',
     context: process.cwd(), // Set webpack context to the current command's directory
     target,
-    devtool: devtoolSourceMap,
+    devtool,
     // webpack needs to known how to resolve both falcon-client's and the app's node_modules, so we use resolve and resolveLoader.
     resolve: {
       modules: ['node_modules', paths.appNodeModules].concat(paths.nodePath.split(path.delimiter).filter(Boolean)),
       extensions: ['.mjs', '.jsx', '.js', '.json', '.graphql', '.gql'],
       alias: {
         'webpack/hot/poll': require.resolve('webpack/hot/poll'), // This is required so symlinks work during development.
-        // Support React Native Web
-        // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
+        // Support React Native Web https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',
         src: paths.appSrc,
         'app-path': paths.appPath,
@@ -244,7 +242,7 @@ module.exports = (target = 'web', options, buildConfig) => {
             importLoaders: 1,
             modules: false,
             minimize: IS_PROD,
-            sourceMap: !!devtoolSourceMap
+            sourceMap: !!devtool
           }),
           sideEffects: true // remove this when webpack adds a warning / error for this. See https://github.com/webpack/webpack/issues/6571
         },
@@ -256,7 +254,7 @@ module.exports = (target = 'web', options, buildConfig) => {
             modules: true,
             minimize: IS_PROD,
             getLocalIdent: getCSSModuleLocalIdent,
-            sourceMap: !!devtoolSourceMap
+            sourceMap: !!devtool
           }),
           sideEffects: true // remove this when webpack adds a warning / error for this. See https://github.com/webpack/webpack/issues/6571
         },
@@ -268,7 +266,7 @@ module.exports = (target = 'web', options, buildConfig) => {
               importLoaders: 2,
               modules: false,
               minimize: IS_PROD,
-              sourceMap: !!devtoolSourceMap
+              sourceMap: !!devtool
             }),
             IS_WEB && require.resolve('sass-loader')
           ].filter(x => x),
@@ -282,7 +280,7 @@ module.exports = (target = 'web', options, buildConfig) => {
               modules: true,
               minimize: IS_PROD,
               getLocalIdent: getCSSModuleLocalIdent,
-              sourceMap: !!devtoolSourceMap
+              sourceMap: !!devtool
             }),
             IS_WEB && require.resolve('sass-loader')
           ].filter(x => x),
@@ -506,7 +504,7 @@ module.exports = (target = 'web', options, buildConfig) => {
             // Default number of concurrent runs: os.cpus().length - 1
             parallel: true,
             cache: true, // Enable file caching
-            sourceMap: !!devtoolSourceMap
+            sourceMap: !!devtool
           })
         ]
       };
