@@ -22,7 +22,6 @@
     "@deity/falcon-i18n": "^0.1.0",
     "@deity/falcon-theme-editor": "^0.1.0",
     "@deity/falcon-ui": "^0.1.0",
-    "@deity/scss-falcon-client-plugin": "^0.0.1",
     "@loadable/component": "^5.2.1",
     "apollo-client": "^2.4.2",
     "config": "^2.0.1",
