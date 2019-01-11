@@ -90,8 +90,6 @@ const Account = () => (
         <ProtectedRoute exact path="/account/address-book" component={AddressBook} />
         <ProtectedRoute exact path="/account/address-book/add" component={AddAddress} />
         <ProtectedRoute exact path="/account/address-book/edit/:id" component={EditAddress} />
-        {/* <ProtectedRoute exact path="/product-reviews" component={} /> */}
-        {/* <ProtectedRoute exact path="/account/wish-list" component={WishList} /> */}
         <DynamicRoute />
       </Switch>
     </Box>
