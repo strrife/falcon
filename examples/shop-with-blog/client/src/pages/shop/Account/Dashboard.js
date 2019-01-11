@@ -12,7 +12,7 @@ const Dashboard = () => (
     <Box>
       <OrdersListQuery variables={{ perPage: 1, page: 1 }}>
         {({ orders: { items } }) => (
-          <>
+          <React.Fragment>
             <FlexLayout justifyContent="flex-start" alignItems="baseline">
               <H2>
                 <T id="dashboard.recentOrder" />
@@ -24,7 +24,7 @@ const Dashboard = () => (
               )}
             </FlexLayout>
             <Box>{items.length ? <OrdersList items={items} /> : <NoOrders />}</Box>
-          </>
+          </React.Fragment>
         )}
       </OrdersListQuery>
     </Box>
@@ -44,7 +44,7 @@ const Dashboard = () => (
       </H2>
       <CustomerQuery>
         {({ customer }) => (
-          <>
+          <React.Fragment>
             <Text>{`${customer.firstname} ${customer.lastname}`}</Text>
             <Text>{customer.email}</Text>
             <FlexLayout flexDirection="row" mt="xs">
@@ -56,7 +56,7 @@ const Dashboard = () => (
                 <T id="dashboard.changePasswordLink" />
               </Link>
             </FlexLayout>
-          </>
+          </React.Fragment>
         )}
       </CustomerQuery>
     </Box>

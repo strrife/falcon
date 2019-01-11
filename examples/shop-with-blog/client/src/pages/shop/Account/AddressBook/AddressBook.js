@@ -25,7 +25,7 @@ const AddressBook = () => (
         const anyRest = restAddresses.length > 0;
 
         return (
-          <>
+          <React.Fragment>
             {anyDefaults && (
               <AddressesListLayout my="md">
                 {defaultsEqual ? (
@@ -36,7 +36,7 @@ const AddressBook = () => (
                     <AddressCardContent address={defaultBilling} />
                   </AddressCardLayout>
                 ) : (
-                  <>
+                  <React.Fragment>
                     {defaultBilling && (
                       <AddressCardLayout>
                         <H2>
@@ -53,7 +53,7 @@ const AddressBook = () => (
                         <AddressCardContent address={defaultShipping} />
                       </AddressCardLayout>
                     )}
-                  </>
+                  </React.Fragment>
                 )}
               </AddressesListLayout>
             )}
@@ -77,7 +77,7 @@ const AddressBook = () => (
                 <T id="addressBook.addNewButton" />
               </Button>
             </FlexLayout>
-          </>
+          </React.Fragment>
         );
       }}
     </AddressesListQuery>
@@ -87,14 +87,14 @@ const AddressBook = () => (
 export default AddressBook;
 
 const AddressCardContent = ({ address }) => (
-  <>
+  <React.Fragment>
     <AddressDetails {...address} />
     <FlexLayout flexDirection="row" mt="xs">
       <EditAddressLink id={address.id} />
       <Divider variant="horizontal" mx="xs" />
       <RemoveAddressLink id={address.id} />
     </FlexLayout>
-  </>
+  </React.Fragment>
 );
 
 const EditAddressLink = ({ id }) => (
@@ -108,7 +108,7 @@ const RemoveAddressLink = ({ id }) => (
     {(removeAddress, { loading }) => (
       <I18n>
         {t => (
-          <>
+          <React.Fragment>
             <Link
               onClick={() => {
                 if (window.confirm(t('addressBook.removeConfirmationMessage'))) {
@@ -119,7 +119,7 @@ const RemoveAddressLink = ({ id }) => (
               {t('addressBook.removeButton')}
             </Link>
             {loading && <Icon ml="xs" src="loader" size="md" />}
-          </>
+          </React.Fragment>
         )}
       </I18n>
     )}

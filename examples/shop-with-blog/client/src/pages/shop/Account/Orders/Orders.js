@@ -12,7 +12,7 @@ const Orders = () => (
     <OrdersListQuery>
       {({ orders: { items, pagination }, fetchMore, networkStatus }) =>
         items.length ? (
-          <>
+          <React.Fragment>
             <OrdersList items={items} />
             {pagination.nextPage && (
               <FlexLayout justifyContent="center">
@@ -25,7 +25,7 @@ const Orders = () => (
                 </Button>
               </FlexLayout>
             )}
-          </>
+          </React.Fragment>
         ) : (
           <NoOrders />
         )
