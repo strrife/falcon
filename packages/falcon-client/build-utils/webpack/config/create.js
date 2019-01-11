@@ -430,17 +430,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         new webpack.DefinePlugin(clientEnv.stringified)
       ];
 
-      config.optimization = {
-        // @todo automatic vendor bundle
-        // Automatically split vendor and commons
-        // https://twitter.com/wSokra/status/969633336732905474
-        // splitChunks: {
-        //   chunks: 'all',
-        // },
-        // Keep the runtime chunk seperated to enable long term caching
-        // https://twitter.com/wSokra/status/969679223278505985
-        // runtimeChunk: true,
-      };
+      config.optimization = {};
     } else {
       // Specify production entry point (/client/index.js)
       config.entry = {
@@ -519,33 +509,6 @@ module.exports = (target = 'web', options, buildConfig) => {
             sourceMap: !!devtoolSourceMap
           })
         ]
-        // @todo automatic vendor bundle
-        // Automatically split vendor and commons
-        // https://twitter.com/wSokra/status/969633336732905474
-        // splitChunks: {
-        //   chunks: 'all',
-        //   minSize: 30000,
-        //   minChunks: 1,
-        //   maxAsyncRequests: 5,
-        //   maxInitialRequests: 3,
-        //   name: true,
-        //   cacheGroups: {
-        //     commons: {
-        //       test: /[\\/]node_modules[\\/]/,
-        //       name: 'vendor',
-        //       chunks: 'all',
-        //     },
-        //     main: {
-        //       chunks: 'all',
-        //       minChunks: 2,
-        //       reuseExistingChunk: true,
-        //       enforce: true,
-        //     },
-        //   },
-        // },
-        // Keep the runtime chunk seperated to enable long term caching
-        // https://twitter.com/wSokra/status/969679223278505985
-        // runtimeChunk: true,
       };
     }
   }
