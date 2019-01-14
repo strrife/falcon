@@ -214,5 +214,10 @@
     "passwordFieldLabel": "New Password",
     "passwordFieldPlaceholder": "At least 8 characters",
     "submitButton": "Update"
+  },
+  "notFound": {
+    "title": "Not found",
+    "text": "The content you were trying to reach couldn't be found.",
+    "goHomeButton": "Go back to Home page"
   }
 }
