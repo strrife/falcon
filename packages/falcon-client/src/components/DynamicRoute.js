@@ -3,9 +3,8 @@ import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Query from './Query';
 import { GET_URL } from './../graphql/url.gql';
-import NotFoundRoute from './NotFoundRoute';
 
-const DynamicRoute = ({ components, location, loaderComponent, errorComponent }) => {
+const DynamicRoute = ({ components, location, loaderComponent, errorComponent, notFoundComponent }) => {
   const { pathname } = location;
   const path = pathname.startsWith('/') ? pathname.substring(1) : pathname;
 
@@ -13,7 +12,8 @@ const DynamicRoute = ({ components, location, loaderComponent, errorComponent })
     <Query query={GET_URL} variables={{ path }} loaderComponent={loaderComponent} errorComponent={errorComponent}>
       {({ data }) => {
         if (!data || data.url === null) {
-          return <NotFoundRoute />;
+          const NotFound = notFoundComponent;
+          return <NotFound location={location} />;
         }
 
         const { url } = data;

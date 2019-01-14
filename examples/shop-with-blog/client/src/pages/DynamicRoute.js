@@ -1,4 +1,5 @@
 import React from 'react';
+import { NotFound } from '@deity/falcon-ecommerce-uikit';
 import DynamicRoute from '@deity/falcon-client/src/components/DynamicRoute';
 import { Loader } from '@deity/falcon-ecommerce-uikit';
 import loadable from 'src/components/loadable';
@@ -16,5 +17,6 @@ export default props => (
       'shop-category': Category,
       'shop-product': Product
     }}
+    notFoundComponent={NotFound}
   />
 );
