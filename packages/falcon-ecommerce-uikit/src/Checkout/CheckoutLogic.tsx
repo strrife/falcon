@@ -1,5 +1,5 @@
 import React from 'react';
-import { withApollo, WithApolloClient, FetchResult, ExecutionResult } from 'react-apollo';
+import { withApollo, WithApolloClient, FetchResult } from 'react-apollo';
 import isEqual from 'lodash.isequal';
 import {
   ESTIMATE_SHIPPING_METHODS,

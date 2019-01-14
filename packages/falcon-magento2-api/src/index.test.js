@@ -226,7 +226,7 @@ describe('Magento2Api', () => {
       };
       const expectedOutput = {
         searchCriteria: {
-          pageSize: Magento2Api.DEFAULT_ITEMS_PER_PAGE,
+          pageSize: api.perPage,
           currentPage: 0,
           sortOrders: [{ field: 'price', direction: 'asc' }]
         }
@@ -235,12 +235,12 @@ describe('Magento2Api', () => {
     });
   });
 
-  it('breadcrumbs resolver should call proper endpoint with proper url from parent object', async () => {
+  it('breadcrumbs resolver should call proper endpoint with proper url without leading slash', async () => {
     nock(URL)
       .get(createMagentoUrl('/breadcrumbs?url=sample-product.html'))
       .reply(200, []);
 
-    const resp = await api.breadcrumbs({ data: { urlPath: 'sample-product.html' } });
+    const resp = await api.breadcrumbs({}, { path: '/sample-product.html' });
 
     expect(resp).toEqual([]);
   });
@@ -256,6 +256,25 @@ describe('Magento2Api', () => {
     expect(response.items).toHaveLength(5);
     expect(response.aggregations).toHaveLength(3);
     expect(response.pagination).toBeObject; // eslint-disable-line
+  });
+
+  it('categoryProducts() should always return pagination data', async () => {
+    nock(URL)
+      .persist(true)
+      .get(createMagentoUrl('/categories/1/products'))
+      .query(() => true)
+      .reply(200, magentoResponses.categoryProducts);
+
+    // this is usually passed via config but api instance is already created
+    // and we just want it to use a different value
+    api.perPage = 3;
+    let response = await api.categoryProducts({ data: { id: 1 } }, {});
+    expect(response.pagination.totalPages).toEqual(4);
+
+    // check if pagination will be computed correctly when perPage in config changes
+    api.perPage = 5;
+    response = await api.categoryProducts({ data: { id: 1 } }, {});
+    expect(response.pagination.totalPages).toEqual(3);
   });
 
   it('processAggregations() should properly parse aggregations data from Magento', () => {

@@ -10,7 +10,6 @@ const Logger = require('@deity/falcon-logger');
 const { addResolveFunctionsToSchema } = require('graphql-tools');
 const Magento2ApiBase = require('./Magento2ApiBase');
 
-const DEFAULT_ITEMS_PER_PAGE = 20;
 /**
  * API for Magento2 store - provides resolvers for shop schema.
  */
@@ -88,7 +87,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { pagination = {} } = params;
     let response;
     try {
-      response = await this.get(`/categories/${obj.data.id}/products`, query, { context: { useAdminToken: true } });
+      response = await this.get(`/categories/${obj.data.id}/products`, query, {
+        context: {
+          useAdminToken: true,
+          pagination
+        }
+      });
     } catch (ex) {
       // if is_anchor is set to "0" then we cannot fetch category contents (as it doesn't have products)
       // in that case if Magento returns error "Bucked does not exist" we return empty array to avoid displaying errors
@@ -104,11 +108,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     return {
       items: response.data.items.map(item => this.reduceProduct({ data: item })),
       aggregations: this.processAggregations(data.filters),
-      pagination: this.processPagination(
-        data.total_count,
-        pagination.page,
-        pagination.perPage || DEFAULT_ITEMS_PER_PAGE
-      )
+      pagination: data.pagination
     };
   }
 
@@ -136,7 +136,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     delete data.created_at;
     delete data.product_count;
 
-    data.urlPath = urlPath && this.convertPathToUrl(urlPath);
+    data.urlPath = this.convertPathToUrl(urlPath);
     childrenData.map(item => this.convertCategoryData({ data: item }).data);
 
     return response;
@@ -171,7 +171,16 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @todo get suffix from Magento2 config
    */
   convertPathToUrl(path) {
-    return path ? `/${path}.html` : path;
+    if (path) {
+      if (!path.endsWith(this.itemUrlSuffix)) {
+        path += this.itemUrlSuffix;
+      }
+      if (path[0] !== '/') {
+        path = `/${path}`;
+      }
+    }
+
+    return path;
   }
 
   /**
@@ -183,7 +192,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     return breadcrumbs.map(item => {
       item.name = htmlHelpers.stripHtml(item.name);
       item.urlPath = this.convertPathToUrl(item.urlPath);
-      item.urlKey = item.urlKey;
       item.urlQuery = null;
       if (item.urlQuery && Array.isArray(item.urlQuery)) {
         // since Magento2.2 we are no longer able to send arbitrary hash, it gets converted to JSON string
@@ -269,7 +277,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     if (pagination && pagination.perPage) {
       searchCriteria.pageSize = pagination.perPage;
     } else {
-      searchCriteria.pageSize = DEFAULT_ITEMS_PER_PAGE;
+      searchCriteria.pageSize = this.perPage;
     }
 
     return {
@@ -461,7 +469,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const price =
       catalogPrice || (typeof data.price.regularPrice !== 'undefined' ? data.price.regularPrice : data.price);
 
-    data.urlPath = this.convertPathToUrl(customAttributes.urlKey || extensionAttributes.urlKey);
+    data.urlPath = this.convertPathToUrl(data.urlPath);
     data.priceAmount = data.price;
     data.currency = currency;
     data.price = price;
@@ -548,7 +556,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @returns {Number} - priority factor
    */
   getFetchUrlPriority(path) {
-    return path.endsWith('.html') ? ApiUrlPriority.HIGH : ApiUrlPriority.NORMAL;
+    return path.endsWith(this.itemUrlSuffix) ? ApiUrlPriority.HIGH : ApiUrlPriority.NORMAL;
   }
 
   /**
@@ -833,7 +841,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
       extensionAttributes.availableQty = parseFloat(extensionAttributes.availableQty);
 
-      item.link = `/${extensionAttributes.urlKey}.html`;
+      item.link = this.convertPathToUrl(item.urlPath);
 
       if (totalsDataItem.options) {
         totalsDataItem.itemOptions =
@@ -1134,7 +1142,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       product.itemOptions = product.options ? JSON.parse(product.options) : [];
       product.qty = product.qtyOrdered;
       product.rowTotalInclTax = product.basePriceInclTax;
-      product.link = `/${product.extensionAttributes.urlKey}.html`;
+      product.link = this.convertPathToUrl(product.urlPath);
       product.thumbnailUrl = product.extensionAttributes.thumbnailUrl;
 
       return product;
@@ -1623,9 +1631,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {Object} params - parameters passed to the resolver
    * @return {Promise<[Breadcrumb]>} breadcrumbs fetched from backend
    */
-  async breadcrumbs(obj) {
-    const resp = await this.get(`/breadcrumbs`, { url: obj.data.urlPath.replace(/^\//, '') });
-    return this.convertBreadcrumbs(resp.data);
+  async breadcrumbs(obj, { path }) {
+    const resp = await this.get(`/breadcrumbs`, { url: path.replace(/^\//, '') });
+    return this.convertBreadcrumbs(this.convertKeys(resp.data));
   }
 
   /**
@@ -1657,5 +1665,3 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }));
   }
 };
-
-module.exports.DEFAULT_ITEMS_PER_PAGE = DEFAULT_ITEMS_PER_PAGE;

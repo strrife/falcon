@@ -21,6 +21,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     this.magentoConfig = {};
     this.storeList = [];
     this.storeConfigMap = {};
+    this.itemUrlSuffix = this.config.itemUrlSuffix || '.html';
   }
 
   /**
@@ -280,7 +281,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
     if (token === undefined) {
       const noTokenError = new Error(
-        'Magento Admin token not found. Did you install the falcon-magento2-module on magento?'
+        'Magento Admin token not found. Did you install the latest version of the falcon-magento2-module on magento?'
       );
 
       noTokenError.statusCode = 501;
@@ -329,6 +330,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     const cookies = (response.headers.get('set-cookie') || '').split('; ');
     const responseTags = response.headers.get('x-cache-tags');
     const data = await super.didReceiveResponse(response);
+    const { pagination: paginationInput } = response.context;
 
     const meta = {};
 
@@ -345,18 +347,16 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       });
     }
 
-    const { search_criteria: searchCriteria } = data;
-
-    if (!searchCriteria) {
-      // no search criteria in response, simply return data from backend
+    // no pagination data requested - skip computation of pagination
+    if (!paginationInput) {
       return { data, meta };
     }
 
-    const { page_size: perPage = null, current_page: currentPage = 1 } = searchCriteria;
+    const { page, perPage } = paginationInput;
     const { total_count: total } = data;
 
     // process search criteria
-    const pagination = this.processPagination(total, currentPage, perPage);
+    const pagination = this.processPagination(total, page, perPage);
     return { data: { items: data.items, filters: data.filters || [], pagination }, meta };
   }
 

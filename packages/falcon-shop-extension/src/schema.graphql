@@ -202,7 +202,7 @@ type Product {
   configurableOptions: [ConfigurableProductOption]
   bundleOptions: [BundleProductOption]
   gallery: [GalleryEntry]
-  breadcrumbs: [Breadcrumb!]
+  breadcrumbs(path: String!): [Breadcrumb]
   seo: ProductSeo
 }
 
@@ -232,7 +232,7 @@ type Category {
   name: String
   children: [Category]
   description: String
-  breadcrumbs: [Breadcrumb]
+  breadcrumbs(path: String!): [Breadcrumb]
   products(pagination: PaginationInput, sort: SortOrderInput, filters: [FilterInput]): ProductList
 }
 
