@@ -589,8 +589,6 @@ module.exports = (target = 'web', options, buildConfig) => {
     'apollo-link-http',
     'apollo-link-state',
     'apollo-utilities',
-    'graphql',
-    'graphql-tag',
     'node-fetch',
     'i18next',
     'i18next-xhr-backend',
