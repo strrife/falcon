@@ -46,7 +46,8 @@ const EditAddress = ({ match, history }) => {
                 initialValues={{
                   firstname: address.firstname,
                   lastname: address.lastname,
-                  street: address.street[0],
+                  street1: address.street[0],
+                  street2: address.street.length > 1 ? address.street[1] : '',
                   postcode: address.postcode,
                   city: address.city,
                   countryId: address.countryId,
@@ -55,13 +56,13 @@ const EditAddress = ({ match, history }) => {
                   defaultBilling: address.defaultBilling,
                   defaultShipping: address.defaultShipping
                 }}
-                onSubmit={values =>
+                onSubmit={({ street1, street2, ...values }) =>
                   editAddress({
                     variables: {
                       input: {
                         ...values,
                         id,
-                        street: [values.street]
+                        street: [street1, street2]
                       }
                     }
                   }).then(() => history.push('/account/address-book'))
@@ -79,7 +80,8 @@ const EditAddress = ({ match, history }) => {
                         <FormField name="telephone" />
                       </GridLayout>
                       <GridLayout gridArea={TwoColumnsLayoutArea.right}>
-                        <FormField name="street" required />
+                        <FormField name="street1" required />
+                        <FormField name="street2" />
                         <FormField name="postcode" required />
                         <FormField name="city" required />
                         <FormField name="countryId" required>

@@ -25,7 +25,8 @@ const AddAddress = ({ history }) => (
           initialValues={{
             firstname: '',
             lastname: '',
-            street: '',
+            street1: '',
+            street2: '',
             postcode: '',
             city: '',
             countryId: '',
@@ -34,12 +35,12 @@ const AddAddress = ({ history }) => (
             defaultBilling: false,
             defaultShipping: false
           }}
-          onSubmit={values =>
+          onSubmit={({ street1, street2, ...values }) =>
             addAddress({
               variables: {
                 input: {
                   ...values,
-                  street: [values.street]
+                  street: [street1, street2]
                 }
               }
             }).then(() => history.push('/account/address-book'))
@@ -57,7 +58,8 @@ const AddAddress = ({ history }) => (
                   <FormField name="telephone" />
                 </GridLayout>
                 <GridLayout gridArea={TwoColumnsLayoutArea.right}>
-                  <FormField name="street" required />
+                  <FormField name="street1" required />
+                  <FormField name="street2" />
                   <FormField name="postcode" required />
                   <FormField name="city" required />
                   <FormField name="countryId" required>
