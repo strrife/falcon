@@ -9,9 +9,11 @@
   "main": "src/index.js",
   "dependencies": {},
   "devDependencies": {
+    "@deity/falcon-server-env": "^0.1.0",
     "@deity/falcon-payment-extension": "^0.0.1"
   },
   "peerDependencies": {
+    "@deity/falcon-server-env": "^0.1.0",
     "@deity/falcon-payment-extension": "^0.0.1"
   }
 }

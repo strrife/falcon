@@ -1,6 +1,6 @@
 import * as Logger from '@deity/falcon-logger';
 import { Body, Request, RESTDataSource } from 'apollo-datasource-rest/dist/RESTDataSource';
-import { URL, URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
+import { URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
 import { GraphQLResolveInfo, GraphQLSchema } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
 import { stringify } from 'qs';
@@ -14,7 +14,6 @@ import {
   ConfigurableConstructorParams,
   ContextCacheOptions,
   ContextFetchResponse,
-  ContextFetchRequest,
   ContextRequestInit,
   ContextRequestOptions,
   DataSourceConfig,
