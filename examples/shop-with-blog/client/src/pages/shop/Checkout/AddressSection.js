@@ -53,7 +53,7 @@ class AddressSection extends React.Component {
       postcode: '',
       city: '',
       telephone: '',
-      countryId: 'NL',
+      countryId: '',
       ...selectedAddress
     };
 

@@ -23,14 +23,14 @@ const AddAddress = ({ history }) => (
       {(addAddress, { loading, error }) => (
         <Formik
           initialValues={{
-            firstname: undefined,
-            lastname: undefined,
-            street: undefined,
-            postcode: undefined,
-            city: undefined,
-            countryId: undefined,
-            company: undefined,
-            telephone: undefined,
+            firstname: '',
+            lastname: '',
+            street: '',
+            postcode: '',
+            city: '',
+            countryId: '',
+            company: '',
+            telephone: '',
             defaultBilling: false,
             defaultShipping: false
           }}
