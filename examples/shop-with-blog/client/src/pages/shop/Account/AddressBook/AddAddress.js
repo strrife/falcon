@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
 import { H1, Button, FlexLayout, GridLayout } from '@deity/falcon-ui';
@@ -78,6 +79,9 @@ const AddAddress = ({ history }) => (
                 </GridLayout>
               </TwoColumnsLayout>
               <FlexLayout justifyContent="flex-end" alignItems="center" mt="md">
+                <Button as={NavLink} to="/account/address-book" mr="md">
+                  <T id="addAddress.cancelButton" />
+                </Button>
                 <Button type="submit" variant={loading ? 'loader' : undefined}>
                   <T id="addAddress.submitButton" />
                 </Button>

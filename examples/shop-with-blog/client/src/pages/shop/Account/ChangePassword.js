@@ -1,5 +1,6 @@
 import React from 'react';
 import { Formik } from 'formik';
+import { NavLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { H1, FlexLayout, GridLayout, Button } from '@deity/falcon-ui';
 import {
@@ -46,6 +47,9 @@ const ChangePassword = ({ history }) => (
                   {({ field }) => <PasswordRevealInput {...field} />}
                 </FormField>
                 <FlexLayout justifyContent="flex-end" alignItems="center" mt="md">
+                  <Button as={NavLink} to="/account/personal-information" mr="md">
+                    <T id="changePassword.cancelButton" />
+                  </Button>
                   <Button type="submit" variant={loading ? 'loader' : undefined}>
                     <T id="changePassword.submitButton" />
                   </Button>

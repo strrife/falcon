@@ -186,7 +186,8 @@
     "postcodeFieldLabel": "ZIP Code",
     "cityFieldLabel": "City",
     "countryIdFieldLabel": "Country",
-    "submitButton": "Update Address"
+    "submitButton": "Update Address",
+    "cancelButton": "Cancel"
   },
   "addAddress": {
     "title": "Add Address",
@@ -201,7 +202,8 @@
     "postcodeFieldLabel": "$t(editAddress.postcodeFieldLabel)",
     "cityFieldLabel": "$t(editAddress.cityFieldLabel)",
     "countryIdFieldLabel": "$t(editAddress.countryIdFieldLabel)",
-    "submitButton": "Save Address"
+    "submitButton": "Save Address",
+    "cancelButton": "$t(editAddress.cancelButton)"
   },
   "editCustomer": {
     "title": "Personal Information",
@@ -216,7 +218,8 @@
     "currentPasswordFieldLabel": "Password",
     "passwordFieldLabel": "New Password",
     "passwordFieldPlaceholder": "At least 8 characters",
-    "submitButton": "Update"
+    "submitButton": "Update",
+    "cancelButton": "Cancel"
   },
   "notFound": {
     "title": "Not found",
