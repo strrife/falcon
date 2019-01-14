@@ -149,6 +149,7 @@
     "statusLabel": "Status",
     "status_na": "N/A",
     "status_pending": "Pending",
+    "quantityLabel": "Quantity:",
     "billingAddressLabel": "Invoice address",
     "shippingAddressLabel": "Delivery address",
     "createdAtLabel": "Ordered at",

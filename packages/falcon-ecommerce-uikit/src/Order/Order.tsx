@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Image, Text, DefaultThemeProps } from '@deity/falcon-ui';
+import { T } from '@deity/falcon-i18n';
 import { Price } from './../Locale';
 import { toGridTemplate } from './../helpers';
 import { OrderItem } from './OrderQuery';
@@ -44,7 +45,9 @@ export const OrderItemSummary: React.SFC<OrderItem> = props => (
       css={{ textAlign: 'right' }}
     />
     <Box gridArea={orderItemSummaryArea.details} display="flex" fontSize="xs">
-      <Text flex="1">Quantity:</Text>
+      <Text flex="1">
+        <T id="order.quantityLabel" />
+      </Text>
       <Text flex="2">{props.qty}</Text>
     </Box>
   </Box>
