@@ -1,15 +1,9 @@
 const Logger = require('@deity/falcon-logger');
 const { ApiDataSource } = require('@deity/falcon-server-env');
-const { AuthenticationError } = require('@deity/falcon-errors');
+const { AuthenticationError, codes } = require('@deity/falcon-errors');
 const util = require('util');
 const addMinutes = require('date-fns/add_minutes');
-const isPlainObject = require('lodash/isPlainObject');
-const camelCase = require('lodash/camelCase');
-const keys = require('lodash/keys');
-const isEmpty = require('lodash/isEmpty');
 const _ = require('lodash');
-
-const { codes } = require('@deity/falcon-errors');
 
 /**
  * Base API features (configuration fetching, response parsing, token management etc.) required for communication
@@ -169,17 +163,17 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   convertKeys(data) {
     // handle simple types
-    if (!isPlainObject(data) && !Array.isArray(data)) {
+    if (!_.isPlainObject(data) && !Array.isArray(data)) {
       return data;
     }
 
-    if (isPlainObject(data) && !isEmpty(data)) {
-      const keysToConvert = keys(data);
+    if (_.isPlainObject(data) && !_.isEmpty(data)) {
+      const keysToConvert = _.keys(data);
       keysToConvert.forEach(key => {
-        data[camelCase(key)] = this.convertKeys(data[key]);
+        data[_.camelCase(key)] = this.convertKeys(data[key]);
 
         // remove snake_case key
-        if (camelCase(key) !== key) {
+        if (_.camelCase(key) !== key) {
           delete data[key];
         }
       });
