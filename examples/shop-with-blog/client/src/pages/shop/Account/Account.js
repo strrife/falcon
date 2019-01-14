@@ -1,9 +1,9 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { Link as RouterLink, Switch } from 'react-router-dom';
+import { Link as RouterLink, Switch, Route } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { Box, Link, Menu, MenuItem } from '@deity/falcon-ui';
-import { toGridTemplate, ProtectedRoute, SignOutLogic } from '@deity/falcon-ecommerce-uikit';
+import { toGridTemplate, SignOutLogic, NotFound } from '@deity/falcon-ecommerce-uikit';
 import AccountDashboard from './Dashboard';
 import PersonalInformation from './PersonalInformation';
 import ChangePassword from './ChangePassword';
@@ -12,7 +12,6 @@ import AddAddress from './AddressBook/AddAddress';
 import EditAddress from './AddressBook/EditAddress';
 import Orders from './Orders/Orders';
 import Order from './Orders/Order';
-import DynamicRoute from './../../DynamicRoute';
 
 const AccountArea = {
   menu: 'menu',
@@ -82,15 +81,15 @@ const Account = () => (
     </Box>
     <Box gridArea={AccountArea.content} min-height="100%">
       <Switch>
-        <ProtectedRoute exact path="/account" component={AccountDashboard} />
-        <ProtectedRoute exact path="/account/orders" component={Orders} />
-        <ProtectedRoute exact path="/account/orders/:id" component={Order} />
-        <ProtectedRoute exact path="/account/personal-information" component={PersonalInformation} />
-        <ProtectedRoute exact path="/account/change-password" component={ChangePassword} />
-        <ProtectedRoute exact path="/account/address-book" component={AddressBook} />
-        <ProtectedRoute exact path="/account/address-book/add" component={AddAddress} />
-        <ProtectedRoute exact path="/account/address-book/edit/:id" component={EditAddress} />
-        <DynamicRoute />
+        <Route exact path="/account" component={AccountDashboard} />
+        <Route exact path="/account/orders" component={Orders} />
+        <Route exact path="/account/orders/:id" component={Order} />
+        <Route exact path="/account/personal-information" component={PersonalInformation} />
+        <Route exact path="/account/change-password" component={ChangePassword} />
+        <Route exact path="/account/address-book" component={AddressBook} />
+        <Route exact path="/account/address-book/add" component={AddAddress} />
+        <Route exact path="/account/address-book/edit/:id" component={EditAddress} />
+        <Route component={NotFound} />
       </Switch>
     </Box>
   </Box>
