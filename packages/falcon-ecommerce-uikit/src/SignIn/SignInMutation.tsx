@@ -7,7 +7,12 @@ export const SIGN_IN_MUTATION = gql`
   }
 `;
 
-export class SignInMutation extends Mutation {
+export type SignInInput = {
+  email: string;
+  password: string;
+};
+
+export class SignInMutation extends Mutation<{ signIn: boolean }, { input: SignInInput }> {
   static defaultProps = {
     mutation: SIGN_IN_MUTATION,
     awaitRefetchQueries: true,
