@@ -2,37 +2,38 @@ import gql from 'graphql-tag';
 import { Query } from '../Query/Query';
 
 export const GET_CATEGORY_PRODUCTS = gql`
-  query CategoryProducts($categoryId: Int!, $page: Int = 1) {
+  query CategoryProducts(
+    $categoryId: String!
+    $sort: SortOrderInput
+    $pagination: PaginationInput
+    $filters: [FilterInput]
+  ) {
     category(id: $categoryId) {
       name
-    }
-    products(
-      categoryId: $categoryId
-      includeSubcategories: true
-      query: { page: $page }
-      sortOrders: [{ field: "name" }]
-    ) {
-      items {
-        id
-        name
-        price
-        thumbnail
-        urlPath
-      }
-      pagination {
-        currentPage
-        totalItems
-        nextPage
+      products(sort: $sort, pagination: $pagination, filters: $filters) {
+        items {
+          id
+          name
+          price
+          thumbnail
+          urlPath
+        }
+        pagination {
+          currentPage
+          totalItems
+          nextPage
+        }
       }
     }
-    sortOrders @client
   }
 `;
 
 export const fetchMore = (data: any, apolloFetchMore: any) =>
   apolloFetchMore({
     variables: {
-      page: data.products.pagination.nextPage
+      pagination: {
+        page: data.category.products.pagination.nextPage
+      }
     },
     updateQuery: (prev: any, { fetchMoreResult }: any) => {
       if (!fetchMoreResult) {
@@ -41,11 +42,12 @@ export const fetchMore = (data: any, apolloFetchMore: any) =>
 
       return {
         ...prev,
-        ...{
+        category: {
+          ...prev.category,
           products: {
-            ...prev.products,
-            items: [...prev.products.items, ...fetchMoreResult.products.items],
-            pagination: { ...fetchMoreResult.products.pagination }
+            ...prev.category.products,
+            items: [...prev.category.products.items, ...fetchMoreResult.category.products.items],
+            pagination: { ...fetchMoreResult.category.products.pagination }
           }
         }
       };

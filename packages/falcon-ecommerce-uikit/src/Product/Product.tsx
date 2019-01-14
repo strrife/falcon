@@ -162,7 +162,7 @@ export class Product extends React.PureComponent<{ product: any }> {
 
     return (
       <ProductLayout>
-        <Breadcrumbs breadcrumbs={product.breadcrumbs} />
+        <Breadcrumbs breadcrumbs={product.breadcrumbs || []} />
         <I18n>
           {t => (
             <ProductForm sku={product.sku} validate={this.createValidator(product, t)}>

@@ -4,13 +4,29 @@
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
 
----
+## Falcon v0.3
 
-## Falcon v0.3 (unreleased)
-
-### Falcon Client v0.2
+### Falcon Client v0.1.1
 
 - improvement: React 16.6 support ([#226](https://github.com/deity-io/falcon/pull/226))
+
+### Falcon Server v0.1.1
+
+- refactor: `Events` enum has been moved from `falcon-server` to `falcon-server-env` package ([#146](https://github.com/deity-io/falcon/pull/146))
+
+### Falcon Magento2 API v0.1.1
+
+- changed url resolver to use new format of data sent by `/url` endpoint ([#146](https://github.com/deity-io/falcon/pull/146))
+- added support for fetching breadcrumbs from new endpoint ([#146](https://github.com/deity-io/falcon/pull/146))
+- added support for product list sorting ([#146](https://github.com/deity-io/falcon/pull/146))
+- modified fetching of category products - now it uses `/categories/{id}/products` endpoint ([#146](https://github.com/deity-io/falcon/pull/146))
+- added aggregations parsing for ProductList ([#146](https://github.com/deity-io/falcon/pull/146))
+
+### Falcon E-commerce UI Kit v0.1.1
+
+- added `SortOrderProvider` which handles fetching and setting sort options for product lists ([#146](https://github.com/deity-io/falcon/pull/146))
+
+---
 
 ## Falcon v0.2 (2018-12-12)
 

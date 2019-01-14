@@ -13,13 +13,13 @@ class CustomApi extends ApiDataSource {
 
 const mocks = {
   Category: () => ({
-    id: 1,
+    id: '1',
     name: 'category name',
     description: 'lorem ipsum'
   }),
 
   Product: () => ({
-    id: 1,
+    id: '1',
     sku: '111',
     name: 'product name',
     image: 'product image',
@@ -31,7 +31,7 @@ const QUERY_TEST_CASES = [
   {
     name: 'category - should return correct category',
     query: `
-      query Category($id: Int!) {
+      query Category($id: String!) {
         category(id: $id) {
           id
           name
@@ -40,15 +40,15 @@ const QUERY_TEST_CASES = [
       }
     `,
     variables: {
-      id: 1
+      id: '1'
     },
-    expected: { data: { category: { id: 1, name: 'category name', description: 'lorem ipsum' } } }
+    expected: { data: { category: { id: '1', name: 'category name', description: 'lorem ipsum' } } }
   },
 
   {
     name: 'products - should return correct products list',
     query: `
-      query Products($categoryId: Int) {
+      query Products($categoryId: String) {
         products(categoryId: $categoryId) {
           items {
             id
@@ -63,12 +63,12 @@ const QUERY_TEST_CASES = [
         products: {
           items: [
             {
-              id: 1,
+              id: '1',
               sku: '111',
               name: 'product name'
             },
             {
-              id: 1,
+              id: '1',
               sku: '111',
               name: 'product name'
             }

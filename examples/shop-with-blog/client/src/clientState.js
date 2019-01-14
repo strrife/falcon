@@ -19,12 +19,23 @@ const languages = [
 const sortOrders = [
   {
     name: 'Price ascending',
-    id: 'asc',
-    active: true
+    field: 'price',
+    direction: 'asc'
   },
   {
     name: 'Price descending',
-    id: 'desc'
+    field: 'price',
+    direction: 'desc'
+  },
+  {
+    name: 'Name ascending',
+    field: 'name',
+    direction: 'asc'
+  },
+  {
+    name: 'Name descending',
+    field: 'name',
+    direction: 'desc'
   }
 ];
 
