@@ -25,3 +25,4 @@ export * from './helpers';
 export * from './Sidebar';
 export * from './Forms';
 export * from './AccountRecovery';
+export * from './Errors';
