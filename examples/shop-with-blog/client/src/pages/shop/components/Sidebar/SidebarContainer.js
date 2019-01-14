@@ -3,6 +3,15 @@ import PropTypes from 'prop-types';
 import { CloseSidebarMutation } from '@deity/falcon-ecommerce-uikit';
 import { SidebarQuery } from './SidebarQuery';
 
+// ready timeout is set based on the assumption how lighthouse measures
+// time to interactive to improve perceived performance
+
+// (TTI measures the time from Navigation Start until the page's resources are loaded
+// and the main thread is idle (for at least 5 seconds))
+// https://developers.google.com/web/updates/2018/05/first-input-delay
+
+const READY_TIMEOUT_MS = 6000;
+
 export class SidebarContainer extends React.Component {
   static propTypes = {
     children: PropTypes.func.isRequired
@@ -17,24 +26,40 @@ export class SidebarContainer extends React.Component {
   }
 
   componentDidMount() {
-    // wait with loading sidebar contents until browser is idle
-    // as it's not high prority task and would delay time to interactive
     const setReady = () => {
-      this.setState({ ready: true });
+      if (this.state.ready) {
+        return;
+      }
+
+      if ('requestIdleCallback' in window) {
+        return window.requestIdleCallback(this.setReadyState);
+      }
+
+      this.setReadyState();
     };
-    const READY_TIMEOUT_MS = 1000;
-    //  use requestIdleCallback when possible as browser idle signal
-    // and fallback to setTimeout
-    if (!('requestIdleCallback' in window)) {
-      window.setTimeout(setReady, READY_TIMEOUT_MS);
-    } else {
-      window.requestIdleCallback(setReady, { timeout: READY_TIMEOUT_MS });
-    }
+
+    // set ready flag even in sidebar has not been opened after READY_TIMEOUT_MS
+    // so sidebar contents are downloaded and ready to be displayed
+    window.setTimeout(setReady, READY_TIMEOUT_MS);
   }
+
+  setReadyState = () => {
+    this.setState({ ready: true });
+  };
+
+  setReadyOnFirstOpen = ({ sidebar }) => {
+    // sets ready flag when sidebar get's opened for the first time
+    // that causes SidebarContents to dynamically import it's JS
+    const openedForTheFirstTime = sidebar.isOpen && !this.state.ready;
+
+    if (openedForTheFirstTime) {
+      this.setReadyState();
+    }
+  };
 
   render() {
     return (
-      <SidebarQuery>
+      <SidebarQuery onCompleted={this.setReadyOnFirstOpen}>
         {({ sidebar }) => (
           <CloseSidebarMutation>
             {closeSidebar =>
