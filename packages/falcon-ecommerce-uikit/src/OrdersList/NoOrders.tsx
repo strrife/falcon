@@ -9,7 +9,7 @@ export const NoOrders: React.SFC<{}> = () => (
       <T id="ordersList.empty" />
     </Text>
     <Button as={RouterLink} to="/">
-      <T id="cart.goShopping" />
+      <T id="cart.goShoppingButton" />
     </Button>
   </Box>
 );
