@@ -1,15 +1,9 @@
 const Logger = require('@deity/falcon-logger');
 const { ApiDataSource } = require('@deity/falcon-server-env');
-const { AuthenticationError } = require('@deity/falcon-errors');
+const { AuthenticationError, codes } = require('@deity/falcon-errors');
 const util = require('util');
 const addMinutes = require('date-fns/add_minutes');
-const isPlainObject = require('lodash/isPlainObject');
-const camelCase = require('lodash/camelCase');
-const keys = require('lodash/keys');
-const isEmpty = require('lodash/isEmpty');
 const _ = require('lodash');
-
-const { codes } = require('@deity/falcon-errors');
 
 /**
  * Base API features (configuration fetching, response parsing, token management etc.) required for communication
@@ -27,6 +21,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     this.magentoConfig = {};
     this.storeList = [];
     this.storeConfigMap = {};
+    this.itemUrlSuffix = this.config.itemUrlSuffix || '.html';
   }
 
   /**
@@ -169,17 +164,17 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   convertKeys(data) {
     // handle simple types
-    if (!isPlainObject(data) && !Array.isArray(data)) {
+    if (!_.isPlainObject(data) && !Array.isArray(data)) {
       return data;
     }
 
-    if (isPlainObject(data) && !isEmpty(data)) {
-      const keysToConvert = keys(data);
+    if (_.isPlainObject(data) && !_.isEmpty(data)) {
+      const keysToConvert = _.keys(data);
       keysToConvert.forEach(key => {
-        data[camelCase(key)] = this.convertKeys(data[key]);
+        data[_.camelCase(key)] = this.convertKeys(data[key]);
 
         // remove snake_case key
-        if (camelCase(key) !== key) {
+        if (_.camelCase(key) !== key) {
           delete data[key];
         }
       });
@@ -279,11 +274,14 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       { context: { skipAuth: true } }
     );
 
-    const tokenData = this.convertKeys(response.data || response);
-    const { token, validTime } = tokenData;
+    const { data: token } = response;
+    // todo: validTime should be extracted from the response, but after recent changes Magento doesn't send it
+    // so that should be changed once https://github.com/deity-io/falcon-magento2-development/issues/32 is resolved
+    const validTime = 1;
+
     if (token === undefined) {
       const noTokenError = new Error(
-        'Magento Admin token not found. Did you install the falcon-magento2-module on magento?'
+        'Magento Admin token not found. Did you install the latest version of the falcon-magento2-module on magento?'
       );
 
       noTokenError.statusCode = 501;
@@ -332,6 +330,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     const cookies = (response.headers.get('set-cookie') || '').split('; ');
     const responseTags = response.headers.get('x-cache-tags');
     const data = await super.didReceiveResponse(response);
+    const { pagination: paginationInput } = response.context;
+
     const meta = {};
 
     if (responseTags) {
@@ -347,26 +347,25 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       });
     }
 
-    const { search_criteria: searchCriteria } = data;
-
-    if (!searchCriteria) {
-      // no search criteria in response, simply return data from backend
+    // no pagination data requested - skip computation of pagination
+    if (!paginationInput) {
       return { data, meta };
     }
 
-    const { page_size: perPage = null, current_page: currentPage = 1 } = searchCriteria;
+    const { page, perPage } = paginationInput;
     const { total_count: total } = data;
 
     // process search criteria
-    const pagination = this.processPagination(total, currentPage, perPage);
+    const pagination = this.processPagination(total, page, perPage);
     return { data: { items: data.items, filters: data.filters || [], pagination }, meta };
   }
 
   /**
    * Handle error occurred during http response
-   * @param {Error} error - error to process
+   * @param {Error} error Error to process
+   * @param {object} req Request object
    */
-  didEncounterError(error) {
+  didEncounterError(error, req) {
     const { extensions } = error;
     const { response } = extensions || {};
 
@@ -384,7 +383,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       }
     }
 
-    super.didEncounterError(error);
+    super.didEncounterError(error, req);
   }
 
   /**

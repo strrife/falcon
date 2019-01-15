@@ -1,4 +1,5 @@
 import React from 'react';
+import { T } from '@deity/falcon-i18n';
 import { Box, Breadcrumbs, Breadcrumb, Link } from '@deity/falcon-ui';
 import { BlogPostsQuery, BlogPostsLayout, BlogPostExcerpt, BlogPostsPaginator } from '@deity/falcon-ecommerce-uikit';
 
@@ -6,9 +7,13 @@ const Blog = props => (
   <Box as="section">
     <Breadcrumbs my="md" alignSelf="flex-start">
       <Breadcrumb key="index">
-        <Link to="/">Home</Link>
+        <Link to="/">
+          <T id="home.title" />
+        </Link>
       </Breadcrumb>
-      <Breadcrumb key="post">Blog</Breadcrumb>
+      <Breadcrumb key="post">
+        <T id="blog.title" />
+      </Breadcrumb>
     </Breadcrumbs>
 
     <BlogPostsQuery
@@ -18,20 +23,14 @@ const Blog = props => (
         }
       }}
     >
-      {({ blogPosts, translations }) => (
+      {({ blogPosts }) => (
         <React.Fragment>
           <BlogPostsLayout>
             {blogPosts.items.map((item, index) => (
-              <BlogPostExcerpt
-                gridColumn={index < 2 ? 'span 3' : 'span 2'}
-                key={item.slug}
-                excerpt={item}
-                translations={translations}
-              />
+              <BlogPostExcerpt key={item.slug} gridColumn={index < 2 ? 'span 3' : 'span 2'} excerpt={item} />
             ))}
           </BlogPostsLayout>
-
-          <BlogPostsPaginator pagination={blogPosts.pagination} translations={translations} />
+          <BlogPostsPaginator pagination={blogPosts.pagination} />
         </React.Fragment>
       )}
     </BlogPostsQuery>

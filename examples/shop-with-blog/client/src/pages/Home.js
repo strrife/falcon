@@ -1,14 +1,33 @@
 import React from 'react';
-import { I18n } from 'react-i18next';
-
+import gql from 'graphql-tag';
 import { H1, GridLayout } from '@deity/falcon-ui';
-import { ProductsList, ProductsListQuery } from '@deity/falcon-ecommerce-uikit';
+import { T } from '@deity/falcon-i18n';
+import { Query, ProductsList } from '@deity/falcon-ecommerce-uikit';
+
+const HOMEPAGE_PRODUCTS_QUERY = gql`
+  query HomepageProducts($categoryId: String!, $amount: Int) {
+    category(id: $categoryId) {
+      products(pagination: { perPage: $amount, page: 1 }) {
+        items {
+          id
+          name
+          price
+          thumbnail
+          urlPath
+        }
+      }
+    }
+  }
+`;
 
 const Home = () => (
   <GridLayout gridGap="md" py="md">
-    <I18n ns={['shop']}>{t => <H1 css={{ textAlign: 'center' }}>{t('home.hotSellers')}</H1>}</I18n>
-
-    <ProductsListQuery>{({ products }) => <ProductsList products={products.items} />}</ProductsListQuery>
+    <H1 css={{ textAlign: 'center' }}>
+      <T id="home.hotSellers" />
+    </H1>
+    <Query query={HOMEPAGE_PRODUCTS_QUERY} variables={{ categoryId: '25', amount: 20 }}>
+      {({ category }) => <ProductsList products={category.products.items} />}
+    </Query>
   </GridLayout>
 );
 

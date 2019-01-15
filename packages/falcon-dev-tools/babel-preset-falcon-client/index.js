@@ -28,7 +28,8 @@ module.exports = (/* api */) => {
       require.resolve('@babel/plugin-transform-runtime'),
       // Add support for loadable components SSR
       // https://www.smooth-code.com/open-source/loadable-components/docs/server-side-rendering/
-      require.resolve('@loadable/babel-plugin')
+      require.resolve('@loadable/babel-plugin'),
+      require.resolve('babel-plugin-graphql-tag')
     ]
   };
 

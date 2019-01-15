@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { H4, Link, List, ListItem, Box, DefaultThemeProps } from '@deity/falcon-ui';
+import { T, I18n } from '@deity/falcon-i18n';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { FooterData, FooterTranslations } from './FooterQuery';
+import { FooterData } from './FooterQuery';
 import { Newsletter } from './Newsletter';
 import { MenuItem } from '../Header';
 
@@ -70,24 +71,23 @@ const languageSectionTheme: DefaultThemeProps = {
     }
   }
 };
-export const Footer: React.SFC<FooterData & { translations: FooterTranslations }> = ({
+
+export const Footer: React.SFC<FooterData> = ({
   config: {
     menus: { footer },
     languages
-  },
-  translations
+  }
 }) => (
   <Box as="footer" defaultTheme={footerLayoutTheme}>
-    <Newsletter translations={translations} />
-
+    <Newsletter />
     <FooterSections sections={footer} />
-
     <Box defaultTheme={languageSectionTheme}>
-      <LanguageSwitcher languages={languages} />
+      <I18n>
+        {(_t, i18n) => <LanguageSwitcher languages={languages} onChange={x => i18n.changeLanguage(x.code)} />}
+      </I18n>
     </Box>
-
     <Box defaultTheme={copyrightLayoutTheme}>
-      {translations.copyright} {new Date().getFullYear()}
+      <T id="copyright" year={new Date().getFullYear()} />
     </Box>
   </Box>
 );

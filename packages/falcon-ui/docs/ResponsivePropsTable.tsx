@@ -1,6 +1,5 @@
 import React from 'react';
 import { withMDXComponents } from '@mdx-js/tag/dist/mdx-provider';
-import { withCSSContext } from '@emotion/core';
 import { themeCategories, ThemeStateContext } from '@deity/falcon-theme-editor';
 import { mappings, ResponsivePropMapping } from '../src/theme/responsiveprops';
 import { Table, Thead, Tr, Th, Tbody, Td, Box, Icon } from '../src';
@@ -21,40 +20,40 @@ const ResponsiveProps: React.SFC<{ category: keyof typeof themeCategories }> = (
       </Thead>
       <Tbody>
         {themeCategories[category].themeSections.map(section =>
-          mappingKeys.filter(name => (mappings[name] as ResponsivePropMapping).themeProp === section).map(name => {
-            const prop: ResponsivePropMapping = mappings[name];
-            const cssProp = prop.cssProp || (!prop.transformToCss ? name : '');
+          mappingKeys
+            .filter(name => (mappings[name] as ResponsivePropMapping).themeProp === section)
+            .map(name => {
+              const prop: ResponsivePropMapping = mappings[name];
+              const cssProp = prop.cssProp || (!prop.transformToCss ? name : '');
 
-            return (
-              <Tr key={name}>
-                <Td fontWeight="bold">{name}</Td>
+              return (
+                <Tr key={name}>
+                  <Td fontWeight="bold">{name}</Td>
 
-                <Td>
-                  {cssProp && toKebabCase(cssProp)}
-                  {!cssProp && (
-                    <Box color="primary" title={prop.transformToCss.toString()}>
-                      transform function
-                    </Box>
-                  )}
-                </Td>
-                <Td>
-                  <ThemeStateContext.Consumer>
-                    {({ openThemePropsPanel }) => (
-                      <Box css={{ cursor: 'pointer' }} onClick={() => openThemePropsPanel(category, section)}>
-                        <Icon size="md" src="viewTheme" />
+                  <Td>
+                    {cssProp && toKebabCase(cssProp)}
+                    {!cssProp && (
+                      <Box color="primary" title={prop.transformToCss.toString()}>
+                        transform function
                       </Box>
                     )}
-                  </ThemeStateContext.Consumer>
-                </Td>
-              </Tr>
-            );
-          })
+                  </Td>
+                  <Td>
+                    <ThemeStateContext.Consumer>
+                      {({ openThemePropsPanel }) => (
+                        <Box css={{ cursor: 'pointer' }} onClick={() => openThemePropsPanel(category, section)}>
+                          <Icon size="md" src="viewTheme" />
+                        </Box>
+                      )}
+                    </ThemeStateContext.Consumer>
+                  </Td>
+                </Tr>
+              );
+            })
         )}
       </Tbody>
     </Table>
   </Box>
 );
 
-export default withMDXComponents(
-  withCSSContext((props: any, context: any) => <ResponsiveProps theme={context.theme} {...props} />)
-);
+export default withMDXComponents(ResponsiveProps);

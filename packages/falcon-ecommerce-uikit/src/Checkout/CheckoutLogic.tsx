@@ -1,7 +1,13 @@
 import React from 'react';
 import { withApollo, WithApolloClient, FetchResult } from 'react-apollo';
 import isEqual from 'lodash.isequal';
-import { ESTIMATE_SHIPPING_METHODS, SET_SHIPPING, PLACE_ORDER } from './CheckoutMutation';
+import {
+  ESTIMATE_SHIPPING_METHODS,
+  EstimateShippingMethodsData,
+  SET_SHIPPING,
+  SetShippingData,
+  PLACE_ORDER
+} from './CheckoutMutation';
 
 type CheckoutAddress = {
   id?: number;
@@ -17,7 +23,7 @@ type CheckoutAddress = {
   telephone: string;
 };
 
-type CheckoutShippingMethod = {
+export type CheckoutShippingMethod = {
   carrierTitle: string;
   amount: number;
   carrierCode: string;
@@ -28,7 +34,7 @@ type CheckoutShippingMethod = {
   currency: string;
 };
 
-type CheckoutPaymentMethod = {
+export type CheckoutPaymentMethod = {
   code: string;
   title: string;
 };
@@ -151,23 +157,17 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
 
   setShippingAddress = (shippingAddress: CheckoutAddress) => {
     this.setLoading(true, () => {
-      // trigger mutationt that will return available shipping options
+      // trigger mutation that will return available shipping options
       this.props.client
-        .mutate({
+        .mutate<EstimateShippingMethodsData>({
           mutation: ESTIMATE_SHIPPING_METHODS,
-          variables: {
-            input: {
-              address: shippingAddress
-            }
-          }
+          variables: { input: { address: shippingAddress } }
         })
-        .then(resp => {
+        .then((resp: FetchResult) => {
           if (resp.errors) {
             this.setPartialState({
               loading: false,
-              errors: {
-                shippingAddress: resp.errors
-              },
+              errors: { shippingAddress: resp.errors },
               availableShippingMethods: null
             });
           } else {
@@ -178,8 +178,9 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
               values.billingAddress = shippingAddress;
             }
 
+            const { estimateShippingMethods } = resp.data!;
             // if shipping methods has changed then remove already selected shipping method
-            if (!isEqual(resp.data!.estimateShippingMethods, this.state.availableShippingMethods)) {
+            if (!isEqual(estimateShippingMethods, this.state.availableShippingMethods)) {
               values.shippingMethod = null;
             }
 
@@ -187,16 +188,14 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
               loading: false,
               errors: {},
               values,
-              availableShippingMethods: resp.data!.estimateShippingMethods
+              availableShippingMethods: estimateShippingMethods
             });
           }
         })
         .catch(error => {
           this.setPartialState({
             loading: false,
-            errors: {
-              shippingAddress: [error]
-            }
+            errors: { shippingAddress: [error] }
           });
         });
     });
@@ -204,9 +203,9 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
 
   setShippingMethod = (shippingMethod: CheckoutShippingMethod) => {
     this.setLoading(true, () => {
-      // trigger mutation that will reutrn available payment options
+      // trigger mutation that will return available payment options
       this.props.client
-        .mutate({
+        .mutate<SetShippingData>({
           mutation: SET_SHIPPING,
           // refetch cart because totals have changed once shipping has been selected
           refetchQueries: ['Cart'],
@@ -219,13 +218,11 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
             }
           }
         })
-        .then(resp => {
+        .then((resp: FetchResult) => {
           if (resp.errors) {
             this.setPartialState({
               loading: false,
-              errors: {
-                shippingMethod: resp.errors
-              },
+              errors: { shippingMethod: resp.errors },
               availablePaymentMethods: null
             });
           } else {
@@ -246,9 +243,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
         .catch(error => {
           this.setPartialState({
             loading: false,
-            errors: {
-              shippingMethod: [error]
-            }
+            errors: { shippingMethod: [error] }
           });
         });
     });

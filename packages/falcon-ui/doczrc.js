@@ -1,6 +1,13 @@
-// eslint-disable-next-line
-import doczPluginNetlify from 'docz-plugin-netlify';
 import * as path from 'path';
+import fs from 'fs';
+import { createPlugin } from 'docz-core';
+
+const doczPluginNetlify = () =>
+  createPlugin({
+    onPostBuild: config => {
+      fs.writeFileSync(`./${config.dest}/_redirects`, '/*    /index.html   200', { encoding: 'utf8' });
+    }
+  });
 
 // always  build docz in development version in order to have 'component finder working'
 // as it only works in react development mode

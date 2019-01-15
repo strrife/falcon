@@ -1,6 +1,7 @@
 export * from './AppLayout';
 export * from './Header';
 export * from './Product';
+export * from './ProductsList';
 export * from './Footer';
 export * from './Category';
 export * from './Cart';
@@ -19,3 +20,4 @@ export * from './helpers';
 export * from './Sidebar';
 export * from './Forms';
 export * from './AccountRecovery';
+export * from './SortOrdersProvider';

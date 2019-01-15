@@ -4,7 +4,7 @@ import ReactRouterDom, { withRouter, RouteComponentProps } from 'react-router-do
 import { History, Location } from 'history';
 
 export type IRenderRouterProps = {
-  children: ({  }: ReactRouterRenderProps) => any;
+  children: (props: ReactRouterRenderProps) => any;
 } & RouteComponentProps;
 
 export type ReactRouterRenderProps = {

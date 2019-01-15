@@ -1,6 +1,8 @@
 import React from 'react';
 import { Field, getIn, FieldProps } from 'formik';
+import { I18n } from '@deity/falcon-i18n';
 import { Box, Label, Input, DefaultThemeProps, ThemedComponentProps, extractThemableProps } from '@deity/falcon-ui';
+import { FormContext } from './Form';
 import { toGridTemplate } from '../helpers';
 import { Validator, passwordValidator, emailValidator, requiredValidator } from './validators';
 
@@ -36,14 +38,6 @@ const formFieldErrorLayout: DefaultThemeProps = {
   }
 };
 
-export type FormFieldProps = {
-  label?: string;
-  name: string;
-  validators?: Validator[];
-  children?: (props: React.InputHTMLAttributes<HTMLInputElement> & ThemedComponentProps) => React.ReactNode;
-} & ThemedComponentProps &
-  React.InputHTMLAttributes<HTMLInputElement>;
-
 const validateSequentially = (validators: Validator[] = [], label: string) => (value: string) => {
   const firstInvalid = validators.find(validator => validator(value, label) !== undefined);
   return firstInvalid ? firstInvalid(value, label) : undefined;
@@ -60,69 +54,110 @@ const getDefaultInputTypeValidator = (inputType: string | undefined) => {
   }
 };
 
+const fieldLabelSuffix = 'FieldLabel';
+const fieldPlaceholderSuffix = 'FieldPlaceholder';
+
+export type FormFieldProps = {
+  name: string;
+  label?: string;
+  validate?: Validator[];
+  children?: (props: React.InputHTMLAttributes<HTMLInputElement> & ThemedComponentProps) => React.ReactNode;
+} & ThemedComponentProps &
+  React.InputHTMLAttributes<HTMLInputElement>;
+
 // TODO: when new i18n support is ready use it to translate label and placeholder props
-export const FormField: React.SFC<FormFieldProps> = ({
-  id,
-  label,
-  required,
-  name,
-  validators,
-  children,
-  ...remaingProps
-}) => {
-  const hasCustomValidators = validators !== undefined;
-  const inputType = remaingProps.type;
+export const FormField: React.SFC<FormFieldProps> = props => {
+  const {
+    id: fieldId,
+    label: fieldLabel,
+    placeholder: fieldPlaceholder,
+    required,
+    name: fieldName,
+    validate,
+    children,
+    ...remainingProps
+  } = props;
+  const inputType = remainingProps.type;
   const isHidden = inputType === 'hidden';
+
+  // eslint-disable-next-line
+  let _validate = validate;
+  const hasCustomValidators = _validate !== undefined;
   if (required) {
-    if (!validators) {
-      validators = [];
+    if (!_validate) {
+      _validate = [];
     }
-    validators.unshift(requiredValidator);
+    _validate.unshift(requiredValidator);
   }
 
   const defaultInputTypeValidator = !hasCustomValidators && getDefaultInputTypeValidator(inputType);
 
-  if (defaultInputTypeValidator && validators) {
-    validators.push(defaultInputTypeValidator);
+  if (defaultInputTypeValidator && _validate) {
+    _validate.push(defaultInputTypeValidator);
   }
 
   return (
-    <Field
-      name={name}
-      validate={validateSequentially(validators, label || '')}
-      render={(fieldProps: FieldProps) => {
-        const { themableProps, rest } = extractThemableProps(remaingProps);
+    <FormContext.Consumer>
+      {({ id: formId, i18nId }) => (
+        <I18n>
+          {t => {
+            const label =
+              fieldLabel ||
+              (i18nId && t(`${i18nId}.${fieldName}${fieldLabelSuffix}`, { defaultValue: '' })) ||
+              undefined;
 
-        const { field, form } = fieldProps;
-        const touch = getIn(form.touched, name);
-        const error = getIn(form.errors, name);
-        const invalid = !!touch && !!error;
+            const placeholder =
+              fieldPlaceholder ||
+              (i18nId && t(`${i18nId}.${fieldName}${fieldPlaceholderSuffix}`, { defaultValue: '' })) ||
+              undefined;
 
-        // TODO: is there a better way of handling input ids (more automated)?
-        // is fallback to name correct?
-        const inputId = id || name;
+            return (
+              <Field
+                name={fieldName}
+                validate={validateSequentially(_validate, label)}
+                render={(fieldProps: FieldProps) => {
+                  const { themableProps, rest } = extractThemableProps(remainingProps);
 
-        const inputProps = {
-          ...field,
-          ...rest,
-          gridArea: FormFieldAreas.input,
-          height: 'xl',
-          id: inputId,
-          invalid
-        };
+                  const { field, form } = fieldProps;
+                  const touch = getIn(form.touched, fieldName);
+                  const error = getIn(form.errors, fieldName);
+                  const invalid = !!touch && !!error;
 
-        const defaultInput = <Input {...inputProps} />;
+                  // TODO: is there a better way of handling input ids (more automated)?
+                  // is fallback to name correct?
+                  const id = fieldId || `${formId}-${fieldName}`;
+                  const inputProps = {
+                    ...field,
+                    ...rest,
+                    gridArea: FormFieldAreas.input,
+                    height: 'xl',
+                    id,
+                    placeholder,
+                    invalid
+                  };
 
-        return (
-          <Box defaultTheme={formFieldLayout} {...themableProps} display={isHidden ? 'none' : undefined}>
-            <Label htmlFor={inputId} gridArea={FormFieldAreas.label} fontSize="xs" fontWeight="bold">
-              {label}
-            </Label>
-            {children ? children(inputProps) : defaultInput}
-            <Box defaultTheme={formFieldErrorLayout}>{invalid ? error : null}</Box>
-          </Box>
-        );
-      }}
-    />
+                  return (
+                    <Box defaultTheme={formFieldLayout} {...themableProps} display={isHidden ? 'none' : undefined}>
+                      {label && (
+                        <Label
+                          htmlFor={id}
+                          gridArea={FormFieldAreas.label}
+                          defaultTheme={{ formFieldLabel: { fontSize: 'xs', fontWeight: 'bold' } }}
+                        >
+                          {label}
+                        </Label>
+                      )}
+
+                      {children ? children(inputProps) : <Input {...inputProps} />}
+                      <Box defaultTheme={formFieldErrorLayout}>{invalid ? error : null}</Box>
+                    </Box>
+                  );
+                }}
+              />
+            );
+          }}
+        </I18n>
+      )}
+    </FormContext.Consumer>
   );
 };
