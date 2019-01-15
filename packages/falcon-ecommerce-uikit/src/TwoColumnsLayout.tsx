@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, themed } from '@deity/falcon-ui';
 import { toGridTemplate } from './helpers';
 

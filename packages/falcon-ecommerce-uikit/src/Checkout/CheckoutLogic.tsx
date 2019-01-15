@@ -157,13 +157,13 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
 
   setShippingAddress = (shippingAddress: CheckoutAddress) => {
     this.setLoading(true, () => {
-      // trigger mutationt that will return available shipping options
+      // trigger mutation that will return available shipping options
       this.props.client
         .mutate<EstimateShippingMethodsData>({
           mutation: ESTIMATE_SHIPPING_METHODS,
           variables: { input: { address: shippingAddress } }
         })
-        .then(resp => {
+        .then((resp: FetchResult) => {
           if (resp.errors) {
             this.setPartialState({
               loading: false,
@@ -203,7 +203,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
 
   setShippingMethod = (shippingMethod: CheckoutShippingMethod) => {
     this.setLoading(true, () => {
-      // trigger mutation that will reutrn available payment options
+      // trigger mutation that will return available payment options
       this.props.client
         .mutate<SetShippingData>({
           mutation: SET_SHIPPING,
@@ -218,7 +218,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
             }
           }
         })
-        .then(resp => {
+        .then((resp: FetchResult) => {
           if (resp.errors) {
             this.setPartialState({
               loading: false,

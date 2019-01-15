@@ -1,5 +1,6 @@
 import { ApolloLink } from 'apollo-link';
 import { onError } from 'apollo-link-error';
+import Logger from '@deity/falcon-logger';
 import { ApolloClient } from '../../service';
 
 /**
@@ -47,7 +48,11 @@ export default ({ config, clientStates = {} }) => {
       });
     });
 
-    const errorLink = onError(({ networkError }) => {
+    const errorLink = onError(({ networkError, graphQLErrors }) => {
+      if (graphQLErrors) {
+        graphQLErrors.forEach(err => Logger.error(err));
+      }
+
       if (networkError) {
         ctx.response.status = 500;
       }
