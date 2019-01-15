@@ -18,23 +18,23 @@ const AddressBook = () => (
     </H1>
     <AddressesListQuery>
       {({ addresses: { items } }) => {
-        const defaultBilling = items.find(x => x.defaultBilling);
-        const defaultShipping = items.find(x => x.defaultShipping);
-        const restAddresses = items.filter(x => !x.defaultBilling && !x.defaultShipping) || [];
-        const anyDefaults = defaultBilling || defaultShipping;
-        const defaultsEqual = (defaultBilling && defaultBilling.id) === (defaultShipping && defaultShipping.id);
-        const anyRest = restAddresses.length > 0;
+        const billing = items.find(x => x.defaultBilling);
+        const shipping = items.find(x => x.defaultShipping);
+        const rest = items.filter(x => !x.defaultBilling && !x.defaultShipping) || [];
+        const anyDefaults = billing || shipping;
+        const defaultsEqual = (billing && billing.id) === (shipping && shipping.id);
+        const anyRest = rest.length > 0;
 
         return (
           <React.Fragment>
             {anyDefaults && (
               <AddressesListLayout my="md">
                 {defaultsEqual ? (
-                  <DefaultAddressCard address={defaultBilling} />
+                  <DefaultAddressCard address={billing} />
                 ) : (
                   <React.Fragment>
-                    {defaultBilling && <DefaultAddressCard address={defaultBilling} />}
-                    {defaultShipping && <DefaultAddressCard address={defaultShipping} />}
+                    {billing && <DefaultAddressCard address={billing} />}
+                    {shipping && <DefaultAddressCard address={shipping} />}
                   </React.Fragment>
                 )}
               </AddressesListLayout>
@@ -46,7 +46,7 @@ const AddressBook = () => (
                   <T id="addressBook.sectionTitle_other" />
                 </H2>
                 <AddressesListLayout gridTemplateColumns={{ md: 'repeat(3, 1fr)' }}>
-                  {restAddresses.map(x => (
+                  {rest.map(x => (
                     <AddressCardLayout key={x.id}>
                       <AddressDetails {...x} />
                       <AddressActions addressId={x.id} />
