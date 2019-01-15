@@ -13,7 +13,7 @@ extend type Query {
   countries: CountryList
   order(id: Int!): Order
   lastOrder: Order
-  orders(query: ShopPageQuery): Orders
+  orders(pagination: PaginationInput): Orders
   address(id: Int!): Address
   addresses: AddressList
   customer: Customer
