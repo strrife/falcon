@@ -1046,30 +1046,22 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Orders} parsed orders with pagination info
    */
   async orders(obj, params) {
-    const {
-      query: { page, perPage }
-    } = params;
+    const { pagination = { perPage: this.perPage, page: 1 } } = params;
     const { customerToken = {} } = this.session;
 
     if (!customerToken.token) {
       throw new Error('Trying to fetch customer orders without valid customer token');
     }
 
-    const searchCriteria = {
-      currentPage: page,
-      sortOrders: [
-        {
-          field: 'created_at',
-          direction: 'desc'
-        }
-      ]
-    };
+    const query = this.createSearchParams({
+      pagination,
+      sort: {
+        field: 'created_at',
+        direction: 'desc'
+      }
+    });
 
-    if (perPage) {
-      searchCriteria.pageSize = perPage;
-    }
-
-    const response = await this.get('/orders/mine', { searchCriteria });
+    const response = await this.get('/orders/mine', query, { context: { pagination } });
 
     return this.convertKeys(response.data);
   }

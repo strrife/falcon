@@ -1,10 +1,10 @@
 import gql from 'graphql-tag';
-import { Query, FetchMore, ShopPageQuery, Pagination } from '../Query';
+import { Query, FetchMore, PaginationQuery, Pagination } from '../Query';
 import { Order } from './../Order';
 
 export const GET_ORDERS_LIST = gql`
-  query Orders($page: Int = 1, $perPage: Int = 10) {
-    orders(query: { page: $page, perPage: $perPage }) {
+  query Orders($pagination: PaginationInput) {
+    orders(pagination: $pagination) {
       items {
         entityId
         incrementId
@@ -31,9 +31,9 @@ export type OrdersData = {
   };
 };
 
-const fetchMore: FetchMore<OrdersData, ShopPageQuery> = (data, apolloFetchMore) =>
+const fetchMore: FetchMore<OrdersData, PaginationQuery> = (data, apolloFetchMore) =>
   apolloFetchMore({
-    variables: { page: data.orders.pagination.nextPage },
+    variables: { pagination: { ...data.orders.pagination, page: data.orders.pagination.nextPage } },
     updateQuery: (prev, { fetchMoreResult }) => {
       if (!fetchMoreResult) {
         return prev;
@@ -52,7 +52,7 @@ const fetchMore: FetchMore<OrdersData, ShopPageQuery> = (data, apolloFetchMore) 
     }
   });
 
-export class OrdersListQuery extends Query<OrdersData, ShopPageQuery> {
+export class OrdersListQuery extends Query<OrdersData, PaginationQuery> {
   static defaultProps = {
     query: GET_ORDERS_LIST,
     fetchMore,

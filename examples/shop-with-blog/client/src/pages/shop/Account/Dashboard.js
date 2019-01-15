@@ -10,7 +10,7 @@ const Dashboard = () => (
       <T id="dashboard.title" />
     </H1>
     <Box>
-      <OrdersListQuery variables={{ perPage: 1, page: 1 }}>
+      <OrdersListQuery variables={{ pagination: { perPage: 1, page: 1 } }}>
         {({ orders: { items } }) => (
           <React.Fragment>
             <FlexLayout justifyContent="flex-start" alignItems="baseline">
