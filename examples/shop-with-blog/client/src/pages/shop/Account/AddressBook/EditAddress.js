@@ -9,6 +9,7 @@ import {
   CheckboxFormField,
   FormErrorSummary,
   AddressQuery,
+  getAddressType,
   GET_ADDRESS,
   EditAddressMutation,
   TwoColumnsLayout,
@@ -30,15 +31,7 @@ const EditAddress = ({ match, history }) => {
 
           {(address.defaultBilling || address.defaultShipping) && (
             <Text>
-              <T
-                id="editAddress.defaultAddressLabel"
-                context={[
-                  address.defaultBilling ? 'billing' : undefined,
-                  address.defaultShipping ? 'shipping' : undefined
-                ]
-                  .filter(x => x)
-                  .join('&')}
-              />
+              <T id="editAddress.defaultAddressLabel" context={getAddressType(address)} />
             </Text>
           )}
           <EditAddressMutation refetchQueries={['Addresses', { query: GET_ADDRESS, variables: { id } }]}>
