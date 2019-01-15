@@ -90,7 +90,6 @@ export const FormField: React.SFC<FormFieldProps> = props => {
   const { themableProps, rest } = extractThemableProps(restProps);
 
   // eslint-disable-next-line
-  // eslint-disable-next-line
   let validators = validate || [];
   if (required) {
     validators.unshift(requiredValidator);

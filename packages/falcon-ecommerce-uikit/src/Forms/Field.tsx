@@ -42,9 +42,6 @@ export type FieldProps<TValue = any> = {
   placeholder?: string;
   validate?: Validator[];
   children?: (props: FieldRenderProps<TValue>) => React.ReactNode;
-  // type?: string;
-  // validate?: ((value: any) => string | Promise<void> | undefined);
-  // innerRef?: (instance: any) => void;
 };
 
 export const Field: React.SFC<FieldProps> = props => {
