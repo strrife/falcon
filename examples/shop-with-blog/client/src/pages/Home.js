@@ -57,13 +57,11 @@ const subheroGrid = {
 
 class Hero extends Component {
   componentDidMount() {
-    document.addEventListener(
-      'scroll',
-      () => {
-        this.parallax();
-      },
-      true
-    );
+    document.addEventListener('scroll', this.parallax);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('scroll', this.parallax);
   }
 
   parallax = () => {
