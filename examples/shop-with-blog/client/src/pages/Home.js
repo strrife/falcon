@@ -78,7 +78,7 @@ class Hero extends Component {
       <LazyLoad height="calc(40vh + 10vw)">
         <BackgroundImage
           css={{ position: 'relative', paddingBottom: 'calc(40vh + 10vw)' }}
-          src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+          src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=512&q=80"
           id="slider"
           data-type="background"
           data-speed="4"

@@ -335,6 +335,10 @@ export const deityGreenTheme = createTheme({
     navbar: {
       bgFullWidth: 'transparent',
       color: 'black',
+      display: {
+        xs: 'none',
+        md: 'flex'
+      },
       css: {
         fontWeight: '500',
         zIndex: 2,

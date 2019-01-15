@@ -13,8 +13,8 @@ export const Navbar = themed({
       m: 'none',
       bgFullWidth: 'primary',
       color: 'primaryText',
+      display: 'flex',
       css: {
-        display: 'flex',
         listStyle: 'none',
         position: 'relative'
       }
