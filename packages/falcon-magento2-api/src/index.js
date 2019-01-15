@@ -893,7 +893,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         },
         { context: { skipAuth: true } }
       );
-      const { token, validTime } = this.convertKeys(response.data);
+
+      const { data: token } = response;
+      // todo: validTime should be extracted from the response, but after recent changes Magento doesn't send it
+      // so that should be changed once https://github.com/deity-io/falcon-magento2-development/issues/32 is resolved
+      const validTime = 1;
 
       // calculate token expiration date and subtract 1 minute for margin
       const tokenValidationTimeInMinutes = validTime * 60 - 1;
