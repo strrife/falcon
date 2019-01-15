@@ -7,6 +7,7 @@ import {
   AddressCardLayout,
   AddressDetails,
   AddressesListLayout,
+  getAddressType,
   RemoveAddressMutation
 } from '@deity/falcon-ecommerce-uikit';
 
@@ -29,30 +30,11 @@ const AddressBook = () => (
             {anyDefaults && (
               <AddressesListLayout my="md">
                 {defaultsEqual ? (
-                  <AddressCardLayout>
-                    <H2>
-                      <T id="addressBook.defaultBillingAndShipping" />
-                    </H2>
-                    <AddressCardContent address={defaultBilling} />
-                  </AddressCardLayout>
+                  <DefaultAddressCard address={defaultBilling} />
                 ) : (
                   <React.Fragment>
-                    {defaultBilling && (
-                      <AddressCardLayout>
-                        <H2>
-                          <T id="addressBook.defaultBilling" />
-                        </H2>
-                        <AddressCardContent address={defaultBilling} />
-                      </AddressCardLayout>
-                    )}
-                    {defaultShipping && (
-                      <AddressCardLayout>
-                        <H2>
-                          <T id="addressBook.defaultShipping" />
-                        </H2>
-                        <AddressCardContent address={defaultShipping} />
-                      </AddressCardLayout>
-                    )}
+                    {defaultBilling && <DefaultAddressCard address={defaultBilling} />}
+                    {defaultShipping && <DefaultAddressCard address={defaultShipping} />}
                   </React.Fragment>
                 )}
               </AddressesListLayout>
@@ -61,12 +43,13 @@ const AddressBook = () => (
             {anyRest && (
               <Box my="md">
                 <H2>
-                  <T id="addressBook.otherAddresses" />
+                  <T id="addressBook.sectionTitle_other" />
                 </H2>
                 <AddressesListLayout gridTemplateColumns={{ md: 'repeat(3, 1fr)' }}>
                   {restAddresses.map(x => (
                     <AddressCardLayout key={x.id}>
-                      <AddressCardContent address={x} />
+                      <AddressDetails {...x} />
+                      <AddressActions addressId={x.id} />
                     </AddressCardLayout>
                   ))}
                 </AddressesListLayout>
@@ -86,15 +69,22 @@ const AddressBook = () => (
 
 export default AddressBook;
 
-const AddressCardContent = ({ address }) => (
-  <React.Fragment>
+const DefaultAddressCard = ({ address }) => (
+  <AddressCardLayout>
+    <H2>
+      <T id="addressBook.sectionTitle" context={getAddressType(address)} />
+    </H2>
     <AddressDetails {...address} />
-    <FlexLayout flexDirection="row" mt="xs">
-      <EditAddressLink id={address.id} />
-      <Divider variant="horizontal" mx="xs" />
-      <RemoveAddressLink id={address.id} />
-    </FlexLayout>
-  </React.Fragment>
+    <AddressActions addressId={address.id} />
+  </AddressCardLayout>
+);
+
+const AddressActions = ({ addressId }) => (
+  <FlexLayout flexDirection="row" mt="xs">
+    <EditAddressLink id={addressId} />
+    <Divider variant="horizontal" mx="xs" />
+    <RemoveAddressLink id={addressId} />
+  </FlexLayout>
 );
 
 const EditAddressLink = ({ id }) => (
