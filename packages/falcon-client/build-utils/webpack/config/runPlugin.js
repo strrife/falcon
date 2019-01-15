@@ -1,5 +1,3 @@
-// / { target, dev }
-
 function runPlugin(plugin, config, options, webpack) {
   if (typeof plugin === 'function') {
     return plugin(config, options, webpack);
