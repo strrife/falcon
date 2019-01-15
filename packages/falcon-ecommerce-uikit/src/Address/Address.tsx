@@ -68,3 +68,8 @@ export const AddressesListLayout = themed({
     }
   }
 });
+
+export type AddressType = 'billing' | 'shipping' | 'billing&shipping' | 'other';
+export const getAddressType = (address: AddressData): AddressType =>
+  ([address.defaultBilling && 'billing', address.defaultShipping && 'shipping'].filter(x => x).join('&') ||
+    'other') as AddressType;
