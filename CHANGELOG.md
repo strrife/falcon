@@ -9,6 +9,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon Client v0.1.1
 
 - improvement: React 16.6 support ([#226](https://github.com/deity-io/falcon/pull/226))
+- added support for scss with css modules ([#259](https://github.com/deity-io/falcon/pull/259))
 
 ### Falcon Server v0.1.1
 
