@@ -1,12 +1,12 @@
 extend type Query {
-  category(id: Int!): Category
-  product(id: Int!): Product
+  category(id: String!): Category
+  product(id: String!): Product
   products(
-    categoryId: Int
+    categoryId: String
     includeSubcategories: Boolean
     query: ShopPageQuery
     sortOrders: [SortOrderInput]
-    filters: [Filter]
+    filters: [FilterInput]
     skus: [String]
   ): ProductList
   cart: Cart
@@ -101,7 +101,7 @@ input ShopPageQuery {
   page: Int
 }
 
-input Filter {
+input FilterInput {
   conditionType: String
   field: String
   value: String
@@ -184,7 +184,7 @@ type PlaceOrderResult {
 }
 
 type Product {
-  id: Int!
+  id: String
   sku: String!
   name: String!
   image: String
@@ -202,7 +202,7 @@ type Product {
   configurableOptions: [ConfigurableProductOption]
   bundleOptions: [BundleProductOption]
   gallery: [GalleryEntry]
-  breadcrumbs: [Breadcrumb]
+  breadcrumbs(path: String!): [Breadcrumb]
   seo: ProductSeo
 }
 
@@ -228,9 +228,12 @@ type PaymentMethod {
 }
 
 type Category {
-  id: Int
+  id: String
   name: String
+  children: [Category]
   description: String
+  breadcrumbs(path: String!): [Breadcrumb]
+  products(pagination: PaginationInput, sort: SortOrderInput, filters: [FilterInput]): ProductList
 }
 
 type ProductList {
@@ -241,11 +244,13 @@ type ProductList {
 
 type Aggregation {
   key: String
+  name: String
   buckets: [AggregationBucket]
 }
 
 type AggregationBucket {
-  key: Int
+  value: String
+  name: String
   count: Int
 }
 
@@ -427,11 +432,8 @@ type GalleryEntry {
 }
 
 type Breadcrumb {
-  id: Int
   name: String
   urlPath: String
-  urlKey: String
-  urlQuery: String
 }
 
 type ConfigurableProductOption {
