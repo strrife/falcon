@@ -156,8 +156,8 @@ export const MiniCart: React.SFC<MiniCartData> = ({ cart: { quoteCurrency, items
         <H3 gridArea={MiniCartLayoutArea.title}>
           <T id="miniCart.title" />
         </H3>
-
         <Box gridArea={MiniCartLayoutArea.items} css={props => ({ ...prettyScrollbars(props.theme) })}>
+          <Divider mb="lg" />
           <MiniCartProducts products={items} currency={quoteCurrency} />
           {!items.length && (
             <FlexLayout alignItems="center" flexDirection="column">

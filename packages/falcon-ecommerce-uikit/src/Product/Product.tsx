@@ -182,7 +182,7 @@ export class Product extends React.PureComponent<{ product: any }> {
                   </Text>
                   <H1 gridArea={Area.title}>{product.name}</H1>
 
-                  <Price fontSize="xl" gridArea={Area.price} value={product.price} />
+                  <Price fontSize="lg" gridArea={Area.price} value={product.price} />
                   <ProductConfigurableOptions
                     options={product.configurableOptions}
                     error={errors.configurableOptions}

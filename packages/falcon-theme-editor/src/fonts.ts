@@ -10,6 +10,10 @@ export const fonts = [
     google: 'Playfair Display:300,400,700'
   },
   {
+    value: 'Roboto',
+    google: 'Roboto:300,400,500,700'
+  },
+  {
     value: 'Source Sans Pro, sans-serif',
     google: 'Source Sans Pro:300,400,700'
   },

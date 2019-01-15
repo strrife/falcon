@@ -1,5 +1,5 @@
 import React from 'react';
-import { DefaultThemeProps, Box, H3 } from '@deity/falcon-ui';
+import { DefaultThemeProps, Box, H3, Divider } from '@deity/falcon-ui';
 
 const miniFormLayout: DefaultThemeProps = {
   miniFormLayout: {
@@ -13,7 +13,6 @@ export const MiniFormLayout: React.SFC<{ title?: string }> = ({ title, children 
     {title && <H3>{title}</H3>}
     <Box
       css={{
-        maxWidth: 300,
         width: '100%',
         margin: '0 auto'
       }}

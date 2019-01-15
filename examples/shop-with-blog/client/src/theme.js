@@ -27,11 +27,24 @@ export const deityGreenTheme = createTheme({
   },
 
   fonts: {
-    sans: 'Montserrat, sans-serif'
+    sans: 'Source Sans Pro, sans-serif'
   },
 
   fontSizes: {
-    md: '16px'
+    xxs: 11,
+    xs: 13,
+    sm: 15,
+    md: 17,
+    lg: 20,
+    xl: 24,
+    xxxl: 52,
+
+    // responsive fontsizes
+    xxl: {
+      xs: 32,
+      md: 46,
+      lg: 52
+    }
   },
 
   fontWeights: {
@@ -181,6 +194,15 @@ export const deityGreenTheme = createTheme({
   },
 
   components: {
+    h1: {
+      fontWeight: 'regular',
+      fontSize: 'xxl'
+    },
+
+    h4: {
+      fontWeight: 'demibold'
+    },
+
     appLayout: {
       px: 0,
       css: {
@@ -188,13 +210,39 @@ export const deityGreenTheme = createTheme({
       }
     },
 
-    gridLayout: {
-      px: 'xl',
+    productListLayout: {
+      gridGap: 'xl',
       py: 'xl',
+      fontSize: 'sm'
+    },
+
+    productLayout: {
+      p: 'xl',
       css: {
         margin: 'auto',
         maxWidth: 1280
       }
+    },
+
+    radio: {
+      size: 'sm',
+      css: ({ theme }) => ({
+        '.-inner-radio-frame': {
+          height: '100%',
+          width: '100%',
+          position: 'relative',
+          display: 'flex',
+          cursor: 'pointer',
+          borderRadius: '0',
+          border: theme.borders.bold,
+          borderColor: theme.colors.secondaryDark,
+          transitionProperty: 'border, fill',
+          transitionTimingFunction: theme.easingFunctions.easeIn,
+          transitionDuration: theme.transitionDurations.short,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }
+      })
     },
 
     icon: {
@@ -215,9 +263,11 @@ export const deityGreenTheme = createTheme({
       alignItems: 'center',
       my: 'none',
       gridGap: 'sm',
-      py: 'lg',
+      py: 'sm',
       px: 'xl',
       css: {
+        maxWidth: 1280,
+        margin: '0 auto',
         justifyItems: 'center'
       }
     },
@@ -226,9 +276,26 @@ export const deityGreenTheme = createTheme({
       bgFullWidth: 'bannerPrimary',
       color: 'white',
       fontSize: 'xs',
+      fontWeight: 'light',
       py: 'xs',
       ml: 'sm',
       justifyContent: 'center'
+    },
+
+    cartLayout: {
+      p: 'xl',
+      css: {
+        maxWidth: 1280,
+        margin: 'auto'
+      }
+    },
+
+    checkoutLayout: {
+      p: 'xl',
+      css: ({ theme }) => ({
+        maxWidth: 1280,
+        margin: `${theme.spacing.lg}px auto`
+      })
     },
 
     productsCategory: {
@@ -243,6 +310,7 @@ export const deityGreenTheme = createTheme({
       fontWeight: 'regular',
       transitionTimingFunction: 'easeIn',
       transitionDuration: 'short',
+      px: 'none',
 
       css: ({ theme }) => ({
         ':hover': {
@@ -278,7 +346,6 @@ export const deityGreenTheme = createTheme({
 
     navbarItem: {
       color: 'black',
-      fontSize: 'xs',
       transitionTimingFunction: 'easeIn',
       transitionDuration: 'short',
 
@@ -290,20 +357,23 @@ export const deityGreenTheme = createTheme({
     },
 
     navbarItemMenu: {
+      px: 'xl',
       css: {
+        maxWidth: 1280,
+        margin: '0 auto',
         borderTop: '1px solid #d0d0d0'
       }
     },
 
     sidebar: {
-      px: 'sm',
-      pt: 'sm',
+      p: 'md',
       boxShadow: 'subtle',
+      transitionTimingFunction: 'easeOut',
       css: {
         boxSizing: 'border-box',
         width: {
           xs: '80vw',
-          sm: 510
+          sm: 480
         }
       }
     },
@@ -317,9 +387,9 @@ export const deityGreenTheme = createTheme({
       px: 'xl',
       height: 'lg',
       bg: 'black',
-      fontSize: 'xs',
+      fontSize: 'sm',
       fontWeight: 'demiBold',
-      borderRadius: 'small',
+      borderRadius: 'none',
       css: {
         transitionProperty: 'all',
         textTransform: 'capitalize'
@@ -341,11 +411,15 @@ export const deityGreenTheme = createTheme({
             cursor: 'default',
             overflow: 'hidden',
 
-            ':hover': {
-              borderColor: props.theme.colors.primaryLight,
-              borderRightColor: props.theme.colors.white
+            ':hover:enabled': {
+              borderColor: 'none',
+              borderRightColor: 'none',
+              backgroundColor: 'none'
             }
           })
+        },
+        secondary: {
+          color: 'black'
         },
         cta: {
           height: 'xl',

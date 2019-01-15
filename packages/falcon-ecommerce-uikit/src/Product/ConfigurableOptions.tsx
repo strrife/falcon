@@ -15,8 +15,8 @@ const Option: React.SFC<{ option: any; disabled?: boolean; onChange: Function }>
         value={value.valueIndex}
         css={{
           cursor: 'pointer',
-          height: 55,
-          width: 55
+          height: 40,
+          width: 40
         }}
       />
     ))}

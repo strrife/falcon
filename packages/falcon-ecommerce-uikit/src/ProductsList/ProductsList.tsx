@@ -24,20 +24,16 @@ export const ProductsList: React.SFC<{ products: any[] }> = ({ products }) => (
                     ':hover': { opacity: '0' }
                   }}
                 />
-                <Image
-                  css={{ flex: '1 1 100%', minHeight: '0%', padding: '20px' }}
-                  src={product.thumbnail}
-                  alt={product.name}
-                />
+                <Image css={{ flex: '1 1 100%', minHeight: '0%' }} src={product.thumbnail} alt={product.name} />
               </Box>
             </React.Fragment>
           </LazyLoad>
 
-          <Text py="xs" ellipsis fontSize="xs" fontWeight="regular">
+          <Text py="xs" ellipsis fontWeight="regular">
             {product.name}
           </Text>
 
-          <Price fontSize="xs" value={product.price} />
+          <Price value={product.price} />
         </ProductCardLayout>
       </li>
     ))}

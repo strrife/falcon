@@ -16,7 +16,6 @@ const footerLayoutTheme: DefaultThemeProps = {
 const copyrightLayoutTheme: DefaultThemeProps = {
   copyrightLayout: {
     p: 'sm',
-    fontSize: 'xs',
     color: 'secondaryText',
     bgFullWidth: 'secondary',
     css: {
@@ -48,12 +47,10 @@ export const FooterSections: React.SFC<{ sections: MenuItem[] }> = ({ sections }
   <Box defaultTheme={footerSectionsTheme}>
     {sections.map(section => (
       <Box key={section.name} css={{ minWidth: 200 }}>
-        <H4 fontSize="xs" fontWeight="demiBold">
-          {section.name}
-        </H4>
+        <H4 fontWeight="demiBold">{section.name}</H4>
         <List>
           {section.children.map(item => (
-            <ListItem fontSize="xxs" py="xs" key={item.name}>
+            <ListItem fontSize="xs" py="xs" key={item.name}>
               <Link as={RouterLink} to={item.url}>
                 {item.name}
               </Link>

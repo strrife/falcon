@@ -1,26 +1,12 @@
 {
   "welcome": "Welcome to @deity",
   "copyright": "© Copyright {{year}}",
-  "banner": {
-    "summerSale": "Summer Sale - Now on!"
-  },
   "newsletter": {
     "title": "Newsletter",
     "message": "Join our mailing list to receive the latest offers and more!",
     "subscribe": "Subscribe",
     "emailPlaceholder": "Enter your email address",
     "consent": "I would like to subscribe to updates"
-  },
-  "home": {
-    "hotSellers": "Hot sellers",
-    "ourFavourites": "Our Favourites",
-    "shopLooks": "Shop the Looks",
-    "ctaButton": "Shop now",
-    "heroText": "New Collection",
-    "menTitle": "For Him",
-    "womenTitle": "For Her",
-    "menText": "Gentlemen's style",
-    "womenText": "Be irresistible"
   },
   "blog": {
     "title": "Blog",

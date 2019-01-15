@@ -1,5 +1,5 @@
 import React from 'react';
-import { themed, H4, Text, Group, Input, Button, Checkbox, Label } from '@deity/falcon-ui';
+import { themed, H3, Text, Group, Input, Button, Checkbox, Label } from '@deity/falcon-ui';
 import { T, I18n } from '@deity/falcon-i18n';
 
 export const NewsletterLayout = themed({
@@ -20,10 +20,10 @@ export const NewsletterLayout = themed({
 
 export const Newsletter: React.SFC<{}> = () => (
   <NewsletterLayout>
-    <H4 fontWeight="demiBold">
+    <H3 fontWeight="demiBold">
       <T id="newsletter.title" />
-    </H4>
-    <Text fontSize="xxs">
+    </H3>
+    <Text fontSize="xs">
       <T id="newsletter.message" />
     </Text>
     <I18n>

@@ -10,7 +10,7 @@ const RadioInnerDOM = (
   const { themableProps, rest } = extractThemableProps(remaining);
 
   return (
-    <Box {...themableProps} className={className}>
+    <Box {...themableProps} css={{ backgroundColor: props.icon.props.children }} className={className}>
       <input {...rest} type="radio" />
       <div aria-hidden className="-inner-radio-frame">
         {icon}
@@ -53,6 +53,9 @@ export const Radio = themed({
           margin: 0,
           opacity: 0,
           zIndex: 1,
+          ':hover': {
+            cursor: 'pointer'
+          },
           ':checked + .-inner-radio-frame': {
             borderColor: theme.colors.primary,
             '.-inner-radio-icon': {
