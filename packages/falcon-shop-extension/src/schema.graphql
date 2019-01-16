@@ -13,8 +13,9 @@ extend type Query {
   countries: CountryList
   order(id: Int!): Order
   lastOrder: Order
-  orders(query: ShopPageQuery): Orders
+  orders(pagination: PaginationInput): Orders
   address(id: Int!): Address
+  addresses: AddressList
   customer: Customer
   cmsPage(id: Int, identifier: String): CmsPage
   cmsBlock(identifier: String): CmsBlock
@@ -33,11 +34,11 @@ extend type Mutation {
   signUp(input: SignUp!): Boolean
   signIn(input: SignIn!): Boolean
   signOut: Boolean
-  editCustomerData(input: CustomerInput!): Customer
-  editCustomerAddress(input: AddressInput!): Address
-  addCustomerAddress(input: AddressInput!): Address
+  editCustomer(input: CustomerInput!): Customer
+  editAddress(input: EditAddressInput!): Address
+  addAddress(input: AddAddressInput!): Address
   estimateShippingMethods(input: EstimateShippingInput!): [ShippingMethod]
-  removeCustomerAddress(input: EntityIdInput!): Boolean
+  removeCustomerAddress(id: Int!): Boolean
   requestCustomerPasswordResetToken(input: EmailInput!): Boolean
   changeCustomerPassword(input: CustomerPassword!): Boolean
   resetCustomerPassword(input: CustomerPasswordReset!): Boolean
@@ -63,10 +64,6 @@ type ShopConfig {
 type ShopStoreEntry {
   name: String
   code: String
-}
-
-input EntityIdInput {
-  id: Int!
 }
 
 input EmailInput {
@@ -137,6 +134,35 @@ input AddressInput {
   regionId: Int
   street: [String]
   telephone: String
+}
+
+input AddAddressInput {
+  company: String
+  firstname: String!
+  lastname: String!
+  telephone: String!
+  street: [String]
+  postcode: String!
+  city: String!
+  countryId: String!
+  defaultBilling: Boolean
+  defaultShipping: Boolean
+  regionId: Int
+}
+
+input EditAddressInput {
+  id: Int!
+  company: String
+  firstname: String!
+  lastname: String!
+  telephone: String
+  street: [String]
+  postcode: String!
+  city: String!
+  countryId: String!
+  defaultBilling: Boolean
+  defaultShipping: Boolean
+  regionId: Int
 }
 
 input CustomerPassword {
@@ -396,18 +422,24 @@ type Customer {
 }
 
 type Address {
-  id: Int
-  firstname: String
-  lastname: String
-  city: String
-  postcode: String
-  countryId: String
-  defaultBilling: Boolean
-  defaultShipping: Boolean
+  id: Int!
+  company: String
+  firstname: String!
+  lastname: String!
+  street: [String]!
+  city: String!
+  postcode: String!
+  countryId: String!
   region: String
   regionId: Int
-  street: [String]
   telephone: String
+  fax: String
+  defaultBilling: Boolean!
+  defaultShipping: Boolean!
+}
+
+type AddressList {
+  items: [Address]!
 }
 
 input SignUp {

@@ -13,23 +13,20 @@ type SignInFormProps = {
 };
 
 export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted, id }) => (
-  <SignInMutation onCompleted={onCompleted}>
+  <SignInMutation
+    update={(_cache, result) => {
+      if (!result.errors && result.data && result.data.signIn) {
+        if (onCompleted) onCompleted();
+      }
+    }}
+  >
     {(signIn, { loading, error }) => (
       <Formik
         initialValues={{
           email: '',
           password: ''
         }}
-        onSubmit={values =>
-          signIn({
-            variables: {
-              input: {
-                email: values.email,
-                password: values.password
-              }
-            }
-          })
-        }
+        onSubmit={values => signIn({ variables: { input: values } })}
       >
         {() => (
           <Form id={id} i18nId="signIn">
@@ -42,7 +39,7 @@ export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted, id }) => (
               required
               autoComplete="current-password"
             >
-              {inputProps => <PasswordRevealInput {...inputProps} />}
+              {({ field }) => <PasswordRevealInput {...field} />}
             </FormField>
             <FlexLayout justifyContent="space-between" alignItems="center" mt="md">
               <ForgotPasswordTrigger />

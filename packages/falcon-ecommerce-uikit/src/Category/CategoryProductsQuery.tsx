@@ -28,7 +28,7 @@ export const GET_CATEGORY_PRODUCTS = gql`
   }
 `;
 
-export const fetchMore = (data: any, apolloFetchMore: any) =>
+const fetchMore = (data: any, apolloFetchMore: any) =>
   apolloFetchMore({
     variables: {
       pagination: {

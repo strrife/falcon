@@ -1,3 +1,4 @@
+export * from './Field';
 export * from './FormField';
 export * from './validators';
 export * from './Form';

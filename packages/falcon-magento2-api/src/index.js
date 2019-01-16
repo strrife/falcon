@@ -1046,30 +1046,22 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Orders} parsed orders with pagination info
    */
   async orders(obj, params) {
-    const {
-      query: { page, perPage }
-    } = params;
+    const { pagination = { perPage: this.perPage, page: 1 } } = params;
     const { customerToken = {} } = this.session;
 
     if (!customerToken.token) {
       throw new Error('Trying to fetch customer orders without valid customer token');
     }
 
-    const searchCriteria = {
-      currentPage: page,
-      sortOrders: [
-        {
-          field: 'created_at',
-          direction: 'desc'
-        }
-      ]
-    };
+    const query = this.createSearchParams({
+      pagination,
+      sort: {
+        field: 'created_at',
+        direction: 'desc'
+      }
+    });
 
-    if (perPage) {
-      searchCriteria.pageSize = perPage;
-    }
-
-    const response = await this.get('/orders/mine', { searchCriteria });
+    const response = await this.get('/orders/mine', query, { context: { pagination } });
 
     return this.convertKeys(response.data);
   }
@@ -1095,7 +1087,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       throw new Error('Failed to load an order.');
     }
 
-    const result = this.get(`/orders/${id}/order-info`);
+    const result = await this.get(`/orders/${id}/order-info`);
 
     return this.convertOrder(result);
   }
@@ -1255,7 +1247,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {CustomerInput} data - data to be saved
    * @return {Promise<Customer>} updated customer data
    */
-  async editCustomerData(obj, { input }) {
+  async editCustomer(obj, { input }) {
     const response = await this.put('/customers/me', { customer: { ...input } });
 
     return this.convertKeys(response.data);
@@ -1268,8 +1260,33 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {number} params.id - address id
    * @return {Promise<Address>} requested address data
    */
-  async address(obj, params) {
-    return this.forwardAddressAction(params);
+  async address(obj, { id }) {
+    const { customerToken = {} } = this.session;
+    if (!customerToken.token) {
+      Logger.error(`${this.name}: Trying to read address data without customer token`);
+      throw new Error('You do not have an access to read address data');
+    }
+
+    const response = await this.get(`/customers/me/address/${id}`);
+
+    return this.convertAddressData(response.data);
+  }
+
+  /**
+   * Request customer addresses
+   * @return {Promise<AddressList>} requested addresses data
+   */
+  async addresses() {
+    const { customerToken = {} } = this.session;
+    if (!customerToken.token) {
+      Logger.error(`${this.name}: Trying to read addresses data without customer token`);
+      throw new Error('You do not have an access to read addresses data');
+    }
+
+    const response = await this.get('/customers/me/address');
+    const items = response.data.items || [];
+
+    return { items: items.map(x => this.convertAddressData(x)) };
   }
 
   /**
@@ -1278,8 +1295,16 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {AddressInput} data - address data
    * @return {Promise<Address>} added address data
    */
-  async addCustomerAddress(obj, { input }) {
-    return this.forwardAddressAction({ data: input, method: 'post' });
+  async addAddress(obj, { input }) {
+    const { customerToken = {} } = this.session;
+    if (!customerToken.token) {
+      Logger.error(`${this.name}: Trying to add address data without customer token`);
+      throw new Error('You do not have an access to add address data');
+    }
+
+    const response = await this.post('/customers/me/address', { address: { ...input } });
+
+    return this.convertAddressData(response.data);
   }
 
   /**
@@ -1288,60 +1313,33 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {AddressInput} data - data to change
    * @return {Promise<Address>} updated address data
    */
-  async editCustomerAddress(obj, { input }) {
-    return this.forwardAddressAction({ data: input, method: 'put' });
+  async editAddress(obj, { input }) {
+    const { customerToken = {} } = this.session;
+    if (!customerToken.token) {
+      Logger.error(`${this.name}: Trying to edit address data without customer token`);
+      throw new Error('You do not have an access to edit address data');
+    }
+
+    const response = await this.put(`/customers/me/address`, { address: { ...input } });
+
+    return this.convertAddressData(response.data);
   }
 
   /**
    * Remove customer address data
    * @param {object} obj Parent object
-   * @param {EntityIdInput} data - address to remove
+   * @param {object} params - request params
+   * @param {number} params.id - address id
    * @return {boolean} true when removed successfully
    */
-  async removeCustomerAddress(obj, { input }) {
-    return this.forwardAddressAction({ id: input.id, method: 'delete' });
-  }
-
-  /**
-   * Request address management action
-   * @param {object} params - request params
-   * @param {string} params.customerToken - customer token
-   * @param {number} params.id - address id
-   * @param {string} params.storeCode - selected store code
-   * @param {string} params.path - REST API path where default path is 'customers/me/address'
-   * @param {string} params.method - request method, where default method is 'get'
-   * @return {Promise<Address|Address[]|boolean>} - address data, list of addresses or true after successful delete
-   */
-  async forwardAddressAction(params = {}) {
-    const { id, path = '/customers/me/address', method = 'get', data = null } = params;
+  async removeCustomerAddress(obj, { id }) {
     const { customerToken = {} } = this.session;
-
-    let addressPath = path;
-    let addressData = data;
-
     if (!customerToken.token) {
-      Logger.error(`${this.name}: Trying to edit customer data without customer token`);
-      throw new Error('You do not have an access to edit address data');
+      Logger.error(`${this.name}: Trying to remove address data without customer token`);
+      throw new Error('You do not have an access to remove address data');
     }
 
-    if (id) {
-      addressPath = `${path}/${id}`;
-    }
-
-    if (method !== 'get' && method !== 'delete') {
-      addressData = {
-        address: {
-          ...data,
-          street: Array.isArray(data.street) ? data.street : [data.street]
-        }
-      };
-    }
-
-    const response = await this[method](addressPath, method === 'get' || method === 'delete' ? null : addressData);
-
-    if (method !== 'delete') {
-      return this.convertAddressData(response.data);
-    }
+    const response = await this.delete(`/customers/me/address/${id}`);
 
     return response.data;
   }
