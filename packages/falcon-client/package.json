@@ -94,7 +94,7 @@
     "workbox-build": "^3.5.0"
   },
   "devDependencies": {
-    "graphql": "^14.0.2",
+    "graphql": "14.0.2",
     "graphql-tag": "^2.9.2",
     "i18next": "^12.1.0",
     "prop-types": "^15.6.2",
