@@ -23,8 +23,13 @@ export const LocaleContext = React.createContext<LocaleContextType>({
   currency: 'EUR'
 });
 
-export const LocaleProvider: React.SFC<any> = ({ children }) => (
+export type LocaleProviderProps = {
+  currency?: string;
+};
+export const LocaleProvider: React.SFC<LocaleProviderProps> = ({ children, ...props }) => (
   <Query query={GET_LOCALE_SETTINGS}>
-    {({ data }) => <LocaleContext.Provider value={data.localeSettings}>{children}</LocaleContext.Provider>}
+    {({ data }) => (
+      <LocaleContext.Provider value={{ ...data.localeSettings, ...props }}>{children}</LocaleContext.Provider>
+    )}
   </Query>
 );

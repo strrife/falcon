@@ -21,7 +21,7 @@ const HOMEPAGE_PRODUCTS_QUERY = gql`
 `;
 
 const Home = () => (
-  <GridLayout gridGap="md" py="md">
+  <GridLayout gridGap="md" py="ld">
     <H1 css={{ textAlign: 'center' }}>
       <T id="home.hotSellers" />
     </H1>

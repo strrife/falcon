@@ -56,20 +56,14 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken })
 
       return (
         <Formik
-          initialValues={
-            {
-              resetToken,
-              password: ''
-            } as ResetCustomerPasswordVariables
-          }
+          initialValues={{ resetToken, password: '' } as ResetCustomerPasswordVariables}
           onSubmit={values => resetCustomerPassword({ variables: { input: values } })}
         >
           {() => (
             <MiniFormLayout>
               <Form id="reset-password" i18nId="resetPassword">
-                <FormField name="resetToken" type="hidden" />
                 <FormField name="password" required type="password" autoComplete="new-password">
-                  {inputProps => <PasswordRevealInput {...inputProps} />}
+                  {({ field }) => <PasswordRevealInput {...field} />}
                 </FormField>
                 <FormSubmit justifySelf="center" submitting={loading} value="Reset my password" />
                 <FormErrorSummary errors={error && [error.message]} />
