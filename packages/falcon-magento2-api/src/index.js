@@ -640,7 +640,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Product>} product data
    */
   async product(obj, { id }) {
-    const productData = await this.get(`/products/${id}`);
+    const productData = await this.get(`/products/${id}`, {}, { context: { useAdminToken: true } });
     const product = this.reduceProduct(productData);
     return product;
   }
@@ -1634,7 +1634,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<[Breadcrumb]>} breadcrumbs fetched from backend
    */
   async breadcrumbs(obj, { path }) {
-    const resp = await this.get(`/breadcrumbs`, { url: path.replace(/^\//, '') });
+    const resp = await this.get(`/breadcrumbs`, { url: path.replace(/^\//, '') }, { context: { useAdminToken: true } });
     return this.convertBreadcrumbs(this.convertKeys(resp.data));
   }
 
