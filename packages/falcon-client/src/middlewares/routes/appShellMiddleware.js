@@ -9,21 +9,24 @@ import HtmlHead from '../../components/HtmlHead';
  * App shell rendering middleware.
  * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
-export default () => async (ctx, next) => {
+export default ({ loadableStats }) => async (ctx, next) => {
   const { client } = ctx.state;
   const { config } = client.readQuery({ query: APP_INIT });
-  const extractor = new ChunkExtractor({ statsFile: process.env.LOADABLE_STATS, entrypoints: ['client'] });
+  const chunkExtractor = new ChunkExtractor({
+    stats: loadableStats,
+    entrypoints: ['client']
+  });
 
   const markup = (
-    <ChunkExtractorManager extractor={extractor}>
+    <ChunkExtractorManager extractor={chunkExtractor}>
       <HtmlHead htmlLang={config.i18n.lng} />
     </ChunkExtractorManager>
   );
 
   renderToString(markup);
 
-  ctx.state.scriptElements = extractor.getScriptElements();
-  ctx.state.styleElements = extractor.getStyleElements();
+  ctx.state.scriptElements = chunkExtractor.getScriptElements();
+  ctx.state.styleElements = chunkExtractor.getStyleElements();
 
   ctx.state.helmetContext = Helmet.renderStatic();
 
