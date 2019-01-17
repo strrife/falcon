@@ -28,24 +28,21 @@ export class SidebarContainer extends React.Component {
   }
 
   componentDidMount() {
-    const setReady = () => {
+    // set isReady flag after READY_TIMEOUT_MS timeout
+    const setTimeoutHandlerId = window.setTimeout(() => {
       if (this.state.isReady) {
         return;
       }
 
       if ('requestIdleCallback' in window) {
         const requestIdleHandlerId = window.requestIdleCallback(this.setIsReady);
-        this.setState(x => ({ ...x, requestIdleHandlerId }));
 
-        return;
+        return this.setState(x => ({ ...x, requestIdleHandlerId }));
       }
 
-      this.setIsReady();
-    };
+      return this.setIsReady();
+    }, READY_TIMEOUT_MS);
 
-    // set isReady flag even if sidebar has not been opened after READY_TIMEOUT_MS
-    // so sidebar contents are downloaded and ready to be displayed
-    const setTimeoutHandlerId = window.setTimeout(setReady, READY_TIMEOUT_MS);
     // eslint-disable-next-line
     this.setState(x => ({ ...x, setTimeoutHandlerId }));
   }
