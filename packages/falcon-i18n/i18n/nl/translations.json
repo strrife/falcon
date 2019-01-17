@@ -57,6 +57,21 @@
     "checkout": "Veilig uitchecken",
     "empty": "Winkelwagen is leeg"
   },
+  "cart": {
+    "title": "Your cart",
+    "emptyCart": "There's nothing in your cart yet",
+    "goShoppingButton": "Let's go shopping!",
+    "couponCode": "Vouchercode",
+    "applyCouponCode": "Activate",
+    "cancelCouponCode": "Cancel code",
+    "invalidCouponCode": "Invalid coupon code",
+    "checkout": "Checkout",
+    "continueShopping": "Shopping"
+  },
+  "checkout": {
+    "noShippingOptions": "There are no available shipping methods for your shipping address. Please contact shop administrator.",
+    "noPaymentOptions": "There are no available shipping methods for this order. Please contact shop administrator."
+  },
   "signIn": {
     "link": "Aanmelden",
     "emailFieldPlaceholder": "Email",

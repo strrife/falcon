@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Label, FlexLayout, Details, DetailsContent, Text, Radio, Box, Button } from '@deity/falcon-ui';
 import { Price } from '@deity/falcon-ecommerce-uikit';
+import { T } from '@deity/falcon-i18n';
 import SectionHeader from './CheckoutSectionHeader';
 import ErrorList from '../components/ErrorList';
 
@@ -63,14 +64,22 @@ class ShippingSection extends React.Component {
       <Details open={open}>
         {header}
         <DetailsContent>
-          <ShippingSelector
-            availableShippingOptions={availableShippingMethods}
-            onShippingSelected={this.onShippingSelected}
-          />
+          {availableShippingMethods.length === 0 ? (
+            <Text color="error" mb="sm">
+              <T id="checkout.noShippingMethodsAvailable" />
+            </Text>
+          ) : (
+            <ShippingSelector
+              availableShippingOptions={availableShippingMethods}
+              onShippingSelected={this.onShippingSelected}
+            />
+          )}
           <ErrorList errors={errors} />
-          <Button disabled={!this.state.selectedShipping} onClick={this.submitShipping}>
-            Continue
-          </Button>
+          {availableShippingMethods.length > 0 && (
+            <Button disabled={!this.state.selectedShipping} onClick={this.submitShipping}>
+              Continue
+            </Button>
+          )}
         </DetailsContent>
       </Details>
     );

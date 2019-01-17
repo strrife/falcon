@@ -69,6 +69,10 @@
     "checkout": "Checkout",
     "continueShopping": "Shopping"
   },
+  "checkout": {
+    "noShippingMethodsAvailable": "There are no available shipping methods for your shipping address. Please contact shop administrator.",
+    "noPaymentMethodsAvailable": "There are no available shipping methods for this order. Please contact shop administrator."
+  },
   "form": {
     "passwordRevealTitle_show": "Show password",
     "passwordRevealTitle_hide": "Hide password"
