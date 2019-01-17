@@ -58,19 +58,15 @@ export class SidebarContainer extends React.Component {
     }
   }
 
-  setIsReady = () => {
-    this.setState(x => ({ ...x, isReady: true }));
-  };
+  /** Sets isReady
+   * @returns {void}
+   */
+  setIsReady = () => this.setState(x => ({ ...x, isReady: true }));
 
-  forceIsReady = () => {
-    const { isReady } = this.state;
-
-    // sets isReady flag when sidebar get's opened for the first time
-    // that causes SidebarContents to dynamically import it's JS
-    if (!isReady) {
-      this.setIsReady();
-    }
-  };
+  /** Sets isReady even before timeout
+   * @returns {void}
+   */
+  forceIsReady = () => !this.state.isReady && this.setIsReady();
 
   render() {
     return (
