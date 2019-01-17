@@ -3,6 +3,7 @@
   "license": "OSL-3.0",
   "main": "src/index.js",
   "version": "0.1.0",
+  "homepage": "https://falcon.deity.io/docs/falcon-server/extensions#blog-extension",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-wordpress-api",
   "publishConfig": {
     "access": "public"
@@ -14,7 +15,7 @@
   "dependencies": {
     "@deity/falcon-logger": "^0.1.0",
     "@deity/falcon-server-env": "^0.1.0",
-    "graphql": "^14.0.2",
+    "graphql": "14.1.0",
     "lodash": "4.17.11",
     "qs": "^6.5.2"
   },

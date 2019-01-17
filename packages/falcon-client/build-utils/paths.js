@@ -38,6 +38,7 @@ const nodePath = (process.env.NODE_PATH || '')
 
 module.exports = {
   resolveApp,
+  resolveOwn,
   resolvePackageDir,
   nodePath,
 

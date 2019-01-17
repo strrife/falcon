@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field, ErrorMessage } from 'formik';
-import { FormField, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
-import { Box, Label, Text, Button, Dropdown, DropdownLabel, DropdownMenu, DropdownMenuItem } from '@deity/falcon-ui';
+import { FormField, CountrySelector, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
+import { Box, Label, Text, Button } from '@deity/falcon-ui';
 
 const AddressFormArea = {
   firstName: 'firstName',
@@ -61,28 +61,12 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '' }) => (
       render={({ field, form }) => (
         <Box gridArea={AddressForm.country}>
           <Label htmlFor={`${id}-${field.name}`}>Country *</Label>
-          <Dropdown
+          <CountrySelector
             id={`${id}-${field.name}`}
-            onChange={value => {
-              form.setFieldValue(field.name, value);
-            }}
-          >
-            <DropdownLabel>
-              {(countries.find(item => item.code === field.value) || { localName: '' }).localName}
-            </DropdownLabel>
-            <DropdownMenu
-              css={{
-                maxHeight: 300,
-                overflowY: 'scroll'
-              }}
-            >
-              {countries.map(item => (
-                <DropdownMenuItem key={item.localName} value={item.code}>
-                  {item.localName}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenu>
-          </Dropdown>
+            items={countries}
+            value={field.value}
+            onChange={value => form.setFieldValue(field.name, value)}
+          />
           <ErrorMessage
             name={field.name}
             render={msg => (

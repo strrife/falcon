@@ -2,6 +2,7 @@
   "name": "@deity/falcon-server-env",
   "license": "OSL-3.0",
   "version": "0.1.0",
+  "homepage": "https://falcon.deity.io/docs/falcon-server/falcon-server-env",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-server-env",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -54,7 +55,7 @@
     "apollo-datasource-rest": "0.2.1",
     "apollo-server-caching": "0.2.1",
     "apollo-server-env": "2.2.0",
-    "graphql": "14.0.2",
+    "graphql": "14.1.0",
     "graphql-tools": "4.0.3",
     "html-entities": "1.2.1",
     "lru-cache": "4.1.5",
@@ -62,7 +63,7 @@
     "striptags": "3.1.1"
   },
   "devDependencies": {
-    "@types/graphql": "14.0.3",
+    "@types/graphql": "14.0.5",
     "@types/html-entities": "1.2.16",
     "@types/jest": "23.3.10",
     "@types/koa": "2.0.47",

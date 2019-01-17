@@ -31,7 +31,7 @@ export const SignUpForm: React.SFC<SignUpFormProps> = ({ onCompleted }) => (
             <FormField name="email" type="email" required autoComplete="email" />
 
             <FormField name="password" required type="password" autoComplete="new-password">
-              {inputProps => <PasswordRevealInput {...inputProps} />}
+              {({ field }) => <PasswordRevealInput {...field} />}
             </FormField>
 
             <FormSubmit submitting={loading} value="Create an account" />

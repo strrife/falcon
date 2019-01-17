@@ -1,163 +1,168 @@
 import React from 'react';
-import { Field, getIn, FieldProps } from 'formik';
-import { I18n } from '@deity/falcon-i18n';
-import { Box, Label, Input, DefaultThemeProps, ThemedComponentProps, extractThemableProps } from '@deity/falcon-ui';
-import { FormContext } from './Form';
+import { FieldProps as FormikFieldProps } from 'formik';
+import {
+  Box,
+  Label,
+  Input,
+  Checkbox,
+  FlexLayout,
+  extractThemableProps,
+  ThemedComponentProps,
+  themed
+} from '@deity/falcon-ui';
+import { Field } from './Field';
 import { toGridTemplate } from '../helpers';
-import { Validator, passwordValidator, emailValidator, requiredValidator } from './validators';
+import { Validator, requiredValidator, getDefaultInputTypeValidator } from './validators';
 
-export const FormFieldAreas = {
+export const FormFieldArea = {
   label: 'label',
   input: 'input',
   error: 'error'
 };
 
-const formFieldLayout: DefaultThemeProps = {
-  formFieldLayout: {
-    display: 'grid',
-    gridGap: 'none',
-    // prettier-ignore
-    gridTemplate: toGridTemplate([
-      ['1fr'                      ],
-      [FormFieldAreas.label       ],
-      [FormFieldAreas.input       ],
-      [FormFieldAreas.error, '0px']
-    ])
-  }
-};
-
-const formFieldErrorLayout: DefaultThemeProps = {
-  formFieldErrorLayout: {
-    gridArea: FormFieldAreas.error,
-    color: 'error',
-    fontSize: 'xxs',
-    css: {
-      pointerEvents: 'none',
-      justifySelf: 'end'
+export const FormFieldLayout = themed({
+  tag: Box,
+  defaultTheme: {
+    formFieldLayout: {
+      display: 'grid',
+      gridGap: 'xs',
+      // prettier-ignore
+      gridTemplate: toGridTemplate([
+        ['1fr'                     ],
+        [FormFieldArea.label       ],
+        [FormFieldArea.input       ],
+        [FormFieldArea.error, '0px']
+      ])
     }
   }
-};
+});
 
-const validateSequentially = (validators: Validator[] = [], label: string) => (value: string) => {
-  const firstInvalid = validators.find(validator => validator(value, label) !== undefined);
-  return firstInvalid ? firstInvalid(value, label) : undefined;
-};
-
-const getDefaultInputTypeValidator = (inputType: string | undefined) => {
-  switch (inputType) {
-    case 'password':
-      return passwordValidator;
-    case 'email':
-      return emailValidator;
-    default:
-      return undefined;
+export const FormFieldLabel = themed({
+  tag: Label,
+  defaultProps: {
+    gridArea: FormFieldArea.label
   }
+});
+
+export const FormFieldError = themed({
+  tag: Box,
+  defaultProps: {
+    gridArea: FormFieldArea.error
+  },
+  defaultTheme: {
+    formFieldError: {
+      gridArea: FormFieldArea.error,
+      color: 'error',
+      fontSize: 'xxs',
+      css: {
+        pointerEvents: 'none',
+        justifySelf: 'end'
+      }
+    }
+  }
+});
+
+export type FormFieldRenderProps<TValue = any> = {
+  form: FormikFieldProps<TValue>['form'] & {
+    id?: number | string;
+  };
+  field: FormikFieldProps<TValue>['field'] &
+    React.InputHTMLAttributes<HTMLInputElement> &
+    ThemedComponentProps & {
+      id?: string;
+      placeholder?: string;
+      invalid: boolean;
+    };
 };
 
-const fieldLabelSuffix = 'FieldLabel';
-const fieldPlaceholderSuffix = 'FieldPlaceholder';
-
-export type FormFieldProps = {
+export type FormFieldProps<TValue = any> = {
+  id?: number | string;
   name: string;
   label?: string;
+  placeholder?: string;
   validate?: Validator[];
-  children?: (props: React.InputHTMLAttributes<HTMLInputElement> & ThemedComponentProps) => React.ReactNode;
-} & ThemedComponentProps &
-  React.InputHTMLAttributes<HTMLInputElement>;
+  children?: (props: FormFieldRenderProps<TValue>) => React.ReactNode;
+} & React.InputHTMLAttributes<HTMLInputElement> &
+  ThemedComponentProps;
 
-// TODO: when new i18n support is ready use it to translate label and placeholder props
 export const FormField: React.SFC<FormFieldProps> = props => {
-  const {
-    id: fieldId,
-    label: fieldLabel,
-    placeholder: fieldPlaceholder,
-    required,
-    name: fieldName,
-    validate,
-    children,
-    ...remainingProps
-  } = props;
-  const inputType = remainingProps.type;
-  const isHidden = inputType === 'hidden';
+  const { name, validate, required, children, ...restProps } = props;
+  const { themableProps, rest } = extractThemableProps(restProps);
 
   // eslint-disable-next-line
-  let _validate = validate;
-  const hasCustomValidators = _validate !== undefined;
+  let validators = validate || [];
   if (required) {
-    if (!_validate) {
-      _validate = [];
-    }
-    _validate.unshift(requiredValidator);
+    validators.unshift(requiredValidator);
   }
-
-  const defaultInputTypeValidator = !hasCustomValidators && getDefaultInputTypeValidator(inputType);
-
-  if (defaultInputTypeValidator && _validate) {
-    _validate.push(defaultInputTypeValidator);
+  const defaultInputTypeValidator = !validate && getDefaultInputTypeValidator(restProps.type);
+  if (defaultInputTypeValidator) {
+    validators.push(defaultInputTypeValidator);
   }
 
   return (
-    <FormContext.Consumer>
-      {({ id: formId, i18nId }) => (
-        <I18n>
-          {t => {
-            const label =
-              fieldLabel ||
-              (i18nId && t(`${i18nId}.${fieldName}${fieldLabelSuffix}`, { defaultValue: '' })) ||
-              undefined;
-
-            const placeholder =
-              fieldPlaceholder ||
-              (i18nId && t(`${i18nId}.${fieldName}${fieldPlaceholderSuffix}`, { defaultValue: '' })) ||
-              undefined;
-
-            return (
-              <Field
-                name={fieldName}
-                validate={validateSequentially(_validate, label)}
-                render={(fieldProps: FieldProps) => {
-                  const { themableProps, rest } = extractThemableProps(remainingProps);
-
-                  const { field, form } = fieldProps;
-                  const touch = getIn(form.touched, fieldName);
-                  const error = getIn(form.errors, fieldName);
-                  const invalid = !!touch && !!error;
-
-                  // TODO: is there a better way of handling input ids (more automated)?
-                  // is fallback to name correct?
-                  const id = fieldId || `${formId}-${fieldName}`;
-                  const inputProps = {
-                    ...field,
-                    ...rest,
-                    gridArea: FormFieldAreas.input,
-                    height: 'xl',
-                    id,
-                    placeholder,
-                    invalid
-                  };
-
-                  return (
-                    <Box defaultTheme={formFieldLayout} {...themableProps} display={isHidden ? 'none' : undefined}>
-                      {label && (
-                        <Label
-                          htmlFor={id}
-                          gridArea={FormFieldAreas.label}
-                          defaultTheme={{ formFieldLabel: { fontSize: 'xs', fontWeight: 'bold' } }}
-                        >
-                          {label}
-                        </Label>
-                      )}
-
-                      {children ? children(inputProps) : <Input {...inputProps} />}
-                      <Box defaultTheme={formFieldErrorLayout}>{invalid ? error : null}</Box>
-                    </Box>
-                  );
-                }}
-              />
-            );
-          }}
-        </I18n>
+    <Field name={name} validate={validators} {...rest}>
+      {({ form, field, label, error }) => (
+        <FormFieldLayout {...themableProps}>
+          {label && <FormFieldLabel htmlFor={field.id}>{label}</FormFieldLabel>}
+          {children ? (
+            children({ form, field: { ...field, gridArea: FormFieldArea.input } })
+          ) : (
+            <Input {...field} gridArea={FormFieldArea.input} />
+          )}
+          <FormFieldError>{field.invalid ? error : null}</FormFieldError>
+        </FormFieldLayout>
       )}
-    </FormContext.Consumer>
+    </Field>
+  );
+};
+
+export const CheckboxFormFieldLayout = themed({
+  tag: Box,
+  defaultTheme: {
+    checkboxFormFieldLayout: {
+      display: 'grid',
+      gridGap: 'xs',
+      // prettier-ignore
+      gridTemplate: toGridTemplate([
+        ['auto',             '1fr'                      ],
+        [FormFieldArea.input, FormFieldArea.label       ],
+        [FormFieldArea.error, FormFieldArea.error, '0px']
+      ])
+    }
+  }
+});
+
+export const CheckboxFormField: React.SFC<FormFieldProps> = props => {
+  const { name, validate, required, children, ...restProps } = props;
+  const { themableProps, rest } = extractThemableProps(restProps);
+
+  // eslint-disable-next-line
+  let validators = validate || [];
+  if (required) {
+    validators.unshift(requiredValidator);
+  }
+  const defaultInputTypeValidator = !validate && getDefaultInputTypeValidator(restProps.type);
+  if (defaultInputTypeValidator) {
+    validators.push(defaultInputTypeValidator);
+  }
+
+  return (
+    <Field name={name} validate={validators} {...rest}>
+      {({ form, field, label, error }) => (
+        <CheckboxFormFieldLayout {...themableProps}>
+          <Checkbox
+            {...field}
+            gridArea={FormFieldArea.input}
+            checked={field.value}
+            onChange={e => form.setFieldValue(field.name, e.target.checked)}
+          />
+          <FlexLayout alignItems="center" gridArea={FormFieldArea.label}>
+            <Label htmlFor={field.id}>{label}</Label>
+          </FlexLayout>
+
+          <FormFieldError>{field.invalid ? error : null}</FormFieldError>
+        </CheckboxFormFieldLayout>
+      )}
+    </Field>
   );
 };

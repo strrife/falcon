@@ -75,14 +75,13 @@
   },
   "signIn": {
     "title": "Sign In",
+    "link": "Sign in",
     "emailFieldLabel": "Email",
+    "emailFieldPlaceholder": "Email",
     "passwordFieldLabel": "Password",
+    "passwordFieldPlaceholder": "Password",
     "button": "Sign in",
-    "forgotPasswordQuestion": "Forgot password?",
-    "form": {
-      "emailPlaceholder": "Email",
-      "passwordPlaceholder": "Password"
-    }
+    "forgotPasswordQuestion": "Forgot password?"
   },
   "forgotPassword": {
     "title": "Forgot Password",
@@ -97,7 +96,7 @@
     "successMessage": "Your password has been reset successfully!"
   },
   "signOut": {
-    "button": "Logout"
+    "link": "Logout"
   },
   "signUp": {
     "title": "Register",
@@ -112,5 +111,119 @@
     "benefitsHeader": "Creating an account has many benefits:",
     "benefitsList": ["check out faster", "keep more than one address", "track orders and more"],
     "createAnAccount": "Create an account"
+  },
+  "account": {
+    "link": "Account",
+    "dashboardLink": "Dashboard",
+    "personalInformationLink": "Personal Information",
+    "addressBookLink": "Address Book",
+    "ordersLink": "Orders",
+    "productReviewsLink": "Product Reviews",
+    "wishListLink": "Wish List"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "recentOrder": "Recent order",
+    "personalInformation": "Personal information",
+    "viewAllOrders": "View all",
+    "addressBook": "Address book",
+    "manageAddresses": "Manage addresses",
+    "editCustomerLink": "Edit",
+    "changePasswordLink": "Change password"
+  },
+  "ordersList": {
+    "title": "Orders",
+    "link": "Orders",
+    "idLabel": "Order #",
+    "createdAtLabel": "Date",
+    "shipToLabel": "Ship to",
+    "grandTotalLabel": "Order total",
+    "statusLabel": "$t(order.statusLabel)",
+    "actionsLabel": "Actions",
+    "viewOrderLink": "View",
+    "showMore": "Show more orders",
+    "empty": "You have not made any purchases yet."
+  },
+  "order": {
+    "title": "#{{orderId}}",
+    "statusLabel": "Status",
+    "status_na": "N/A",
+    "status_pending": "Pending",
+    "quantityLabel": "Quantity:",
+    "billingAddressLabel": "Invoice address",
+    "shippingAddressLabel": "Delivery address",
+    "createdAtLabel": "Ordered at",
+    "shippingMethodLabel": "Delivery method",
+    "paymentMethodLabel": "Payment method",
+    "subtotalLabel": "Subtotal",
+    "shippingAmountLabel": "Shipping & Handling",
+    "grandTotalLabel": "Total"
+  },
+  "addressBook": {
+    "title": "Address Book",
+    "sectionTitle_billing": "Default Invoice Address",
+    "sectionTitle_shipping": "Default Delivery Address",
+    "sectionTitle_billing&shipping": "Default Address",
+    "sectionTitle_other": "Other Addresses",
+    "addNewButton": "Add new Address",
+    "editButton": "Edit",
+    "removeButton": "Delete",
+    "removeConfirmationMessage": "Are you sure?"
+  },
+  "editAddress": {
+    "title": "Address Edit",
+    "defaultAddressLabel_billing": "It's a default Invoice address.",
+    "defaultAddressLabel_shipping": "It's a default Delivery Address.",
+    "defaultAddressLabel_billing&shipping": "It's a default Invoice and Delivery Address.",
+    "defaultShippingFieldLabel": "Use as my default Delivery Address",
+    "defaultBillingFieldLabel": "Use as my default Invoice Address",
+    "companyFieldLabel": "Company",
+    "firstnameFieldLabel": "First Name",
+    "lastnameFieldLabel": "Last Name",
+    "telephoneFieldLabel": "Phone Number",
+    "street1FieldLabel": "Street Line 1",
+    "street2FieldLabel": "Street Line 2",
+    "postcodeFieldLabel": "ZIP Code",
+    "cityFieldLabel": "City",
+    "countryIdFieldLabel": "Country",
+    "submitButton": "Update Address",
+    "cancelButton": "Cancel"
+  },
+  "addAddress": {
+    "title": "Add Address",
+    "defaultShippingFieldLabel": "$t(editAddress.defaultShippingFieldLabel)",
+    "defaultBillingFieldLabel": "$t(editAddress.defaultBillingFieldLabel)",
+    "companyFieldLabel": "$t(editAddress.companyFieldLabel)",
+    "firstnameFieldLabel": "$t(editAddress.firstnameFieldLabel)",
+    "lastnameFieldLabel": "$t(editAddress.lastnameFieldLabel)",
+    "telephoneFieldLabel": "$t(editAddress.telephoneFieldLabel)",
+    "street1FieldLabel": "$t(editAddress.street1FieldLabel)",
+    "street2FieldLabel": "$t(editAddress.street2FieldLabel)",
+    "postcodeFieldLabel": "$t(editAddress.postcodeFieldLabel)",
+    "cityFieldLabel": "$t(editAddress.cityFieldLabel)",
+    "countryIdFieldLabel": "$t(editAddress.countryIdFieldLabel)",
+    "submitButton": "Save Address",
+    "cancelButton": "$t(editAddress.cancelButton)"
+  },
+  "editCustomer": {
+    "title": "Personal Information",
+    "firstnameFieldLabel": "$t(signUp.firstnameFieldLabel)",
+    "lastnameFieldLabel": "$t(signUp.lastnameFieldLabel)",
+    "emailFieldLabel": "$t(signUp.emailFieldLabel)",
+    "submitButton": "Update",
+    "changePassword": "Change password"
+  },
+  "changePassword": {
+    "title": "Change Password",
+    "currentPasswordFieldLabel": "Password",
+    "passwordFieldLabel": "New Password",
+    "passwordFieldPlaceholder": "At least 8 characters",
+    "submitButton": "Update",
+    "cancelButton": "Cancel"
+  },
+  "notFound": {
+    "title": "Not found",
+    "text": "The content you were trying to reach couldn't be found.",
+    "goHomeButton": "Go back to Home page"
   }
 }

@@ -3,9 +3,12 @@ import { themed } from '../theme';
 import { Icon } from './Icon';
 
 const CheckboxInnerDOM = (
-  props: React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & { icon: JSX.Element }
+  props: React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
+    invalid: boolean;
+    icon: JSX.Element;
+  }
 ) => {
-  const { className, icon, ...rest } = props;
+  const { className, icon, invalid, ...rest } = props;
 
   return (
     <div className={className}>
@@ -21,6 +24,7 @@ export const Checkbox = themed({
   tag: CheckboxInnerDOM,
 
   defaultProps: {
+    invalid: false,
     icon: (
       <Icon
         src="checkboxCheckmarkIcon"
@@ -46,7 +50,7 @@ export const Checkbox = themed({
     checkbox: {
       size: 'md',
 
-      css: ({ theme }) => ({
+      css: ({ invalid, theme }) => ({
         display: 'inline-flex',
         position: 'relative',
         // checkbox input is not visible but interactive
@@ -68,7 +72,7 @@ export const Checkbox = themed({
           },
 
           ':hover + .-inner-checkbox-frame': {
-            borderColor: theme.colors.primaryLight
+            borderColor: invalid ? theme.colors.error : theme.colors.primaryLight
           },
 
           ':checked:hover + .-inner-checkbox-frame': {
@@ -96,7 +100,7 @@ export const Checkbox = themed({
           cursor: 'pointer',
           borderRadius: theme.borderRadius.small,
           border: theme.borders.bold,
-          borderColor: theme.colors.secondaryDark,
+          borderColor: invalid ? theme.colors.error : theme.colors.secondaryDark,
           transitionProperty: 'border, background',
           transitionTimingFunction: theme.easingFunctions.easeIn,
           transitionDuration: theme.transitionDurations.short
