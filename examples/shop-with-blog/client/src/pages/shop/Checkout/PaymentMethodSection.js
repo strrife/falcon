@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, FlexLayout, Label, Details, DetailsContent, Text, Radio, Button } from '@deity/falcon-ui';
+import { T } from '@deity/falcon-i18n';
 import SectionHeader from './CheckoutSectionHeader';
 import ErrorList from '../components/ErrorList';
 
@@ -46,29 +47,37 @@ class PaymentSection extends React.Component {
     if (!open && selectedPayment) {
       header = (
         <SectionHeader
-          title="Payment"
+          title={<T id="checkout.payment" />}
           onActionClick={onEditRequested}
-          editLabel="Edit"
+          editLabel={<T id="edit" />}
           complete
           summary={<Text>{selectedPayment.title}</Text>}
         />
       );
     } else {
-      header = <SectionHeader title="Payment" />;
+      header = <SectionHeader title={<T id="checkout.payment" />} />;
     }
 
     return (
       <Details open={open}>
         {header}
         <DetailsContent>
-          <PaymentSelector
-            availablePaymentMethods={availablePaymentMethods}
-            onPaymentSelected={this.onPaymentSelected}
-          />
+          {availablePaymentMethods.length === 0 ? (
+            <Text color="error" mb="sm">
+              <T id="checkout.noPaymentMethodsAvailable" />
+            </Text>
+          ) : (
+            <PaymentSelector
+              availablePaymentMethods={availablePaymentMethods}
+              onPaymentSelected={this.onPaymentSelected}
+            />
+          )}
           <ErrorList errors={errors} />
-          <Button disabled={!this.state.selectedPayment} onClick={this.submitPayment}>
-            Continue
-          </Button>
+          {availablePaymentMethods.length > 0 && (
+            <Button disabled={!this.state.selectedPayment} onClick={this.submitPayment}>
+              <T id="continue" />
+            </Button>
+          )}
         </DetailsContent>
       </Details>
     );
