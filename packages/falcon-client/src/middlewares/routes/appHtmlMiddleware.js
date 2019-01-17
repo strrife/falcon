@@ -9,23 +9,13 @@ import Html from '../../components/Html';
  * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
 export default ({ webpackAssets }) => async ctx => {
-  const {
-    AppMarkup,
-    client,
-    prefetchLinkElements,
-    scriptElements,
-    styleElements,
-    helmetContext,
-    serverTiming
-  } = ctx.state;
+  const { AppMarkup, client, chunkExtractor, helmetContext, serverTiming } = ctx.state;
   const renderTimer = serverTiming.start('HTML renderToString()');
 
   const htmlDocument = renderToString(
     <Html
       assets={webpackAssets}
-      scriptElements={scriptElements}
-      styleElements={styleElements}
-      prefetchLinkElements={prefetchLinkElements}
+      chunkExtractor={chunkExtractor}
       helmetContext={helmetContext}
       state={client.extract()}
       i18nextState={extractI18nextState(ctx)}

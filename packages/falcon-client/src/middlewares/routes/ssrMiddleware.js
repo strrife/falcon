@@ -38,12 +38,7 @@ export default ({ App, loadableStats }) => async (ctx, next) => {
   await serverTiming.profile(async () => getDataFromTree(markup), 'getDataFromTree()');
 
   ctx.state.AppMarkup = markup;
-  // loadable components provides prefetch links, style and script tags and waits on the client for all script tags before rendering
-  // https://www.smooth-code.com/open-source/loadable-components/docs/server-side-rendering/
-  ctx.state.prefetchLinkElements = chunkExtractor.getLinkElements();
-  ctx.state.scriptElements = chunkExtractor.getScriptElements();
-  ctx.state.styleElements = chunkExtractor.getStyleElements();
-
+  ctx.state.chunkExtractor = chunkExtractor;
   ctx.state.helmetContext = Helmet.renderStatic();
 
   return routerContext.url ? ctx.redirect(routerContext.url) : next();

@@ -25,9 +25,7 @@ export default ({ loadableStats }) => async (ctx, next) => {
 
   renderToString(markup);
 
-  ctx.state.scriptElements = chunkExtractor.getScriptElements();
-  ctx.state.styleElements = chunkExtractor.getStyleElements();
-
+  ctx.state.chunkExtractor = chunkExtractor;
   ctx.state.helmetContext = Helmet.renderStatic();
 
   return next();
