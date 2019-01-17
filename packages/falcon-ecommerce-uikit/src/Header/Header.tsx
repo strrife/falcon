@@ -109,7 +109,7 @@ const rightMenuLayoutTheme: DefaultThemeProps = {
 
 export const Searchbar: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
   <Box defaultTheme={searchBarLayoutTheme}>
-    <List css={{ color: 'black' }} gridArea={SearchBarArea.leftMenu} display="flex">
+    <List css={{ color: 'black', display: { xs: 'none', md: 'flex' } }} gridArea={SearchBarArea.leftMenu}>
       {items.map(item => (
         <ListItem py="xs" mr="sm" key={item.name}>
           <Link as={RouterLink} to={item.url}>
@@ -118,6 +118,23 @@ export const Searchbar: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
         </ListItem>
       ))}
     </List>
+    <OpenSidebarMutation>
+      {openSidebar => (
+        <Icon
+          gridArea={SearchBarArea.leftMenu}
+          css={{ display: { md: 'none' } }}
+          onClick={() =>
+            openSidebar({
+              variables: {
+                contentType: 'account',
+                side: 'left'
+              }
+            })
+          }
+          src="menu"
+        />
+      )}
+    </OpenSidebarMutation>
     <Link aria-label="DEITY" height="xl" as={RouterLink} gridArea={SearchBarArea.logo} to="/">
       <Icon src="logo" />
     </Link>

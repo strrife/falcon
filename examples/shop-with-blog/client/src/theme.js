@@ -6,6 +6,7 @@ import ChevronRight from 'react-feather/dist/icons/chevron-right';
 import User from 'react-feather/dist/icons/user';
 import Close from 'react-feather/dist/icons/x';
 import LogOut from 'react-feather/dist/icons/log-out';
+import Menu from 'react-feather/dist/icons/menu';
 import Remove from 'react-feather/dist/icons/x-circle';
 import ChevronsRight from 'react-feather/dist/icons/chevrons-right';
 import ChevronsLeft from 'react-feather/dist/icons/chevrons-left';
@@ -170,6 +171,10 @@ export const deityGreenTheme = createTheme({
     nextPage: {
       icon: ChevronsRight,
       stroke: 'black'
+    },
+    menu: {
+      icon: Menu,
+      strokeWidth: 'sm'
     },
     prevPage: {
       icon: ChevronsLeft,
@@ -379,6 +384,13 @@ export const deityGreenTheme = createTheme({
           xs: '80vw',
           sm: 480
         }
+      }
+    },
+
+    subheroGrid: {
+      gridTemplate: {
+        xs: 'none',
+        sm: '"0 1" / 1fr 1fr'
       }
     },
 
