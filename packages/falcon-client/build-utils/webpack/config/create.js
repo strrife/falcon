@@ -363,7 +363,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         prettyPrint: true
       }),
       new LoadablePlugin({
-        outputAsset: true,
+        outputAsset: false,
         writeToDisk: { filename: paths.appBuild }
       })
     ];
