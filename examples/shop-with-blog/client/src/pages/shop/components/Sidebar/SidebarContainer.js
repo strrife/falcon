@@ -35,12 +35,12 @@ export class SidebarContainer extends React.Component {
       }
 
       if ('requestIdleCallback' in window) {
-        const requestIdleHandlerId = window.requestIdleCallback(this.setIsReady);
+        const requestIdleHandlerId = window.requestIdleCallback(this.forceIsReady);
 
         return this.setState(x => ({ ...x, requestIdleHandlerId }));
       }
 
-      return this.setIsReady();
+      return this.forceIsReady();
     }, READY_TIMEOUT_MS);
 
     // eslint-disable-next-line
@@ -55,15 +55,15 @@ export class SidebarContainer extends React.Component {
     }
   }
 
-  /** Sets isReady
-   * @returns {void}
-   */
-  setIsReady = () => this.setState(x => ({ ...x, isReady: true }));
-
-  /** Sets isReady even before timeout
-   * @returns {void}
-   */
-  forceIsReady = () => !this.state.isReady && this.setIsReady();
+  /** Sets isReady even before timeout */
+  forceIsReady = () => {
+    if (this.state.isReady === false) {
+      this.setState(x => ({
+        ...x,
+        isReady: true
+      }));
+    }
+  };
 
   render() {
     return (
