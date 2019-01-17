@@ -49,15 +49,15 @@ class ShippingSection extends React.Component {
     if (!open && selectedShipping) {
       header = (
         <SectionHeader
-          title="Shipping"
+          title={<T id="checkout.shipping" />}
           onActionClick={onEditRequested}
-          editLabel="Edit"
+          editLabel={<T id="edit" />}
           complete
           summary={<Text>{selectedShipping.carrierTitle}</Text>}
         />
       );
     } else {
-      header = <SectionHeader title="Shipping" />;
+      header = <SectionHeader title={<T id="checkout.shipping" />} />;
     }
 
     return (
@@ -77,7 +77,7 @@ class ShippingSection extends React.Component {
           <ErrorList errors={errors} />
           {availableShippingMethods.length > 0 && (
             <Button disabled={!this.state.selectedShipping} onClick={this.submitShipping}>
-              Continue
+              <T id="continue" />
             </Button>
           )}
         </DetailsContent>

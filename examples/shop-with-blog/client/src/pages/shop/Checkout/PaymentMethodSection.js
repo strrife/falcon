@@ -47,15 +47,15 @@ class PaymentSection extends React.Component {
     if (!open && selectedPayment) {
       header = (
         <SectionHeader
-          title="Payment"
+          title={<T id="checkout.payment" />}
           onActionClick={onEditRequested}
-          editLabel="Edit"
+          editLabel={<T id="edit" />}
           complete
           summary={<Text>{selectedPayment.title}</Text>}
         />
       );
     } else {
-      header = <SectionHeader title="Payment" />;
+      header = <SectionHeader title={<T id="checkout.payment" />} />;
     }
 
     return (
@@ -75,7 +75,7 @@ class PaymentSection extends React.Component {
           <ErrorList errors={errors} />
           {availablePaymentMethods.length > 0 && (
             <Button disabled={!this.state.selectedPayment} onClick={this.submitPayment}>
-              Continue
+              <T id="continue" />
             </Button>
           )}
         </DetailsContent>

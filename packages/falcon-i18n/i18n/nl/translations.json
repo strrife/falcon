@@ -1,6 +1,8 @@
 {
   "welcome": "Welcome to @deity",
   "copyright": "© Copyright {{year}}",
+  "continue": "Continue",
+  "edit": "Edit",
   "newsletter": {
     "title": "Nieuwsbrief",
     "message": "Word lid van onze mailinglijst om de nieuwste aanbiedingen en meer te ontvangen!",
@@ -69,8 +71,10 @@
     "continueShopping": "Shopping"
   },
   "checkout": {
+    "payment": "Payment",
+    "shipping": "Shipping",
     "noShippingOptions": "There are no available shipping methods for your shipping address. Please contact shop administrator.",
-    "noPaymentOptions": "There are no available shipping methods for this order. Please contact shop administrator."
+    "noPaymentOptions": "There are no available payment methods for this order. Please contact shop administrator."
   },
   "signIn": {
     "link": "Aanmelden",
