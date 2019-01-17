@@ -21,7 +21,7 @@ export class SidebarContainer extends React.Component {
     super(props);
 
     this.state = {
-      ready: false,
+      isReady: false,
       setTimeoutHandlerId: undefined,
       requestIdleHandlerId: undefined
     };
@@ -29,21 +29,21 @@ export class SidebarContainer extends React.Component {
 
   componentDidMount() {
     const setReady = () => {
-      if (this.state.ready) {
+      if (this.state.isReady) {
         return;
       }
 
       if ('requestIdleCallback' in window) {
-        const requestIdleHandlerId = window.requestIdleCallback(this.setReadyState);
+        const requestIdleHandlerId = window.requestIdleCallback(this.setIsReady);
         this.setState(x => ({ ...x, requestIdleHandlerId }));
 
         return;
       }
 
-      this.setReadyState();
+      this.setIsReady();
     };
 
-    // set ready flag even if sidebar has not been opened after READY_TIMEOUT_MS
+    // set isReady flag even if sidebar has not been opened after READY_TIMEOUT_MS
     // so sidebar contents are downloaded and ready to be displayed
     const setTimeoutHandlerId = window.setTimeout(setReady, READY_TIMEOUT_MS);
     // eslint-disable-next-line
@@ -58,17 +58,17 @@ export class SidebarContainer extends React.Component {
     }
   }
 
-  setReadyState = () => {
-    this.setState(x => ({ ...x, ready: true }));
+  setIsReady = () => {
+    this.setState(x => ({ ...x, isReady: true }));
   };
 
   forceIsReady = () => {
-    const { ready } = this.state;
+    const { isReady } = this.state;
 
-    // sets ready flag when sidebar get's opened for the first time
+    // sets isReady flag when sidebar get's opened for the first time
     // that causes SidebarContents to dynamically import it's JS
-    if (!ready) {
-      this.setReadyState();
+    if (!isReady) {
+      this.setIsReady();
     }
   };
 
@@ -79,7 +79,7 @@ export class SidebarContainer extends React.Component {
           <CloseSidebarMutation>
             {closeSidebar =>
               this.props.children({
-                ready: this.state.ready,
+                ready: this.state.isReady,
                 close: closeSidebar,
                 isOpen: sidebar.isOpen,
                 side: sidebar.side,
