@@ -21,7 +21,9 @@ export class SidebarContainer extends React.Component {
     super(props);
 
     this.state = {
-      ready: false
+      ready: false,
+      setTimeoutHandlerId: undefined,
+      requestIdleHandlerId: undefined
     };
   }
 
@@ -32,19 +34,32 @@ export class SidebarContainer extends React.Component {
       }
 
       if ('requestIdleCallback' in window) {
-        return window.requestIdleCallback(this.setReadyState);
+        const requestIdleHandlerId = window.requestIdleCallback(this.setReadyState);
+        this.setState(x => ({ ...x, requestIdleHandlerId }));
+
+        return;
       }
 
       this.setReadyState();
     };
 
-    // set ready flag even in sidebar has not been opened after READY_TIMEOUT_MS
+    // set ready flag even if sidebar has not been opened after READY_TIMEOUT_MS
     // so sidebar contents are downloaded and ready to be displayed
-    window.setTimeout(setReady, READY_TIMEOUT_MS);
+    const setTimeoutHandlerId = window.setTimeout(setReady, READY_TIMEOUT_MS);
+    // eslint-disable-next-line
+    this.setState(x => ({ ...x, setTimeoutHandlerId }));
+  }
+
+  componentWillUnmount() {
+    window.clearTimeout(this.state.setTimeoutHandlerId);
+
+    if ('requestIdleCallback' in window && this.state.requestIdleHandlerId !== undefined) {
+      window.cancelIdleCallback(this.state.requestIdleHandlerId);
+    }
   }
 
   setReadyState = () => {
-    this.setState({ ready: true });
+    this.setState(x => ({ ...x, ready: true }));
   };
 
   setReadyOnFirstOpen = ({ sidebar }) => {
