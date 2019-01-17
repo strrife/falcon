@@ -111,7 +111,6 @@ describe('Server', () => {
     }).callback();
     const response = await supertest(serverHandler).get('/');
 
-    console.log(response);
     expect(response.status).toBe(200);
     expect(response.headers).toContainKey('server-timing');
     expect(response.text).toEqual(expect.stringContaining('<h2>Foo</h2>'));
