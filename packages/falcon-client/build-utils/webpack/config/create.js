@@ -362,10 +362,10 @@ module.exports = (target = 'web', options, buildConfig) => {
         includeAllFileTypes: true,
         prettyPrint: true
       }),
-
-      // loadable components  plugin
-      // https://www.smooth-code.com/open-source/loadable-components/docs/server-side-rendering/
-      new LoadablePlugin({ writeToDisk: true, path: paths.appBuild })
+      new LoadablePlugin({
+        outputAsset: true,
+        writeToDisk: { filename: paths.appBuild }
+      })
     ];
 
     if (IS_DEV) {
