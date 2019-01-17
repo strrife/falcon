@@ -62,19 +62,19 @@ export class SidebarContainer extends React.Component {
     this.setState(x => ({ ...x, ready: true }));
   };
 
-  setReadyOnFirstOpen = ({ sidebar }) => {
+  forceIsReady = () => {
+    const { ready } = this.state;
+
     // sets ready flag when sidebar get's opened for the first time
     // that causes SidebarContents to dynamically import it's JS
-    const openedForTheFirstTime = sidebar.isOpen && !this.state.ready;
-
-    if (openedForTheFirstTime) {
+    if (!ready) {
       this.setReadyState();
     }
   };
 
   render() {
     return (
-      <SidebarQuery onCompleted={this.setReadyOnFirstOpen}>
+      <SidebarQuery onCompleted={({ sidebar }) => sidebar.isOpen && this.forceIsReady()}>
         {({ sidebar }) => (
           <CloseSidebarMutation>
             {closeSidebar =>
