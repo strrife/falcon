@@ -20,7 +20,7 @@ export type EnsureTTIProps = {
  * TTI measures the time from Navigation Start until the page's resources are loaded
  * and the main thread is idle (for at least 5 seconds), ref: https://developers.google.com/web/updates/2018/05/first-input-delay
  *
- * timeout is set based on the assumption how lighthouse measures time to interactive to improve perceived performance
+ * Default timeout is 6000 and based on the assumption how lighthouse measures time to interactive to improve perceived performance
  */
 export class EnsureTTI extends React.Component<EnsureTTIProps, EnsureTTIState> {
   static propTypes = {
@@ -43,7 +43,7 @@ export class EnsureTTI extends React.Component<EnsureTTIProps, EnsureTTIState> {
   }
 
   componentDidMount() {
-    // set isReady flag after READY_TIMEOUT_MS timeout
+    // set isReady flag after timeout
     const setTimeoutHandlerId = window.setTimeout(() => {
       if (this.state.isReady) {
         return;
@@ -85,23 +85,5 @@ export class EnsureTTI extends React.Component<EnsureTTIProps, EnsureTTIState> {
       isReady: this.state.isReady,
       forceReady: this.forceReady
     });
-
-    // return (
-    //   <SidebarQuery onCompleted={({ sidebar }) => sidebar.isOpen && this.forceIsReady()}>
-    //     {({ sidebar }) => (
-    //       <CloseSidebarMutation>
-    //         {closeSidebar =>
-    //           this.props.children({
-    //             ready: this.state.isReady,
-    //             close: closeSidebar,
-    //             isOpen: sidebar.isOpen,
-    //             side: sidebar.side,
-    //             contentType: sidebar.contentType
-    //           })
-    //         }
-    //       </CloseSidebarMutation>
-    //     )}
-    //   </SidebarQuery>
-    // );
   }
 }
