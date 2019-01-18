@@ -445,6 +445,15 @@ export const deityGreenTheme = createTheme({
           })
         }
       }
+    },
+
+    input: {
+      height: 'xl'
+    },
+
+    label: {
+      fontSize: 'xs',
+      fontWeight: 'bold'
     }
   }
 });

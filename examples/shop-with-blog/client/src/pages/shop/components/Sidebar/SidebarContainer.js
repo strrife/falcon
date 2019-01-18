@@ -3,6 +3,15 @@ import PropTypes from 'prop-types';
 import { CloseSidebarMutation } from '@deity/falcon-ecommerce-uikit';
 import { SidebarQuery } from './SidebarQuery';
 
+// ready timeout is set based on the assumption how lighthouse measures
+// time to interactive to improve perceived performance
+
+// (TTI measures the time from Navigation Start until the page's resources are loaded
+// and the main thread is idle (for at least 5 seconds))
+// https://developers.google.com/web/updates/2018/05/first-input-delay
+
+const READY_TIMEOUT_MS = 6000;
+
 export class SidebarContainer extends React.Component {
   static propTypes = {
     children: PropTypes.func.isRequired
@@ -12,34 +21,58 @@ export class SidebarContainer extends React.Component {
     super(props);
 
     this.state = {
-      ready: false
+      isReady: false,
+      setTimeoutHandlerId: undefined,
+      requestIdleHandlerId: undefined
     };
   }
 
   componentDidMount() {
-    // wait with loading sidebar contents until browser is idle
-    // as it's not high prority task and would delay time to interactive
-    const setReady = () => {
-      this.setState({ ready: true });
-    };
-    const READY_TIMEOUT_MS = 1000;
-    //  use requestIdleCallback when possible as browser idle signal
-    // and fallback to setTimeout
-    if (!('requestIdleCallback' in window)) {
-      window.setTimeout(setReady, READY_TIMEOUT_MS);
-    } else {
-      window.requestIdleCallback(setReady, { timeout: READY_TIMEOUT_MS });
+    // set isReady flag after READY_TIMEOUT_MS timeout
+    const setTimeoutHandlerId = window.setTimeout(() => {
+      if (this.state.isReady) {
+        return;
+      }
+
+      if ('requestIdleCallback' in window) {
+        const requestIdleHandlerId = window.requestIdleCallback(this.forceIsReady);
+
+        return this.setState(x => ({ ...x, requestIdleHandlerId }));
+      }
+
+      return this.forceIsReady();
+    }, READY_TIMEOUT_MS);
+
+    // eslint-disable-next-line
+    this.setState(x => ({ ...x, setTimeoutHandlerId }));
+  }
+
+  componentWillUnmount() {
+    window.clearTimeout(this.state.setTimeoutHandlerId);
+
+    if ('requestIdleCallback' in window && this.state.requestIdleHandlerId !== undefined) {
+      window.cancelIdleCallback(this.state.requestIdleHandlerId);
     }
   }
 
+  /** Sets isReady even before timeout */
+  forceIsReady = () => {
+    if (this.state.isReady === false) {
+      this.setState(x => ({
+        ...x,
+        isReady: true
+      }));
+    }
+  };
+
   render() {
     return (
-      <SidebarQuery>
+      <SidebarQuery onCompleted={({ sidebar }) => sidebar.isOpen && this.forceIsReady()}>
         {({ sidebar }) => (
           <CloseSidebarMutation>
             {closeSidebar =>
               this.props.children({
-                ready: this.state.ready,
+                ready: this.state.isReady,
                 close: closeSidebar,
                 isOpen: sidebar.isOpen,
                 side: sidebar.side,

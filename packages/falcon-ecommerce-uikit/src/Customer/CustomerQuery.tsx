@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { Query } from '../Query/Query';
+import { AddressData } from './../Address';
 
 export const GET_CUSTOMER = gql`
   query Customer {
@@ -8,6 +9,7 @@ export const GET_CUSTOMER = gql`
       firstname
       lastname
       email
+      websiteId
     }
   }
 `;
@@ -17,6 +19,8 @@ export type Customer = {
   firstname: string;
   lastname: string;
   email: string;
+  websiteId: number;
+  addresses?: AddressData[];
 };
 
 export type CustomerQueryData = {
@@ -39,50 +43,26 @@ export const GET_CUSTOMER_WITH_ADDRESSES = gql`
       firstname
       lastname
       email
-      defaultBilling
-      defaultShipping
       addresses {
         id
+        company
         firstname
         lastname
-        city
+        street
         postcode
+        city
         countryId
         defaultBilling
         defaultShipping
         region
         regionId
-        street
         telephone
       }
     }
   }
 `;
 
-export type CustomerWithAddress = {
-  id: number;
-  firstname: string;
-  lastname: string;
-  email: string;
-  defaultBilling: boolean;
-  defaultShipping: boolean;
-  addresses: {
-    id: number;
-    firstname: string;
-    lastname: string;
-    city: string;
-    postcode: string;
-    countryId: string;
-    defaultBilling: boolean;
-    defaultShipping: boolean;
-    region: string;
-    regionId: number;
-    street: string;
-    telephone: string;
-  };
-};
-
-export class CustomerWithAddressesQuery extends Query<CustomerWithAddress> {
+export class CustomerWithAddressesQuery extends Query<Customer> {
   static defaultProps = {
     query: GET_CUSTOMER_WITH_ADDRESSES
   };

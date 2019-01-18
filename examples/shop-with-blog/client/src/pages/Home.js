@@ -7,6 +7,22 @@ import { BackgroundImage, Box, Link } from '@deity/falcon-ui';
 import LazyLoad from 'react-lazyload';
 import gql from 'graphql-tag';
 
+const HOMEPAGE_PRODUCTS_QUERY = gql`
+  query HomepageProducts($categoryId: String!, $amount: Int) {
+    category(id: $categoryId) {
+      products(pagination: { perPage: $amount, page: 1 }) {
+        items {
+          id
+          name
+          price
+          thumbnail
+          urlPath
+        }
+      }
+    }
+  }
+`;
+
 const GET_PRODUCTS_LIST = gql`
   query Products($query: ShopPageQuery) {
     products(query: $query) {
@@ -153,6 +169,16 @@ const Home = () => (
       {/* <ProductsListQuery>{({ products }) => <ProductsList products={products.items} />}</ProductsListQuery> */}
     </GridLayout>
   </React.Fragment>
-);
+
+// const Home = () => (
+//  <GridLayout gridGap="md" py="ld">
+//    <H1 css={{ textAlign: 'center' }}>
+//      <T id="home.hotSellers" />
+//    </H1>
+//    <Query query={HOMEPAGE_PRODUCTS_QUERY} variables={{ categoryId: '25', amount: 20 }}>
+//      {({ category }) => <ProductsList products={category.products.items} />}
+//    </Query>
+//  </GridLayout>
+// );
 
 export default Home;

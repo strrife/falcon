@@ -6,7 +6,6 @@ export const Label = themed({
   defaultTheme: {
     label: {
       display: 'block',
-      mb: 'xs',
       lineHeight: 'small'
     }
   }

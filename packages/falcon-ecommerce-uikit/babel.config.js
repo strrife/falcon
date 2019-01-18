@@ -16,6 +16,7 @@ module.exports = {
     '@babel/preset-react'
   ],
   plugins: [
+    'babel-plugin-graphql-tag',
     '@babel/plugin-proposal-class-properties',
     ['@babel/plugin-transform-runtime', { useESModules: notARollupCjsBuild }],
     ['@babel/proposal-object-rest-spread', { loose: true, useBuiltIns: true }],

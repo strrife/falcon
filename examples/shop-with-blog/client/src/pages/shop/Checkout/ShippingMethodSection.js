@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Label, FlexLayout, Details, DetailsContent, Text, Radio, Box, Button } from '@deity/falcon-ui';
 import { Price } from '@deity/falcon-ecommerce-uikit';
+import { T } from '@deity/falcon-i18n';
 import SectionHeader from './CheckoutSectionHeader';
 import ErrorList from '../components/ErrorList';
 
@@ -48,29 +49,37 @@ class ShippingSection extends React.Component {
     if (!open && selectedShipping) {
       header = (
         <SectionHeader
-          title="Shipping"
+          title={<T id="checkout.shipping" />}
           onActionClick={onEditRequested}
-          editLabel="Edit"
+          editLabel={<T id="edit" />}
           complete
           summary={<Text>{selectedShipping.carrierTitle}</Text>}
         />
       );
     } else {
-      header = <SectionHeader title="Shipping" />;
+      header = <SectionHeader title={<T id="checkout.shipping" />} />;
     }
 
     return (
       <Details open={open}>
         {header}
         <DetailsContent>
-          <ShippingSelector
-            availableShippingOptions={availableShippingMethods}
-            onShippingSelected={this.onShippingSelected}
-          />
+          {availableShippingMethods.length === 0 ? (
+            <Text color="error" mb="sm">
+              <T id="checkout.noShippingMethodsAvailable" />
+            </Text>
+          ) : (
+            <ShippingSelector
+              availableShippingOptions={availableShippingMethods}
+              onShippingSelected={this.onShippingSelected}
+            />
+          )}
           <ErrorList errors={errors} />
-          <Button disabled={!this.state.selectedShipping} onClick={this.submitShipping}>
-            Continue
-          </Button>
+          {availableShippingMethods.length > 0 && (
+            <Button disabled={!this.state.selectedShipping} onClick={this.submitShipping}>
+              <T id="continue" />
+            </Button>
+          )}
         </DetailsContent>
       </Details>
     );

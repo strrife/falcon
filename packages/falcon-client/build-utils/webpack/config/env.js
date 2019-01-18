@@ -13,11 +13,11 @@ function getClientEnv(target, options, envToBuildIn) {
       {
         NODE_ENV: env,
         BABEL_ENV: env,
-        PORT: env === 'development' ? port : undefined,
+        ...(env === 'development' ? { PORT: port } : {}),
         BUILD_TARGET: target === 'web' ? 'client' : 'server',
         PUBLIC_PATH: env === 'production' ? publicPath : undefined,
         ASSETS_MANIFEST: paths.appManifest,
-        LOADABLE_STATS: paths.loadableStats,
+        LOADABLE_STATS: paths.appLoadableStats,
         PUBLIC_DIR: env === 'production' ? paths.appBuildPublic : paths.appPublic
       }
     );

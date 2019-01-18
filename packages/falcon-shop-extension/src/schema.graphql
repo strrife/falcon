@@ -1,20 +1,21 @@
 extend type Query {
-  category(id: Int!): Category
-  product(id: Int!): Product
+  category(id: String!): Category
+  product(id: String!): Product
   products(
-    categoryId: Int
+    categoryId: String
     includeSubcategories: Boolean
     query: ShopPageQuery
     sortOrders: [SortOrderInput]
-    filters: [Filter]
+    filters: [FilterInput]
     skus: [String]
   ): ProductList
   cart: Cart
   countries: CountryList
   order(id: Int!): Order
   lastOrder: Order
-  orders(query: ShopPageQuery): Orders
+  orders(pagination: PaginationInput): Orders
   address(id: Int!): Address
+  addresses: AddressList
   customer: Customer
   cmsPage(id: Int, identifier: String): CmsPage
   cmsBlock(identifier: String): CmsBlock
@@ -33,11 +34,11 @@ extend type Mutation {
   signUp(input: SignUp!): Boolean
   signIn(input: SignIn!): Boolean
   signOut: Boolean
-  editCustomerData(input: CustomerInput!): Customer
-  editCustomerAddress(input: AddressInput!): Address
-  addCustomerAddress(input: AddressInput!): Address
+  editCustomer(input: CustomerInput!): Customer
+  editAddress(input: EditAddressInput!): Address
+  addAddress(input: AddAddressInput!): Address
   estimateShippingMethods(input: EstimateShippingInput!): [ShippingMethod]
-  removeCustomerAddress(input: EntityIdInput!): Boolean
+  removeCustomerAddress(id: Int!): Boolean
   requestCustomerPasswordResetToken(input: EmailInput!): Boolean
   changeCustomerPassword(input: CustomerPassword!): Boolean
   resetCustomerPassword(input: CustomerPasswordReset!): Boolean
@@ -63,10 +64,6 @@ type ShopConfig {
 type ShopStoreEntry {
   name: String
   code: String
-}
-
-input EntityIdInput {
-  id: Int!
 }
 
 input EmailInput {
@@ -101,7 +98,7 @@ input ShopPageQuery {
   page: Int
 }
 
-input Filter {
+input FilterInput {
   conditionType: String
   field: String
   value: String
@@ -137,6 +134,35 @@ input AddressInput {
   regionId: Int
   street: [String]
   telephone: String
+}
+
+input AddAddressInput {
+  company: String
+  firstname: String!
+  lastname: String!
+  telephone: String!
+  street: [String]
+  postcode: String!
+  city: String!
+  countryId: String!
+  defaultBilling: Boolean
+  defaultShipping: Boolean
+  regionId: Int
+}
+
+input EditAddressInput {
+  id: Int!
+  company: String
+  firstname: String!
+  lastname: String!
+  telephone: String
+  street: [String]
+  postcode: String!
+  city: String!
+  countryId: String!
+  defaultBilling: Boolean
+  defaultShipping: Boolean
+  regionId: Int
 }
 
 input CustomerPassword {
@@ -184,7 +210,7 @@ type PlaceOrderResult {
 }
 
 type Product {
-  id: Int!
+  id: String
   sku: String!
   name: String!
   image: String
@@ -202,7 +228,7 @@ type Product {
   configurableOptions: [ConfigurableProductOption]
   bundleOptions: [BundleProductOption]
   gallery: [GalleryEntry]
-  breadcrumbs: [Breadcrumb]
+  breadcrumbs(path: String!): [Breadcrumb]
   seo: ProductSeo
 }
 
@@ -228,9 +254,12 @@ type PaymentMethod {
 }
 
 type Category {
-  id: Int
+  id: String
   name: String
+  children: [Category]
   description: String
+  breadcrumbs(path: String!): [Breadcrumb]
+  products(pagination: PaginationInput, sort: SortOrderInput, filters: [FilterInput]): ProductList
 }
 
 type ProductList {
@@ -241,11 +270,13 @@ type ProductList {
 
 type Aggregation {
   key: String
+  name: String
   buckets: [AggregationBucket]
 }
 
 type AggregationBucket {
-  key: Int
+  value: String
+  name: String
   count: Int
 }
 
@@ -391,18 +422,24 @@ type Customer {
 }
 
 type Address {
-  id: Int
-  firstname: String
-  lastname: String
-  city: String
-  postcode: String
-  countryId: String
-  defaultBilling: Boolean
-  defaultShipping: Boolean
+  id: Int!
+  company: String
+  firstname: String!
+  lastname: String!
+  street: [String]!
+  city: String!
+  postcode: String!
+  countryId: String!
   region: String
   regionId: Int
-  street: [String]
   telephone: String
+  fax: String
+  defaultBilling: Boolean!
+  defaultShipping: Boolean!
+}
+
+type AddressList {
+  items: [Address]!
 }
 
 input SignUp {
@@ -427,11 +464,8 @@ type GalleryEntry {
 }
 
 type Breadcrumb {
-  id: Int
   name: String
   urlPath: String
-  urlKey: String
-  urlQuery: String
 }
 
 type ConfigurableProductOption {

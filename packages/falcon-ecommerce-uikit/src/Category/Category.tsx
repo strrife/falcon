@@ -31,13 +31,21 @@ const CategoryLayout = themed({
   }
 });
 
+type SortOrder = {
+  name: string;
+  field: string;
+  direction: string;
+};
+
 export const Category: React.SFC<{
-  category: { name: string };
-  products: any;
-  sortOrders: any[];
+  category: { name: string; products: any };
+  availableSortOrders: SortOrder[];
+  activeSortOrder: SortOrder;
+  setSortOrder(order: SortOrder): null;
   fetchMore: any;
   networkStatus: NetworkStatus;
-}> = ({ category, products, sortOrders, fetchMore, networkStatus }) => {
+}> = ({ category, availableSortOrders, activeSortOrder, setSortOrder, fetchMore, networkStatus }) => {
+  const { products } = category;
   const { pagination, items } = products;
 
   return (
@@ -45,7 +53,7 @@ export const Category: React.SFC<{
       <H1>{category.name}</H1>
       <FlexLayout justifyContent="space-between" alignItems="center">
         <ShowingOutOf itemsCount={items.length} totalItems={pagination.totalItems} />
-        <SortOrderDropdown sortOrders={sortOrders} />
+        <SortOrderDropdown sortOrders={availableSortOrders} activeSortOrder={activeSortOrder} onChange={setSortOrder} />
       </FlexLayout>
       <Divider />
       <ProductsList products={items} />
@@ -61,29 +69,25 @@ export const ShowingOutOf: React.SFC<{ itemsCount: number; totalItems: number }>
   </Text>
 );
 
-export const SortOrderDropdown: React.SFC<any> = ({ sortOrders, onChange }) => {
-  const activeSortOrder = sortOrders.filter((sortOrder: any) => sortOrder.active)[0];
-
-  return (
-    <FlexLayout alignItems="center">
-      <Text mr="sm">
-        <T id="productsList.sort.title" />
-      </Text>
-      <Box display="flex">
-        <Dropdown css={{ width: '100%' }} onChange={onChange}>
-          <DropdownLabel>{activeSortOrder.name}</DropdownLabel>
-          <DropdownMenu>
-            {sortOrders.map((sortOrder: any) => (
-              <DropdownMenuItem key={sortOrder.name} value={sortOrder}>
-                {sortOrder.name}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenu>
-        </Dropdown>
-      </Box>
-    </FlexLayout>
-  );
-};
+export const SortOrderDropdown: React.SFC<any> = ({ sortOrders, activeSortOrder, onChange }) => (
+  <FlexLayout alignItems="center">
+    <Text mr="sm">
+      <T id="productsList.sort.title" />
+    </Text>
+    <Box display="flex">
+      <Dropdown css={{ width: '100%' }} onChange={onChange}>
+        <DropdownLabel>{activeSortOrder.name}</DropdownLabel>
+        <DropdownMenu>
+          {sortOrders.map((sortOrder: any) => (
+            <DropdownMenuItem key={sortOrder.name} value={sortOrder}>
+              {sortOrder.name}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenu>
+      </Dropdown>
+    </Box>
+  </FlexLayout>
+);
 
 export const ShowMore: React.SFC<{ onClick: MouseEventHandler; loading: boolean }> = ({ onClick, loading }) => (
   <Box>

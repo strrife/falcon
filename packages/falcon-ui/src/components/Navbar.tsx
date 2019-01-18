@@ -3,6 +3,7 @@ import { Value } from 'react-powerplug';
 
 import { themed } from '../theme';
 import { Box } from './Box';
+import { ListItem } from './List';
 
 export const Navbar = themed({
   tag: 'ul',
@@ -22,30 +23,25 @@ export const Navbar = themed({
   }
 });
 
-type NavbarContextType = {
-  open?: boolean;
-};
+const MenuItemContext = React.createContext<{ open?: boolean }>({});
 
-const NavbarItemContext = React.createContext<NavbarContextType>({});
-
-const NavbarItemInnerDOM: React.SFC<any> = props => (
+const MenuItemInnerDOM: React.SFC<any> = props => (
   <Value initial={false}>
     {({ set, value }) => (
-      <NavbarItemContext.Provider value={{ open: value }}>
-        <Box
-          as="li"
+      <MenuItemContext.Provider value={{ open: value }}>
+        <ListItem
           {...props}
           onMouseEnter={() => set(true)}
           onMouseLeave={() => set(false)}
           onClick={() => set(false)}
         />
-      </NavbarItemContext.Provider>
+      </MenuItemContext.Provider>
     )}
   </Value>
 );
 
 export const NavbarItem = themed({
-  tag: NavbarItemInnerDOM,
+  tag: MenuItemInnerDOM,
 
   defaultTheme: {
     navbarItem: {
@@ -78,8 +74,10 @@ const NavbarItemMenuInnerDOM: React.SFC<any> = props => (
       />
     )}
   </NavbarItemContext.Consumer>
+//   <MenuItemContext.Consumer>
+//     {({ open }) => <Box {...props} display={open ? 'block' : 'none'} />}
+//   </MenuItemContext.Consumer>
 );
-
 export const NavbarItemMenu = themed({
   tag: NavbarItemMenuInnerDOM,
 

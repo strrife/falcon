@@ -12,19 +12,20 @@ import HtmlHead from '../../components/HtmlHead';
 export default ({ loadableStats }) => async (ctx, next) => {
   const { client } = ctx.state;
   const { config } = client.readQuery({ query: APP_INIT });
-  const extractor = new ChunkExtractor({ stats: loadableStats, entrypoints: ['client'] });
+  const chunkExtractor = new ChunkExtractor({
+    stats: loadableStats,
+    entrypoints: ['client']
+  });
 
   const markup = (
-    <ChunkExtractorManager extractor={extractor}>
+    <ChunkExtractorManager extractor={chunkExtractor}>
       <HtmlHead htmlLang={config.i18n.lng} />
     </ChunkExtractorManager>
   );
 
   renderToString(markup);
 
-  ctx.state.scriptElements = extractor.getScriptElements();
-  ctx.state.styleElements = extractor.getStyleElements();
-
+  ctx.state.chunkExtractor = chunkExtractor;
   ctx.state.helmetContext = Helmet.renderStatic();
 
   return next();

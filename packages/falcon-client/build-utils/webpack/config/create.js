@@ -5,38 +5,20 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const AssetsPlugin = require('assets-webpack-plugin');
 const StartServerPlugin = require('start-server-webpack-plugin');
-const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackBar = require('webpackbar');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const VirtualModulesPlugin = require('webpack-virtual-modules');
 const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
+const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 
-const paths = require('./../../paths');
 const { colors } = require('./../tools');
 const { getClientEnv } = require('./env');
 const runPlugin = require('./runPlugin');
 
 const falconClientPolyfills = require.resolve('./../../polyfills');
-
-const postCssOptions = {
-  ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
-  plugins: () => [
-    // eslint-disable-next-line import/no-dynamic-require
-    require('postcss-flexbugs-fixes'),
-    autoprefixer({
-      browsers: [
-        '>1%',
-        'last 4 versions',
-        'Firefox ESR',
-        'not ie < 9' // React doesn't support IE8 anyway
-      ],
-      flexbox: 'no-2009'
-    })
-  ]
-};
 
 function getEsLintLoaderOptions(eslintRcPath, isDev) {
   const options = {
@@ -71,15 +53,51 @@ function getBabelLoaderOptions(babelRcPath) {
   return options;
 }
 
-function getFalconI18nPlugin(options) {
-  const { resourcePackages = [], filter = {} } = options || {};
+function getStyleLoaders(target, env, cssLoaderOptions) {
+  const { sourceMap = false } = cssLoaderOptions;
 
-  return new FalconI18nLocalesPlugin({
-    mainSource: path.join(paths.appPath, 'i18n'),
-    defaultSources: resourcePackages.map(x => paths.resolvePackageDir(x)).map(x => path.join(x, 'i18n')),
-    output: 'build/i18n',
-    filter
-  });
+  // "postcss" loader applies autoprefixer to our CSS.
+  // "css" loader resolves paths in CSS and adds assets as dependencies.
+  // "style" loader turns CSS into JS modules that inject <style> tags.
+  // In production, we use a plugin to extract that CSS to a file, but
+  // in development "style" loader enables hot editing of CSS.
+  //
+  // Note: this yields the exact same CSS config as create-react-app.
+
+  if (target === 'node') {
+    // Style-loader does not work in Node.js without some crazy magic. Luckily we just need css-loader.
+    return [
+      {
+        loader: require.resolve('css-loader/locals'),
+        options: {
+          ...cssLoaderOptions,
+          minimize: false
+        }
+      }
+    ];
+  }
+
+  return [
+    env === 'production' ? MiniCssExtractPlugin.loader : require.resolve('style-loader'),
+    {
+      loader: require.resolve('css-loader'),
+      options: { ...cssLoaderOptions }
+    },
+    {
+      loader: require.resolve('postcss-loader'),
+      options: {
+        ident: 'postcss',
+        plugins: () => [
+          require('postcss-flexbugs-fixes'),
+          require('postcss-preset-env')({
+            autoprefixer: { flexbox: 'no-2009' },
+            stage: 3
+          })
+        ],
+        sourceMap
+      }
+    }
+  ];
 }
 
 function addVendorsBundle(modules = []) {
@@ -107,50 +125,46 @@ function addVendorsBundle(modules = []) {
   };
 }
 
-// This is the Webpack configuration factory. It's the juice!
 /**
+ * Webpack configuration factory. It's the juice!
  * @param {'web' | 'node' } target target
  * @param {{ env: ('development' | 'production'), host: string, port: number, inspect: string, publicPath: string }} options environment
  * @param {object} buildConfig config
  * @returns {object} webpack config
  */
 module.exports = (target = 'web', options, buildConfig) => {
-  const { env, host, devServerPort } = options;
-  const { useWebmanifest, plugins, modify } = buildConfig;
+  const { env, host, devServerPort, paths } = options;
+  const { useWebmanifest, plugins, modify, i18n } = buildConfig;
 
   // Define some useful shorthands.
   const IS_NODE = target === 'node';
   const IS_WEB = target === 'web';
-  const IS_PROD = env === 'productions';
+  const IS_PROD = env === 'production';
   const IS_DEV = env === 'development';
   process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
+  const devtool = 'cheap-module-source-map';
 
   const clientEnv = getClientEnv(target, options, buildConfig.envToBuildIn);
 
-  // This is our base webpack config.
   let config = {
     mode: IS_DEV ? 'development' : 'production',
     context: process.cwd(), // Set webpack context to the current command's directory
     target,
-    devtool: 'cheap-module-source-map',
-    // We need to tell webpack how to resolve both Razzle's node_modules and
-    // the users', so we use resolve and resolveLoader.
+    devtool,
+    // webpack needs to known how to resolve both falcon-client's and the app's node_modules, so we use resolve and resolveLoader.
     resolve: {
       modules: ['node_modules', paths.appNodeModules].concat(paths.nodePath.split(path.delimiter).filter(Boolean)),
       extensions: ['.mjs', '.jsx', '.js', '.json', '.graphql', '.gql'],
       alias: {
         'webpack/hot/poll': require.resolve('webpack/hot/poll'), // This is required so symlinks work during development.
-        // Support React Native Web
-        // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
+        // Support React Native Web https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',
         src: paths.appSrc,
         'app-path': paths.appPath,
         'app-webmanifest': useWebmanifest ? paths.appWebmanifest : paths.ownWebmanifest
       }
     },
-    resolveLoader: {
-      modules: [paths.appNodeModules, paths.ownNodeModules]
-    },
+    resolveLoader: { modules: [paths.appNodeModules, paths.ownNodeModules] },
     module: {
       strictExportPresence: true,
       rules: [
@@ -194,7 +208,7 @@ module.exports = (target = 'web', options, buildConfig) => {
             /\.(ts|tsx)$/,
             /\.(graphql|gql)$/,
             /\.(less)$/,
-            /\.(s?css|sass)$/,
+            /\.(css|scss|sass)$/,
             /\.json$/,
             /\.html$/,
             /\.(vue)$/,
@@ -221,94 +235,56 @@ module.exports = (target = 'web', options, buildConfig) => {
             { loader: require.resolve('app-manifest-loader') }
           ]
         },
-        // "postcss" loader applies autoprefixer to our CSS.
-        // "css" loader resolves paths in CSS and adds assets as dependencies.
-        // "style" loader turns CSS into JS modules that inject <style> tags.
-        // In production, we use a plugin to extract that CSS to a file, but
-        // in development "style" loader enables hot editing of CSS.
-        //
-        // Note: this yields the exact same CSS config as create-react-app.
         {
           test: /\.css$/,
           exclude: [paths.appBuild, /\.module\.css$/],
-          use: IS_NODE // Style-loader does not work in Node.js without some crazy magic. Luckily we just need css-loader.
-            ? [
-                {
-                  loader: require.resolve('css-loader'),
-                  options: { importLoaders: 1 }
-                }
-              ]
-            : [
-                ...(IS_DEV
-                  ? [
-                      require.resolve('style-loader'),
-                      {
-                        loader: require.resolve('css-loader'),
-                        options: { importLoaders: 1 }
-                      }
-                    ]
-                  : [
-                      MiniCssExtractPlugin.loader,
-                      {
-                        loader: require.resolve('css-loader'),
-                        options: {
-                          importLoaders: 1,
-                          modules: false,
-                          minimize: true
-                        }
-                      }
-                    ]),
-                {
-                  loader: require.resolve('postcss-loader'),
-                  options: postCssOptions
-                }
-              ]
+          use: getStyleLoaders(target, env, {
+            importLoaders: 1,
+            modules: false,
+            minimize: IS_PROD,
+            sourceMap: !!devtool
+          }),
+          sideEffects: true // remove this when webpack adds a warning / error for this. See https://github.com/webpack/webpack/issues/6571
         },
-        // Adds support for CSS Modules (https://github.com/css-modules/css-modules) using the extension .module.css
         {
           test: /\.module\.css$/,
           exclude: [paths.appBuild],
-          use: IS_NODE // on the server we do not need to embed the css and just want the identifier mappings https://github.com/webpack-contrib/css-loader#scope
-            ? [
-                {
-                  loader: require.resolve('css-loader/locals'),
-                  options: {
-                    modules: true,
-                    importLoaders: 1,
-                    localIdentName: '[path]__[name]___[local]'
-                  }
-                }
-              ]
-            : [
-                ...(IS_DEV
-                  ? [
-                      require.resolve('style-loader'),
-                      {
-                        loader: require.resolve('css-loader'),
-                        options: {
-                          modules: true,
-                          importLoaders: 1,
-                          localIdentName: '[path]__[name]___[local]'
-                        }
-                      }
-                    ]
-                  : [
-                      MiniCssExtractPlugin.loader,
-                      {
-                        loader: require.resolve('css-loader'),
-                        options: {
-                          modules: true,
-                          importLoaders: 1,
-                          minimize: true,
-                          localIdentName: '[path]__[name]___[local]'
-                        }
-                      }
-                    ]),
-                {
-                  loader: require.resolve('postcss-loader'),
-                  options: postCssOptions
-                }
-              ]
+          use: getStyleLoaders(target, env, {
+            importLoaders: 1,
+            modules: true,
+            minimize: IS_PROD,
+            getLocalIdent: getCSSModuleLocalIdent,
+            sourceMap: !!devtool
+          }),
+          sideEffects: true // remove this when webpack adds a warning / error for this. See https://github.com/webpack/webpack/issues/6571
+        },
+        {
+          test: /\.(scss|sass)$/,
+          exclude: /\.module\.(scss|sass)$/,
+          use: [
+            ...getStyleLoaders(target, env, {
+              importLoaders: 2,
+              modules: false,
+              minimize: IS_PROD,
+              sourceMap: !!devtool
+            }),
+            IS_WEB && require.resolve('sass-loader')
+          ].filter(x => x),
+          sideEffects: true // remove this when webpack adds a warning / error for this. See https://github.com/webpack/webpack/issues/6571
+        },
+        {
+          test: /\.module\.(scss|sass)$/,
+          use: [
+            ...getStyleLoaders(target, env, {
+              importLoaders: 2,
+              modules: true,
+              minimize: IS_PROD,
+              getLocalIdent: getCSSModuleLocalIdent,
+              sourceMap: !!devtool
+            }),
+            IS_WEB && require.resolve('sass-loader')
+          ].filter(x => x),
+          sideEffects: true // remove this when webpack adds a warning / error for this. See https://github.com/webpack/webpack/issues/6571
         }
       ].filter(x => x)
     }
@@ -374,19 +350,22 @@ module.exports = (target = 'web', options, buildConfig) => {
   if (IS_WEB) {
     config.plugins = [
       new VirtualModulesPlugin({ [paths.ownWebmanifest]: '{}' }),
-      getFalconI18nPlugin(buildConfig.i18n),
+      new FalconI18nLocalesPlugin({
+        mainSource: path.join(paths.appPath, 'i18n'),
+        defaultSources: (i18n.resourcePackages || []).map(x => path.join(paths.resolvePackageDir(x), 'i18n')),
+        output: 'build/i18n',
+        filter: i18n.filter || {}
+      }),
       new AssetsPlugin({
         path: paths.appBuild,
         filename: 'assets.json',
         includeAllFileTypes: true,
         prettyPrint: true
       }),
-
-      // loadable components  plugin
-      // https://www.smooth-code.com/open-source/loadable-components/docs/server-side-rendering/
-      // TODO: add change args to { writeToDisk: true, filename: paths.loadableStats } when
-      // https://github.com/smooth-code/loadable-components/issues/179 gets fixed
-      new LoadablePlugin({ writeToDisk: true })
+      new LoadablePlugin({
+        outputAsset: false,
+        writeToDisk: { filename: paths.appBuild }
+      })
     ];
 
     if (IS_DEV) {
@@ -447,17 +426,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         new webpack.DefinePlugin(clientEnv.stringified)
       ];
 
-      config.optimization = {
-        // @todo automatic vendor bundle
-        // Automatically split vendor and commons
-        // https://twitter.com/wSokra/status/969633336732905474
-        // splitChunks: {
-        //   chunks: 'all',
-        // },
-        // Keep the runtime chunk seperated to enable long term caching
-        // https://twitter.com/wSokra/status/969679223278505985
-        // runtimeChunk: true,
-      };
+      config.optimization = {};
     } else {
       // Specify production entry point (/client/index.js)
       config.entry = {
@@ -485,11 +454,8 @@ module.exports = (target = 'web', options, buildConfig) => {
         new webpack.DefinePlugin(clientEnv.stringified),
         // Extract our CSS into a files.
         new MiniCssExtractPlugin({
-          filename: 'static/css/bundle.[contenthash:8].css',
-          // allChunks: true because we want all css to be included in the main
-          // css bundle when doing code splitting to avoid FOUC:
-          // https://github.com/facebook/create-react-app/issues/2415
-          allChunks: true
+          filename: 'static/css/[name].[contenthash:8].css',
+          chunkFilename: 'static/css/[name].[contenthash:8].chunk.css'
         }),
         new webpack.HashedModuleIdsPlugin(),
         new webpack.optimize.AggressiveMergingPlugin()
@@ -535,39 +501,10 @@ module.exports = (target = 'web', options, buildConfig) => {
             // Use multi-process parallel running to improve the build speed
             // Default number of concurrent runs: os.cpus().length - 1
             parallel: true,
-            // Enable file caching
-            cache: true,
-            // @todo add flag for sourcemaps
-            sourceMap: true
+            cache: true, // Enable file caching
+            sourceMap: !!devtool
           })
         ]
-        // @todo automatic vendor bundle
-        // Automatically split vendor and commons
-        // https://twitter.com/wSokra/status/969633336732905474
-        // splitChunks: {
-        //   chunks: 'all',
-        //   minSize: 30000,
-        //   minChunks: 1,
-        //   maxAsyncRequests: 5,
-        //   maxInitialRequests: 3,
-        //   name: true,
-        //   cacheGroups: {
-        //     commons: {
-        //       test: /[\\/]node_modules[\\/]/,
-        //       name: 'vendor',
-        //       chunks: 'all',
-        //     },
-        //     main: {
-        //       chunks: 'all',
-        //       minChunks: 2,
-        //       reuseExistingChunk: true,
-        //       enforce: true,
-        //     },
-        //   },
-        // },
-        // Keep the runtime chunk seperated to enable long term caching
-        // https://twitter.com/wSokra/status/969679223278505985
-        // runtimeChunk: true,
       };
     }
   }
@@ -589,8 +526,6 @@ module.exports = (target = 'web', options, buildConfig) => {
     'apollo-link-http',
     'apollo-link-state',
     'apollo-utilities',
-    'graphql',
-    'graphql-tag',
     'node-fetch',
     'i18next',
     'i18next-xhr-backend',
@@ -608,14 +543,14 @@ module.exports = (target = 'web', options, buildConfig) => {
   // Apply razzle plugins, if they are present in razzle.config.js
   if (Array.isArray(plugins)) {
     plugins.forEach(plugin => {
-      config = runPlugin(plugin, config, { target, dev: IS_DEV }, webpack);
+      config = runPlugin(plugin, config, { ...options, target, dev: IS_DEV }, webpack);
     });
   }
 
   // Check if razzle.config has a modify function. If it does, call it on the
   // configs we created.
   if (modify) {
-    config = modify(config, { target, dev: IS_DEV }, webpack);
+    config = modify(config, { ...options, target, dev: IS_DEV }, webpack);
   }
 
   return config;
