@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { H1, H2, H3, GridLayout, Button } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
-import { ProductsList, ProductsListQuery, Query } from '@deity/falcon-ecommerce-uikit';
+import { ProductsList, Query } from '@deity/falcon-ecommerce-uikit';
 import { BackgroundImage, Box, Link } from '@deity/falcon-ui';
 import LazyLoad from 'react-lazyload';
 import gql from 'graphql-tag';
@@ -18,20 +18,6 @@ const HOMEPAGE_PRODUCTS_QUERY = gql`
           thumbnail
           urlPath
         }
-      }
-    }
-  }
-`;
-
-const GET_PRODUCTS_LIST = gql`
-  query Products($query: ShopPageQuery) {
-    products(query: $query) {
-      items {
-        id
-        name
-        price
-        thumbnail
-        urlPath
       }
     }
   }
@@ -163,22 +149,11 @@ const Home = () => (
           <T id="home.shopLooks" />
         </span>
       </H3>
-      <ProductsListQuery query={GET_PRODUCTS_LIST} variables={{ query: { perPage: 12 } }}>
-        {({ products }) => <ProductsList products={products.items} />}
-      </ProductsListQuery>
-      {/* <ProductsListQuery>{({ products }) => <ProductsList products={products.items} />}</ProductsListQuery> */}
+      <Query query={HOMEPAGE_PRODUCTS_QUERY} variables={{ categoryId: '25', amount: 20 }}>
+        {({ category }) => <ProductsList products={category.products.items} />}
+      </Query>
     </GridLayout>
   </React.Fragment>
-
-// const Home = () => (
-//  <GridLayout gridGap="md" py="ld">
-//    <H1 css={{ textAlign: 'center' }}>
-//      <T id="home.hotSellers" />
-//    </H1>
-//    <Query query={HOMEPAGE_PRODUCTS_QUERY} variables={{ categoryId: '25', amount: 20 }}>
-//      {({ category }) => <ProductsList products={category.products.items} />}
-//    </Query>
-//  </GridLayout>
-// );
+);
 
 export default Home;

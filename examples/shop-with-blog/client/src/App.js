@@ -13,8 +13,7 @@ import {
   Footer,
   FooterQuery,
   HeaderQuery,
-  LocaleProvider,
-  Loader
+  LocaleProvider
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
