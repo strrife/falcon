@@ -64,7 +64,7 @@ export const NavbarItem = themed({
 });
 
 const NavbarItemMenuInnerDOM: React.SFC<any> = props => (
-  <NavbarItemContext.Consumer>
+  <MenuItemContext.Consumer>
     {({ open }) => (
       <Box
         {...props}
@@ -73,11 +73,9 @@ const NavbarItemMenuInnerDOM: React.SFC<any> = props => (
         transitionDuration="standard"
       />
     )}
-  </NavbarItemContext.Consumer>
-//   <MenuItemContext.Consumer>
-//     {({ open }) => <Box {...props} display={open ? 'block' : 'none'} />}
-//   </MenuItemContext.Consumer>
+  </MenuItemContext.Consumer>
 );
+
 export const NavbarItemMenu = themed({
   tag: NavbarItemMenuInnerDOM,
 

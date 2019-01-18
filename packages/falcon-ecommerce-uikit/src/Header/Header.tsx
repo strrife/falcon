@@ -12,7 +12,6 @@ import {
   DefaultThemeProps,
   Box
 } from '@deity/falcon-ui';
-import { T } from '@deity/falcon-i18n';
 
 import { toGridTemplate } from '../helpers';
 import { MiniCartIcon } from '../MiniCart';
@@ -160,31 +159,31 @@ export const Searchbar: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
           }
           src="menu"
         />
-//         <React.Fragment>
-//           <CustomerQuery>
-//             {({ customer }) =>
-//               customer ? (
-//                 <Link as={RouterLink} to="/account" gridArea={SearchBarArea.signIn}>
-//                   <AccountIcon />
-//                 </Link>
-//               ) : (
-//                 <SignInIcon
-//                   gridArea={SearchBarArea.signIn}
-//                   onClick={() => openSidebar({ variables: { contentType: 'account' } })}
-//                 />
-//               )
-//             }
-//           </CustomerQuery>
-//           <CartQuery>
-//             {(data: CartData) => (
-//               <MiniCartIcon
-//                 onClick={() => openSidebar({ variables: { contentType: 'cart' } })}
-//                 gridArea={SearchBarArea.cart}
-//                 itemsQty={data.cart ? data.cart.itemsQty : 0}
-//               />
-//             )}
-//           </CartQuery>
-//         </React.Fragment>
+        //         <React.Fragment>
+        //           <CustomerQuery>
+        //             {({ customer }) =>
+        //               customer ? (
+        //                 <Link as={RouterLink} to="/account" gridArea={SearchBarArea.signIn}>
+        //                   <AccountIcon />
+        //                 </Link>
+        //               ) : (
+        //                 <SignInIcon
+        //                   gridArea={SearchBarArea.signIn}
+        //                   onClick={() => openSidebar({ variables: { contentType: 'account' } })}
+        //                 />
+        //               )
+        //             }
+        //           </CustomerQuery>
+        //           <CartQuery>
+        //             {(data: CartData) => (
+        //               <MiniCartIcon
+        //                 onClick={() => openSidebar({ variables: { contentType: 'cart' } })}
+        //                 gridArea={SearchBarArea.cart}
+        //                 itemsQty={data.cart ? data.cart.itemsQty : 0}
+        //               />
+        //             )}
+        //           </CartQuery>
+        //         </React.Fragment>
       )}
     </OpenSidebarMutation>
     <Link aria-label="DEITY" height="xl" as={RouterLink} gridArea={SearchBarArea.logo} to="/">
@@ -236,7 +235,7 @@ export const Header: React.SFC<HeaderData> = ({
   }
 }) => (
   <header>
-    <Banner items={banner} />
+    <Banner />
     {/* <LeftMenu items={leftMenu} /> */}
     <Searchbar items={leftMenu} />
     <nav>
