@@ -89,7 +89,7 @@ const App = ({ online }) => (
                 <SidebarContainer>
                   {sidebarProps => (
                     <Sidebar {...sidebarProps}>
-                      {() => <SidebarContents contentType={sidebarProps.contentType} />}
+                      <SidebarContents contentType={sidebarProps.contentType} />
                     </Sidebar>
                   )}
                 </SidebarContainer>
