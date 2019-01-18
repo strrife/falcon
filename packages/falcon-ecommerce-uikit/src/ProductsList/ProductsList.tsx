@@ -11,7 +11,7 @@ export const ProductsList: React.SFC<{ products: any[] }> = ({ products }) => (
         <ProductCardLayout to={product.urlPath}>
           <LazyLoad height="100%" offset={150}>
             <React.Fragment>
-              <Box css={{ display: 'flex', maxHeight: '100%', position: 'relative' }}>
+              <Box css={{ display: 'flex', maxHeight: '100%', position: 'relative', width: '100%', height: '100%' }}>
                 <Box
                   transitionTimingFunction="easeIn"
                   transitionDuration="short"

@@ -238,7 +238,7 @@ export const deityGreenTheme = createTheme({
           position: 'relative',
           display: 'flex',
           cursor: 'pointer',
-          borderRadius: '0',
+          borderRadius: 'small',
           border: theme.borders.bold,
           borderColor: theme.colors.secondaryDark,
           transitionProperty: 'border, fill',
@@ -405,7 +405,7 @@ export const deityGreenTheme = createTheme({
       bg: 'black',
       fontSize: 'sm',
       fontWeight: 'demiBold',
-      borderRadius: 'none',
+      borderRadius: 'small',
       css: {
         transitionProperty: 'all',
         textTransform: 'capitalize'

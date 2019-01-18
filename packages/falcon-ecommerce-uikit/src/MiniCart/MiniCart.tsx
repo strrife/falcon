@@ -95,13 +95,7 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
             })
           }
         >
-          <Icon
-            size="lg"
-            stroke="secondaryDark"
-            src="remove"
-            mr="xs"
-            css={({ theme }) => ({ ':hover': { stroke: theme.colors.primary } })}
-          />
+          <Icon size="lg" stroke="primary" src="remove" mr="xs" css={{ ':hover': { opacity: 0.6 } }} />
         </Link>
       )}
     </RemoveCartItemMutation>
