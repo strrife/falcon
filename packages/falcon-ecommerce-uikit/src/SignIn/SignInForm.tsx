@@ -13,20 +13,14 @@ type SignInFormProps = {
 };
 
 export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted, id }) => (
-  <SignInMutation
-    update={(_cache, result) => {
-      if (!result.errors && result.data && result.data.signIn) {
-        if (onCompleted) onCompleted();
-      }
-    }}
-  >
+  <SignInMutation>
     {(signIn, { loading, error }) => (
       <Formik
         initialValues={{
           email: '',
           password: ''
         }}
-        onSubmit={values => signIn({ variables: { input: values } })}
+        onSubmit={values => signIn({ variables: { input: values } }).then(() => onCompleted && onCompleted())}
       >
         {() => (
           <Form id={id} i18nId="signIn">
