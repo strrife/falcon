@@ -21,7 +21,9 @@ export const ProductsList: React.SFC<{ products: any[] }> = ({ products }) => (
                     width: '100%',
                     height: '100%',
                     zIndex: 100,
-                    ':hover': { opacity: '0' }
+                    ':hover': {
+                      opacity: 0
+                    }
                   }}
                 />
                 <Image css={{ flex: '1 1 100%', minHeight: '0%' }} src={product.thumbnail} alt={product.name} />
