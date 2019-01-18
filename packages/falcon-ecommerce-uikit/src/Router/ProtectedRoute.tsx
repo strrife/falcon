@@ -27,8 +27,8 @@ export const ProtectedRoute: React.SFC<ProtectedRouteProps> = ({ component, redi
               <Redirect
                 to={{
                   pathname: redirectTo,
-                  search: `?${new URLSearchParams({ returnUrl: `${pathname}${search}` })}`,
-                  state: { returnLocation: location }
+                  search: `?${new URLSearchParams({ next: `${pathname}${search}` })}`,
+                  state: { nextLocation: location }
                 }}
               />
             );
