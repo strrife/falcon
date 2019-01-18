@@ -15,18 +15,24 @@ export const ProtectedRoute: React.SFC<ProtectedRouteProps> = ({ component, redi
       {...rest}
       render={props => (
         <IsAuthenticatedQuery>
-          {({ customer }) =>
-            customer ? (
-              <Component {...props} />
-            ) : (
+          {({ customer }) => {
+            if (customer) {
+              return <Component {...props} />;
+            }
+
+            const { location } = props;
+            const { pathname, search } = location;
+
+            return (
               <Redirect
                 to={{
                   pathname: redirectTo,
-                  state: { origin: props.location }
+                  search: `?${new URLSearchParams({ next: `${pathname}${search}` })}`,
+                  state: { nextLocation: location }
                 }}
               />
-            )
-          }
+            );
+          }}
         </IsAuthenticatedQuery>
       )}
     />
