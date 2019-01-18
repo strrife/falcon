@@ -21,50 +21,58 @@ export class SidebarContainer extends React.Component {
     super(props);
 
     this.state = {
-      ready: false
+      isReady: false,
+      setTimeoutHandlerId: undefined,
+      requestIdleHandlerId: undefined
     };
   }
 
   componentDidMount() {
-    const setReady = () => {
-      if (this.state.ready) {
+    // set isReady flag after READY_TIMEOUT_MS timeout
+    const setTimeoutHandlerId = window.setTimeout(() => {
+      if (this.state.isReady) {
         return;
       }
 
       if ('requestIdleCallback' in window) {
-        return window.requestIdleCallback(this.setReadyState);
+        const requestIdleHandlerId = window.requestIdleCallback(this.forceIsReady);
+
+        return this.setState(x => ({ ...x, requestIdleHandlerId }));
       }
 
-      this.setReadyState();
-    };
+      return this.forceIsReady();
+    }, READY_TIMEOUT_MS);
 
-    // set ready flag even in sidebar has not been opened after READY_TIMEOUT_MS
-    // so sidebar contents are downloaded and ready to be displayed
-    window.setTimeout(setReady, READY_TIMEOUT_MS);
+    // eslint-disable-next-line
+    this.setState(x => ({ ...x, setTimeoutHandlerId }));
   }
 
-  setReadyState = () => {
-    this.setState({ ready: true });
-  };
+  componentWillUnmount() {
+    window.clearTimeout(this.state.setTimeoutHandlerId);
 
-  setReadyOnFirstOpen = ({ sidebar }) => {
-    // sets ready flag when sidebar get's opened for the first time
-    // that causes SidebarContents to dynamically import it's JS
-    const openedForTheFirstTime = sidebar.isOpen && !this.state.ready;
+    if ('requestIdleCallback' in window && this.state.requestIdleHandlerId !== undefined) {
+      window.cancelIdleCallback(this.state.requestIdleHandlerId);
+    }
+  }
 
-    if (openedForTheFirstTime) {
-      this.setReadyState();
+  /** Sets isReady even before timeout */
+  forceIsReady = () => {
+    if (this.state.isReady === false) {
+      this.setState(x => ({
+        ...x,
+        isReady: true
+      }));
     }
   };
 
   render() {
     return (
-      <SidebarQuery onCompleted={this.setReadyOnFirstOpen}>
+      <SidebarQuery onCompleted={({ sidebar }) => sidebar.isOpen && this.forceIsReady()}>
         {({ sidebar }) => (
           <CloseSidebarMutation>
             {closeSidebar =>
               this.props.children({
-                ready: this.state.ready,
+                ready: this.state.isReady,
                 close: closeSidebar,
                 isOpen: sidebar.isOpen,
                 side: sidebar.side,

@@ -24,16 +24,7 @@ export default class Html extends Component {
   }
 
   render() {
-    const {
-      assets,
-      children,
-      helmetContext,
-      prefetchLinkElements,
-      styleElements,
-      scriptElements,
-      state,
-      i18nextState
-    } = this.props;
+    const { assets, children, helmetContext, chunkExtractor, state, i18nextState } = this.props;
 
     return (
       <html lang="en" {...helmetContext.htmlAttributes.toComponent()}>
@@ -48,8 +39,10 @@ export default class Html extends Component {
 
           <link rel="shortcut icon" href="/favicon.ico" />
           {assets.webmanifest && <link rel="manifest" href={assets.webmanifest} type="application/manifest+json" />}
-          {prefetchLinkElements}
-          {styleElements}
+
+          {chunkExtractor.getLinkElements()}
+          {chunkExtractor.getStyleElements()}
+
           {helmetContext.link.toComponent()}
           {helmetContext.script.toComponent()}
         </head>
@@ -59,10 +52,9 @@ export default class Html extends Component {
           <div id="root">{children}</div>
 
           <SerializeState variable="__APOLLO_STATE__" value={state} />
-
           <SerializeState variable="I18NEXT_STATE" value={i18nextState} />
 
-          {scriptElements}
+          {chunkExtractor.getScriptElements()}
         </body>
       </html>
     );
@@ -71,14 +63,10 @@ export default class Html extends Component {
 
 Html.propTypes = {
   children: PropTypes.node,
+  chunkExtractor: PropTypes.shape({}).isRequired,
+  assets: PropTypes.shape({ webmanifest: PropTypes.string }),
   helmetContext: PropTypes.shape({}).isRequired,
-  assets: PropTypes.shape({
-    webmanifest: PropTypes.string
-  }),
   state: PropTypes.shape({}),
-  scriptElements: PropTypes.arrayOf(PropTypes.element),
-  styleElements: PropTypes.arrayOf(PropTypes.element),
-  prefetchLinkElements: PropTypes.arrayOf(PropTypes.element),
   i18nextState: PropTypes.shape({
     language: PropTypes.string,
     data: PropTypes.shape({})
@@ -88,9 +76,6 @@ Html.propTypes = {
 
 Html.defaultProps = {
   assets: { webmanifest: '' },
-  scriptElements: [],
-  styleElements: [],
-  prefetchLinkElements: [],
   state: {},
   i18nextState: {},
   googleTagManager: {}
