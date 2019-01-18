@@ -362,12 +362,10 @@ module.exports = (target = 'web', options, buildConfig) => {
         includeAllFileTypes: true,
         prettyPrint: true
       }),
-
-      // loadable components  plugin
-      // https://www.smooth-code.com/open-source/loadable-components/docs/server-side-rendering/
-      // TODO: add change args to { writeToDisk: true, filename: paths.loadableStats } when
-      // https://github.com/smooth-code/loadable-components/issues/179 gets fixed
-      new LoadablePlugin({ writeToDisk: true })
+      new LoadablePlugin({
+        outputAsset: false,
+        writeToDisk: { filename: paths.appBuild }
+      })
     ];
 
     if (IS_DEV) {

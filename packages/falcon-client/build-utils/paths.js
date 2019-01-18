@@ -54,10 +54,7 @@ module.exports = {
   appBuildPublic: resolveApp('build/public'),
   appPublic: resolveApp('public'),
   appManifest: resolveApp('build/assets.json'),
-  // TODO: this path should be changed to /build/loadable-stats.json
-  // when https://github.com/smooth-code/loadable-components/issues/179 gets fixed
-  // as we don't want to have stats file in public dir in long term
-  loadableStats: resolveApp('build/public/loadable-stats.json'),
+  appLoadableStats: resolveApp('build/loadable-stats.json'),
 
   testsSetup: resolveApp('src/setupTests.js'),
   appBabelRc: resolveApp('.babelrc'),
