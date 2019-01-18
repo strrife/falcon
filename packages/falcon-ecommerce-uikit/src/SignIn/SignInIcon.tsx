@@ -14,12 +14,12 @@ export const SignInIcon: React.SFC<{
     <Icon src="user" />
     <Text
       color="primary"
-      fontSize="xs"
-      fontWeight="bold"
+      fontSize="xxs"
+      fontWeight="light"
       css={{
         whiteSpace: 'nowrap',
         position: 'absolute',
-        bottom: '-10px',
+        bottom: '-5px',
         left: '50%',
         transform: 'translate(-50%, 0)'
       }}
