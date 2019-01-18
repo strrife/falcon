@@ -2,7 +2,7 @@
   "name": "@deity/falcon-logger",
   "license": "OSL-3.0",
   "main": "src/index.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://falcon.deity.io/docs/miscellaneous/falcon-logger",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-logger",
   "publishConfig": {
