@@ -7,8 +7,8 @@
     "magento": {
       "package": "@deity/falcon-magento2-api/src/endpoints",
       "config": {
-        "host": "magento.deity.io",
-        "protocol": "https"
+        "host": "magento-old.deity.io",
+        "protocol": "http"
       }
     }
   },

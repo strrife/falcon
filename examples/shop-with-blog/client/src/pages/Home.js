@@ -68,7 +68,7 @@ class Hero extends Component {
     let yPos = window.pageYOffset / this.parallaxImage.dataset.speed;
     yPos = -yPos;
 
-    const coords = `0% ${50 + yPos * 0.2}%`;
+    const coords = `center ${50 + yPos * 0.2}%`;
 
     this.parallaxImage.style.backgroundPosition = coords;
   };
