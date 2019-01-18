@@ -11,11 +11,9 @@ export const SignIn = () => (
     {t => (
       <MiniFormLayout title={t('signIn.title')}>
         <Divider mb="lg" />
-        <SignInForm id="sign-in-sidebar" />
-
-//         <CloseSidebarMutation>
-//           {closeSidebar => <SignInForm id="sign-in-sidebar" onCompleted={closeSidebar} />}
-//         </CloseSidebarMutation>
+        <CloseSidebarMutation>
+          {closeSidebar => <SignInForm id="sign-in-sidebar" onCompleted={closeSidebar} />}
+        </CloseSidebarMutation>
         <Divider my="lg" />
         <GridLayout>
           <NewCustomer />
