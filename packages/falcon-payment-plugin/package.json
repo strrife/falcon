@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "license": "OSL-3.0",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-payment-plugin",
-  "main": "dist/falcon-payment.cjs.js",
+  "main": "dist/falcon-payment-plugin.cjs.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
