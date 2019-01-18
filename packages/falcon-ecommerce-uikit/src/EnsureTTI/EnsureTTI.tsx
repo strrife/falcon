@@ -43,6 +43,8 @@ export class EnsureTTI extends React.Component<EnsureTTIProps, EnsureTTIState> {
   }
 
   componentDidMount() {
+    const { timeout } = this.props;
+
     // set isReady flag after timeout
     const setTimeoutHandlerId = window.setTimeout(() => {
       if (this.state.isReady) {
@@ -56,17 +58,18 @@ export class EnsureTTI extends React.Component<EnsureTTIProps, EnsureTTIState> {
       }
 
       return this.forceReady();
-    }, this.props.timeout);
+    }, timeout);
 
     // eslint-disable-next-line
     this.setState(x => ({ ...x, setTimeoutHandlerId }));
   }
 
   componentWillUnmount() {
-    window.clearTimeout(this.state.setTimeoutHandlerId);
+    const { setTimeoutHandlerId, requestIdleHandlerId } = this.state;
 
-    if ('requestIdleCallback' in window && this.state.requestIdleHandlerId !== undefined) {
-      (window as any).cancelIdleCallback(this.state.requestIdleHandlerId);
+    window.clearTimeout(setTimeoutHandlerId);
+    if ('requestIdleCallback' in window && requestIdleHandlerId !== undefined) {
+      (window as any).cancelIdleCallback(requestIdleHandlerId);
     }
   }
 
