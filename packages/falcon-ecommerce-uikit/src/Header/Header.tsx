@@ -231,7 +231,7 @@ export const Searchbar: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
 
 export const Header: React.SFC<HeaderData> = ({
   config: {
-    menus: { header, banner, leftMenu }
+    menus: { header, leftMenu }
   }
 }) => (
   <header>
