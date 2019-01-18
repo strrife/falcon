@@ -40,7 +40,7 @@ export const Newsletter: React.SFC<{}> = () => (
             <Button as="input" type="submit" value={t('newsletter.subscribe')} flex="none" />
           </Group>
           <Label htmlFor="subscribe" my="sm" display="flex" justifyContent="center" alignItems="center" fontSize="xxs">
-            <Checkbox id="subscribe" required mr="xs" size="sm" /> {t('newsletter.consent')}
+            <Checkbox id="subscribe" required mr="xs" width="sm" height="sm" /> {t('newsletter.consent')}
           </Label>
         </form>
       )}
