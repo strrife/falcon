@@ -7,13 +7,23 @@ export const Divider = themed({
     divider: {
       display: 'block',
       m: 'none',
-      borderTop: 'regular',
+      border: 'regular',
       borderBottom: 'none',
       borderLeft: 'none',
       borderColor: 'secondaryDark',
 
       css: {
         width: '100%'
+      },
+
+      variants: {
+        horizontal: {
+          borderTop: 'none',
+
+          css: {
+            width: 'auto'
+          }
+        }
       }
     }
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Divider, H4, Text, List, ListItem, Icon, Button, GridLayout } from '@deity/falcon-ui';
 import { I18n, T } from '@deity/falcon-i18n';
+import { CloseSidebarMutation } from './../Sidebar/SidebarMutations';
 import { SignInForm } from '../SignIn';
 import { MiniFormLayout } from './MiniFormLayout';
 import { OpenSidebarMutation } from '../Sidebar';
@@ -9,8 +10,9 @@ export const SignIn = () => (
   <I18n>
     {t => (
       <MiniFormLayout title={t('signIn.title')}>
-        <SignInForm id="sign-in-sidebar" />
-
+        <CloseSidebarMutation>
+          {closeSidebar => <SignInForm id="sign-in-sidebar" onCompleted={closeSidebar} />}
+        </CloseSidebarMutation>
         <Divider my="lg" />
         <GridLayout>
           <NewCustomer />

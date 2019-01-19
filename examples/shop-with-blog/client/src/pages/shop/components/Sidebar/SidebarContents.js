@@ -1,13 +1,6 @@
 import React from 'react';
 import { Box } from '@deity/falcon-ui';
-import {
-  MiniCartQuery,
-  MiniAccountQuery,
-  MiniCart,
-  MiniAccount,
-  SignUp,
-  ForgotPassword
-} from '@deity/falcon-ecommerce-uikit';
+import { MiniCartQuery, MiniCart, SignIn, SignUp, ForgotPassword } from '@deity/falcon-ecommerce-uikit';
 import { SIDEBAR_CONTENT_TYPES } from './SidebarQuery';
 
 export default ({ contentType }) => {
@@ -31,7 +24,7 @@ export default ({ contentType }) => {
       </ContentBox>
 
       <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.account}>
-        <MiniAccountQuery>{data => <MiniAccount {...data} />}</MiniAccountQuery>
+        <SignIn />
       </ContentBox>
       <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.signUp}>
         <SignUp />

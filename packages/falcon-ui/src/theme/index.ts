@@ -79,14 +79,14 @@ export type ThemedComponentPropsWithCss<T = {}> = {
     | (PropsMappings[ComponentProp] extends ThemedPropMapping
         ? Extract<keyof Theme[PropsMappings[ComponentProp]['themeProp']], string>
         : PropsMappings[ComponentProp] extends ResponsivePropMapping
-          ? CssProps[PropsMappings[ComponentProp]['cssProp']]
-          : (string | number))
+        ? CssProps[PropsMappings[ComponentProp]['cssProp']]
+        : (string | number))
     | {
         [Breakpoint in keyof Theme['breakpoints']]?: PropsMappings[ComponentProp] extends ThemedPropMapping
           ? Extract<keyof Theme[PropsMappings[ComponentProp]['themeProp']], string>
           : PropsMappings[ComponentProp] extends ResponsivePropMapping
-            ? CssProps[PropsMappings[ComponentProp]['cssProp']]
-            : (string | number)
+          ? CssProps[PropsMappings[ComponentProp]['cssProp']]
+          : (string | number)
       }
 } & { css?: InlineCss<T> };
 

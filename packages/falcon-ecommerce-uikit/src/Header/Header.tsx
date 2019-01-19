@@ -1,4 +1,5 @@
 import React from 'react';
+import { T } from '@deity/falcon-i18n';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Navbar,
@@ -15,6 +16,10 @@ import {
 import { toGridTemplate } from '../helpers';
 import { MiniCartIcon } from '../MiniCart';
 import { CartQuery, CartData } from '../Cart';
+import { CustomerQuery } from '../Customer';
+import { AccountIcon } from '../MiniAccount';
+import { SignInIcon } from '../SignIn';
+import { SignOutLogic } from '../SignOut';
 import { HeaderData, MenuItem } from './HeaderQuery';
 import { OpenSidebarMutation } from '../Sidebar';
 
@@ -33,6 +38,17 @@ const bannerLayoutTheme: DefaultThemeProps = {
 
 export const Banner: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
   <List defaultTheme={bannerLayoutTheme}>
+    <SignOutLogic>
+      {({ isSignedIn, signOut }: any) =>
+        isSignedIn && (
+          <ListItem p="xs">
+            <Link onClick={() => signOut()}>
+              <T id="signOut.link" />
+            </Link>
+          </ListItem>
+        )
+      }
+    </SignOutLogic>
     {items.map(item => (
       <ListItem p="xs" key={item.name}>
         <Link as={RouterLink} to={item.url}>
@@ -99,29 +115,24 @@ export const Searchbar = () => (
     <OpenSidebarMutation>
       {openSidebar => (
         <React.Fragment>
-          <Icon
-            gridArea={SearchBarArea.signIn}
-            src="user"
-            onClick={() =>
-              openSidebar({
-                variables: {
-                  contentType: 'account'
-                }
-              })
+          <CustomerQuery>
+            {({ customer }) =>
+              customer ? (
+                <Link as={RouterLink} to="/account" gridArea={SearchBarArea.signIn}>
+                  <AccountIcon />
+                </Link>
+              ) : (
+                <SignInIcon
+                  gridArea={SearchBarArea.signIn}
+                  onClick={() => openSidebar({ variables: { contentType: 'account' } })}
+                />
+              )
             }
-            css={{ cursor: 'pointer' }}
-          />
-
+          </CustomerQuery>
           <CartQuery>
             {(data: CartData) => (
               <MiniCartIcon
-                onClick={() =>
-                  openSidebar({
-                    variables: {
-                      contentType: 'cart'
-                    }
-                  })
-                }
+                onClick={() => openSidebar({ variables: { contentType: 'cart' } })}
                 gridArea={SearchBarArea.cart}
                 itemsQty={data.cart ? data.cart.itemsQty : 0}
               />

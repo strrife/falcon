@@ -8,6 +8,7 @@ import i18next from './i18nextMiddleware';
  * @typedef {object} RenderAppShell
  * @property {object} config App configuration
  * @property {object} webpackAssets webpack assets
+ * @property {object} loadableStats @loadable components stats
  */
 
 /**
@@ -31,7 +32,8 @@ export function renderAppShell({ config, webpackAssets, loadableStats }) {
  * @property {function} App React Component
  * @property {object} config App configuration
  * @property {object} clientApolloSchema Apollo State object
- * @property {object} webpackAssets webpack assets
+ * @property {object} webpackAssets webpack assets,
+ * @property {object} loadableStats @loadable components stats
  */
 
 /**

@@ -1,7 +1,8 @@
 {
   "name": "@deity/falcon-i18n",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "OSL-3.0",
+  "homepage": "https://falcon.deity.io/docs/falcon-client/internationalization",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-i18n",
   "main": "dist/falcon-i18n.cjs.js",
   "module": "dist/index.js",
@@ -12,7 +13,8 @@
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "i18n"
   ],
   "scripts": {
     "clean": "rimraf dist",

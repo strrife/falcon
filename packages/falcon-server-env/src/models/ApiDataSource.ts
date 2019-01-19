@@ -38,7 +38,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
   public name: string;
   public config: ApiDataSourceConfig;
   public fetchUrlPriority: number = ApiUrlPriority.NORMAL;
-  public perPage: number = 10;
+  public perPage: number = 20;
 
   protected apiContainer: ApiContainer;
   protected eventEmitter: EventEmitter2;

@@ -51,7 +51,7 @@ const CartPage = () => (
               <T id="cart.emptyCart" />
             </Text>
             <Button mt="sm" as={RouterLink} to="/">
-              <T id="cart.goShopping" />
+              <T id="cart.goShoppingButton" />
             </Button>
           </Box>
         )}

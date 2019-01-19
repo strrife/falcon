@@ -38,7 +38,7 @@ type Url {
   """
   Entity ID
   """
-  id: Int!
+  id: String!
   """
   Canonical URL for the found entity
   """

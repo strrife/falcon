@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
-import { Loader } from '@deity/falcon-ecommerce-uikit';
 import { ThemeProvider } from '@deity/falcon-ui';
-import DynamicRoute from '@deity/falcon-client/src/components/DynamicRoute';
 import isOnline from '@deity/falcon-client/src/components/isOnline';
 import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
 import {
@@ -22,6 +20,7 @@ import loadable from 'src/components/loadable';
 import { ErrorBoundary } from 'src/components/ErrorBoundary';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
+import DynamicRoute from 'src/pages/DynamicRoute';
 import { Sidebar, SidebarContainer } from 'src/pages/shop/components/Sidebar';
 import { deityGreenTheme, globalCss } from './theme';
 
@@ -41,20 +40,18 @@ const HeadMetaTags = () => (
   </Helmet>
 );
 
-const Category = loadable(() => import(/* webpackChunkName: "shop/category" */ './pages/shop/Category'));
-const Product = loadable(() => import(/* webpackChunkName: "shop/product" */ './pages/shop/Product'));
+const Account = loadable(() => import(/* webpackChunkName: "account" */ './pages/shop/Account/Account'));
 const SignIn = loadable(() => import(/* webpackChunkName: "account/sign-in" */ './pages/account/SignIn'));
-const Dashboard = loadable(() => import(/* webpackChunkName: "account/dashboard" */ './pages/account/Dashboard'));
 const ResetPassword = loadable(() => import(/* webpackChunkName: "shop/resetpassword" */ './pages/shop/ResetPassword'));
 const Blog = loadable(() => import(/* webpackChunkName: "blog/blog" */ './pages/blog/Blog'));
-const BlogPost = loadable(() => import(/* webpackChunkName: "blog/post" */ './pages/blog/Post'));
 const Cart = loadable(() => import(/* webpackChunkName: "shop/cart" */ './pages/shop/Cart'));
 const Checkout = loadable(() => import(/* webpackChunkName: "shop/checkout" */ './pages/shop/Checkout'));
 const CheckoutConfirmation = loadable(() =>
   import(/* webpackChunkName: "shop/checkout" */ './pages/shop/CheckoutConfirmation')
 );
+
 const SidebarContents = loadable(() =>
-  import(/* webpackChunkName: "shop/SidebarContents" */ './pages/shop/components/Sidebar/SidebarContents')
+  import(/* webpackPrefetch: true, webpackChunkName: "shop/SidebarContents" */ './pages/shop/components/Sidebar/SidebarContents')
 );
 
 let ThemeEditorComponent;
@@ -83,18 +80,10 @@ const App = ({ online }) => (
                   <Route exact path="/cart" component={Cart} />
                   <Route exact path="/checkout" component={Checkout} />
                   <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
-                  <Route exact path="/reset-password" component={ResetPassword} />
-                  <ProtectedRoute exact path="/account" component={Dashboard} />
+                  <ProtectedRoute path="/account" component={Account} />
                   <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
                   <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
-                  <DynamicRoute
-                    loaderComponent={Loader}
-                    components={{
-                      'blog-post': BlogPost,
-                      'shop-category': Category,
-                      'shop-product': Product
-                    }}
-                  />
+                  <DynamicRoute />
                 </Switch>
                 <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
                 <SidebarContainer>

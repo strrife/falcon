@@ -4,6 +4,8 @@ import { Box, Image, Text, Divider } from '@deity/falcon-ui';
 import { Price, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
 import CartTotals from '../components/CartTotals';
 
+const MAX_THUMB_SIZE = '80px';
+
 const ItemArea = {
   thumb: 'thumb',
   name: 'name',
@@ -11,9 +13,7 @@ const ItemArea = {
   details: 'details'
 };
 
-const MAX_THUMB_SIZE = '80px';
-
-const checkoutCartSummaryItemLayout = {
+export const checkoutCartSummaryItemLayout = {
   checkoutCartSummaryItemLayout: {
     display: 'grid',
     gridGap: 'sm',
@@ -26,24 +26,6 @@ const checkoutCartSummaryItemLayout = {
       [ItemArea.thumb,  ItemArea.details, ItemArea.details, ItemArea.details  ]
     ])
   }
-};
-
-const OptionRow = ({ option }) => (
-  <Box display="flex" key={option.label}>
-    <Text flex="1" fontSize="xs">
-      {option.label}:
-    </Text>
-    <Text flex="2" fontSize="xs">
-      {option.value}
-    </Text>
-  </Box>
-);
-
-OptionRow.propTypes = {
-  option: PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-  })
 };
 
 const CartItem = ({ item }) => (
@@ -66,6 +48,19 @@ const CartItem = ({ item }) => (
     <Price gridArea={ItemArea.price} value={item.rowTotalInclTax} fontWeight="bold" css={{ textAlign: 'right' }} />
   </Box>
 );
+
+const OptionRow = ({ option }) => (
+  <Box display="flex" fontSize="xs">
+    <Text flex="1">{option.label}:</Text>
+    <Text flex="2">{option.value}</Text>
+  </Box>
+);
+OptionRow.propTypes = {
+  option: PropTypes.shape({
+    label: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+  })
+};
 
 const CheckoutCartSummary = ({ cart }) => (
   <Box>

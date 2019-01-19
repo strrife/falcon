@@ -23,8 +23,7 @@ export const OnlyUnauthenticatedRoute: React.SFC<OnlyUnauthenticatedRouteRoutePr
             customer ? (
               <Redirect
                 to={{
-                  pathname: redirectTo,
-                  state: { origin: props.location }
+                  pathname: redirectTo
                 }}
               />
             ) : (
