@@ -273,7 +273,22 @@ export const deityGreenTheme = createTheme({
       css: {
         maxWidth: 1280,
         margin: '0 auto',
-        justifyItems: 'center'
+        justifyItems: 'center',
+        borderBottom: {
+          xs: '1px solid #d0d0d0',
+          md: 'none'
+        }
+      }
+    },
+
+    accountLayout: {
+      p: 'xl',
+      gridGap: {
+        md: 'xxl'
+      },
+      css: {
+        maxWidth: 1280,
+        margin: '0 auto'
       }
     },
 
