@@ -165,7 +165,7 @@ export const Searchbar: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
       <Icon src="logo" />
     </Link>
     <Box defaultTheme={rightMenuLayoutTheme} gridArea={SearchBarArea.rightMenu}>
-      <Icon src="search" gridArea={RightMenuArea.search} />
+      {/* <Icon src="search" gridArea={RightMenuArea.search} /> */}
       <OpenSidebarMutation>
         {openSidebar => (
           <React.Fragment>
