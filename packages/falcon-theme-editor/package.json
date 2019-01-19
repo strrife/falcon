@@ -38,7 +38,7 @@
     "@babel/preset-env": "7.1.6",
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.1.0",
-    "@types/react": "16.7.17",
+    "@types/react": "16.7.20",
     "@types/react-dom": "16.0.11",
     "@types/stringify-object": "^3.2.0",
     "babel-plugin-annotate-pure-calls": "0.4.0",

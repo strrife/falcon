@@ -41,7 +41,7 @@
     "babel-plugin-module-resolver": "3.1.1",
     "i18next": "^12.1.0",
     "prop-types": "^15.6.2",
-    "react": "~16.4.2",
+    "react": "^16.6.3",
     "react-dom": "~16.4.2",
     "rimraf": "2.6.3",
     "rollup": "0.66.4",
@@ -53,7 +53,7 @@
   "peerDependencies": {
     "i18next": "^12.1.0",
     "prop-types": "^15.6.2",
-    "react": "^16.4.2",
+    "react": "^16.6.3",
     "react-dom": "~16.4.2"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
