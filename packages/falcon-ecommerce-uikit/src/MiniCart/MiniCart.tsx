@@ -167,7 +167,14 @@ export const MiniCart: React.SFC<MiniCartData> = ({ cart: { quoteCurrency, items
 
         {items.length > 0 && (
           <Box gridArea={MiniCartLayoutArea.cta} py="sm" bgFullWidth="secondaryLight">
-            <Button as={RouterLink} to="/cart" onClick={() => closeSidebar()} css={{ width: '100%' }} height="xl">
+            <Button
+              as={RouterLink}
+              to="/cart"
+              onClick={() => closeSidebar()}
+              css={{ width: '100%' }}
+              variant="reverse"
+              height="xl"
+            >
               <Icon stroke="white" size="md" mr="xs" src="lock" />
               <T id="miniCart.checkout" />
             </Button>

@@ -83,7 +83,7 @@ class Hero extends Component {
           src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=512&q=80"
           id="slider"
           data-type="background"
-          data-speed="4"
+          data-speed="3"
           ref={ref => {
             this.parallaxImage = ref;
           }}
@@ -97,7 +97,7 @@ class Hero extends Component {
             css={{ width: '100%', height: '100%' }}
             justifyContent="center"
           >
-            <H1 fontWeight="demiBold" css={{ textShadow: '3px 4px 20px #0000004f' }}>
+            <H1 fontWeight="demiBold" css={{ textShadow: '3px 4px 20px #0000004f' }} mb="md">
               <T id="home.heroText" />
             </H1>
             <Button as={RouterLink} to="/women.html" variant="cta">

@@ -417,7 +417,7 @@ export const deityGreenTheme = createTheme({
     button: {
       px: 'xl',
       height: 'lg',
-      bg: 'black',
+      bg: 'primary',
       fontSize: 'sm',
       fontWeight: 'demiBold',
       borderRadius: 'small',
@@ -458,12 +458,21 @@ export const deityGreenTheme = createTheme({
             color: props.theme.colors.white,
             backgroundColor: props.theme.colors.primary
           })
+        },
+        reverse: {
+          bg: 'primaryLight',
+          css: props => ({
+            ':hover:enabled': {
+              backgroundColor: props.theme.colors.primary
+            }
+          })
         }
       }
     },
 
     input: {
-      height: 'xl'
+      height: 'xl',
+      borderRadius: 'small'
     },
 
     label: {

@@ -43,7 +43,7 @@ const accountLayout = {
 
 const MenuLink = ({ to, children, ...rest }) => (
   <MenuItem {...rest}>
-    <Link as={RouterLink} to={to} p="xs" flex={1}>
+    <Link as={RouterLink} to={to} p="xs" flex={1} color="black">
       {children}
     </Link>
   </MenuItem>
@@ -54,8 +54,16 @@ MenuLink.propTypes = {
 
 const Account = () => (
   <Box defaultTheme={accountLayout}>
-    <Box gridArea={AccountArea.menu} display="flex" flexDirection="column" alignItems="stretch" my="md">
-      <Menu>
+    <Box
+      gridArea={AccountArea.menu}
+      display="flex"
+      flexDirection="column"
+      alignItems="stretch"
+      bg="secondaryLight"
+      my="md"
+      css={{ margin: { md: 0 } }}
+    >
+      <Menu px="sm" py="xs" bg="transparent">
         <MenuLink to="/account">
           <T id="account.dashboardLink" />
         </MenuLink>
