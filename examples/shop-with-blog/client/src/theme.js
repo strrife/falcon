@@ -218,7 +218,11 @@ export const deityGreenTheme = createTheme({
     productListLayout: {
       gridGap: 'xl',
       py: 'xl',
-      fontSize: 'sm'
+      fontSize: 'sm',
+      gridTemplateColumns: {
+        xs: 'repeat(auto-fill,minmax(260px,1fr))',
+        md: 'repeat(auto-fill,minmax(300px,1fr))'
+      }
     },
 
     productLayout: {

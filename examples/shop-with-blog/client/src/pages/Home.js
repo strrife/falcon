@@ -142,7 +142,13 @@ const Category = () => (
 const Home = () => (
   <React.Fragment>
     <Hero />
-    <GridLayout p="xl" css={{ margin: 'auto', maxWidth: 1280 }}>
+    <GridLayout
+      css={props => ({
+        margin: 'auto',
+        maxWidth: 1280,
+        padding: { xs: props.theme.spacing.md, md: props.theme.spacing.xl }
+      })}
+    >
       <Category />
       <H3 fontWeight="demiBold" mt="lg" css={{ textAlign: 'center' }}>
         <span py="1px" style={{ borderBottom: '2px solid black' }}>
