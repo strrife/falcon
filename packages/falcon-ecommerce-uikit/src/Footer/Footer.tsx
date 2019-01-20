@@ -31,13 +31,15 @@ const footerSectionsTheme: DefaultThemeProps = {
     gridGap: 'sm',
     bgFullWidth: 'secondaryLight',
     py: 'sm',
-    px: 'xl',
+    px: {
+      xs: 'md',
+      md: 'xl'
+    },
     css: {
       margin: 'auto',
       maxWidth: 1280,
       justifyItems: {
-        xs: 'center',
-        md: 'flex-start'
+        xs: 'flex-start'
       }
     }
   }

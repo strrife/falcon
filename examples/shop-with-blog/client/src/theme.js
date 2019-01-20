@@ -215,6 +215,28 @@ export const deityGreenTheme = createTheme({
       }
     },
 
+    footerLayout: {
+      px: {
+        xs: 'md',
+        md: 'xl'
+      },
+      pt: {
+        xs: 'md',
+        md: 'xl'
+      }
+    },
+
+    dropdownMenu: {
+      variants: {
+        reverse: {
+          css: {
+            top: 'initial',
+            bottom: 'calc(100% + 1px)'
+          }
+        }
+      }
+    },
+
     productListLayout: {
       gridGap: 'xl',
       py: 'xl',
@@ -277,8 +299,7 @@ export const deityGreenTheme = createTheme({
         md: 'sm'
       },
       px: {
-        xs: 'sm',
-        sm: 'md',
+        xs: 'md',
         md: 'xl'
       },
       css: {
