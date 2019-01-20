@@ -79,7 +79,7 @@ const Account = () => (
         <MenuItem css={{ ':hover': { background: 'transparent' } }}>
           <SignOutLogic>
             {({ signOut }) => (
-              <Link p="xs" flex={1} color="black" onClick={() => signOut()}>
+              <Link p="xs" flex={1} color="black" onClick={() => signOut()} css={{ ':hover': { opacity: 0.6 } }}>
                 <T id="signOut.link" />
               </Link>
             )}

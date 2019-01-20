@@ -218,7 +218,7 @@ export const deityGreenTheme = createTheme({
     footerLayout: {
       px: {
         xs: 'md',
-        md: 'xl'
+        sm: 'xl'
       },
       pt: {
         xs: 'md',
@@ -237,7 +237,11 @@ export const deityGreenTheme = createTheme({
     },
 
     productLayout: {
-      p: 'xl',
+      py: 'xl',
+      px: {
+        xs: 'md',
+        sm: 'xl'
+      },
       css: {
         margin: 'auto',
         maxWidth: 1280
@@ -289,7 +293,7 @@ export const deityGreenTheme = createTheme({
       },
       px: {
         xs: 'md',
-        md: 'xl'
+        sm: 'xl'
       },
       css: {
         maxWidth: 1280,
@@ -304,6 +308,10 @@ export const deityGreenTheme = createTheme({
 
     accountLayout: {
       p: 'xl',
+      px: {
+        xs: 'md',
+        sm: 'xl'
+      },
       gridGap: {
         md: 'xxl'
       },
@@ -323,7 +331,11 @@ export const deityGreenTheme = createTheme({
     },
 
     cartLayout: {
-      p: 'xl',
+      py: 'xl',
+      px: {
+        xs: 'md',
+        sm: 'xl'
+      },
       css: {
         maxWidth: 1280,
         margin: 'auto'
@@ -332,14 +344,30 @@ export const deityGreenTheme = createTheme({
 
     checkoutLayout: {
       py: 'xl',
+      px: {
+        xs: 'md',
+        sm: 'xl'
+      },
       css: ({ theme }) => ({
         maxWidth: 1280,
         margin: `${theme.spacing.lg}px auto`
       })
     },
 
+    blogPostsLayout: {
+      py: 'xl',
+      px: {
+        xs: 'md',
+        sm: 'xl'
+      }
+    },
+
     productsCategory: {
-      p: 'xl',
+      py: 'xl',
+      px: {
+        xs: 'md',
+        sm: 'xl'
+      },
       css: {
         margin: 'auto',
         maxWidth: 1280

@@ -144,7 +144,7 @@ const Home = () => (
         margin: 'auto',
         maxWidth: 1280
       }}
-      px={{ xs: 'md', md: 'xl' }}
+      px={{ xs: 'md', sm: 'xl' }}
       py="xl"
     >
       <Category />
