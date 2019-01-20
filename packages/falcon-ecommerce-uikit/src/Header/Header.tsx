@@ -128,14 +128,19 @@ const rightMenuLayoutTheme: DefaultThemeProps = {
       [RightMenuArea.search, RightMenuArea.account, RightMenuArea.cart]
     ]),
     css: {
-      alignItems: 'center'
+      alignItems: 'center',
+      width: '100%',
+      justifyContent: 'flex-end'
     }
   }
 };
 
 export const Searchbar: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
   <Box defaultTheme={searchBarLayoutTheme}>
-    <List css={{ color: 'black', display: { xs: 'none', md: 'flex' } }} gridArea={SearchBarArea.leftMenu}>
+    <List
+      css={{ color: 'black', display: { xs: 'none', md: 'flex' }, width: '100%' }}
+      gridArea={SearchBarArea.leftMenu}
+    >
       {items.map(item => (
         <ListItem py="xs" mr="sm" key={item.name}>
           <Link as={RouterLink} to={item.url}>
@@ -144,23 +149,24 @@ export const Searchbar: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
         </ListItem>
       ))}
     </List>
-    <OpenSidebarMutation>
-      {openSidebar => (
-        <Icon
-          gridArea={SearchBarArea.leftMenu}
-          css={{ display: { md: 'none' } }}
-          onClick={() =>
-            openSidebar({
-              variables: {
-                contentType: 'account',
-                side: 'left'
-              }
-            })
-          }
-          src="menu"
-        />
-      )}
-    </OpenSidebarMutation>
+    <Box gridArea={SearchBarArea.leftMenu} css={{ display: { md: 'none' }, width: '100%' }}>
+      <OpenSidebarMutation>
+        {openSidebar => (
+          <Icon
+            cursor="pointer"
+            onClick={() =>
+              openSidebar({
+                variables: {
+                  contentType: 'account',
+                  side: 'left'
+                }
+              })
+            }
+            src="menu"
+          />
+        )}
+      </OpenSidebarMutation>
+    </Box>
     <Link aria-label="DEITY" height="xl" as={RouterLink} gridArea={SearchBarArea.logo} to="/">
       <Icon src="logo" />
     </Link>

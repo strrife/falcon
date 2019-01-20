@@ -264,7 +264,7 @@ export const deityGreenTheme = createTheme({
     },
 
     searchbarLayout: {
-      gridTemplate: '"leftMenu logo rightMenu" / auto 1fr auto',
+      gridTemplate: '"leftMenu logo rightMenu" / 1fr 1fr 1fr',
       alignItems: 'center',
       my: 'none',
       gridGap: 'sm',
@@ -298,7 +298,6 @@ export const deityGreenTheme = createTheme({
       fontSize: 'xs',
       fontWeight: 'light',
       py: 'xs',
-      ml: 'sm',
       justifyContent: 'center'
     },
 
