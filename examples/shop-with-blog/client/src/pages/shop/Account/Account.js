@@ -42,7 +42,7 @@ const accountLayout = {
 };
 
 const MenuLink = ({ to, children, ...rest }) => (
-  <MenuItem {...rest}>
+  <MenuItem {...rest} css={{ ':hover': { background: 'transparent' } }}>
     <Link as={RouterLink} to={to} p="xs" flex={1} color="black">
       {children}
     </Link>
@@ -76,7 +76,7 @@ const Account = () => (
         <MenuLink to="/account/personal-information">
           <T id="account.personalInformationLink" />
         </MenuLink>
-        <MenuItem>
+        <MenuItem css={{ ':hover': { background: 'transparent' } }}>
           <SignOutLogic>
             {({ signOut }) => (
               <Link p="xs" flex={1} color="black" onClick={() => signOut()}>
