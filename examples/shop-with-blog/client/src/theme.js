@@ -226,17 +226,6 @@ export const deityGreenTheme = createTheme({
       }
     },
 
-    dropdownMenu: {
-      variants: {
-        reverse: {
-          css: {
-            top: 'initial',
-            bottom: 'calc(100% + 1px)'
-          }
-        }
-      }
-    },
-
     productListLayout: {
       gridGap: 'xl',
       py: 'xl',
