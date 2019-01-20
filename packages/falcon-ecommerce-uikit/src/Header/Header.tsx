@@ -141,6 +141,9 @@ export const Searchbar: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
       css={{ color: 'black', display: { xs: 'none', md: 'flex' }, width: '100%' }}
       gridArea={SearchBarArea.leftMenu}
     >
+      <ListItem py="xs" mr="sm">
+        <Link href="mailto:info@deity.io">Contact</Link>
+      </ListItem>
       {items.map(item => (
         <ListItem py="xs" mr="sm" key={item.name}>
           <Link as={RouterLink} to={item.url}>

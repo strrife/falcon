@@ -61,19 +61,11 @@
     ],
     "banner": [
       {
-        "name": "Contact",
-        "url": "#"
-      },
-      {
         "name": "Blog",
         "url": "/blog"
       }
     ],
     "leftMenu": [
-      {
-        "name": "Contact",
-        "url": "#"
-      },
       {
         "name": "Blog",
         "url": "/blog"

@@ -1,11 +1,11 @@
 import React from 'react';
-import { T } from '@deity/falcon-i18n';
-import { Box, Breadcrumbs, Breadcrumb, Link } from '@deity/falcon-ui';
+// import { T } from '@deity/falcon-i18n';
+import { Box } from '@deity/falcon-ui';
 import { BlogPostsQuery, BlogPostsLayout, BlogPostExcerpt, BlogPostsPaginator } from '@deity/falcon-ecommerce-uikit';
 
 const Blog = props => (
   <Box as="section">
-    <Breadcrumbs my="md" alignSelf="flex-start">
+    {/* <Breadcrumbs my="md" alignSelf="flex-start">
       <Breadcrumb key="index">
         <Link to="/">
           <T id="home.title" />
@@ -14,7 +14,7 @@ const Blog = props => (
       <Breadcrumb key="post">
         <T id="blog.title" />
       </Breadcrumb>
-    </Breadcrumbs>
+    </Breadcrumbs> */}
 
     <BlogPostsQuery
       variables={{

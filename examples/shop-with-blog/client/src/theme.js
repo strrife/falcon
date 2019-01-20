@@ -274,12 +274,12 @@ export const deityGreenTheme = createTheme({
       size: 'md',
       transitionTimingFunction: 'easeInOut',
       transitionDuration: 'standard',
-      css: {
-        strokeWidth: '1px',
+      css: props => ({
+        strokeWidth: '2px',
         ':hover': {
-          opacity: '0.7'
+          stroke: props.theme.colors.primaryLight
         }
-      }
+      })
     },
 
     searchbarLayout: {
@@ -359,6 +359,10 @@ export const deityGreenTheme = createTheme({
       px: {
         xs: 'md',
         sm: 'xl'
+      },
+      css: {
+        maxWidth: 1280,
+        margin: '0 auto'
       }
     },
 
