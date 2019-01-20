@@ -125,7 +125,7 @@ const Category = () => (
                   src={item.image}
                 />
               </LazyLoad>
-              <H2 fontWeight="demiBold" mt="md">
+              <H2 fontWeight="demiBold" mt={{ xs: 'sm', md: 'md' }}>
                 <T id={item.title} />
               </H2>
               <span>
@@ -143,11 +143,12 @@ const Home = () => (
   <React.Fragment>
     <Hero />
     <GridLayout
-      css={props => ({
+      css={{
         margin: 'auto',
-        maxWidth: 1280,
-        padding: { xs: props.theme.spacing.md, md: props.theme.spacing.xl }
-      })}
+        maxWidth: 1280
+      }}
+      px={{ xs: 'md', md: 'xl' }}
+      py="xl"
     >
       <Category />
       <H3 fontWeight="demiBold" mt="lg" css={{ textAlign: 'center' }}>
