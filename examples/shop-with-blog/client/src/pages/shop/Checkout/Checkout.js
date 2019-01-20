@@ -37,8 +37,8 @@ const checkoutLayout = {
     gridGap: 'lg',
     my: 'lg',
     px: {
-      sm: 'none',
-      md: 'xxxl'
+      xs: 'md',
+      md: 'xl'
     },
     // prettier-ignore
     gridTemplate: {

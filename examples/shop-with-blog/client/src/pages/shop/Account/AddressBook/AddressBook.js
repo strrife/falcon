@@ -88,7 +88,7 @@ const AddressActions = ({ addressId }) => (
 );
 
 const EditAddressLink = ({ id }) => (
-  <Link as={RouterLink} to={`/account/address-book/edit/${id}`}>
+  <Link as={RouterLink} to={`/account/address-book/edit/${id}`} css={{ textDecoration: 'underline' }}>
     <T id="addressBook.editButton" />
   </Link>
 );
@@ -100,6 +100,7 @@ const RemoveAddressLink = ({ id }) => (
         {t => (
           <React.Fragment>
             <Link
+              css={{ textDecoration: 'underline' }}
               onClick={() => {
                 if (window.confirm(t('addressBook.removeConfirmationMessage'))) {
                   removeAddress({ variables: { id } });

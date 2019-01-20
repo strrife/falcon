@@ -331,7 +331,7 @@ export const deityGreenTheme = createTheme({
     },
 
     checkoutLayout: {
-      p: 'xl',
+      py: 'xl',
       css: ({ theme }) => ({
         maxWidth: 1280,
         margin: `${theme.spacing.lg}px auto`

@@ -46,7 +46,7 @@ const PersonalInformation = () => (
                     <FormField name="lastname" required />
                     <FormField name="email" required />
                     <FlexLayout justifyContent="space-between" alignItems="center" mt="md">
-                      <Link as={RouterLink} to="/account/change-password">
+                      <Link as={RouterLink} to="/account/change-password" css={{ textDecoration: 'underline' }}>
                         <T id="editCustomer.changePassword" />
                       </Link>
                       <Button type="submit" variant={loading ? 'loader' : undefined}>

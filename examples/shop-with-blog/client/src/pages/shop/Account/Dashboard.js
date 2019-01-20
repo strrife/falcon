@@ -48,11 +48,11 @@ const Dashboard = () => (
             <Text>{`${customer.firstname} ${customer.lastname}`}</Text>
             <Text>{customer.email}</Text>
             <FlexLayout flexDirection="row" mt="xs">
-              <Link as={RouterLink} to="/account/personal-information">
+              <Link as={RouterLink} to="/account/personal-information" css={{ textDecoration: 'underline' }}>
                 <T id="dashboard.editCustomerLink" />
               </Link>
               <Divider variant="horizontal" mx="xs" />
-              <Link as={RouterLink} to="/account/change-password">
+              <Link as={RouterLink} to="/account/change-password" css={{ textDecoration: 'underline' }}>
                 <T id="dashboard.changePasswordLink" />
               </Link>
             </FlexLayout>
