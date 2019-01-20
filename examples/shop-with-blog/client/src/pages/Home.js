@@ -67,10 +67,9 @@ class Hero extends Component {
   }
 
   parallax = () => {
-    let yPos = window.pageYOffset / this.parallaxImage.dataset.speed;
-    yPos = -yPos;
+    const yPos = window.pageYOffset / 12;
 
-    const coords = `center ${50 + yPos * 0.2}%`;
+    const coords = `center ${50 + -yPos}%`;
 
     this.parallaxImage.style.backgroundPosition = coords;
   };
@@ -80,10 +79,8 @@ class Hero extends Component {
       <LazyLoad height="calc(40vh + 10vw)">
         <BackgroundImage
           css={{ position: 'relative', paddingBottom: 'calc(40vh + 10vw)' }}
-          src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=512&q=80"
+          src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1024&q=60"
           id="slider"
-          data-type="background"
-          data-speed="3"
           ref={ref => {
             this.parallaxImage = ref;
           }}
@@ -117,7 +114,7 @@ const Category = () => (
         {data.config.subheroItem.map((item, i) => (
           <Link as={RouterLink} to={item.url} key={item.url}>
             <Box gridArea={i} defaultTheme={subheroStyle}>
-              <LazyLoad>
+              <LazyLoad height="300px">
                 <BackgroundImage
                   className="backgroundImage"
                   css={{ transitionTimingFunction: 'easeIn', transitionDuration: '1s' }}

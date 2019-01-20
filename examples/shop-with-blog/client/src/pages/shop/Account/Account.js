@@ -42,7 +42,7 @@ const accountLayout = {
 };
 
 const MenuLink = ({ to, children, ...rest }) => (
-  <MenuItem {...rest} css={{ ':hover': { background: 'transparent' } }}>
+  <MenuItem {...rest} css={{ ':hover': { background: 'transparent', opacity: 0.6 } }}>
     <Link as={RouterLink} to={to} p="xs" flex={1} color="black">
       {children}
     </Link>

@@ -33,7 +33,7 @@ const Dashboard = () => (
         <H2>
           <T id="dashboard.addressBook" />
         </H2>
-        <Link as={RouterLink} to="/account/address-book" ml="md">
+        <Link as={RouterLink} to="/account/address-book" ml="md" css={{ textDecoration: 'underline' }}>
           <T id="dashboard.manageAddresses" />
         </Link>
       </FlexLayout>
