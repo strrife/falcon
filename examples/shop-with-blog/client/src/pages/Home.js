@@ -67,7 +67,7 @@ class Hero extends Component {
   }
 
   parallax = () => {
-    const yPos = window.pageYOffset / 12;
+    const yPos = window.pageYOffset / 16;
 
     const coords = `center ${50 + -yPos}%`;
 
