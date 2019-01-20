@@ -172,7 +172,7 @@ export const MiniCart: React.SFC<MiniCartData> = ({ cart: { quoteCurrency, items
               to="/cart"
               onClick={() => closeSidebar()}
               css={{ width: '100%' }}
-              variant="reverse"
+              variant="checkout"
               height="xl"
             >
               <Icon stroke="white" size="md" mr="xs" src="lock" />

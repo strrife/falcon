@@ -28,7 +28,7 @@ export const deityGreenTheme = createTheme({
   },
 
   fonts: {
-    sans: 'Source Sans Pro, sans-serif'
+    sans: 'Roboto, sans-serif'
   },
 
   fontSizes: {
@@ -458,13 +458,13 @@ export const deityGreenTheme = createTheme({
             backgroundColor: props.theme.colors.primary
           })
         },
-        reverse: {
+        checkout: {
           bg: 'primaryLight',
-          css: props => ({
+          css: {
             ':hover:enabled': {
-              backgroundColor: props.theme.colors.primary
+              opacity: 0.9
             }
-          })
+          }
         }
       }
     },

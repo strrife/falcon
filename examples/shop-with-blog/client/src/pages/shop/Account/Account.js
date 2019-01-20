@@ -79,7 +79,7 @@ const Account = () => (
         <MenuItem>
           <SignOutLogic>
             {({ signOut }) => (
-              <Link p="xs" flex={1} onClick={() => signOut()}>
+              <Link p="xs" flex={1} color="black" onClick={() => signOut()}>
                 <T id="signOut.link" />
               </Link>
             )}

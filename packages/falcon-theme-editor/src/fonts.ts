@@ -11,7 +11,7 @@ export const fonts = [
   },
   {
     value: 'Roboto',
-    google: 'Roboto:300,400,500,700'
+    google: 'Roboto:300,400,600,700'
   },
   {
     value: 'Source Sans Pro, sans-serif',
