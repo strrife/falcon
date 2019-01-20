@@ -1,5 +1,16 @@
 {
+  "banner": {
+    "summerSale": "Zomer Verkoop - Nu begonnen!"
+  },
   "home": {
-    "hotSellers": "Hot verkopers"
+    "hotSellers": "Meest gekocht",
+    "ourFavourites": "Onze Favorieten",
+    "shopLooks": "Shop de looks",
+    "ctaButton": "Shop nu",
+    "heroText": "Nieuwe Collectie",
+    "menTitle": "Voor Hem",
+    "womenTitle": "Voor Haar",
+    "menText": "Echte herenstijl",
+    "womenText": "Wees onweerstaanbar"
   }
 }
