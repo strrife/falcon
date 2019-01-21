@@ -68,7 +68,7 @@ export const Nav: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
     {items.map(item => (
       <NavbarItem key={item.name}>
         <Link p="sm" as={RouterLink} to={item.url}>
-          {item.name}
+          {item.children.length > 0 ? `${item.name} ▾` : item.name}
         </Link>
         {item.children.length > 0 && (
           <NavbarItemMenu>
