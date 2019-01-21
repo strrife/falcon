@@ -9,7 +9,7 @@ const colorNamesToHex: { [key: string]: string } = {
   cyan: 'cyan',
   magenta: 'magenta',
   yellow: 'yellow',
-  black: 'back',
+  black: 'black',
   white: 'white',
   pink: 'pink',
   purple: 'purple',
