@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box } from '@deity/falcon-ui';
-import { MiniCartQuery, MiniCart, SignIn, SignUp, ForgotPassword } from '@deity/falcon-ecommerce-uikit';
+import { MiniCartQuery, HeaderQuery, MiniCart, SignIn, SignUp, ForgotPassword } from '@deity/falcon-ecommerce-uikit';
+import { MobileMenu } from '../../../../components/MobileMenu';
 import { SIDEBAR_CONTENT_TYPES } from './SidebarQuery';
 
 export default ({ contentType }) => {
@@ -31,6 +32,9 @@ export default ({ contentType }) => {
       </ContentBox>
       <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.forgotPassword}>
         <ForgotPassword />
+      </ContentBox>
+      <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.mobileMenu}>
+        <HeaderQuery>{data => <MobileMenu items={data.config.menus.header} />}</HeaderQuery>
       </ContentBox>
     </React.Fragment>
   );

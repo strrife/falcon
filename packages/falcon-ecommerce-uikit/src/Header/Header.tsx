@@ -19,7 +19,6 @@ import { CartQuery, CartData } from '../Cart';
 import { CustomerQuery } from '../Customer';
 import { AccountIcon } from '../MiniAccount';
 import { SignInIcon } from '../SignIn';
-import { SignOutLogic } from '../SignOut';
 import { HeaderData, MenuItem } from './HeaderQuery';
 import { OpenSidebarMutation } from '../Sidebar';
 
@@ -160,7 +159,7 @@ export const Searchbar: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
             onClick={() =>
               openSidebar({
                 variables: {
-                  contentType: 'account',
+                  contentType: 'mobileMenu',
                   side: 'left'
                 }
               })
