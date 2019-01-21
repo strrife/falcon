@@ -30,6 +30,7 @@ type OptionPropTypes = {
 
 const ColorSwatch: React.SFC<OptionPropTypes> = ({ option, onChange, disabled }) => (
   <Radio
+    variant="colorSwatch"
     disabled={disabled}
     mr="xs"
     icon={<div />}
@@ -39,6 +40,7 @@ const ColorSwatch: React.SFC<OptionPropTypes> = ({ option, onChange, disabled })
     css={{
       cursor: 'pointer',
       backgroundColor: colorNamesToHex[option.label.toLowerCase()] || option.label.toLowerCase(),
+      borderRadius: '100%',
       height: 40,
       width: 40
     }}
