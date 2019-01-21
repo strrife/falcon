@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CloseSidebarMutation } from '@deity/falcon-ecommerce-uikit';
+import { CloseSidebarMutation, CLOSE_SIDEBAR_MUTATION } from '@deity/falcon-ecommerce-uikit';
+import { withRouter } from 'react-router-dom';
+import { withApollo } from 'react-apollo';
 import { SidebarQuery } from './SidebarQuery';
 
 // ready timeout is set based on the assumption how lighthouse measures
@@ -12,7 +14,7 @@ import { SidebarQuery } from './SidebarQuery';
 
 const READY_TIMEOUT_MS = 6000;
 
-export class SidebarContainer extends React.Component {
+class SidebarContainerDOM extends React.Component {
   static propTypes = {
     children: PropTypes.func.isRequired
   };
@@ -25,6 +27,7 @@ export class SidebarContainer extends React.Component {
       setTimeoutHandlerId: undefined,
       requestIdleHandlerId: undefined
     };
+    this.unlistenHistoryChange = undefined;
   }
 
   componentDidMount() {
@@ -45,6 +48,7 @@ export class SidebarContainer extends React.Component {
 
     // eslint-disable-next-line
     this.setState(x => ({ ...x, setTimeoutHandlerId }));
+    this.unlistenHistoryChange = this.props.history.listen(this.closeSidebar);
   }
 
   componentWillUnmount() {
@@ -53,7 +57,17 @@ export class SidebarContainer extends React.Component {
     if ('requestIdleCallback' in window && this.state.requestIdleHandlerId !== undefined) {
       window.cancelIdleCallback(this.state.requestIdleHandlerId);
     }
+
+    if (this.unlistenHistoryChange) {
+      this.unlistenHistoryChange();
+    }
   }
+
+  closeSidebar = () => {
+    this.props.client.mutate({
+      mutation: CLOSE_SIDEBAR_MUTATION
+    });
+  };
 
   /** Sets isReady even before timeout */
   forceIsReady = () => {
@@ -85,3 +99,5 @@ export class SidebarContainer extends React.Component {
     );
   }
 }
+
+export const SidebarContainer = withApollo(withRouter(SidebarContainerDOM));
