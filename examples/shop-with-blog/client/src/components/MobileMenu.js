@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
-import { H3, Box, FlexLayout, Link, Menu, MenuItem, Text, Icon } from '@deity/falcon-ui';
+import { H3, Box, FlexLayout, Link, Menu, MenuItem, Text, Icon, Divider } from '@deity/falcon-ui';
 import { withRouter } from 'react-router-dom';
 
 const menuItemTheme = {
@@ -116,6 +116,7 @@ export const MobileMenu = props => (
     <H3>
       <T id="menu" />
     </H3>
+    <Divider mt="md" />
     <MultiLevelMenu open {...props} />
   </Box>
 );
