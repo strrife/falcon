@@ -30,8 +30,11 @@ const menuItemTheme = {
       // main sub-menu elements
       ul: {
         padding: 0,
-        paddingLeft: theme.spacing.xs,
-        flex: 1
+        flex: 1,
+        backgroundColor: theme.colors.secondaryLight,
+        li: {
+          paddingLeft: theme.spacing.md
+        }
       },
       'li:last-of-type': {
         borderBottom: 'none',
@@ -104,7 +107,7 @@ class MultiLevelMenuItemDOM extends React.Component {
 const MultiLevelMenuItem = withRouter(MultiLevelMenuItemDOM);
 
 const MultiLevelMenu = ({ items }) => (
-  <Menu bg="transparent" p="xs" pr="none">
+  <Menu bg="transparent" pr="none">
     {items.map(item => (
       <MultiLevelMenuItem key={item.name} item={item} />
     ))}
