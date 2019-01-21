@@ -109,7 +109,16 @@ export const DropdownMenu = themed({
         left: 0,
         right: 0,
         zIndex: theme.zIndex.dropDownMenu
-      })
+      }),
+
+      variants: {
+        above: {
+          css: ({ theme }) => ({
+            top: 'auto',
+            bottom: 'calc(100% + 1px)'
+          })
+        }
+      }
     }
   }
 });

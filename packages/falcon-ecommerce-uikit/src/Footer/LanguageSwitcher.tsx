@@ -25,7 +25,7 @@ export const LanguageSwitcher: React.SFC<LanguageSwitcherProps> = ({ languages, 
     <Dropdown onChange={onChange}>
       <DropdownLabel css={{ textAlign: 'left' }}>{activeLanguage.name}</DropdownLabel>
 
-      <DropdownMenu>
+      <DropdownMenu variant="above">
         {languages.map(lang => (
           <DropdownMenuItem key={lang.code} value={lang}>
             {lang.name}
