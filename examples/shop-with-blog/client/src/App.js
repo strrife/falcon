@@ -5,7 +5,7 @@ import Helmet from 'react-helmet';
 import { ThemeProvider } from '@deity/falcon-ui';
 import isOnline from '@deity/falcon-client/src/components/isOnline';
 import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
-import withAnalytics from '@deity/falcon-client/src/components/withAnalytics';
+import withPageview from '@deity/falcon-client/src/components/withPageview';
 import {
   AppLayout,
   ProtectedRoute,
@@ -109,4 +109,4 @@ App.propTypes = {
   online: PropTypes.bool
 };
 
-export default isOnline()(withAnalytics(App));
+export default isOnline()(withPageview(App));
