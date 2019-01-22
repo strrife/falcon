@@ -9,7 +9,6 @@ const menuItemTheme = {
     flexDirection: 'column',
     color: 'primary',
     fontSize: 'md',
-    p: 'sm',
     pr: 0,
     css: ({ theme }) => ({
       fontWeight: 'normal',
@@ -17,7 +16,8 @@ const menuItemTheme = {
       borderBottom: theme.borders.regular,
       borderColor: theme.colors.secondaryDark,
       '> div, > a': {
-        cursor: 'pointer'
+        cursor: 'pointer',
+        padding: theme.spacing.sm
       },
       ':hover': {
         backgroundColor: 'transparent',
