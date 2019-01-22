@@ -1,5 +1,6 @@
 import koaI18next from 'koa-i18next';
 import i18nFactory from '../../i18n/i18nServerFactory';
+import { GET_BACKEND_CONFIG } from '../../graphql/config.gql';
 
 /**
  * @typedef {object} Options
@@ -16,8 +17,12 @@ import i18nFactory from '../../i18n/i18nServerFactory';
  * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
 export default options => async (ctx, next) => {
-  // TODO: merge options.availableLanguages with these retrieved from falcon-server
-  const i18nInstance = await i18nFactory(options);
+  const { client } = ctx.state;
+  const {
+    data: { backendConfig }
+  } = await client.query({ query: GET_BACKEND_CONFIG });
+
+  const i18nInstance = await i18nFactory({ ...options, lng: backendConfig.activeLocale.replace('_', '-') });
 
   return koaI18next(i18nInstance, {
     lookupCookie: 'i18n',

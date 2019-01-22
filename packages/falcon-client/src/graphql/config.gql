@@ -1,14 +1,3 @@
-query CLIENT_SIDE_APP_INIT {
-  config @client {
-    serverSideRendering
-    i18n {
-      lng
-      fallbackLng
-      whitelist
-    }
-  }
-}
-
 query APP_INIT {
   config @client {
     googleTagManager {
@@ -16,6 +5,16 @@ query APP_INIT {
     }
     i18n {
       lng
+    }
+  }
+}
+
+query GET_BACKEND_CONFIG {
+  backendConfig {
+    locales
+    activeLocale
+    shop {
+      activeCurrency
     }
   }
 }

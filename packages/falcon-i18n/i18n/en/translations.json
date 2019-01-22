@@ -3,6 +3,11 @@
   "copyright": "© Copyright {{year}}",
   "continue": "Continue",
   "edit": "Edit",
+  "languages": {
+    "cimode": "CI Mode",
+    "en_US": "English",
+    "nl_NL": "Dutch"
+  },
   "banner": {
     "contactLink": "Contact",
     "blogLink": "Blog"
