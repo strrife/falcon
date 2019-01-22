@@ -14,27 +14,15 @@ const GET_FOOTER_DATA = gql`
           }
         }
       }
-      languages {
-        name
-        code
-        active
-      }
     }
   }
 `;
-
-export type LanguageItem = {
-  name: string;
-  code: string;
-  active: boolean;
-};
 
 export type FooterData = {
   config: {
     menus: {
       footer: MenuItem[];
     };
-    languages: LanguageItem[];
   };
 };
 

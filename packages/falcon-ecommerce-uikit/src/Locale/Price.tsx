@@ -5,14 +5,20 @@ import { LocaleContext } from './LocaleContext';
 // Price formatting based on Intl api, see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
 const PriceInnerDom: React.SFC<any> = ({ value, currency, locale, ...rest }) => (
   <LocaleContext.Consumer>
-    {({ locale: defaultLocale, currency: defaultCurrency }) => (
-      <Text {...rest}>
-        {new Intl.NumberFormat(locale || defaultLocale, {
-          style: 'currency',
-          currency: currency || defaultCurrency
-        }).format(value)}
-      </Text>
-    )}
+    {localeContext => {
+      let localeCode = locale || localeContext.locale;
+      localeCode = localeCode.replace('_', '-');
+      localeCode = localeCode === 'cimode' ? 'en' : localeCode;
+
+      return (
+        <Text {...rest}>
+          {new Intl.NumberFormat(localeCode, {
+            style: 'currency',
+            currency: currency || localeContext.currency
+          }).format(value)}
+        </Text>
+      );
+    }}
   </LocaleContext.Consumer>
 );
 

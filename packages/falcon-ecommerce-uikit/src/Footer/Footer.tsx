@@ -6,6 +6,7 @@ import { LanguageSwitcher } from './LanguageSwitcher';
 import { FooterData } from './FooterQuery';
 import { Newsletter } from './Newsletter';
 import { MenuItem } from '../Header';
+import { BackendConfigQuery, SetLocaleMutation } from '../BackendConfig';
 
 const footerLayoutTheme: DefaultThemeProps = {
   footerLayout: {
@@ -80,8 +81,7 @@ const languageSectionTheme: DefaultThemeProps = {
 
 export const Footer: React.SFC<FooterData> = ({
   config: {
-    menus: { footer },
-    languages
+    menus: { footer }
   }
 }) => (
   <Box as="footer" defaultTheme={footerLayoutTheme}>
@@ -89,7 +89,25 @@ export const Footer: React.SFC<FooterData> = ({
     <FooterSections sections={footer} />
     <Box defaultTheme={languageSectionTheme}>
       <I18n>
-        {(_t, i18n) => <LanguageSwitcher languages={languages} onChange={x => i18n.changeLanguage(x.code)} />}
+        {(t, i18n) => (
+          <BackendConfigQuery passLoading>
+            {({ backendConfig: { locales, activeLocale } }) => (
+              <SetLocaleMutation>
+                {setLocale => (
+                  <LanguageSwitcher
+                    items={locales.map(x => ({ code: x, name: t(`languages.${x}`) }))}
+                    value={{ code: activeLocale, name: t(`languages.${activeLocale}`) }}
+                    onChange={x => {
+                      setLocale({ variables: { locale: x.code } }).then(({ data }: any) => {
+                        i18n.changeLanguage(data.setLocale.activeLocale);
+                      });
+                    }}
+                  />
+                )}
+              </SetLocaleMutation>
+            )}
+          </BackendConfigQuery>
+        )}
       </I18n>
     </Box>
     <Box defaultTheme={copyrightLayoutTheme}>

@@ -3,6 +3,11 @@
   "copyright": "© Copyright {{year}}",
   "continue": "Continue",
   "edit": "Edit",
+  "languages": {
+    "cimode": "CI Mode",
+    "en_US": "English",
+    "nl_NL": "Dutch"
+  },
   "newsletter": {
     "title": "Newsletter",
     "message": "Join our mailing list to receive the latest offers and more!",
