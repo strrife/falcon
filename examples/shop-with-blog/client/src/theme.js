@@ -366,6 +366,18 @@ export const deityGreenTheme = createTheme({
       }
     },
 
+    blogPostLayout: {
+      py: 'xl',
+      px: {
+        xs: 'md',
+        sm: 'xl'
+      },
+      css: {
+        maxWidth: 1280,
+        margin: '0 auto'
+      }
+    },
+
     productsCategory: {
       py: 'xl',
       px: {

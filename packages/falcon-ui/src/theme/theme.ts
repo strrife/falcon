@@ -107,7 +107,40 @@ export const defaultBaseTheme = {
     long: '375ms'
   },
 
-  keyframes: {},
+  keyframes: {
+    leftToRight: {
+      '0%': {
+        transform: 'translateX(-100%)'
+      },
+      '100%': {
+        transform: 'translateX(0)'
+      }
+    },
+    leftToRightReverse: {
+      '0%': {
+        transform: 'translateX(0)'
+      },
+      '100%': {
+        transform: 'translateX(-100%)'
+      }
+    },
+    rightToLeft: {
+      '0%': {
+        transform: 'translateX(100%)'
+      },
+      '100%': {
+        transform: 'translateX(0)'
+      }
+    },
+    rightToLeftReverse: {
+      '0%': {
+        transform: 'translateX(0)'
+      },
+      '100%': {
+        transform: 'translateX(100%)'
+      }
+    }
+  },
 
   zIndex: {
     dropDownMenu: 600,

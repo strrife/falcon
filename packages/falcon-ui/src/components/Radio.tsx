@@ -10,7 +10,7 @@ const RadioInnerDOM = (
   const { themableProps, rest } = extractThemableProps(remaining);
 
   return (
-    <Box {...themableProps} css={{ backgroundColor: props.icon.props.children }} className={className}>
+    <Box {...themableProps} className={className}>
       <input {...rest} type="radio" />
       <div aria-hidden className="-inner-radio-frame">
         {icon}
@@ -64,9 +64,9 @@ export const Radio = themed({
             }
           },
           ':hover + .-inner-radio-frame': {
-            borderColor: theme.colors.primaryLight,
+            borderColor: theme.colors.primary,
             '.-inner-radio-icon': {
-              fill: theme.colors.primaryLight
+              fill: theme.colors.primary
             }
           }
         },
@@ -98,7 +98,41 @@ export const Radio = themed({
           justifyContent: 'center',
           alignItems: 'center'
         }
-      })
+      }),
+
+      variants: {
+        colorSwatch: {
+          css: ({ theme }) => ({
+            '.-inner-radio-icon': {
+              height: 'calc(100% - 4px)',
+              width: 'calc(100% - 4px)',
+              display: 'block',
+              opacity: 0,
+              stroke: 'none',
+              fill: theme.colors.white,
+              transitionProperty: 'opacity, fill',
+              transitionTimingFunction: theme.easingFunctions.easeIn,
+              transitionDuration: theme.transitionDurations.short
+            },
+
+            '.-inner-radio-frame': {
+              height: '100%',
+              width: '100%',
+              position: 'relative',
+              display: 'flex',
+              cursor: 'pointer',
+              borderRadius: '100%',
+              border: theme.borders.bold,
+              borderColor: theme.colors.secondaryDark,
+              transitionProperty: 'border, fill',
+              transitionTimingFunction: theme.easingFunctions.easeIn,
+              transitionDuration: theme.transitionDurations.short,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }
+          })
+        }
+      }
     }
   }
 });

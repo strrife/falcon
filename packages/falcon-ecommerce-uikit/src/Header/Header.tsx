@@ -19,7 +19,6 @@ import { CartQuery, CartData } from '../Cart';
 import { CustomerQuery } from '../Customer';
 import { AccountIcon } from '../MiniAccount';
 import { SignInIcon } from '../SignIn';
-import { SignOutLogic } from '../SignOut';
 import { HeaderData, MenuItem } from './HeaderQuery';
 import { OpenSidebarMutation } from '../Sidebar';
 
@@ -69,7 +68,7 @@ export const Nav: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
     {items.map(item => (
       <NavbarItem key={item.name}>
         <Link p="sm" as={RouterLink} to={item.url}>
-          {item.name}
+          {item.children.length > 0 ? `${item.name} ▾` : item.name}
         </Link>
         {item.children.length > 0 && (
           <NavbarItemMenu>
@@ -160,7 +159,7 @@ export const Searchbar: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
             onClick={() =>
               openSidebar({
                 variables: {
-                  contentType: 'account',
+                  contentType: 'mobileMenu',
                   side: 'left'
                 }
               })

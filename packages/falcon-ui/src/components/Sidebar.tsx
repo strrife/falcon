@@ -19,11 +19,17 @@ export const Sidebar = themed({
         [side]: 0,
         height: '100%',
         zIndex: theme.zIndex.sidebar,
-        transitionProperty: 'transform',
-        transitionDuration: visible ? theme.transitionDurations.short : theme.transitionDurations.standard,
-        transitionTimingFunction: visible ? theme.easingFunctions.easeIn : theme.easingFunctions.easeOut,
-        // eslint-disable-next-line
-        transform: visible ? 'translateX(0)' : side === 'left' ? 'translateX(-100%)' : 'translateX(100%)'
+        /* eslint-disable */
+        animation: `${
+          side === 'left'
+            ? visible
+              ? theme.keyframes.leftToRight
+              : theme.keyframes.leftToRightReverse
+            : visible
+            ? theme.keyframes.rightToLeft
+            : theme.keyframes.rightToLeftReverse
+        } ${visible ? theme.transitionDurations.short : theme.transitionDurations.standard} forwards`
+        /* eslint-enable */
       })
     }
   }

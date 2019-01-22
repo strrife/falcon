@@ -113,10 +113,10 @@ export const DropdownMenu = themed({
 
       variants: {
         above: {
-          css: () => ({
+          css: {
             top: 'auto',
             bottom: 'calc(100% + 1px)'
-          })
+          }
         }
       }
     }
