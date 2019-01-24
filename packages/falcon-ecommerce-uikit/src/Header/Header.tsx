@@ -1,7 +1,6 @@
 import React from 'react';
-import { T } from '@deity/falcon-i18n';
 import { Link as RouterLink } from 'react-router-dom';
-import { Link, List, ListItem, Icon, DefaultThemeProps, Box } from '@deity/falcon-ui';
+import { Link, Icon, DefaultThemeProps, Box } from '@deity/falcon-ui';
 
 import { toGridTemplate } from '../helpers';
 import { MiniCartIcon } from '../MiniCart';
