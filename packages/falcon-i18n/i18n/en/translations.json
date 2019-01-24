@@ -3,6 +3,10 @@
   "copyright": "© Copyright {{year}}",
   "continue": "Continue",
   "edit": "Edit",
+  "banner": {
+    "contactLink": "Contact",
+    "blogLink": "Blog"
+  },
   "newsletter": {
     "title": "Newsletter",
     "message": "Join our mailing list to receive the latest offers and more!",

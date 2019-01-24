@@ -35,12 +35,12 @@ export const Banner: React.SFC<{}> = () => (
     </SignOutLogic>
     <ListItem p="xs">
       <Link as={RouterLink} to="#">
-        <T id="header.contactLink" />
+        <T id="banner.contactLink" />
       </Link>
     </ListItem>
     <ListItem p="xs">
       <Link as={RouterLink} to="/blog">
-        <T id="header.blogLink" />
+        <T id="banner.blogLink" />
       </Link>
     </ListItem>
   </BannerLayout>
