@@ -1,71 +1,11 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { H4, Link, List, ListItem, Box, DefaultThemeProps, themed } from '@deity/falcon-ui';
+import { H4, List, Box, DefaultThemeProps, themed } from '@deity/falcon-ui';
 import { T, I18n } from '@deity/falcon-i18n';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { FooterData } from './FooterQuery';
 import { Newsletter } from './Newsletter';
-
-export const CopyrightLayout = themed({
-  tag: Box,
-  defaultTheme: {
-    copyrightLayout: {
-      p: 'sm',
-      color: 'secondaryText',
-      bgFullWidth: 'secondary',
-      css: {
-        textAlign: 'center'
-      }
-    }
-  }
-});
-
-export const FooterSectionsLayout = themed({
-  tag: Box,
-  defaultTheme: {
-    footerSectionsLayout: {
-      display: 'flex',
-      bgFullWidth: 'secondaryLight',
-      css: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        justifyItems: 'center',
-        flexWrap: 'wrap'
-      }
-    }
-  }
-});
-
-export const FooterSectionLayout = themed({
-  tag: Box,
-  defaultTheme: {
-    footerSection: {
-      p: 'md',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'flex-start',
-      css: {
-        minWidth: 250,
-        textAlign: {
-          md: 'unset',
-          xs: 'center'
-        },
-        alignItems: {
-          md: 'unset',
-          xs: 'center'
-        }
-      }
-    }
-  }
-});
-
-export const SitemapLink: React.SFC<{ to: string }> = ({ to, children }) => (
-  <ListItem p="xs">
-    <Link as={RouterLink} to={to}>
-      {children}
-    </Link>
-  </ListItem>
-);
+import { Copyright } from './Copyright';
+import { FooterSectionsLayout, FooterSectionLayout, SitemapLink } from './FooterSections';
 
 export const Sitemap: React.SFC = () => (
   <FooterSectionsLayout>
@@ -148,8 +88,6 @@ export const Footer: React.SFC<FooterData> = ({ config: { languages } }) => (
         {(_t, i18n) => <LanguageSwitcher languages={languages} onChange={x => i18n.changeLanguage(x.code)} />}
       </I18n>
     </Box>
-    <CopyrightLayout>
-      <T id="copyright" year={new Date().getFullYear()} />
-    </CopyrightLayout>
+    <Copyright />
   </FooterLayout>
 );
