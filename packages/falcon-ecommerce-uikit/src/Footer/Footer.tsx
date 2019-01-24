@@ -7,16 +7,19 @@ import { FooterData } from './FooterQuery';
 import { Newsletter } from './Newsletter';
 import { MenuItem } from '../Menu';
 
-const copyrightLayoutTheme: DefaultThemeProps = {
-  copyrightLayout: {
-    p: 'sm',
-    color: 'secondaryText',
-    bgFullWidth: 'secondary',
-    css: {
-      textAlign: 'center'
+export const CopyrightLayout = themed({
+  tag: Box,
+  defaultTheme: {
+    copyrightLayout: {
+      p: 'sm',
+      color: 'secondaryText',
+      bgFullWidth: 'secondary',
+      css: {
+        textAlign: 'center'
+      }
     }
   }
-};
+});
 
 const footerSectionsTheme: DefaultThemeProps = {
   footerSectionLayout: {
@@ -67,7 +70,7 @@ const languageSectionTheme: DefaultThemeProps = {
 };
 
 export const FooterLayout = themed({
-  tag: 'div',
+  tag: Box,
   defaultTheme: {
     footerLayout: {
       mt: 'md'
@@ -89,8 +92,8 @@ export const Footer: React.SFC<FooterData> = ({
         {(_t, i18n) => <LanguageSwitcher languages={languages} onChange={x => i18n.changeLanguage(x.code)} />}
       </I18n>
     </Box>
-    <Box defaultTheme={copyrightLayoutTheme}>
+    <CopyrightLayout>
       <T id="copyright" year={new Date().getFullYear()} />
-    </Box>
+    </CopyrightLayout>
   </FooterLayout>
 );
