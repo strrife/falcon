@@ -10,16 +10,6 @@
     }
   },
   "menus": {
-    "banner": [
-      {
-        "name": "Contact",
-        "urlPath": "#"
-      },
-      {
-        "name": "Blog",
-        "urlPath": "/blog"
-      }
-    ],
     "footer": [
       {
         "name": "Customer service",
