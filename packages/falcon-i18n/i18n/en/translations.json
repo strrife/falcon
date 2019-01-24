@@ -14,6 +14,19 @@
     "emailPlaceholder": "Enter your email address",
     "consent": "I would like to subscribe to updates"
   },
+  "sitemap": {
+    "customerService": "Customer service",
+    "trackOrderLink": "Track order",
+    "returnPolicyLink": "Return policy",
+    "faqsLink": "FAQs",
+    "aboutUs": "About us",
+    "aboutUsLink": "About us",
+    "blogLink": "Blog",
+    "jobsLink": "Jobs",
+    "terms": "Terms",
+    "cookiesLink": "Cookies",
+    "termsLink": "Terms"
+  },
   "home": {
     "hotSellers": "Hot sellers"
   },
