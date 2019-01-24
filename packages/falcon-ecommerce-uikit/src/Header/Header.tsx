@@ -9,46 +9,9 @@ import { CartQuery, CartData } from '../Cart';
 import { CustomerQuery } from '../Customer';
 import { AccountIcon } from '../MiniAccount';
 import { SignInIcon } from '../SignIn';
-import { SignOutLogic } from '../SignOut';
-import { HeaderData } from './HeaderQuery';
-import { MenuQuery, MenuNavbar, MenuItem } from '../Menu';
+import { MenuQuery, MenuNavbar } from '../Menu';
 import { OpenSidebarMutation } from '../Sidebar';
-
-const bannerLayoutTheme: DefaultThemeProps = {
-  bannerLayout: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    bgFullWidth: 'secondaryLight',
-    m: 'none',
-    p: 'none',
-    css: {
-      listStyle: 'none'
-    }
-  }
-};
-
-export const Banner: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
-  <List defaultTheme={bannerLayoutTheme}>
-    <SignOutLogic>
-      {({ isSignedIn, signOut }: any) =>
-        isSignedIn && (
-          <ListItem p="xs">
-            <Link onClick={() => signOut()}>
-              <T id="signOut.link" />
-            </Link>
-          </ListItem>
-        )
-      }
-    </SignOutLogic>
-    {items.map(item => (
-      <ListItem p="xs" key={item.name}>
-        <Link as={RouterLink} to={item.urlPath}>
-          {item.name}
-        </Link>
-      </ListItem>
-    ))}
-  </List>
-);
+import { Banner } from './Banner';
 
 export const SearchBarArea = {
   logo: 'logo',
@@ -110,13 +73,9 @@ export const Searchbar = () => (
   </Box>
 );
 
-export const Header: React.SFC<HeaderData> = ({
-  config: {
-    menus: { banner }
-  }
-}) => (
+export const Header: React.SFC = () => (
   <header>
-    <Banner items={banner} />
+    <Banner />
     <Searchbar />
     <MenuQuery>{({ menu }) => <MenuNavbar items={menu} />}</MenuQuery>
   </header>
