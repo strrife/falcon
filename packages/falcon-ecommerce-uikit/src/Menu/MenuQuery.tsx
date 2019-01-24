@@ -1,6 +1,10 @@
 import gql from 'graphql-tag';
 import { Query } from '../Query';
 
+export type Menu = {
+  menu: MenuItem[];
+};
+
 export type MenuItem = {
   id: string;
   name: string;
@@ -38,7 +42,7 @@ export const GET_MENU = gql`
   }
 `;
 
-export class MenuQuery extends Query<MenuItem> {
+export class MenuQuery extends Query<Menu> {
   static defaultProps = {
     query: GET_MENU
   };
