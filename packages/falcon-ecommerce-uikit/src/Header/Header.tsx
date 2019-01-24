@@ -1,17 +1,7 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
 import { Link as RouterLink } from 'react-router-dom';
-import {
-  Navbar,
-  NavbarItem,
-  NavbarItemMenu,
-  Link,
-  List,
-  ListItem,
-  Icon,
-  DefaultThemeProps,
-  Box
-} from '@deity/falcon-ui';
+import { Link, List, ListItem, Icon, DefaultThemeProps, Box } from '@deity/falcon-ui';
 
 import { toGridTemplate } from '../helpers';
 import { MiniCartIcon } from '../MiniCart';
@@ -21,7 +11,7 @@ import { AccountIcon } from '../MiniAccount';
 import { SignInIcon } from '../SignIn';
 import { SignOutLogic } from '../SignOut';
 import { HeaderData } from './HeaderQuery';
-import { MenuQuery, MenuItem } from '../Menu';
+import { MenuQuery, MenuNavbar, MenuItem } from '../Menu';
 import { OpenSidebarMutation } from '../Sidebar';
 
 const bannerLayoutTheme: DefaultThemeProps = {
@@ -58,31 +48,6 @@ export const Banner: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
       </ListItem>
     ))}
   </List>
-);
-
-export const Nav: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
-  <Navbar>
-    {items.map(item => (
-      <NavbarItem key={item.name}>
-        <Link p="sm" as={RouterLink} to={item.urlPath}>
-          {item.name}
-        </Link>
-        {item.children.length > 0 && (
-          <NavbarItemMenu>
-            <List>
-              {item.children.map(subItem => (
-                <ListItem key={subItem.name}>
-                  <Link p="xs" display="block" as={RouterLink} to={subItem.urlPath}>
-                    {subItem.name}
-                  </Link>
-                </ListItem>
-              ))}
-            </List>
-          </NavbarItemMenu>
-        )}
-      </NavbarItem>
-    ))}
-  </Navbar>
 );
 
 export const SearchBarArea = {
@@ -153,12 +118,6 @@ export const Header: React.SFC<HeaderData> = ({
   <header>
     <Banner items={banner} />
     <Searchbar />
-    <MenuQuery>
-      {({ menu }) => (
-        <nav>
-          <Nav items={menu} />
-        </nav>
-      )}
-    </MenuQuery>
+    <MenuQuery>{({ menu }) => <MenuNavbar items={menu} />}</MenuQuery>
   </header>
 );
