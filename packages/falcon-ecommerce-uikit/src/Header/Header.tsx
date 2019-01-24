@@ -21,7 +21,7 @@ import { AccountIcon } from '../MiniAccount';
 import { SignInIcon } from '../SignIn';
 import { SignOutLogic } from '../SignOut';
 import { HeaderData } from './HeaderQuery';
-import { MenuItem } from '../Menu';
+import { MenuQuery, MenuItem } from '../Menu';
 import { OpenSidebarMutation } from '../Sidebar';
 
 const bannerLayoutTheme: DefaultThemeProps = {
@@ -147,14 +147,18 @@ export const Searchbar = () => (
 
 export const Header: React.SFC<HeaderData> = ({
   config: {
-    menus: { header, banner }
+    menus: { banner }
   }
 }) => (
   <header>
     <Banner items={banner} />
     <Searchbar />
-    <nav>
-      <Nav items={header} />
-    </nav>
+    <MenuQuery>
+      {({ menu }) => (
+        <nav>
+          <Nav items={menu} />
+        </nav>
+      )}
+    </MenuQuery>
   </header>
 );
