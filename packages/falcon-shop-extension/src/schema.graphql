@@ -259,7 +259,7 @@ type MenuItem {
   name: String!
   urlPath: String!
   cssClass: String
-  children: [MenuItem]
+  children: [MenuItem]!
 }
 
 type Category {
