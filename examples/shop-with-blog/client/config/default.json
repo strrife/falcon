@@ -10,55 +10,6 @@
     }
   },
   "menus": {
-    "header": [
-      {
-        "name": "What's new?",
-        "urlPath": "/what-is-new.html",
-        "children": []
-      },
-      {
-        "name": "Women",
-        "urlPath": "/women.html",
-        "children": [
-          {
-            "name": "Tops",
-            "urlPath": "/women/tops-women.html"
-          },
-          {
-            "name": "Bottoms",
-            "urlPath": "/women/bottoms-women/shorts-women.html"
-          }
-        ]
-      },
-      {
-        "name": "Men",
-        "urlPath": "/men.html",
-        "children": []
-      },
-      {
-        "name": "Gear",
-        "urlPath": "/gear.html",
-        "children": [
-          {
-            "name": "Bags",
-            "urlPath": "/gear/bags.html"
-          },
-          {
-            "name": "Fitness Equipment",
-            "urlPath": "/gear/fitness-equipment.html"
-          },
-          {
-            "name": "Watches",
-            "urlPath": "/gear/watches.html"
-          }
-        ]
-      },
-      {
-        "name": "Sale",
-        "urlPath": "/sale.html",
-        "children": []
-      }
-    ],
     "banner": [
       {
         "name": "Contact",

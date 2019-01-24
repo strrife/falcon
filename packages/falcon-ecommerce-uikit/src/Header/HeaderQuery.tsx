@@ -6,11 +6,6 @@ const GET_HEADER_DATA = gql`
   query HeaderData {
     config @client {
       menus {
-        header {
-          name
-          urlPath
-          children
-        }
         banner {
           name
           urlPath
@@ -23,7 +18,6 @@ const GET_HEADER_DATA = gql`
 export type HeaderData = {
   config: {
     menus: {
-      header: MenuItem[];
       banner: MenuItem[];
     };
   };
