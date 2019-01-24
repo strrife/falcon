@@ -13,60 +13,60 @@
     "header": [
       {
         "name": "What's new?",
-        "url": "/what-is-new.html",
+        "urlPath": "/what-is-new.html",
         "children": []
       },
       {
         "name": "Women",
-        "url": "/women.html",
+        "urlPath": "/women.html",
         "children": [
           {
             "name": "Tops",
-            "url": "/women/tops-women.html"
+            "urlPath": "/women/tops-women.html"
           },
           {
             "name": "Bottoms",
-            "url": "/women/bottoms-women/shorts-women.html"
+            "urlPath": "/women/bottoms-women/shorts-women.html"
           }
         ]
       },
       {
         "name": "Men",
-        "url": "/men.html",
+        "urlPath": "/men.html",
         "children": []
       },
       {
         "name": "Gear",
-        "url": "/gear.html",
+        "urlPath": "/gear.html",
         "children": [
           {
             "name": "Bags",
-            "url": "/gear/bags.html"
+            "urlPath": "/gear/bags.html"
           },
           {
             "name": "Fitness Equipment",
-            "url": "/gear/fitness-equipment.html"
+            "urlPath": "/gear/fitness-equipment.html"
           },
           {
             "name": "Watches",
-            "url": "/gear/watches.html"
+            "urlPath": "/gear/watches.html"
           }
         ]
       },
       {
         "name": "Sale",
-        "url": "/sale.html",
+        "urlPath": "/sale.html",
         "children": []
       }
     ],
     "banner": [
       {
         "name": "Contact",
-        "url": "#"
+        "urlPath": "#"
       },
       {
         "name": "Blog",
-        "url": "/blog"
+        "urlPath": "/blog"
       }
     ],
     "footer": [
@@ -75,19 +75,19 @@
         "children": [
           {
             "name": "Track order",
-            "url": "/"
+            "urlPath": "/"
           },
           {
             "name": "Return policy",
-            "url": "/"
+            "urlPath": "/"
           },
           {
             "name": "FAQs",
-            "url": "/"
+            "urlPath": "/"
           },
           {
             "name": "Terms",
-            "url": "/"
+            "urlPath": "/"
           }
         ]
       },
@@ -96,19 +96,19 @@
         "children": [
           {
             "name": "Blog",
-            "url": "/blog"
+            "urlPath": "/blog"
           },
           {
             "name": "Cookies",
-            "url": "/"
+            "urlPath": "/"
           },
           {
             "name": "About us",
-            "url": "/"
+            "urlPath": "/"
           },
           {
             "name": "Jobs",
-            "url": "/"
+            "urlPath": "/"
           }
         ]
       },
@@ -117,19 +117,19 @@
         "children": [
           {
             "name": "Blog",
-            "url": "/blog"
+            "urlPath": "/blog"
           },
           {
             "name": "Cookies",
-            "url": "/"
+            "urlPath": "/"
           },
           {
             "name": "About us",
-            "url": "/"
+            "urlPath": "/"
           },
           {
             "name": "Jobs",
-            "url": "/"
+            "urlPath": "/"
           }
         ]
       }

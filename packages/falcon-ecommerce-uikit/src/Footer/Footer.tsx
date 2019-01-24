@@ -5,7 +5,7 @@ import { T, I18n } from '@deity/falcon-i18n';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { FooterData } from './FooterQuery';
 import { Newsletter } from './Newsletter';
-import { MenuItem } from '../Header';
+import { MenuItem } from '../Menu';
 
 const footerLayoutTheme: DefaultThemeProps = {
   footerLayout: {
@@ -48,7 +48,7 @@ export const FooterSections: React.SFC<{ sections: MenuItem[] }> = ({ sections }
         <List>
           {section.children.map(item => (
             <ListItem p="xs" key={item.name}>
-              <Link as={RouterLink} to={item.url}>
+              <Link as={RouterLink} to={item.urlPath}>
                 {item.name}
               </Link>
             </ListItem>

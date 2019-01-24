@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import { Query } from '../Query';
-import { MenuItem } from '../Header';
+import { MenuItem } from '../Menu';
 
 const GET_FOOTER_DATA = gql`
   query FooterData {
@@ -10,7 +10,7 @@ const GET_FOOTER_DATA = gql`
           name
           children {
             name
-            url
+            urlPath
           }
         }
       }

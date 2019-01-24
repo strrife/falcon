@@ -20,7 +20,8 @@ import { CustomerQuery } from '../Customer';
 import { AccountIcon } from '../MiniAccount';
 import { SignInIcon } from '../SignIn';
 import { SignOutLogic } from '../SignOut';
-import { HeaderData, MenuItem } from './HeaderQuery';
+import { HeaderData } from './HeaderQuery';
+import { MenuItem } from '../Menu';
 import { OpenSidebarMutation } from '../Sidebar';
 
 const bannerLayoutTheme: DefaultThemeProps = {
@@ -51,7 +52,7 @@ export const Banner: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
     </SignOutLogic>
     {items.map(item => (
       <ListItem p="xs" key={item.name}>
-        <Link as={RouterLink} to={item.url}>
+        <Link as={RouterLink} to={item.urlPath}>
           {item.name}
         </Link>
       </ListItem>
@@ -63,7 +64,7 @@ export const Nav: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
   <Navbar>
     {items.map(item => (
       <NavbarItem key={item.name}>
-        <Link p="sm" as={RouterLink} to={item.url}>
+        <Link p="sm" as={RouterLink} to={item.urlPath}>
           {item.name}
         </Link>
         {item.children.length > 0 && (
@@ -71,7 +72,7 @@ export const Nav: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
             <List>
               {item.children.map(subItem => (
                 <ListItem key={subItem.name}>
-                  <Link p="xs" display="block" as={RouterLink} to={subItem.url}>
+                  <Link p="xs" display="block" as={RouterLink} to={subItem.urlPath}>
                     {subItem.name}
                   </Link>
                 </ListItem>
