@@ -1,17 +1,11 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { H4, Link, List, ListItem, Box, DefaultThemeProps } from '@deity/falcon-ui';
+import { H4, Link, List, ListItem, Box, DefaultThemeProps, themed } from '@deity/falcon-ui';
 import { T, I18n } from '@deity/falcon-i18n';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { FooterData } from './FooterQuery';
 import { Newsletter } from './Newsletter';
 import { MenuItem } from '../Menu';
-
-const footerLayoutTheme: DefaultThemeProps = {
-  footerLayout: {
-    mt: 'md'
-  }
-};
 
 const copyrightLayoutTheme: DefaultThemeProps = {
   copyrightLayout: {
@@ -72,13 +66,22 @@ const languageSectionTheme: DefaultThemeProps = {
   }
 };
 
+export const FooterLayout = themed({
+  tag: 'div',
+  defaultTheme: {
+    footerLayout: {
+      mt: 'md'
+    }
+  }
+});
+
 export const Footer: React.SFC<FooterData> = ({
   config: {
     menus: { footer },
     languages
   }
 }) => (
-  <Box as="footer" defaultTheme={footerLayoutTheme}>
+  <FooterLayout as="footer">
     <Newsletter />
     <FooterSections sections={footer} />
     <Box defaultTheme={languageSectionTheme}>
@@ -89,5 +92,5 @@ export const Footer: React.SFC<FooterData> = ({
     <Box defaultTheme={copyrightLayoutTheme}>
       <T id="copyright" year={new Date().getFullYear()} />
     </Box>
-  </Box>
+  </FooterLayout>
 );
