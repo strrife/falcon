@@ -30,12 +30,6 @@ export const GET_MENU = gql`
           name
           urlPath
           cssClass
-          children {
-            id
-            name
-            urlPath
-            cssClass
-          }
         }
       }
     }
