@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { Query } from '../Query/Query';
+import { MenuItem } from '../Menu';
 
 const GET_HEADER_DATA = gql`
   query HeaderData {
@@ -7,22 +8,18 @@ const GET_HEADER_DATA = gql`
       menus {
         header {
           name
-          url
+          urlPath
           children
         }
         banner {
           name
-          url
+          urlPath
         }
       }
     }
   }
 `;
-export type MenuItem = {
-  name: string;
-  url: string;
-  children: MenuItem[];
-};
+
 export type HeaderData = {
   config: {
     menus: {
