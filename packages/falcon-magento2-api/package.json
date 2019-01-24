@@ -33,6 +33,7 @@
     "date-fns": "1.29.0",
     "graphql-tools": "4.0.3",
     "lodash": "4.17.11",
+    "proper-url-join": "^1.2.0",
     "qs": "6.6.0"
   },
   "devDependencies": {

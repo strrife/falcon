@@ -4,6 +4,7 @@ const pick = require('lodash/pick');
 const has = require('lodash/has');
 const forEach = require('lodash/forEach');
 const isPlainObject = require('lodash/isPlainObject');
+const urlJoin = require('proper-url-join');
 const addMinutes = require('date-fns/add_minutes');
 const { ApiUrlPriority, htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
@@ -73,12 +74,21 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async menu() {
     const response = await this.get('/menu');
+    const data = this.convertKeys(response);
 
-    const rrr = this.convertKeys(response);
-    const result = rrr.data;
-    console.log(result);
+    const mapMenu = x => {
+      if (Array.isArray(x)) {
+        return x.length > 0 ? x.map(mapMenu) : [];
+      }
 
-    return result;
+      return {
+        ...x,
+        urlPath: urlJoin(x.urlPath, undefined, { leadingSlash: true }),
+        children: x.children && x.children.length > 0 ? x.children.map(mapMenu) : []
+      };
+    };
+
+    return mapMenu(data);
   }
 
   /**
