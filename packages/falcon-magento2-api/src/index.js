@@ -66,6 +66,22 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
+   * Fetch Menu
+   * @param {object} obj Parent object
+   * @param {object} params - request params
+   * @return {Promise<MenuItem[]>} requested Menu data
+   */
+  async menu() {
+    const response = await this.get('/menu');
+
+    const rrr = this.convertKeys(response);
+    const result = rrr.data;
+    console.log(result);
+
+    return result;
+  }
+
+  /**
    * Fetch category data
    * @param {object} obj Parent object
    * @param {number} id - id of the requested category
