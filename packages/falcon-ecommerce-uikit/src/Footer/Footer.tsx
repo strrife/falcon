@@ -43,10 +43,7 @@ export const FooterSectionLayout = themed({
       p: 'md',
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: {
-        md: 'flex-start',
-        xs: 'flex-start'
-      },
+      justifyContent: 'flex-start',
       css: {
         minWidth: 250,
         textAlign: {
