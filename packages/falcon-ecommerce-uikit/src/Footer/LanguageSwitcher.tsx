@@ -28,7 +28,7 @@ export const LanguageSwitcher: React.SFC<LanguageSwitcherProps> = ({ items, valu
 
   return (
     <Dropdown onChange={onChange}>
-      <DropdownLabel css={{ textAlign: 'left' }}>{value.name}</DropdownLabel>
+      <DropdownLabel>{value.name}</DropdownLabel>
       <DropdownMenu variant="above">
         {items.map(x => (
           <DropdownMenuItem key={x.code} value={x}>

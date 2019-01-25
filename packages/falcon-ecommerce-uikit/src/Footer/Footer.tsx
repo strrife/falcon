@@ -64,7 +64,6 @@ const languageSectionTheme: DefaultThemeProps = {
     css: {
       maxWidth: 160,
       margin: '0 auto',
-      textAlign: 'center',
       zIndex: 2
     }
   }
