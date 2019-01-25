@@ -94,7 +94,7 @@ export const Footer: React.SFC = () => (
                     value={{ code: activeLocale, name: t(`languages.${activeLocale}`) }}
                     onChange={x => {
                       setLocale({ variables: { locale: x.code } }).then(({ data }: any) => {
-                        i18n.changeLanguage(data.setLocale.activeLocale.replace('_', '-'));
+                        i18n.changeLanguage(data.setLocale.activeLocale);
                       });
                     }}
                   />

@@ -7,7 +7,6 @@ const PriceInnerDom: React.SFC<any> = ({ value, currency, locale, ...rest }) => 
   <LocaleContext.Consumer>
     {localeContext => {
       let localeCode = locale || localeContext.locale;
-      localeCode = localeCode.replace('_', '-');
       localeCode = localeCode === 'cimode' ? 'en' : localeCode;
 
       return (

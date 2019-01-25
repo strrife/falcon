@@ -22,7 +22,7 @@ export default options => async (ctx, next) => {
     data: { backendConfig }
   } = await client.query({ query: GET_BACKEND_CONFIG });
 
-  const i18nInstance = await i18nFactory({ ...options, lng: backendConfig.activeLocale.replace('_', '-') });
+  const i18nInstance = await i18nFactory({ ...options, lng: backendConfig.activeLocale });
 
   return koaI18next(i18nInstance, {
     lookupCookie: 'i18n',
