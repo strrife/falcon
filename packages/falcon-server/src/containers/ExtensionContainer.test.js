@@ -50,10 +50,10 @@ describe('ExtensionContainer', () => {
       [
         [
           {
-            locales: ['en_US']
+            locales: ['en-US']
           },
           {
-            locales: ['pl_PL']
+            locales: ['pl-PL']
           }
         ],
         {
@@ -63,14 +63,14 @@ describe('ExtensionContainer', () => {
       [
         [
           {
-            locales: ['en_US', 'nl_NL']
+            locales: ['en-US', 'nl-NL']
           },
           {
-            locales: ['pl_PL', 'en_US']
+            locales: ['pl-PL', 'en-US']
           }
         ],
         {
-          locales: ['en_US']
+          locales: ['en-US']
         }
       ],
       [
@@ -79,12 +79,12 @@ describe('ExtensionContainer', () => {
             foo: 'bar'
           },
           {
-            locales: ['pl_PL', 'en_US']
+            locales: ['pl-PL', 'en-US']
           },
           null
         ],
         {
-          locales: ['pl_PL', 'en_US']
+          locales: ['pl-PL', 'en-US']
         }
       ]
     ];
