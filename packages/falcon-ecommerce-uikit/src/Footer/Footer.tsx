@@ -2,7 +2,6 @@ import React from 'react';
 import { H4, List, Box, DefaultThemeProps, themed } from '@deity/falcon-ui';
 import { T, I18n } from '@deity/falcon-i18n';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { FooterData } from './FooterQuery';
 import { Newsletter } from './Newsletter';
 import { Copyright } from './Copyright';
 import { FooterSectionsLayout, FooterSectionLayout, SitemapLink } from './FooterSections';
@@ -80,7 +79,7 @@ export const FooterLayout = themed({
   }
 });
 
-export const Footer: React.SFC<FooterData> = () => (
+export const Footer: React.SFC = () => (
   <FooterLayout as="footer">
     <Newsletter />
     <Sitemap />

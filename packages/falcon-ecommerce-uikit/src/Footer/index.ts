@@ -1,4 +1,3 @@
-export * from './FooterQuery';
 export * from './Footer';
 export * from './Newsletter';
 export * from './FooterSections';

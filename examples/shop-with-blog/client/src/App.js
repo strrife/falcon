@@ -11,7 +11,6 @@ import {
   OnlyUnauthenticatedRoute,
   Header,
   Footer,
-  FooterQuery,
   LocaleProvider
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
@@ -84,7 +83,7 @@ const App = ({ online }) => (
                   <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
                   <DynamicRoute />
                 </Switch>
-                <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
+                <Footer />
                 <SidebarContainer>
                   {sidebarProps => (
                     <Sidebar {...sidebarProps}>
