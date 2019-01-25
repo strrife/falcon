@@ -74,7 +74,7 @@ module.exports = class WordpressApi extends ApiDataSource {
       this.baseLanguage = languages.default;
 
       this.languageMap = languages.options.reduce((result, option) => {
-        const localeCode = option.default_locale;
+        const localeCode = option.default_locale.replace('_', '-');
 
         return {
           ...result,
