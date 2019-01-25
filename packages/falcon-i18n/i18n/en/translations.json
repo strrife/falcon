@@ -5,8 +5,8 @@
   "edit": "Edit",
   "languages": {
     "cimode": "CI Mode",
-    "en_US": "English",
-    "nl_NL": "Dutch"
+    "en-US": "English",
+    "nl-NL": "Dutch"
   },
   "banner": {
     "contactLink": "Contact",

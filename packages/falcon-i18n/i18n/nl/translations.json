@@ -4,8 +4,8 @@
   "continue": "Continue",
   "edit": "Edit",
   "languages": {
-    "en_US": "Engels",
-    "nl_NL": "Nederlands"
+    "en-US": "Engels",
+    "nl-NL": "Nederlands"
   },
   "newsletter": {
     "title": "Nieuwsbrief",
