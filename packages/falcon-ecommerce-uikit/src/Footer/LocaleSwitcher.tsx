@@ -1,19 +1,22 @@
 import React from 'react';
-import { Box, DefaultThemeProps, Dropdown, DropdownLabel, DropdownMenu, DropdownMenuItem } from '@deity/falcon-ui';
+import { themed, Dropdown, DropdownLabel, DropdownMenu, DropdownMenuItem, Box } from '@deity/falcon-ui';
 import { T, I18n } from '@deity/falcon-i18n';
 import { BackendConfigQuery, SetLocaleMutation } from '../BackendConfig';
 
-const languageSectionTheme: DefaultThemeProps = {
-  languageSection: {
-    bgFullWidth: 'secondaryLight',
-    py: 'md',
-    css: {
-      maxWidth: 160,
-      margin: '0 auto',
-      zIndex: 2
+export const LanguageSection = themed({
+  tag: Box,
+  defaultTheme: {
+    languageSection: {
+      bgFullWidth: 'secondaryLight',
+      py: 'md',
+      css: {
+        maxWidth: 160,
+        margin: '0 auto',
+        zIndex: 2
+      }
     }
   }
-};
+});
 
 export type LocaleItem = {
   code: string;
@@ -49,25 +52,30 @@ export const addCIModeLocale = (locales: LocaleItem[]) => {
   return locales;
 };
 
-export const LocaleSwitcher: React.SFC = () => (
+export type LocaleSwitcherRenderProps = {
+  onChange: (value: LocaleItem) => Promise<void>;
+  value: LocaleItem;
+  items: LocaleItem[];
+};
+export type LocaleSwitcherProps = {
+  children: (props: LocaleSwitcherRenderProps) => any;
+};
+export const LocaleSwitcher: React.SFC<LocaleSwitcherProps> = ({ children }) => (
   <I18n>
     {(t, i18n) => (
       <SetLocaleMutation>
         {setLocale => (
           <BackendConfigQuery passLoading>
-            {({ backendConfig: { locales, activeLocale } }) => (
-              <Box defaultTheme={languageSectionTheme}>
-                <LocaleSwitcherDropdown
-                  items={addCIModeLocale(locales.map(x => ({ code: x, name: t(`languages.${x}`) })))}
-                  value={{ code: activeLocale, name: t(`languages.${activeLocale}`) }}
-                  onChange={x => {
-                    setLocale({ variables: { locale: x.code } }).then(({ data }: any) => {
-                      i18n.changeLanguage(data.setLocale.activeLocale);
-                    });
-                  }}
-                />
-              </Box>
-            )}
+            {({ backendConfig: { locales, activeLocale } }) => {
+              const items = addCIModeLocale(locales.map(x => ({ code: x, name: t(`languages.${x}`) })));
+              const value = { code: activeLocale, name: t(`languages.${activeLocale}`) };
+              const onChange = (x: LocaleItem) =>
+                setLocale({ variables: { locale: x.code } }).then(({ data }: any) => {
+                  i18n.changeLanguage(data.setLocale.activeLocale);
+                });
+
+              return children && children({ items, value, onChange });
+            }}
           </BackendConfigQuery>
         )}
       </SetLocaleMutation>

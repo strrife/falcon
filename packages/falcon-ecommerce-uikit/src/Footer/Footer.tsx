@@ -1,7 +1,7 @@
 import React from 'react';
 import { H4, List, Box, themed } from '@deity/falcon-ui';
-import { T, I18n } from '@deity/falcon-i18n';
-import { LocaleSwitcher, LocaleSwitcherDropdown } from './LocaleSwitcher';
+import { T } from '@deity/falcon-i18n';
+import { LanguageSection, LocaleSwitcher, LocaleSwitcherDropdown } from './LocaleSwitcher';
 import { Newsletter } from './Newsletter';
 import { Copyright } from './Copyright';
 import { FooterSectionsLayout, FooterSectionLayout, SitemapLink } from './FooterSections';
@@ -69,7 +69,10 @@ export const Footer: React.SFC = () => (
   <FooterLayout as="footer">
     <Newsletter />
     <Sitemap />
-    <LocaleSwitcher />
+    <LanguageSection>
+      <LocaleSwitcher>{({ ...props }) => <LocaleSwitcherDropdown {...props} />}</LocaleSwitcher>
+    </LanguageSection>
+
     <Copyright />
   </FooterLayout>
 );
