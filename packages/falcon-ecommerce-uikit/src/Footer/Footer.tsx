@@ -1,7 +1,7 @@
 import React from 'react';
 import { H4, List, Box, DefaultThemeProps, themed } from '@deity/falcon-ui';
 import { T, I18n } from '@deity/falcon-i18n';
-import { LanguageSwitcher } from './LanguageSwitcher';
+import { LocaleSwitcherDropdown, addCIModeLocale } from './LocaleSwitcher';
 import { Newsletter } from './Newsletter';
 import { Copyright } from './Copyright';
 import { FooterSectionsLayout, FooterSectionLayout, SitemapLink } from './FooterSections';
@@ -89,8 +89,8 @@ export const Footer: React.SFC = () => (
             {({ backendConfig: { locales, activeLocale } }) => (
               <SetLocaleMutation>
                 {setLocale => (
-                  <LanguageSwitcher
-                    items={locales.map(x => ({ code: x, name: t(`languages.${x}`) }))}
+                  <LocaleSwitcherDropdown
+                    items={addCIModeLocale(locales.map(x => ({ code: x, name: t(`languages.${x}`) })))}
                     value={{ code: activeLocale, name: t(`languages.${activeLocale}`) }}
                     onChange={x => {
                       setLocale({ variables: { locale: x.code } }).then(({ data }: any) => {
