@@ -1,11 +1,10 @@
 import React from 'react';
-import { H4, List, Box, DefaultThemeProps, themed } from '@deity/falcon-ui';
+import { H4, List, Box, themed } from '@deity/falcon-ui';
 import { T, I18n } from '@deity/falcon-i18n';
-import { LocaleSwitcherDropdown, addCIModeLocale } from './LocaleSwitcher';
+import { LocaleSwitcher, LocaleSwitcherDropdown } from './LocaleSwitcher';
 import { Newsletter } from './Newsletter';
 import { Copyright } from './Copyright';
 import { FooterSectionsLayout, FooterSectionLayout, SitemapLink } from './FooterSections';
-import { BackendConfigQuery, SetLocaleMutation } from '../BackendConfig';
 
 export const Sitemap: React.SFC = () => (
   <FooterSectionsLayout>
@@ -57,18 +56,6 @@ export const Sitemap: React.SFC = () => (
   </FooterSectionsLayout>
 );
 
-const languageSectionTheme: DefaultThemeProps = {
-  languageSection: {
-    bgFullWidth: 'secondaryLight',
-    py: 'md',
-    css: {
-      maxWidth: 160,
-      margin: '0 auto',
-      zIndex: 2
-    }
-  }
-};
-
 export const FooterLayout = themed({
   tag: Box,
   defaultTheme: {
@@ -82,29 +69,7 @@ export const Footer: React.SFC = () => (
   <FooterLayout as="footer">
     <Newsletter />
     <Sitemap />
-    <Box defaultTheme={languageSectionTheme}>
-      <I18n>
-        {(t, i18n) => (
-          <BackendConfigQuery passLoading>
-            {({ backendConfig: { locales, activeLocale } }) => (
-              <SetLocaleMutation>
-                {setLocale => (
-                  <LocaleSwitcherDropdown
-                    items={addCIModeLocale(locales.map(x => ({ code: x, name: t(`languages.${x}`) })))}
-                    value={{ code: activeLocale, name: t(`languages.${activeLocale}`) }}
-                    onChange={x => {
-                      setLocale({ variables: { locale: x.code } }).then(({ data }: any) => {
-                        i18n.changeLanguage(data.setLocale.activeLocale);
-                      });
-                    }}
-                  />
-                )}
-              </SetLocaleMutation>
-            )}
-          </BackendConfigQuery>
-        )}
-      </I18n>
-    </Box>
+    <LocaleSwitcher />
     <Copyright />
   </FooterLayout>
 );
