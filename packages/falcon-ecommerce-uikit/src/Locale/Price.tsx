@@ -6,12 +6,12 @@ import { LocaleContext } from './LocaleContext';
 const PriceInnerDom: React.SFC<any> = ({ value, currency, locale, ...rest }) => (
   <LocaleContext.Consumer>
     {localeContext => {
-      let localeCode = locale || localeContext.locale;
-      localeCode = localeCode === 'cimode' ? 'en' : localeCode;
+      const localeCode = locale || localeContext.locale;
+      const localFallback = 'en';
 
       return (
         <Text {...rest}>
-          {new Intl.NumberFormat(localeCode, {
+          {new Intl.NumberFormat([localeCode, localFallback], {
             style: 'currency',
             currency: currency || localeContext.currency
           }).format(value)}
