@@ -58,13 +58,15 @@ export default ({ config, clientStates = {} }) => {
       }
     });
 
+    const { schemaLink /* only for unit tests purpose */, ...apolloClientConfig } = config;
+
     const apolloClient = new ApolloClient({
       clientState: mergedClientState,
-      extraLinks: [profileMiddleware, errorLink],
+      extraLinks: [profileMiddleware, errorLink, schemaLink && schemaLink()].map(x => x),
       headers: {
         cookie: ctx.get('cookie')
       },
-      apolloClientConfig: config
+      apolloClientConfig
     });
 
     ctx.state.client = apolloClient;
