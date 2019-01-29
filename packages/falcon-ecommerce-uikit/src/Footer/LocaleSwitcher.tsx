@@ -10,7 +10,7 @@ export const LanguageSection = themed({
       bgFullWidth: 'secondaryLight',
       py: 'md',
       css: {
-        maxWidth: 160,
+        maxWidth: 190,
         margin: '0 auto',
         zIndex: 2
       }

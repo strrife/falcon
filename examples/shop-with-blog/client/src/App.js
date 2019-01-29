@@ -10,12 +10,12 @@ import {
   ProtectedRoute,
   OnlyUnauthenticatedRoute,
   Header,
-  Footer,
   LocaleProvider
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
 import { ErrorBoundary } from 'src/components/ErrorBoundary';
+import { Footer } from 'src/components/footer';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
 import DynamicRoute from 'src/pages/DynamicRoute';
