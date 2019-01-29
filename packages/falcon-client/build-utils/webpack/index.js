@@ -11,6 +11,7 @@ const {
   exitIfBuildingItself,
   exitIfNoRequiredFiles,
   getBuildConfig,
+  getFullIcuPath,
   removePreviousBuildAssets,
   webpackCompiler,
   webpackCompileAsync,
@@ -33,6 +34,7 @@ module.exports.startDevServer = async () => {
   process.env.BABEL_ENV = process.env.NODE_ENV;
   process.env.HOST = process.env.HOST || 'localhost';
   process.env.PORT = await choosePort(process.env.HOST, parseInt(process.env.PORT, 10) || 3000);
+  process.env.NODE_ICU_DATA = getFullIcuPath();
 
   try {
     removePreviousBuildAssets(paths.appBuild, paths.appBuildPublic);
