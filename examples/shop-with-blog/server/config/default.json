@@ -7,7 +7,7 @@
     "magento": {
       "package": "@deity/falcon-magento2-api/src/endpoints",
       "config": {
-        "host": "magento.deity.io",
+        "host": "dev.magento.deity.io",
         "protocol": "https"
       }
     }
@@ -24,7 +24,7 @@
     "api-magento2": {
       "package": "@deity/falcon-magento2-api",
       "config": {
-        "host": "magento.deity.io",
+        "host": "dev.magento.deity.io",
         "protocol": "https",
         "username": "node-api",
         "password": "3de3f3a262",
