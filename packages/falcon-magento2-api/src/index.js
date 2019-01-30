@@ -84,6 +84,16 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async categoryProducts(obj, params) {
     const query = this.createSearchParams(params);
+
+    this.addSearchFilter(params, 'visibility', '2,4', 'in');
+
+    if (!this.isFilterSet('status', params)) {
+      this.addSearchFilter(params, 'status', '1');
+    }
+
+    // removed virtual products as we're not supporting it
+    this.addSearchFilter(params, 'type_id', 'simple,configurable,bundle', 'in');
+
     const { pagination = {} } = params;
     let response;
     try {
@@ -262,13 +272,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     if (filters.length) {
       filters.forEach(item => {
         if (item.value) {
-          this.addSearchFilter(processedFilters, item.field, item.value);
+          this.addSearchFilter(processedFilters, item.field, item.value, item.operator);
         }
       });
     }
 
     const searchCriteria = {
-      filterGroups: processedFilters.filters,
+      filterGroups: processedFilters.filterGroups,
       sortOrders: [sort]
     };
 
@@ -290,23 +300,98 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {object} params - request params that should be populated with filters
    * @param {string} field - filter field to include
    * @param {string} value - field value
-   * @param {string} conditionType - condition type of the filter
+   * @param {string} operator - condition type of the filter
    * @return {object} - request params with additional filter
    */
-  addSearchFilter(params = {}, field, value, conditionType = 'eq') {
-    params.filters = isEmpty(params.filters) ? [] : params.filters;
-
-    params.filters.push({
-      filters: [
-        {
-          condition_type: conditionType,
-          field,
-          value
-        }
-      ]
-    });
+  addSearchFilter(params = {}, field, value, operator = 'eq') {
+    params.filterGroups = isEmpty(params.filters) ? [] : params.filters;
+    const newFilterGroups = this.createMagentoFilter(field, value, operator);
+    newFilterGroups.forEach(filterGroup => params.filterGroups.push(filterGroup));
 
     return params;
+  }
+
+  /**
+   * Converts filter entry to Magento compatible filters format
+   * See https://devdocs.magento.com/guides/v2.3/rest/performing-searches.html for the details
+   * @param {String} field - field name
+   * @param {String|String[]} value - value of the field
+   * @param {FilterOperator} operator - filter operator
+   * @return {Object} Magento-compatible filters definition
+   */
+  createMagentoFilter(field, value, operator) {
+    if (!Array.isArray(value)) {
+      value = [value];
+    }
+
+    switch (operator) {
+      case 'eq': {
+        const filters = [];
+        value.forEach(val => filters.push(this.createSimpleFilter(field, val, operator)));
+        // for 'eq' return one filter group with multiple entries inside when user passes array of values
+        return [
+          {
+            filters
+          }
+        ];
+      }
+
+      case 'neq': {
+        const output = [];
+        output.push({ filters: [this.createSimpleFilter(field, value[0], operator)] });
+
+        // if multiple 'neq' values have been passed then these must be joined with AND, so separate
+        // filterGroups must be used
+        // @todo: consider using 'nin' filter when multiple values are passed - that would simplify final filter
+        if (value.length > 1) {
+          value.slice(1).forEach(val =>
+            output.push({
+              filters: [this.createSimpleFilter(field, val, operator)]
+            })
+          );
+        }
+
+        return output;
+      }
+
+      case 'lt':
+      case 'gt':
+      case 'lte':
+      case 'gte':
+        // map lte to lteq and gte to gteq
+        return [
+          {
+            filters: [this.createSimpleFilter(field, value[0], operator.endsWith('e') ? `${operator}q` : operator)]
+          }
+        ];
+
+      case 'in':
+      case 'nin':
+        // join values with comma
+        return [
+          {
+            filters: [this.createSimpleFilter(field, value.join(','), operator)]
+          }
+        ];
+
+      default:
+        return [];
+    }
+  }
+
+  /**
+   * Creates single filter entry in Magento format
+   * @param {String} field - field name
+   * @param {String} value - filter value
+   * @param {String} operator - filter operator to be used
+   * @return {Object} Magento filter
+   */
+  createSimpleFilter(field, value, operator) {
+    return {
+      condition_type: operator,
+      field,
+      value
+    };
   }
 
   /**
@@ -365,7 +450,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   async fetchList(path, params) {
     const {
       query: { page = 1, perPage } = {},
-      filters: filterGroups = [],
+      filterGroups = [],
       includeSubcategories = false,
       withAttributeFilters = [],
       sortOrders = {}
