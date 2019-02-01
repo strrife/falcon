@@ -3,9 +3,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloClient } from './';
 
 export const apolloClientWeb = ({ initialState, clientApolloSchema, apolloClientConfig }) => {
-  const { navigator } = window;
-  const online = navigator && navigator.onLine;
-
   const cache = new InMemoryCache({ addTypename: false });
   const cachePersistor = new CachePersistor({
     cache,
@@ -16,7 +13,9 @@ export const apolloClientWeb = ({ initialState, clientApolloSchema, apolloClient
   });
 
   const restoreCache = persistor =>
-    online ? persistor.purge().then(() => cache.restore(initialState)) : persistor.restore();
+    window.navigator && window.navigator.onLine
+      ? persistor.purge().then(() => cache.restore(initialState))
+      : persistor.restore();
 
   return restoreCache(cachePersistor).then(() => {
     const apolloClient = new ApolloClient({
