@@ -33,7 +33,9 @@ export class OnlineStatus extends React.Component<OnlineStatusProps, OnlineStatu
   }
 
   updateOnLineStatus() {
+    const { navigator } = window;
     const online = navigator && navigator.onLine;
+
     if (this.state.isOnline === online) {
       return;
     }
