@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
 export const SET_LOCALE = gql`
-  mutation setLocale($locale: String!) {
+  mutation SetLocale($locale: String!) {
     setLocale(locale: $locale) {
       activeLocale
     }
