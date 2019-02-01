@@ -74,7 +74,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async menu() {
     const response = await this.get('/menu');
-    const data = this.convertKeys(response);
+    const { data } = this.convertKeys(response);
 
     const mapMenu = x => {
       if (Array.isArray(x)) {
