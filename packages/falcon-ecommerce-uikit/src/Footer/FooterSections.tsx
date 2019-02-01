@@ -41,7 +41,7 @@ export const FooterSectionLayout = themed({
   }
 });
 
-export const SitemapLink: React.SFC<{ to: string }> = ({ to, children }) => (
+export const FooterLink: React.SFC<{ to: string }> = ({ to, children }) => (
   <ListItem p="xs">
     <Link as={RouterLink} to={to}>
       {children}

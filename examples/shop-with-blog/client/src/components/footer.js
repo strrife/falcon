@@ -4,7 +4,7 @@ import { T } from '@deity/falcon-i18n';
 import {
   FooterSectionsLayout,
   FooterSectionLayout,
-  SitemapLink,
+  FooterLink,
   FooterLayout,
   LanguageSection,
   LocaleSwitcher,
@@ -20,15 +20,15 @@ export const Sitemap = () => (
         <T id="sitemap.customerService" />
       </H4>
       <List>
-        <SitemapLink to="/">
+        <FooterLink to="/">
           <T id="sitemap.trackOrderLink" />
-        </SitemapLink>
-        <SitemapLink to="/">
+        </FooterLink>
+        <FooterLink to="/">
           <T id="sitemap.returnPolicyLink" />
-        </SitemapLink>
-        <SitemapLink to="/">
+        </FooterLink>
+        <FooterLink to="/">
           <T id="sitemap.faqsLink" />
-        </SitemapLink>
+        </FooterLink>
       </List>
     </FooterSectionLayout>
     <FooterSectionLayout>
@@ -36,15 +36,15 @@ export const Sitemap = () => (
         <T id="sitemap.aboutUs" />
       </H4>
       <List>
-        <SitemapLink to="/">
+        <FooterLink to="/">
           <T id="sitemap.aboutUsLink" />
-        </SitemapLink>
-        <SitemapLink to="/blog">
+        </FooterLink>
+        <FooterLink to="/blog">
           <T id="sitemap.blogLink" />
-        </SitemapLink>
-        <SitemapLink to="/">
+        </FooterLink>
+        <FooterLink to="/">
           <T id="sitemap.jobsLink" />
-        </SitemapLink>
+        </FooterLink>
       </List>
     </FooterSectionLayout>
     <FooterSectionLayout>
@@ -52,12 +52,12 @@ export const Sitemap = () => (
         <T id="sitemap.terms" />
       </H4>
       <List>
-        <SitemapLink to="/">
+        <FooterLink to="/">
           <T id="sitemap.cookiesLink" />
-        </SitemapLink>
-        <SitemapLink to="/">
+        </FooterLink>
+        <FooterLink to="/">
           <T id="sitemap.termsLink" />
-        </SitemapLink>
+        </FooterLink>
       </List>
     </FooterSectionLayout>
   </FooterSectionsLayout>
