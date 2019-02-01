@@ -13,8 +13,5 @@ query GET_BACKEND_CONFIG {
   backendConfig {
     locales
     activeLocale
-    shop {
-      activeCurrency
-    }
   }
 }

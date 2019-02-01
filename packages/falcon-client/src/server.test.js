@@ -9,7 +9,6 @@ import supertest from 'supertest';
 import { makeExecutableSchema, mergeSchemas } from 'graphql-tools';
 import { SchemaLink } from 'apollo-link-schema';
 import { BaseSchema } from '@deity/falcon-server';
-import { Schema } from '@deity/falcon-shop-extension';
 import { T } from '@deity/falcon-i18n';
 import { Server } from './server';
 import DynamicRoute from './components/DynamicRoute';
@@ -86,7 +85,7 @@ describe('Server', () => {
         schemaLink: () =>
           new SchemaLink({
             schema: mergeSchemas({
-              schemas: [makeExecutableSchema({ typeDefs: [BaseSchema, Schema] })],
+              schemas: [makeExecutableSchema({ typeDefs: [BaseSchema] })],
               resolvers: {
                 Query: {
                   backendConfig: () => ({
