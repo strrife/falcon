@@ -34,7 +34,11 @@ module.exports.startDevServer = async () => {
   process.env.BABEL_ENV = process.env.NODE_ENV;
   process.env.HOST = process.env.HOST || 'localhost';
   process.env.PORT = await choosePort(process.env.HOST, parseInt(process.env.PORT, 10) || 3000);
-  process.env.NODE_ICU_DATA = getFullIcuPath();
+
+  const fullIcuPath = getFullIcuPath();
+  if (fullIcuPath) {
+    process.env.NODE_ICU_DATA = fullIcuPath;
+  }
 
   try {
     removePreviousBuildAssets(paths.appBuild, paths.appBuildPublic);
