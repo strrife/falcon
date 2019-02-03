@@ -6,9 +6,6 @@ import loadable from '@loadable/component';
 import { Route, Switch } from 'react-router-dom';
 import Koa from 'koa';
 import supertest from 'supertest';
-import { makeExecutableSchema, mergeSchemas } from 'graphql-tools';
-import { SchemaLink } from 'apollo-link-schema';
-import { BaseSchema } from '@deity/falcon-server';
 import { T } from '@deity/falcon-i18n';
 import { Server } from './server';
 import DynamicRoute from './components/DynamicRoute';
@@ -82,20 +79,26 @@ describe('Server', () => {
         resources: { en: { translations: { key: 'foo bar baz' } } }
       },
       apolloClient: {
-        schemaLink: () =>
-          new SchemaLink({
-            schema: mergeSchemas({
-              schemas: [makeExecutableSchema({ typeDefs: [BaseSchema] })],
-              resolvers: {
-                Query: {
-                  backendConfig: () => ({
-                    locales: ['en-US'],
-                    activeLocale: 'en-US'
-                  })
-                }
-              }
-            })
-          })
+        httpLink: {
+          typeDefs: `
+            type Query {
+              backendConfig: BackendConfig
+            }
+
+            type BackendConfig {
+              locales: [String]
+              activeLocale: String
+            }
+          `,
+          resolvers: {
+            Query: {
+              backendConfig: () => ({
+                locales: ['en-US'],
+                activeLocale: 'en-US'
+              })
+            }
+          }
+        }
       }
     });
 
