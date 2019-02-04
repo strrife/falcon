@@ -95,7 +95,6 @@
   },
   "devDependencies": {
     "@deity/falcon-server": "^0.1.1",
-    "@deity/falcon-shop-extension": "^0.2.0",
     "graphql": "14.1.0",
     "graphql-tag": "^2.9.2",
     "i18next": "^12.1.0",
