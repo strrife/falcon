@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Details, DetailsContent, Text, Button } from '@deity/falcon-ui';
-import { T } from '@deity/falcon-i18n';
+import { I18n, T } from '@deity/falcon-i18n';
 import loadable from 'src/components/loadable';
 import SectionHeader from './CheckoutSectionHeader';
 import ErrorList from '../components/ErrorList';
@@ -24,16 +24,20 @@ class PaymentSection extends React.Component {
     let header;
     if (!open && selectedPayment) {
       header = (
-        <SectionHeader
-          title={<T id="checkout.payment" />}
-          onActionClick={onEditRequested}
-          editLabel={<T id="edit" />}
-          complete
-          summary={<Text>{selectedPayment.title}</Text>}
-        />
+        <I18n>
+          {t => (
+            <SectionHeader
+              title={t('checkout.payment')}
+              onActionClick={onEditRequested}
+              editLabel={t('edit')}
+              complete
+              summary={<Text>{selectedPayment.title}</Text>}
+            />
+          )}
+        </I18n>
       );
     } else {
-      header = <SectionHeader title={<T id="checkout.payment" />} />;
+      header = <I18n>{t => <SectionHeader title={t('checkout.payment')} />}</I18n>;
     }
 
     return (

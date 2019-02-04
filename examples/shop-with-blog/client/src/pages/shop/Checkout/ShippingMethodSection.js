@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Label, FlexLayout, Details, DetailsContent, Text, Radio, Box, Button } from '@deity/falcon-ui';
 import { Price } from '@deity/falcon-ecommerce-uikit';
-import { T } from '@deity/falcon-i18n';
+import { I18n, T } from '@deity/falcon-i18n';
 import SectionHeader from './CheckoutSectionHeader';
 import ErrorList from '../components/ErrorList';
 
@@ -48,16 +48,20 @@ class ShippingSection extends React.Component {
 
     if (!open && selectedShipping) {
       header = (
-        <SectionHeader
-          title={<T id="checkout.shipping" />}
-          onActionClick={onEditRequested}
-          editLabel={<T id="edit" />}
-          complete
-          summary={<Text>{selectedShipping.carrierTitle}</Text>}
-        />
+        <I18n>
+          {t => (
+            <SectionHeader
+              title={t('checkout.shipping')}
+              onActionClick={onEditRequested}
+              editLabel={t('edit')}
+              complete
+              summary={<Text>{selectedShipping.carrierTitle}</Text>}
+            />
+          )}
+        </I18n>
       );
     } else {
-      header = <SectionHeader title={<T id="checkout.shipping" />} />;
+      header = <I18n>{t => <SectionHeader title={t('checkout.shipping')} />}</I18n>;
     }
 
     return (
