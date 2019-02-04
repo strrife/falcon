@@ -42,10 +42,10 @@ export const LocaleSwitcherDropdown: React.SFC<LocaleSwitcherDropdownProps> = ({
   </Dropdown>
 );
 
-export const addCIModeLocale = (locales: LocaleItem[]) => {
+export const addCimodeLocale = (locales: string[]) => {
   if (process.env.NODE_ENV === 'development') {
-    if (!locales.find(x => x.code === 'cimode')) {
-      locales.unshift({ code: 'cimode', name: 'CI mode' });
+    if (!locales.find(x => x === 'cimode')) {
+      locales.unshift('cimode');
     }
   }
 
@@ -67,7 +67,7 @@ export const LocaleSwitcher: React.SFC<LocaleSwitcherProps> = ({ children }) => 
         {setLocale => (
           <BackendConfigQuery passLoading>
             {({ backendConfig: { locales, activeLocale } }) => {
-              const items = addCIModeLocale(locales.map(x => ({ code: x, name: t(`languages.${x}`) })));
+              const items = addCimodeLocale(locales).map(x => ({ code: x, name: t(`languages.${x}`) }));
               const value = { code: activeLocale, name: t(`languages.${activeLocale}`) };
               const onChange = (x: LocaleItem) =>
                 setLocale({ variables: { locale: x.code } }).then(({ data }: any) => {
