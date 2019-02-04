@@ -60,5 +60,8 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "resolutions": {
+    "apollo-env": "0.3.1"
   }
 }
