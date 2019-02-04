@@ -104,10 +104,12 @@ class EmailSection extends React.Component {
         ...prevState,
         email: nextCustomerEmail || ''
       };
-    } else if (nextProps.email && !prevState.email) {
+    }
+
+    if (nextProps.email && nextProps.email !== prevState.email) {
       return {
         ...prevState,
-        email: nextProps.email || ''
+        email: nextProps.email
       };
     }
 
