@@ -6,6 +6,7 @@ import loadable from '@loadable/component';
 import { Route, Switch } from 'react-router-dom';
 import Koa from 'koa';
 import supertest from 'supertest';
+import { BaseSchema } from '@deity/falcon-server';
 import { T } from '@deity/falcon-i18n';
 import { Server } from './server';
 import DynamicRoute from './components/DynamicRoute';
@@ -80,16 +81,7 @@ describe('Server', () => {
       },
       apolloClient: {
         httpLink: {
-          typeDefs: `
-            type Query {
-              backendConfig: BackendConfig
-            }
-
-            type BackendConfig {
-              locales: [String]
-              activeLocale: String
-            }
-          `,
+          typeDefs: [BaseSchema],
           resolvers: {
             Query: {
               backendConfig: () => ({
