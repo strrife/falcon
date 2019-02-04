@@ -13,7 +13,8 @@ import {
   Footer,
   FooterQuery,
   HeaderQuery,
-  LocaleProvider
+  LocaleProvider,
+  SearchProvider
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
@@ -67,37 +68,41 @@ const App = ({ online }) => (
     <ScrollToTop />
     <ThemeEditorState initial={deityGreenTheme}>
       {props => (
-        <React.Fragment>
-          <ThemeProvider theme={props.theme} globalCss={globalCss}>
-            <HeadMetaTags />
-            <AppLayout>
-              <HeaderQuery>{data => <Header {...data} />}</HeaderQuery>
-              {!online && <p>you are offline.</p>}
-              <ErrorBoundary>
-                <Switch>
-                  <Route exact path="/" component={Home} />
-                  <Route exact path="/blog/:page?" component={Blog} />
-                  <Route exact path="/cart" component={Cart} />
-                  <Route exact path="/checkout" component={Checkout} />
-                  <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
-                  <ProtectedRoute path="/account" component={Account} />
-                  <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
-                  <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
-                  <DynamicRoute />
-                </Switch>
-                <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
-                <SidebarContainer>
-                  {sidebarProps => (
-                    <Sidebar {...sidebarProps}>
-                      {() => <SidebarContents contentType={sidebarProps.contentType} />}
-                    </Sidebar>
-                  )}
-                </SidebarContainer>
-              </ErrorBoundary>
-            </AppLayout>
-          </ThemeProvider>
-          {ThemeEditorComponent && <ThemeEditorComponent {...props} side="left" />}
-        </React.Fragment>
+        <SearchProvider>
+          {() => (
+            <React.Fragment>
+              <ThemeProvider theme={props.theme} globalCss={globalCss}>
+                <HeadMetaTags />
+                <AppLayout>
+                  <HeaderQuery>{data => <Header {...data} />}</HeaderQuery>
+                  {!online && <p>you are offline.</p>}
+                  <ErrorBoundary>
+                    <Switch>
+                      <Route exact path="/" component={Home} />
+                      <Route exact path="/blog/:page?" component={Blog} />
+                      <Route exact path="/cart" component={Cart} />
+                      <Route exact path="/checkout" component={Checkout} />
+                      <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
+                      <ProtectedRoute path="/account" component={Account} />
+                      <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
+                      <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
+                      <DynamicRoute />
+                    </Switch>
+                    <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
+                    <SidebarContainer>
+                      {sidebarProps => (
+                        <Sidebar {...sidebarProps}>
+                          {() => <SidebarContents contentType={sidebarProps.contentType} />}
+                        </Sidebar>
+                      )}
+                    </SidebarContainer>
+                  </ErrorBoundary>
+                </AppLayout>
+              </ThemeProvider>
+              {ThemeEditorComponent && <ThemeEditorComponent {...props} side="left" />}
+            </React.Fragment>
+          )}
+        </SearchProvider>
       )}
     </ThemeEditorState>
   </LocaleProvider>
