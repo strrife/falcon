@@ -1,62 +1,60 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { H4, Link, List, ListItem, Box, DefaultThemeProps } from '@deity/falcon-ui';
+import { H4, List, Box, DefaultThemeProps, themed } from '@deity/falcon-ui';
 import { T, I18n } from '@deity/falcon-i18n';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { FooterData } from './FooterQuery';
 import { Newsletter } from './Newsletter';
-import { MenuItem } from '../Header';
+import { Copyright } from './Copyright';
+import { FooterSectionsLayout, FooterSectionLayout, SitemapLink } from './FooterSections';
 
-const footerLayoutTheme: DefaultThemeProps = {
-  footerLayout: {
-    mt: 'md'
-  }
-};
-
-const copyrightLayoutTheme: DefaultThemeProps = {
-  copyrightLayout: {
-    p: 'sm',
-    color: 'secondaryText',
-    bgFullWidth: 'secondary',
-    css: {
-      textAlign: 'center'
-    }
-  }
-};
-
-const footerSectionsTheme: DefaultThemeProps = {
-  footerSectionLayout: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))',
-    gridGap: 'sm',
-    bgFullWidth: 'secondaryLight',
-    py: 'sm',
-    css: {
-      justifyItems: {
-        xs: 'center',
-        md: 'center'
-      }
-    }
-  }
-};
-
-export const FooterSections: React.SFC<{ sections: MenuItem[] }> = ({ sections }) => (
-  <Box defaultTheme={footerSectionsTheme}>
-    {sections.map(section => (
-      <Box key={section.name} css={{ minWidth: 200 }}>
-        <H4 fontWeight="bold">{section.name}</H4>
-        <List>
-          {section.children.map(item => (
-            <ListItem p="xs" key={item.name}>
-              <Link as={RouterLink} to={item.url}>
-                {item.name}
-              </Link>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-    ))}
-  </Box>
+export const Sitemap: React.SFC = () => (
+  <FooterSectionsLayout>
+    <FooterSectionLayout>
+      <H4 fontWeight="bold">
+        <T id="sitemap.customerService" />
+      </H4>
+      <List>
+        <SitemapLink to="/">
+          <T id="sitemap.trackOrderLink" />
+        </SitemapLink>
+        <SitemapLink to="/">
+          <T id="sitemap.returnPolicyLink" />
+        </SitemapLink>
+        <SitemapLink to="/">
+          <T id="sitemap.faqsLink" />
+        </SitemapLink>
+      </List>
+    </FooterSectionLayout>
+    <FooterSectionLayout>
+      <H4 fontWeight="bold">
+        <T id="sitemap.aboutUs" />
+      </H4>
+      <List>
+        <SitemapLink to="/">
+          <T id="sitemap.aboutUsLink" />
+        </SitemapLink>
+        <SitemapLink to="/blog">
+          <T id="sitemap.blogLink" />
+        </SitemapLink>
+        <SitemapLink to="/">
+          <T id="sitemap.jobsLink" />
+        </SitemapLink>
+      </List>
+    </FooterSectionLayout>
+    <FooterSectionLayout>
+      <H4 fontWeight="bold">
+        <T id="sitemap.terms" />
+      </H4>
+      <List>
+        <SitemapLink to="/">
+          <T id="sitemap.cookiesLink" />
+        </SitemapLink>
+        <SitemapLink to="/">
+          <T id="sitemap.termsLink" />
+        </SitemapLink>
+      </List>
+    </FooterSectionLayout>
+  </FooterSectionsLayout>
 );
 
 const languageSectionTheme: DefaultThemeProps = {
@@ -72,22 +70,24 @@ const languageSectionTheme: DefaultThemeProps = {
   }
 };
 
-export const Footer: React.SFC<FooterData> = ({
-  config: {
-    menus: { footer },
-    languages
+export const FooterLayout = themed({
+  tag: Box,
+  defaultTheme: {
+    footerLayout: {
+      mt: 'md'
+    }
   }
-}) => (
-  <Box as="footer" defaultTheme={footerLayoutTheme}>
+});
+
+export const Footer: React.SFC<FooterData> = ({ config: { languages } }) => (
+  <FooterLayout as="footer">
     <Newsletter />
-    <FooterSections sections={footer} />
+    <Sitemap />
     <Box defaultTheme={languageSectionTheme}>
       <I18n>
         {(_t, i18n) => <LanguageSwitcher languages={languages} onChange={x => i18n.changeLanguage(x.code)} />}
       </I18n>
     </Box>
-    <Box defaultTheme={copyrightLayoutTheme}>
-      <T id="copyright" year={new Date().getFullYear()} />
-    </Box>
-  </Box>
+    <Copyright />
+  </FooterLayout>
 );

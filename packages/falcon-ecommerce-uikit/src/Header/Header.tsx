@@ -1,17 +1,6 @@
 import React from 'react';
-import { T } from '@deity/falcon-i18n';
 import { Link as RouterLink } from 'react-router-dom';
-import {
-  Navbar,
-  NavbarItem,
-  NavbarItemMenu,
-  Link,
-  List,
-  ListItem,
-  Icon,
-  DefaultThemeProps,
-  Box
-} from '@deity/falcon-ui';
+import { Link, Icon, DefaultThemeProps, Box } from '@deity/falcon-ui';
 
 import { toGridTemplate } from '../helpers';
 import { MiniCartIcon } from '../MiniCart';
@@ -19,70 +8,9 @@ import { CartQuery, CartData } from '../Cart';
 import { CustomerQuery } from '../Customer';
 import { AccountIcon } from '../MiniAccount';
 import { SignInIcon } from '../SignIn';
-import { SignOutLogic } from '../SignOut';
-import { HeaderData, MenuItem } from './HeaderQuery';
+import { MenuQuery, MenuNavbar } from '../Menu';
 import { OpenSidebarMutation } from '../Sidebar';
-
-const bannerLayoutTheme: DefaultThemeProps = {
-  bannerLayout: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    bgFullWidth: 'secondaryLight',
-    m: 'none',
-    p: 'none',
-    css: {
-      listStyle: 'none'
-    }
-  }
-};
-
-export const Banner: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
-  <List defaultTheme={bannerLayoutTheme}>
-    <SignOutLogic>
-      {({ isSignedIn, signOut }: any) =>
-        isSignedIn && (
-          <ListItem p="xs">
-            <Link onClick={() => signOut()}>
-              <T id="signOut.link" />
-            </Link>
-          </ListItem>
-        )
-      }
-    </SignOutLogic>
-    {items.map(item => (
-      <ListItem p="xs" key={item.name}>
-        <Link as={RouterLink} to={item.url}>
-          {item.name}
-        </Link>
-      </ListItem>
-    ))}
-  </List>
-);
-
-export const Nav: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
-  <Navbar>
-    {items.map(item => (
-      <NavbarItem key={item.name}>
-        <Link p="sm" as={RouterLink} to={item.url}>
-          {item.name}
-        </Link>
-        {item.children.length > 0 && (
-          <NavbarItemMenu>
-            <List>
-              {item.children.map(subItem => (
-                <ListItem key={subItem.name}>
-                  <Link p="xs" display="block" as={RouterLink} to={subItem.url}>
-                    {subItem.name}
-                  </Link>
-                </ListItem>
-              ))}
-            </List>
-          </NavbarItemMenu>
-        )}
-      </NavbarItem>
-    ))}
-  </Navbar>
-);
+import { Banner } from './Banner';
 
 export const SearchBarArea = {
   logo: 'logo',
@@ -144,16 +72,10 @@ export const Searchbar = () => (
   </Box>
 );
 
-export const Header: React.SFC<HeaderData> = ({
-  config: {
-    menus: { header, banner }
-  }
-}) => (
+export const Header: React.SFC = () => (
   <header>
-    <Banner items={banner} />
+    <Banner />
     <Searchbar />
-    <nav>
-      <Nav items={header} />
-    </nav>
+    <MenuQuery>{({ menu }) => <MenuNavbar items={menu} />}</MenuQuery>
   </header>
 );

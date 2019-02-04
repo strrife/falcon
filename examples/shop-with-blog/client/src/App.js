@@ -12,7 +12,6 @@ import {
   Header,
   Footer,
   FooterQuery,
-  HeaderQuery,
   LocaleProvider
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
@@ -71,7 +70,7 @@ const App = ({ online }) => (
           <ThemeProvider theme={props.theme} globalCss={globalCss}>
             <HeadMetaTags />
             <AppLayout>
-              <HeaderQuery>{data => <Header {...data} />}</HeaderQuery>
+              <Header />
               {!online && <p>you are offline.</p>}
               <ErrorBoundary>
                 <Switch>
