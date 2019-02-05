@@ -526,7 +526,7 @@ module.exports = (target = 'web', options, buildConfig) => {
     'apollo-link-http',
     'apollo-link-state',
     'apollo-utilities',
-    'node-fetch',
+    'whatwg-fetch',
     'i18next',
     'i18next-xhr-backend',
     '@deity/falcon-client/build-utils/polyfills',
