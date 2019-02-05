@@ -47,6 +47,7 @@ function getBabelLoaderOptions(babelRcPath) {
 
   const hasBabelRc = fs.existsSync(babelRcPath);
   if (!hasBabelRc) {
+    options.babelrc = false;
     options.presets.push(require.resolve('@deity/babel-preset-falcon-client'));
   }
 
@@ -526,6 +527,7 @@ module.exports = (target = 'web', options, buildConfig) => {
     'apollo-link-http',
     'apollo-link-state',
     'apollo-utilities',
+    'core-js',
     'whatwg-fetch',
     'i18next',
     'i18next-xhr-backend',
