@@ -5,11 +5,7 @@ module.exports = {
       '@babel/preset-env',
       {
         modules: false,
-        loose: true,
-        targets: {
-          // > 0.5%, last 2 versions, Firefox ESR, not dead
-          browsers: 'defaults'
-        }
+        loose: true
       }
     ],
     '@babel/preset-typescript',
