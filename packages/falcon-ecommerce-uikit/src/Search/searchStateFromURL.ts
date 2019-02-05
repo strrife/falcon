@@ -1,8 +1,8 @@
 import qs from 'qs';
-import { SearchState } from './index.d';
+import { SearchState, FilterOperator } from './index.d';
 
 export function searchStateFromURL(url: string) {
-  const parts: any = qs.parse(url);
+  const parts: any = qs.parse(url.replace('?', ''));
   const searchState: SearchState = {};
 
   if (parts.q) {
@@ -31,7 +31,7 @@ export function searchStateFromURL(url: string) {
       const [field, operator] = names[i].split(':');
       searchState.filters.push({
         field,
-        operator: operator || 'eq',
+        operator: (operator as FilterOperator) || FilterOperator.eq,
         value: parts.filters[names[i]].split(',')
       });
     }

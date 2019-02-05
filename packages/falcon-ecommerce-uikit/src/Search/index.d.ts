@@ -33,7 +33,7 @@ export type FilterInput = {
 
 export type SearchState = {
   query?: string;
-  filters?: any[];
+  filters?: FilterInput[];
   sort?: SortOrderInput;
   pagination?: PaginationInput;
 };
