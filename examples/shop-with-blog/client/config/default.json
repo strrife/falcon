@@ -8,17 +8,5 @@
     "httpLink": {
       "uri": "http://localhost:4000/graphql"
     }
-  },
-  "languages": [
-    {
-      "name": "English",
-      "code": "en",
-      "active": false
-    },
-    {
-      "name": "Dutch",
-      "code": "nl",
-      "active": true
-    }
-  ]
+  }
 }
