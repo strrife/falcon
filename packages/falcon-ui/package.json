@@ -16,10 +16,6 @@
     "dist",
     "src"
   ],
-  "peerDependencies": {
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3"
-  },
   "scripts": {
     "clean": "rimraf dist",
     "prepare": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:tsDeclarations && npm run size",
@@ -36,8 +32,8 @@
     "@babel/core": "7.1.6",
     "@babel/plugin-proposal-class-properties": "7.1.0",
     "@babel/plugin-proposal-object-rest-spread": "7.0.0",
-    "@babel/plugin-transform-runtime": "7.1.0",
-    "@babel/preset-env": "7.1.6",
+    "@babel/plugin-transform-runtime": "7.2.0",
+    "@babel/preset-env": "7.3.1",
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.1.0",
     "@deity/falcon-theme-editor": "^0.1.1",
@@ -70,6 +66,10 @@
     "emotion-theming": "^10.0.5",
     "is-plain-object": "^2.0.4",
     "react-powerplug": "1.0.0"
+  },
+  "peerDependencies": {
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
   },
   "size-limit": [
     {

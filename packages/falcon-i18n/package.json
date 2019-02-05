@@ -32,8 +32,8 @@
     "@babel/core": "7.1.6",
     "@babel/plugin-proposal-class-properties": "7.1.0",
     "@babel/plugin-proposal-object-rest-spread": "7.0.0",
-    "@babel/plugin-transform-runtime": "7.1.0",
-    "@babel/preset-env": "7.1.6",
+    "@babel/plugin-transform-runtime": "7.2.0",
+    "@babel/preset-env": "7.3.1",
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.1.0",
     "@types/i18next": "12.1.0",
@@ -41,8 +41,8 @@
     "babel-plugin-module-resolver": "3.1.1",
     "i18next": "^12.1.0",
     "prop-types": "^15.6.2",
-    "react": "~16.4.2",
-    "react-dom": "~16.4.2",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "rimraf": "2.6.2",
     "rollup": "0.66.4",
     "rollup-plugin-babel": "4.0.3",
@@ -53,8 +53,8 @@
   "peerDependencies": {
     "i18next": "^12.1.0",
     "prop-types": "^15.6.2",
-    "react": "^16.4.2",
-    "react-dom": "~16.4.2"
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }
