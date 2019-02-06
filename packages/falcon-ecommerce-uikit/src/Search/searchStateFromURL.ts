@@ -31,7 +31,7 @@ export function searchStateFromURL(url: string) {
       const [field, operator] = names[i].split(':');
       searchState.filters.push({
         field,
-        operator: (operator as FilterOperator) || FilterOperator.eq,
+        operator: (operator || 'eq') as FilterOperator,
         value: parts.filters[names[i]].split(',')
       });
     }

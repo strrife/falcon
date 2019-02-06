@@ -1,22 +1,13 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { SearchState, FilterInput, FilterOperator, SortOrderInput, PaginationInput } from './index.d';
+import { SearchState, FilterOperator, SortOrderInput, PaginationInput } from './index.d';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
-
-export type SearchProviderInjectedProps = {
-  activeFilters: FilterInput[];
-  setFilter(name: string, value: string[]): void;
-  removeFilter(name: string): void;
-  setSortOrder(sort: SortOrderInput): void;
-  setQuery(query: string): void;
-  setPagination(pagination: PaginationInput): void;
-};
+import { SearchContext } from './SearchContext';
 
 export type SearchProviderOwnProps = {
   searchStateToURL?(state: SearchState): string;
   searchStateFromURL?(url: string): SearchState;
-  children(props: SearchProviderInjectedProps): any;
 };
 
 export type SearchProviderProps = SearchProviderOwnProps & RouteComponentProps<any>;
@@ -41,7 +32,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
     this.historyUnlisten();
   }
 
-  setFilter = (field: string, value: string[], operator = FilterOperator.eq) => {
+  setFilter = (field: string, value: string[], operator = 'eq' as FilterOperator) => {
     const filters = this.state.filters ? [...this.state.filters] : [];
     let filter = filters.find(item => item.field === field);
 
@@ -111,16 +102,18 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
 
   render() {
     return (
-      <React.Fragment>
-        {this.props.children({
-          activeFilters: this.state.filters || [],
+      <SearchContext.Provider
+        value={{
+          state: this.state,
           setFilter: this.setFilter,
           removeFilter: this.removeFilter,
           setSortOrder: this.setSortOrder,
           setPagination: this.setPagination,
           setQuery: this.setQuery
-        })}
-      </React.Fragment>
+        }}
+      >
+        {this.props.children}
+      </SearchContext.Provider>
     );
   }
 }
