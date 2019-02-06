@@ -899,9 +899,9 @@
     "@babel/plugin-transform-typescript" "^7.1.0"
 
 "@babel/runtime-corejs2@^7.0.0-rc.1":
-  version "7.2.0"
-  resolved "https://registry.npmjs.org/@babel/runtime-corejs2/-/runtime-corejs2-7.2.0.tgz#5ccd722b72d2c18c6a7224b5751f4b9816b60ada"
-  integrity sha512-kPfmKoRI8Hpo5ZJGACWyrc9Eq1j3ZIUpUAQT2yH045OuYpccFJ9kYA/eErwzOM2jeBG1sC8XX1nl1EArtuM8tg==
+  version "7.3.1"
+  resolved "https://registry.npmjs.org/@babel/runtime-corejs2/-/runtime-corejs2-7.3.1.tgz#0c113242e2328f9674d42703a89bee6ebebe9a82"
+  integrity sha512-YpO13776h3e6Wy8dl2J8T9Qwlvopr+b4trCEhHE+yek6yIqV8sx6g3KozdHMbXeBpjosbPi+Ii5Z7X9oXFHUKA==
   dependencies:
     core-js "^2.5.7"
     regenerator-runtime "^0.12.0"
@@ -5002,9 +5002,9 @@ core-js@^2.4.0, core-js@^2.4.1, core-js@^2.5.0, core-js@^2.5.7, core-js@^2.6.1:
   integrity sha512-NdBPF/RVwPW6jr0NCILuyN9RiqLo2b1mddWHkUL+VnvcB7dzlnBJ1bXYntjpTGOgkZiiLWj2JxmOr7eGE3qK6g==
 
 core-js@^3.0.0-beta.3:
-  version "3.0.0-beta.9"
-  resolved "https://registry.npmjs.org/core-js/-/core-js-3.0.0-beta.9.tgz#1897789a5ef0ee1190d54777f35f80c38c077633"
-  integrity sha512-OGLbGro2f0s8UXVyu2s9kIW42pcuRoNEqJsmn8a4rAOO9G5A2t96l++rf+4mHNw9GKrbdozZ9G5ieDKOBl68zQ==
+  version "3.0.0-beta.13"
+  resolved "https://registry.npmjs.org/core-js/-/core-js-3.0.0-beta.13.tgz#7732c69be5e4758887917235fe7c0352c4cb42a1"
+  integrity sha512-16Q43c/3LT9NyePUJKL8nRIQgYWjcBhjJSMWg96PVSxoS0PeE0NHitPI3opBrs9MGGHjte1KoEVr9W63YKlTXQ==
 
 core-util-is@1.0.2, core-util-is@^1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
@@ -10009,36 +10009,6 @@ koa-static@^5.0.0:
   dependencies:
     debug "^3.1.0"
     koa-send "^5.0.0"
-
-koa@2.5.3:
-  version "2.5.3"
-  resolved "https://registry.npmjs.org/koa/-/koa-2.5.3.tgz#0b0c37eee3aac807a0a6ad36bc0b8660f12d83f1"
-  integrity sha512-U6rgy2kwlfO+3P1phAidDrRZpGfwcpHCxl33wFe+fHXalpzEshHGnMaSU7I/ZeDFpGRQkbQOYsXkXfUjn+AtdQ==
-  dependencies:
-    accepts "^1.3.5"
-    cache-content-type "^1.0.0"
-    content-disposition "~0.5.2"
-    content-type "^1.0.4"
-    cookies "~0.7.1"
-    debug "~3.1.0"
-    delegates "^1.0.0"
-    depd "^1.1.2"
-    destroy "^1.0.4"
-    error-inject "^1.0.0"
-    escape-html "^1.0.3"
-    fresh "~0.5.2"
-    http-assert "^1.3.0"
-    http-errors "^1.6.3"
-    is-generator-function "^1.0.7"
-    koa-compose "^4.1.0"
-    koa-convert "^1.2.0"
-    koa-is-json "^1.0.0"
-    on-finished "^2.3.0"
-    only "~0.0.2"
-    parseurl "^1.3.2"
-    statuses "^1.5.0"
-    type-is "^1.6.16"
-    vary "^1.1.2"
 
 koa@2.6.2:
   version "2.6.2"
@@ -15561,18 +15531,10 @@ superagent@^3.8.3:
     qs "^6.5.1"
     readable-stream "^2.3.5"
 
-supertest@3.3.0:
-  version "3.3.0"
-  resolved "https://registry.npmjs.org/supertest/-/supertest-3.3.0.tgz#79b27bd7d34392974ab33a31fa51a3e23385987e"
-  integrity sha512-dMQSzYdaZRSANH5LL8kX3UpgK9G1LRh/jnggs/TI0W2Sz7rkMx9Y48uia3K9NgcaWEV28tYkBnXE4tiFC77ygQ==
-  dependencies:
-    methods "^1.1.2"
-    superagent "^3.8.3"
-
-supertest@^3.3.0:
-  version "3.4.1"
-  resolved "https://registry.npmjs.org/supertest/-/supertest-3.4.1.tgz#91b19ea34804c205769d0ff5ad947aff3eb2731d"
-  integrity sha512-r4AmsjjKxC50LxGACe/E4xKjau2amiFlj3aCT2sZCRig2o3l4XFN6Acw7crDu4d8Af1f5chafIyLkQ1mac/boA==
+supertest@3.4.2:
+  version "3.4.2"
+  resolved "https://registry.npmjs.org/supertest/-/supertest-3.4.2.tgz#bad7de2e43d60d27c8caeb8ab34a67c8a5f71aad"
+  integrity sha512-WZWbwceHUo2P36RoEIdXvmqfs47idNNZjCuJOqDz6rvtkk8ym56aU5oglORCpPeXGxT7l9rkJ41+O1lffQXYSA==
   dependencies:
     methods "^1.1.2"
     superagent "^3.8.3"

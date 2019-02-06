@@ -29,5 +29,10 @@
   "dependencies": {
     "@deity/falcon-server-env": "^0.1.1",
     "koa-proxies": "0.8.1"
+  },
+  "devDependencies": {
+    "koa": "2.6.2",
+    "koa-router": "7.4.0",
+    "supertest": "3.4.2"
   }
 }
