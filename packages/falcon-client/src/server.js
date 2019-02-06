@@ -22,6 +22,8 @@ export function Server({ App, clientApolloSchema, bootstrap, webpackAssets, load
 
   const publicDir = process.env.PUBLIC_DIR;
   const router = new Router();
+  bootstrap.onRouterCreated(router);
+
   router.get('/sw.js', serve(publicDir, { maxage: 0 }));
   router.get('/static/*', serve(publicDir, { maxage: process.env.NODE_ENV === 'production' ? 31536000000 : 0 }));
   router.get('/*', serve(publicDir));

@@ -18,6 +18,7 @@
     "@deity/falcon-wordpress-api": "^0.1.1",
     "@deity/falcon-adyen-api": "^0.0.1",
     "@deity/falcon-paypal-api": "^0.0.1",
+    "@deity/falcon-proxy-endpoints": "^0.0.1",
     "config": "^2.0.1",
     "cross-env": "^5.2.0"
   },

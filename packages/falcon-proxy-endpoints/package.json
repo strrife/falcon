@@ -1,0 +1,33 @@
+{
+  "name": "@deity/falcon-proxy-endpoints",
+  "version": "0.0.1",
+  "license": "OSL-3.0",
+  "homepage": "https://falcon.deity.io/docs/falcon-server/endpoints",
+  "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-proxy-endpoints",
+  "main": "src/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "jest --watch",
+    "test:coverage": "jest --ci --coverage"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "coverageReporters": [
+      "html",
+      "text",
+      "text-summary",
+      "lcov"
+    ],
+    "setupFiles": [
+      "../../test/nodeEnvSetupFile"
+    ]
+  },
+  "dependencies": {
+    "@deity/falcon-server-env": "^0.1.1",
+    "koa-proxies": "0.8.1"
+  }
+}

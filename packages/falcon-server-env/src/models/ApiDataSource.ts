@@ -4,8 +4,8 @@ import { URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
 import { GraphQLResolveInfo, GraphQLSchema } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
 import { stringify } from 'qs';
-import { format } from 'url';
 import Cache from '../cache/Cache';
+import { formatUrl } from '../helpers/url';
 import ContextHTTPCache from '../cache/ContextHTTPCache';
 import {
   ApiContainer,
@@ -62,13 +62,9 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
     this.apiContainer = apiContainer;
     this.eventEmitter = eventEmitter;
 
-    const { host, port, protocol, fetchUrlPriority, perPage } = this.config;
+    const { host, fetchUrlPriority, perPage } = this.config;
     if (host) {
-      this.baseURL = format({
-        protocol: protocol === 'https' || Number(port) === 443 ? 'https' : 'http',
-        hostname: host,
-        port: Number(port) || undefined
-      });
+      this.baseURL = formatUrl(this.config);
     }
 
     this.fetchUrlPriority = fetchUrlPriority || this.fetchUrlPriority;

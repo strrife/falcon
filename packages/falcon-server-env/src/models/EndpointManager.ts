@@ -1,10 +1,11 @@
 import { EventEmitter2 } from 'eventemitter2';
-import { Context } from 'koa';
 import { ConfigurableConstructorParams, EndpointEntry, UrlConfig } from '../types';
+import { formatUrl } from '../helpers/url';
 
 export default abstract class EndpointManager {
   public config: UrlConfig;
   public name: string;
+  public baseUrl: string;
 
   protected eventEmitter: EventEmitter2;
 
@@ -12,6 +13,7 @@ export default abstract class EndpointManager {
     this.config = params.config || {};
     this.name = params.name || this.constructor.name;
     this.eventEmitter = params.eventEmitter;
+    this.baseUrl = formatUrl(this.config);
   }
 
   /**
