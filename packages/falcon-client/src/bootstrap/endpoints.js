@@ -3,6 +3,13 @@ import fetch from 'node-fetch';
 import proxies from 'koa-proxies';
 import Logger from '@deity/falcon-logger';
 
+/**
+ * Bootstrap hook to fetch list of endpoints from Falcon-Server
+ * and set up a "proxy" handler
+ * @param {koa-router} router KoaRouter object
+ * @param {string} serverUrl Falcon-Server URL
+ * @param {boolean} isDebug Debug flag
+ */
 export const endpoints = (router, serverUrl, isDebug = process.env.NODE_ENV !== 'production') => {
   if (!serverUrl) {
     Logger.warn('"serverUrl" must be passed in your "bootstrap.js" file.');
