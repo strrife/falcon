@@ -132,9 +132,7 @@ class FalconServer {
     // Set signed cookie keys (https://koajs.com/#app-keys-)
     this.app.keys = this.config.session.keys;
 
-    this.router = new Router({
-      prefix: '/api'
-    });
+    this.router = new Router();
 
     this.app.use(
       cors({
