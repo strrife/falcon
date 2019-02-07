@@ -6,5 +6,6 @@ export default {
   onServerCreated: bootstrap.onServerCreated || (() => {}),
   onServerInitialized: bootstrap.onServerInitialized || (() => {}),
   onServerStarted: bootstrap.onServerStarted || (() => {}),
-  onRouterCreated: bootstrap.onRouterCreated || (() => {})
+  onRouterCreated: bootstrap.onRouterCreated || (() => {}),
+  onRouterInitialized: bootstrap.onRouterInitialized || (() => {})
 };

@@ -29,6 +29,7 @@ export function Server({ App, clientApolloSchema, bootstrap, webpackAssets, load
   router.get('/*', serve(publicDir));
   router.get('/app-shell', ...renderAppShell({ config, webpackAssets, loadableStats }));
   router.get('/*', ...renderApp({ App, clientApolloSchema, config, webpackAssets, loadableStats }));
+  bootstrap.onRouterInitialized(router);
 
   instance
     .use(helmet())
