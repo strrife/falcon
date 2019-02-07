@@ -24,5 +24,8 @@
   },
   "devDependencies": {
     "nodemon": "^1.18.9"
+  },
+  "resolutions": {
+    "apollo-env": "0.3.1"
   }
 }
