@@ -41,7 +41,6 @@ function getEsLintLoaderOptions(eslintRcPath, isDev) {
 function getBabelLoaderOptions(babelRcPath) {
   const options = {
     babelrc: true,
-    cacheDirectory: true,
     presets: []
   };
 
@@ -143,7 +142,7 @@ module.exports = (target = 'web', options, buildConfig) => {
   const IS_PROD = env === 'production';
   const IS_DEV = env === 'development';
   process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
-  const devtool = 'cheap-module-source-map';
+  const devtool = IS_DEV ? 'source-map' : 'cheap-module-source-map';
 
   const clientEnv = getClientEnv(target, options, buildConfig.envToBuildIn);
 
@@ -502,7 +501,6 @@ module.exports = (target = 'web', options, buildConfig) => {
             // Use multi-process parallel running to improve the build speed
             // Default number of concurrent runs: os.cpus().length - 1
             parallel: true,
-            cache: true, // Enable file caching
             sourceMap: !!devtool
           })
         ]
