@@ -43,10 +43,12 @@ i18nFactory({ ...config.i18n, lng: i18nextState.language }).then(i18next => {
     renderApp(markup, document.getElementById('root'));
   });
 
-  if (process.env.NODE_ENV === 'production') {
-    register('/sw.js');
-  } else {
-    unregisterAll();
+  if (window.navigator && 'serviceWorker' in navigator) {
+    if (process.env.NODE_ENV === 'production') {
+      register('/sw.js');
+    } else {
+      unregisterAll();
+    }
   }
 });
 
