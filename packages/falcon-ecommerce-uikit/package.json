@@ -49,7 +49,7 @@
     "build:esm": "babel src -d dist -x .ts,.tsx -s",
     "build:cjs": "rollup -c",
     "watch": "babel src -d dist -x .ts,.tsx -s --watch",
-    "test": "jest --watch --verbose=false",
+    "test": "jest --watch",
     "test:coverage": "jest --ci --coverage"
   },
   "peerDependencies": {

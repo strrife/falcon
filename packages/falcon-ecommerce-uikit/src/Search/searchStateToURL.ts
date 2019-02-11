@@ -1,5 +1,5 @@
 import qs from 'qs';
-import { SearchState } from './index.d';
+import { SearchState } from './types';
 
 type UrlParts = {
   // search query

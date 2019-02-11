@@ -1,6 +1,6 @@
 import { searchStateToURL } from './searchStateToURL';
 import { searchStateFromURL } from './searchStateFromURL';
-import { SortOrderDirection, FilterOperator, SearchState } from './index.d';
+import { SortOrderDirection, FilterOperator } from './types';
 
 describe('Filters', () => {
   describe('serializing and deserializing', () => {

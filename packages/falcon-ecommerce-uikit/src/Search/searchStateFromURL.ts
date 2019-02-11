@@ -1,5 +1,5 @@
 import qs from 'qs';
-import { SearchState, FilterOperator } from './index.d';
+import { SearchState, FilterOperator } from './types';
 
 export function searchStateFromURL(url: string) {
   const parts: any = qs.parse(url.replace('?', ''));

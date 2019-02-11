@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
-import { SearchState, FilterOperator, SortOrder, PaginationInput } from './index.d';
+import { SearchState, FilterOperator, SortOrder, PaginationInput } from './types';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
 import { SearchContext } from './SearchContext';
@@ -13,13 +13,11 @@ export const SORT_ORDERS_QUERY = gql`
   }
 `;
 
-export type SearchProviderOwnProps = {
+interface SearchProviderProps extends RouteComponentProps {
   searchStateToURL?(state: SearchState): string;
   searchStateFromURL?(url: string): SearchState;
   sortOrders: SortOrder[];
-};
-
-export type SearchProviderProps = SearchProviderOwnProps & RouteComponentProps<any>;
+}
 
 class SearchProviderImpl extends React.Component<SearchProviderProps, SearchState> {
   static defaultProps = {
