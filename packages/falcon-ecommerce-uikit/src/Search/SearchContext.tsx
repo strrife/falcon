@@ -1,8 +1,9 @@
 import React from 'react';
-import { SearchState, FilterInput, SortOrderInput, PaginationInput } from './index.d';
+import { SearchState, SortOrder, SortOrderInput, PaginationInput } from './index.d';
 
 export type SearchContextType = {
   state: SearchState;
+  availableSortOrders: SortOrder[];
   setFilter(name: string, value: string[]): void;
   removeFilter(name: string): void;
   setSortOrder(sort: SortOrderInput): void;
@@ -12,6 +13,7 @@ export type SearchContextType = {
 
 export const SearchContext = React.createContext<SearchContextType>({
   state: {},
+  availableSortOrders: [],
   setFilter: () => {},
   removeFilter: () => {},
   setSortOrder: () => {},

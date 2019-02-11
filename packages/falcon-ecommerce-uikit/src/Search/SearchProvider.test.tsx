@@ -1,29 +1,58 @@
 import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { MemoryRouter, Route } from 'react-router-dom';
-import { SearchProvider } from './SearchProvider';
+import { MockedProvider } from 'react-apollo/test-utils';
+import { SearchProvider, SORT_ORDERS_QUERY } from './SearchProvider';
 import { SearchContext } from './SearchContext';
+import { SearchState } from './index.d';
+import { wait } from '../../../../test/helpers';
 
 // custom serializing and deserializing go avoid problems when default implementation of those changes
-const stateToUrl = state => JSON.stringify(state);
-const stateFromUrl = url => (url ? JSON.parse(url.replace('?', '')) : {});
+const stateToUrl = (state: SearchState) => JSON.stringify(state);
+const stateFromUrl = (url: string) => (url ? JSON.parse(url.replace('?', '')) : {});
 
-const renderSearchProvider = (content: any, mocks: any = {}) =>
+const dataMocks = [
+  {
+    request: {
+      query: SORT_ORDERS_QUERY
+    },
+    result: {
+      data: {
+        sortOrders: [
+          {
+            name: 'Price ascending',
+            field: 'price',
+            direction: 'asc'
+          },
+          {
+            name: 'Price descending',
+            field: 'price',
+            direction: 'desc'
+          }
+        ]
+      }
+    }
+  }
+];
+
+const renderSearchProvider = (content: any) =>
   mount(
     <MemoryRouter initialEntries={['/']}>
-      <Route>
-        <SearchProvider searchStateFromURL={stateFromUrl} searchStateToURL={stateToUrl}>
-          {content}
-        </SearchProvider>
-      </Route>
+      <MockedProvider mocks={dataMocks} addTypename={false}>
+        <Route>
+          <SearchProvider searchStateFromURL={stateFromUrl} searchStateToURL={stateToUrl}>
+            {content}
+          </SearchProvider>
+        </Route>
+      </MockedProvider>
     </MemoryRouter>
   );
 
 describe('SearchProvider', () => {
   let wrapper: ReactWrapper<any, any> | null;
 
-  const getLocation = () => wrapper.find(SearchProvider.WrappedComponent).props().location;
-  const getSearchInfo = () => wrapper.find(SearchProvider.WrappedComponent).state();
+  const getLocation = () => wrapper!.find(SearchProvider.WrappedComponent).props().location;
+  const getSearchInfo = () => wrapper!.find(SearchProvider.WrappedComponent).state();
 
   afterEach(() => {
     if (wrapper) {
@@ -32,7 +61,7 @@ describe('SearchProvider', () => {
     }
   });
 
-  it('should provide info about search via context', () => {
+  it('should provide info about search via context', async () => {
     let searchInfo;
 
     wrapper = renderSearchProvider(
@@ -43,11 +72,13 @@ describe('SearchProvider', () => {
         }}
       </SearchContext.Consumer>
     );
+
+    await wait(0);
 
     expect(searchInfo.state.filters).toBeArray; // eslint-disable-line no-unused-expressions
   });
 
-  it('setFilter() should update url and pass new filter value in props', () => {
+  it('setFilter() should update url and pass new filter value in props', async () => {
     let searchInfo;
 
     wrapper = renderSearchProvider(
@@ -58,6 +89,9 @@ describe('SearchProvider', () => {
         }}
       </SearchContext.Consumer>
     );
+
+    // wait for Query to return the result
+    await wait(0);
 
     searchInfo.setFilter('price', ['10']);
     wrapper.update();
@@ -65,7 +99,7 @@ describe('SearchProvider', () => {
     expect(getLocation().search).toEqual(`?${JSON.stringify(getSearchInfo())}`);
   });
 
-  it('removeFiler() should update url and remove filter value from passed props', () => {
+  it('removeFiler() should update url and remove filter value from passed props', async () => {
     let searchInfo;
 
     wrapper = renderSearchProvider(
@@ -76,6 +110,9 @@ describe('SearchProvider', () => {
         }}
       </SearchContext.Consumer>
     );
+
+    // wait for Query to return the result
+    await wait(0);
 
     searchInfo.setFilter('price', ['10']);
     searchInfo.removeFilter('price');
@@ -84,7 +121,7 @@ describe('SearchProvider', () => {
     expect(getLocation().search).toEqual(`?${JSON.stringify(getSearchInfo())}`);
   });
 
-  it('setQuery() should update url and pass query in props', () => {
+  it('setQuery() should update url and pass query in props', async () => {
     let searchInfo;
 
     wrapper = renderSearchProvider(
@@ -95,6 +132,9 @@ describe('SearchProvider', () => {
         }}
       </SearchContext.Consumer>
     );
+
+    // wait for Query to return the result
+    await wait(0);
 
     searchInfo.setQuery('searchQuery');
     searchInfo.removeFilter('price');
@@ -103,7 +143,7 @@ describe('SearchProvider', () => {
     expect(getLocation().search).toEqual(`?${JSON.stringify(getSearchInfo())}`);
   });
 
-  it('setSortOrder() should update url and pass order in props', () => {
+  it('setSortOrder() should update url and pass order in props', async () => {
     let searchInfo;
 
     wrapper = renderSearchProvider(
@@ -114,14 +154,19 @@ describe('SearchProvider', () => {
         }}
       </SearchContext.Consumer>
     );
+
+    // wait for Query to return the result
+    await wait(0);
 
     searchInfo.setSortOrder({ field: 'price', direction: 'asc' });
     wrapper.update();
-    expect(searchInfo.state.sort).toEqual({ field: 'price', direction: 'asc' });
+    // name: 'Price ascending' should be added as value passed to setSortOrder is matched with value from
+    // sortOrders property passed to SearchProvider (from Query or via prop directly)
+    expect(searchInfo.state.sort).toEqual({ field: 'price', direction: 'asc', name: 'Price ascending' });
     expect(getLocation().search).toEqual(`?${JSON.stringify(getSearchInfo())}`);
   });
 
-  it('setPagination() should update url and pass pagination in props', () => {
+  it('setPagination() should update url and pass pagination in props', async () => {
     let searchInfo;
 
     wrapper = renderSearchProvider(
@@ -132,6 +177,9 @@ describe('SearchProvider', () => {
         }}
       </SearchContext.Consumer>
     );
+
+    // wait for Query to return the result
+    await wait(0);
 
     searchInfo.setPagination({ page: 1, perPage: 10 });
     wrapper.update();
@@ -139,7 +187,7 @@ describe('SearchProvider', () => {
     expect(getLocation().search).toEqual(`?${JSON.stringify(getSearchInfo())}`);
   });
 
-  it('history change should trigger update of search state', () => {
+  it('history change should trigger update of search state', async () => {
     let searchInfo;
 
     wrapper = renderSearchProvider(
@@ -150,6 +198,9 @@ describe('SearchProvider', () => {
         }}
       </SearchContext.Consumer>
     );
+
+    // wait for Query to return the result
+    await wait(0);
 
     const { history } = wrapper.find(SearchProvider.WrappedComponent).props();
     history.push('/?{"query":"foo"}');

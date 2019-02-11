@@ -23,6 +23,15 @@ export const GET_CATEGORY_PRODUCTS = gql`
           totalItems
           nextPage
         }
+        aggregations {
+          key
+          name
+          buckets {
+            name
+            value
+            count
+          }
+        }
       }
     }
   }

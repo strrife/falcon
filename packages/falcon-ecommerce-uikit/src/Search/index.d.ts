@@ -20,6 +20,10 @@ export type SortOrderInput = {
   direction: SortOrderDirection;
 };
 
+export type SortOrder = SortOrder & {
+  name: string;
+};
+
 export type PaginationInput = {
   perPage: number;
   page: number;
