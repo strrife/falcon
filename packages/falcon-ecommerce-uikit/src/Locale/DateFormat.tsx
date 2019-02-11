@@ -10,9 +10,14 @@ type DateFormatProps = {
 
 const DateFormatInnerDOM: React.SFC<DateFormatProps> = ({ value, locale, options, ...rest }) => (
   <LocaleContext.Consumer>
-    {({ locale: defaultLocale }) => (
-      <Text {...rest}>{new Intl.DateTimeFormat(locale || defaultLocale, options).format(new Date(value))}</Text>
-    )}
+    {localeContext => {
+      const localeCode = locale || localeContext.locale;
+      const localFallback = 'en';
+
+      return (
+        <Text {...rest}>{new Intl.DateTimeFormat([localeCode, localFallback], options).format(new Date(value))}</Text>
+      );
+    }}
   </LocaleContext.Consumer>
 );
 

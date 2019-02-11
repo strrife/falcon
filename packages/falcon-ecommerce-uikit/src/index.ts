@@ -28,3 +28,4 @@ export * from './Forms';
 export * from './AccountRecovery';
 export * from './Errors';
 export * from './SortOrdersProvider';
+export * from './BackendConfig';
