@@ -41,3 +41,13 @@ export function unregisterAll() {
     );
   });
 }
+
+export function configureServiceWorker() {
+  if (window.navigator && 'serviceWorker' in navigator) {
+    if (process.env.NODE_ENV === 'production') {
+      register('/sw.js');
+    } else {
+      unregisterAll();
+    }
+  }
+}

@@ -10,7 +10,7 @@ import { ApolloClient, apolloStateToObject } from './service';
 import HtmlHead from './components/HtmlHead';
 import App, { clientApolloSchema } from './clientApp';
 import i18nFactory from './i18n/i18nClientFactory';
-import { register, unregisterAll } from './serviceWorker';
+import { configureServiceWorker } from './serviceWorker';
 
 // eslint-disable-next-line no-underscore-dangle
 const apolloInitialState = window.__APOLLO_STATE__ || {};
@@ -43,13 +43,7 @@ i18nFactory({ ...config.i18n, lng: i18nextState.language }).then(i18next => {
     renderApp(markup, document.getElementById('root'));
   });
 
-  if (window.navigator && 'serviceWorker' in navigator) {
-    if (process.env.NODE_ENV === 'production') {
-      register('/sw.js');
-    } else {
-      unregisterAll();
-    }
-  }
+  configureServiceWorker();
 });
 
 if (module.hot) {
