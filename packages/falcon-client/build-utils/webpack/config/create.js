@@ -112,6 +112,13 @@ function addVendorsBundle(modules = []) {
       config.optimization = {
         splitChunks: {
           cacheGroups: {
+            polyfills: {
+              name: 'polyfills',
+              enforce: true,
+              priority: 100,
+              chunks: 'initial',
+              test: new RegExp(`[\\\\/]node_modules[\\\\/]core-js[\\\\/]`)
+            },
             vendor: {
               name: 'vendors',
               enforce: true,
@@ -373,8 +380,7 @@ module.exports = (target = 'web', options, buildConfig) => {
       // specify our client entry point /client/index.js
       config.entry = {
         client: [
-          // We ship a few polyfills by default but only include them if React is being placed in the default path.
-          !clientEnv.raw.REACT_BUNDLE_PATH && falconClientPolyfills,
+          falconClientPolyfills,
           require.resolve('razzle-dev-utils/webpackHotDevClient'),
           paths.ownClientIndexJs
         ].filter(Boolean)
@@ -430,12 +436,7 @@ module.exports = (target = 'web', options, buildConfig) => {
     } else {
       // Specify production entry point (/client/index.js)
       config.entry = {
-        client: [
-          // We ship a few polyfills by default but only include them if React is being placed in the default path.
-          // If you are doing some vendor bundling, you'll need to require the @deity/falcon-client/build-utils/polyfills on your own.
-          !clientEnv.raw.REACT_BUNDLE_PATH && falconClientPolyfills,
-          paths.ownClientIndexJs
-        ].filter(Boolean)
+        client: [falconClientPolyfills, paths.ownClientIndexJs].filter(Boolean)
       };
 
       // Specify the client output directory and paths. Notice that we have
@@ -525,7 +526,6 @@ module.exports = (target = 'web', options, buildConfig) => {
     'apollo-link-http',
     'apollo-link-state',
     'apollo-utilities',
-    'core-js',
     'whatwg-fetch',
     'i18next',
     'i18next-xhr-backend',
