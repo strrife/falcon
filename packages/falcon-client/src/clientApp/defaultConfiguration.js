@@ -27,5 +27,8 @@ export default initialConfig =>
       }
     },
     initialConfig || {},
-    { arrayMerge: (destination, source) => source }
+    {
+      arrayMerge: (destination, source) => source,
+      clone: false
+    }
   );

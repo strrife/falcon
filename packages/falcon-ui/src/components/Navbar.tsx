@@ -25,15 +25,24 @@ export const Navbar = themed({
 
 const MenuItemContext = React.createContext<{ open?: boolean }>({});
 
-const MenuItemInnerDOM: React.SFC<any> = props => (
+const MenuItemInnerDOM: React.SFC<any> = ({ onMouseEnter, onMouseLeave, onClick, ...props }) => (
   <Value initial={false}>
     {({ set, value }) => (
       <MenuItemContext.Provider value={{ open: value }}>
         <ListItem
           {...props}
-          onMouseEnter={() => set(true)}
-          onMouseLeave={() => set(false)}
-          onClick={() => set(false)}
+          onMouseEnter={e => {
+            if (onMouseEnter) onMouseEnter(e);
+            set(true);
+          }}
+          onMouseLeave={e => {
+            set(false);
+            if (onMouseLeave) onMouseLeave(e);
+          }}
+          onClick={e => {
+            set(false);
+            if (onClick) onClick(e);
+          }}
         />
       </MenuItemContext.Provider>
     )}

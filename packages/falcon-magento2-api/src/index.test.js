@@ -48,7 +48,7 @@ describe('Magento2Api', () => {
       .get(createMagentoUrl('/store/storeConfigs'))
       .reply(200, [
         {
-          locale: 'en_US',
+          locale: 'en-US',
           extension_attributes: {},
           code: 'default'
         }
