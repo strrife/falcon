@@ -52,9 +52,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     ]);
 
     // Processing "active" items only
-    const activeStoreViews = storeViews.data.filter(
-      storeView => storeView.extension_attributes.is_active && storeView.website_id
-    );
+    const activeStoreViews = storeViews.data.filter(x => x.extension_attributes.is_active && x.website_id);
     const activeStoreWebsites = storeWebsites.data.filter(storeWebsite => storeWebsite.id);
     const activeStoreGroups = storeGroups.data.filter(storeGroup => storeGroup.id);
 
@@ -63,17 +61,17 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
         'id',
         'code',
         'website_id',
-        'locale',
         'base_currency_code',
         'default_display_currency_code',
         'timezone',
         'weight_unit'
       ]),
+      locale: storeConfig.locale.replace('_', '-'),
       ..._.pick(_.find(activeStoreViews, { id: storeConfig.id }), ['store_group_id', 'name'])
     }));
     this.storeConfigMap = _.keyBy(activeStoreConfigs, 'code');
-    this.magentoConfig.locales = _.uniq(_.map(activeStoreConfigs, 'locale'));
-    this.magentoConfig.defaultLocale = _.find(activeStoreConfigs, { code: 'default' }).locale;
+    this.magentoConfig.locales = _.uniq(activeStoreConfigs.map(x => x.locale));
+    this.magentoConfig.defaultLocale = activeStoreConfigs.find(x => x.code === 'default').locale;
 
     activeStoreWebsites.forEach(storeWebsite => {
       const groups = [];

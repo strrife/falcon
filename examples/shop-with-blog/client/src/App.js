@@ -9,14 +9,12 @@ import {
   ProtectedRoute,
   OnlyUnauthenticatedRoute,
   Header,
-  Footer,
-  FooterQuery,
-  HeaderQuery,
   LocaleProvider
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
 import { ErrorBoundary } from 'src/components/ErrorBoundary';
+import { Footer } from 'src/components/footer';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
 import DynamicRoute from 'src/pages/DynamicRoute';
@@ -70,7 +68,7 @@ const App = () => (
           <ThemeProvider theme={props.theme} globalCss={globalCss}>
             <HeadMetaTags />
             <AppLayout>
-              <HeaderQuery>{data => <Header {...data} />}</HeaderQuery>
+              <Header />
               <OnlineStatus>{({ isOnline }) => !isOnline && <p>you are offline.</p>}</OnlineStatus>
               <ErrorBoundary>
                 <Switch>
@@ -84,7 +82,7 @@ const App = () => (
                   <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
                   <DynamicRoute />
                 </Switch>
-                <FooterQuery>{data => <Footer {...data} />}</FooterQuery>
+                <Footer />
                 <SidebarContainer>
                   {sidebarProps => (
                     <Sidebar {...sidebarProps}>
