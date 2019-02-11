@@ -214,12 +214,19 @@ class FalconServer {
    * @private
    */
   async registerEndpoints() {
+    const endpoints = [];
     await this.eventEmitter.emitAsync(Events.BEFORE_ENDPOINTS_REGISTERED, this.endpointContainer.entries);
     this.endpointContainer.entries.forEach(({ methods, path: routerPath, handler }) => {
       (Array.isArray(methods) ? methods : [methods]).forEach(method => {
         Logger.debug(`FalconServer: registering endpoint ${method.toUpperCase()}: "${routerPath}"`);
         this.router[method.toLowerCase()](routerPath, handler);
+        if (endpoints.indexOf(routerPath) < 0) {
+          endpoints.push(routerPath);
+        }
       });
+    });
+    this.router.get('/endpoints', ctx => {
+      ctx.body = endpoints;
     });
 
     this.app.use(this.router.routes()).use(this.router.allowedMethods());
