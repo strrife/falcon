@@ -1,12 +1,6 @@
 import React from 'react';
-import gql from 'graphql-tag';
 import { Query } from './Query';
-
-export const SORT_ORDERS_QUERY = gql`
-  query SortOrdersQuery {
-    sortOrders @client
-  }
-`;
+import { SORT_ORDERS_QUERY } from './Search';
 
 type SortOrder = {
   name: string;
