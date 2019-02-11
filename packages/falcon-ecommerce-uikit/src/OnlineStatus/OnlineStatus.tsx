@@ -11,12 +11,9 @@ export type OnlineStatusProps = {
 };
 
 export class OnlineStatus extends React.Component<OnlineStatusProps, OnlineStatusState> {
-  constructor(props: OnlineStatusProps) {
-    super(props);
-
-    this.state = { isOnline: true };
-    this.updateOnLineStatus = this.updateOnLineStatus.bind(this);
-  }
+  state = {
+    isOnline: true
+  };
 
   componentDidMount() {
     window.addEventListener('online', this.updateOnLineStatus);
@@ -32,7 +29,7 @@ export class OnlineStatus extends React.Component<OnlineStatusProps, OnlineStatu
     window.removeEventListener('offline', this.updateOnLineStatus);
   }
 
-  updateOnLineStatus() {
+  updateOnLineStatus = () => {
     const { navigator } = window;
     const online = navigator && navigator.onLine;
 
@@ -41,12 +38,12 @@ export class OnlineStatus extends React.Component<OnlineStatusProps, OnlineStatu
     }
 
     this.setState({ isOnline: online });
-  }
+  };
 
   render() {
     const { children } = this.props;
-    const { isOnline: online } = this.state;
+    const { isOnline } = this.state;
 
-    return children({ isOnline: online });
+    return children({ isOnline });
   }
 }
