@@ -23,7 +23,7 @@ export function searchStateToURL(state: SearchState) {
     parts.filters = {};
     for (let i = 0; i < filters.length; i++) {
       const filter = filters[i];
-      const name = filter.operator === 'eq' || !filter.operator ? filter.field : `${filter.field}:${filter.operator}`;
+      const name = filter.operator === 'eq' ? filter.field : `${filter.field}:${filter.operator}`;
       parts.filters[name] = filter.value.join(',');
     }
   }

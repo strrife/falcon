@@ -1,6 +1,6 @@
 import { searchStateToURL } from './searchStateToURL';
 import { searchStateFromURL } from './searchStateFromURL';
-import { SortOrderDirection } from './index.d';
+import { SortOrderDirection, FilterOperator, SearchState } from './index.d';
 
 describe('Filters', () => {
   describe('serializing and deserializing', () => {
@@ -9,37 +9,13 @@ describe('Filters', () => {
         filters: [
           {
             field: 'price',
-            operator: 'gt',
+            operator: 'gt' as FilterOperator,
             value: ['10']
           }
         ]
       };
 
       expect(searchStateFromURL(searchStateToURL(input))).toEqual(input);
-    });
-
-    it('should correctly deal with "eq" operator', () => {
-      const input1 = {
-        filters: [
-          {
-            field: 'price',
-            value: ['10']
-          }
-        ]
-      };
-
-      const input2 = {
-        filters: [
-          {
-            operator: 'eq',
-            field: 'price',
-            value: ['10']
-          }
-        ]
-      };
-
-      expect(searchStateFromURL(searchStateToURL(input1))).toEqual(input2);
-      expect(searchStateFromURL(searchStateToURL(input2))).toEqual(input2);
     });
 
     it('should correctly deal with pagination', () => {
