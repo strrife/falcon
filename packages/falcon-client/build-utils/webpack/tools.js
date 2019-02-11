@@ -137,6 +137,14 @@ function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {
   return configDefaults;
 }
 
+function getFullIcuPath() {
+  if (process.env.NODE_ICU_DATA !== undefined) {
+    return process.env.NODE_ICU_DATA;
+  }
+
+  return paths.resolvePackageDir('full-icu');
+}
+
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} Bytes`;
   else if (bytes < 1048576) return `${(bytes / 1024).toFixed(3)} KB`;
@@ -150,6 +158,7 @@ module.exports = {
   exitIfBuildingItself,
   exitIfNoRequiredFiles,
   getBuildConfig,
+  getFullIcuPath,
   removePreviousBuildAssets,
   webpackCompiler,
   webpackCompileAsync,

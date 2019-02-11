@@ -6,6 +6,7 @@ import loadable from '@loadable/component';
 import { Route, Switch } from 'react-router-dom';
 import Koa from 'koa';
 import supertest from 'supertest';
+import { BaseSchema } from '@deity/falcon-server';
 import { T } from '@deity/falcon-i18n';
 import { Server } from './server';
 import DynamicRoute from './components/DynamicRoute';
@@ -73,14 +74,26 @@ describe('Server', () => {
     const config = defaultConfiguration({
       logLevel: 'error',
       serverSideRendering: true,
-      googleTagManager: {
-        id: null
-      },
+      googleTagManager: { id: null },
       i18n: {
         lng: 'en',
         resources: { en: { translations: { key: 'foo bar baz' } } }
+      },
+      apolloClient: {
+        httpLink: {
+          typeDefs: [BaseSchema],
+          resolvers: {
+            Query: {
+              backendConfig: () => ({
+                locales: ['en-US'],
+                activeLocale: 'en-US'
+              })
+            }
+          }
+        }
       }
     });
+
     const bootstrap = {
       config,
       onServerCreated: () => {},
@@ -109,6 +122,7 @@ describe('Server', () => {
         }
       }
     }).callback();
+
     const response = await supertest(serverHandler).get('/');
 
     expect(response.status).toBe(200);

@@ -1,4 +1,5 @@
 extend type Query {
+  menu: [MenuItem]
   category(id: String!): Category
   product(id: String!): Product
   products(
@@ -251,6 +252,14 @@ type ShippingInformation {
 type PaymentMethod {
   code: String
   title: String
+}
+
+type MenuItem {
+  id: String!
+  name: String!
+  urlPath: String!
+  cssClass: String
+  children: [MenuItem]!
 }
 
 type Category {
