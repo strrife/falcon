@@ -5,7 +5,8 @@ module.exports = {
       '@babel/preset-env',
       {
         modules: false,
-        loose: true
+        loose: true,
+        targets: 'defaults'
       }
     ],
     '@babel/preset-typescript',
