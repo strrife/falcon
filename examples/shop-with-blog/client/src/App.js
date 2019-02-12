@@ -47,7 +47,6 @@ const Checkout = loadable(() => import(/* webpackChunkName: "shop/checkout" */ '
 const CheckoutConfirmation = loadable(() =>
   import(/* webpackChunkName: "shop/checkout" */ './pages/shop/CheckoutConfirmation')
 );
-
 const SidebarContents = loadable(() =>
   import(/* webpackPrefetch: true, webpackChunkName: "shop/SidebarContents" */ './pages/shop/components/Sidebar/SidebarContents')
 );
@@ -87,7 +86,7 @@ const App = ({ online }) => (
                 <SidebarContainer>
                   {sidebarProps => (
                     <Sidebar {...sidebarProps}>
-                      {() => <SidebarContents contentType={sidebarProps.contentType} />}
+                      <SidebarContents contentType={sidebarProps.contentType} />
                     </Sidebar>
                   )}
                 </SidebarContainer>
