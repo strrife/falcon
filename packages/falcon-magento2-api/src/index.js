@@ -111,7 +111,15 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   async categoryProducts(obj, params) {
     const query = this.createSearchParams(params);
 
-    this.addSearchFilter(params, 'visibility', '2,4', 'in');
+    /**
+     * Magento visibility settings
+     *
+     * VISIBILITY_NOT_VISIBLE = 1;
+     * VISIBILITY_IN_CATALOG = 2;
+     * VISIBILITY_IN_SEARCH = 3;
+     * VISIBILITY_BOTH = 4;
+     */
+    this.addSearchFilter(params, 'visibility', '4', 'eq');
 
     if (!this.isFilterSet('status', params)) {
       this.addSearchFilter(params, 'status', '1');
@@ -434,7 +442,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
      * VISIBILITY_IN_SEARCH = 3;
      * VISIBILITY_BOTH = 4;
      */
-    this.addSearchFilter(params, 'visibility', '2,4', 'in');
+    this.addSearchFilter(params, 'visibility', '4', 'eq');
 
     if (!this.isFilterSet('status', params)) {
       this.addSearchFilter(params, 'status', '1');
