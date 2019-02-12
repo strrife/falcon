@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
-import { SearchState, FilterOperator, SortOrderInput, SortOrder, PaginationInput } from './types';
+import { SearchState, FilterOperator, SortOrder, PaginationInput } from './types';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
 import { SearchContext } from './SearchContext';
@@ -55,7 +55,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
     return state;
   }
 
-  getFullSortOrderDefinition(sort: SortOrderInput) {
+  getFullSortOrderDefinition(sort: SortOrder) {
     return this.props.sortOrders.find(
       (item: SortOrder) => item.field === sort.field && item.direction === sort.direction
     );
@@ -140,7 +140,11 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
     return (
       <SearchContext.Provider
         value={{
-          state: this.state,
+          state: {
+            ...this.state,
+            // if there's no sort set yet then return first available option (it's considered as default one)
+            sort: this.state.sort || this.props.sortOrders[0]
+          },
           availableSortOrders: this.props.sortOrders,
           setFilter: this.setFilter,
           removeFilter: this.removeFilter,

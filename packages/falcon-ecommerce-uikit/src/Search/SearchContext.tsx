@@ -1,12 +1,12 @@
 import React from 'react';
-import { SearchState, SortOrder, SortOrderInput, PaginationInput } from './types';
+import { SearchState, SortOrder, PaginationInput } from './types';
 
 export type SearchContextType = {
   state: SearchState;
   availableSortOrders: SortOrder[];
   setFilter(name: string, value: string[]): void;
   removeFilter(name: string): void;
-  setSortOrder(sort: SortOrderInput): void;
+  setSortOrder(sort: SortOrder): void;
   setQuery(query: string): void;
   setPagination(pagination: PaginationInput): void;
 };

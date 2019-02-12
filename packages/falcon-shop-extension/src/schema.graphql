@@ -117,12 +117,12 @@ enum FilterOperator {
   neq
 
   """
-  less then
+  less than
   """
   lt
 
   """
-  less then or equals
+  less than or equals
   """
   lte
 

@@ -4,30 +4,27 @@ import { SearchContext, CategoryProductsQuery, Category } from '@deity/falcon-ec
 
 const CategoryPage = ({ id }) => (
   <SearchContext.Consumer>
-    {({ state, availableSortOrders, setSortOrder }) => {
-      const activeSortOrder = state.sort || availableSortOrders[0];
-      return (
-        <CategoryProductsQuery
-          variables={{
-            categoryId: id,
-            sort: {
-              field: activeSortOrder.field,
-              direction: activeSortOrder.direction
-            },
-            filters: state.filters
-          }}
-        >
-          {categoryProps => (
-            <Category
-              {...categoryProps}
-              availableSortOrders={availableSortOrders}
-              activeSortOrder={activeSortOrder}
-              setSortOrder={setSortOrder}
-            />
-          )}
-        </CategoryProductsQuery>
-      );
-    }}
+    {({ state, availableSortOrders, setSortOrder }) => (
+      <CategoryProductsQuery
+        variables={{
+          categoryId: id,
+          sort: {
+            direction: state.sort.direction,
+            field: state.sort.field
+          },
+          filters: state.filters
+        }}
+      >
+        {categoryProps => (
+          <Category
+            {...categoryProps}
+            availableSortOrders={availableSortOrders}
+            activeSortOrder={state.sort}
+            setSortOrder={setSortOrder}
+          />
+        )}
+      </CategoryProductsQuery>
+    )}
   </SearchContext.Consumer>
 );
 
