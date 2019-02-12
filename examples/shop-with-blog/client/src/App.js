@@ -67,39 +67,35 @@ const App = ({ online }) => (
     <ThemeEditorState initial={deityGreenTheme}>
       {props => (
         <SearchProvider>
-          {() => (
-            <React.Fragment>
-              <ThemeProvider theme={props.theme} globalCss={globalCss}>
-                <HeadMetaTags />
-                <AppLayout>
-                  <Header />
-                  {!online && <p>you are offline.</p>}
-                  <ErrorBoundary>
-                    <Switch>
-                      <Route exact path="/" component={Home} />
-                      <Route exact path="/blog/:page?" component={Blog} />
-                      <Route exact path="/cart" component={Cart} />
-                      <Route exact path="/checkout" component={Checkout} />
-                      <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
-                      <ProtectedRoute path="/account" component={Account} />
-                      <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
-                      <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
-                      <DynamicRoute />
-                    </Switch>
-                    <Footer />
-                    <SidebarContainer>
-                      {sidebarProps => (
-                        <Sidebar {...sidebarProps}>
-                          {() => <SidebarContents contentType={sidebarProps.contentType} />}
-                        </Sidebar>
-                      )}
-                    </SidebarContainer>
-                  </ErrorBoundary>
-                </AppLayout>
-              </ThemeProvider>
-              {ThemeEditorComponent && <ThemeEditorComponent {...props} side="left" />}
-            </React.Fragment>
-          )}
+          <ThemeProvider theme={props.theme} globalCss={globalCss}>
+            <HeadMetaTags />
+            <AppLayout>
+              <Header />
+              {!online && <p>you are offline.</p>}
+              <ErrorBoundary>
+                <Switch>
+                  <Route exact path="/" component={Home} />
+                  <Route exact path="/blog/:page?" component={Blog} />
+                  <Route exact path="/cart" component={Cart} />
+                  <Route exact path="/checkout" component={Checkout} />
+                  <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
+                  <ProtectedRoute path="/account" component={Account} />
+                  <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
+                  <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
+                  <DynamicRoute />
+                </Switch>
+                <Footer />
+                <SidebarContainer>
+                  {sidebarProps => (
+                    <Sidebar {...sidebarProps}>
+                      {() => <SidebarContents contentType={sidebarProps.contentType} />}
+                    </Sidebar>
+                  )}
+                </SidebarContainer>
+              </ErrorBoundary>
+            </AppLayout>
+          </ThemeProvider>
+          {ThemeEditorComponent && <ThemeEditorComponent {...props} side="left" />}
         </SearchProvider>
       )}
     </ThemeEditorState>
