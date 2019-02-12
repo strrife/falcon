@@ -1,26 +1,13 @@
-export enum SortOrderDirection {
-  asc = 'asc',
-  desc = 'desc'
-}
+export type SortOrderDirection = 'asc' | 'desc';
 
-export enum FilterOperator {
-  eq = 'eq',
-  neq = 'neq',
-  lt = 'lt',
-  lte = 'lte',
-  gt = 'gt',
-  gte = 'gte',
-  in = 'in',
-  nin = 'nin',
-  range = 'range'
-}
+export type FilterOperator = 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'in' | 'nin' | 'range';
 
 export type SortOrderInput = {
   field: string;
   direction: SortOrderDirection;
 };
 
-export type SortOrder = SortOrder & {
+export type SortOrder = SortOrderInput & {
   name: string;
 };
 

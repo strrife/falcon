@@ -9,7 +9,7 @@ describe('Filters', () => {
         filters: [
           {
             field: 'price',
-            operator: 'gt' as FilterOperator,
+            operator: 'eq' as FilterOperator,
             value: ['10']
           }
         ]
