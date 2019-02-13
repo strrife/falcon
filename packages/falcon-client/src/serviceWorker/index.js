@@ -11,7 +11,7 @@ export function register(swPath = '/sw.js') {
     return;
   }
 
-  window.addEventListener('load', () => {
+  const registerSw = () => {
     const scope = '/';
 
     navigator.serviceWorker
@@ -24,7 +24,15 @@ export function register(swPath = '/sw.js') {
       .catch(registrationError => {
         console.warn(`SW registration for '${scope}' failed.`, registrationError);
       });
-  });
+  };
+
+  // if 'load' event has already been called then document.readyState is set to 'complete'
+  // in that case we register SW immediately, otherwise we delay it until 'load' event is fired
+  if (document.readyState === 'complete') {
+    registerSw();
+  } else {
+    window.addEventListener('load', registerSw);
+  }
 }
 
 /**
