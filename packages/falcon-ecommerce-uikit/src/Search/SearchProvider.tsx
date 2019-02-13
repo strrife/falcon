@@ -1,5 +1,7 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+// eslint-disable-next-line
+import { Location } from 'history';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import { SearchState, FilterOperator, SortOrder, PaginationInput } from './types';
@@ -29,7 +31,6 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
   constructor(props: SearchProviderProps) {
     super(props);
     this.state = this.getStateFromURL(props.location);
-    this.historyUnlisten = () => {};
   }
 
   componentDidMount() {
@@ -40,7 +41,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
     this.historyUnlisten();
   }
 
-  getStateFromURL(location: any) {
+  getStateFromURL(location: Location) {
     const state = this.props.searchStateFromURL!(location.search);
     // if sort order was passed in url then make sure that it's available
     if (state.sort) {
@@ -56,12 +57,10 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
   }
 
   getFullSortOrderDefinition(sort: SortOrder) {
-    return this.props.sortOrders.find(
-      (item: SortOrder) => item.field === sort.field && item.direction === sort.direction
-    );
+    return this.props.sortOrders.find(item => item.field === sort.field && item.direction === sort.direction);
   }
 
-  setFilter = (field: string, value: string[], operator = 'eq' as FilterOperator) => {
+  setFilter = (field: string, value: string[], operator: FilterOperator = 'eq') => {
     const filters = this.state.filters ? [...this.state.filters] : [];
     let filter = filters.find(item => item.field === field);
 
@@ -124,7 +123,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
     });
   };
 
-  private historyUnlisten: Function;
+  private historyUnlisten = () => {};
 
   updateURL(state: SearchState) {
     const queryString = this.props.searchStateToURL!(state);
