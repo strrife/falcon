@@ -29,4 +29,5 @@ export * from './AccountRecovery';
 export * from './Errors';
 export * from './SortOrdersProvider';
 export * from './OnlineStatus';
+export * from './EnsureTTI';
 export * from './BackendConfig';
