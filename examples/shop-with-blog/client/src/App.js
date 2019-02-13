@@ -1,9 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { ThemeProvider } from '@deity/falcon-ui';
-import isOnline from '@deity/falcon-client/src/components/isOnline';
+import { OnlineStatus } from '@deity/falcon-ecommerce-uikit';
 import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
 import {
   AppLayout,
@@ -59,7 +58,7 @@ if (process.env.NODE_ENV !== 'production') {
   ThemeEditorComponent = ThemeEditor;
 }
 
-const App = ({ online }) => (
+const App = () => (
   <LocaleProvider>
     <ScrollToTop />
     <ThemeEditorState initial={deityGreenTheme}>
@@ -69,7 +68,7 @@ const App = ({ online }) => (
             <HeadMetaTags />
             <AppLayout>
               <Header />
-              {!online && <p>you are offline.</p>}
+              <OnlineStatus>{({ isOnline }) => !isOnline && <p>you are offline.</p>}</OnlineStatus>
               <ErrorBoundary>
                 <Switch>
                   <Route exact path="/" component={Home} />
@@ -100,8 +99,4 @@ const App = ({ online }) => (
   </LocaleProvider>
 );
 
-App.propTypes = {
-  online: PropTypes.bool
-};
-
-export default isOnline()(App);
+export default App;
