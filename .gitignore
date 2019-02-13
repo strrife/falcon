@@ -8,6 +8,7 @@ package-lock.json
 
 .vscode/
 */**/jsconfig.json
+*.log
 
 .vimrc
 *.swp

@@ -15,13 +15,12 @@
     "@deity/falcon-server": "^0.1.1",
     "@deity/falcon-shop-extension": "^0.2.0",
     "@deity/falcon-wordpress-api": "^0.1.1",
+    "apollo-env": "0.3.1",
+    "core-js": "3.0.0-beta.3",
     "config": "^2.0.1",
     "cross-env": "^5.2.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.7"
-  },
-  "resolutions": {
-    "apollo-env": "0.3.1"
   }
 }
