@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SearchContext, CategoryProductsQuery, Category } from '@deity/falcon-ecommerce-uikit';
+import { SearchConsumer, CategoryProductsQuery, Category } from '@deity/falcon-ecommerce-uikit';
 
 const CategoryPage = ({ id }) => (
-  <SearchContext.Consumer>
+  <SearchConsumer>
     {({ state, availableSortOrders, setSortOrder }) => (
       <CategoryProductsQuery
         variables={{
@@ -25,7 +25,7 @@ const CategoryPage = ({ id }) => (
         )}
       </CategoryProductsQuery>
     )}
-  </SearchContext.Consumer>
+  </SearchConsumer>
 );
 
 CategoryPage.propTypes = {

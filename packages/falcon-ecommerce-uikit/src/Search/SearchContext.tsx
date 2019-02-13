@@ -20,3 +20,5 @@ export const SearchContext = React.createContext<SearchContextType>({
   setQuery: () => {},
   setPagination: () => {}
 });
+
+export const SearchConsumer = SearchContext.Consumer;
