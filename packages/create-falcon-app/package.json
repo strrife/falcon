@@ -19,9 +19,11 @@
     "listr": "0.14.2"
   },
   "keywords": [
+    "deity",
     "pwa",
     "ecommerce",
     "headless",
+    "storefront",
     "react",
     "javascript",
     "magento",
