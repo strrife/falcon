@@ -1,6 +1,6 @@
 {
   "name": "@deity/falcon-client",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://falcon.deity.io/docs/falcon-client/basics",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-client",
   "license": "OSL-3.0",
@@ -22,7 +22,7 @@
     "@babel/core": "^7.0.0",
     "@deity/babel-preset-falcon-client": "^0.1.1",
     "@deity/falcon-errors": "^0.1.1",
-    "@deity/falcon-i18n": "^0.2.0",
+    "@deity/falcon-i18n": "^0.2.1",
     "@deity/falcon-i18n-webpack-plugin": "^0.2.0",
     "@deity/falcon-logger": "^0.1.1",
     "@loadable/component": "^5.2.1",
@@ -95,7 +95,7 @@
     "workbox-build": "^3.5.0"
   },
   "devDependencies": {
-    "@deity/falcon-server": "^0.1.1",
+    "@deity/falcon-server": "^0.1.2",
     "graphql": "14.1.0",
     "graphql-tag": "^2.9.2",
     "i18next": "^12.1.0",

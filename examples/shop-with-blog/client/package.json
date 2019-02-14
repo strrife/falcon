@@ -2,7 +2,7 @@
   "name": "@deity/example-shop-with-blog-client",
   "private": true,
   "license": "OSL-3.0",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "repository": "https://github.com/deity-io/falcon/tree/master/examples/shop-with-blog/client",
   "scripts": {
     "start": "falcon-client start",
@@ -17,10 +17,10 @@
     "eject": "eject-ts @deity/falcon-ecommerce-uikit src/uikit"
   },
   "dependencies": {
-    "@deity/falcon-client": "^0.2.0",
-    "@deity/falcon-i18n": "^0.2.0",
+    "@deity/falcon-client": "^0.3.0",
+    "@deity/falcon-i18n": "^0.2.1",
     "@deity/falcon-theme-editor": "^0.1.1",
-    "@deity/falcon-ui": "^0.1.1",
+    "@deity/falcon-ui": "^0.1.2",
     "@loadable/component": "^5.2.1",
     "apollo-client": "^2.4.2",
     "config": "^2.0.1",
@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@deity/eslint-config-falcon": "^0.1.0",
-    "@deity/falcon-ecommerce-uikit": "^0.2.0",
+    "@deity/falcon-ecommerce-uikit": "^0.3.0",
     "cross-env": "^5.2.0",
     "eject-ts": "^0.1.0",
     "eslint": "4.19.1",

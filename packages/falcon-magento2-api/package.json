@@ -2,7 +2,7 @@
   "name": "@deity/falcon-magento2-api",
   "license": "OSL-3.0",
   "main": "src/index.js",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://falcon.deity.io/docs/falcon-server/api-providers#falcon-magento-2-api",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-magento2-api",
   "publishConfig": {
@@ -29,7 +29,7 @@
   "dependencies": {
     "@deity/falcon-errors": "^0.1.1",
     "@deity/falcon-logger": "^0.1.1",
-    "@deity/falcon-server-env": "^0.1.1",
+    "@deity/falcon-server-env": "^0.1.2",
     "date-fns": "1.29.0",
     "graphql-tools": "4.0.4",
     "lodash": "4.17.11",
@@ -37,8 +37,8 @@
     "qs": "6.6.0"
   },
   "devDependencies": {
-    "@deity/falcon-server": "^0.1.1",
-    "@deity/falcon-shop-extension": "^0.2.0",
+    "@deity/falcon-server": "^0.1.2",
+    "@deity/falcon-shop-extension": "^0.3.0",
     "eventemitter2": "5.0.1",
     "graphql": "14.1.0",
     "graphql-tools": "4.0.4",
