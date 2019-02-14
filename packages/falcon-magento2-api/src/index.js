@@ -1686,7 +1686,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   async placeOrder(obj, { input }) {
     let response;
     try {
-      response = await this.performCartAction('/deity-order', 'put', Object.assign({}, input));
+      response = await this.performCartAction('/place-order', 'put', Object.assign({}, input));
     } catch (e) {
       // todo: use new version of error handler
       if (e.statusCode === 400) {

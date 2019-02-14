@@ -13,6 +13,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon Magento2 API v0.3.0 (2019-02-14)
 
 - added filters implementation ([#309](https://github.com/deity-io/falcon/pull/309))
+- updated endpoint for placing order so it's compatible with falcon-magento2-module v3.0.0
 
 ### Falcon E-commerce UI Kit v0.3.0 (2019-02-14)
 
