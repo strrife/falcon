@@ -34,7 +34,7 @@ git apply falcon-update-xxxxxx.patch
 
 where `xxxxxx` should be changed to proper name of the patch.
 
-3. solve potential conflicts between your changes on our new code
+3. solve potential conflicts between your changes and our new code
 
 Next, follow steps 2, 3 and 4 to install required dependencies.
 
