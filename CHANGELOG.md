@@ -22,6 +22,10 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 - fixed offline mode ([#266](https://github.com/deity-io/falcon/pull/266))
 
+### Falcon Server v0.3.0 (2019-02-14)
+
+- fixed missing dependencies (`core-js`) issue ([#313](https://github.com/deity-io/falcon/pull/313))
+
 ---
 
 ## Falcon v0.3 (2019-01-18)
