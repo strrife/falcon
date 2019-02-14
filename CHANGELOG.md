@@ -4,21 +4,21 @@
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
 
-## Falcon v0.4
+## Falcon 1.0 RC (2019-02-14)
 
-### Falcon Shop Extension
+### Falcon Shop Extension v0.3.0 (2019-02-14)
 
 - updated schema to handle filters correctly ([#309](https://github.com/deity-io/falcon/pull/309))
 
-### Falcon Magento2 API
+### Falcon Magento2 API v0.3.0 (2019-02-14)
 
 - added filters implementation ([#309](https://github.com/deity-io/falcon/pull/309))
 
-### Falcon E-commerce UI Kit
+### Falcon E-commerce UI Kit v0.3.0 (2019-02-14)
 
 - added `SearchProvider` with `SearchContext` that handles basic filtering ([#309](https://github.com/deity-io/falcon/pull/309))
 
-### Falcon Client
+### Falcon Client v0.3.0 (2019-02-14)
 
 - fixed offline mode ([#266](https://github.com/deity-io/falcon/pull/266))
 
