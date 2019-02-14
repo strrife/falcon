@@ -32,7 +32,7 @@ To apply such update you instead of 1st step from the list above you have to:
 git apply falcon-update-xxxxxx.patch
 ```
 
-where `xxxxxx` should be changed to proper name of the patch.
+where `xxxxxx` should be changed to a proper name of the patch.
 
 3. solve potential conflicts between your changes and our new code
 
