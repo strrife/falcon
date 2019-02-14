@@ -1,30 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SortOrdersProvider, CategoryProductsQuery, Category } from '@deity/falcon-ecommerce-uikit';
+import { SearchConsumer, CategoryProductsQuery, Category } from '@deity/falcon-ecommerce-uikit';
 
 const CategoryPage = ({ id }) => (
-  <SortOrdersProvider>
-    {({ availableSortOrders, activeSortOrder, setSortOrder }) => (
+  <SearchConsumer>
+    {({ state, availableSortOrders, setSortOrder }) => (
       <CategoryProductsQuery
         variables={{
           categoryId: id,
           sort: {
-            field: activeSortOrder.field,
-            direction: activeSortOrder.direction
-          }
+            direction: state.sort.direction,
+            field: state.sort.field
+          },
+          filters: state.filters
         }}
       >
         {categoryProps => (
           <Category
             {...categoryProps}
             availableSortOrders={availableSortOrders}
-            activeSortOrder={activeSortOrder}
+            activeSortOrder={state.sort}
             setSortOrder={setSortOrder}
           />
         )}
       </CategoryProductsQuery>
     )}
-  </SortOrdersProvider>
+  </SearchConsumer>
 );
 
 CategoryPage.propTypes = {

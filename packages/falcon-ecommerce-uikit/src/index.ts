@@ -28,6 +28,7 @@ export * from './Forms';
 export * from './AccountRecovery';
 export * from './Errors';
 export * from './SortOrdersProvider';
+export * from './Search';
 export * from './OnlineStatus';
 export * from './EnsureTTI';
 export * from './BackendConfig';

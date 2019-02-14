@@ -9,7 +9,8 @@ import {
   ProtectedRoute,
   OnlyUnauthenticatedRoute,
   Header,
-  LocaleProvider
+  LocaleProvider,
+  SearchProvider
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
@@ -63,7 +64,7 @@ const App = () => (
     <ScrollToTop />
     <ThemeEditorState initial={deityGreenTheme}>
       {props => (
-        <React.Fragment>
+        <SearchProvider>
           <ThemeProvider theme={props.theme} globalCss={globalCss}>
             <HeadMetaTags />
             <AppLayout>
@@ -93,7 +94,7 @@ const App = () => (
             </AppLayout>
           </ThemeProvider>
           {ThemeEditorComponent && <ThemeEditorComponent {...props} side="left" />}
-        </React.Fragment>
+        </SearchProvider>
       )}
     </ThemeEditorState>
   </LocaleProvider>
