@@ -17,6 +17,6 @@ export const Sidebar = ({ close, isOpen, side, children }) => (
 Sidebar.propTypes = {
   close: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
-  children: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
   side: PropTypes.oneOf(['right', 'left']).isRequired
 };
