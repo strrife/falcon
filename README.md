@@ -15,7 +15,7 @@
 
 DEITY Falcon is a platform agnostic, stand-alone but modular library to easily build headless PWA websites.
 
-Falcon was built with the F.I.R.E. principal in mind:
+Falcon was built with the **F.I.R.E.** principal in mind:
 
 - Flexible - Allow you to build any kind of website; e-commerce, blogs, portfolio's, you name it
 - Integrable - Allow you to integrate any kind of data source with it
@@ -77,4 +77,4 @@ Trusted by the best from the industry
 |---|---|---|---|---|
 |<img src="https://user-images.githubusercontent.com/40865297/48707268-2aad7a00-ebff-11e8-8ad3-21eb6f2d7048.png" />|<img src="https://user-images.githubusercontent.com/40865297/48707457-d5259d00-ebff-11e8-8131-7bc79d98849e.png" width="200px"/>|<img src="https://user-images.githubusercontent.com/40865297/48707477-de166e80-ebff-11e8-88b3-f8333dbe39b5.png" />|<img src="https://user-images.githubusercontent.com/40865297/48707482-e53d7c80-ebff-11e8-9db7-4f891a0979f7.png" />||
 
-If you would like to become a partner please contact us at contributors@deity.io
+If you would like to become a partner please contact us at contribute@deity.io
