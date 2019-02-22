@@ -1,4 +1,5 @@
 extend type Query {
+  menu: [MenuItem]
   category(id: String!): Category
   product(id: String!): Product
   products(
@@ -103,9 +104,56 @@ input ShopPageQuery {
 }
 
 input FilterInput {
-  conditionType: String
+  operator: FilterOperator
   field: String
-  value: String
+  value: [String]
+}
+
+enum FilterOperator {
+  """
+  equals - can bee used also as a set, when array is passed
+  """
+  eq
+
+  """
+  not equals - can be used as "not in set" when array is passed
+  """
+  neq
+
+  """
+  less than
+  """
+  lt
+
+  """
+  less than or equals
+  """
+  lte
+
+  """
+  greater than
+  """
+  gt
+
+  """
+  greater than or equals
+  """
+  gte
+
+  """
+  in the set
+  """
+  in
+
+  """
+  not in the set
+  """
+  nin
+
+  """
+  in the range
+  """
+  range
 }
 
 input CustomerInput {
@@ -255,6 +303,14 @@ type ShippingInformation {
 type PaymentMethod {
   code: String
   title: String
+}
+
+type MenuItem {
+  id: String!
+  name: String!
+  urlPath: String!
+  cssClass: String
+  children: [MenuItem]!
 }
 
 type Category {

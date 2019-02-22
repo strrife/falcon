@@ -1,6 +1,6 @@
 {
   "name": "@deity/falcon-i18n",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "license": "OSL-3.0",
   "homepage": "https://falcon.deity.io/docs/falcon-client/internationalization",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-i18n",

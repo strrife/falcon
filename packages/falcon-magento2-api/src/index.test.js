@@ -48,7 +48,7 @@ describe('Magento2Api', () => {
       .get(createMagentoUrl('/store/storeConfigs'))
       .reply(200, [
         {
-          locale: 'en_US',
+          locale: 'en-US',
           extension_attributes: {},
           code: 'default'
         }
@@ -411,6 +411,69 @@ describe('Magento2Api', () => {
       expect(product.data.type).toEqual('shop-product');
       expect(category.data.type).toEqual('shop-category');
       expect(page.data.type).toEqual('shop-page');
+    });
+  });
+
+  describe('filters', () => {
+    const applyFilter = (value, operator) => api.addSearchFilter({}, 'field', value, operator);
+
+    // eslint-disable-next-line
+    const magentoFilter = (value, condition_type) => ({
+      condition_type,
+      value,
+      field: 'field'
+    });
+
+    it('should correctly format "eq" filter with one item in value array', () => {
+      expect(applyFilter(['10'], 'eq').filterGroups[0].filters).toEqual([magentoFilter('10', 'eq')]);
+    });
+
+    it('should correctly format "eq" filter with multiple items in value array', () => {
+      expect(applyFilter(['10', '20'], 'eq').filterGroups[0].filters).toEqual([
+        magentoFilter('10', 'eq'),
+        magentoFilter('20', 'eq')
+      ]);
+    });
+
+    it('should correctly format "neq" filter with one item in value array', () => {
+      expect(applyFilter(['10'], 'neq').filterGroups[0].filters).toEqual([magentoFilter('10', 'neq')]);
+    });
+
+    it('should correctly format "neq" filter with multiple items in value array', () => {
+      expect(applyFilter(['10', '20'], 'neq').filterGroups).toEqual([
+        {
+          filters: [magentoFilter('10', 'neq')]
+        },
+        {
+          filters: [magentoFilter('20', 'neq')]
+        }
+      ]);
+    });
+
+    it('should correctly format "lt" filter', () => {
+      expect(applyFilter(['10'], 'lt').filterGroups[0].filters).toEqual([magentoFilter('10', 'lt')]);
+    });
+
+    it('should correctly format "gt" filter', () => {
+      expect(applyFilter(['10'], 'gt').filterGroups[0].filters).toEqual([magentoFilter('10', 'gt')]);
+    });
+
+    it('should correctly format "lte" filter', () => {
+      expect(applyFilter(['10'], 'lte').filterGroups[0].filters).toEqual([magentoFilter('10', 'lteq')]);
+    });
+
+    it('should correctly format "gte" filter', () => {
+      expect(applyFilter(['10'], 'gte').filterGroups[0].filters).toEqual([magentoFilter('10', 'gteq')]);
+    });
+
+    it('should correctly format "in" filter', () => {
+      expect(applyFilter(['10', '20', '30'], 'in').filterGroups[0].filters).toEqual([magentoFilter('10,20,30', 'in')]);
+    });
+
+    it('should correctly format "nin" filter', () => {
+      expect(applyFilter(['10', '20', '30'], 'nin').filterGroups[0].filters).toEqual([
+        magentoFilter('10,20,30', 'nin')
+      ]);
     });
   });
 });

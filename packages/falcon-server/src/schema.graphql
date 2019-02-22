@@ -8,7 +8,7 @@ scalar JSON
 
 type Mutation {
   """
-  Sets the locale (for example, "en_US")
+  Sets the locale (for example, "en-US")
   """
   setLocale(locale: String!): BackendConfig
 }
@@ -58,11 +58,11 @@ Returns a compiled config object for all supported backends
 """
 type BackendConfig {
   """
-  List of supported locales (for example: `["en_US", "nl_NL"]`)
+  List of supported locales (for example: `["en-US", "nl-NL"]`)
   """
   locales: [String]
   """
-  Current active locale (for example, `en_US`)
+  Current active locale (for example, `en-US`)
   """
   activeLocale: String
 }

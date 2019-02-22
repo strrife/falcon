@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon",
   "private": true,
-  "version": "0.3.0",
+  "version": "1.0.0-rc",
   "license": "OSL-3.0",
   "repository": "git@github.com:deity-io/falcon.git",
   "scripts": {

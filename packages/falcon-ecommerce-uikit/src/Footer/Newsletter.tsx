@@ -1,5 +1,5 @@
 import React from 'react';
-import { themed, H3, Text, Group, Input, Button, Checkbox, Label } from '@deity/falcon-ui';
+import { themed, Box, H3, Text, Group, Input, Button, Checkbox, Label } from '@deity/falcon-ui';
 import { T, I18n } from '@deity/falcon-i18n';
 
 export const NewsletterLayout = themed({
@@ -13,7 +13,7 @@ export const NewsletterLayout = themed({
     css: {
       maxWidth: 560,
       margin: '0 auto',
-      textAlign: 'center'
+      justifyItems: 'center'
     }
   }
 });
@@ -28,7 +28,7 @@ export const Newsletter: React.SFC<{}> = () => (
     </Text>
     <I18n>
       {t => (
-        <form>
+        <Box as="form" justifySelf="stretch">
           <Group>
             <Input
               type="email"
@@ -42,7 +42,7 @@ export const Newsletter: React.SFC<{}> = () => (
           <Label htmlFor="subscribe" my="sm" display="flex" justifyContent="center" alignItems="center">
             <Checkbox id="subscribe" required mr="xs" /> {t('newsletter.consent')}
           </Label>
-        </form>
+        </Box>
       )}
     </I18n>
   </NewsletterLayout>

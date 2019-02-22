@@ -71,15 +71,19 @@ module.exports = class WordpressApi extends ApiDataSource {
     this.languageSupported = !!Object.keys(languages).length;
 
     if (this.languageSupported) {
-      this.wpConfig.locales = [];
       this.baseLanguage = languages.default;
-      languages.options.forEach(({ default_locale: locale, language_code: langCode }) => {
-        this.languageMap[locale] = langCode;
-        this.wpConfig.locales.push(locale);
-        if (this.baseLanguage === langCode) {
-          this.wpConfig.defaultLocale = locale;
-        }
-      });
+
+      this.languageMap = languages.options.reduce((result, option) => {
+        const localeCode = option.default_locale.replace('_', '-');
+
+        return {
+          ...result,
+          [localeCode]: option.language_code
+        };
+      }, {});
+
+      this.wpConfig.locales = Object.keys(this.languageMap) || [];
+      this.wpConfig.defaultLocale = this.wpConfig.locales.find(x => this.languageMap[x] === this.baseLanguage);
     }
 
     return this.wpConfig;

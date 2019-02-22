@@ -33,15 +33,21 @@ export function ApolloClient(config = {}) {
     initialState = {},
     clientState = {},
     headers,
-    apolloClientConfig
+    apolloClientConfig,
+    cache
   } = config;
+  clientState.resolvers = deepMerge(clientState.resolvers, resolvers);
+
   const { httpLink, connectToDevTools, ...restApolloClientConfig } = apolloClientConfig;
   const addTypename = false; // disabling 'addTypename' option to avoid manual setting "__typename" field
-
-  clientState.resolvers = deepMerge(clientState.resolvers, resolvers);
-  const cache = new InMemoryCache({ addTypename }).restore(initialState);
-  const apolloClientStateLink = withClientState({ cache, ...clientState });
-  const apolloHttpLink = createHttpLink({ ...httpLink, fetch, credentials: 'include', headers });
+  const inMemoryCache = cache || new InMemoryCache({ addTypename }).restore(initialState);
+  const apolloClientStateLink = withClientState({ cache: inMemoryCache, ...clientState });
+  const apolloHttpLink = createHttpLink({
+    ...httpLink,
+    fetch,
+    credentials: 'include',
+    headers
+  });
 
   return new Apollo(
     deepMerge.all(
@@ -49,7 +55,7 @@ export function ApolloClient(config = {}) {
         {
           addTypename,
           ssrMode: !isBrowser,
-          cache,
+          cache: inMemoryCache,
           link: ApolloLink.from([...extraLinks, apolloClientStateLink, apolloHttpLink]),
           connectToDevTools: isBrowser && connectToDevTools
         },

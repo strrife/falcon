@@ -1,6 +1,6 @@
 {
   "name": "create-falcon-app",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "CLI tool to bootstrap Falcon applications",
   "homepage": "https://falcon.deity.io/",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/create-falcon-app",
@@ -16,7 +16,19 @@
     "commander": "2.19.0",
     "execa": "1.0.0",
     "fs-extra": "7.0.0",
-    "listr": "0.14.2"
+    "listr": "0.14.2",
+    "node-machine-id": "^1.1.10"
   },
+  "keywords": [
+    "deity",
+    "pwa",
+    "ecommerce",
+    "headless",
+    "storefront",
+    "react",
+    "javascript",
+    "magento",
+    "wordpress"
+  ],
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }
