@@ -1559,6 +1559,31 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
+   * Sets billing address for the cart
+   * @param {object} obj Parent object
+   * @param {object} input Billing address object
+   * @return {Promise<number>} Billing Address ID
+   */
+  async setBillingAddress(obj, { input }) {
+    const response = await this.performCartAction('/billing-address', 'post', {
+      address: this.prepareAddressForOrder(input)
+    });
+    return response.data;
+  }
+
+  async setPaymentInfo(obj, { input }) {
+    const address = this.prepareAddressForOrder(input.address);
+    const response = await this.performCartAction('/set-payment-information', 'post', {
+      billingAddress: address,
+      paymentMethod: {
+        method: input.method,
+        additional_data: input.additionalData
+      }
+    });
+    return response.data;
+  }
+
+  /**
    * Place order
    * @param {object} obj Parent object
    * @param {PlaceOrderInput} input - form data
@@ -1567,7 +1592,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   async placeOrder(obj, { input }) {
     let response;
     try {
-      response = await this.performCartAction('/deity-order', 'put', Object.assign({}, input));
+      response = await this.performCartAction('/place-order', 'put', Object.assign({}, input));
     } catch (e) {
       // todo: use new version of error handler
       if (e.statusCode === 400) {

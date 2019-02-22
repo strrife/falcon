@@ -68,8 +68,6 @@ class PaymentSection extends React.Component {
 }
 
 PaymentSection.propTypes = {
-  // Billing address form
-  addressInput: PropTypes.element.isRequired,
   // flag that indicates if the section is currently open
   open: PropTypes.bool,
   // all available payment methods

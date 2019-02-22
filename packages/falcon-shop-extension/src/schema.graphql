@@ -78,6 +78,10 @@ input PlaceOrderInput {
 
 input PaymentMethodInput {
   method: String
+  """
+  Selected payment-specific payload (like encrypted credit card info)
+  """
+  additionalData: JSON
 }
 
 input ShippingInput {
@@ -299,7 +303,7 @@ type Cart {
   itemsCount: Int
   itemsQty: Int
   totals: [CartTotal]
-  quoteCurrency: String
+  quoteCurrency: String @deprecated(reason: "Use ShopConfig.activeCurrency")
   couponCode: String
   billingAddress: Address
 }
