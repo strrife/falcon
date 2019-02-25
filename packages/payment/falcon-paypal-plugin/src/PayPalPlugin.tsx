@@ -9,6 +9,6 @@ export class PayPalPlugin extends PluginModel {
   }
 
   render() {
-    return <React.Fragment />;
+    return this.props.template({});
   }
 }
