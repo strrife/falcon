@@ -40,7 +40,6 @@
     "@babel/preset-typescript": "7.1.0",
     "@types/react": "16.7.17",
     "@types/react-dom": "16.0.11",
-    "@types/stringify-object": "^3.2.0",
     "babel-plugin-annotate-pure-calls": "0.4.0",
     "babel-plugin-module-resolver": "3.1.1",
     "react": "^16.6.3",
@@ -54,7 +53,6 @@
   "dependencies": {
     "@babel/runtime": "7.3.1",
     "deep-object-diff": "^1.1.0",
-    "stringify-object": "^3.2.2",
     "webfontloader": "^1.6.28"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
