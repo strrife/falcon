@@ -381,8 +381,8 @@ module.exports = (target = 'web', options, buildConfig) => {
       config.entry = {
         client: [
           falconClientPolyfills,
-          require.resolve('razzle-dev-utils/webpackHotDevClient'),
-          paths.ownClientIndexJs
+          paths.ownClientIndexJs,
+          require.resolve('razzle-dev-utils/webpackHotDevClient')
         ].filter(Boolean)
       };
 
