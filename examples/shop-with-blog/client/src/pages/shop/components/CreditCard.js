@@ -1,31 +1,77 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import CreditCardInput from 'react-credit-card-input';
-import { Input } from '@deity/falcon-ui';
+import { Box, Input, Label } from '@deity/falcon-ui';
 
-export default class CreditCart extends React.Component {
+class CreditCard extends React.Component {
   state = {
     number: '',
     expiry: '',
-    cvc: ''
+    cvc: '',
+    name: ''
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    const { number: prevNumber, expiry: prevExpiry, cvc: prevCvc, name: prevName } = prevState;
+    const { number, expiry, cvc, name } = this.state;
+
+    if (
+      number &&
+      expiry &&
+      cvc &&
+      name &&
+      (prevNumber !== number || prevCvc !== cvc || prevExpiry !== expiry || prevName !== name)
+    ) {
+      this.props.onCompletion(this.state);
+    }
+  }
 
   render() {
     return (
-      <CreditCardInput
-        inputComponent={Input}
-        cardNumberInputProps={{
-          value: this.state.number,
-          onChange: ({ target: { value: number } }) => this.setState({ number })
-        }}
-        cardExpiryInputProps={{
-          value: this.state.expiry,
-          onChange: ({ target: { value: expiry } }) => this.setState({ expiry })
-        }}
-        cardCVCInputProps={{
-          value: this.state.cvc,
-          onChange: ({ target: { value: cvc } }) => this.setState({ cvc })
-        }}
-      />
+      <Box>
+        <Box my="xs">
+          <Label htmlFor="cc-name">Name on card</Label>
+          <Input
+            my="xs"
+            autoComplete="cc-name"
+            name="cc-name"
+            css={({ theme }) => ({
+              fontSize: theme.fontSizes.sm
+            })}
+            onChange={({ target: { value: name } }) => this.setState({ name })}
+          />
+        </Box>
+        <Box
+          css={({ theme }) => ({
+            'div#field-wrapper': {
+              border: '1px solid',
+              borderColor: theme.colors.secondaryDark
+            }
+          })}
+        >
+          <CreditCardInput
+            inputComponent={Input}
+            cardNumberInputProps={{
+              value: this.state.number,
+              onChange: ({ target: { value: number } }) => this.setState({ number })
+            }}
+            cardExpiryInputProps={{
+              value: this.state.expiry,
+              onChange: ({ target: { value: expiry } }) => this.setState({ expiry })
+            }}
+            cardCVCInputProps={{
+              value: this.state.cvc,
+              onChange: ({ target: { value: cvc } }) => this.setState({ cvc })
+            }}
+          />
+        </Box>
+      </Box>
     );
   }
 }
+
+CreditCard.propTypes = {
+  onCompletion: PropTypes.func.isRequired
+};
+
+export default CreditCard;
