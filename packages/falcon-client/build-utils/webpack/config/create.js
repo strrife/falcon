@@ -332,6 +332,9 @@ module.exports = (target = 'web', options, buildConfig) => {
   }
 
   if (IS_WEB) {
+    config.entry = {
+      client: [falconClientPolyfills, paths.ownClientIndexJs]
+    };
     config.optimization = {};
     config.plugins = [
       new VirtualModulesPlugin({ [paths.ownWebmanifest]: '{}' }),
@@ -354,15 +357,7 @@ module.exports = (target = 'web', options, buildConfig) => {
     ];
 
     if (IS_DEV) {
-      // Setup Webpack Dev Server on port 3001 and
-      // specify our client entry point /client/index.js
-      config.entry = {
-        client: [
-          falconClientPolyfills,
-          paths.ownClientIndexJs,
-          require.resolve('razzle-dev-utils/webpackHotDevClient')
-        ].filter(Boolean)
-      };
+      config.entry.client.push(require.resolve('razzle-dev-utils/webpackHotDevClient'));
 
       // Configure our client bundles output. Not the public path is to 3001.
       config.output = {
@@ -410,11 +405,6 @@ module.exports = (target = 'web', options, buildConfig) => {
         new webpack.DefinePlugin(clientEnv.stringified)
       ];
     } else {
-      // Specify production entry point (/client/index.js)
-      config.entry = {
-        client: [falconClientPolyfills, paths.ownClientIndexJs].filter(Boolean)
-      };
-
       // Specify the client output directory and paths. Notice that we have
       // changed the publiPath to just '/' from http://localhost:3001. This is because
       // we will only be using one port in production.
