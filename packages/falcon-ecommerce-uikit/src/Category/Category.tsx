@@ -43,6 +43,7 @@ export const Category: React.SFC<{
   activeSortOrder: SortOrder;
   setSortOrder(order: SortOrder): null;
   fetchMore: any;
+  aggregations: any;
   networkStatus: NetworkStatus;
 }> = ({ category, availableSortOrders, activeSortOrder, setSortOrder, fetchMore, networkStatus }) => {
   const { products } = category;

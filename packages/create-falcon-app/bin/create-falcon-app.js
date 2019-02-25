@@ -22,8 +22,12 @@ program
   .version(pkg.version)
   .arguments('<project-directory>')
   .usage(`${chalk.green('<project-directory>')} [options]`)
-  .action(async (name, { example }) => {
+  .action(async (name, { example, analytics }) => {
     try {
+      createFalconApp.track.enable(analytics);
+      const start = Date.now();
+      createFalconApp.track('wizard', 'start', `cfa-version=${pkg.version}`);
+
       const { activeProjects, packageManager } = await createFalconApp({ name, example });
       console.log(chalk.green(`${EOL}Application created successfully!`));
       console.log(`All required dependencies were installed, so you don't need to worry about them.${EOL}`);
@@ -44,12 +48,15 @@ program
       }
 
       activeProjects.forEach(project => console.log(getAppHelp(packageManager, project) + EOL));
+      createFalconApp.track('wizard', 'finish', 'duration', Date.now() - start);
     } catch (e) {
+      createFalconApp.track('wizard', 'error', 'info', e.message);
       console.error(chalk.red('Failed to create app!'));
       console.error(chalk.red(e.message));
     }
   })
   .option('-e, --example <example-name>', `Create from Example app. Available options: ${availableExamples}`)
+  .option('-n, --no-analytics', 'Do not send usage stats')
   .allowUnknownOption()
   .on('--help', () => 'messages.help')
   .parse(process.argv);

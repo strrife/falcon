@@ -1,16 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { ThemeProvider } from '@deity/falcon-ui';
-import isOnline from '@deity/falcon-client/src/components/isOnline';
+import { OnlineStatus } from '@deity/falcon-ecommerce-uikit';
 import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
 import {
   AppLayout,
   ProtectedRoute,
   OnlyUnauthenticatedRoute,
   Header,
-  LocaleProvider
+  LocaleProvider,
+  SearchProvider
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
@@ -47,7 +47,6 @@ const Checkout = loadable(() => import(/* webpackChunkName: "shop/checkout" */ '
 const CheckoutConfirmation = loadable(() =>
   import(/* webpackChunkName: "shop/checkout" */ './pages/shop/CheckoutConfirmation')
 );
-
 const SidebarContents = loadable(() =>
   import(/* webpackPrefetch: true, webpackChunkName: "shop/SidebarContents" */ './pages/shop/components/Sidebar/SidebarContents')
 );
@@ -60,17 +59,17 @@ if (process.env.NODE_ENV !== 'production') {
   ThemeEditorComponent = ThemeEditor;
 }
 
-const App = ({ online }) => (
+const App = () => (
   <LocaleProvider>
     <ScrollToTop />
     <ThemeEditorState initial={deityGreenTheme}>
       {props => (
-        <React.Fragment>
+        <SearchProvider>
           <ThemeProvider theme={props.theme} globalCss={globalCss}>
             <HeadMetaTags />
             <AppLayout>
               <Header />
-              {!online && <p>you are offline.</p>}
+              <OnlineStatus>{({ isOnline }) => !isOnline && <p>you are offline.</p>}</OnlineStatus>
               <ErrorBoundary>
                 <Switch>
                   <Route exact path="/" component={Home} />
@@ -87,7 +86,7 @@ const App = ({ online }) => (
                 <SidebarContainer>
                   {sidebarProps => (
                     <Sidebar {...sidebarProps}>
-                      {() => <SidebarContents contentType={sidebarProps.contentType} />}
+                      <SidebarContents contentType={sidebarProps.contentType} />
                     </Sidebar>
                   )}
                 </SidebarContainer>
@@ -95,14 +94,10 @@ const App = ({ online }) => (
             </AppLayout>
           </ThemeProvider>
           {ThemeEditorComponent && <ThemeEditorComponent {...props} side="left" />}
-        </React.Fragment>
+        </SearchProvider>
       )}
     </ThemeEditorState>
   </LocaleProvider>
 );
 
-App.propTypes = {
-  online: PropTypes.bool
-};
-
-export default isOnline()(App);
+export default App;

@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, FlexLayout, Label, Details, DetailsContent, Text, Radio, Button } from '@deity/falcon-ui';
-import { T } from '@deity/falcon-i18n';
+import { I18n, T } from '@deity/falcon-i18n';
 import SectionHeader from './CheckoutSectionHeader';
 import ErrorList from '../components/ErrorList';
 
 // we have to filter the methods until we have implementation for all of them
 const ALLOWED_PAYMENT_METHODS = ['checkmo'];
 
+const filterAvailablePaymentMethods = methods =>
+  methods.filter(option => ALLOWED_PAYMENT_METHODS.includes(option.code));
+
 const PaymentSelector = ({ availablePaymentMethods = [], onPaymentSelected }) => {
-  const paymentMethods = availablePaymentMethods.filter(option => ALLOWED_PAYMENT_METHODS.includes(option.code));
+  const paymentMethods = filterAvailablePaymentMethods(availablePaymentMethods);
 
   return (
     <Box my="md">
@@ -46,23 +49,27 @@ class PaymentSection extends React.Component {
     let header;
     if (!open && selectedPayment) {
       header = (
-        <SectionHeader
-          title={<T id="checkout.payment" />}
-          onActionClick={onEditRequested}
-          editLabel={<T id="edit" />}
-          complete
-          summary={<Text>{selectedPayment.title}</Text>}
-        />
+        <I18n>
+          {t => (
+            <SectionHeader
+              title={t('checkout.payment')}
+              onActionClick={onEditRequested}
+              editLabel={t('edit')}
+              complete
+              summary={<Text>{selectedPayment.title}</Text>}
+            />
+          )}
+        </I18n>
       );
     } else {
-      header = <SectionHeader title={<T id="checkout.payment" />} />;
+      header = <I18n>{t => <SectionHeader title={t('checkout.payment')} />}</I18n>;
     }
 
     return (
       <Details open={open}>
         {header}
         <DetailsContent>
-          {availablePaymentMethods.length === 0 ? (
+          {filterAvailablePaymentMethods(availablePaymentMethods).length === 0 ? (
             <Text color="error" mb="sm">
               <T id="checkout.noPaymentMethodsAvailable" />
             </Text>

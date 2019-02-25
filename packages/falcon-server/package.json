@@ -2,7 +2,7 @@
   "name": "@deity/falcon-server",
   "license": "OSL-3.0",
   "main": "src/index.js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://falcon.deity.io/docs/falcon-server/basics",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-server",
   "publishConfig": {
@@ -32,7 +32,7 @@
   "dependencies": {
     "@deity/falcon-errors": "^0.1.1",
     "@deity/falcon-logger": "^0.1.1",
-    "@deity/falcon-server-env": "^0.1.1",
+    "@deity/falcon-server-env": "^0.1.2",
     "@koa/cors": "2.2.2",
     "apollo-server-cache-memcached": "0.2.1",
     "apollo-server-cache-redis": "0.2.1",

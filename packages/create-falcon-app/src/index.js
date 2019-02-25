@@ -2,6 +2,7 @@ const { dirname, resolve } = require('path');
 const fs = require('fs-extra');
 const execa = require('execa');
 const Listr = require('listr');
+const http = require('http');
 
 const examplesPath = resolve(__dirname, './../examples');
 const rootDir = resolve(__dirname, './../../..');
@@ -123,8 +124,56 @@ const createFalconApp = ({ name, example }) => {
   return tasks.run();
 };
 
+const track = (() => {
+  const { machineIdSync } = require('node-machine-id');
+  const os = require('os');
+  const ua = `${os.type()} ${os.release()} ${os.platform()}, node@${process.version}`;
+  let id;
+  let enabled = true;
+
+  try {
+    id = machineIdSync();
+  } catch (ex) {
+    id = 'unknown';
+  }
+
+  const trackEvent = (category, action, label, value) => {
+    if (!enabled) {
+      return;
+    }
+
+    const data = ['v=1', 'tid=UA-115774797-7', `cid=${id}`, 't=event', `ec=${category}`, `ea=${action}`];
+    if (label) {
+      data.push(`el=${label}`);
+    }
+    if (value) {
+      data.push(`ev=${value}`);
+    }
+
+    const options = {
+      host: 'www.google-analytics.com',
+      path: '/collect',
+      method: 'POST',
+      headers: {
+        'User-Agent': ua
+      }
+    };
+
+    const req = http.request(options);
+    req.write(data.join('&'));
+    req.end();
+  };
+
+  trackEvent.enable = value => {
+    enabled = value;
+  };
+
+  return trackEvent;
+})();
+
 module.exports = createFalconApp;
 module.exports.replaceNightlyVersion = replaceNightlyVersion;
 module.exports.copyFolder = copyFolder;
 module.exports.examplesPath = examplesPath;
 module.exports.getAvailableExamples = getAvailableExamples;
+module.exports.track = track;
