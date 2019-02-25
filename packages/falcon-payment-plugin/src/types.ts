@@ -1,31 +1,47 @@
-export enum PaymentType {
-  plain = 'plain',
-  creditCard = 'creditCard',
-  redirect = 'redirect'
-}
+import { PluginModel } from './models/Plugin';
 
-export type CreditCardProps = {};
+export type CreditCardProps = {
+  onCompletion: () => {};
+};
 
 export type BillingAddressProps = {};
-
-export type PaymentPluginProps = {
-  children: (methodConfig: MethodConfig, onSelect: SelectMethodCallback) => React.ReactNode;
-  methods: Array<MethodConfig>;
-  billingAddressInput: React.ComponentType<BillingAddressProps>;
-  creditCardInput: React.ComponentType<CreditCardProps>;
-  paymentsConfig: {
-    [key: string]: any;
-  };
-};
-
-export type PaymentPluginState = {
-  selected: null | string;
-};
 
 export type MethodConfig = {
   code: string;
   title: string;
-  type: PaymentType;
 };
 
-export type SelectMethodCallback = () => any;
+export type PaymentChildrenProps = MethodConfig & {
+  icon: string | null;
+  pluginComponent?: React.ReactType;
+  onSelect: () => any;
+};
+
+declare type PaymentProps = {
+  template: (args: any) => React.ReactNode;
+  billingAddressInput?: React.ComponentType<BillingAddressProps>;
+  creditCardInput?: React.ComponentType<CreditCardProps>;
+};
+
+export type PluginModelProps = {
+  config?: {
+    [key: string]: any;
+  };
+  onPaymentSelected: (additionalData?: any) => {};
+} & PaymentProps;
+
+export type PaymentPluginProps = {
+  children: (childrenProps: PaymentChildrenProps) => React.ReactNode | null;
+  methods: Array<MethodConfig>;
+  paymentsConfig: {
+    [key: string]: any;
+  };
+  plugins: {
+    [key: string]: PluginModel;
+  };
+  onPaymentSelected: (method: MethodConfig, additionalData: any) => {};
+} & PaymentProps;
+
+export type PaymentPluginState = {
+  active: null | string;
+};

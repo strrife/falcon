@@ -10,13 +10,14 @@ const PaymentSelector = loadable(() => import(/* webpackChunkName: "shop/payment
 
 class PaymentSection extends React.Component {
   state = {
-    selectedPayment: null
+    selectedPayment: null,
+    additionalData: null
   };
 
-  onPaymentSelected = selectedPayment => this.setState({ selectedPayment });
+  onPaymentSelected = (selectedPayment, additionalData) => this.setState({ selectedPayment, additionalData });
 
   submitPayment = () => {
-    this.props.setPayment(this.state.selectedPayment);
+    this.props.setPayment(this.state.selectedPayment, this.state.additionalData);
   };
 
   render() {

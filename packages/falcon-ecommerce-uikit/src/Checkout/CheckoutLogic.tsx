@@ -46,6 +46,7 @@ type CheckoutLogicData = {
   billingSameAsShipping: boolean | null;
   shippingMethod: CheckoutShippingMethod | null;
   paymentMethod: CheckoutPaymentMethod | null;
+  paymentAdditionalData: object | null;
 };
 
 type CheckoutLogicError = {
@@ -85,7 +86,7 @@ export type CheckoutLogicInjectedProps = {
   setBillingSameAsShipping(same: boolean): void;
   setBillingAddress(address: CheckoutAddress): void;
   setShippingMethod(shipping: CheckoutShippingMethod): void;
-  setPaymentMethod(payment: CheckoutPaymentMethod): void;
+  setPaymentMethod(payment: CheckoutPaymentMethod, additionalData?: any): void;
   placeOrder(): void;
 };
 
@@ -152,8 +153,10 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
   setBillingAddress = (billingAddress: CheckoutAddress) =>
     this.setLoading(true, () => this.setPartialState({ loading: false, values: { billingAddress } }));
 
-  setPaymentMethod = (paymentMethod: CheckoutPaymentMethod) =>
-    this.setLoading(true, () => this.setPartialState({ loading: false, values: { paymentMethod } }));
+  setPaymentMethod = (paymentMethod: CheckoutPaymentMethod, additionalData?: any) =>
+    this.setLoading(true, () =>
+      this.setPartialState({ loading: false, values: { paymentMethod, paymentAdditionalData: additionalData } })
+    );
 
   setShippingAddress = (shippingAddress: CheckoutAddress) => {
     this.setLoading(true, () => {
@@ -281,8 +284,10 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           variables: {
             input: {
               email: this.state.values.email,
+              billingAddress: this.state.values.billingAddress,
               paymentMethod: {
-                method: this.state.values.paymentMethod!.code
+                method: this.state.values.paymentMethod!.code,
+                additionalData: this.state.values.paymentAdditionalData
               }
             }
           }
