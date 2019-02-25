@@ -109,34 +109,6 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
   ];
 }
 
-function addVendorsBundle(modules = []) {
-  return (config, { target, dev }) => {
-    if (target === 'web') {
-      config.output.filename = dev ? 'static/js/[name].js' : 'static/js/[name].[hash:8].js';
-
-      config.optimization = {
-        splitChunks: {
-          cacheGroups: {
-            polyfills: {
-              name: 'polyfills',
-              enforce: true,
-              priority: 100,
-              chunks: 'initial',
-              test: moduleFilter(['core-js'])
-            },
-            vendor: {
-              name: 'vendors',
-              enforce: true,
-              chunks: 'initial',
-              test: moduleFilter(modules)
-            }
-          }
-        }
-      };
-    }
-  };
-}
-
 /**
  * Webpack configuration factory. It's the juice!
  * @param {'web' | 'node' } target target
@@ -154,7 +126,7 @@ module.exports = (target = 'web', options, buildConfig) => {
   const IS_PROD = env === 'production';
   const IS_DEV = env === 'development';
   process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
-  const devtool = IS_DEV ? 'source-map' : 'cheap-module-source-map';
+  const devtool = 'cheap-module-source-map';
 
   const clientEnv = getClientEnv(target, options, buildConfig.envToBuildIn);
 
@@ -360,6 +332,7 @@ module.exports = (target = 'web', options, buildConfig) => {
   }
 
   if (IS_WEB) {
+    config.optimization = {};
     config.plugins = [
       new VirtualModulesPlugin({ [paths.ownWebmanifest]: '{}' }),
       new FalconI18nLocalesPlugin({
@@ -397,7 +370,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         publicPath: `http://${host}:${devServerPort}/`,
         pathinfo: true,
         libraryTarget: 'var',
-        filename: 'static/js/bundle.js',
+        filename: 'static/js/[name].js',
         chunkFilename: 'static/js/[name].chunk.js',
         devtoolModuleFilenameTemplate: info => path.resolve(info.resourcePath).replace(/\\/g, '/')
       };
@@ -436,8 +409,6 @@ module.exports = (target = 'web', options, buildConfig) => {
         new webpack.HotModuleReplacementPlugin({ multiStep: true }),
         new webpack.DefinePlugin(clientEnv.stringified)
       ];
-
-      config.optimization = {};
     } else {
       // Specify production entry point (/client/index.js)
       config.entry = {
@@ -450,7 +421,7 @@ module.exports = (target = 'web', options, buildConfig) => {
       config.output = {
         path: paths.appBuildPublic,
         publicPath: options.publicPath,
-        filename: 'static/js/bundle.[chunkhash:8].js',
+        filename: 'static/js/[name].[hash:8].js',
         chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
         libraryTarget: 'var'
       };
@@ -509,7 +480,41 @@ module.exports = (target = 'web', options, buildConfig) => {
             parallel: true,
             sourceMap: !!devtool
           })
-        ]
+        ],
+        splitChunks: {
+          cacheGroups: {
+            polyfills: {
+              name: 'polyfills',
+              enforce: true,
+              priority: 100,
+              chunks: 'initial',
+              test: moduleFilter(['core-js', 'object-assign', 'whatwg-fetch'])
+            },
+            vendor: {
+              name: 'vendors',
+              enforce: true,
+              chunks: 'initial',
+              test: moduleFilter([
+                'apollo-cache-inmemory',
+                'apollo-client',
+                'apollo-link',
+                'apollo-link-http',
+                'apollo-link-state',
+                'apollo-utilities',
+                'i18next',
+                'i18next-xhr-backend',
+                'react',
+                'react-apollo',
+                'react-dom',
+                'react-google-tag-manager',
+                `react-helmet`,
+                'react-router',
+                'react-router-dom',
+                'history'
+              ])
+            }
+          }
+        }
       };
     }
   }
@@ -523,27 +528,6 @@ module.exports = (target = 'web', options, buildConfig) => {
       compiledIn: true
     })
   ];
-
-  addVendorsBundle([
-    'apollo-cache-inmemory',
-    'apollo-client',
-    'apollo-link',
-    'apollo-link-http',
-    'apollo-link-state',
-    'apollo-utilities',
-    'whatwg-fetch',
-    'i18next',
-    'i18next-xhr-backend',
-    '@deity/falcon-client/build-utils/polyfills',
-    'react',
-    'react-apollo',
-    'react-dom',
-    'react-google-tag-manager',
-    `react-helmet`,
-    'react-router',
-    'react-router-dom',
-    'history'
-  ])(config, { target, dev: IS_DEV });
 
   // Apply razzle plugins, if they are present in razzle.config.js
   if (Array.isArray(plugins)) {
