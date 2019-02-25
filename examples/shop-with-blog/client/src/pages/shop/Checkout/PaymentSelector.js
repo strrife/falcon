@@ -41,7 +41,7 @@ class PaymentSelector extends React.PureComponent {
           paymentsConfig={paymentsConfig}
         >
           {({ code, title, onSelect, icon, pluginComponent }) => (
-            <FlexLayout key={code}>
+            <FlexLayout key={code} my="xs" css={{ alignItems: 'center' }}>
               <Radio size="sm" name="payment" id={`opt-${code}`} value={code} onChange={onSelect} />
               <Label mx="sm" flex="1" htmlFor={`opt-${code}`}>
                 {icon && <Image src={icon} mr="xs" mb="xs" css={{ verticalAlign: 'middle' }} />}
