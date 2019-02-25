@@ -20,6 +20,15 @@ const runPlugin = require('./runPlugin');
 
 const falconClientPolyfills = require.resolve('./../../polyfills');
 
+/**
+ * Create RegExp filter based on provided modules names
+ * @param {string[]} modules module names to filter on
+ * @returns {RegExp} RegExp filter
+ */
+function moduleFilter(modules) {
+  return new RegExp(`[\\\\/]node_modules[\\\\/](${modules.map(x => x.replace('/', '[\\\\/]')).join('|')})[\\\\/]`);
+}
+
 function getEsLintLoaderOptions(eslintRcPath, isDev) {
   const options = {
     eslintPath: require.resolve('eslint'),
@@ -101,10 +110,6 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
 }
 
 function addVendorsBundle(modules = []) {
-  const moduleFilter = new RegExp(
-    `[\\\\/]node_modules[\\\\/](${modules.map(x => x.replace('/', '[\\\\/]')).join('|')})[\\\\/]`
-  );
-
   return (config, { target, dev }) => {
     if (target === 'web') {
       config.output.filename = dev ? 'static/js/[name].js' : 'static/js/[name].[hash:8].js';
@@ -117,13 +122,13 @@ function addVendorsBundle(modules = []) {
               enforce: true,
               priority: 100,
               chunks: 'initial',
-              test: new RegExp(`[\\\\/]node_modules[\\\\/]core-js[\\\\/]`)
+              test: moduleFilter(['core-js'])
             },
             vendor: {
               name: 'vendors',
               enforce: true,
               chunks: 'initial',
-              test: moduleFilter
+              test: moduleFilter(modules)
             }
           }
         }
