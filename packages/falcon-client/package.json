@@ -25,6 +25,7 @@
     "@deity/falcon-i18n": "^0.2.1",
     "@deity/falcon-i18n-webpack-plugin": "^0.2.0",
     "@deity/falcon-logger": "^0.1.1",
+    "@deity/falcon-normal-module-override-webpack-plugin": "0.0.1",
     "@loadable/component": "^5.2.1",
     "@loadable/server": "^5.4.0",
     "@loadable/webpack-plugin": "^5.4.0",
