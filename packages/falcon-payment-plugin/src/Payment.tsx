@@ -25,6 +25,7 @@ export class Payment extends React.Component<PaymentPluginProps, PaymentPluginSt
       ...method,
       // @ts-ignore
       pluginComponent: SelectedPlugin && (
+        // @ts-ignore
         <SelectedPlugin
           config={pluginConfig}
           creditCardInput={this.props.creditCardInput}

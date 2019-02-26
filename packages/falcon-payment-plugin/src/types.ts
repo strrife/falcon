@@ -13,7 +13,7 @@ export type MethodConfig = {
 
 export type PaymentChildrenProps = MethodConfig & {
   icon: string | null;
-  pluginComponent?: React.ReactType;
+  pluginComponent?: React.ReactType | null | undefined;
   onSelect: () => any;
 };
 

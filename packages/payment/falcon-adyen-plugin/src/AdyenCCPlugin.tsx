@@ -47,7 +47,7 @@ export class AdyenCCPlugin extends PluginModel<AdyenProps> {
     const encryptedData = this.cseInstance.encrypt(creditCard);
     if (encryptedData) {
       this.props.onPaymentSelected({
-        // cc_type: "VI",
+        cc_type: '',
         encrypted_data: encryptedData,
         store_cc: false
       });
