@@ -4,6 +4,14 @@
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
 
+## Falcon next
+
+### Falcon Client next
+
+- added `.browserslistrc` support for javascript, fixed #293 ([#306](https://github.com/deity-io/falcon/pull/306))
+
+---
+
 ## Falcon 1.0 RC (2019-02-14)
 
 ### Falcon Shop Extension v0.3.0 (2019-02-14)
