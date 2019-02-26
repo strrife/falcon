@@ -254,12 +254,47 @@ type Order {
   couponCode: String
 }
 
-type PlaceOrderResult {
-  # increment order id
+"""
+Successful placeOrder result
+"""
+type PlaceOrderSuccessfulResult {
+  """
+  Increment order id
+  """
   orderId: Int
-  # like 0000001 - used for reference by customer
+  """
+  like 0000001 - used for reference by customer
+  """
   orderRealId: String
 }
+
+"""
+3D-secure placeOrder result
+"""
+type PlaceOrder3dSecureResult {
+  """
+  Issuer URL (target URL) for redirection
+  """
+  url: String!
+  """
+  HTTP method (GET or POST)
+  """
+  method: String
+  """
+  List of fields to pass to the issuer page
+  """
+  fields: [PlaceOrder3dSecureField]
+}
+
+type PlaceOrder3dSecureField {
+  name: String!
+  value: String
+}
+
+"""
+Mixed result for "Mutation.placeOrder" for
+"""
+union PlaceOrderResult = PlaceOrderSuccessfulResult | PlaceOrder3dSecureResult
 
 type Product {
   id: String
@@ -353,7 +388,9 @@ type ProductSeo {
 
 type Cart {
   active: Boolean
-  #state wheather products will be shipped or not
+  """
+  State wheather products will be shipped or not
+  """
   virtual: Boolean
   items: [CartItem]
   itemsCount: Int
