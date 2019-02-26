@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
 import { themed, Image, Text } from '@deity/falcon-ui';
 import { Price } from '../Locale';
+import { ComponentToReplace } from './../Footer/ComponentToReplace';
 
 export const ProductsList: React.SFC<{ products: any[] }> = ({ products }) => (
   <ProductListLayout>
+    <ComponentToReplace />
     {products.map((product: any) => (
       <li key={product.id}>
         <ProductCardLayout to={product.urlPath}>

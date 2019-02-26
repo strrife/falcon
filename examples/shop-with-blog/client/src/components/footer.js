@@ -10,8 +10,13 @@ import {
   LocaleSwitcher,
   LocaleSwitcherDropdown,
   Newsletter,
-  Copyright
+  ComponentToReplace,
+  Text as UIkitText
 } from '@deity/falcon-ecommerce-uikit';
+// import { Copyright } from '@deity/falcon-ecommerce-uikit/dist/Footer/Copyright';
+import { Copyright } from '@deity/falcon-ecommerce-uikit';
+import { ComponentToReplace as ReplacedComponent } from 'src/components/ComponentToReplace';
+// import { ComponentToReplace } from '@deity/falcon-ecommerce-uikit/dist/Footer/ComponentToReplace';
 
 export const Sitemap = () => (
   <FooterSectionsLayout>
@@ -65,11 +70,14 @@ export const Sitemap = () => (
 
 export const Footer = () => (
   <FooterLayout as="footer">
+    <ComponentToReplace />
+    <UIkitText>some text rendered inside UIkitText</UIkitText>
     <Newsletter />
     <Sitemap />
     <LanguageSection>
       <LocaleSwitcher>{({ ...props }) => <LocaleSwitcherDropdown {...props} />}</LocaleSwitcher>
     </LanguageSection>
+    <ReplacedComponent />
     <Copyright />
   </FooterLayout>
 );

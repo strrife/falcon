@@ -1,17 +1,16 @@
 import React from 'react';
 import { Box, themed } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
-import { ComponentToReplace } from './ComponentToReplace';
 
 export const CopyrightLayout = themed({
   tag: Box,
   defaultTheme: {
     copyrightLayout: {
       p: 'sm',
-      color: 'secondaryText',
       bgFullWidth: 'secondary',
       css: {
-        textAlign: 'center'
+        textAlign: 'center',
+        color: 'read'
       }
     }
   }
@@ -19,7 +18,6 @@ export const CopyrightLayout = themed({
 
 export const Copyright = () => (
   <CopyrightLayout>
-    <T id="copyright" year={new Date().getFullYear()} />
-    <ComponentToReplace />
+    This is shop-with-blog version of <T id="copyright" year={new Date().getFullYear()} />
   </CopyrightLayout>
 );
