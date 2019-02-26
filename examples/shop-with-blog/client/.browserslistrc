@@ -1,8 +1,3 @@
 # Browsers that we support
 
-> 1%
-last 1 version
-Firefox ESR
-not ie < 11
-not op_mini all
-not dead
+last 1 Chrome version
