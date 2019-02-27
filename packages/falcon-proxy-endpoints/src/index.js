@@ -20,10 +20,10 @@ module.exports = class ProxyEndpoints extends EndpointManager {
         changeOrigin: true,
         logs: this.config.logs || false,
         events: {
-          proxyRes: (proxyRes, req, res) => {
+          proxyRes: (proxyRes, req) => {
             Logger.debug(
               `ProxyEndpoints: processing ${req.method} ${req.url} => ${this.baseUrl + req.url} (response code: ${
-                res.statusCode
+                proxyRes.statusCode
               })`
             );
           }
