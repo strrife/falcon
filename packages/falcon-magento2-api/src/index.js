@@ -338,7 +338,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {object} - request params with additional filter
    */
   addSearchFilter(params = {}, field, value, operator = 'eq') {
-    params.filterGroups = isEmpty(params.filters) ? [] : params.filters;
+    params.filterGroups = isEmpty(params.filterGroups) ? [] : params.filterGroups;
     const newFilterGroups = this.createMagentoFilter(field, value, operator);
     newFilterGroups.forEach(filterGroup => params.filterGroups.push(filterGroup));
 

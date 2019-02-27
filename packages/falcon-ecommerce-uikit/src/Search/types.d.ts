@@ -25,3 +25,15 @@ export type SearchState = {
   sort?: SortOrder;
   pagination?: PaginationInput;
 };
+
+export type AggregationBucket = {
+  value: string;
+  name: string;
+  count: number;
+};
+
+export type Aggregation = {
+  key: string;
+  name: string;
+  buckets: AggregationBucket[];
+};

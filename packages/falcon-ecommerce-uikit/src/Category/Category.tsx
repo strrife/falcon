@@ -15,6 +15,14 @@ import {
 } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 import { ProductsList } from '../ProductsList/ProductsList';
+import { toGridTemplate } from '../helpers';
+import { FiltersPanel } from '../Filters';
+
+const CategoryArea = {
+  navigation: 'navigation',
+  heading: 'heading',
+  content: 'content'
+};
 
 const CategoryLayout = themed({
   tag: 'div',
@@ -24,8 +32,23 @@ const CategoryLayout = themed({
       display: 'grid',
       gridGap: 'md',
       my: 'lg',
-      css: {
-        textAlign: 'center'
+      // prettier-ignore
+      gridTemplate: {
+        xs: toGridTemplate([
+          ['1fr'               ],
+          [CategoryArea.heading],
+          [CategoryArea.content]
+        ]),
+        md: toGridTemplate([
+          ['1fr',                   '3fr'               ],
+          [CategoryArea.heading,    CategoryArea.heading],
+          [CategoryArea.navigation, CategoryArea.content]
+        ]),
+        lg: toGridTemplate([
+          ['1fr',                   '4fr'               ],
+          [CategoryArea.heading,    CategoryArea.heading],
+          [CategoryArea.navigation, CategoryArea.content]
+        ])
       }
     }
   }
@@ -47,19 +70,30 @@ export const Category: React.SFC<{
   networkStatus: NetworkStatus;
 }> = ({ category, availableSortOrders, activeSortOrder, setSortOrder, fetchMore, networkStatus }) => {
   const { products } = category;
-  const { pagination, items } = products;
+  const { pagination, items, aggregations } = products;
 
   return (
     <CategoryLayout>
-      <H1>{category.name}</H1>
-      <FlexLayout justifyContent="space-between" alignItems="center">
-        <ShowingOutOf itemsCount={items.length} totalItems={pagination.totalItems} />
-        <SortOrderDropdown sortOrders={availableSortOrders} activeSortOrder={activeSortOrder} onChange={setSortOrder} />
-      </FlexLayout>
-      <Divider />
-      <ProductsList products={items} />
-      {pagination.nextPage && <Divider />}
-      {pagination.nextPage && <ShowMore onClick={fetchMore} loading={networkStatus === NetworkStatus.fetchMore} />}
+      <Box gridArea={CategoryArea.heading}>
+        <H1>{category.name}</H1>
+        <FlexLayout justifyContent="space-between" alignItems="center">
+          <ShowingOutOf itemsCount={items.length} totalItems={pagination.totalItems} />
+          <SortOrderDropdown
+            sortOrders={availableSortOrders}
+            activeSortOrder={activeSortOrder}
+            onChange={setSortOrder}
+          />
+        </FlexLayout>
+        <Divider mt="xs" />
+      </Box>
+      <Box gridArea={CategoryArea.navigation}>
+        {aggregations && aggregations.length !== 0 && <FiltersPanel aggregations={aggregations} />}
+      </Box>
+      <Box gridArea={CategoryArea.content}>
+        <ProductsList products={items} />
+        {pagination.nextPage && <Divider />}
+        {pagination.nextPage && <ShowMore onClick={fetchMore} loading={networkStatus === NetworkStatus.fetchMore} />}
+      </Box>
     </CategoryLayout>
   );
 };
