@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@deity/falcon-server-env": "^0.1.1",
+    "@deity/falcon-logger": "^0.1.1",
     "koa-proxies": "0.8.1"
   },
   "devDependencies": {
