@@ -33,7 +33,7 @@ export const endpoints = (router, serverUrl, successRedir, isDebug = process.env
           endpoint,
           endpoint,
           proxies(endpoint, {
-            target: url.resolve(serverUrl, endpoint),
+            target: url.resolve(serverUrl, '/'),
             changeOrigin: true,
             logs: isDebug,
             events: {
