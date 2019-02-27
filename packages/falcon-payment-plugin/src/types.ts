@@ -1,4 +1,4 @@
-import { PluginModel } from './models/Plugin';
+import { PluginModel } from './components/Plugin';
 
 export type CreditCardProps = {
   onCompletion: () => {};
@@ -23,7 +23,7 @@ declare type PaymentProps = {
   creditCardInput?: React.ComponentType<CreditCardProps>;
 };
 
-export type PluginModelProps = {
+export type PluginComponentProps = {
   config?: {
     [key: string]: any;
   };

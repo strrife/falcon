@@ -1,5 +1,5 @@
 import React from 'react';
-import { PluginModel } from './models/Plugin';
+import { PluginModel } from './components/Plugin';
 import { MethodConfig, PaymentPluginProps, PaymentPluginState } from './types';
 
 export class Payment extends React.Component<PaymentPluginProps, PaymentPluginState> {

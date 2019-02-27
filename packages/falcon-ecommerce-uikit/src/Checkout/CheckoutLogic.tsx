@@ -6,7 +6,8 @@ import {
   EstimateShippingMethodsData,
   SET_SHIPPING,
   SetShippingData,
-  PLACE_ORDER
+  PLACE_ORDER,
+  PlaceOrderResult
 } from './CheckoutMutation';
 
 type CheckoutAddress = {
@@ -59,7 +60,7 @@ type CheckoutLogicState = {
   loading: boolean;
   errors: CheckoutLogicErrors;
   values: CheckoutLogicData;
-  orderId?: number;
+  result?: PlaceOrderResult;
   availableShippingMethods: CheckoutShippingMethod[];
   availablePaymentMethods: CheckoutPaymentMethod[];
 };
@@ -80,7 +81,7 @@ export type CheckoutLogicInjectedProps = {
   loading: boolean;
   availableShippingMethods: CheckoutShippingMethod[];
   availablePaymentMethods: CheckoutPaymentMethod[];
-  orderId?: number;
+  result?: PlaceOrderResult;
   setEmail(email: string): void;
   setShippingAddress(address: CheckoutAddress): void;
   setBillingSameAsShipping(same: boolean): void;
@@ -265,7 +266,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
         this.setPartialState({
           loading: false,
           error: null,
-          orderId: resp.data!.placeOrder.orderId
+          result: resp.data!.placeOrder
         });
       }
     };
@@ -305,7 +306,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           loading: this.state.loading,
           values: this.state.values,
           errors: this.state.errors,
-          orderId: this.state.orderId,
+          result: this.state.result,
           availablePaymentMethods: this.state.availablePaymentMethods,
           availableShippingMethods: this.state.availableShippingMethods,
           setEmail: this.setEmail,

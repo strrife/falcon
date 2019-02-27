@@ -9,6 +9,7 @@ import { BaseSchema } from '@deity/falcon-server';
 import { Schema } from '@deity/falcon-shop-extension';
 
 import { CheckoutLogic, CheckoutLogicInjectedProps } from './CheckoutLogic';
+import { PlaceOrderSuccessfulResult } from './CheckoutMutation';
 import { wait } from '../../../../test/helpers';
 
 const sampleAddress = {
@@ -45,8 +46,10 @@ const resolversWithoutErrors = {
       paymentMethods: [samplePaymentMethod]
     }),
     placeOrder: () => ({
-      orderId: 10,
-      orderRealId: '010'
+      result: {
+        orderId: 10,
+        orderRealId: '010'
+      }
     })
   }
 };
@@ -184,7 +187,7 @@ describe('CheckoutLogic', () => {
       getProps().setPaymentMethod(samplePaymentMethod);
       getProps().placeOrder();
       await wait(0);
-      expect(getProps().orderId).toBe(10);
+      expect((getProps().result! as PlaceOrderSuccessfulResult).orderId).toBe(10);
     });
   });
 

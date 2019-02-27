@@ -1693,6 +1693,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   async setPaymentInfo(obj, { input }) {
     const address = this.prepareAddressForOrder(input.address);
     const response = await this.performCartAction('/set-payment-information', 'post', {
+      email: input.email,
       billingAddress: address,
       paymentMethod: {
         method: input.method,
@@ -1710,6 +1711,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async placeOrder(obj, { input }) {
     let response;
+
     try {
       response = await this.performCartAction('/place-order', 'put', Object.assign({}, input));
     } catch (e) {
@@ -1735,6 +1737,29 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     this.session.orderQuoteId = this.session.cart.quoteId;
+
+    if (orderData.extensionAttributes && orderData.extensionAttributes.adyenRedirect) {
+      const { issuerUrl, md, paRequest, termUrl } = orderData.extensionAttributes.adyenRedirect;
+
+      return {
+        url: issuerUrl,
+        method: 'POST',
+        fields: [
+          {
+            name: 'PaReq',
+            value: paRequest
+          },
+          {
+            name: 'MD',
+            value: md
+          },
+          {
+            name: 'TermUrl',
+            value: termUrl
+          }
+        ]
+      };
+    }
 
     return response.data;
   }

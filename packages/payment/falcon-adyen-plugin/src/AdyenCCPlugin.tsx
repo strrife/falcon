@@ -1,9 +1,9 @@
 import React from 'react';
-import { PluginModel, PluginModelProps } from '@deity/falcon-payment-plugin';
+import { PluginModel, PluginComponentProps } from '@deity/falcon-payment-plugin';
 
 const adyen = require('adyen-cse-web');
 
-export type AdyenProps = PluginModelProps & {
+export type AdyenProps = PluginComponentProps & {
   config: {
     key: string;
   };

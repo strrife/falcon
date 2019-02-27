@@ -9,6 +9,7 @@ import {
   GET_CUSTOMER_WITH_ADDRESSES,
   toGridTemplate
 } from '@deity/falcon-ecommerce-uikit';
+import { Test3dSecure } from '@deity/falcon-payment-plugin';
 import CheckoutCartSummary from './CheckoutCartSummary';
 import CustomerSelector from './CustomerSelector';
 import ShippingMethodSection from './ShippingMethodSection';
@@ -150,7 +151,7 @@ class CheckoutWizard extends React.Component {
       values,
       loading,
       errors,
-      orderId,
+      result,
       availableShippingMethods,
       availablePaymentMethods,
       setEmail,
@@ -164,9 +165,13 @@ class CheckoutWizard extends React.Component {
 
     const { customerData } = this.props;
 
-    if (orderId) {
-      // order has been placed successfully so we show confirmation
-      return <Redirect to="/checkout/confirmation" />;
+    if (result) {
+      if (result.url) {
+        return <Test3dSecure {...result} />;
+      } else if (result.orderId) {
+        // order has been placed successfully so we show confirmation
+        return <Redirect to="/checkout/confirmation" />;
+      }
     }
 
     let addresses;

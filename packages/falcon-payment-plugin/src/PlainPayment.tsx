@@ -1,5 +1,5 @@
 import React from 'react';
-import { PluginModel } from './models/Plugin';
+import { PluginModel } from './components/Plugin';
 
 export class PlainPayment extends PluginModel {
   componentDidMount() {
