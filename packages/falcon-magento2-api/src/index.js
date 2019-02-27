@@ -10,6 +10,7 @@ const { ApiUrlPriority, htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
 const { addResolveFunctionsToSchema } = require('graphql-tools');
 const Magento2ApiBase = require('./Magento2ApiBase');
+const url = require('url');
 
 /**
  * API for Magento2 store - provides resolvers for shop schema.
@@ -1707,9 +1708,10 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * Place order
    * @param {object} obj Parent object
    * @param {PlaceOrderInput} input - form data
+   * @param {object} context Request context
    * @return {Promise<PlaceOrderResult>} order data
    */
-  async placeOrder(obj, { input }) {
+  async placeOrder(obj, { input }, context) {
     let response;
 
     try {
@@ -1739,7 +1741,21 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     this.session.orderQuoteId = this.session.cart.quoteId;
 
     if (orderData.extensionAttributes && orderData.extensionAttributes.adyenRedirect) {
-      const { issuerUrl, md, paRequest, termUrl } = orderData.extensionAttributes.adyenRedirect;
+      const { origin } = context.headers;
+      const { issuerUrl, md, paRequest } = orderData.extensionAttributes.adyenRedirect;
+      let { termUrl } = orderData.extensionAttributes.adyenRedirect;
+
+      // `origin` is available on client-side request (checkout page)
+      // replacing "magento host" with the one from the client-side request
+      if (origin) {
+        const originUrl = url.parse(origin);
+        termUrl = url.format(
+          Object.assign(url.parse(termUrl), {
+            protocol: originUrl.protocol,
+            host: originUrl.host
+          })
+        );
+      }
 
       return {
         url: issuerUrl,
