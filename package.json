@@ -49,7 +49,6 @@
     "packages/falcon-wordpress-api",
     "packages/falcon-payment-env",
     "packages/falcon-payment-plugin",
-    "packages/falcon-payment-extension",
     "packages/falcon-proxy-endpoints",
     "packages/payment/falcon-adyen-plugin",
     "packages/payment/falcon-paypal-plugin",
