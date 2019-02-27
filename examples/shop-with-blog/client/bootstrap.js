@@ -6,5 +6,5 @@ export default {
   // onServerCreated: server => { console.log('created'); },
   // onServerInitialized: server => { console.log('initialized'); },
   // onServerStarted: server => { console.log('started'); }
-  onRouterCreated: router => endpoints(router, config.apolloClient.httpLink.uri)
+  onRouterCreated: router => endpoints(router, config.apolloClient.httpLink.uri, '/checkout/confirmation')
 };

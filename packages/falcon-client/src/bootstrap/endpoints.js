@@ -8,9 +8,10 @@ import Logger from '@deity/falcon-logger';
  * and set up a "proxy" handler
  * @param {koa-router} router KoaRouter object
  * @param {string} serverUrl Falcon-Server URL
+ * @param {string} successRedir Redirect on success
  * @param {boolean} isDebug Debug flag
  */
-export const endpoints = (router, serverUrl, isDebug = process.env.NODE_ENV !== 'production') => {
+export const endpoints = (router, serverUrl, successRedir, isDebug = process.env.NODE_ENV !== 'production') => {
   if (!serverUrl) {
     Logger.warn('"serverUrl" must be passed in your "bootstrap.js" file.');
     return;
@@ -40,6 +41,13 @@ export const endpoints = (router, serverUrl, isDebug = process.env.NODE_ENV !== 
                 // Hiding "not found" page output from the backend
                 if (proxyRes.statusCode === 404) {
                   res.end(proxyRes.statusMessage);
+                }
+
+                // Success redirection
+                if (proxyRes.statusCode === 302) {
+                  res.statusCode = 302;
+                  res.setHeader('Location', successRedir);
+                  res.end();
                 }
               }
             }
