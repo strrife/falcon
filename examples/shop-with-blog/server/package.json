@@ -11,8 +11,6 @@
   },
   "dependencies": {
     "@deity/falcon-payment-extension": "^0.0.1",
-    "@deity/falcon-adyen-api": "^0.0.1",
-    "@deity/falcon-paypal-api": "^0.0.1",
     "@deity/falcon-proxy-endpoints": "^0.0.1",
     "@deity/falcon-blog-extension": "^0.1.2",
     "@deity/falcon-magento2-api": "^0.3.0",
