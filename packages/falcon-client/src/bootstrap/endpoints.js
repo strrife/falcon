@@ -44,7 +44,7 @@ export const endpoints = (router, serverUrl, successRedir, isDebug = process.env
                 }
 
                 // Success redirection
-                if (proxyRes.statusCode === 302) {
+                if ([200, 302].indexOf(proxyRes.statusCode) !== false) {
                   res.statusCode = 302;
                   res.setHeader('Location', successRedir);
                   res.end();

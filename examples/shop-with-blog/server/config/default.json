@@ -9,7 +9,7 @@
       "config": {
         "protocol": "https",
         "host": "magento.deity.io",
-        "entries": ["/adyen/*", "/paypal/*"]
+        "entries": ["/adyen/*", "/paypal/*", "/checkoutExt/*"]
       }
     }
   },

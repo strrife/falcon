@@ -44,6 +44,7 @@
     "graphql-tools": "4.0.4",
     "graphql-type-json": "0.2.1",
     "koa": "2.6.2",
+    "koa-body": "4.0.8",
     "koa-router": "7.4.0",
     "koa-session": "5.10.0",
     "lodash": "4.17.11"

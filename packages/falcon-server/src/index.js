@@ -1,6 +1,7 @@
 const Koa = require('koa');
 const Router = require('koa-router');
 const session = require('koa-session');
+const body = require('koa-body');
 const cors = require('@koa/cors');
 const get = require('lodash/get');
 const capitalize = require('lodash/capitalize');
@@ -134,6 +135,7 @@ class FalconServer {
 
     this.router = new Router();
 
+    this.app.use(body());
     this.app.use(
       cors({
         credentials: true
@@ -173,7 +175,7 @@ class FalconServer {
     await this.extensionContainer.registerExtensions(this.config.extensions, this.apiContainer.dataSources);
     await this.eventEmitter.emitAsync(Events.AFTER_EXTENSION_CONTAINER_CREATED, this.extensionContainer);
 
-    this.endpointContainer = new EndpointContainer();
+    this.endpointContainer = new EndpointContainer(this.eventEmitter);
     await this.endpointContainer.registerEndpoints(this.config.endpoints);
   }
 
