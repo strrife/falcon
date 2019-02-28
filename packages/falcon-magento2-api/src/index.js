@@ -1692,13 +1692,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   async setPaymentInfo(obj, { input }) {
-    const address = this.prepareAddressForOrder(input.address);
+    const address = this.prepareAddressForOrder(input.billingAddress);
     const response = await this.performCartAction('/set-payment-information', 'post', {
       email: input.email,
       billingAddress: address,
       paymentMethod: {
-        method: input.method,
-        additional_data: input.additionalData
+        method: input.paymentMethod.method,
+        additionalData: input.paymentMethod.additionalData
       }
     });
     return response.data;
@@ -1708,11 +1708,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * Place order
    * @param {object} obj Parent object
    * @param {PlaceOrderInput} input - form data
-   * @param {object} context Request context
    * @return {Promise<PlaceOrderResult>} order data
    */
-  async placeOrder(obj, { input }, context) {
+  async placeOrder(obj, { input }) {
     let response;
+
+    if (input.paymentMethod.method === 'paypal_express') {
+      return this.handlePayPalToken(input);
+    }
 
     try {
       response = await this.performCartAction('/place-order', 'put', Object.assign({}, input));
@@ -1741,43 +1744,67 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     this.session.orderQuoteId = this.session.cart.quoteId;
 
     if (orderData.extensionAttributes && orderData.extensionAttributes.adyenRedirect) {
-      const { origin } = context.headers;
-      const { issuerUrl, md, paRequest } = orderData.extensionAttributes.adyenRedirect;
-      let { termUrl } = orderData.extensionAttributes.adyenRedirect;
-
-      // `origin` is available on client-side request (checkout page)
-      // replacing "magento host" with the one from the client-side request
-      if (origin) {
-        const originUrl = url.parse(origin);
-        termUrl = url.format(
-          Object.assign(url.parse(termUrl), {
-            protocol: originUrl.protocol,
-            host: originUrl.host
-          })
-        );
-      }
-
-      return {
-        url: issuerUrl,
-        method: 'POST',
-        fields: [
-          {
-            name: 'PaReq',
-            value: paRequest
-          },
-          {
-            name: 'MD',
-            value: md
-          },
-          {
-            name: 'TermUrl',
-            value: termUrl
-          }
-        ]
-      };
+      return this.handleAdyen3dSecure(orderData.extensionAttributes.adyenRedirect);
     }
 
     return response.data;
+  }
+
+  /**
+   * Handling Adyen 3D-secure payment
+   * @param {object} data adyenRedirect data
+   * @return {object} Redirect response data
+   */
+  handleAdyen3dSecure(data) {
+    const { origin } = this.context.headers;
+    const { issuerUrl, md, paRequest } = data;
+    let { termUrl } = data;
+
+    // `origin` is available on client-side request (checkout page)
+    // replacing "magento host" with the one from the client-side request
+    if (origin) {
+      const originUrl = url.parse(origin);
+      termUrl = url.format({
+        protocol: originUrl.protocol,
+        host: originUrl.host,
+        pathname: '/checkoutExt/adyen/validate3d/'
+      });
+    }
+
+    return {
+      url: issuerUrl,
+      method: 'POST',
+      fields: [
+        {
+          name: 'PaReq',
+          value: paRequest
+        },
+        {
+          name: 'MD',
+          value: md
+        },
+        {
+          name: 'TermUrl',
+          value: termUrl
+        }
+      ]
+    };
+  }
+
+  /**
+   * Handling PayPal payment on its own page
+   * @param {object} input Order payload
+   * @return {object} PayPal response data
+   */
+  async handlePayPalToken(input) {
+    await this.setPaymentInfo({}, { input });
+    const { data } = await this.performCartAction('/paypal-fetch-token', 'get');
+
+    return {
+      url: data.url,
+      method: 'GET',
+      fields: []
+    };
   }
 
   /**

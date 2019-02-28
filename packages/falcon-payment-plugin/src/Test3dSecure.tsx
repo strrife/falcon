@@ -18,6 +18,14 @@ export class Test3dSecure extends React.Component<Test3dSecureProps> {
   }
 
   componentDidMount() {
+    const form: HTMLFormElement = this.form.current!;
+    const { method, action } = form;
+    if (method.toLowerCase() === 'get') {
+      window.location.href = action;
+    } else {
+      form.submit();
+    }
+
     this.form.current!.submit();
   }
 
