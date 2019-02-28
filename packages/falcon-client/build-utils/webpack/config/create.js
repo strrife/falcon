@@ -10,6 +10,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const VirtualModulesPlugin = require('webpack-virtual-modules');
 const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
+const FalconNormalModuleReplacementPlugin = require('@deity/falcon-normal-module-override-webpack-plugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const LoadablePlugin = require('@loadable/webpack-plugin');
@@ -365,49 +366,27 @@ module.exports = (target = 'web', options, buildConfig) => {
       new LoadablePlugin({
         outputAsset: false,
         writeToDisk: { filename: paths.appBuild }
-      }),
-      new webpack.NormalModuleReplacementPlugin(
-        /(.*)[\\\\/]Text(\.*)/,
-        // /[\\\\/]falcon-ecommerce-uikit[\\\\/]dist[\\\\/]Footer[\\\\/]ComponentToReplace/,
-        resource => {
-          // console.log(
-          //   `resource: ${JSON.stringify(
-          //     {
-          //       request: resource.request,
-          //       context: resource.context,
-          //       falconUI: require.resolve(`@deity/falcon-ui`),
-          //       realPath: path.join(resource.context, resource.request),
-          //       confPath: require.resolve(`@deity/falcon-ui/dist/components/Text`)
-          //     },
-          //     null,
-          //     2
-          //   )}`
-          // );
-
-          // require.resolve(`@deity/falcon-ui`);
-          resource.request = `src/components/RedText`;
-        }
-      ),
-      new webpack.NormalModuleReplacementPlugin(
-        /(.*)[\\\\/]ComponentToReplace(\.*)/,
-        // /[\\\\/]falcon-ecommerce-uikit[\\\\/]dist[\\\\/]Footer[\\\\/]ComponentToReplace/,
-        (resource, hook) => {
-          console.log(
-            `${JSON.stringify(
-              {
-                hook,
-                request: resource.request,
-                context: resource.context,
-                realPath: path.join(resource.context, resource.request),
-                confPath: require.resolve(`@deity/falcon-ecommerce-uikit/dist/Footer/ComponentToReplace`)
-              },
-              null,
-              2
-            )}`
-          );
-          resource.request = `src/components/ComponentToReplace`;
-        }
-      )
+      })
+      // new FalconNormalModuleReplacementPlugin(
+      //   /(.*)[\\\\/]ComponentToReplace(\.*)/,
+      //   // /[\\\\/]falcon-ecommerce-uikit[\\\\/]dist[\\\\/]Footer[\\\\/]ComponentToReplace/,
+      //   (resource, hook) => {
+      //     console.log(
+      //       `${JSON.stringify(
+      //         {
+      //           hook,
+      //           request: resource.request,
+      //           context: resource.context,
+      //           realPath: path.join(resource.context, resource.request),
+      //           confPath: require.resolve(`@deity/falcon-ecommerce-uikit/dist/Footer/ComponentToReplace`)
+      //         },
+      //         null,
+      //         2
+      //       )}`
+      //     );
+      //     resource.request = `src/components/ComponentToReplace`;
+      //   }
+      // )
       // new webpack.NormalModuleReplacementPlugin(
       //   // /(.*)ComponentToReplace(\.*)/
       //   /[\\\\/]falcon-ecommerce-uikit[\\\\/]dist[\\\\/]Footer[\\\\/]ComponentToReplace/,
@@ -601,7 +580,11 @@ module.exports = (target = 'web', options, buildConfig) => {
   }
 
   config.plugins = [
-    ...config.plugins
+    ...config.plugins,
+    new FalconNormalModuleReplacementPlugin({
+      '@deity/falcon-ui/dist/components/Text': '@deity/falcon-ecommerce-uikit/dist/Footer/Text',
+      '@deity/falcon-ecommerce-uikit/dist/Footer/Text': 'src/components/RedText'
+    })
     // new WebpackBar({
     //   minimal: options.isCI,
     //   color: colors.deityGreen,
