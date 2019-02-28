@@ -21,7 +21,13 @@ const apiConfig = {
   eventEmitter: ee,
   gqlServerConfig: {
     schema: makeExecutableSchema({
-      typeDefs: [BaseSchema, Schema]
+      typeDefs: [BaseSchema, Schema],
+      resolvers: {
+        PlaceOrderResult: {
+          // empty resolver
+          __resolveType: () => ''
+        }
+      }
     })
   }
 };

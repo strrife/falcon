@@ -51,9 +51,7 @@
     "build:tsDeclarations": "tsc",
     "build:esm": "babel src -d dist -x .ts,.tsx -s",
     "build:cjs": "rollup -c",
-    "watch": "babel src -d dist -x .ts,.tsx -s --watch",
-    "test": "jest --watch",
-    "test:coverage": "jest --ci --coverage"
+    "watch": "babel src -d dist -x .ts,.tsx -s --watch"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0"

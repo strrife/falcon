@@ -51,9 +51,7 @@
     "build:tsDeclarations": "tsc",
     "build:esm": "babel src -d dist -x .ts,.tsx -s",
     "build:cjs": "rollup -c",
-    "watch": "babel src -d dist -x .ts,.tsx -s --watch",
-    "test": "jest --watch",
-    "test:coverage": "jest --ci --coverage"
+    "watch": "babel src -d dist -x .ts,.tsx -s --watch"
   },
   "dependencies": {
     "adyen-cse-web": "git+https://github.com/Adyen/adyen-cse-web.git#v0.1.24",

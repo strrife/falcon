@@ -22,14 +22,18 @@ export function Server({ App, clientApolloSchema, bootstrap, webpackAssets, load
 
   const publicDir = process.env.PUBLIC_DIR;
   const router = new Router();
-  bootstrap.onRouterCreated(router);
+  if (bootstrap.onRouterCreated) {
+    bootstrap.onRouterCreated(router);
+  }
 
   router.get('/sw.js', serve(publicDir, { maxage: 0 }));
   router.get('/static/*', serve(publicDir, { maxage: process.env.NODE_ENV === 'production' ? 31536000000 : 0 }));
   router.get('/*', serve(publicDir));
   router.get('/app-shell', ...renderAppShell({ config, webpackAssets, loadableStats }));
   router.get('/*', ...renderApp({ App, clientApolloSchema, config, webpackAssets, loadableStats }));
-  bootstrap.onRouterInitialized(router);
+  if (bootstrap.onRouterInitialized) {
+    bootstrap.onRouterInitialized(router);
+  }
 
   instance
     .use(helmet())
