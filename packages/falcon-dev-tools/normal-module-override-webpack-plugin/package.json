@@ -1,9 +1,9 @@
 {
-  "name": "@deity/falcon-normal-module-override-webpack-plugin",
+  "name": "@deity/normal-module-override-webpack-plugin",
   "version": "0.0.1",
   "license": "OSL-3.0",
   "main": "index.js",
-  "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-dev-tools/falcon-normal-module-override-webpack-plugin",
+  "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-dev-tools/normal-module-override-webpack-plugin",
   "publishConfig": {
     "access": "public"
   },

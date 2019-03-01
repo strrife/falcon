@@ -10,7 +10,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const VirtualModulesPlugin = require('webpack-virtual-modules');
 const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
-const FalconNormalModuleReplacementPlugin = require('@deity/falcon-normal-module-override-webpack-plugin');
+const NormalModuleOverridePlugin = require('@deity/normal-module-override-webpack-plugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const LoadablePlugin = require('@loadable/webpack-plugin');
@@ -509,7 +509,7 @@ module.exports = (target = 'web', options, buildConfig) => {
 
   config.plugins = [
     ...config.plugins,
-    new FalconNormalModuleReplacementPlugin(moduleOverride)
+    new NormalModuleOverridePlugin(moduleOverride)
     // new WebpackBar({
     //   minimal: options.isCI,
     //   color: colors.deityGreen,
