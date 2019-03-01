@@ -5,7 +5,6 @@ module.exports = class NormalModuleOverridePlugin {
   constructor(moduleOverrideMap) {
     this.name = 'NormalModuleOverridePlugin';
     this.moduleOverrideMap = moduleOverrideMap;
-    this.context = path.resolve(process.cwd());
   }
 
   requireResolveIfExists(id, options = undefined) {
@@ -29,35 +28,35 @@ module.exports = class NormalModuleOverridePlugin {
     return require.resolve(files[0]);
   }
 
-  apply(compiler) {
-    const { moduleOverrideMap } = this;
-
-    if (Object.keys(moduleOverrideMap).length === 0) {
-      return;
-    }
-
-    const moduleMap = Object.keys(moduleOverrideMap).reduce(
+  resolveModuleOverrideMap(context, map) {
+    return Object.keys(map).reduce(
       (result, x) => ({
         ...result,
-        [require.resolve(x)]:
-          this.requireResolveIfExists(moduleOverrideMap[x]) ||
-          this.resolveModulePath(this.context, moduleOverrideMap[x])
+        [require.resolve(x)]: this.requireResolveIfExists(map[x]) || this.resolveModulePath(context, map[x])
       }),
       {}
     );
+  }
+
+  apply(compiler) {
+    if (Object.keys(this.moduleOverrideMap).length === 0) {
+      return;
+    }
+
+    const moduleMap = this.resolveModuleOverrideMap(compiler.context, this.moduleOverrideMap);
 
     compiler.hooks.normalModuleFactory.tap(this.name, nmf => {
-      nmf.hooks.beforeResolve.tap(this.name, e => {
-        if (!e) {
+      nmf.hooks.beforeResolve.tap(this.name, resolve => {
+        if (!resolve) {
           return;
         }
 
-        const moduleToReplace = this.requireResolveIfExists(e.request, { paths: [e.context] });
+        const moduleToReplace = this.requireResolveIfExists(resolve.request, { paths: [resolve.context] });
         if (moduleToReplace && moduleMap[moduleToReplace]) {
-          e.request = moduleMap[moduleToReplace];
+          resolve.request = moduleMap[moduleToReplace];
         }
 
-        return e;
+        return resolve;
       });
     });
   }
