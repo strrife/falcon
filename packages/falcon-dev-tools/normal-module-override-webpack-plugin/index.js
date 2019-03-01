@@ -7,11 +7,11 @@ module.exports = class NormalModuleOverridePlugin {
     this.moduleOverrideMap = moduleOverrideMap;
   }
 
-  requireResolveIfExists(id, options = undefined) {
+  requireResolveIfCan(id, options = undefined) {
     try {
       return require.resolve(id, options);
     } catch (e) {
-      return false;
+      return undefined;
     }
   }
 
@@ -32,7 +32,7 @@ module.exports = class NormalModuleOverridePlugin {
     return Object.keys(map).reduce(
       (result, x) => ({
         ...result,
-        [require.resolve(x)]: this.requireResolveIfExists(map[x]) || this.resolveModulePath(context, map[x])
+        [require.resolve(x)]: this.requireResolveIfCan(map[x]) || this.resolveModulePath(context, map[x])
       }),
       {}
     );
@@ -51,7 +51,7 @@ module.exports = class NormalModuleOverridePlugin {
           return;
         }
 
-        const moduleToReplace = this.requireResolveIfExists(resolve.request, { paths: [resolve.context] });
+        const moduleToReplace = this.requireResolveIfCan(resolve.request, { paths: [resolve.context] });
         if (moduleToReplace && moduleMap[moduleToReplace]) {
           resolve.request = moduleMap[moduleToReplace];
         }
