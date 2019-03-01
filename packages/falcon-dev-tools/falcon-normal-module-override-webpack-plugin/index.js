@@ -20,7 +20,7 @@ module.exports = class FalconNormalModuleOverridePlugin {
 
   resolveModulePath(context, request) {
     const filePathWithoutExtension = path.resolve(context, request);
-    const files = glob.sync(`${filePathWithoutExtension}.*`);
+    const files = glob.sync(`${filePathWithoutExtension}@(|.*)`);
     if (files.length === 0) {
       throw new Error(`There is no file '${filePathWithoutExtension}'`);
     }
