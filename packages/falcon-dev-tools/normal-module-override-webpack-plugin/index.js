@@ -23,7 +23,7 @@ module.exports = class FalconNormalModuleOverridePlugin {
       throw new Error(`There is no file '${filePathWithoutExtension}'`);
     }
     if (files.length > 1) {
-      throw new Error(`There is more that one file '${filePathWithoutExtension}'`);
+      throw new Error(`There is more than one file '${filePathWithoutExtension}'`);
     }
 
     return require.resolve(files[0]);
