@@ -135,7 +135,7 @@ function addVendorsBundle(modules = []) {
  */
 module.exports = (target = 'web', options, buildConfig) => {
   const { env, host, devServerPort, paths } = options;
-  const { useWebmanifest, plugins, modify, i18n } = buildConfig;
+  const { useWebmanifest, plugins, modify, i18n, moduleOverride } = buildConfig;
 
   // Define some useful shorthands.
   const IS_NODE = target === 'node';
@@ -509,10 +509,7 @@ module.exports = (target = 'web', options, buildConfig) => {
 
   config.plugins = [
     ...config.plugins,
-    new FalconNormalModuleReplacementPlugin({
-      '@deity/falcon-ui/dist/components/Text': '@deity/falcon-ecommerce-uikit/dist/Footer/Text',
-      '@deity/falcon-ecommerce-uikit/dist/Footer/Text': 'src/components/RedText'
-    })
+    new FalconNormalModuleReplacementPlugin(moduleOverride)
     // new WebpackBar({
     //   minimal: options.isCI,
     //   color: colors.deityGreen,
