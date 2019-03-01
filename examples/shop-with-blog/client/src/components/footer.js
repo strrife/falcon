@@ -9,9 +9,9 @@ import {
   LanguageSection,
   LocaleSwitcher,
   LocaleSwitcherDropdown,
-  Newsletter
+  Newsletter,
+  Copyright
 } from '@deity/falcon-ecommerce-uikit';
-import { Copyright } from '@deity/falcon-ecommerce-uikit';
 
 export const Sitemap = () => (
   <FooterSectionsLayout>
