@@ -2,9 +2,9 @@ const path = require('path');
 const glob = require('glob');
 
 module.exports = class FalconNormalModuleOverridePlugin {
-  constructor(moduleReplacementMap) {
+  constructor(moduleOverrideMap) {
     this.name = 'FalconNormalModuleOverridePlugin';
-    this.moduleReplacementMap = moduleReplacementMap;
+    this.moduleOverrideMap = moduleOverrideMap;
     this.context = path.resolve(process.cwd());
   }
 
@@ -30,13 +30,18 @@ module.exports = class FalconNormalModuleOverridePlugin {
   }
 
   apply(compiler) {
-    const { moduleReplacementMap } = this;
-    const moduleMap = Object.keys(moduleReplacementMap).reduce(
+    const { moduleOverrideMap } = this;
+
+    if (Object.keys(moduleOverrideMap).length === 0) {
+      return;
+    }
+
+    const moduleMap = Object.keys(moduleOverrideMap).reduce(
       (result, x) => ({
         ...result,
         [require.resolve(x)]:
-          this.requireResolveIfExists(moduleReplacementMap[x]) ||
-          this.resolveModulePath(this.context, moduleReplacementMap[x])
+          this.requireResolveIfExists(moduleOverrideMap[x]) ||
+          this.resolveModulePath(this.context, moduleOverrideMap[x])
       }),
       {}
     );
