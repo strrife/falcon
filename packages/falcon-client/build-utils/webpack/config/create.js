@@ -6,7 +6,7 @@ const nodeExternals = require('webpack-node-externals');
 const AssetsPlugin = require('assets-webpack-plugin');
 const StartServerPlugin = require('start-server-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// const WebpackBar = require('webpackbar');
+const WebpackBar = require('webpackbar');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const VirtualModulesPlugin = require('webpack-virtual-modules');
 const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
@@ -15,7 +15,7 @@ const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware')
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 
-// const { colors } = require('./../tools');
+const { colors } = require('./../tools');
 const { getClientEnv } = require('./env');
 const runPlugin = require('./runPlugin');
 
@@ -509,13 +509,13 @@ module.exports = (target = 'web', options, buildConfig) => {
 
   config.plugins = [
     ...config.plugins,
-    new NormalModuleOverridePlugin(moduleOverride)
-    // new WebpackBar({
-    //   minimal: options.isCI,
-    //   color: colors.deityGreen,
-    //   name: IS_WEB ? 'client' : 'server',
-    //   compiledIn: true
-    // }),
+    new NormalModuleOverridePlugin(moduleOverride),
+    new WebpackBar({
+      minimal: options.isCI,
+      color: colors.deityGreen,
+      name: IS_WEB ? 'client' : 'server',
+      compiledIn: true
+    })
   ];
 
   addVendorsBundle([
