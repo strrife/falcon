@@ -2,10 +2,8 @@ const path = require('path');
 const glob = require('glob');
 
 module.exports = class FalconNormalModuleOverridePlugin {
-  constructor(/* resourceRegExp, newResource, */ moduleReplacementMap) {
+  constructor(moduleReplacementMap) {
     this.name = 'FalconNormalModuleOverridePlugin';
-    // this.resourceRegExp = resourceRegExp;
-    // this.newResource = newResource;
     this.moduleReplacementMap = moduleReplacementMap;
     this.context = path.resolve(process.cwd());
   }
@@ -33,7 +31,6 @@ module.exports = class FalconNormalModuleOverridePlugin {
 
   apply(compiler) {
     const { moduleReplacementMap } = this;
-
     const moduleMap = Object.keys(moduleReplacementMap).reduce(
       (result, x) => ({
         ...result,
@@ -44,17 +41,6 @@ module.exports = class FalconNormalModuleOverridePlugin {
       {}
     );
 
-    // const pathResolve = path.resolve(
-    //   this.context,
-    //   'C:/A/Deity/falcon/examples/shop-with-blog/client/src/components/RedText'
-    // );
-    // const files = glob.sync(`${pathResolve}.*`);
-    // console.log(files);
-
-    // console.log(`pathReolve: ${pathResolve}, exists: ${require.resolve(files[0])}`);
-
-    // console.log(require.resolve('@deity/falcon-ecommerce-uikit/dist/Footer/Text'));
-
     compiler.hooks.normalModuleFactory.tap(this.name, nmf => {
       nmf.hooks.beforeResolve.tap(this.name, e => {
         if (!e) {
@@ -63,19 +49,7 @@ module.exports = class FalconNormalModuleOverridePlugin {
 
         const moduleToReplace = this.requireResolveIfExists(e.request, { paths: [e.context] });
         if (moduleToReplace && moduleMap[moduleToReplace]) {
-          // try {
-          //   console.log(`e.context + e.request ${require.resolve(path.join(e.context, e.request))}`);
-          // } catch (error) {
-          //   console.log(`e.context + e.request can not resolve`);
-          // }
-          // // moduleReplacementMap
-
-          // if (typeof newResource === 'function') {
-          //   newResource(e);
-          // } else {
-          console.log(`${e.context}  ${e.request} -> ${moduleMap[moduleToReplace]}`);
           e.request = moduleMap[moduleToReplace];
-          // }
         }
 
         return e;
