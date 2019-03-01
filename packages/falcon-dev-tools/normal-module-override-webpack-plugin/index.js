@@ -1,9 +1,9 @@
 const path = require('path');
 const glob = require('glob');
 
-module.exports = class FalconNormalModuleOverridePlugin {
+module.exports = class NormalModuleOverridePlugin {
   constructor(moduleOverrideMap) {
-    this.name = 'FalconNormalModuleOverridePlugin';
+    this.name = 'NormalModuleOverridePlugin';
     this.moduleOverrideMap = moduleOverrideMap;
     this.context = path.resolve(process.cwd());
   }
