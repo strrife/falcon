@@ -4,6 +4,49 @@
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
 
+## Falcon 1.0 RC1
+
+### Falcon Client v0.4.0
+
+- added `bootstrap/endpoints` script to proxy requests from Falcon-Client to Falcon-Server ([#247](https://github.com/deity-io/falcon/pull/247))
+- added root client `Query.getConfig` resolver (`getConfig (key: "...") @client`) to extract config value for the specified key ([#247](https://github.com/deity-io/falcon/pull/247))
+
+### Falcon Server v0.4.0
+
+- introduced `onRouterCreated` and `onRouterInitialized` bootstrap events ([#247](https://github.com/deity-io/falcon/pull/247))
+- introduced scalar `JSON` GraphQL type available for any extension ([#247](https://github.com/deity-io/falcon/pull/247))
+- exposes `/endpoints` endpoint to get a list of entries to be proxies to the external backend (service) ([#247](https://github.com/deity-io/falcon/pull/247))
+
+### Falcon E-commerce UI Kit v0.4.0
+
+- `CheckoutMutation` now handles "union" result types from Falcon-Server ([#247](https://github.com/deity-io/falcon/pull/247))
+
+### Falcon Shop Extension v0.4.0
+
+- `Cart.quoteCurrency` is now deprecated ([#247](https://github.com/deity-io/falcon/pull/247))
+- `PaymentMethodInput` GraphQL input now accepts `additionalData` object ([#247](https://github.com/deity-io/falcon/pull/247))
+- `Mutation.placeOrder` can now return 2 result types - `PlaceOrderSuccessfulResult` and `PlaceOrder3dSecureResult` ([#247](https://github.com/deity-io/falcon/pull/247))
+
+### Falcon Magento2 API v0.4.0
+
+- added Adyen (credit card) and PayPal Payment Gateways support ([#247](https://github.com/deity-io/falcon/pull/247))
+
+### Falcon Payment Plugin v0.0.1
+
+- initial release
+
+### Falcon Adyen Plugin v0.0.1
+
+- initial release
+
+### Falcon PayPal Plugin v0.0.1
+
+- initial release
+
+### Falcon Proxy Endpoints v0.0.1
+
+- Initial release
+
 ## Falcon 1.0 RC (2019-02-14)
 
 ### Falcon Shop Extension v0.3.0 (2019-02-14)

@@ -25,7 +25,9 @@ export const endpoints = (router, serverUrl, successRedir, isDebug = process.env
       return result.json();
     })
     .then(data => {
-      Logger.debug('Adding endpoints for proxying:', data);
+      if (data.length) {
+        Logger.debug('Adding endpoints for proxying:', data);
+      }
 
       data.forEach(endpoint => {
         // using "endpoint" value as a proxied route name

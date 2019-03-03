@@ -1,6 +1,7 @@
 # Falcon Proxy Endpoints (Falcon-Server)
 
-## Config
+## Config values
 
+- `protocol` and `host` - set your target server you want to proxy your requests to
 - `entries` - list of API REST endpoints patterns
-- `logs` - "debug" mode flag
+- `orderIdSessionPath` - object path to get an orderId from the session (default `magento2.orderId`)

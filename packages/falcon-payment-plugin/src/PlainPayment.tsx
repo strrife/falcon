@@ -7,6 +7,6 @@ export class PlainPayment extends PluginModel {
   }
 
   render() {
-    return <React.Fragment />;
+    return this.props.template({});
   }
 }

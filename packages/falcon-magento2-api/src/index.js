@@ -1679,18 +1679,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
-   * Sets billing address for the cart
-   * @param {object} obj Parent object
-   * @param {object} input Billing address object
-   * @return {Promise<number>} Billing Address ID
+   * Sets payment method for the current cart
+   * @param {object} obj Root object
+   * @param {PlaceOrderInput} input Payment info payload
+   * @return {object} Result
    */
-  async setBillingAddress(obj, { input }) {
-    const response = await this.performCartAction('/billing-address', 'post', {
-      address: this.prepareAddressForOrder(input)
-    });
-    return response.data;
-  }
-
   async setPaymentInfo(obj, { input }) {
     const address = this.prepareAddressForOrder(input.billingAddress);
     const response = await this.performCartAction('/set-payment-information', 'post', {
