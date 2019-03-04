@@ -132,6 +132,14 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
 
   restoreStateFromURL = (location: any) => {
     const state = this.getStateFromURL(location);
+    // state created from URL might be empty so we have to make sure that all the items are correctly
+    // removed from current state - setting undefined for non existing value will do the trick
+    Object.keys(this.state).forEach(key => {
+      if (!(key in state)) {
+        state[key as keyof SearchState] = undefined;
+      }
+    });
+
     this.setState(state);
   };
 

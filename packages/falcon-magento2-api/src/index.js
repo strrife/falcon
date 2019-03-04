@@ -408,6 +408,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
           }
         ];
 
+      case 'range':
+        // translate range to 'from' - 'to' filters - because 'range' doesn't work in Magento
+        return [
+          {
+            filters: [this.createSimpleFilter(field, value[0], 'from'), this.createSimpleFilter(field, value[1], 'to')]
+          }
+        ];
+
       default:
         return [];
     }

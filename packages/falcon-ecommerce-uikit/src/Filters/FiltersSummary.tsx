@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Text, List, ListItem, Icon } from '@deity/falcon-ui';
+import { Box, Text, List, ListItem, Icon, Button } from '@deity/falcon-ui';
 import { FilterInput } from '../Search/types';
 
 const filtersSummaryTheme = {
@@ -16,12 +16,32 @@ export const FiltersSummary: React.SFC<FiltersSummaryProps> = ({ selected, remov
     <List>
       {selected.map(item => (
         <ListItem key={item.field}>
-          <Box onClick={() => removeFilter(item.field)} role="button">
-            <Icon src="close" />
+          <Button
+            onClick={() => removeFilter(item.field)}
+            css={({ theme }) => ({
+              display: 'flex',
+              background: 'transparent',
+              alignItems: 'center',
+              cursor: 'pointer',
+              color: theme.colors.black,
+              padding: 0,
+              textAlign: 'left',
+              transitionProperty: 'none',
+              border: 'none',
+              ':hover:enabled': {
+                color: theme.colors.primaryLight,
+                background: 'transparent',
+                svg: {
+                  stroke: theme.colors.primaryLight
+                }
+              }
+            })}
+          >
+            <Icon src="close" size="sm" mr="xs" />
             <Text>
               {item.field}: {item.value[0]}
             </Text>
-          </Box>
+          </Button>
         </ListItem>
       ))}
     </List>

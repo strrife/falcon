@@ -1,57 +1,46 @@
 import React from 'react';
-import { Box, List, ListItem, Label, Checkbox } from '@deity/falcon-ui';
+import { Box, List } from '@deity/falcon-ui';
 import { FilterInput, Aggregation } from '../Search/types';
+import { FilterItemValue } from './FilterItemValue';
 
 const filterContentTheme = {
   filterContent: {}
 };
 
 type FilterContentProps = {
-  setFilter: (name: string, value: string[]) => void;
+  setFilter: (name: string, value: string[], operator?: string) => void;
   removeFilter: (name: string) => void;
   selected?: FilterInput;
   aggregation: Aggregation;
   singleMode?: boolean;
 };
 
-export const FilterContent: React.SFC<FilterContentProps> = ({
-  aggregation,
-  selected,
-  setFilter,
-  singleMode,
-  removeFilter
-}) => {
-  const updateFilter = (enable: boolean, value: string) => {
+export const FilterContent: React.SFC<FilterContentProps> = ({ aggregation, selected, setFilter, singleMode }) => {
+  const updateNormalFilter = (value: string) => {
     if (singleMode) {
-      if (selected && selected.value.includes(value)) {
-        return removeFilter(aggregation.key);
-      }
       return setFilter(aggregation.key, [value]);
     }
+
     const nextSelected = selected ? [...selected.value] : [];
-    if (enable) {
+    if (!nextSelected.includes(value)) {
       nextSelected.push(value);
-    } else {
-      nextSelected.splice(nextSelected.indexOf(value), 1);
     }
+
     setFilter(aggregation.key, nextSelected);
   };
+
+  const updatePriceFilter = (value: string) => {
+    const [from, to] = value.split('-');
+    setFilter(aggregation.key, [from, to], 'range');
+  };
+
+  const updateFilter = aggregation.key === 'price' ? updatePriceFilter : updateNormalFilter;
 
   return (
     <Box defaultTheme={filterContentTheme}>
       <List>
         {aggregation.buckets.map(item => (
-          <ListItem key={item.name} pt="xs">
-            <Label htmlFor={`item-${item.name}-${item.value}`} display="flex" flexDirection="row" alignItems="center">
-              <Checkbox
-                id={`item-${item.name}-${item.value}`}
-                mr="xs"
-                checked={!!selected && selected.value.includes(item.value)}
-                onChange={ev => updateFilter(ev.target.checked, item.value)}
-              />
-              {item.name} ({item.count})
-            </Label>
-          </ListItem>
+          <FilterItemValue key={item.name} item={item} onClick={() => updateFilter(item.value)} />
         ))}
       </List>
     </Box>

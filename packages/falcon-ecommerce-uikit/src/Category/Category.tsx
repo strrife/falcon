@@ -17,6 +17,7 @@ import { T } from '@deity/falcon-i18n';
 import { ProductsList } from '../ProductsList/ProductsList';
 import { toGridTemplate } from '../helpers';
 import { FiltersPanel } from '../Filters';
+import { SearchConsumer } from '../Search';
 
 const CategoryArea = {
   navigation: 'navigation',
@@ -73,28 +74,37 @@ export const Category: React.SFC<{
   const { pagination, items, aggregations } = products;
 
   return (
-    <CategoryLayout>
-      <Box gridArea={CategoryArea.heading}>
-        <H1>{category.name}</H1>
-        <FlexLayout justifyContent="space-between" alignItems="center">
-          <ShowingOutOf itemsCount={items.length} totalItems={pagination.totalItems} />
-          <SortOrderDropdown
-            sortOrders={availableSortOrders}
-            activeSortOrder={activeSortOrder}
-            onChange={setSortOrder}
-          />
-        </FlexLayout>
-        <Divider mt="xs" />
-      </Box>
-      <Box gridArea={CategoryArea.navigation}>
-        {aggregations && aggregations.length !== 0 && <FiltersPanel aggregations={aggregations} />}
-      </Box>
-      <Box gridArea={CategoryArea.content}>
-        <ProductsList products={items} />
-        {pagination.nextPage && <Divider />}
-        {pagination.nextPage && <ShowMore onClick={fetchMore} loading={networkStatus === NetworkStatus.fetchMore} />}
-      </Box>
-    </CategoryLayout>
+    <SearchConsumer>
+      {search => (
+        <CategoryLayout>
+          <Box gridArea={CategoryArea.heading}>
+            <H1>{category.name}</H1>
+            <FlexLayout justifyContent="space-between" alignItems="center">
+              <ShowingOutOf itemsCount={items.length} totalItems={pagination.totalItems} />
+              <SortOrderDropdown
+                sortOrders={availableSortOrders}
+                activeSortOrder={activeSortOrder}
+                onChange={setSortOrder}
+              />
+            </FlexLayout>
+            <Divider mt="xs" />
+          </Box>
+          <Box gridArea={CategoryArea.navigation}>
+            {((aggregations && aggregations.length !== 0) ||
+              (search.state.filters && search.state.filters.length > 0)) && (
+              <FiltersPanel aggregations={aggregations} />
+            )}
+          </Box>
+          <Box gridArea={CategoryArea.content}>
+            <ProductsList products={items} />
+            {pagination.nextPage && <Divider />}
+            {pagination.nextPage && (
+              <ShowMore onClick={fetchMore} loading={networkStatus === NetworkStatus.fetchMore} />
+            )}
+          </Box>
+        </CategoryLayout>
+      )}
+    </SearchConsumer>
   );
 };
 

@@ -19,7 +19,6 @@ type FilterPanelProps = {
 };
 
 export const FiltersPanel: React.SFC<FilterPanelProps> = ({ title, aggregations }) => (
-  // todo: price filter requires dedicated logic
   <SearchConsumer>
     {search => (
       <Box defaultTheme={filtersPanelTheme}>
