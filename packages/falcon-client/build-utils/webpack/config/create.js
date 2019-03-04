@@ -376,7 +376,8 @@ module.exports = (target = 'web', options, buildConfig) => {
           // We ship a few polyfills by default but only include them if React is being placed in the default path.
           !clientEnv.raw.REACT_BUNDLE_PATH && falconClientPolyfills,
           require.resolve('razzle-dev-utils/webpackHotDevClient'),
-          paths.ownClientIndexJs
+          paths.ownClientIndexJs,
+          require.resolve('pwacompat')
         ].filter(Boolean)
       };
 
@@ -434,7 +435,8 @@ module.exports = (target = 'web', options, buildConfig) => {
           // We ship a few polyfills by default but only include them if React is being placed in the default path.
           // If you are doing some vendor bundling, you'll need to require the @deity/falcon-client/build-utils/polyfills on your own.
           !clientEnv.raw.REACT_BUNDLE_PATH && falconClientPolyfills,
-          paths.ownClientIndexJs
+          paths.ownClientIndexJs,
+          require.resolve('pwacompat')
         ].filter(Boolean)
       };
 
