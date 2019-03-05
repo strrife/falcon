@@ -32,7 +32,7 @@ describe('Server', () => {
       App: () => <div />,
       bootstrap,
       clientApolloSchema: {
-        defaults: {}
+        data: {}
       },
       webpackAssets: {}
     });
@@ -100,7 +100,7 @@ describe('Server', () => {
       onServerInitialized: () => {}
     };
     const clientApolloSchema = {
-      defaults: {},
+      data: {},
       resolvers: {
         Query: {}
       }

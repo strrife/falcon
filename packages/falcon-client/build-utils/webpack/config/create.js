@@ -524,7 +524,6 @@ module.exports = (target = 'web', options, buildConfig) => {
     'apollo-client',
     'apollo-link',
     'apollo-link-http',
-    'apollo-link-state',
     'apollo-utilities',
     'node-fetch',
     'i18next',

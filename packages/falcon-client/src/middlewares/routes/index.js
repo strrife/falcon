@@ -18,7 +18,7 @@ import i18next from './i18nextMiddleware';
  */
 export function renderAppShell({ config, webpackAssets, loadableStats }) {
   const { apolloClient } = config;
-  const configSchema = { defaults: { config } };
+  const configSchema = { data: { config } };
 
   return [
     apolloClientProvider({ config: apolloClient, clientStates: { configSchema } }),
@@ -43,7 +43,7 @@ export function renderAppShell({ config, webpackAssets, loadableStats }) {
  */
 export function renderApp({ config, clientApolloSchema, App, webpackAssets, loadableStats }) {
   const { i18n, serverSideRendering, apolloClient } = config;
-  const configSchema = { defaults: { config } };
+  const configSchema = { data: { config } };
 
   return [
     apolloClientProvider({

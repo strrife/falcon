@@ -27,7 +27,7 @@ const sortOrders = [
 ];
 
 export default {
-  defaults: {
+  data: {
     sidebar: {
       contentType: null,
       side: 'right',

@@ -13,7 +13,7 @@ import { configureServiceWorker } from './serviceWorker';
 
 // eslint-disable-next-line no-underscore-dangle
 const initialState = window.__APOLLO_STATE__ || {};
-const config = apolloStateToObject(initialState, '$ROOT_QUERY.config');
+const config = apolloStateToObject(initialState, '$ROOT_QUERY.config') || {};
 
 const { language } = window.I18NEXT_STATE || {};
 const i18nConfig = { ...config.i18n, lng: language };
