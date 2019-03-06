@@ -41,49 +41,90 @@ const addressFormLayout = {
   }
 };
 
-const AddressForm = ({ countries = [], submitLabel = 'Save', id = '' }) => (
-  <Box id={id} as={Form} defaultTheme={addressFormLayout}>
-    <FormField name="email" type="email" label="Email" id={`${id}-email`} required gridArea={AddressFormArea.email} />
-    <FormField
-      name="firstname"
-      label="First name"
-      id={`${id}-firstname`}
-      required
-      gridArea={AddressFormArea.firstName}
-    />
-    <FormField name="lastname" label="Last name" id={`${id}-lastname`} required gridArea={AddressFormArea.lastName} />
-    <FormField name="street" label="Street" id={`${id}-street`} required gridArea={AddressFormArea.street} />
-    <FormField name="postcode" label="Post code" id={`${id}-postcode`} required gridArea={AddressFormArea.postCode} />
-    <FormField name="city" label="City" id={`${id}-city`} required gridArea={AddressFormArea.city} />
+const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoCompleteSection }) => {
+  const getAutoComplete = attribute => [autoCompleteSection, attribute].filter(x => x).join(' ');
 
-    <Field
-      name="countryId"
-      render={({ field, form }) => (
-        <Box gridArea={AddressForm.country}>
-          <Label htmlFor={`${id}-${field.name}`}>Country *</Label>
-          <CountrySelector
-            id={`${id}-${field.name}`}
-            items={countries}
-            value={field.value}
-            onChange={value => form.setFieldValue(field.name, value)}
-          />
-          <ErrorMessage
-            name={field.name}
-            render={msg => (
-              <Text fontSize="xs" color="error">
-                {msg}
-              </Text>
-            )}
-          />
-        </Box>
-      )}
-    />
-    <FormField name="telephone" label="Phone" id={`${id}-telephone`} required gridArea={AddressFormArea.phone} />
-    <Box gridArea={AddressFormArea.submit}>
-      <Button type="submit">{submitLabel}</Button>
+  return (
+    <Box id={id} as={Form} defaultTheme={addressFormLayout}>
+      <FormField name="email" type="email" label="Email" id={`${id}-email`} required gridArea={AddressFormArea.email} />
+      <FormField
+        name="firstname"
+        label="First name"
+        id={`${id}-firstname`}
+        required
+        autoComplete={getAutoComplete('given-name')}
+        gridArea={AddressFormArea.firstName}
+      />
+      <FormField
+        name="lastname"
+        label="Last name"
+        id={`${id}-lastname`}
+        required
+        autoComplete={getAutoComplete('family-name')}
+        gridArea={AddressFormArea.lastName}
+      />
+      <FormField
+        name="street"
+        label="Street"
+        id={`${id}-street`}
+        required
+        autoComplete={getAutoComplete('street-address')}
+        gridArea={AddressFormArea.street}
+      />
+      <FormField
+        name="postcode"
+        label="Post code"
+        id={`${id}-postcode`}
+        required
+        autoComplete={getAutoComplete('postal-code')}
+        gridArea={AddressFormArea.postCode}
+      />
+      <FormField
+        name="city"
+        label="City"
+        id={`${id}-city`}
+        required
+        autoComplete={getAutoComplete('address-level2')}
+        gridArea={AddressFormArea.city}
+      />
+
+      <Field
+        name="countryId"
+        render={({ field, form }) => (
+          <Box gridArea={AddressForm.country}>
+            <Label htmlFor={`${id}-${field.name}`}>Country</Label>
+            <CountrySelector
+              id={`${id}-${field.name}`}
+              autoComplete={getAutoComplete('country')}
+              items={countries}
+              value={field.value}
+              onChange={value => form.setFieldValue(field.name, value)}
+            />
+            <ErrorMessage
+              name={field.name}
+              render={msg => (
+                <Text fontSize="xs" color="error">
+                  {msg}
+                </Text>
+              )}
+            />
+          </Box>
+        )}
+      />
+      <FormField
+        name="telephone"
+        label="Phone"
+        id={`${id}-telephone`}
+        required
+        autoComplete={getAutoComplete('tel')}
+        gridArea={AddressFormArea.phone}
+      />
+      <Box gridArea={AddressFormArea.submit}>
+        <Button type="submit">{submitLabel}</Button>
+      </Box>
     </Box>
-  </Box>
-);
+  );
+};
 
 AddressForm.propTypes = {
   id: PropTypes.string.isRequired,
