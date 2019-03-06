@@ -16,7 +16,6 @@ export const Select = themed({
         fontFamily: 'inherit',
         lineHeight: 'inherit',
         color: theme.colors.secondaryText,
-        WebkitAppearance: 'none',
         width: '100%',
         outline: 'none',
         position: 'relative',
