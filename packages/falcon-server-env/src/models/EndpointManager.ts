@@ -1,4 +1,5 @@
 import { EventEmitter2 } from 'eventemitter2';
+import fetch from 'node-fetch';
 import { ConfigurableConstructorParams, EndpointEntry, UrlConfig } from '../types';
 import { formatUrl } from '../helpers/url';
 
@@ -6,6 +7,8 @@ export default abstract class EndpointManager {
   public config: UrlConfig;
   public name: string;
   public baseUrl: string;
+
+  protected fetch = fetch;
 
   protected eventEmitter: EventEmitter2;
 

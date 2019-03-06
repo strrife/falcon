@@ -27,7 +27,7 @@
     "@deity/falcon-server-env": "^0.1.1",
     "@deity/falcon-logger": "^0.1.1",
     "lodash.get": "^4.4.2",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "2.3.0",
     "qs": "^6.6.0"
   },
   "devDependencies": {
