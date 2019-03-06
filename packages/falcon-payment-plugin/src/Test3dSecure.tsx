@@ -25,8 +25,6 @@ export class Test3dSecure extends React.Component<Test3dSecureProps> {
     } else {
       form.submit();
     }
-
-    this.form.current!.submit();
   }
 
   form: React.RefObject<HTMLFormElement>;
