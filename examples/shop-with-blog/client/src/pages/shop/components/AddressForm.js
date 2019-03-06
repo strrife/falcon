@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Field, ErrorMessage } from 'formik';
+import { Form } from 'formik';
 import { FormField, CountrySelector, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
-import { Box, Label, Text, Button } from '@deity/falcon-ui';
+import { Box, Button } from '@deity/falcon-ui';
 
 const AddressFormArea = {
   firstName: 'firstName',
@@ -72,6 +72,18 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
         gridArea={AddressFormArea.street}
       />
       <FormField
+        name="countryId"
+        label="Country"
+        id={`${id}-country`}
+        required
+        autoComplete={getAutoComplete('country')}
+        gridArea={AddressForm.country}
+      >
+        {({ form, field }) => (
+          <CountrySelector {...field} items={countries} onChange={x => form.setFieldValue(field.name, x)} />
+        )}
+      </FormField>
+      <FormField
         name="postcode"
         label="Post code"
         id={`${id}-postcode`}
@@ -86,30 +98,6 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
         required
         autoComplete={getAutoComplete('address-level2')}
         gridArea={AddressFormArea.city}
-      />
-
-      <Field
-        name="countryId"
-        render={({ field, form }) => (
-          <Box gridArea={AddressForm.country}>
-            <Label htmlFor={`${id}-${field.name}`}>Country</Label>
-            <CountrySelector
-              id={`${id}-${field.name}`}
-              autoComplete={getAutoComplete('country')}
-              items={countries}
-              value={field.value}
-              onChange={value => form.setFieldValue(field.name, value)}
-            />
-            <ErrorMessage
-              name={field.name}
-              render={msg => (
-                <Text fontSize="xs" color="error">
-                  {msg}
-                </Text>
-              )}
-            />
-          </Box>
-        )}
       />
       <FormField
         name="telephone"
