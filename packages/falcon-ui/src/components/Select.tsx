@@ -5,7 +5,8 @@ export const Select = themed({
 
   defaultTheme: {
     select: {
-      p: 'xs',
+      py: 'xs',
+      px: 'sm',
       border: 'regular',
       borderRadius: 'medium',
       borderColor: 'secondaryDark',
@@ -13,12 +14,15 @@ export const Select = themed({
       css: ({ theme }) => ({
         display: 'block',
         fontFamily: 'inherit',
+        lineHeight: 'inherit',
+        color: theme.colors.secondaryText,
+        WebkitAppearance: 'none',
         width: '100%',
         outline: 'none',
         position: 'relative',
         ':focus': {
           outline: 'none',
-          borderColor: theme.colors.primary
+          borderColor: theme.colors.secondary
         }
       })
     }
