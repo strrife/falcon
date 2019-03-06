@@ -15,7 +15,7 @@ export const Select = themed({
         display: 'block',
         fontFamily: 'inherit',
         lineHeight: 'inherit',
-        color: theme.colors.secondaryText,
+        color: 'inherit',
         width: '100%',
         outline: 'none',
         position: 'relative',
