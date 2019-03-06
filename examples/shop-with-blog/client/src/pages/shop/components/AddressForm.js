@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form } from 'formik';
-import { FormField, CountrySelector, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
+import { Form, FormField, CountrySelector, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
 import { Box, Button } from '@deity/falcon-ui';
 
 const AddressFormArea = {
@@ -45,12 +44,11 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
   const getAutoComplete = attribute => [autoCompleteSection, attribute].filter(x => x).join(' ');
 
   return (
-    <Box id={id} as={Form} defaultTheme={addressFormLayout}>
-      <FormField name="email" type="email" label="Email" id={`${id}-email`} required gridArea={AddressFormArea.email} />
+    <Form id={id} defaultTheme={addressFormLayout}>
+      <FormField name="email" type="email" label="Email" required gridArea={AddressFormArea.email} />
       <FormField
         name="firstname"
         label="First name"
-        id={`${id}-firstname`}
         required
         autoComplete={getAutoComplete('given-name')}
         gridArea={AddressFormArea.firstName}
@@ -58,7 +56,6 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
       <FormField
         name="lastname"
         label="Last name"
-        id={`${id}-lastname`}
         required
         autoComplete={getAutoComplete('family-name')}
         gridArea={AddressFormArea.lastName}
@@ -66,7 +63,6 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
       <FormField
         name="street"
         label="Street"
-        id={`${id}-street`}
         required
         autoComplete={getAutoComplete('street-address')}
         gridArea={AddressFormArea.street}
@@ -74,7 +70,6 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
       <FormField
         name="countryId"
         label="Country"
-        id={`${id}-country`}
         required
         autoComplete={getAutoComplete('country')}
         gridArea={AddressForm.country}
@@ -86,7 +81,6 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
       <FormField
         name="postcode"
         label="Post code"
-        id={`${id}-postcode`}
         required
         autoComplete={getAutoComplete('postal-code')}
         gridArea={AddressFormArea.postCode}
@@ -94,7 +88,6 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
       <FormField
         name="city"
         label="City"
-        id={`${id}-city`}
         required
         autoComplete={getAutoComplete('address-level2')}
         gridArea={AddressFormArea.city}
@@ -102,7 +95,6 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
       <FormField
         name="telephone"
         label="Phone"
-        id={`${id}-telephone`}
         required
         autoComplete={getAutoComplete('tel')}
         gridArea={AddressFormArea.phone}
@@ -110,7 +102,7 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
       <Box gridArea={AddressFormArea.submit}>
         <Button type="submit">{submitLabel}</Button>
       </Box>
-    </Box>
+    </Form>
   );
 };
 
