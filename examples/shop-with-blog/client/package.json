@@ -2,7 +2,7 @@
   "name": "@deity/example-shop-with-blog-client",
   "private": true,
   "license": "OSL-3.0",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "repository": "https://github.com/deity-io/falcon/tree/master/examples/shop-with-blog/client",
   "scripts": {
     "start": "falcon-client start",
