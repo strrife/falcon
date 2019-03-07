@@ -34,7 +34,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       const value = await this.cache.get({
         key: [this.name, this.session.storeCode || 'default', url].join(':'),
         callback: async () => {
-          const rawValue = await this.get(url);
+          const rawValue = await this.get(url, {}, { context: { useAdminToken: true } });
           return JSON.stringify(rawValue);
         },
         options: {
