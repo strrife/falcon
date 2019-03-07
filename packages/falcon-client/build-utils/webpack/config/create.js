@@ -10,6 +10,7 @@ const WebpackBar = require('webpackbar');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const VirtualModulesPlugin = require('webpack-virtual-modules');
 const FalconI18nLocalesPlugin = require('@deity/falcon-i18n-webpack-plugin');
+const NormalModuleOverridePlugin = require('@deity/normal-module-override-webpack-plugin');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const LoadablePlugin = require('@loadable/webpack-plugin');
@@ -134,7 +135,7 @@ function addVendorsBundle(modules = []) {
  */
 module.exports = (target = 'web', options, buildConfig) => {
   const { env, host, devServerPort, paths } = options;
-  const { useWebmanifest, plugins, modify, i18n } = buildConfig;
+  const { useWebmanifest, plugins, modify, i18n, moduleOverride } = buildConfig;
 
   // Define some useful shorthands.
   const IS_NODE = target === 'node';
@@ -362,10 +363,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         includeAllFileTypes: true,
         prettyPrint: true
       }),
-      new LoadablePlugin({
-        outputAsset: false,
-        writeToDisk: { filename: paths.appBuild }
-      })
+      new LoadablePlugin({ outputAsset: false, writeToDisk: { filename: paths.appBuild } })
     ];
 
     if (IS_DEV) {
@@ -513,6 +511,7 @@ module.exports = (target = 'web', options, buildConfig) => {
 
   config.plugins = [
     ...config.plugins,
+    new NormalModuleOverridePlugin(moduleOverride),
     new WebpackBar({
       minimal: options.isCI,
       color: colors.deityGreen,
