@@ -4,10 +4,11 @@
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
 
-## Falcon 1.0 RC1
+## Falcon Next
 
 ### Falcon Client v0.4.0
 
+- added support for normal module replacement ([#328](https://github.com/deity-io/falcon/pull/328))
 - added `bootstrap/endpoints` script to proxy requests from Falcon-Client to Falcon-Server ([#247](https://github.com/deity-io/falcon/pull/247))
 - added root client `Query.getConfig` resolver (`getConfig (key: "...") @client`) to extract config value for the specified key ([#247](https://github.com/deity-io/falcon/pull/247))
 
@@ -46,6 +47,10 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon Proxy Endpoints v0.0.1
 
 - Initial release
+
+### Normal Module Override Webpack Plugin v0.0.1
+
+- feat: first version of Normal Module Override Webpack Plugin ([#328](https://github.com/deity-io/falcon/pull/328))
 
 ## Falcon 1.0 RC (2019-02-14)
 
