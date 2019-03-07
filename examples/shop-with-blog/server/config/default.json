@@ -11,6 +11,13 @@
         "host": "magento.deity.io",
         "entries": ["/adyen/*", "/paypal/*", "/checkoutExt/*"]
       }
+    },
+    "magento": {
+      "package": "@deity/falcon-magento2-api/src/endpoints",
+      "config": {
+        "protocol": "https",
+        "host": "magento.deity.io"
+      }
     }
   },
   "apis": {

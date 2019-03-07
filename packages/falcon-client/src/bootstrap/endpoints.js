@@ -8,10 +8,13 @@ import Logger from '@deity/falcon-logger';
  * and set up a "proxy" handler
  * @param {koa-router} router KoaRouter object
  * @param {string} serverUrl Falcon-Server URL
- * @param {string} successRedir Redirect on success
+ * @param {object} redirs Map of redirections
+ * @param {string} redirs.success Success page
+ * @param {string} redirs.failure Failure page
+ * @param {string} redirs.cancel Cancel page
  * @param {boolean} isDebug Debug flag
  */
-export const endpoints = (router, serverUrl, successRedir, isDebug = process.env.NODE_ENV !== 'production') => {
+export const endpoints = (router, serverUrl, redirs, isDebug = process.env.NODE_ENV !== 'production') => {
   if (!serverUrl) {
     Logger.warn('"serverUrl" must be passed in your "bootstrap.js" file.');
     return;
@@ -40,6 +43,8 @@ export const endpoints = (router, serverUrl, successRedir, isDebug = process.env
             logs: isDebug,
             events: {
               proxyRes: (proxyRes, req, res) => {
+                const { success } = redirs;
+
                 // Hiding "not found" page output from the backend
                 if (proxyRes.statusCode === 404) {
                   res.end(proxyRes.statusMessage);
@@ -48,7 +53,7 @@ export const endpoints = (router, serverUrl, successRedir, isDebug = process.env
                 // Success redirection
                 if ([200, 302].indexOf(proxyRes.statusCode) !== false) {
                   res.statusCode = 302;
-                  res.setHeader('Location', successRedir);
+                  res.setHeader('Location', success);
                   res.end();
                 }
               }
@@ -59,7 +64,7 @@ export const endpoints = (router, serverUrl, successRedir, isDebug = process.env
         const route = router.route(endpoint);
         const routeIndex = router.routes().router.stack.indexOf(route);
         // Rearranging proxied routes - we have to make sure
-        // these routes are added at the beginning of the route stack
+        // these routes are added at the beginning of the router stack
         router.routes().router.stack.splice(routeIndex, 1);
         router.routes().router.stack.unshift(route);
       });
