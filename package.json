@@ -52,6 +52,7 @@
     "packages/falcon-dev-tools/babel-preset-falcon-client",
     "packages/falcon-dev-tools/eslint-config-falcon",
     "packages/falcon-dev-tools/falcon-i18n-webpack-plugin",
+    "packages/falcon-dev-tools/normal-module-override-webpack-plugin",
     "packages/eject-ts",
     "examples/shop-with-blog/client",
     "examples/shop-with-blog/server"
@@ -63,6 +64,9 @@
   },
   "resolutions": {
     "apollo-env": "0.3.1",
-    "jest-util": "v24.2.0-alpha.0"
+    "jest-util": "v24.2.0-alpha.0",
+    "react-router-dom": "4.4.0-beta.6",
+    "react": "16.8.2",
+    "apollo-client": "2.4.13"
   }
 }
