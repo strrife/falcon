@@ -17,7 +17,7 @@ export type PaymentChildrenProps = MethodConfig & {
   onSelect: () => any;
 };
 
-declare type PaymentProps = {
+export type PaymentProps = {
   template: (args: any) => React.ReactNode;
   billingAddressInput?: React.ComponentType<BillingAddressProps>;
   creditCardInput?: React.ComponentType<CreditCardProps>;
