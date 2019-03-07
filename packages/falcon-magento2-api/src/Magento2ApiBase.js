@@ -194,9 +194,12 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   async resolveURL(req) {
     const { path } = req;
-    const { storeCode = this.storePrefix } = this.session;
+    return super.resolveURL({ path: this.getPathWithPrefix(path) });
+  }
 
-    return super.resolveURL({ path: `/rest/${storeCode}/V1${path}` });
+  getPathWithPrefix(path) {
+    const { storeCode = this.storePrefix } = this.session;
+    return `/rest/${storeCode}/V1${path}`;
   }
 
   /**

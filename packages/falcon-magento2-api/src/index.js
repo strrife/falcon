@@ -1790,8 +1790,23 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {object} PayPal response data
    */
   async handlePayPalToken(input) {
-    await this.setPaymentInfo({}, { input });
-    const { data } = await this.performCartAction('/paypal-fetch-token', 'get');
+    const { origin } = this.context.headers;
+
+    if (origin) {
+      const paypalReturnSuccess = `${origin}${this.getPathWithPrefix(`${this.getCartPath()}/paypal-express-return`)}`;
+      const paypalReturnCancel = `${origin}${this.getPathWithPrefix(`${this.getCartPath()}/paypal-express-cancel`)}`;
+
+      input.paymentMethod.additionalData = Object.assign(input.paymentMethod.additionalData, {
+        paypal_return_success: paypalReturnSuccess,
+        paypal_return_cancel: paypalReturnCancel
+      });
+    }
+
+    const { data: setPaymentInfoResult } = await this.setPaymentInfo({}, { input });
+    if (!setPaymentInfoResult) {
+      throw new Error('Failed to set payment information');
+    }
+    const { data } = await this.performCartAction('/paypal-express-fetch-token', 'get');
 
     return {
       url: data.url,
