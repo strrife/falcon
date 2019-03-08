@@ -14,27 +14,18 @@ import { wait } from '../../../../test/helpers';
 const stateToUrl = (state: SearchState) => JSON.stringify(state);
 const stateFromUrl = (url: string) => (url ? JSON.parse(url.replace('?', '')) : {});
 
-const dataMocks = {
-  request: {
-    query: SORT_ORDERS_QUERY
+const sortOrders = [
+  {
+    name: 'Price ascending',
+    field: 'price',
+    direction: 'asc'
   },
-  result: {
-    data: {
-      sortOrders: [
-        {
-          name: 'Price ascending',
-          field: 'price',
-          direction: 'asc'
-        },
-        {
-          name: 'Price descending',
-          field: 'price',
-          direction: 'desc'
-        }
-      ]
-    }
+  {
+    name: 'Price descending',
+    field: 'price',
+    direction: 'desc'
   }
-};
+];
 
 describe('SearchProvider', () => {
   let wrapper: ReactWrapper<any, any> | null;
@@ -44,12 +35,11 @@ describe('SearchProvider', () => {
   const renderSearchProvider = async (ContentComponent: any = null) => {
     const client = new ApolloClient({
       link: mockSingleLink(),
-      cache: new Cache({ addTypename: false }),
-      resolvers: {
-        Query: {
-          sortOrders: () => dataMocks.result.data.sortOrders
+      cache: new Cache({ addTypename: false }).restore({
+        ROOT_QUERY: {
+          sortOrders
         }
-      }
+      })
     });
 
     wrapper = mount(

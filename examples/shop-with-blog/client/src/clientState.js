@@ -7,22 +7,26 @@ const sortOrders = [
   {
     name: 'Price ascending',
     field: 'price',
-    direction: 'asc'
+    direction: 'asc',
+    __typename: 'SortOrderValue'
   },
   {
     name: 'Price descending',
     field: 'price',
-    direction: 'desc'
+    direction: 'desc',
+    __typename: 'SortOrderValue'
   },
   {
     name: 'Name ascending',
     field: 'name',
-    direction: 'asc'
+    direction: 'asc',
+    __typename: 'SortOrderValue'
   },
   {
     name: 'Name descending',
     field: 'name',
-    direction: 'desc'
+    direction: 'desc',
+    __typename: 'SortOrderValue'
   }
 ];
 
@@ -31,7 +35,8 @@ export default {
     sidebar: {
       contentType: null,
       side: 'right',
-      isOpen: false
+      isOpen: false,
+      __typename: 'SidebarStatus'
     }
   },
 
@@ -46,7 +51,8 @@ export default {
           sidebar: {
             contentType,
             side: side || 'right',
-            isOpen: true
+            isOpen: true,
+            __typename: 'SidebarStatus'
           }
         };
 
