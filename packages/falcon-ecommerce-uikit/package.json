@@ -40,7 +40,9 @@
       "json",
       "node"
     ],
-    "setupTestFrameworkScriptFile": "./../../test/setupTests.js"
+    "setupFilesAfterEnv": [
+      "./../../test/setupTests.js"
+    ]
   },
   "scripts": {
     "clean": "rimraf dist",

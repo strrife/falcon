@@ -16,7 +16,9 @@
     "test:coverage": "node ./bin/falcon-client test --env=jsdom --ci --coverage"
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "./../../test/setupTests.js"
+    "setupFilesAfterEnv": [
+      "./../../test/setupTests.js"
+    ]
   },
   "dependencies": {
     "@babel/core": "^7.0.0",
