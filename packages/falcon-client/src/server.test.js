@@ -74,22 +74,24 @@ describe('Server', () => {
     const config = defaultConfiguration({
       logLevel: 'error',
       serverSideRendering: true,
-      googleTagManager: { id: null },
+      googleTagManager: { __typename: 'GTMConfig', id: null },
       i18n: {
+        __typename: 'I18nConfig',
         lng: 'en',
-        resources: { en: { translations: { key: 'foo bar baz' } } }
+        resources: {
+          __typename: 'I18nResources',
+          en: {
+            __typename: 'I18nResourcesData',
+            translations: {
+              __typename: 'I18nTranslations',
+              key: 'foo bar baz'
+            }
+          }
+        }
       },
       apolloClient: {
         httpLink: {
-          typeDefs: [BaseSchema],
-          resolvers: {
-            Query: {
-              backendConfig: () => ({
-                locales: ['en-US'],
-                activeLocale: 'en-US'
-              })
-            }
-          }
+          typeDefs: [BaseSchema]
         }
       }
     });
@@ -100,9 +102,12 @@ describe('Server', () => {
       onServerInitialized: () => {}
     };
     const clientApolloSchema = {
-      data: {},
-      resolvers: {
-        Query: {}
+      data: {
+        backendConfig: {
+          __typename: 'BackendConfig',
+          locales: ['en-US'],
+          activeLocale: 'en-US'
+        }
       }
     };
 
