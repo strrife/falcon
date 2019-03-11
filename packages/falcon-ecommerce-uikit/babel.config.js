@@ -6,10 +6,7 @@ module.exports = {
       {
         modules: false,
         loose: true,
-        targets: {
-          // > 0.5%, last 2 versions, Firefox ESR, not dead
-          browsers: 'defaults'
-        }
+        targets: 'defaults'
       }
     ],
     '@babel/preset-typescript',
