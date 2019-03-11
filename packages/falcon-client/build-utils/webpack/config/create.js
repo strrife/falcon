@@ -21,6 +21,15 @@ const runPlugin = require('./runPlugin');
 
 const falconClientPolyfills = require.resolve('./../../polyfills');
 
+/**
+ * Create RegExp filter based on provided modules names
+ * @param {string[]} modules module names to filter on
+ * @returns {RegExp} RegExp filter
+ */
+function moduleFilter(modules) {
+  return new RegExp(`[\\\\/]node_modules[\\\\/](${modules.map(x => x.replace('/', '[\\\\/]')).join('|')})[\\\\/]`);
+}
+
 function getEsLintLoaderOptions(eslintRcPath, isDev) {
   const options = {
     eslintPath: require.resolve('eslint'),
@@ -42,12 +51,12 @@ function getEsLintLoaderOptions(eslintRcPath, isDev) {
 function getBabelLoaderOptions(babelRcPath) {
   const options = {
     babelrc: true,
-    cacheDirectory: true,
     presets: []
   };
 
   const hasBabelRc = fs.existsSync(babelRcPath);
   if (!hasBabelRc) {
+    options.babelrc = false;
     options.presets.push(require.resolve('@deity/babel-preset-falcon-client'));
   }
 
@@ -99,31 +108,6 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
       }
     }
   ];
-}
-
-function addVendorsBundle(modules = []) {
-  const moduleFilter = new RegExp(
-    `[\\\\/]node_modules[\\\\/](${modules.map(x => x.replace('/', '[\\\\/]')).join('|')})[\\\\/]`
-  );
-
-  return (config, { target, dev }) => {
-    if (target === 'web') {
-      config.output.filename = dev ? 'static/js/[name].js' : 'static/js/[name].[hash:8].js';
-
-      config.optimization = {
-        splitChunks: {
-          cacheGroups: {
-            vendor: {
-              name: 'vendors',
-              enforce: true,
-              chunks: 'initial',
-              test: moduleFilter
-            }
-          }
-        }
-      };
-    }
-  };
 }
 
 /**
@@ -349,6 +333,10 @@ module.exports = (target = 'web', options, buildConfig) => {
   }
 
   if (IS_WEB) {
+    config.entry = {
+      client: [falconClientPolyfills, paths.ownClientIndexJs]
+    };
+    config.optimization = {};
     config.plugins = [
       new VirtualModulesPlugin({ [paths.ownWebmanifest]: '{}' }),
       new FalconI18nLocalesPlugin({
@@ -367,16 +355,7 @@ module.exports = (target = 'web', options, buildConfig) => {
     ];
 
     if (IS_DEV) {
-      // Setup Webpack Dev Server on port 3001 and
-      // specify our client entry point /client/index.js
-      config.entry = {
-        client: [
-          // We ship a few polyfills by default but only include them if React is being placed in the default path.
-          !clientEnv.raw.REACT_BUNDLE_PATH && falconClientPolyfills,
-          require.resolve('razzle-dev-utils/webpackHotDevClient'),
-          paths.ownClientIndexJs
-        ].filter(Boolean)
-      };
+      config.entry.client.push(require.resolve('razzle-dev-utils/webpackHotDevClient'));
 
       // Configure our client bundles output. Not the public path is to 3001.
       config.output = {
@@ -384,7 +363,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         publicPath: `http://${host}:${devServerPort}/`,
         pathinfo: true,
         libraryTarget: 'var',
-        filename: 'static/js/bundle.js',
+        filename: 'static/js/[name].js',
         chunkFilename: 'static/js/[name].chunk.js',
         devtoolModuleFilenameTemplate: info => path.resolve(info.resourcePath).replace(/\\/g, '/')
       };
@@ -423,26 +402,14 @@ module.exports = (target = 'web', options, buildConfig) => {
         new webpack.HotModuleReplacementPlugin({ multiStep: true }),
         new webpack.DefinePlugin(clientEnv.stringified)
       ];
-
-      config.optimization = {};
     } else {
-      // Specify production entry point (/client/index.js)
-      config.entry = {
-        client: [
-          // We ship a few polyfills by default but only include them if React is being placed in the default path.
-          // If you are doing some vendor bundling, you'll need to require the @deity/falcon-client/build-utils/polyfills on your own.
-          !clientEnv.raw.REACT_BUNDLE_PATH && falconClientPolyfills,
-          paths.ownClientIndexJs
-        ].filter(Boolean)
-      };
-
       // Specify the client output directory and paths. Notice that we have
       // changed the publiPath to just '/' from http://localhost:3001. This is because
       // we will only be using one port in production.
       config.output = {
         path: paths.appBuildPublic,
         publicPath: options.publicPath,
-        filename: 'static/js/bundle.[chunkhash:8].js',
+        filename: 'static/js/[name].[hash:8].js',
         chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
         libraryTarget: 'var'
       };
@@ -499,10 +466,43 @@ module.exports = (target = 'web', options, buildConfig) => {
             // Use multi-process parallel running to improve the build speed
             // Default number of concurrent runs: os.cpus().length - 1
             parallel: true,
-            cache: true, // Enable file caching
             sourceMap: !!devtool
           })
-        ]
+        ],
+        splitChunks: {
+          cacheGroups: {
+            polyfills: {
+              name: 'polyfills',
+              enforce: true,
+              priority: 100,
+              chunks: 'initial',
+              test: moduleFilter(['core-js', 'object-assign', 'whatwg-fetch'])
+            },
+            vendor: {
+              name: 'vendors',
+              enforce: true,
+              chunks: 'initial',
+              test: moduleFilter([
+                'apollo-cache-inmemory',
+                'apollo-client',
+                'apollo-link',
+                'apollo-link-http',
+                'apollo-link-state',
+                'apollo-utilities',
+                'i18next',
+                'i18next-xhr-backend',
+                'react',
+                'react-apollo',
+                'react-dom',
+                'react-google-tag-manager',
+                `react-helmet`,
+                'react-router',
+                'react-router-dom',
+                'history'
+              ])
+            }
+          }
+        }
       };
     }
   }
@@ -517,27 +517,6 @@ module.exports = (target = 'web', options, buildConfig) => {
       compiledIn: true
     })
   ];
-
-  addVendorsBundle([
-    'apollo-cache-inmemory',
-    'apollo-client',
-    'apollo-link',
-    'apollo-link-http',
-    'apollo-link-state',
-    'apollo-utilities',
-    'node-fetch',
-    'i18next',
-    'i18next-xhr-backend',
-    '@deity/falcon-client/build-utils/polyfills',
-    'react',
-    'react-apollo',
-    'react-dom',
-    'react-google-tag-manager',
-    `react-helmet`,
-    'react-router',
-    'react-router-dom',
-    'history'
-  ])(config, { target, dev: IS_DEV });
 
   // Apply razzle plugins, if they are present in razzle.config.js
   if (Array.isArray(plugins)) {

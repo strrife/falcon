@@ -4,7 +4,8 @@ module.exports = (/* api */) => {
       [
         require.resolve('@babel/preset-env'),
         {
-          modules: false
+          modules: false,
+          useBuiltIns: 'entry'
         }
       ],
       require.resolve('@babel/preset-react')
@@ -22,10 +23,8 @@ module.exports = (/* api */) => {
           useBuiltIns: true
         }
       ],
-      // Adds syntax support for import()
-      require.resolve('babel-plugin-syntax-dynamic-import'),
-      // Add support for async/await
-      require.resolve('@babel/plugin-transform-runtime'),
+      require.resolve('@babel/plugin-syntax-dynamic-import'), // Adds syntax support for import()
+      require.resolve('@babel/plugin-transform-runtime'), // Add support for async/await
       // Add support for loadable components SSR
       // https://www.smooth-code.com/open-source/loadable-components/docs/server-side-rendering/
       require.resolve('@loadable/babel-plugin'),
