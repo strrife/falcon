@@ -47,7 +47,7 @@ export function ApolloClient(config = {}) {
     headers
   });
 
-  return new Apollo(
+  const client = new Apollo(
     deepMerge.all(
       [
         {
@@ -62,4 +62,8 @@ export function ApolloClient(config = {}) {
       { clone: false }
     )
   );
+
+  client.onResetStore(() => cache.writeData({ data: clientState.data }));
+
+  return client;
 }

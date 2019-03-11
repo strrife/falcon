@@ -14,7 +14,9 @@ export default initialConfig =>
           useGETForQueries: false
         },
         connectToDevTools: process.env.NODE_ENV !== 'production',
-        defaultOptions: {},
+        defaultOptions: {
+          __typename: 'ApolloClientDefaultOptions'
+        },
         queryDeduplication: true
       },
       googleTagManager: {
