@@ -476,7 +476,7 @@ module.exports = (target = 'web', options, buildConfig) => {
               enforce: true,
               priority: 100,
               chunks: 'initial',
-              test: moduleFilter(['core-js', 'object-assign', 'whatwg-fetch'])
+              test: moduleFilter(['core-js', 'object-assign', 'whatwg-fetch', 'pwacompat'])
             },
             vendor: {
               name: 'vendors',
