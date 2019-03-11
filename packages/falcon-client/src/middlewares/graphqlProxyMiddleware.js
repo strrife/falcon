@@ -18,7 +18,7 @@ export default serverUri => async ctx => {
   // https://github.com/bitinn/node-fetch/blob/master/src/headers.js#L120
   // node-fetch returns `set-cookie` headers concatenated with ", " (which is invalid)
   // for this reason we get a list of "raw" headers and set them to the response
-  ctx.set('set-cookie', result.headers.raw()['set-cookie']);
+  ctx.set('set-cookie', result.headers.raw()['set-cookie'] || []);
 
   ctx.status = result.status;
   ctx.body = result.body;
