@@ -33,7 +33,6 @@ export const Option = themed({
 
   defaultTheme: {
     option: {
-      p: 'xs',
       fontSize: 'sm',
       css: {
         fontFamily: 'inherit'
