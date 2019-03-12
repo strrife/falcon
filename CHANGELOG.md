@@ -10,6 +10,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 - added `.browserslistrc` support for javascript, fixed #293 ([#306](https://github.com/deity-io/falcon/pull/306))
 - added support for normal module replacement ([#328](https://github.com/deity-io/falcon/pull/328))
+- HTML5 autocomplete on checkout address form ([#330](https://github.com/deity-io/falcon/pull/330))
 - introduced `graphqlProxy` config flag to control GraphQL proxy via Falcon-Client route ([#337](https://github.com/deity-io/falcon/pull/337))
 
 ### Normal Module Override Webpack Plugin v0.0.1
