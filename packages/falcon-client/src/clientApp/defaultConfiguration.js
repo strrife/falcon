@@ -6,6 +6,7 @@ export default initialConfig =>
       __typename: 'ClientConfig',
       logLevel: 'error',
       serverSideRendering: true,
+      graphqlProxy: true,
       apolloClient: {
         __typename: 'ApolloClientConfig',
         httpLink: {
