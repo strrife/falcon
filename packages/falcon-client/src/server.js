@@ -3,7 +3,6 @@ import serve from 'koa-static';
 import helmet from 'koa-helmet';
 import Router from 'koa-router';
 import compress from 'koa-compress';
-import url from 'url';
 import Logger from '@deity/falcon-logger';
 import error500 from './middlewares/error500Middleware';
 import serverTiming from './middlewares/serverTimingMiddleware';
@@ -25,25 +24,8 @@ export function Server({ App, clientApolloSchema, bootstrap, webpackAssets, port
   const publicDir = process.env.PUBLIC_DIR;
   const router = new Router();
 
-  const httpLinkUri = config.apolloClient && config.apolloClient.httpLink && config.apolloClient.httpLink.uri;
-  if (httpLinkUri) {
-    const httpUrl = url.parse(httpLinkUri);
-    const serverUri = url.format({
-      protocol: httpUrl.protocol,
-      auth: httpUrl.auth,
-      host: httpUrl.host
-    });
-
-    // Switching Apollo Http Link URI to the "localhost" address
-    // so ApolloClient would be talking to the "own" host
-    config.apolloClient.httpLink.uri = url.format({
-      pathname: httpUrl.pathname,
-      protocol: 'http',
-      port,
-      hostname: 'localhost'
-    });
-
-    router.all(httpUrl.pathname, graphqlProxy(serverUri));
+  if (config.graphqlProxy) {
+    graphqlProxy(config, router, port);
   }
 
   router.get('/sw.js', serve(publicDir, { maxage: 0 }));

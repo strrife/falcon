@@ -5,6 +5,7 @@ export default initialConfig =>
     {
       logLevel: 'error',
       serverSideRendering: true,
+      graphqlProxy: true,
       apolloClient: {
         httpLink: {
           uri: 'http://localhost:4000/graphql',
