@@ -64,7 +64,7 @@ export function ApolloClient(config = {}) {
     )
   );
 
-  client.onResetStore(() => cache.writeData({ data: clientState.data }));
+  client.onResetStore(() => inMemoryCache.writeData({ data: clientState.data }));
 
   return client;
 }
