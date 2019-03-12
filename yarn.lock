@@ -3340,6 +3340,14 @@ apollo-link-schema@^1.1.1, apollo-link-schema@^1.1.2:
     apollo-link "^1.2.9"
     tslib "^1.9.3"
 
+apollo-link-state@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.npmjs.org/apollo-link-state/-/apollo-link-state-0.4.2.tgz#ac00e9be9b0ca89eae0be6ba31fe904b80bbe2e8"
+  integrity sha512-xMPcAfuiPVYXaLwC6oJFIZrKgV3GmdO31Ag2eufRoXpvT0AfJZjdaPB4450Nu9TslHRePN9A3quxNueILlQxlw==
+  dependencies:
+    apollo-utilities "^1.0.8"
+    graphql-anywhere "^4.1.0-alpha.0"
+
 apollo-link@^1.0.0, apollo-link@^1.2.3, apollo-link@^1.2.9:
   version "1.2.9"
   resolved "https://registry.npmjs.org/apollo-link/-/apollo-link-1.2.9.tgz#40a8f0b90716ce3fd6beb27b7eae1108b92e0054"
@@ -3451,7 +3459,7 @@ apollo-tracing@0.3.3:
     apollo-server-env "2.2.0"
     graphql-extensions "0.3.3"
 
-apollo-utilities@1.2.1, apollo-utilities@^1.0.1, apollo-utilities@^1.2.1:
+apollo-utilities@1.2.1, apollo-utilities@^1.0.1, apollo-utilities@^1.0.8, apollo-utilities@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/apollo-utilities/-/apollo-utilities-1.2.1.tgz#1c3a1ebf5607d7c8efe7636daaf58e7463b41b3c"
   integrity sha512-Zv8Udp9XTSFiN8oyXOjf6PMHepD4yxxReLsl6dPUy5Ths7jti3nmlBzZUOxuTWRwZn0MoclqL7RQ5UEJN8MAxg==
@@ -3460,7 +3468,7 @@ apollo-utilities@1.2.1, apollo-utilities@^1.0.1, apollo-utilities@^1.2.1:
     ts-invariant "^0.2.1"
     tslib "^1.9.3"
 
-app-manifest-loader@^2.2.0:
+app-manifest-loader@2.2.3:
   version "2.2.3"
   resolved "https://registry.npmjs.org/app-manifest-loader/-/app-manifest-loader-2.2.3.tgz#4c51467d9e6070e8066547cd0c209757b82cda56"
   integrity sha512-9sutddD5lpPzp4nePRkw9oG51aBIY4+YbbfkLZaErTPexkLewX6myp0KVtKfeH5Z7vfjX4aPT03eB4RKT9Jb1g==
@@ -8238,6 +8246,14 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   version "4.1.15"
   resolved "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.15.tgz#ffb703e1066e8a0eeaa4c8b80ba9253eeefbfb00"
   integrity sha512-6uHUhOPEBgQ24HM+r6b/QwWfZq+yiFcipKFrOFiBEnWdy5sdzYoi+pJeQaPI5qOLRFqWmAXUPQNsielzdLoecA==
+
+graphql-anywhere@^4.1.0-alpha.0:
+  version "4.2.1"
+  resolved "https://registry.npmjs.org/graphql-anywhere/-/graphql-anywhere-4.2.1.tgz#1f7c3a3d9004dbe81b1c553d7fd1ef2e16e14a85"
+  integrity sha512-4zlzTFzixGXtIYjX7BiXQOGhQ5yQVohj/EKNxUHUTAR7lHnCmrXU17gGtZ+108l9TkoHNfc33ieJ9U8trnHE1w==
+  dependencies:
+    apollo-utilities "^1.2.1"
+    tslib "^1.9.3"
 
 graphql-extensions@0.3.3:
   version "0.3.3"
@@ -13708,6 +13724,11 @@ punycode@^1.2.4, punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.npmjs.org/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
   integrity sha1-wNWmOycYgArY4esPpSachN1BhF4=
+
+pwacompat@2.0.8:
+  version "2.0.8"
+  resolved "https://registry.npmjs.org/pwacompat/-/pwacompat-2.0.8.tgz#9efced79003c4cf2b658dcc7f66ce71c9f8ad046"
+  integrity sha512-rJmmvZnsIISddbcqS4TTDqHtZQ+wp+B4ldR3h1MTjNr4BhxDRBKnfuYjPXoKUWDLvaurx4MDOOiSsni5+Oh8pw==
 
 q@^1.1.2, q@^1.5.1:
   version "1.5.1"
