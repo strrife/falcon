@@ -20,7 +20,14 @@ const i18nConfig = { ...config.i18n, lng: language };
 const renderApp = config.serverSideRendering ? hydrate : render;
 
 loadableReady()
-  .then(() => apolloClientWeb({ initialState, clientApolloSchema, apolloClientConfig: config.apolloClient }))
+  .then(() =>
+    apolloClientWeb({
+      initialState,
+      graphqlProxy: config.graphqlProxy,
+      clientApolloSchema,
+      apolloClientConfig: config.apolloClient
+    })
+  )
   .then(apolloClient => i18nFactory(i18nConfig).then(i18next => ({ apolloClient, i18next })))
   .then(({ apolloClient, i18next }) => {
     const markup = (

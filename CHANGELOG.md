@@ -9,6 +9,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon Client next
 
 - added support for normal module replacement ([#328](https://github.com/deity-io/falcon/pull/328))
+- introduced `graphqlProxy` config flag to control GraphQL proxy via Falcon-Client route ([#337](https://github.com/deity-io/falcon/pull/337))
 
 ### Normal Module Override Webpack Plugin v0.0.1
 

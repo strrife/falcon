@@ -33,6 +33,7 @@ export function ApolloClient(config = {}) {
     initialState = {},
     clientState = {},
     headers,
+    graphqlProxy = false,
     apolloClientConfig,
     cache
   } = config;
@@ -40,7 +41,8 @@ export function ApolloClient(config = {}) {
   const addTypename = false; // disabling 'addTypename' option to avoid manual setting "__typename" field
 
   let { uri } = httpLink;
-  if (isBrowser) {
+  if (isBrowser && graphqlProxy) {
+    // for "graphqlProxy" flag - use a relative route for client-side requests
     uri = url.parse(httpLink.uri).pathname;
   }
 
