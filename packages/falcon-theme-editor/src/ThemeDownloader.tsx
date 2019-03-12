@@ -1,14 +1,13 @@
 import React from 'react';
 import { diff } from 'deep-object-diff';
-import stringifyObject from 'stringify-object';
 import { Theme, Input, FlexLayout, Icon, Button, Text } from '@deity/falcon-ui';
 
 const CREATE_THEME_IMPORT = "import { createTheme } from '@deity/falcon-ui';";
 
 function getThemeCustomizations(initialTheme: Theme, currentTheme: Theme) {
-  const customizations = stringifyObject(diff(initialTheme as object, currentTheme), { indent: '  ' });
+  const themeDiff = diff(initialTheme as object, currentTheme);
 
-  return customizations;
+  return JSON.stringify(themeDiff, null, 2);
 }
 
 function withExports(customizationsSerialized: string) {
