@@ -200,7 +200,7 @@ export const RadioFormField: React.SFC<FormFieldProps> = props => {
 
   return (
     <Field name={name} validate={validators} {...rest}>
-      {({ form, field, label, error }) => (
+      {({ field, label }) => (
         <RadioFormFieldLayout {...themableProps}>
           <Radio {...field} value={value} checked={value === field.value} gridArea={FormFieldArea.input} />
           <FlexLayout alignItems="center" gridArea={FormFieldArea.label}>
