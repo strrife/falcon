@@ -3,19 +3,23 @@ import { themed } from '../theme';
 export const Select = themed({
   tag: 'select',
 
+  defaultProps: {
+    invalid: false
+  },
+
   defaultTheme: {
     select: {
       py: 'xs',
       px: 'sm',
       border: 'regular',
       borderRadius: 'medium',
-      borderColor: 'secondaryDark',
 
-      css: ({ theme }) => ({
+      css: ({ theme, invalid }) => ({
         display: 'block',
         fontFamily: 'inherit',
         lineHeight: 'inherit',
         color: 'inherit',
+        borderColor: invalid ? theme.colors.error : theme.colors.secondaryDark,
         width: '100%',
         outline: 'none',
         position: 'relative',
