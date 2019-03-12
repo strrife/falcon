@@ -62,7 +62,11 @@ export default ({ config, clientStates = {} }) => {
       clientState: mergedClientState,
       extraLinks: [profileMiddleware, errorLink],
       headers: {
-        cookie: ctx.get('cookie')
+        // Setting proper headers from the current visitor
+        'accept-encoding': ctx.get('accept-encoding'),
+        'accept-language': ctx.get('accept-language'),
+        cookie: ctx.get('cookie'),
+        'user-agent': ctx.get('user-agent')
       },
       apolloClientConfig: config
     });
