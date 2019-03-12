@@ -1,10 +1,13 @@
+import '@babel/polyfill';
 import 'app-webmanifest';
+
 import React from 'react';
 import { hydrate, render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo';
 import { loadableReady } from '@loadable/component';
 import { I18nProvider } from '@deity/falcon-i18n';
+import url from 'url';
 import { apolloClientWeb, apolloStateToObject } from './service';
 import HtmlHead from './components/HtmlHead';
 import App, { clientApolloSchema } from './clientApp';
@@ -19,8 +22,19 @@ const { language } = window.I18NEXT_STATE || {};
 const i18nConfig = { ...config.i18n, lng: language };
 const renderApp = config.serverSideRendering ? hydrate : render;
 
+if (config.graphqlProxy) {
+  // for "graphqlProxy" flag - use a relative route for client-side requests
+  config.apolloClient.httpLink.uri = url.parse(config.apolloClient.httpLink.uri).pathname;
+}
+
 loadableReady()
-  .then(() => apolloClientWeb({ initialState, clientApolloSchema, apolloClientConfig: config.apolloClient }))
+  .then(() =>
+    apolloClientWeb({
+      initialState,
+      clientApolloSchema,
+      apolloClientConfig: config.apolloClient
+    })
+  )
   .then(apolloClient => i18nFactory(i18nConfig).then(i18next => ({ apolloClient, i18next })))
   .then(({ apolloClient, i18next }) => {
     const markup = (

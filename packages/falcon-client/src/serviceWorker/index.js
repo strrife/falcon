@@ -7,7 +7,7 @@ export function register(swPath = '/sw.js') {
   const isHttps = window.location.protocol === 'https:';
   const isLocalHost = window.location.host.match(/(localhost|127.0.0.1)/);
 
-  if (!('serviceWorker' in navigator) || (!isHttps && !isLocalHost)) {
+  if (!isHttps && !isLocalHost) {
     return;
   }
 
@@ -51,9 +51,11 @@ export function unregisterAll() {
 }
 
 export function configureServiceWorker() {
-  if (process.env.NODE_ENV === 'production') {
-    register('/sw.js');
-  } else {
-    unregisterAll();
+  if (window.navigator && 'serviceWorker' in navigator) {
+    if (process.env.NODE_ENV === 'production') {
+      register('/sw.js');
+    } else {
+      unregisterAll();
+    }
   }
 }
