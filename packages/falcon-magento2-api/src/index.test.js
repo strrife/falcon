@@ -177,7 +177,7 @@ describe('Magento2Api', () => {
     expect(resp).toBe(true);
   });
 
-  describe('createSearchParams()', async () => {
+  describe('createSearchParams()', () => {
     it('Should properly create payload for magento', () => {
       const input = {
         filters: [
