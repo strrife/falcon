@@ -487,7 +487,6 @@ module.exports = (target = 'web', options, buildConfig) => {
                 'apollo-client',
                 'apollo-link',
                 'apollo-link-http',
-                'apollo-link-state',
                 'apollo-utilities',
                 'i18next',
                 'i18next-xhr-backend',

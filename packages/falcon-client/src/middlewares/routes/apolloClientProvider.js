@@ -6,15 +6,15 @@ import { ApolloClient } from '../../service';
 /**
  * Apollo Client Provider middleware, sets ApolloClient on ctx.state.client
  * @param {object} config ApolloClient configuration
- * @param {Object.<string, {defaults, resolvers}>} - dictionary of Apollo States.
+ * @param {Object.<string, {data, resolvers}>} - dictionary of Apollo States.
  * @return {function(ctx: object, next: function): Promise<void>} Koa middleware function
  */
 export default ({ config, clientStates = {} }) => {
   const mergedClientState = Object.keys(clientStates).reduce(
     (result, key) => {
       if (clientStates[key]) {
-        if (clientStates[key].defaults) {
-          result.defaults = { ...result.defaults, ...clientStates[key].defaults };
+        if (clientStates[key].data) {
+          result.data = { ...result.data, ...clientStates[key].data };
         }
         if (clientStates[key].resolvers) {
           result.resolvers = { ...result.resolvers, ...clientStates[key].resolvers };
@@ -23,7 +23,7 @@ export default ({ config, clientStates = {} }) => {
 
       return result;
     },
-    { defaults: {}, resolvers: {} }
+    { data: {}, resolvers: {} }
   );
 
   return async (ctx, next) => {
@@ -62,7 +62,11 @@ export default ({ config, clientStates = {} }) => {
       clientState: mergedClientState,
       extraLinks: [profileMiddleware, errorLink],
       headers: {
-        cookie: ctx.get('cookie')
+        // Setting proper headers from the current visitor
+        'accept-encoding': ctx.get('accept-encoding'),
+        'accept-language': ctx.get('accept-language'),
+        cookie: ctx.get('cookie'),
+        'user-agent': ctx.get('user-agent')
       },
       apolloClientConfig: config
     });
