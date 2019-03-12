@@ -334,7 +334,7 @@ module.exports = (target = 'web', options, buildConfig) => {
 
   if (IS_WEB) {
     config.entry = {
-      client: [falconClientPolyfills, paths.ownClientIndexJs]
+      client: [falconClientPolyfills, require.resolve('pwacompat'), paths.ownClientIndexJs]
     };
     config.optimization = {};
     config.plugins = [
@@ -476,7 +476,7 @@ module.exports = (target = 'web', options, buildConfig) => {
               enforce: true,
               priority: 100,
               chunks: 'initial',
-              test: moduleFilter(['core-js', 'object-assign', 'whatwg-fetch'])
+              test: moduleFilter(['core-js', 'object-assign', 'whatwg-fetch', 'pwacompat'])
             },
             vendor: {
               name: 'vendors',
@@ -487,7 +487,6 @@ module.exports = (target = 'web', options, buildConfig) => {
                 'apollo-client',
                 'apollo-link',
                 'apollo-link-http',
-                'apollo-link-state',
                 'apollo-utilities',
                 'i18next',
                 'i18next-xhr-backend',

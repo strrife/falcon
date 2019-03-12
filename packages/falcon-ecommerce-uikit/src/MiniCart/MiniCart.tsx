@@ -91,7 +91,7 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
           onClick={() =>
             removeCartItem({
               variables: { input: { itemId: product.itemId } },
-              optimisticResponse: { removeCartItem: { itemId: product.itemId } }
+              optimisticResponse: { removeCartItem: { __typename: 'RemoveCartItemResponse', itemId: product.itemId } }
             })
           }
         >
