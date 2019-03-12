@@ -3,33 +3,26 @@ import fetch from 'node-fetch';
 import url from 'url';
 
 // GraphQL Proxy to Falcon-Server
-export default (config, router, port) => {
+export default (config, port) => {
   const { apolloClient } = config;
   const httpLinkUri = apolloClient && apolloClient.httpLink && apolloClient.httpLink.uri;
-
-  const httpUrl = url.parse(httpLinkUri);
-  const serverUri = url.format({
-    protocol: httpUrl.protocol,
-    auth: httpUrl.auth,
-    host: httpUrl.host
-  });
 
   // Switching Apollo Http Link URI to the "localhost" address
   // so ApolloClient would be talking to the "own" host
   config.apolloClient.httpLink.uri = url.format({
-    pathname: httpUrl.pathname,
     protocol: 'http',
+    hostname: 'localhost',
     port,
-    hostname: 'localhost'
+    pathname: '/graphql'
   });
 
-  Logger.debug(`Registering api proxy for "${httpUrl.pathname}"`);
+  Logger.debug(`Registering api proxy for "/graphql" to "${httpLinkUri}"`);
 
-  router.all(httpUrl.pathname, async ctx => {
-    const { request, originalUrl } = ctx;
+  return async ctx => {
+    const { request } = ctx;
     const { method, header } = request;
 
-    const result = await fetch(`${serverUri}${originalUrl}`, {
+    const result = await fetch(httpLinkUri, {
       method,
       headers: header,
       body: method === 'POST' ? ctx.req : undefined
@@ -46,5 +39,5 @@ export default (config, router, port) => {
 
     ctx.status = result.status;
     ctx.body = result.body;
-  });
+  };
 };

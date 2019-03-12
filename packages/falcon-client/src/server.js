@@ -25,7 +25,7 @@ export function Server({ App, clientApolloSchema, bootstrap, webpackAssets, port
   const router = new Router();
 
   if (config.graphqlProxy) {
-    graphqlProxy(config, router, port);
+    router.all('/graphql', graphqlProxy(config, port));
   }
 
   router.get('/sw.js', serve(publicDir, { maxage: 0 }));
