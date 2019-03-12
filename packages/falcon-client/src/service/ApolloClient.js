@@ -4,7 +4,6 @@ import { withClientState } from 'apollo-link-state';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import fetch from 'node-fetch';
-import url from 'url';
 import deepMerge from 'deepmerge';
 
 /**
@@ -33,24 +32,16 @@ export function ApolloClient(config = {}) {
     initialState = {},
     clientState = {},
     headers,
-    graphqlProxy = false,
     apolloClientConfig,
     cache
   } = config;
   const { httpLink, connectToDevTools, ...restApolloClientConfig } = apolloClientConfig;
   const addTypename = false; // disabling 'addTypename' option to avoid manual setting "__typename" field
 
-  let { uri } = httpLink;
-  if (isBrowser && graphqlProxy) {
-    // for "graphqlProxy" flag - use a relative route for client-side requests
-    uri = url.parse(httpLink.uri).pathname;
-  }
-
   const inMemoryCache = cache || new InMemoryCache({ addTypename }).restore(initialState);
   const apolloClientStateLink = withClientState({ cache: inMemoryCache, ...clientState });
   const apolloHttpLink = createHttpLink({
     ...httpLink,
-    uri,
     fetch,
     credentials: 'include',
     headers

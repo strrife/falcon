@@ -2,7 +2,7 @@ import { CachePersistor } from 'apollo-cache-persist';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloClient } from './';
 
-export const apolloClientWeb = ({ initialState, graphqlProxy, clientApolloSchema, apolloClientConfig }) => {
+export const apolloClientWeb = ({ initialState, clientApolloSchema, apolloClientConfig }) => {
   const cache = new InMemoryCache({ addTypename: false });
   const cachePersistor = new CachePersistor({
     cache,
@@ -21,7 +21,6 @@ export const apolloClientWeb = ({ initialState, graphqlProxy, clientApolloSchema
     const apolloClient = new ApolloClient({
       isBrowser: true,
       clientState: clientApolloSchema,
-      graphqlProxy,
       initialState,
       apolloClientConfig,
       cache
