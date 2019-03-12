@@ -97,6 +97,8 @@ export type CheckoutLogicProps = WithApolloClient<{
 }>;
 
 class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogicState> {
+  private isComponentMounted: boolean; // eslint-disable-line react/sort-comp
+
   constructor(props: CheckoutLogicProps) {
     super(props);
     this.state = {
@@ -106,9 +108,24 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
       availablePaymentMethods: [],
       availableShippingMethods: []
     };
+    this.isComponentMounted = false;
+  }
+
+  componentDidMount() {
+    this.isComponentMounted = true;
+  }
+
+  componentWillUnmount() {
+    this.isComponentMounted = false;
   }
 
   setPartialState(partial: any, callback?: () => void) {
+    // make sure that setState() is not called after component has been unmounted - we need that guard
+    // as ApolloClient sometimes call finish callback twice. In that case CheckoutLogic might already be
+    // unmounted when ApolloClient calls the finish callback again - that would print React's warning
+    if (!this.isComponentMounted) {
+      return;
+    }
     this.setState(
       state =>
         // "deep replace" - replace old values with new, don't merge these
