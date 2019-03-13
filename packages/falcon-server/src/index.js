@@ -227,8 +227,8 @@ class FalconServer {
         }
       });
     });
-    this.router.get('/endpoints', ctx => {
-      ctx.body = endpoints;
+    this.router.get('/config', ctx => {
+      ctx.body = { endpoints };
     });
 
     this.app.use(this.router.routes()).use(this.router.allowedMethods());
