@@ -16,7 +16,7 @@ export default (config, port) => {
     pathname: '/graphql'
   });
 
-  Logger.debug(`Registering api proxy for "/graphql" to "${httpLinkUri}"`);
+  Logger.debug(`Registering GraphQL Proxy for "/graphql" to "${httpLinkUri}"`);
 
   return async ctx => {
     const result = await ProxyRequest(httpLinkUri, ctx);

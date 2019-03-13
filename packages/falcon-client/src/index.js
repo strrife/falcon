@@ -1,7 +1,7 @@
 import http from 'http';
 import Logger from '@deity/falcon-logger';
 
-function falconWebServer(port) {
+async function falconWebServer(port) {
   const { Server } = require('./server');
   const app = require('./clientApp');
   const bootstrap = require('./clientApp/bootstrap');
@@ -30,37 +30,41 @@ function falconWebServer(port) {
   });
 }
 
-const port = parseInt(process.env.PORT, 10) || 3000;
-const server = falconWebServer(port);
-let currentWebServerHandler = server.callback();
+(async () => {
+  const port = parseInt(process.env.PORT, 10) || 3000;
+  const server = await falconWebServer(port);
+  let currentWebServerHandler = server.callback();
 
-// Use `app#callback()` method here instead of directly
-// passing `app` as an argument to `createServer` (or use `app#listen()` instead)
-// @see https://github.com/koajs/koa/blob/master/docs/api/index.md#appcallback
-const httpServer = http.createServer(currentWebServerHandler);
-httpServer.listen(port, error => {
-  if (error) {
-    Logger.error(error);
-  }
-
-  Logger.log(`🚀  Client ready at http://localhost:${port}`);
-  server.started();
-});
-
-if (module.hot) {
-  Logger.log('✅  Server-side HMR Enabled!');
-
-  module.hot.accept(['./server', './clientApp', './clientApp/bootstrap'], () => {
-    Logger.log('🔁  HMR: Reloading server...');
-
-    try {
-      const newHandler = falconWebServer(port).callback();
-      httpServer.removeListener('request', currentWebServerHandler);
-      httpServer.on('request', newHandler);
-      currentWebServerHandler = newHandler;
-      Logger.log('✅  HMR: Server reloaded.');
-    } catch (error) {
-      Logger.log('🛑  HMR: Reloading server failed, syntax error!');
+  // Use `app#callback()` method here instead of directly
+  // passing `app` as an argument to `createServer` (or use `app#listen()` instead)
+  // @see https://github.com/koajs/koa/blob/master/docs/api/index.md#appcallback
+  const httpServer = http.createServer(currentWebServerHandler);
+  httpServer.listen(port, error => {
+    if (error) {
+      Logger.error(error);
     }
+
+    Logger.log(`🚀  Client ready at http://localhost:${port}`);
+    server.started();
   });
-}
+
+  if (module.hot) {
+    Logger.log('✅  Server-side HMR Enabled!');
+
+    module.hot.accept(['./server', './clientApp', './clientApp/bootstrap'], () => {
+      Logger.log('🔁  HMR: Reloading server...');
+
+      (async () => {
+        try {
+          const newHandler = await falconWebServer(port).callback();
+          httpServer.removeListener('request', currentWebServerHandler);
+          httpServer.on('request', newHandler);
+          currentWebServerHandler = newHandler;
+          Logger.log('✅  HMR: Server reloaded.');
+        } catch (error) {
+          Logger.log('🛑  HMR: Reloading server failed, syntax error!');
+        }
+      })();
+    });
+  }
+})();
