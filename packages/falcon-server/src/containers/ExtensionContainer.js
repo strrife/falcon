@@ -14,7 +14,6 @@ const BaseContainer = require('./BaseContainer');
 /**
  * @typedef {object} BackendConfig
  * @property {string[]} locales
- * @property {string} defaultLocale
  */
 
 /**
@@ -122,7 +121,6 @@ module.exports = class ExtensionContainer extends BaseContainer {
       }
 
       return {
-        defaultLocale: prev.defaultLocale || current.defaultLocale,
         locales: mergedLocales
       };
     }, {});
