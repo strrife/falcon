@@ -71,7 +71,7 @@ export const PLACE_ORDER = gql`
 `;
 
 export type PlaceOrderSuccessfulResult = {
-  orderId: number;
+  orderId: string;
   orderRealId: string;
 };
 

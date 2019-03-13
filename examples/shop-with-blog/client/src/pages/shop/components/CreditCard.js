@@ -56,15 +56,21 @@ class CreditCard extends React.Component {
             inputComponent={Input}
             cardNumberInputProps={{
               value: this.state.number,
-              onChange: ({ target: { value: number } }) => this.setState({ number })
+              onChange: ({ target: { value: number } }) => {
+                this.setState({ number });
+              }
             }}
             cardExpiryInputProps={{
               value: this.state.expiry,
-              onChange: ({ target: { value: expiry } }) => this.setState({ expiry })
+              onChange: ({ target: { value: expiry } }) => {
+                this.setState({ expiry });
+              }
             }}
             cardCVCInputProps={{
               value: this.state.cvc,
-              onChange: ({ target: { value: cvc } }) => this.setState({ cvc })
+              onChange: ({ target: { value: cvc } }) => {
+                this.setState({ cvc });
+              }
             }}
           />
         </Box>

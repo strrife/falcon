@@ -261,7 +261,7 @@ type PlaceOrderSuccessfulResult {
   """
   Increment order id
   """
-  orderId: Int
+  orderId: String
   """
   like 0000001 - used for reference by customer
   """

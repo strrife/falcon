@@ -1,15 +1,18 @@
 const config = require('config');
-const { endpoints } = require('@deity/falcon-client/src/bootstrap/endpoints');
+const { bootstrap } = require('@deity/falcon-client/src/bootstrap');
+
+const redirects = {
+  payment: {
+    success: '/checkout/confirmation',
+    failure: '/checkout/failure',
+    cancel: '/cart'
+  }
+};
 
 export default {
   config: { ...config },
   // onServerCreated: server => { console.log('created'); },
   // onServerInitialized: server => { console.log('initialized'); },
   // onServerStarted: server => { console.log('started'); }
-  onRouterCreated: router =>
-    endpoints(router, config.apolloClient.httpLink.uri, {
-      success: '/checkout/confirmation',
-      cancel: '/checkout/cancel',
-      failure: '/cart'
-    })
+  onRouterCreated: async router => bootstrap(router, config.apolloClient.httpLink.uri, redirects)
 };
