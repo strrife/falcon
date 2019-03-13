@@ -106,6 +106,7 @@ function removePreviousBuildAssets(appBuild, appBuildPublic) {
  * @property {object} i18n i18n falcon client webpack plugin configuration
  * @property {string[]} envToBuildIn env vars to build in bundle
  * @property {(function|string)[]} plugins razzle compatible plugins
+ * @property {object} moduleOverride dictionary of module names to override
  */
 
 /**
@@ -119,7 +120,8 @@ function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {
     useWebmanifest: false,
     i18n: {},
     envToBuildIn: [],
-    plugins: []
+    plugins: [],
+    moduleOverride: {}
   };
 
   const buildConfigPath = paths.resolveApp(buildConfigFileName);
