@@ -13,7 +13,7 @@ import DynamicRoute from './components/DynamicRoute';
 import defaultConfiguration from './clientApp/defaultConfiguration';
 
 describe('Server', () => {
-  it('Should properly call eventHandlers', () => {
+  it('Should properly call eventHandlers', async () => {
     const onServerCreatedMock = jest.fn();
     const onServerInitializedMock = jest.fn();
     const onServerStartedMock = jest.fn();
@@ -33,7 +33,7 @@ describe('Server', () => {
       onRouterInitialized: onRouterInitializedMock
     };
 
-    const server = Server({
+    const server = await Server({
       App: () => <div />,
       bootstrap,
       clientApolloSchema: {
@@ -123,7 +123,7 @@ describe('Server', () => {
       }
     };
 
-    const serverHandler = Server({
+    const server = await Server({
       App,
       bootstrap,
       clientApolloSchema,
@@ -138,7 +138,8 @@ describe('Server', () => {
           }
         }
       }
-    }).callback();
+    });
+    const serverHandler = server.callback();
 
     const response = await supertest(serverHandler).get('/');
 
