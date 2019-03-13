@@ -1711,7 +1711,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     try {
-      response = await this.performCartAction('/place-order', 'put', Object.assign({}, input));
+      response = await this.performCartAction('/place-order', 'put', input);
     } catch (e) {
       // todo: use new version of error handler
       if (e.statusCode === 400) {
@@ -1722,12 +1722,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     const orderData = response.data;
-    if (orderData.extensionAttributes && orderData.extensionAttributes.adyen) {
-      orderData.adyen = orderData.extensionAttributes.adyen;
-      delete orderData.extensionAttributes.adyen;
-      response.data = orderData;
-    }
-
     this.session.orderId = orderData.orderId;
 
     if (!this.session.orderId) {
@@ -1823,14 +1817,17 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Order>} last order data
    */
   async lastOrder() {
-    const { orderId } = this.session;
+    const { orderId, customerToken = {} } = this.session;
 
     if (!orderId) {
       Logger.warn(`${this.name} Trying to fetch order info without order id`);
       return {};
     }
 
-    const response = await this.get(`/orders/${orderId}`, {}, { context: { useAdminToken: true } });
+    const isLoggedIn = customerToken && customerToken.token;
+    const orderEndpoint = isLoggedIn ? `/orders/${orderId}/order-info` : `/guest-orders/${orderId}/order-info`;
+
+    const response = await this.get(orderEndpoint, {}, { context: { useAdminToken: !isLoggedIn } });
     response.data = this.convertKeys(response.data);
     response.data.paymentMethodName = response.data.payment.method;
 

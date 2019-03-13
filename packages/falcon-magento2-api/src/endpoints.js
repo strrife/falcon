@@ -2,6 +2,7 @@ const { EndpointManager } = require('@deity/falcon-server-env');
 const url = require('url');
 const get = require('lodash/get');
 const set = require('lodash/set');
+const Logger = require('@deity/falcon-logger');
 
 module.exports = class MagentoEndpoints extends EndpointManager {
   constructor(params) {
@@ -9,6 +10,7 @@ module.exports = class MagentoEndpoints extends EndpointManager {
     this.resultHeader = this.config.resultHeader || 'Falcon-Result';
     this.customerTokenSessionPath = this.config.customerTokenSessionPath || 'magento2.customerToken.token';
     this.orderIdSessionPath = this.config.orderIdSessionPath || 'magento2.orderId';
+    this.cartSessionPath = this.config.cartSessionPath || 'magento2.cart';
   }
 
   getEntries() {
@@ -42,18 +44,22 @@ module.exports = class MagentoEndpoints extends EndpointManager {
 
   handlePayPalReturn(isGuest = true) {
     return async ctx => {
-      const { redirect, order_id: orderId } = await this.handlePayPalCallback(ctx, isGuest);
-      ctx.set(this.resultHeader, redirect);
-      set(ctx.session, this.orderIdSessionPath, orderId);
-      ctx.body = {};
+      const result = await this.handlePayPalCallback(ctx, isGuest);
+      if (result.ok) {
+        const body = await result.json();
+        set(ctx.session, this.orderIdSessionPath, body.order_id);
+        set(ctx.session, this.cartSessionPath, undefined);
+        this.setResult(ctx, body.redirect);
+      } else {
+        this.setResult(ctx, 'failure');
+      }
     };
   }
 
   handlePayPalCancel(isGuest = true) {
     return async ctx => {
       await this.handlePayPalCallback(ctx, isGuest);
-      ctx.set(this.resultHeader, 'cancel');
-      ctx.body = {};
+      this.setResult(ctx, 'cancel');
     };
   }
 
@@ -63,14 +69,22 @@ module.exports = class MagentoEndpoints extends EndpointManager {
       protocol: this.config.protocol,
       host: this.config.host,
       pathname: parsedUrl.pathname,
-      search: parsedUrl.search.replace('PayerID', 'PayerId')
+      search: parsedUrl.search
     });
 
-    const result = await this.fetch(targetUrl, {
+    Logger.debug(`Proxying ${ctx.request.url} to ${targetUrl}`);
+
+    return this.fetch(targetUrl, {
       method: ctx.request.method,
       headers: this.getAuthHeaders(ctx, isGuest)
     });
-    return result.json();
+  }
+
+  setResult(ctx, result) {
+    ctx.body = {
+      type: 'payment',
+      result
+    };
   }
 
   /**
