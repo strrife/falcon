@@ -4,12 +4,15 @@ import CreditCardInput from 'react-credit-card-input';
 import { Box, Input, Label } from '@deity/falcon-ui';
 
 class CreditCard extends React.Component {
-  state = {
-    number: '',
-    expiry: '',
-    cvc: '',
-    name: ''
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      number: undefined,
+      expiry: undefined,
+      cvc: undefined,
+      name: undefined
+    };
+  }
 
   componentDidUpdate(prevProps, prevState) {
     const { number: prevNumber, expiry: prevExpiry, cvc: prevCvc, name: prevName } = prevState;

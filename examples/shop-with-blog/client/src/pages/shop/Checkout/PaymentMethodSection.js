@@ -9,10 +9,13 @@ import ErrorList from '../components/ErrorList';
 const PaymentSelector = loadable(() => import(/* webpackChunkName: "shop/payments" */ './PaymentSelector'));
 
 class PaymentSection extends React.Component {
-  state = {
-    selectedPayment: null,
-    additionalData: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedPayment: null,
+      additionalData: null
+    };
+  }
 
   onPaymentSelected = (selectedPayment, additionalData) => this.setState({ selectedPayment, additionalData });
 
