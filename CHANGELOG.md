@@ -4,7 +4,7 @@
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
 
-## Falcon 1.0 RC-2
+## Falcon 1.0 RC-2 (2019-03-13)
 
 ### Falcon Client v0.3.1 (2019-03-13)
 
@@ -18,7 +18,6 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 - fixed issues with address autocompletion on checkout page ([#330](https://github.com/deity-io/falcon/pull/330))
 - fixed configuration of loadable components ([#327](https://github.com/deity-io/falcon/pull/327))
 
-
 ### Normal Module Override Webpack Plugin v0.0.1 (2019-03-13)
 
 - feat: first version of Normal Module Override Webpack Plugin ([#328](https://github.com/deity-io/falcon/pull/328))
@@ -26,7 +25,6 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon Magento2 API v0.3.1 (2019-03-13)
 
 - fixed problems with fetching store configurations for logged in users when Falcon Server is restarted ([#331](https://github.com/deity-io/falcon/pull/331))
-
 
 ---
 
