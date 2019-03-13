@@ -16,6 +16,10 @@
     "lint": "eslint ./",
     "eject": "eject-ts @deity/falcon-ecommerce-uikit src/uikit"
   },
+  "engines": {
+    "node": ">=8.10",
+    "yarn": ">=1.12"
+  },
   "dependencies": {
     "@deity/falcon-client": "^0.3.0",
     "@deity/falcon-i18n": "^0.2.1",
