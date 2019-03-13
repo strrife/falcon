@@ -4,18 +4,29 @@
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
 
-## Falcon next
+## Falcon 1.0 RC-2
 
-### Falcon Client next
+### Falcon Client v0.3.1 (2019-03-13)
 
 - added `.browserslistrc` support for javascript, fixed #293 ([#306](https://github.com/deity-io/falcon/pull/306))
 - added support for normal module replacement ([#328](https://github.com/deity-io/falcon/pull/328))
 - HTML5 autocomplete on checkout address form ([#330](https://github.com/deity-io/falcon/pull/330))
 - introduced `graphqlProxy` config flag to control GraphQL proxy via Falcon-Client route ([#337](https://github.com/deity-io/falcon/pull/337))
+- added possibility to override any component with custom implementation ([#328](https://github.com/deity-io/falcon/pull/328))
+- updated `ApolloClient` to the latest version with built-in local state management ([#333](https://github.com/deity-io/falcon/pull/333))
+- fixed issues with handling cookies when Falcon Server runs under a different domain than Falcon Client ([#337](https://github.com/deity-io/falcon/pull/337))
+- fixed issues with address autocompletion on checkout page ([#330](https://github.com/deity-io/falcon/pull/330))
+- fixed configuration of loadable components ([#327](https://github.com/deity-io/falcon/pull/327))
 
-### Normal Module Override Webpack Plugin v0.0.1
+
+### Normal Module Override Webpack Plugin v0.0.1 (2019-03-13)
 
 - feat: first version of Normal Module Override Webpack Plugin ([#328](https://github.com/deity-io/falcon/pull/328))
+
+### Falcon Magento2 API v0.3.1 (2019-03-13)
+
+- fixed problems with fetching store configurations for logged in users when Falcon Server is restarted ([#331](https://github.com/deity-io/falcon/pull/331))
+
 
 ---
 
