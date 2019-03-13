@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
-import { Box, H2, Button, Divider, Icon } from '@deity/falcon-ui';
+import { Box, H2, H4, Button, Divider, Icon } from '@deity/falcon-ui';
 import {
   CheckoutLogic,
   CartQuery,
@@ -68,6 +68,12 @@ const checkoutLayout = {
       'details article': {
         paddingLeft: theme.spacing.xxl,
         paddingRight: theme.spacing.xxl
+      },
+      redirect: {
+        paddingBottom: theme.spacing.xxl
+      },
+      'redirect h4': {
+        textAlign: 'center'
       }
     })
   }
@@ -167,7 +173,17 @@ class CheckoutWizard extends React.Component {
 
     if (result) {
       if (result.url) {
-        return <Test3dSecure {...result} />;
+        return (
+          <Box defaultTheme={checkoutLayout}>
+            <Box gridArea={CheckoutArea.checkout} as="redirect" position="relative">
+              <H4 fontSize="md" mb="md">
+                Redirecting to the external Payment Gateway...
+              </H4>
+              <Loader visible />
+              <Test3dSecure {...result} />
+            </Box>
+          </Box>
+        );
       } else if (result.orderId) {
         // order has been placed successfully so we show confirmation
         return <Redirect to="/checkout/confirmation" />;
