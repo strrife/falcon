@@ -208,6 +208,9 @@ export const deityGreenTheme = createTheme({
     input: {
       height: 'xl'
     },
+    select: {
+      height: 'xl'
+    },
 
     label: {
       fontSize: 'xs',
