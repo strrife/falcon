@@ -1,6 +1,6 @@
 import Logger from '@deity/falcon-logger';
-import fetch from 'node-fetch';
 import url from 'url';
+import { ProxyRequest } from '../service/ProxyRequest';
 
 // GraphQL Proxy to Falcon-Server
 export default (config, port) => {
@@ -19,24 +19,7 @@ export default (config, port) => {
   Logger.debug(`Registering api proxy for "/graphql" to "${httpLinkUri}"`);
 
   return async ctx => {
-    const { request } = ctx;
-    const { method, header } = request;
-
-    const result = await fetch(httpLinkUri, {
-      method,
-      headers: header,
-      body: method === 'POST' ? ctx.req : undefined
-    });
-
-    result.headers.forEach((value, name) => {
-      ctx.set(name, value);
-    });
-
-    // https://github.com/bitinn/node-fetch/blob/master/src/headers.js#L120
-    // node-fetch returns `set-cookie` headers concatenated with ", " (which is invalid)
-    // for this reason we get a list of "raw" headers and set them to the response
-    ctx.set('set-cookie', result.headers.raw()['set-cookie'] || []);
-
+    const result = await ProxyRequest(httpLinkUri, ctx);
     ctx.status = result.status;
     ctx.body = result.body;
   };
