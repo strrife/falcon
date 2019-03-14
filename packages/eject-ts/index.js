@@ -36,7 +36,7 @@ async function eject(packageToEject, targetDir) {
   const targetDirFullPath = path.join(process.cwd(), targetDir);
   const appSrc = path.join(process.cwd(), 'src');
   // assumption is that resolvedPackageDir points to dist folder that is one level deep inside root package dir
-  // and based on that assumption we can retreive package json and src dir
+  // and based on that assumption we can retrieve package json and src dir
   const resolvedPackageDir = path.dirname(require.resolve(packageToEject));
   const resolvedPackagePackageJsonPath = path.join(resolvedPackageDir, '../package.json');
   const resolvedPackagePackageJsonDependencies = require(resolvedPackagePackageJsonPath).dependencies;
@@ -58,20 +58,20 @@ async function eject(packageToEject, targetDir) {
   // copy source typescript files to target dir
   fs.copySync(packageSrcFiles, targetDirFullPath, { filter: filterOnlyTSSourceFiles });
 
-  // retreive all copied TS files metadata
+  // retrieve all copied TS files metadata
   const ejectedFilesMeta = klawSync(targetDirFullPath, { nodir: true });
   // once files are copied then we transform each of them by removing TS types
   // while preserving original formatting and changing extension to .js
   convertToJs(ejectedFilesMeta);
 
-  // retreive all project  files that can have imports to package being ejected
+  // retrieve all project  files that can have imports to package being ejected
   const appFilesMeta = klawSync(appSrc, { nodir: true, filter: filterOnlyAppJsFiles(targetDir) });
 
   // and then replace imports inside them
   replaceImports(appFilesMeta, packageToEject, targetDir);
 
   // as a final step install dependencies of package being ejected to project where it's ejected
-  // this logic fails when using yarn workspaces - https://github.com/yarnpkg/yarn/issues/4812
+  // this logic fails when using yarn workspace - https://github.com/yarnpkg/yarn/issues/4812
   const dependenciesToInstall = Object.keys(resolvedPackagePackageJsonDependencies).map(
     packageName => `${packageName}@${resolvedPackagePackageJsonDependencies[packageName]}`
   );
@@ -88,7 +88,7 @@ async function eject(packageToEject, targetDir) {
       chalk.green(
         `
          It appears that you've run eject command while using yarn workspaces in your project,
-         hence intallation failed due to known yarn issue (https://github.com/yarnpkg/yarn/issues/4812).
+         hence installation failed due to known yarn issue (https://github.com/yarnpkg/yarn/issues/4812).
          Package has been ejected, but if you'd have troubles running the project after it anyway, try running yarn install in the root dir.`
       )
     );
@@ -107,7 +107,7 @@ function convertToJs(ejectedFilesMeta) {
       plugins: [[require.resolve('@babel/plugin-transform-typescript'), { isTSX: true }], pluginRecast]
     });
 
-    // run prettier on transformed JS as recast preserves formatting such as whitespaces, but formats bit diferently thant prettier
+    // run prettier on transformed JS as recast preserves formatting such as whitespaces, but formats bit differently thant prettier
     const transformedContents = prettier.format(result.code, prettierOptions);
 
     // write transformed code to file
