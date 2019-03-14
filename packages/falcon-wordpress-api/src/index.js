@@ -83,7 +83,6 @@ module.exports = class WordpressApi extends ApiDataSource {
       }, {});
 
       this.wpConfig.locales = Object.keys(this.languageMap) || [];
-      this.wpConfig.defaultLocale = this.wpConfig.locales.find(x => this.languageMap[x] === this.baseLanguage);
     }
 
     return this.wpConfig;

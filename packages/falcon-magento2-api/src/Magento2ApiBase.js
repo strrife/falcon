@@ -71,7 +71,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     }));
     this.storeConfigMap = _.keyBy(activeStoreConfigs, 'code');
     this.magentoConfig.locales = _.uniq(activeStoreConfigs.map(x => x.locale));
-    this.magentoConfig.defaultLocale = activeStoreConfigs.find(x => x.code === 'default').locale;
 
     activeStoreWebsites.forEach(storeWebsite => {
       const groups = [];
