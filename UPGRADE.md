@@ -38,6 +38,11 @@ where `xxxxxx` should be changed to a proper name of the patch.
 
 Next, follow steps 2, 3 and 4 to install required dependencies.
 
+## Falcon 1.0-rc to 1.0-rc2
+
+Patch for this update can be found [here](https://github.com/deity-io/falcon/releases/download/v1.0-rc2/falcon-update-100rc-100rc2.patch).
+
+
 ## Falcon 0.3.0 to 1.0-rc
 
 Patch for this update can be found [here](https://github.com/deity-io/falcon/releases/download/v1.0-rc/falcon-update-030-100rc.patch).
