@@ -64,7 +64,7 @@ async function eject(packageToEject, targetDir) {
   // while preserving original formatting and changing extension to .js
   convertToJs(ejectedFilesMeta);
 
-  // retrieve all project  files that can have imports to package being ejected
+  // retrieve all project files that can have imports to package being ejected
   const appFilesMeta = klawSync(appSrc, { nodir: true, filter: filterOnlyAppJsFiles(targetDir) });
 
   // and then replace imports inside them
