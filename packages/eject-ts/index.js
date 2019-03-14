@@ -104,7 +104,7 @@ function convertToJs(ejectedFilesMeta) {
     const fileContents = fs.readFileSync(filePath, 'utf8');
     // babel transforms Typescript to JS using recast to preserve as much original formatting as possible
     const result = babel.transformSync(fileContents, {
-      plugins: [['@babel/plugin-transform-typescript', { isTSX: true }], pluginRecast]
+      plugins: [[require.resolve('@babel/plugin-transform-typescript'), { isTSX: true }], pluginRecast]
     });
 
     // run prettier on transformed JS as recast preserves formatting such as whitespaces, but formats bit diferently thant prettier
@@ -126,10 +126,13 @@ function replaceImports(appFilesMeta, originalImport, replacementImport) {
     // run babel transforms that preserve formatting while replacing imports
     const result = babel.transformSync(fileContents, {
       plugins: [
-        '@babel/plugin-syntax-jsx',
-        '@babel/plugin-syntax-dynamic-import',
-        '@babel/plugin-syntax-class-properties',
-        ['babel-plugin-transform-rename-import', { original: originalImport, replacement: replacementImport }],
+        require.resolve('@babel/plugin-syntax-jsx'),
+        require.resolve('@babel/plugin-syntax-dynamic-import'),
+        require.resolve('@babel/plugin-syntax-class-properties'),
+        [
+          require.resolve('babel-plugin-transform-rename-import'),
+          { original: originalImport, replacement: replacementImport }
+        ],
         pluginRecast
       ]
     });
