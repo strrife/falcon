@@ -11,6 +11,9 @@
   "scripts": {
     "prepare": "node scripts/prepublish.js"
   },
+  "engines": {
+    "node": ">=8.10"
+  },
   "dependencies": {
     "chalk": "2.4.1",
     "commander": "2.19.0",
