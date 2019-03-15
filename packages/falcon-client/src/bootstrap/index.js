@@ -16,8 +16,6 @@ const handleRemoteEndpoints = async (router, serverUrl, endpoints, redirs) => {
   }
 
   try {
-    Logger.debug('Adding endpoints for proxying:', endpoints);
-
     endpoints.forEach(endpoint => {
       // using "endpoint" value as a proxied route name
       router.all(endpoint, async ctx => {
@@ -60,7 +58,7 @@ export const bootstrap = async (router, serverUrl, redirs) => {
   }
 
   if (!serverUrl) {
-    Logger.warn('"serverUrl" must be passed in your "bootstrap.js" file.');
+    Logger.error('"serverUrl" must be passed in your "bootstrap.js" file.');
     return;
   }
 
@@ -76,6 +74,6 @@ export const bootstrap = async (router, serverUrl, redirs) => {
       handleRemoteEndpoints(router, serverUrl, remoteConfig.endpoints, redirs);
     }
   } catch (error) {
-    Logger.warn(`Failed to process remote config from Falcon-Server: ${error.message}`);
+    Logger.error(`Failed to process remote config from Falcon-Server: ${error.message}`);
   }
 };
