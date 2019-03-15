@@ -69,10 +69,7 @@ const checkoutLayout = {
         paddingLeft: theme.spacing.xxl,
         paddingRight: theme.spacing.xxl
       },
-      redirect: {
-        paddingBottom: theme.spacing.xxl
-      },
-      'redirect h4': {
+      '.redirect h4': {
         textAlign: 'center'
       }
     })
@@ -171,28 +168,26 @@ class CheckoutWizard extends React.Component {
 
     const { customerData } = this.props;
 
+    let addresses;
+    let defaultShippingAddress;
+    let defaultBillingAddress;
+    let orderResult = null;
+
     if (result) {
       if (result.url) {
-        return (
-          <Box defaultTheme={checkoutLayout}>
-            <Box gridArea={CheckoutArea.checkout} as="redirect" position="relative">
-              <H4 fontSize="md" mb="md">
-                Redirecting to the external Payment Gateway...
-              </H4>
-              <Loader visible />
-              <Test3dSecure {...result} />
-            </Box>
+        orderResult = (
+          <Box className="redirect">
+            <H4 fontSize="md" mb="md">
+              Redirecting to the external Payment Gateway URL...
+            </H4>
+            <Test3dSecure {...result} />
           </Box>
         );
       } else if (result.orderId) {
         // order has been placed successfully so we show confirmation
-        return <Redirect to="/checkout/confirmation" />;
+        orderResult = <Redirect to="/checkout/confirmation" />;
       }
     }
-
-    let addresses;
-    let defaultShippingAddress;
-    let defaultBillingAddress;
 
     // detect if user is logged in - if so and he has address list then use it for address sections
     if (customerData && customerData.addresses && customerData.addresses.length) {
@@ -224,7 +219,7 @@ class CheckoutWizard extends React.Component {
                   </Box>
                   <Divider gridArea={CheckoutArea.divider} />
                   <Box gridArea={CheckoutArea.checkout} position="relative">
-                    <Loader visible={loading} />
+                    <Loader visible={loading || result} />
                     <CustomerSelector
                       open={currentStep === CHECKOUT_STEPS.EMAIL}
                       onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.EMAIL)}
@@ -295,6 +290,7 @@ class CheckoutWizard extends React.Component {
                     <ErrorList errors={errors.order} />
                     {currentStep === CHECKOUT_STEPS.CONFIRMATION && <Button onClick={placeOrder}>Place order</Button>}
                   </Box>
+                  {orderResult}
                 </Box>
               );
             }}
