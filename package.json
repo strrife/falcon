@@ -48,7 +48,6 @@
     "packages/falcon-magento2-api",
     "packages/falcon-wordpress-api",
     "packages/falcon-payment-plugin",
-    "packages/falcon-proxy-endpoints",
     "packages/payment/falcon-adyen-plugin",
     "packages/payment/falcon-paypal-plugin",
     "packages/falcon-errors",
