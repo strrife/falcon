@@ -10,10 +10,9 @@
     "start:prod": "cross-env NODE_ENV=production node index.js"
   },
   "dependencies": {
-    "@deity/falcon-proxy-endpoints": "^0.0.1",
     "@deity/falcon-blog-extension": "^0.1.3",
     "@deity/falcon-magento2-api": "^0.3.1",
-    "@deity/falcon-server": "^0.1.2",
+    "@deity/falcon-server": "^0.1.3",
     "@deity/falcon-shop-extension": "^0.3.1",
     "@deity/falcon-wordpress-api": "^0.1.3",
     "apollo-env": "0.3.1",
@@ -22,7 +21,7 @@
     "cross-env": "^5.2.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.9"
+    "nodemon": "^1.18.10"
   },
   "resolutions": {
     "apollo-env": "0.3.1"
