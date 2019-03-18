@@ -118,8 +118,8 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
  * @returns {object} webpack config
  */
 module.exports = (target = 'web', options, buildConfig) => {
-  const { env, host, devServerPort, paths } = options;
-  const { useWebmanifest, plugins, modify, i18n, moduleOverride } = buildConfig;
+  const { env, paths } = options;
+  const { devServer, useWebmanifest, plugins, modify, i18n, moduleOverride } = buildConfig;
 
   // Define some useful shorthands.
   const IS_NODE = target === 'node';
@@ -299,14 +299,13 @@ module.exports = (target = 'web', options, buildConfig) => {
 
     config.output = {
       path: paths.appBuild,
-      publicPath: IS_DEV ? `http://${host}:${devServerPort}/` : '/',
+      publicPath: IS_DEV ? `http://${devServer.host}:${devServer.port}/` : '/',
       filename: 'server.js',
       libraryTarget: 'commonjs2'
     };
 
     config.plugins = [
       new webpack.DefinePlugin(clientEnv.stringified),
-      // Prevent creating multiple chunks for the server
       new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })
     ];
 
@@ -360,7 +359,7 @@ module.exports = (target = 'web', options, buildConfig) => {
       // Configure our client bundles output. Not the public path is to 3001.
       config.output = {
         path: paths.appBuildPublic,
-        publicPath: `http://${host}:${devServerPort}/`,
+        publicPath: `http://${devServer.host}:${devServer.port}/`,
         pathinfo: true,
         libraryTarget: 'var',
         filename: 'static/js/[name].js',
@@ -372,19 +371,18 @@ module.exports = (target = 'web', options, buildConfig) => {
       config.devServer = {
         disableHostCheck: true,
         clientLogLevel: 'none',
-        // Enable gzip compression of generated files.
-        compress: true,
+        compress: true, // enable gzip compression of generated files
         // watchContentBase: true,
         headers: { 'Access-Control-Allow-Origin': '*' },
         historyApiFallback: {
           // Paths with dots should still use the history fallback. See https://github.com/facebookincubator/create-react-app/issues/387.
           disableDotRule: true
         },
-        host,
+        host: devServer.host,
+        port: devServer.port,
         hot: true,
         noInfo: true,
         overlay: false,
-        port: devServerPort,
         quiet: true,
         // By default files from `contentBase` will not trigger a page reload.
         // Reportedly, this avoids CPU overload on some systems. https://github.com/facebookincubator/create-react-app/issues/293
@@ -392,8 +390,7 @@ module.exports = (target = 'web', options, buildConfig) => {
           ignored: /node_modules/
         },
         before(app) {
-          // This lets us open files from the runtime error overlay.
-          app.use(errorOverlayMiddleware());
+          app.use(errorOverlayMiddleware()); // this lets us open files from the runtime error overlay.
         }
       };
       // Add client-only development plugins
