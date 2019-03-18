@@ -1754,7 +1754,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       termUrl = url.format({
         protocol: originUrl.protocol,
         host: originUrl.host,
-        pathname: '/checkoutExt/adyen/validate3d/'
+        pathname: url.parse(termUrl).pathname
       });
     }
 

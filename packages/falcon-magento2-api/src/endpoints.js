@@ -14,7 +14,22 @@ module.exports = class MagentoEndpoints extends EndpointManager {
   }
 
   getEntries() {
-    return [...this.getPayPalCallbackEntries()];
+    return [...this.getPayPalCallbackEntries(), ...this.getAdyenCallbackEntries()];
+  }
+
+  getAdyenCallbackEntries() {
+    return [
+      {
+        methods: 'POST',
+        path: '/rest/*/V1/guest-orders/*/adyen-process-validate3d',
+        handler: this.handleAdyenReturn()
+      },
+      {
+        methods: 'POST',
+        path: '/rest/*/V1/orders/*/adyen-process-validate3d',
+        handler: this.handleAdyenReturn(false)
+      }
+    ];
   }
 
   getPayPalCallbackEntries() {
@@ -42,13 +57,25 @@ module.exports = class MagentoEndpoints extends EndpointManager {
     ];
   }
 
+  handleAdyenReturn(isGuest = true) {
+    return async ctx => {
+      const result = await this.handleMagentoCallback(ctx, isGuest);
+      const body = await result.json();
+      if (body.order_id) {
+        set(ctx.session, this.orderIdSessionPath, body.order_id);
+        this.clearCart(ctx);
+        this.setResult(ctx, 'success');
+      }
+    };
+  }
+
   handlePayPalReturn(isGuest = true) {
     return async ctx => {
-      const result = await this.handlePayPalCallback(ctx, isGuest);
+      const result = await this.handleMagentoCallback(ctx, isGuest);
       if (result.ok) {
         const body = await result.json();
         set(ctx.session, this.orderIdSessionPath, body.order_id);
-        set(ctx.session, this.cartSessionPath, undefined);
+        this.clearCart(ctx);
         this.setResult(ctx, body.redirect);
       } else {
         this.setResult(ctx, 'failure');
@@ -58,12 +85,12 @@ module.exports = class MagentoEndpoints extends EndpointManager {
 
   handlePayPalCancel(isGuest = true) {
     return async ctx => {
-      await this.handlePayPalCallback(ctx, isGuest);
+      await this.handleMagentoCallback(ctx, isGuest);
       this.setResult(ctx, 'cancel');
     };
   }
 
-  async handlePayPalCallback(ctx, isGuest) {
+  async handleMagentoCallback(ctx, isGuest) {
     const parsedUrl = url.parse(ctx.request.url);
     const targetUrl = url.format({
       protocol: this.config.protocol,
@@ -76,7 +103,11 @@ module.exports = class MagentoEndpoints extends EndpointManager {
 
     return this.fetch(targetUrl, {
       method: ctx.request.method,
-      headers: this.getAuthHeaders(ctx, isGuest)
+      body: ctx.request.method === 'POST' ? JSON.stringify(ctx.request.body) : undefined,
+      headers: {
+        'Content-Type': 'application/json',
+        ...this.getAuthHeaders(ctx, isGuest)
+      }
     });
   }
 
@@ -105,5 +136,9 @@ module.exports = class MagentoEndpoints extends EndpointManager {
     return {
       Authorization: `Bearer ${token}`
     };
+  }
+
+  clearCart(ctx) {
+    set(ctx.session, this.cartSessionPath, undefined);
   }
 };

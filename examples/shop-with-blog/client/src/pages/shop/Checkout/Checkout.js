@@ -173,7 +173,7 @@ class CheckoutWizard extends React.Component {
     let defaultBillingAddress;
     let orderResult = null;
 
-    if (result) {
+    if (result && Object.keys(result).length) {
       if (result.url) {
         orderResult = (
           <Box className="redirect">

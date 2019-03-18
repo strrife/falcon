@@ -4,14 +4,6 @@
   "logLevel": "info",
   "verboseEvents": false,
   "endpoints": {
-    "payments": {
-      "package": "@deity/falcon-proxy-endpoints",
-      "config": {
-        "protocol": "https",
-        "host": "magento.deity.io",
-        "entries": ["/adyen/*", "/paypal/*", "/checkoutExt/*"]
-      }
-    },
     "magento": {
       "package": "@deity/falcon-magento2-api/src/endpoints",
       "config": {
