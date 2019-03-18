@@ -99,6 +99,17 @@ function removePreviousBuildAssets(appBuild, appBuildPublic) {
   }
 }
 
+function requireOrExit(id) {
+  try {
+    // eslint-disable-next-line
+    return require(id);
+  } catch (e) {
+    clearConsole();
+    Logger.error(`File ${path.basename(id)} is invalid (${id}).`, e);
+    process.exit(1);
+  }
+}
+
 /**
  * @typedef {object} FalconClientBuildConfig
  * @property {boolean} clearConsole if clear console
@@ -115,8 +126,15 @@ function removePreviousBuildAssets(appBuild, appBuildPublic) {
  * @returns {FalconClientBuildConfig} falcon-client build time config
  */
 function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {
-  const configDefaults = {
+  const buildConfigFilePath = paths.resolveApp(buildConfigFileName);
+  const buildConfig = fs.existsSync(buildConfigFilePath) ? requireOrExit(buildConfigFilePath) : {};
+
+  const buildConfigDefaults = {
     clearConsole: true,
+    devServer: {
+      host: 'localhost',
+      port: 3001
+    },
     useWebmanifest: false,
     i18n: {},
     envToBuildIn: [],
@@ -124,19 +142,9 @@ function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {
     moduleOverride: {}
   };
 
-  const buildConfigPath = paths.resolveApp(buildConfigFileName);
-  if (fs.existsSync(buildConfigPath)) {
-    try {
-      // eslint-disable-next-line
-      return deepMerge(configDefaults, require(buildConfigPath), { arrayMerge: (destination, source) => source });
-    } catch (e) {
-      clearConsole();
-      Logger.error(`Invalid falcon-client.build.config.js file, (${buildConfigFileName}).`, e);
-      process.exit(1);
-    }
-  }
+  const config = deepMerge(buildConfigDefaults, buildConfig, { arrayMerge: (destination, source) => source });
 
-  return configDefaults;
+  return config;
 }
 
 function getFullIcuPath() {
