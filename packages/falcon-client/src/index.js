@@ -54,6 +54,9 @@ if (module.hot) {
     Logger.log('🔁  HMR: Reloading server...');
 
     try {
+      delete require.cache[require.resolve('./clientApp/bootstrap')];
+      delete require.cache[require.resolve('app-path/bootstrap')];
+
       const newHandler = falconWebServer(port).callback();
       httpServer.removeListener('request', currentWebServerHandler);
       httpServer.on('request', newHandler);
