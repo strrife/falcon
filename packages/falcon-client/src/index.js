@@ -54,6 +54,7 @@ if (module.hot) {
     Logger.log('🔁  HMR: Reloading server...');
 
     try {
+      // Ensuring a complete reloading of client's config and bootstrap
       delete require.cache[require.resolve('./clientApp/bootstrap')];
       delete require.cache[require.resolve('app-path/bootstrap')];
 
