@@ -335,6 +335,12 @@ module.exports = (target = 'web', options, buildConfig) => {
     config.entry = {
       client: [falconClientPolyfills, require.resolve('pwacompat'), paths.ownClientIndexJs]
     };
+
+    config.output = {
+      path: paths.appBuildPublic,
+      libraryTarget: 'var'
+    };
+
     config.optimization = {};
     config.plugins = [
       new VirtualModulesPlugin({ [paths.ownWebmanifest]: '{}' }),
@@ -356,14 +362,12 @@ module.exports = (target = 'web', options, buildConfig) => {
     if (IS_DEV) {
       config.entry.client.push(require.resolve('razzle-dev-utils/webpackHotDevClient'));
 
-      // Configure our client bundles output. Not the public path is to 3001.
       config.output = {
-        path: paths.appBuildPublic,
-        publicPath: `http://${devServer.host}:${devServer.port}/`,
-        pathinfo: true,
-        libraryTarget: 'var',
+        ...config.output,
+        publicPath: `http://${devServer.host}:${devServer.port}/`, // should point to devServer
         filename: 'static/js/[name].js',
         chunkFilename: 'static/js/[name].chunk.js',
+        pathinfo: true,
         devtoolModuleFilenameTemplate: info => path.resolve(info.resourcePath).replace(/\\/g, '/')
       };
       // Configure webpack-dev-server to serve our client-side bundle from
@@ -400,15 +404,11 @@ module.exports = (target = 'web', options, buildConfig) => {
         new webpack.DefinePlugin(clientEnv.stringified)
       ];
     } else {
-      // Specify the client output directory and paths. Notice that we have
-      // changed the publiPath to just '/' from http://localhost:3001. This is because
-      // we will only be using one port in production.
       config.output = {
-        path: paths.appBuildPublic,
+        ...config.output,
         publicPath: options.publicPath,
         filename: 'static/js/[name].[hash:8].js',
-        chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
-        libraryTarget: 'var'
+        chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js'
       };
 
       config.plugins = [
