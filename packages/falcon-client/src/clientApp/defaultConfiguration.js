@@ -6,12 +6,12 @@ export default initialConfig =>
       __typename: 'ClientConfig',
       logLevel: 'error',
       serverSideRendering: true,
-      graphqlProxy: true,
+      graphqlUrl: 'http://localhost:4000/graphql',
       apolloClient: {
         __typename: 'ApolloClientConfig',
         httpLink: {
           __typename: 'ApolloClientLinkConfig',
-          uri: 'http://localhost:4000/graphql',
+          uri: '/graphql',
           useGETForQueries: false
         },
         connectToDevTools: process.env.NODE_ENV !== 'production',

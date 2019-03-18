@@ -1,7 +1,7 @@
 import http from 'http';
 import Logger from '@deity/falcon-logger';
 
-function falconWebServer(port) {
+function falconWebServer() {
   const { Server } = require('./server');
   const app = require('./clientApp');
   const bootstrap = require('./clientApp/bootstrap');
@@ -25,13 +25,12 @@ function falconWebServer(port) {
     webpackAssets: {
       webmanifest: assetsManifest[''].webmanifest
     },
-    port,
     loadableStats
   });
 }
 
 const port = parseInt(process.env.PORT, 10) || 3000;
-const server = falconWebServer(port);
+const server = falconWebServer();
 let currentWebServerHandler = server.callback();
 
 // Use `app#callback()` method here instead of directly
@@ -54,11 +53,7 @@ if (module.hot) {
     Logger.log('🔁  HMR: Reloading server...');
 
     try {
-      // Ensuring a complete reloading of client's config and bootstrap
-      delete require.cache[require.resolve('./clientApp/bootstrap')];
-      delete require.cache[require.resolve('app-path/bootstrap')];
-
-      const newHandler = falconWebServer(port).callback();
+      const newHandler = falconWebServer().callback();
       httpServer.removeListener('request', currentWebServerHandler);
       httpServer.on('request', newHandler);
       currentWebServerHandler = newHandler;
