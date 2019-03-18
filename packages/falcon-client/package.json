@@ -109,7 +109,7 @@
     "react": "^16.6.3",
     "react-apollo": "2.5.1",
     "react-dom": "^16.6.3",
-    "react-router-dom": "^4.4.0-beta.6"
+    "react-router-dom": "^4.4.0"
   },
   "peerDependencies": {
     "graphql": "^14.1.0",
@@ -119,7 +119,7 @@
     "react": "^16.6.3",
     "react-apollo": "2.5.1",
     "react-dom": "^16.6.3",
-    "react-router-dom": "^4.4.0-beta.6"
+    "react-router-dom": "^4.4.0"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }
