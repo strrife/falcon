@@ -22,12 +22,12 @@ module.exports = class MagentoEndpoints extends EndpointManager {
       {
         methods: 'POST',
         path: '/rest/*/V1/guest-orders/*/adyen-process-validate3d',
-        handler: this.handleAdyenReturn()
+        handler: this.handleReturn()
       },
       {
         methods: 'POST',
         path: '/rest/*/V1/orders/*/adyen-process-validate3d',
-        handler: this.handleAdyenReturn(false)
+        handler: this.handleReturn(false)
       }
     ];
   }
@@ -37,7 +37,7 @@ module.exports = class MagentoEndpoints extends EndpointManager {
       {
         methods: 'GET',
         path: '/rest/*/V1/guest-carts/*/paypal-express-return',
-        handler: this.handlePayPalReturn()
+        handler: this.handleReturn()
       },
       {
         methods: 'GET',
@@ -47,7 +47,7 @@ module.exports = class MagentoEndpoints extends EndpointManager {
       {
         methods: 'GET',
         path: '/rest/*/V1/carts/mine/paypal-express-return',
-        handler: this.handlePayPalReturn(false)
+        handler: this.handleReturn(false)
       },
       {
         methods: 'GET',
@@ -57,29 +57,20 @@ module.exports = class MagentoEndpoints extends EndpointManager {
     ];
   }
 
-  handleAdyenReturn(isGuest = true) {
-    return async ctx => {
-      const result = await this.handleMagentoCallback(ctx, isGuest);
-      const body = await result.json();
-      if (body.order_id) {
-        set(ctx.session, this.orderIdSessionPath, body.order_id);
-        this.clearCart(ctx);
-        this.setResult(ctx, 'success');
-      }
-    };
-  }
-
-  handlePayPalReturn(isGuest = true) {
+  handleReturn(isGuest = true) {
     return async ctx => {
       const result = await this.handleMagentoCallback(ctx, isGuest);
       if (result.ok) {
         const body = await result.json();
-        set(ctx.session, this.orderIdSessionPath, body.order_id);
-        this.clearCart(ctx);
-        this.setResult(ctx, body.redirect);
-      } else {
-        this.setResult(ctx, 'failure');
+        if (body.order_id) {
+          set(ctx.session, this.orderIdSessionPath, body.order_id);
+          this.clearCart(ctx);
+          this.setResult(ctx, body.redirect || 'success');
+          return;
+        }
       }
+
+      this.setResult(ctx, 'failure');
     };
   }
 
