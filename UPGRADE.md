@@ -38,6 +38,37 @@ where `xxxxxx` should be changed to a proper name of the patch.
 
 Next, follow steps 2, 3 and 4 to install required dependencies.
 
+## Falcon 1.0-rc2 to 1.0-rc3
+
+In your falcon-client project - check `apolloClient.httpLink.uri` and `graphqlUrl` (your project may not have this key) config values
+(in `config/default.json` file). If `apolloClient.httpLink.uri` uses a full GraphQL URL and you would like to enable proxying for
+GraphQL server - make the following changes to your config file:
+
+```diff
+ {
++  "graphqlUrl": "http://localhost:4000/graphql",
+   "apolloClient": {
+     "httpLink": {
+-      "uri": "http://localhost:4000/graphql"
++      "uri": "/graphql"
+     }
+   }
+ }
+```
+
+If you wish to use your generated application without GraphQL proxy:
+
+```diff
+ {
++  "graphqlUrl": false,
+   "apolloClient": {
+     "httpLink": {
+       "uri": "http://localhost:4000/graphql"
+     }
+   }
+ }
+```
+
 ## Falcon 1.0-rc to 1.0-rc2
 
 Patch for this update can be found [here](https://github.com/deity-io/falcon/releases/download/v1.0-rc2/falcon-update-100rc-100rc2.patch).

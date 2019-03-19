@@ -40,8 +40,14 @@ export function ApolloClient(config = {}) {
   const inMemoryCache = cache || new InMemoryCache().restore(initialState);
   inMemoryCache.writeData({ data: clientState.data });
 
+  let httpLinkUri = httpLink.uri;
+  if (!isBrowser && clientState.data.config.graphqlUrl) {
+    httpLinkUri = clientState.data.config.graphqlUrl;
+  }
+
   const apolloHttpLink = createHttpLink({
     ...httpLink,
+    uri: httpLinkUri,
     fetch,
     credentials: 'include',
     headers
