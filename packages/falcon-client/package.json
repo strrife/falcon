@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.2.2",
+    "@babel/code-frame": "7.0.0",
     "@babel/polyfill": "7.2.5",
     "@deity/babel-preset-falcon-client": "^0.1.2",
     "@deity/falcon-errors": "^0.1.1",
@@ -60,6 +61,7 @@
     "jest": "24.1.0",
     "jest-extended": "0.11.1",
     "jest-transform-graphql": "^2.1.0",
+    "jest-message-util": "24.5.0",
     "koa": "2.5.3",
     "koa-compress": "^3.0.0",
     "koa-helmet": "^4.0.0",
@@ -77,7 +79,6 @@
     "promise": "^8.0.1",
     "pwacompat": "2.0.8",
     "raf": "^3.4.0",
-    "razzle-dev-utils": "2.4.0",
     "react-dev-utils": "^6.0.4",
     "react-error-overlay": "^2.0.0",
     "react-google-tag-manager": "2.2.1",

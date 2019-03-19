@@ -314,19 +314,17 @@ module.exports = (target = 'web', options, buildConfig) => {
 
     if (IS_DEV) {
       config.watch = true;
-      config.entry.unshift('webpack/hot/poll?300');
 
-      // Pretty format server errors
-      config.entry.unshift('razzle-dev-utils/prettyNodeErrors');
+      config.entry.unshift('webpack/hot/poll?300');
+      config.entry.unshift(require.resolve('./../prettyNodeErrors')); // Pretty format server errors
+
       config.plugins = [
         ...config.plugins,
         new webpack.HotModuleReplacementPlugin(),
-        // Suppress errors to console (we use our own logger)
         new StartServerPlugin({
           name: 'server.js',
           nodeArgs: ['-r', 'source-map-support/register', options.inspect].filter(x => x)
         }),
-        // Ignore assets.json to avoid infinite recompile bug
         new webpack.WatchIgnorePlugin([paths.appManifest])
       ];
     }
@@ -361,7 +359,6 @@ module.exports = (target = 'web', options, buildConfig) => {
     ];
 
     if (IS_DEV) {
-      console.log(require.resolve('./../webpackHotDevClient'));
       config.entry.client.push(require.resolve('./../webpackHotDevClient'));
 
       config.output = {
