@@ -42,7 +42,6 @@ module.exports.startDevServer = async () => {
 
     const options = {
       env: process.env.NODE_ENV,
-      devServerPort: falconConfig.devServerPort,
       inspect: process.argv.find(x => x.match(/--inspect-brk(=|$)/) || x.match(/--inspect(=|$)/)) || undefined,
       paths
     };
@@ -68,7 +67,7 @@ module.exports.startDevServer = async () => {
 
     // Create a new instance of Webpack-dev-server for our client assets.
     const clientDevServer = new WebpackDevServer(clientCompiler, clientConfig.devServer);
-    clientDevServer.listen(options.devServerPort, error => {
+    clientDevServer.listen(falconConfig.devServerPort, error => {
       if (error) {
         Logger.error(error);
       }

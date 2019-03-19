@@ -113,13 +113,13 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
 /**
  * Webpack configuration factory. It's the juice!
  * @param {'web' | 'node' } target target
- * @param {{ env: ('development' | 'production'), host: string, port: number, inspect: string, publicPath: string }} options environment
+ * @param {{ env: ('development' | 'production'), inspect: string, publicPath: string }} options environment
  * @param {object} buildConfig config
  * @returns {object} webpack config
  */
 module.exports = (target = 'web', options, buildConfig) => {
   const { env, paths } = options;
-  const { devServer, useWebmanifest, plugins, modify, i18n, moduleOverride } = buildConfig;
+  const { devServerPort, useWebmanifest, plugins, modify, i18n, moduleOverride } = buildConfig;
 
   // Define some useful shorthands.
   const IS_NODE = target === 'node';
@@ -129,7 +129,8 @@ module.exports = (target = 'web', options, buildConfig) => {
   process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
   const devtool = 'cheap-module-source-map';
 
-  const clientEnv = getClientEnv(target, options, buildConfig.envToBuildIn);
+  const clientEnv = getClientEnv(target, { ...options, devServerPort }, buildConfig.envToBuildIn);
+  const devServerUrl = `http://localhost:${devServerPort}/`;
 
   let config = {
     mode: IS_DEV ? 'development' : 'production',
@@ -299,7 +300,7 @@ module.exports = (target = 'web', options, buildConfig) => {
 
     config.output = {
       path: paths.appBuild,
-      publicPath: IS_DEV ? `http://${devServer.host}:${devServer.port}/` : '/',
+      publicPath: IS_DEV ? devServerUrl : '/',
       filename: 'server.js',
       libraryTarget: 'commonjs2'
     };
@@ -360,18 +361,19 @@ module.exports = (target = 'web', options, buildConfig) => {
     ];
 
     if (IS_DEV) {
-      config.entry.client.push(require.resolve('razzle-dev-utils/webpackHotDevClient'));
+      console.log(require.resolve('./../webpackHotDevClient'));
+      config.entry.client.push(require.resolve('./../webpackHotDevClient'));
 
       config.output = {
         ...config.output,
-        publicPath: `http://${devServer.host}:${devServer.port}/`, // should point to devServer
+        publicPath: devServerUrl, // should point to webpack-dev-server
         filename: 'static/js/[name].js',
         chunkFilename: 'static/js/[name].chunk.js',
         pathinfo: true,
         devtoolModuleFilenameTemplate: info => path.resolve(info.resourcePath).replace(/\\/g, '/')
       };
-      // Configure webpack-dev-server to serve our client-side bundle from
-      // http://${dotenv.raw.HOST}:3001
+
+      // configure webpack-dev-server to serve client-side bundle from http://localhost:${devServerPort}
       config.devServer = {
         disableHostCheck: true,
         clientLogLevel: 'none',
@@ -382,8 +384,8 @@ module.exports = (target = 'web', options, buildConfig) => {
           // Paths with dots should still use the history fallback. See https://github.com/facebookincubator/create-react-app/issues/387.
           disableDotRule: true
         },
-        host: devServer.host,
-        port: devServer.port,
+        host: 'localhost',
+        port: devServerPort,
         hot: true,
         noInfo: true,
         overlay: false,
