@@ -3,7 +3,6 @@ const chalk = require('chalk');
 const Logger = require('@deity/falcon-logger');
 const WebpackDevServer = require('webpack-dev-server-speedy');
 const clearConsole = require('react-dev-utils/clearConsole');
-const { choosePort } = require('react-dev-utils/WebpackDevServerUtils');
 const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react-dev-utils/FileSizeReporter');
 
 const paths = require('./../paths');
@@ -32,8 +31,6 @@ module.exports.startDevServer = async () => {
 
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
   process.env.BABEL_ENV = process.env.NODE_ENV;
-  process.env.HOST = process.env.HOST || 'localhost';
-  process.env.PORT = await choosePort(process.env.HOST, parseInt(process.env.PORT, 10) || 3000);
 
   const fullIcuPath = getFullIcuPath();
   if (fullIcuPath) {
@@ -45,9 +42,7 @@ module.exports.startDevServer = async () => {
 
     const options = {
       env: process.env.NODE_ENV,
-      host: process.env.HOST,
-      port: parseInt(process.env.PORT, 10),
-      devServerPort: parseInt(process.env.PORT, 10) + 1,
+      devServerPort: falconConfig.devServerPort,
       inspect: process.argv.find(x => x.match(/--inspect-brk(=|$)/) || x.match(/--inspect(=|$)/)) || undefined,
       paths
     };
