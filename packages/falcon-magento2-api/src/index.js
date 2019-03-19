@@ -1030,7 +1030,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       };
 
       // Remove guest cart. Magento merges guest cart with cart of authorized user so we'll have to refresh it
-      delete this.session.cart;
+      this.removeCartData();
       // make sure that cart is correctly loaded for signed in user
       await this.ensureCart();
 
@@ -1056,7 +1056,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   async signOut() {
     /* Remove logged in customer data */
     delete this.session.customerToken;
-    delete this.session.cart;
+    this.removeCartData();
 
     return true;
   }
@@ -1733,6 +1733,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     if (orderData.extensionAttributes && orderData.extensionAttributes.adyenRedirect) {
       return this.handleAdyen3dSecure(orderData.extensionAttributes.adyenRedirect);
     }
+    this.removeCartData();
 
     return response.data;
   }

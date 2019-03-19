@@ -295,10 +295,6 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           // update cart once order is placed successfully
           refetchQueries: ['Cart', 'Orders'],
           awaitRefetchQueries: true,
-          // when refetchQueries and awaitRefetchQueries are set then we cannot use promise
-          // because it's not called (Apollo's bug), but we can update state based on
-          // update() callback
-          update: (_, resp) => handleResponse(resp),
           variables: {
             input: {
               email: this.state.values.email,

@@ -173,7 +173,7 @@ class CheckoutWizard extends React.Component {
     let defaultBillingAddress;
     let orderResult = null;
 
-    if (result && Object.keys(result).length) {
+    if (!loading && result) {
       if (result.url) {
         orderResult = (
           <Box className="redirect">
@@ -201,8 +201,8 @@ class CheckoutWizard extends React.Component {
         {({ countries }) => (
           <CartQuery>
             {({ cart }) => {
-              // cart is empty so redirect user to the homepage
-              if (cart.itemsQty === 0) {
+              // cart is empty and it's not a "placeOrder" result so redirect user to the homepage
+              if (!loading && !orderResult && cart.itemsQty === 0) {
                 return <Redirect to="/" />;
               }
 
