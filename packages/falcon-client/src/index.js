@@ -1,7 +1,7 @@
 import http from 'http';
 import Logger from '@deity/falcon-logger';
 
-async function falconWebServer(port) {
+async function falconWebServer() {
   const { Server } = require('./server');
   const app = require('./clientApp');
   const bootstrap = require('./clientApp/bootstrap');
@@ -25,14 +25,13 @@ async function falconWebServer(port) {
     webpackAssets: {
       webmanifest: assetsManifest[''].webmanifest
     },
-    port,
     loadableStats
   });
 }
 
 (async () => {
   const port = parseInt(process.env.PORT, 10) || 3000;
-  const server = await falconWebServer(port);
+  const server = await falconWebServer();
   let currentWebServerHandler = server.callback();
 
   // Use `app#callback()` method here instead of directly
@@ -56,7 +55,7 @@ async function falconWebServer(port) {
 
       (async () => {
         try {
-          const newHandler = await falconWebServer(port).callback();
+          const newHandler = await falconWebServer().callback();
           httpServer.removeListener('request', currentWebServerHandler);
           httpServer.on('request', newHandler);
           currentWebServerHandler = newHandler;
