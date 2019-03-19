@@ -8,11 +8,12 @@ const redirects = {
     cancel: '/cart'
   }
 };
+const serverUrl = config.graphqlUrl || config.apolloClient.httpLink.uri;
 
 export default {
   config: { ...config },
   // onServerCreated: server => { console.log('created'); },
   // onServerInitialized: server => { console.log('initialized'); },
   // onServerStarted: server => { console.log('started'); }
-  onRouterCreated: async router => bootstrap(router, config.apolloClient.httpLink.uri, redirects)
+  onRouterCreated: async router => bootstrap(router, serverUrl, redirects)
 };
