@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2015-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 // This alternative WebpackDevServer combines the functionality of:
 // https://github.com/webpack/webpack-dev-server/blob/webpack-1/client/index.js
 // https://github.com/webpack/webpack/blob/webpack-1/hot/dev-server.js
@@ -8,7 +15,7 @@
 // https://github.com/glenjamin/webpack-hot-middleware
 
 /* eslint-disable */
-debugger;
+
 const SockJS = require('sockjs-client');
 const stripAnsi = require('strip-ansi');
 const url = require('url');
@@ -16,24 +23,29 @@ const launchEditorEndpoint = require('react-dev-utils/launchEditorEndpoint');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const ErrorOverlay = require('react-error-overlay');
 
+ErrorOverlay.setEditorHandler(errorLocation => {
+  // Keep this sync with errorOverlayMiddleware.js
+  fetch(
+    `${launchEditorEndpoint}?fileName=${window.encodeURIComponent(
+      errorLocation.fileName
+    )}&lineNumber=${window.encodeURIComponent(errorLocation.lineNumber || 1)}&colNumber=${window.encodeURIComponent(
+      errorLocation.colNumber || 1
+    )}`
+  );
+});
+
 // We need to keep track of if there has been a runtime error.
 // Essentially, we cannot guarantee application state was not corrupted by the
 // runtime error. To prevent confusing behavior, we forcibly reload the entire
 // application. This is handled below when we are notified of a compile (code
 // change).
-// See https://github.com/facebookincubator/create-react-app/issues/3096
+// See https://github.com/facebook/create-react-app/issues/3096
 let hadRuntimeError = false;
 ErrorOverlay.startReportingRuntimeErrors({
-  launchEditorEndpoint: url.format({
-    protocol: window.location.protocol,
-    hostname: window.location.hostname,
-    port: parseInt(process.env.DEV_SERVER_PORT, 10) || window.location.port + 1,
-    pathname: launchEditorEndpoint
-  }),
   onError() {
     hadRuntimeError = true;
   },
-  filename: process.env.REACT_BUNDLE_PATH || '/static/js/bundle.js'
+  filename: '/static/js/bundle.js'
 });
 
 if (module.hot && typeof module.hot.dispose === 'function') {
@@ -57,7 +69,7 @@ const connection = new SockJS(
 // Unlike WebpackDevServer client, we won't try to reconnect
 // to avoid spamming the console. Disconnect usually happens
 // when developer stops the server.
-connection.onclose = function() {
+connection.onclose = () => {
   if (typeof console !== 'undefined' && typeof console.info === 'function') {
     console.info('The development server has disconnected.\nRefresh the page if necessary.');
   }
@@ -90,7 +102,7 @@ function handleSuccess() {
     tryApplyUpdates(() => {
       // Only dismiss it when we're sure it's a hot update.
       // Otherwise it would flicker right before the reload.
-      ErrorOverlay.dismissBuildError();
+      tryDismissErrorOverlay();
     });
   }
 }
@@ -121,19 +133,15 @@ function handleWarnings(warnings) {
     }
   }
 
+  printWarnings();
+
   // Attempt to apply hot updates or reload.
   if (isHotUpdate) {
     tryApplyUpdates(() => {
-      // Only print warnings if we aren't refreshing the page.
-      // Otherwise they'll disappear right away anyway.
-      printWarnings();
       // Only dismiss it when we're sure it's a hot update.
       // Otherwise it would flicker right before the reload.
-      ErrorOverlay.dismissBuildError();
+      tryDismissErrorOverlay();
     });
-  } else {
-    // Print initial warnings immediately.
-    printWarnings();
   }
 }
 
@@ -164,6 +172,12 @@ function handleErrors(errors) {
   // We will reload on next success instead.
 }
 
+function tryDismissErrorOverlay() {
+  if (!hasCompileErrors) {
+    ErrorOverlay.dismissBuildError();
+  }
+}
+
 // There is a newer version of the code available.
 function handleAvailableHash(hash) {
   // Update last known compilation hash.
@@ -171,7 +185,7 @@ function handleAvailableHash(hash) {
 }
 
 // Handle messages from the server.
-connection.onmessage = function(e) {
+connection.onmessage = e => {
   const message = JSON.parse(e.data);
   switch (message.type) {
     case 'hash':
