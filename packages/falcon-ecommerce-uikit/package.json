@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon-ecommerce-uikit",
   "license": "OSL-3.0",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-ecommerce-uikit",
   "main": "dist/falcon-ecommerce-uikit.cjs.js",
   "module": "dist/index.js",
@@ -40,7 +40,9 @@
       "json",
       "node"
     ],
-    "setupTestFrameworkScriptFile": "./../../test/setupTests.js"
+    "setupFilesAfterEnv": [
+      "./../../test/setupTests.js"
+    ]
   },
   "scripts": {
     "clean": "rimraf dist",
@@ -55,10 +57,10 @@
   "peerDependencies": {
     "@deity/falcon-i18n": "0.0.3",
     "@deity/falcon-ui": "0.0.1",
-    "apollo-client": "^2.4.2",
+    "apollo-client": "2.5.1",
     "graphql-tag": "^2.9.2",
     "react": "^16.6.3",
-    "react-apollo": "2.3.2",
+    "react-apollo": "2.5.1",
     "react-dom": "^16.6.3",
     "react-router-dom": "^4.4.0-beta.6"
   },
@@ -67,17 +69,17 @@
   },
   "devDependencies": {
     "@babel/cli": "7.1.5",
-    "@babel/core": "7.1.6",
-    "@babel/plugin-proposal-class-properties": "7.1.0",
-    "@babel/plugin-proposal-object-rest-spread": "7.0.0",
-    "@babel/plugin-transform-runtime": "7.1.0",
-    "@babel/preset-env": "7.1.6",
+    "@babel/core": "7.2.2",
+    "@babel/plugin-proposal-class-properties": "7.3.0",
+    "@babel/plugin-proposal-object-rest-spread": "7.3.2",
+    "@babel/plugin-transform-runtime": "7.2.0",
+    "@babel/preset-env": "7.3.1",
     "@babel/preset-react": "7.0.0",
     "@babel/preset-typescript": "7.1.0",
-    "@deity/falcon-i18n": "^0.2.1",
-    "@deity/falcon-server": "^0.1.2",
-    "@deity/falcon-shop-extension": "^0.3.0",
-    "@deity/falcon-ui": "^0.1.2",
+    "@deity/falcon-i18n": "^0.2.2",
+    "@deity/falcon-server": "^0.1.3",
+    "@deity/falcon-shop-extension": "^0.3.1",
+    "@deity/falcon-ui": "^0.1.3",
     "@types/enzyme": "^3.1.15",
     "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/i18next": "12.1.0",
@@ -88,7 +90,7 @@
     "@types/react-router-dom": "4.3.1",
     "@types/react-test-renderer": "^16.0.3",
     "apollo-cache-inmemory": "^1.3.11",
-    "apollo-client": "^2.4.2",
+    "apollo-client": "2.5.1",
     "apollo-link-schema": "^1.1.2",
     "babel-plugin-annotate-pure-calls": "0.4.0",
     "babel-plugin-graphql-tag": "^1.6.0",
@@ -100,9 +102,9 @@
     "i18next": "^12.1.0",
     "prop-types": "15.6.2",
     "react": "^16.6.3",
-    "react-apollo": "2.3.2",
+    "react-apollo": "2.5.1",
     "react-dom": "^16.6.3",
-    "react-router-dom": "^4.4.0-beta.6",
+    "react-router-dom": "^4.4.0-beta.7",
     "react-test-renderer": "^16.6.3",
     "rimraf": "2.6.2",
     "rollup": "0.66.4",
@@ -113,7 +115,7 @@
     "typescript": "3.2.1"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0",
+    "@babel/runtime": "7.3.1",
     "formik": "^1.3.1",
     "lodash.isequal": "^4.5.0",
     "qs": "^6.6.0",

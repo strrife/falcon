@@ -2,7 +2,7 @@
   "name": "@deity/example-shop-with-blog-client",
   "private": true,
   "license": "OSL-3.0",
-  "version": "0.3.0",
+  "version": "0.3.3",
   "repository": "https://github.com/deity-io/falcon/tree/master/examples/shop-with-blog/client",
   "scripts": {
     "start": "falcon-client start",
@@ -16,13 +16,16 @@
     "lint": "eslint ./",
     "eject": "eject-ts @deity/falcon-ecommerce-uikit src/uikit"
   },
+  "engines": {
+    "node": ">=8.10"
+  },
   "dependencies": {
-    "@deity/falcon-client": "^0.3.0",
-    "@deity/falcon-i18n": "^0.2.1",
-    "@deity/falcon-theme-editor": "^0.1.1",
-    "@deity/falcon-ui": "^0.1.2",
+    "@deity/falcon-client": "^0.3.1",
+    "@deity/falcon-i18n": "^0.2.2",
+    "@deity/falcon-theme-editor": "^0.1.2",
+    "@deity/falcon-ui": "^0.1.3",
     "@loadable/component": "^5.2.1",
-    "apollo-client": "^2.4.2",
+    "apollo-client": "2.5.1",
     "config": "^2.0.1",
     "formik": "^1.3.1",
     "graphql": "14.1.0",
@@ -31,17 +34,17 @@
     "prop-types": "15.6.2",
     "react": "^16.6.3",
     "react-adopt": "^0.6.0",
-    "react-apollo": "2.3.2",
+    "react-apollo": "2.5.1",
     "react-dom": "^16.6.3",
     "react-feather": "^1.1.3",
     "react-helmet": "^5.2.0",
-    "react-router-dom": "^4.4.0-beta.6"
+    "react-router-dom": "4.4.0-beta.6"
   },
   "devDependencies": {
     "@deity/eslint-config-falcon": "^0.1.0",
-    "@deity/falcon-ecommerce-uikit": "^0.3.0",
+    "@deity/falcon-ecommerce-uikit": "^0.3.2",
     "cross-env": "^5.2.0",
-    "eject-ts": "^0.1.0",
+    "eject-ts": "^0.1.2",
     "eslint": "4.19.1",
     "full-icu": "^1.2.1",
     "jest-transform-graphql": "^2.1.0"

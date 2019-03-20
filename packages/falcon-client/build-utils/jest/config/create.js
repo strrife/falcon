@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = paths => {
   let config = {
     rootDir: paths.appPath,
-    setupTestFrameworkScriptFile: fs.existsSync(paths.testsSetup) ? '<rootDir>/src/setupTests.js' : undefined,
+    setupFilesAfterEnv: fs.existsSync(paths.testsSetup) ? ['<rootDir>/src/setupTests.js'] : undefined,
     testEnvironment: 'node',
     testURL: 'http://localhost',
     testMatch: ['<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}', '<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}'],

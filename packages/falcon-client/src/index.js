@@ -1,14 +1,17 @@
 import http from 'http';
 import Logger from '@deity/falcon-logger';
-import { smartRequire } from '@loadable/server/lib/util';
 
 function falconWebServer() {
   const { Server } = require('./server');
   const app = require('./clientApp');
   const bootstrap = require('./clientApp/bootstrap');
-  // eslint-disable-next-line
+  /* eslint-disable */
   const assetsManifest = require(process.env.ASSETS_MANIFEST);
-  const loadableStats = smartRequire(process.env.LOADABLE_STATS);
+  const loadableStats =
+    process.env.NODE_ENV === 'production'
+      ? require(process.env.LOADABLE_STATS)
+      : __non_webpack_require__(process.env.LOADABLE_STATS);
+  /* eslint-enable */
 
   /**
    * Creates an instance of Falcon web server
@@ -26,6 +29,7 @@ function falconWebServer() {
   });
 }
 
+const port = parseInt(process.env.PORT, 10) || 3000;
 const server = falconWebServer();
 let currentWebServerHandler = server.callback();
 
@@ -33,7 +37,6 @@ let currentWebServerHandler = server.callback();
 // passing `app` as an argument to `createServer` (or use `app#listen()` instead)
 // @see https://github.com/koajs/koa/blob/master/docs/api/index.md#appcallback
 const httpServer = http.createServer(currentWebServerHandler);
-const port = parseInt(process.env.PORT, 10) || 3000;
 httpServer.listen(port, error => {
   if (error) {
     Logger.error(error);

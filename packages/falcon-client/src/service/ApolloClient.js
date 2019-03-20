@@ -1,6 +1,5 @@
 import { ApolloLink } from 'apollo-link';
 import Apollo from 'apollo-client';
-import { withClientState } from 'apollo-link-state';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import fetch from 'node-fetch';
@@ -11,13 +10,13 @@ import deepMerge from 'deepmerge';
  * @property {boolean} [isBrowser=false] Boolean flag to determine the current environment
  * @property {object} [initialState={}] Object to restore Cache data from
  * @property {string} [serverUri="http://localhost:4000/graphql"] ApolloServer URL
- * @property {FalconApolloLinkStateConfig} [clientState={}] https://www.apollographql.com/docs/link/links/state.html
+ * @property {FalconApolloClientStateConfig} [clientState={}] Configuration of client state for Apollo
  */
 
 /**
- * @typedef {object} FalconApolloLinkStateConfig
- * @property {object} defaults https://www.apollographql.com/docs/link/links/state.html#defaults
- * @property {object} resolvers https://www.apollographql.com/docs/link/links/state.html#resolver
+ * @typedef {object} FalconApolloClientStateConfig
+ * @property {object} data https://www.apollographql.com/docs/react/essentials/local-state.html#cache-initialization
+ * @property {object} resolvers https://www.apollographql.com/docs/react/essentials/local-state.html#local-resolvers
  */
 
 /**
@@ -35,31 +34,42 @@ export function ApolloClient(config = {}) {
     apolloClientConfig,
     cache
   } = config;
-  const { httpLink, connectToDevTools, ...restApolloClientConfig } = apolloClientConfig;
-  const addTypename = false; // disabling 'addTypename' option to avoid manual setting "__typename" field
 
-  const inMemoryCache = cache || new InMemoryCache({ addTypename }).restore(initialState);
-  const apolloClientStateLink = withClientState({ cache: inMemoryCache, ...clientState });
+  const { httpLink, connectToDevTools, ...restApolloClientConfig } = apolloClientConfig;
+
+  const inMemoryCache = cache || new InMemoryCache().restore(initialState);
+  inMemoryCache.writeData({ data: clientState.data });
+
+  let httpLinkUri = httpLink.uri;
+  if (!isBrowser && clientState.data.config.graphqlUrl) {
+    httpLinkUri = clientState.data.config.graphqlUrl;
+  }
+
   const apolloHttpLink = createHttpLink({
     ...httpLink,
+    uri: httpLinkUri,
     fetch,
     credentials: 'include',
     headers
   });
 
-  return new Apollo(
+  const client = new Apollo(
     deepMerge.all(
       [
         {
-          addTypename,
           ssrMode: !isBrowser,
           cache: inMemoryCache,
-          link: ApolloLink.from([...extraLinks, apolloClientStateLink, apolloHttpLink]),
-          connectToDevTools: isBrowser && connectToDevTools
+          link: ApolloLink.from([...extraLinks, apolloHttpLink]),
+          connectToDevTools: isBrowser && connectToDevTools,
+          resolvers: clientState.resolvers
         },
         restApolloClientConfig
       ],
       { clone: false }
     )
   );
+
+  client.onResetStore(() => cache.writeData({ data: clientState.data }));
+
+  return client;
 }

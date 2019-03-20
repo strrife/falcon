@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon",
   "private": true,
-  "version": "1.0.0-rc",
+  "version": "1.0.0-rc2",
   "license": "OSL-3.0",
   "repository": "git@github.com:deity-io/falcon.git",
   "scripts": {
@@ -22,8 +22,8 @@
     "eslint-plugin-prettier": "2.7.0",
     "husky": "1.1.1",
     "identity-obj-proxy": "3.0.0",
-    "jest": "23.6.0",
-    "jest-extended": "0.11.0",
+    "jest": "24.1.0",
+    "jest-extended": "0.11.1",
     "lerna": "3.4.3",
     "lint-staged": "7.3.0",
     "prettier": "1.15.3",
@@ -52,6 +52,7 @@
     "packages/falcon-dev-tools/babel-preset-falcon-client",
     "packages/falcon-dev-tools/eslint-config-falcon",
     "packages/falcon-dev-tools/falcon-i18n-webpack-plugin",
+    "packages/falcon-dev-tools/normal-module-override-webpack-plugin",
     "packages/eject-ts",
     "examples/shop-with-blog/client",
     "examples/shop-with-blog/server"
@@ -62,6 +63,9 @@
     }
   },
   "resolutions": {
-    "apollo-env": "0.3.1"
+    "apollo-env": "0.3.1",
+    "jest-util": "24.3.0",
+    "react": "16.8.2",
+    "react-router": "4.4.0-beta.6"
   }
 }

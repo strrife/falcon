@@ -3,7 +3,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloClient } from './';
 
 export const apolloClientWeb = ({ initialState, clientApolloSchema, apolloClientConfig }) => {
-  const cache = new InMemoryCache({ addTypename: false });
+  const cache = new InMemoryCache();
   const cachePersistor = new CachePersistor({
     cache,
     storage: window.localStorage,

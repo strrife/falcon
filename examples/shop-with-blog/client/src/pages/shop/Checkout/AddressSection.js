@@ -98,7 +98,7 @@ class AddressSection extends React.Component {
         )}
         {!selectedAvailableAddress && (
           <Formik initialValues={initialAddressValue} onSubmit={this.submitAddress}>
-            {() => <AddressForm id={id} countries={countries} submitLabel={submitLabel} />}
+            {() => <AddressForm id={id} countries={countries} submitLabel={submitLabel} autoCompleteSection={id} />}
           </Formik>
         )}
         {!!selectedAvailableAddress && (
@@ -136,7 +136,7 @@ class AddressSection extends React.Component {
     } else {
       content = (
         <Formik initialValues={initialAddressValue} onSubmit={this.submitAddress}>
-          {() => <AddressForm id={id} countries={countries} submitLabel={submitLabel} />}
+          {() => <AddressForm id={id} countries={countries} submitLabel={submitLabel} autoCompleteSection={id} />}
         </Formik>
       );
     }
