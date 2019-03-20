@@ -9,6 +9,8 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon Client
 
 - changed GraphQL Proxy config in favor of passing GraphQL URL explicitly ([#355](https://github.com/deity-io/falcon/pull/355))
+- feat: (Breaking change) changed the way of configuring PORT for `falcon-client` and `webpackDevServer` ([#364](https://github.com/deity-io/falcon/pull/364))
+
 
 ## Falcon 1.0 RC2 (2019-03-13)
 
