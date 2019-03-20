@@ -1,4 +1,4 @@
-export type PluginComponentProps = {
+export type PaymentPluginComponentProps = {
   config?: {
     [key: string]: any;
   };

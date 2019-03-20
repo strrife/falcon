@@ -1,7 +1,7 @@
 import React from 'react';
-import { PluginModel } from './components/Plugin';
+import { PaymentPluginModel } from './PaymentPlugin';
 
-export class SimplePayment extends PluginModel {
+export class SimplePayment extends PaymentPluginModel {
   componentDidMount() {
     this.props.onPaymentDetailsReady();
   }

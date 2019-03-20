@@ -1,14 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Box, Details, DetailsContent, Text, Button, FlexLayout, Radio, Label, Image } from '@deity/falcon-ui';
+import { Details, DetailsContent, Text, Button, FlexLayout, Radio, Label, Image } from '@deity/falcon-ui';
 import { I18n, T } from '@deity/falcon-i18n';
 import { ConfigQuery, TwoStepWizard } from '@deity/falcon-ecommerce-uikit';
-import AdyenCCPlugin from '@deity/falcon-adyen-plugin';
-import PayPalExpressPlugin from '@deity/falcon-paypal-plugin';
-import { SimplePayment } from '@deity/falcon-payment-plugin';
+import loadable from '@loadable/component';
 import SectionHeader from './CheckoutSectionHeader';
 import ErrorList from '../components/ErrorList';
 import CreditCard from '../components/CreditCard';
+
+const AdyenCCPlugin = loadable(() => import(/* webpackChunkName: "checkout/payments" */ '@deity/falcon-adyen-plugin'));
+const PayPalExpressPlugin = loadable(() =>
+  import(/* webpackChunkName: "checkout/payments" */ '@deity/falcon-paypal-plugin')
+);
+const SimplePayment = loadable(
+  () => import(/* webpackChunkName: "checkout/payments" */ '@deity/falcon-payment-plugin').SimplePayment
+);
 
 const paymentPlugins = {
   adyen_cc: AdyenCCPlugin,
@@ -110,11 +116,9 @@ class PaymentSection extends React.Component {
                       details = (
                         <AdyenCCPlugin config={paymentConfig} onPaymentDetailsReady={onPaymentDetailsReady}>
                           {({ setCreditCardData }) => (
-                            <Box my="md" css={{ width: '100%' }}>
-                              <FlexLayout>
-                                <CreditCard onCompletion={setCreditCardData} />
-                              </FlexLayout>
-                            </Box>
+                            <FlexLayout my="md" css={{ width: '100%' }}>
+                              <CreditCard onCompletion={setCreditCardData} />
+                            </FlexLayout>
                           )}
                         </AdyenCCPlugin>
                       );
