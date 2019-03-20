@@ -126,11 +126,12 @@ module.exports = (target = 'web', options, buildConfig) => {
   const IS_WEB = target === 'web';
   const IS_PROD = env === 'production';
   const IS_DEV = env === 'development';
-  process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
-  const devtool = 'cheap-module-source-map';
 
-  const clientEnv = getClientEnv(target, { ...options, devServerPort }, buildConfig.envToBuildIn);
+  process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
+
+  const devtool = 'cheap-module-source-map';
   const devServerUrl = `http://localhost:${devServerPort}/`;
+  const clientEnv = getClientEnv(target, { ...options, devServerPort }, buildConfig.envToBuildIn);
 
   let config = {
     mode: IS_DEV ? 'development' : 'production',
