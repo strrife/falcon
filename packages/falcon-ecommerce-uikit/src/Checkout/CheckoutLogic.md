@@ -23,7 +23,7 @@ It provides current state of the checkout process and methods for manipulating w
 The following props are provided by `CheckoutLogic`:
 
 - `loading: bool` - flag that indicates that data loading/submitting is in progress
-- `orderId: number` - order id that is set when order has been placed correctly
+- `orderId: string` - order id that is set when order has been placed correctly
 - `values: object` - map containing currently applied values:
   - `email: string` - user's email
   - `shippingAddress: object` - shipping address for the order
