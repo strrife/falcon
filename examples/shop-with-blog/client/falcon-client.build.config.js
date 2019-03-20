@@ -1,5 +1,4 @@
 module.exports = {
-  publicPath: process.env.PUBLIC_PATH || '/',
   devServerPort: 3001,
   clearConsole: false,
   useWebmanifest: true,
