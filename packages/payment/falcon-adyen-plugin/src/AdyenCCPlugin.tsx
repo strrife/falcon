@@ -7,6 +7,7 @@ export type AdyenProps = PluginComponentProps & {
   config: {
     key: string;
   };
+  children: (args: any) => React.ReactNode;
 };
 
 export interface CreditCardData {
@@ -46,7 +47,7 @@ export class AdyenCCPlugin extends PluginModel<AdyenProps> {
     };
     const encryptedData = this.cseInstance.encrypt(creditCard);
     if (encryptedData) {
-      this.props.onPaymentSelected({
+      this.props.onPaymentDetailsReady({
         cc_type: '',
         encrypted_data: encryptedData,
         store_cc: false
@@ -54,15 +55,13 @@ export class AdyenCCPlugin extends PluginModel<AdyenProps> {
     }
   }
 
-  render() {
-    const CreditCardInput = this.props.creditCardInput;
-    const CreditCardInputOutput = (
-      // @ts-ignore
-      <CreditCardInput onCompletion={(creditCardData: CreditCardData) => this.encryptCreditCard(creditCardData)} />
-    );
+  setCreditCardData = (data: CreditCardData) => {
+    this.encryptCreditCard(data);
+  };
 
-    return this.props.template({
-      creditCardInput: CreditCardInputOutput
+  render() {
+    return this.props.children({
+      setCreditCardData: this.setCreditCardData
     });
   }
 }

@@ -38,6 +38,7 @@ class CreditCard extends React.Component {
             my="xs"
             autoComplete="cc-name"
             name="cc-name"
+            value={this.state.name}
             css={({ theme }) => ({
               fontSize: theme.fontSizes.sm
             })}

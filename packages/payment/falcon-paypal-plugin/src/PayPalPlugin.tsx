@@ -5,10 +5,10 @@ export class PayPalPlugin extends PluginModel {
   static icon: string = 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png';
 
   componentDidMount() {
-    this.props.onPaymentSelected();
+    this.props.onPaymentDetailsReady();
   }
 
   render() {
-    return this.props.template({});
+    return null;
   }
 }
