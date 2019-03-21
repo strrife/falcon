@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import url from 'url';
 
 // GraphQL Proxy to Falcon-Server
 export default graphqlUrl => async ctx => {
@@ -7,7 +8,11 @@ export default graphqlUrl => async ctx => {
 
   const result = await fetch(graphqlUrl, {
     method,
-    headers: header,
+    headers: {
+      ...header,
+      // Overriding Host header with the target server
+      host: url.parse(graphqlUrl).host
+    },
     body: method === 'POST' ? ctx.req : undefined
   });
 
