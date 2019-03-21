@@ -1,9 +1,9 @@
 import qs from 'qs';
 import { SearchState, FilterOperator } from './types';
 
-export function searchStateFromURL(url: string) {
+export function searchStateFromURL(url: string): Partial<SearchState> {
   const parts: any = qs.parse(url.replace('?', ''));
-  const searchState: SearchState = {};
+  const searchState: Partial<SearchState> = {};
 
   if (parts.q) {
     searchState.term = parts.q;

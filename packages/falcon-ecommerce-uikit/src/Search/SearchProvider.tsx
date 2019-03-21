@@ -16,8 +16,8 @@ export const SORT_ORDERS_QUERY = gql`
 `;
 
 interface SearchProviderProps extends RouteComponentProps {
-  searchStateToURL?(state: SearchState): string;
-  searchStateFromURL?(url: string): SearchState;
+  searchStateFromURL?(url: string): Partial<SearchState>;
+  searchStateToURL?(state: Partial<SearchState>): string;
   sortOrders: SortOrder[];
 }
 
@@ -25,11 +25,13 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
   static defaultProps = {
     searchStateFromURL,
     searchStateToURL,
+    filters: [],
     sortOrders: []
   };
 
   constructor(props: SearchProviderProps) {
     super(props);
+
     this.state = this.getStateFromURL(props.location);
   }
 
@@ -41,36 +43,26 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
     this.historyUnlisten();
   }
 
-  getStateFromURL(location: Location) {
-    const state = this.props.searchStateFromURL!(location.search);
-    // if sort order was passed in url then make sure that it's available
-    if (state.sort) {
-      const sortOrderItem = this.getFullSortOrderDefinition(state.sort);
-      if (sortOrderItem) {
-        state.sort = sortOrderItem;
-      } else {
-        delete state.sort;
-      }
-    }
+  getStateFromURL(location: Location): SearchState {
+    const { sort, filters, ...rest } = this.props.searchStateFromURL!(location.search);
 
-    return state;
+    return {
+      ...rest,
+      filters: Array.isArray(filters) ? filters : [],
+      // if there's no sort set yet then return first available option (it's considered as default one)
+      sort: (sort && this.getFullSortOrderDefinition(sort)) || this.props.sortOrders[0]
+    };
   }
 
-  getFullSortOrderDefinition(sort: SortOrder) {
-    return this.props.sortOrders.find(item => item.field === sort.field && item.direction === sort.direction);
-  }
+  getFullSortOrderDefinition = (sort: SortOrder) =>
+    this.props.sortOrders.find(item => item.field === sort.field && item.direction === sort.direction);
 
   setFilter = (field: string, value: string[], operator: FilterOperator = 'eq') => {
-    const filters = this.state.filters ? [...this.state.filters] : [];
-    let filter = filters.find(item => item.field === field);
+    const filters = [...this.state.filters];
+    const filter = filters.find(item => item.field === field);
 
     if (!filter) {
-      filter = {
-        operator,
-        field,
-        value
-      };
-      filters.push(filter);
+      filters.push({ field, value, operator });
     } else {
       filter.operator = operator;
       filter.value = value;
@@ -111,15 +103,9 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
   };
 
   removeFilter = (field: string) => {
-    if (!this.state.filters) {
-      return;
-    }
-
-    const filters = this.state.filters.filter(filter => filter.field !== field);
-
     this.updateURL({
       ...this.state,
-      filters
+      filters: this.state.filters.filter(filter => filter.field !== field)
     });
   };
 

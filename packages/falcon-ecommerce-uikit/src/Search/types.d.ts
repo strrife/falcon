@@ -21,8 +21,8 @@ export type FilterInput = {
 
 export type SearchState = {
   term?: string;
-  filters?: FilterInput[];
-  sort?: SortOrder;
+  filters: FilterInput[];
+  sort: SortOrder;
   pagination?: PaginationInput;
 };
 

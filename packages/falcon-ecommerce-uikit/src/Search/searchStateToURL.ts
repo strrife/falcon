@@ -14,7 +14,7 @@ type UrlParts = {
   sort?: string;
 };
 
-export function searchStateToURL(state: SearchState) {
+export function searchStateToURL(state: Partial<SearchState>): string {
   const { term, filters, sort, pagination } = state;
 
   const parts: UrlParts = {};
