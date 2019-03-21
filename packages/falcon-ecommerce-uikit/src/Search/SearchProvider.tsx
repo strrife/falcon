@@ -68,10 +68,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
       filter.value = value;
     }
 
-    this.updateURL({
-      ...this.state,
-      filters
-    });
+    this.updateURL({ ...this.state, filters });
   };
 
   setSortOrder = (sort: SortOrder) => {
@@ -82,41 +79,24 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
       );
     }
 
-    this.updateURL({
-      ...this.state,
-      sort: sortItem
-    });
+    this.updateURL({ ...this.state, sort: sortItem });
   };
 
-  setPagination = (pagination: PaginationInput) => {
-    this.updateURL({
-      ...this.state,
-      pagination
-    });
-  };
+  setPagination = (pagination: PaginationInput) => this.updateURL({ ...this.state, pagination });
 
-  setTerm = (term: string) => {
-    this.updateURL({
-      ...this.state,
-      term
-    });
-  };
+  setTerm = (term: string) => this.updateURL({ ...this.state, term });
 
   removeFilter = (field: string) => {
-    this.updateURL({
-      ...this.state,
-      filters: this.state.filters.filter(filter => filter.field !== field)
-    });
+    const filters = this.state.filters.filter(filter => filter.field !== field);
+    this.updateURL({ ...this.state, filters });
   };
 
-  private historyUnlisten = () => {};
-
-  updateURL(state: SearchState) {
+  private updateURL(state: SearchState) {
     const queryString = this.props.searchStateToURL!(state);
     this.props.history.push(`${this.props.location.pathname}?${queryString}`);
   }
 
-  restoreStateFromURL = (location: any) => {
+  private restoreStateFromURL = (location: any) => {
     const state = this.getStateFromURL(location);
     // state created from URL might be empty so we have to make sure that all the items are correctly
     // removed from current state - setting undefined for non existing value will do the trick
@@ -128,6 +108,8 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
 
     this.setState(state);
   };
+
+  private historyUnlisten = () => {};
 
   render() {
     return (
