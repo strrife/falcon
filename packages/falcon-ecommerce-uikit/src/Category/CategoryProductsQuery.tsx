@@ -24,13 +24,14 @@ export const GET_CATEGORY_PRODUCTS = gql`
           nextPage
         }
         aggregations {
-          key
-          name
+          field
+          type
           buckets {
-            name
             value
             count
+            title
           }
+          title
         }
       }
     }

@@ -149,6 +149,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       throw ex;
     }
     const { data } = response;
+
     return {
       items: response.data.items.map(item => this.reduceProduct({ data: item })),
       aggregations: this.processAggregations(data.filters),
@@ -1784,13 +1785,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   processAggregations(rawAggregations = []) {
     return rawAggregations.map(item => ({
-      key: item.code,
-      name: item.label,
+      field: item.code,
+      type: undefined,
       buckets: item.options.map(option => ({
+        count: option.count,
         value: option.value,
-        name: htmlHelpers.stripHtml(option.label),
-        count: option.count
-      }))
+        title: htmlHelpers.stripHtml(option.label)
+      })),
+      title: item.label
     }));
   }
 };

@@ -27,13 +27,13 @@ export const FiltersPanel: React.SFC<FilterPanelProps> = ({ title, aggregations 
           <FiltersSummary selected={search.state.filters || []} removeFilter={search.removeFilter} />
         )}
         {aggregations
-          .sort((first, second) => (first.name < second.name ? -1 : 1))
+          .sort((first, second) => (first.title < second.title ? -1 : 1))
           .map(item => (
-            <FilterTile key={item.key} title={item.name}>
+            <FilterTile key={item.field} title={item.title}>
               <FilterContent
-                singleMode={item.key === 'cat'}
+                singleMode={item.field === 'cat'}
                 aggregation={item}
-                selected={getSelectedFilterValues(item.key, search.state.filters || [])}
+                selected={getSelectedFilterValues(item.field, search.state.filters || [])}
                 setFilter={search.setFilter}
                 removeFilter={search.removeFilter}
               />

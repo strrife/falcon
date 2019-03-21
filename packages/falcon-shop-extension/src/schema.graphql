@@ -100,9 +100,9 @@ input ShopPageQuery {
 }
 
 input FilterInput {
-  operator: FilterOperator
   field: String
   value: [String]
+  operator: FilterOperator
 }
 
 enum FilterOperator {
@@ -325,15 +325,33 @@ type ProductList {
 }
 
 type Aggregation {
-  key: String
-  name: String
+  field: String
+  type: AggregationType
   buckets: [AggregationBucket]
+  title: String
+}
+
+enum AggregationType {
+  """
+  one from many
+  """
+  single
+
+  """
+  many from many
+  """
+  multiple
+
+  """
+  from to
+  """
+  range
 }
 
 type AggregationBucket {
   value: String
-  name: String
   count: Int
+  title: String
 }
 
 type Stock {

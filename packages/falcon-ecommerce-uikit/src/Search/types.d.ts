@@ -26,14 +26,17 @@ export type SearchState = {
   pagination?: PaginationInput;
 };
 
-export type AggregationBucket = {
-  value: string;
-  name: string;
-  count: number;
+export type Aggregation = {
+  field: string;
+  type: AggregationType;
+  buckets: AggregationBucket[];
+  title: string;
 };
 
-export type Aggregation = {
-  key: string;
-  name: string;
-  buckets: AggregationBucket[];
+export type AggregationType = 'single' | 'multiple' | 'range';
+
+export type AggregationBucket = {
+  value: string;
+  count: number;
+  title: string;
 };

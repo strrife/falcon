@@ -18,7 +18,7 @@ type FilterContentProps = {
 export const FilterContent: React.SFC<FilterContentProps> = ({ aggregation, selected, setFilter, singleMode }) => {
   const updateNormalFilter = (value: string) => {
     if (singleMode) {
-      return setFilter(aggregation.key, [value]);
+      return setFilter(aggregation.field, [value]);
     }
 
     const nextSelected = selected ? [...selected.value] : [];
@@ -26,21 +26,21 @@ export const FilterContent: React.SFC<FilterContentProps> = ({ aggregation, sele
       nextSelected.push(value);
     }
 
-    setFilter(aggregation.key, nextSelected);
+    setFilter(aggregation.field, nextSelected);
   };
 
   const updatePriceFilter = (value: string) => {
     const [from, to] = value.split('-');
-    setFilter(aggregation.key, [from, to], 'range');
+    setFilter(aggregation.field, [from, to], 'range');
   };
 
-  const updateFilter = aggregation.key === 'price' ? updatePriceFilter : updateNormalFilter;
+  const updateFilter = aggregation.field === 'price' ? updatePriceFilter : updateNormalFilter;
 
   return (
     <Box defaultTheme={filterContentTheme}>
       <List>
         {aggregation.buckets.map(item => (
-          <FilterItemValue key={item.name} item={item} onClick={() => updateFilter(item.value)} />
+          <FilterItemValue key={item.title} item={item} onClick={() => updateFilter(item.value)} />
         ))}
       </List>
     </Box>

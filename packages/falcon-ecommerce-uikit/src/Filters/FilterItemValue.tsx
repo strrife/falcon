@@ -25,7 +25,7 @@ type FilterItemValueProps = {
 export const FilterItemValue: React.SFC<FilterItemValueProps> = ({ item, onClick }) => (
   <ListItem defaultTheme={filterItemValueTheme}>
     <Text onClick={onClick}>
-      {item.name} ({item.count})
+      {item.title} ({item.count})
     </Text>
   </ListItem>
 );
