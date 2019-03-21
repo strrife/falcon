@@ -3,18 +3,12 @@ import PropTypes from 'prop-types';
 import { Details, DetailsContent, Text, Button, FlexLayout, Radio, Label, Image } from '@deity/falcon-ui';
 import { I18n, T } from '@deity/falcon-i18n';
 import { ConfigQuery, TwoStepWizard } from '@deity/falcon-ecommerce-uikit';
-import loadable from '@loadable/component';
+import { SimplePayment } from '@deity/falcon-payment-plugin';
+import AdyenCCPlugin from '@deity/falcon-adyen-plugin';
+import PayPalExpressPlugin from '@deity/falcon-paypal-plugin';
 import SectionHeader from './CheckoutSectionHeader';
 import ErrorList from '../components/ErrorList';
 import CreditCard from '../components/CreditCard';
-
-const AdyenCCPlugin = loadable(() => import(/* webpackChunkName: "checkout/payments" */ '@deity/falcon-adyen-plugin'));
-const PayPalExpressPlugin = loadable(() =>
-  import(/* webpackChunkName: "checkout/payments" */ '@deity/falcon-paypal-plugin')
-);
-const SimplePayment = loadable(
-  () => import(/* webpackChunkName: "checkout/payments" */ '@deity/falcon-payment-plugin').SimplePayment
-);
 
 const paymentPlugins = {
   adyen_cc: AdyenCCPlugin,
