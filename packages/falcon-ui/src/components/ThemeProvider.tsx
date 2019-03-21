@@ -6,6 +6,9 @@ import createCache from '@emotion/cache';
 import { createTheme, PropsWithTheme, CSSObject } from '../theme';
 import { Root } from './Root';
 
+// re-export withTheme from emotion so theme can be accessed from code
+export { withTheme } from 'emotion-theming';
+
 // IMPORTANT: those styles get injected as global styles
 // every other reset style can be applied on Root component
 // but not body margin
