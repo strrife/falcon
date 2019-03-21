@@ -2,7 +2,6 @@ const fs = require('fs-extra');
 const path = require('path');
 const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const nodeExternals = require('webpack-node-externals');
 const AssetsPlugin = require('assets-webpack-plugin');
 const StartServerPlugin = require('start-server-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -282,20 +281,6 @@ module.exports = (target = 'web', options, buildConfig) => {
       __dirname: false,
       __filename: false
     };
-
-    // We need to tell webpack what to bundle into our Node bundle.
-    config.externals = [
-      nodeExternals({
-        whitelist: [
-          IS_DEV ? 'webpack/hot/poll?300' : null,
-          /@deity\/falcon-client\//, // webpack needs to compile @deity/falcon-client
-          /\.(eot|woff|woff2|ttf|otf)$/,
-          /\.(svg|png|jpg|jpeg|gif|ico)$/,
-          /\.(mp4|mp3|ogg|swf|webp)$/,
-          /\.(css|scss|sass|sss|less)$/
-        ].filter(x => x)
-      })
-    ];
 
     config.output = {
       path: paths.appBuild,
