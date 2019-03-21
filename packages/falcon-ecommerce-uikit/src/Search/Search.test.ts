@@ -42,7 +42,7 @@ describe('Filters', () => {
 
     it('should correctly deal with search query', () => {
       const input = {
-        query: 'foo'
+        term: 'foo'
       };
 
       expect(searchStateFromURL(searchStateToURL(input))).toEqual(input);

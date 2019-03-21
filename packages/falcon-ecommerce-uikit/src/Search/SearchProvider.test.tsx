@@ -123,7 +123,7 @@ describe('SearchProvider', () => {
 
   it('history change should trigger update of search state', async () => {
     const { history } = wrapper!.find((SearchProvider as any).WrappedComponent).props() as RouteComponentProps;
-    history.push('/?{"query":"foo"}');
+    history.push('/?{"term":"foo"}');
     wrapper!.update();
     expect(searchInfo.state.term).toEqual('foo');
   });
