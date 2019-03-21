@@ -45,7 +45,7 @@ const resolversWithoutErrors = {
       paymentMethods: [samplePaymentMethod]
     }),
     placeOrder: () => ({
-      orderId: 10,
+      orderId: '10',
       orderRealId: '010'
     })
   }
@@ -184,7 +184,7 @@ describe('CheckoutLogic', () => {
       getProps().setPaymentMethod(samplePaymentMethod);
       getProps().placeOrder();
       await wait(0);
-      expect(getProps().orderId).toBe(10);
+      expect(getProps().orderId).toBe('10');
     });
   });
 
