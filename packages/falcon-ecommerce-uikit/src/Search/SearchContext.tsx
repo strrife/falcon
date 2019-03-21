@@ -7,17 +7,17 @@ export type SearchContextType = {
   setFilter(name: string, value: string[]): void;
   removeFilter(name: string): void;
   setSortOrder(sort: SortOrder): void;
-  setQuery(query: string): void;
+  setTerm(term: string): void;
   setPagination(pagination: PaginationInput): void;
 };
 
 export const SearchContext = React.createContext<SearchContextType>({
   state: {},
   availableSortOrders: [],
+  setTerm: () => {},
   setFilter: () => {},
   removeFilter: () => {},
   setSortOrder: () => {},
-  setQuery: () => {},
   setPagination: () => {}
 });
 

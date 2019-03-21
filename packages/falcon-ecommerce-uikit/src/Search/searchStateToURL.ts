@@ -15,7 +15,7 @@ type UrlParts = {
 };
 
 export function searchStateToURL(state: SearchState) {
-  const { query, filters, sort, pagination } = state;
+  const { term, filters, sort, pagination } = state;
 
   const parts: UrlParts = {};
 
@@ -37,8 +37,8 @@ export function searchStateToURL(state: SearchState) {
     parts.p = pagination.page.toString();
   }
 
-  if (query) {
-    parts.q = query; // eslint-disable-line id-length
+  if (term) {
+    parts.q = term; // eslint-disable-line id-length
   }
 
   return qs.stringify(parts, { encode: false });

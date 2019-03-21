@@ -6,7 +6,7 @@ export function searchStateFromURL(url: string) {
   const searchState: SearchState = {};
 
   if (parts.q) {
-    searchState.query = parts.q;
+    searchState.term = parts.q;
   }
 
   if (parts.p) {

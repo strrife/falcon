@@ -98,10 +98,10 @@ describe('SearchProvider', () => {
   });
 
   it('setQuery() should update url and pass query in props', async () => {
-    searchInfo.setQuery('searchQuery');
+    searchInfo.setTerm('searchQuery');
     searchInfo.removeFilter('price');
     wrapper!.update();
-    expect(searchInfo.state.query).toEqual('searchQuery');
+    expect(searchInfo.state.term).toEqual('searchQuery');
     expect(getLocation().search).toEqual(`?${JSON.stringify(getSearchInfo())}`);
   });
 
@@ -125,6 +125,6 @@ describe('SearchProvider', () => {
     const { history } = wrapper!.find((SearchProvider as any).WrappedComponent).props() as RouteComponentProps;
     history.push('/?{"query":"foo"}');
     wrapper!.update();
-    expect(searchInfo.state.query).toEqual('foo');
+    expect(searchInfo.state.term).toEqual('foo');
   });
 });

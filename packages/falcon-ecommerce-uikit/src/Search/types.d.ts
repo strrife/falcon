@@ -20,7 +20,7 @@ export type FilterInput = {
 };
 
 export type SearchState = {
-  query?: string;
+  term?: string;
   filters?: FilterInput[];
   sort?: SortOrder;
   pagination?: PaginationInput;
