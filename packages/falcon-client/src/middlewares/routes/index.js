@@ -23,7 +23,7 @@ export function renderAppShell({ config, webpackAssets, loadableStats }) {
   return [
     apolloClientProvider({ config: apolloClient, clientStates: { configSchema } }),
     appShell({ loadableStats }),
-    appHtml({ webpackAssets })
+    appHtml({ webpackAssets, config })
   ];
 }
 
@@ -55,6 +55,6 @@ export function renderApp({ config, clientApolloSchema, App, webpackAssets, load
     }),
     i18next({ ...i18n }),
     serverSideRendering ? ssr({ App, loadableStats }) : appShell({ loadableStats }),
-    appHtml({ webpackAssets })
+    appHtml({ webpackAssets, config })
   ].filter(x => x);
 }
