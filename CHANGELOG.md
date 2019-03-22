@@ -12,6 +12,12 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 - fixed issue where appHtmlMiddleware does not pass GoogleTagManager information to falcon-client/src/components/Html.js (even though the config is correct). ([#362](https://github.com/deity-io/falcon/pull/362))
 
 
+### Falcon UI
+
+- exposed `withTheme()` so theme values can be accessed from not themed components ([#371](https://github.com/deity-io/falcon/pull/371))
+
+---
+
 ## Falcon 1.0 RC2 (2019-03-13)
 
 ### Falcon Client v0.3.1 (2019-03-13)
