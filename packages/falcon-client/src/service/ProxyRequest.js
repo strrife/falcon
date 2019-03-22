@@ -1,10 +1,15 @@
 import fetch from 'node-fetch';
+import url from 'url';
 
 export async function ProxyRequest(targetUrl, ctx) {
   const { method, header } = ctx.request;
   const response = await fetch(targetUrl, {
     method,
-    headers: header,
+    headers: {
+      ...header,
+      // Overriding Host header with the target server
+      host: url.parse(targetUrl).host
+    },
     body: method === 'POST' ? ctx.req : undefined
   });
 
