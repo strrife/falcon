@@ -25,8 +25,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
   static defaultProps = {
     searchStateFromURL,
     searchStateToURL,
-    filters: [],
-    sortOrders: []
+    filters: []
   };
 
   constructor(props: SearchProviderProps) {
@@ -115,11 +114,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
     return (
       <SearchContext.Provider
         value={{
-          state: {
-            ...this.state,
-            // if there's no sort set yet then return first available option (it's considered as default one)
-            sort: this.state.sort || this.props.sortOrders[0]
-          },
+          state: { ...this.state },
           availableSortOrders: this.props.sortOrders,
           setFilter: this.setFilter,
           removeFilter: this.removeFilter,

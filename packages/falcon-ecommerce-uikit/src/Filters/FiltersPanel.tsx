@@ -20,12 +20,10 @@ type FilterPanelProps = {
 
 export const FiltersPanel: React.SFC<FilterPanelProps> = ({ title, aggregations }) => (
   <SearchConsumer>
-    {search => (
+    {({ setFilter, removeFilter, state: { filters } }) => (
       <Box defaultTheme={filtersPanelTheme}>
         {!!title && <H2>{title}</H2>}
-        {search.state.filters && search.state.filters.length > 0 && (
-          <FiltersSummary selected={search.state.filters || []} removeFilter={search.removeFilter} />
-        )}
+        {filters.length > 0 && <FiltersSummary selected={filters} removeFilter={removeFilter} />}
         {aggregations
           .sort((first, second) => (first.title < second.title ? -1 : 1))
           .map(item => (
@@ -33,9 +31,9 @@ export const FiltersPanel: React.SFC<FilterPanelProps> = ({ title, aggregations 
               <FilterContent
                 singleMode={item.field === 'cat'}
                 aggregation={item}
-                selected={getSelectedFilterValues(item.field, search.state.filters || [])}
-                setFilter={search.setFilter}
-                removeFilter={search.removeFilter}
+                selected={getSelectedFilterValues(item.field, filters)}
+                setFilter={setFilter}
+                removeFilter={removeFilter}
               />
             </FilterTile>
           ))}

@@ -90,8 +90,7 @@ export const Category: React.SFC<{
             <Divider mt="xs" />
           </Box>
           <Box gridArea={CategoryArea.navigation}>
-            {((aggregations && aggregations.length !== 0) ||
-              (search.state.filters && search.state.filters.length > 0)) && (
+            {((aggregations && aggregations.length !== 0) || search.state.filters.length > 0) && (
               <FiltersPanel aggregations={aggregations} />
             )}
           </Box>

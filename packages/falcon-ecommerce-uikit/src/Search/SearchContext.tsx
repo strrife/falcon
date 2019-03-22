@@ -12,7 +12,7 @@ export type SearchContextType = {
 };
 
 export const SearchContext = React.createContext<SearchContextType>({
-  state: {},
+  state: { filters: [] } as any,
   availableSortOrders: [],
   setTerm: () => {},
   setFilter: () => {},
