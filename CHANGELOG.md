@@ -12,7 +12,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 ### Falcon UI
 
-- expose `withTheme()` so theme values can be accessed from not themed components ([#371](https://github.com/deity-io/falcon/pull/371))
+- exposed `withTheme()` so theme values can be accessed from not themed components ([#371](https://github.com/deity-io/falcon/pull/371))
 
 ---
 
