@@ -1730,8 +1730,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     this.session.orderQuoteId = this.session.cart.quoteId;
 
-    if (orderData.extensionAttributes && orderData.extensionAttributes.adyenRedirect) {
-      return this.handleAdyen3dSecure(orderData.extensionAttributes.adyenRedirect);
+    if (orderData.extensionAttributes && orderData.extensionAttributes.adyenCc) {
+      return this.handleAdyen3dSecure(orderData.extensionAttributes.adyenCc);
     }
     this.removeCartData();
 
