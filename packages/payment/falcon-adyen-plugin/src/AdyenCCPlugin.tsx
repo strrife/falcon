@@ -1,12 +1,13 @@
 import React from 'react';
-import { PluginModel, PluginComponentProps } from '@deity/falcon-payment-plugin';
+import { PaymentPluginModel, PaymentPluginComponentProps } from '@deity/falcon-payment-plugin';
 
 const adyen = require('adyen-cse-web');
 
-export type AdyenProps = PluginComponentProps & {
+export type AdyenProps = PaymentPluginComponentProps & {
   config: {
     key: string;
   };
+  children: (args: any) => React.ReactNode;
 };
 
 export interface CreditCardData {
@@ -16,7 +17,7 @@ export interface CreditCardData {
   name: string;
 }
 
-export class AdyenCCPlugin extends PluginModel<AdyenProps> {
+export class AdyenCCPlugin extends PaymentPluginModel<AdyenProps> {
   static icon: string =
     'https://raw.githubusercontent.com/Adyen/adyen-magento2/develop/view/base/web/images/logos/creditcard.png';
   private cseInstance: any;
@@ -46,7 +47,7 @@ export class AdyenCCPlugin extends PluginModel<AdyenProps> {
     };
     const encryptedData = this.cseInstance.encrypt(creditCard);
     if (encryptedData) {
-      this.props.onPaymentSelected({
+      this.props.onPaymentDetailsReady({
         cc_type: '',
         encrypted_data: encryptedData,
         store_cc: false
@@ -54,15 +55,13 @@ export class AdyenCCPlugin extends PluginModel<AdyenProps> {
     }
   }
 
-  render() {
-    const CreditCardInput = this.props.creditCardInput;
-    const CreditCardInputOutput = (
-      // @ts-ignore
-      <CreditCardInput onCompletion={(creditCardData: CreditCardData) => this.encryptCreditCard(creditCardData)} />
-    );
+  setCreditCardData = (data: CreditCardData) => {
+    this.encryptCreditCard(data);
+  };
 
-    return this.props.template({
-      creditCardInput: CreditCardInputOutput
+  render() {
+    return this.props.children({
+      setCreditCardData: this.setCreditCardData
     });
   }
 }

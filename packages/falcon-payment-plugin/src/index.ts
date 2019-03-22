@@ -1,5 +1,4 @@
-export * from './components/Plugin';
-export * from './Payment';
-export * from './PlainPayment';
+export * from './PaymentPlugin';
+export * from './SimplePayment';
 export * from './Test3dSecure';
 export * from './types';
