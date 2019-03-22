@@ -17,18 +17,26 @@ module.exports = class BaseContainer {
    * @return {any} Imported module
    */
   importModule(pathOrPackage) {
+    const prefix = this.constructor.name;
     let module;
     try {
       module = require(pathOrPackage); // eslint-disable-line import/no-dynamic-require
-      Logger.debug(`${this.constructor.name}: "${pathOrPackage}" loaded as a package`);
+      Logger.debug(`${prefix}: "${pathOrPackage}" loaded as a package`);
     } catch (packageError) {
+      if (pathOrPackage.startsWith('.') === false) {
+        // Log the error for (more likely) non-local modules (NPM dependency)
+        Logger.warn(`${prefix}: ${packageError.message}`);
+      }
+
       try {
         const modulePath = resolve(process.cwd(), pathOrPackage);
         module = require(modulePath); // eslint-disable-line import/no-dynamic-require
-        Logger.debug(`${this.constructor.name}: "${pathOrPackage}" loaded from ${modulePath}`);
+        Logger.debug(`${prefix}: "${pathOrPackage}" loaded from ${modulePath}`);
       } catch (pathError) {
-        Logger.warn(
-          `${this.constructor.name}: "${pathOrPackage}" cannot be loaded. Please check your config ("package" key)`
+        Logger.error(
+          `${prefix}: "${pathOrPackage}" cannot be loaded. Please check your config ("package" key) - ${
+            pathError.message
+          }`
         );
       }
     }
