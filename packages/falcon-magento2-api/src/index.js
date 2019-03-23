@@ -43,6 +43,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         breadcrumbs: (...args) => this.breadcrumbs(...args),
         products: (...args) => this.categoryProducts(...args),
         children: (...args) => this.categoryChildren(...args)
+      },
+      PaymentMethod: {
+        config: (...args) => this.getPaymentMethodConfig(...args)
       }
     };
     Logger.debug(`${this.name}: Adding additional resolve functions`);
@@ -1674,8 +1677,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     };
 
     const response = await this.performCartAction('/shipping-information', 'post', magentoData);
-
     return this.convertKeys(response.data);
+  }
+
+  getPaymentMethodConfig(paymentMethod) {
+    return paymentMethod.code in this.config.payments ? this.config.payments[paymentMethod.code] : {};
   }
 
   /**

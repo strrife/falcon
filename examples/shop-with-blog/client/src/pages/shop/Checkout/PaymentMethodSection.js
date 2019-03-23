@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Details, DetailsContent, Text, Button, FlexLayout, Radio, Label, Image } from '@deity/falcon-ui';
 import { I18n, T } from '@deity/falcon-i18n';
-import { ConfigQuery, TwoStepWizard } from '@deity/falcon-ecommerce-uikit';
+import { TwoStepWizard } from '@deity/falcon-ecommerce-uikit';
 import { SimplePayment } from '@deity/falcon-payment-plugin';
 import AdyenCCPlugin from '@deity/falcon-adyen-plugin';
 import PayPalExpressPlugin from '@deity/falcon-paypal-plugin';
@@ -61,79 +61,71 @@ class PaymentSection extends React.Component {
               <T id="checkout.noPaymentMethodsAvailable" />
             </Text>
           ) : (
-            <ConfigQuery variables={{ key: 'plugins.payments' }}>
-              {({ getConfig: paymentsConfig }) => (
-                <TwoStepWizard>
-                  {({ selectedOption, selectOption }) => {
-                    const picker = (
-                      <React.Fragment>
-                        {availablePaymentMethods
-                          // render only methods that we have implementation for
-                          .filter(payment => payment.code in paymentPlugins)
-                          // merge configs with info about received payment methods
-                          .map(payment => ({ ...paymentsConfig[payment.code], ...payment }))
-                          // render picker - simple radio buttons with icons for now
-                          .map(payment => (
-                            <FlexLayout key={payment.code} my="xs" css={{ alignItems: 'center' }}>
-                              <Radio
-                                size="sm"
-                                name="payment"
-                                id={`opt-${payment.code}`}
-                                value={payment}
-                                onChange={() => selectOption(payment.code)}
+            <TwoStepWizard>
+              {({ selectedOption, selectOption }) => {
+                const picker = (
+                  <React.Fragment>
+                    {availablePaymentMethods
+                      // render only methods that we have implementation for
+                      .filter(payment => payment.code in paymentPlugins)
+                      // render picker - simple radio buttons with icons for now
+                      .map(payment => (
+                        <FlexLayout key={payment.code} my="xs" css={{ alignItems: 'center' }}>
+                          <Radio
+                            size="sm"
+                            name="payment"
+                            id={`opt-${payment.code}`}
+                            value={payment}
+                            onChange={() => selectOption(payment.code)}
+                          />
+                          <Label mx="sm" flex="1" htmlFor={`opt-${payment.code}`}>
+                            {paymentPlugins[payment.code].icon && (
+                              <Image
+                                src={paymentPlugins[payment.code].icon}
+                                mr="xs"
+                                mb="xs"
+                                css={{ verticalAlign: 'middle' }}
                               />
-                              <Label mx="sm" flex="1" htmlFor={`opt-${payment.code}`}>
-                                {paymentPlugins[payment.code].icon && (
-                                  <Image
-                                    src={paymentPlugins[payment.code].icon}
-                                    mr="xs"
-                                    mb="xs"
-                                    css={{ verticalAlign: 'middle' }}
-                                  />
-                                )}
-                                {payment.title}
-                              </Label>
-                            </FlexLayout>
-                          ))}
-                      </React.Fragment>
-                    );
+                            )}
+                            {payment.title}
+                          </Label>
+                        </FlexLayout>
+                      ))}
+                  </React.Fragment>
+                );
 
-                    const paymentConfig = paymentsConfig[selectedOption];
-                    const onPaymentDetailsReady = additionalData =>
-                      this.onPaymentSelected(
-                        availablePaymentMethods.find(item => item.code === selectedOption),
-                        additionalData || {}
-                      );
+                const activePayment = availablePaymentMethods.find(item => item.code === selectedOption);
+                const paymentConfig = (activePayment && activePayment.config) || {};
+                const onPaymentDetailsReady = additionalData =>
+                  this.onPaymentSelected(activePayment, additionalData || {});
 
-                    let details = null;
-                    if (selectedOption === 'adyen_cc') {
-                      details = (
-                        <AdyenCCPlugin config={paymentConfig} onPaymentDetailsReady={onPaymentDetailsReady}>
-                          {({ setCreditCardData }) => (
-                            <FlexLayout my="md" css={{ width: '100%' }}>
-                              <CreditCard onCompletion={setCreditCardData} />
-                            </FlexLayout>
-                          )}
-                        </AdyenCCPlugin>
-                      );
-                    } else if (selectedOption === 'paypal_express') {
-                      details = (
-                        <PayPalExpressPlugin onPaymentDetailsReady={onPaymentDetailsReady} config={paymentsConfig} />
-                      );
-                    } else if (selectedOption === 'checkmo') {
-                      details = <SimplePayment onPaymentDetailsReady={onPaymentDetailsReady} />;
-                    }
+                let details = null;
+                if (selectedOption === 'adyen_cc') {
+                  details = (
+                    <AdyenCCPlugin config={paymentConfig} onPaymentDetailsReady={onPaymentDetailsReady}>
+                      {({ setCreditCardData }) => (
+                        <FlexLayout my="md" css={{ width: '100%' }}>
+                          <CreditCard onCompletion={setCreditCardData} />
+                        </FlexLayout>
+                      )}
+                    </AdyenCCPlugin>
+                  );
+                } else if (selectedOption === 'paypal_express') {
+                  details = (
+                    <PayPalExpressPlugin onPaymentDetailsReady={onPaymentDetailsReady} config={paymentConfig} />
+                  );
+                } else if (selectedOption === 'checkmo') {
+                  details = <SimplePayment onPaymentDetailsReady={onPaymentDetailsReady} />;
+                }
 
-                    return (
-                      <React.Fragment>
-                        {picker}
-                        {details}
-                      </React.Fragment>
-                    );
-                  }}
-                </TwoStepWizard>
-              )}
-            </ConfigQuery>
+                return (
+                  <React.Fragment>
+                    {picker}
+                    {details}
+                  </React.Fragment>
+                );
+              }}
+            </TwoStepWizard>
           )}
           <ErrorList errors={errors} />
           {availablePaymentMethods.length > 0 && (

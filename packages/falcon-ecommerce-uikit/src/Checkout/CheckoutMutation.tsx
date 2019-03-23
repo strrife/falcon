@@ -39,6 +39,7 @@ export const SET_SHIPPING = gql`
       paymentMethods {
         code
         title
+        config
       }
     }
   }
