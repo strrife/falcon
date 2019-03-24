@@ -1,20 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Details, DetailsContent, Text, Button, FlexLayout, Radio, Label, Image } from '@deity/falcon-ui';
+import { Details, DetailsContent, Text, Button } from '@deity/falcon-ui';
 import { I18n, T } from '@deity/falcon-i18n';
 import { TwoStepWizard } from '@deity/falcon-ecommerce-uikit';
-import { SimplePayment } from '@deity/falcon-payment-plugin';
-import AdyenCCPlugin from '@deity/falcon-adyen-plugin';
-import PayPalExpressPlugin from '@deity/falcon-paypal-plugin';
+import loadable from 'src/components/loadable';
 import SectionHeader from './CheckoutSectionHeader';
 import ErrorList from '../components/ErrorList';
-import CreditCard from '../components/CreditCard';
 
-const paymentPlugins = {
-  adyen_cc: AdyenCCPlugin,
-  paypal_express: PayPalExpressPlugin,
-  checkmo: SimplePayment
-};
+// Loading "PaymentMethodItem" component via loadable package
+// to avoid premature import of Payment frontend-plugins and their dependencies on SSR
+const PaymentMethodItem = loadable(() =>
+  import(/* webpackChunkName: "checkout/payment" */ './components/PaymentMethodItem')
+);
 
 class PaymentSection extends React.Component {
   constructor(props) {
@@ -62,69 +59,17 @@ class PaymentSection extends React.Component {
             </Text>
           ) : (
             <TwoStepWizard>
-              {({ selectedOption, selectOption }) => {
-                const picker = (
-                  <React.Fragment>
-                    {availablePaymentMethods
-                      // render only methods that we have implementation for
-                      .filter(payment => payment.code in paymentPlugins)
-                      // render picker - simple radio buttons with icons for now
-                      .map(payment => (
-                        <FlexLayout key={payment.code} my="xs" css={{ alignItems: 'center' }}>
-                          <Radio
-                            size="sm"
-                            name="payment"
-                            id={`opt-${payment.code}`}
-                            value={payment}
-                            onChange={() => selectOption(payment.code)}
-                          />
-                          <Label mx="sm" flex="1" htmlFor={`opt-${payment.code}`}>
-                            {paymentPlugins[payment.code].icon && (
-                              <Image
-                                src={paymentPlugins[payment.code].icon}
-                                mr="xs"
-                                mb="xs"
-                                css={{ verticalAlign: 'middle' }}
-                              />
-                            )}
-                            {payment.title}
-                          </Label>
-                        </FlexLayout>
-                      ))}
-                  </React.Fragment>
-                );
-
-                const activePayment = availablePaymentMethods.find(item => item.code === selectedOption);
-                const paymentConfig = (activePayment && activePayment.config) || {};
-                const onPaymentDetailsReady = additionalData =>
-                  this.onPaymentSelected(activePayment, additionalData || {});
-
-                let details = null;
-                if (selectedOption === 'adyen_cc') {
-                  details = (
-                    <AdyenCCPlugin config={paymentConfig} onPaymentDetailsReady={onPaymentDetailsReady}>
-                      {({ setCreditCardData }) => (
-                        <FlexLayout my="md" css={{ width: '100%' }}>
-                          <CreditCard onCompletion={setCreditCardData} />
-                        </FlexLayout>
-                      )}
-                    </AdyenCCPlugin>
-                  );
-                } else if (selectedOption === 'paypal_express') {
-                  details = (
-                    <PayPalExpressPlugin onPaymentDetailsReady={onPaymentDetailsReady} config={paymentConfig} />
-                  );
-                } else if (selectedOption === 'checkmo') {
-                  details = <SimplePayment onPaymentDetailsReady={onPaymentDetailsReady} />;
-                }
-
-                return (
-                  <React.Fragment>
-                    {picker}
-                    {details}
-                  </React.Fragment>
-                );
-              }}
+              {({ selectedOption, selectOption }) =>
+                availablePaymentMethods.map(payment => (
+                  <PaymentMethodItem
+                    key={payment.code}
+                    {...payment}
+                    selectOption={selectOption}
+                    selectedOption={selectedOption}
+                    onPaymentDetailsReady={additionalData => this.onPaymentSelected(payment, additionalData)}
+                  />
+                ))
+              }
             </TwoStepWizard>
           )}
           <ErrorList errors={errors} />

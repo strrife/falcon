@@ -7,6 +7,6 @@ export class SimplePayment extends PaymentPluginModel {
   }
 
   render() {
-    return null;
+    return this.props.children ? this.props.children : null;
   }
 }

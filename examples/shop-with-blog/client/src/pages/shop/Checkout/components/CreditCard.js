@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CreditCardInput from 'react-credit-card-input';
-import { Box, Input, Label } from '@deity/falcon-ui';
+import { Box, Input, Label, withTheme } from '@deity/falcon-ui';
 
 class CreditCard extends React.Component {
   constructor(props) {
@@ -30,6 +30,8 @@ class CreditCard extends React.Component {
   }
 
   render() {
+    const { theme } = this.props;
+
     return (
       <Box>
         <Box my="xs">
@@ -39,42 +41,32 @@ class CreditCard extends React.Component {
             autoComplete="cc-name"
             name="cc-name"
             value={this.state.name}
-            css={({ theme }) => ({
-              fontSize: theme.fontSizes.sm
-            })}
+            css={{ fontSize: theme.fontSizes.sm }}
             onChange={({ target: { value: name } }) => this.setState({ name })}
           />
         </Box>
-        <Box
-          css={({ theme }) => ({
-            'div#field-wrapper': {
-              border: '1px solid',
-              borderColor: theme.colors.secondaryDark
+        <CreditCardInput
+          fieldStyle={{ border: '1px solid', borderColor: theme.colors.secondaryDark }}
+          inputComponent={Input}
+          cardNumberInputProps={{
+            value: this.state.number,
+            onChange: ({ target: { value: number } }) => {
+              this.setState({ number });
             }
-          })}
-        >
-          <CreditCardInput
-            inputComponent={Input}
-            cardNumberInputProps={{
-              value: this.state.number,
-              onChange: ({ target: { value: number } }) => {
-                this.setState({ number });
-              }
-            }}
-            cardExpiryInputProps={{
-              value: this.state.expiry,
-              onChange: ({ target: { value: expiry } }) => {
-                this.setState({ expiry });
-              }
-            }}
-            cardCVCInputProps={{
-              value: this.state.cvc,
-              onChange: ({ target: { value: cvc } }) => {
-                this.setState({ cvc });
-              }
-            }}
-          />
-        </Box>
+          }}
+          cardExpiryInputProps={{
+            value: this.state.expiry,
+            onChange: ({ target: { value: expiry } }) => {
+              this.setState({ expiry });
+            }
+          }}
+          cardCVCInputProps={{
+            value: this.state.cvc,
+            onChange: ({ target: { value: cvc } }) => {
+              this.setState({ cvc });
+            }
+          }}
+        />
       </Box>
     );
   }
@@ -84,4 +76,4 @@ CreditCard.propTypes = {
   onCompletion: PropTypes.func.isRequired
 };
 
-export default CreditCard;
+export default withTheme(CreditCard);
