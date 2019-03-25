@@ -59,6 +59,7 @@ const sampleShippingMethod = {
 
 const samplePaymentMethod = {
   code: 'sample-payment',
+  config: null,
   title: 'Sample Payment'
 };
 
