@@ -16,7 +16,7 @@ import {
 import { T } from '@deity/falcon-i18n';
 import { ProductsList } from '../ProductsList/ProductsList';
 import { toGridTemplate } from '../helpers';
-import { FiltersPanel } from '../Filters';
+import { Filters } from '../Filters';
 import { SearchConsumer } from '../Search';
 
 const CategoryArea = {
@@ -88,7 +88,7 @@ export const Category: React.SFC<{
         <Divider mt="xs" />
       </Box>
       <Box gridArea={CategoryArea.navigation}>
-        {Array.isArray(aggregations) && aggregations.length > 0 && <FiltersPanel aggregations={aggregations} />}
+        {Array.isArray(aggregations) && aggregations.length > 0 && <Filters aggregations={aggregations} />}
       </Box>
       <Box gridArea={CategoryArea.content}>
         <ProductsList products={items} />

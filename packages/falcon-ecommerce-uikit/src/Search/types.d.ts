@@ -28,15 +28,29 @@ export type SearchState = {
 
 export type Aggregation = {
   field: string;
-  type: AggregationType;
+  type: SelectionType;
   buckets: AggregationBucket[];
   title: string;
 };
 
-export type AggregationType = 'single' | 'multiple' | 'range';
+export type SelectionType = 'single' | 'multiple' | 'range';
 
 export type AggregationBucket = {
   value: string;
   count: number;
   title: string;
+};
+
+export type Filter = {
+  field: string;
+  title: string;
+  type: SelectionType;
+  operator: FilterOperator;
+  options: FilterOption[];
+};
+
+export type FilterOption = {
+  title: string;
+  value: string;
+  count: number;
 };

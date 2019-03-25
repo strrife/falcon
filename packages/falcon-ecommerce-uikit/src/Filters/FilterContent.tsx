@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, List, Text, Icon, themed } from '@deity/falcon-ui';
-import { FilterInput, Aggregation, AggregationBucket } from '../Search/types';
+import { FilterInput, Filter, FilterOption } from '../Search/types';
 import { FilterItem, FilterItemLayout } from './FilterItem';
 import { SelectedFilterItem } from './FilterItem';
 import { ColorTile } from './ColorTile';
@@ -13,7 +13,7 @@ type FilterContentProps = {
   setFilter: (name: string, value: string[], operator?: string) => void;
   removeFilter: (name: string) => void;
   selected: string[];
-  aggregation: Aggregation;
+  aggregation: Filter;
   singleMode?: boolean;
 };
 
@@ -41,7 +41,7 @@ export const FilterContent: React.SFC<FilterContentProps> = ({ aggregation, sele
   return (
     <Box defaultTheme={filterContentTheme}>
       <List>
-        {aggregation.buckets.map(item => (
+        {aggregation.options.map(item => (
           <FilterItem key={item.title} item={item} onClick={() => updateFilter(item.value)} />
         ))}
       </List>
@@ -62,7 +62,7 @@ export const FilterItemsList = themed({
 
 export const SingleFilter: React.SFC<{
   field: string;
-  options: AggregationBucket[];
+  options: FilterOption[];
   selected?: string;
   setFilter: (field: string, value: string[], operator?: string) => void;
   removeFilter: (field: string) => void;
