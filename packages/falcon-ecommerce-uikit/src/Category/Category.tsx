@@ -17,7 +17,6 @@ import { T } from '@deity/falcon-i18n';
 import { ProductsList } from '../ProductsList/ProductsList';
 import { toGridTemplate } from '../helpers';
 import { Filters, getFiltersData } from '../Filters';
-import { SearchConsumer } from '../Search';
 
 const CategoryArea = {
   navigation: 'navigation',
