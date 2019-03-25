@@ -26,17 +26,16 @@ export const getFiltersData = (aggregations: Aggregation[], mergeWith: FilterDat
     first.title < second.title ? -1 : 1
   );
 
-export const Filters: React.SFC<{ aggregations: Aggregation[] }> = ({ aggregations }) => (
+export const Filters: React.SFC<{ data: FilterData[] }> = ({ data }) => (
   <SearchConsumer>
     {({ setFilter, removeFilter, removeAllFilters, state: { filters } }) => {
-      const filtersData = getFiltersData(aggregations);
       const anyFilters = filters.length > 0;
 
       return (
         <FiltersLayout>
           {anyFilters && <Button onClick={removeAllFilters}>Clear all filters</Button>}
           {anyFilters && <FiltersSummary selected={filters} removeFilter={removeFilter} />}
-          {filtersData.map(item => {
+          {data.map(item => {
             const selectedFilter = filters.find(x => x.field === item.field);
 
             if (item.field === 'color') {
