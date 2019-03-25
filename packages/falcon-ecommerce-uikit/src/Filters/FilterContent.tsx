@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, List, Text, Icon, themed } from '@deity/falcon-ui';
-import { FilterInput, Filter, FilterOption } from '../Search/types';
+import { FilterInput, FilterData, FilterOption } from '../Search/types';
 import { FilterItem, FilterItemLayout } from './FilterItem';
 import { SelectedFilterItem } from './FilterItem';
 import { ColorTile } from './ColorTile';
@@ -13,7 +13,7 @@ type FilterContentProps = {
   setFilter: (name: string, value: string[], operator?: string) => void;
   removeFilter: (name: string) => void;
   selected: string[];
-  aggregation: Filter;
+  aggregation: FilterData;
   singleMode?: boolean;
 };
 

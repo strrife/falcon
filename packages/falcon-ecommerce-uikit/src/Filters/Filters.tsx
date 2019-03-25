@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Button, H3, themed } from '@deity/falcon-ui';
-import { SearchConsumer } from '../Search';
-import { FilterInput, Aggregation, Filter as FilterData, FilterOperator } from '../Search/types';
+import { SearchConsumer, Aggregation, FilterData, FilterOperator } from '../Search';
 import { FilterTile, FilterLayout } from './FilterTile';
 import { FilterContent, SingleFilter } from './FilterContent';
 import { FiltersSummary } from './FiltersSummary';

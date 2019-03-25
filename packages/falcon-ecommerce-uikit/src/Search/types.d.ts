@@ -41,7 +41,7 @@ export type AggregationBucket = {
   title: string;
 };
 
-export type Filter = {
+export type FilterData = {
   field: string;
   title: string;
   type: SelectionType;
