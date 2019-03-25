@@ -40,11 +40,9 @@ export const FiltersSummary: React.SFC<FiltersSummaryProps> = ({ data }) => (
         <FiltersSummaryLayout>
           <List>
             {selected.map(item => (
-              <ListItem key={item.field}>
-                <SelectedFilterItem onClick={() => removeFilter(item.field)}>
-                  {item.title}: {item.options.map(x => x.title || x.value).join(', ')}
-                </SelectedFilterItem>
-              </ListItem>
+              <SelectedFilterItem key={item.field} onClick={() => removeFilter(item.field)}>
+                {item.title}: {item.options.map(x => x.title || x.value).join(', ')}
+              </SelectedFilterItem>
             ))}
           </List>
         </FiltersSummaryLayout>
