@@ -33,7 +33,7 @@ export const Filters: React.SFC<{ data: FilterData[] }> = ({ data }) => (
       return (
         <FiltersLayout>
           {anyFilters && <Button onClick={removeAllFilters}>Clear all filters</Button>}
-          {anyFilters && <FiltersSummary selected={filters} removeFilter={removeFilter} />}
+          {anyFilters && <FiltersSummary data={data} />}
           {data.map(item => {
             const selectedFilter = filters.find(x => x.field === item.field);
 

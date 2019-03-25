@@ -1,27 +1,54 @@
 import React from 'react';
-import { Box, List, ListItem } from '@deity/falcon-ui';
-import { FilterInput } from '../Search/types';
+import { Box, List, ListItem, themed } from '@deity/falcon-ui';
+import { SearchConsumer, FilterData, FilterInput } from '../Search';
 import { SelectedFilterItem } from './FilterItem';
 
-const filtersSummaryTheme = {
-  filtersSummary: {}
-};
+export const FiltersSummaryLayout = themed({
+  tag: Box,
+  defaultTheme: {
+    filtersSummaryLayout: {}
+  }
+});
 
 type FiltersSummaryProps = {
-  removeFilter: (name: string) => void;
-  selected: FilterInput[];
+  data: FilterData[];
 };
 
-export const FiltersSummary: React.SFC<FiltersSummaryProps> = ({ selected, removeFilter }) => (
-  <Box defaultTheme={filtersSummaryTheme}>
-    <List>
-      {selected.map(item => (
-        <ListItem key={item.field}>
-          <SelectedFilterItem onClick={() => removeFilter(item.field)}>
-            {item.field}: {item.value[0]}
-          </SelectedFilterItem>
-        </ListItem>
-      ))}
-    </List>
-  </Box>
+export const getSelectedFilterData = (data: FilterData[], filters: FilterInput[]): FilterData[] =>
+  filters
+    .reduce<FilterData[]>((result, { value, field }) => {
+      const filterData = data.find(item => item.field === field);
+
+      return filterData
+        ? [
+            ...result,
+            {
+              ...filterData,
+              options: filterData.options.filter(item => value.some(x => x === item.value))
+            }
+          ]
+        : result;
+    }, [])
+    .sort((first, second) => (first.title < second.title ? -1 : 1));
+
+export const FiltersSummary: React.SFC<FiltersSummaryProps> = ({ data }) => (
+  <SearchConsumer>
+    {({ state: { filters }, removeFilter }) => {
+      const selected = getSelectedFilterData(data, filters);
+
+      return (
+        <FiltersSummaryLayout>
+          <List>
+            {selected.map(item => (
+              <ListItem key={item.field}>
+                <SelectedFilterItem onClick={() => removeFilter(item.field)}>
+                  {item.title}: {item.options.map(x => x.title || x.value).join(', ')}
+                </SelectedFilterItem>
+              </ListItem>
+            ))}
+          </List>
+        </FiltersSummaryLayout>
+      );
+    }}
+  </SearchConsumer>
 );
