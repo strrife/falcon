@@ -11,12 +11,9 @@ export const ColorTile = themed<{ color: string }, any>({
       size: 'md',
       borderRadius: 'small',
       border: 'bold',
-      borderColor: 'white',
-      css: ({ theme, color }) => ({
-        backgroundColor: color,
-        ':hover': {
-          borderColor: theme.colors.primaryLight
-        }
+      borderColor: 'secondaryDark',
+      css: ({ color }) => ({
+        backgroundColor: color
       })
     }
   }
