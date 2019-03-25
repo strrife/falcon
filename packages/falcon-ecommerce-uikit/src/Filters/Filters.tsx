@@ -1,4 +1,5 @@
 import React from 'react';
+import { T } from '@deity/falcon-i18n';
 import { Box, Button, H3, themed } from '@deity/falcon-ui';
 import { SearchConsumer, Aggregation, FilterData, FilterOperator } from '../Search';
 import { FilterTile, FilterLayout } from './FilterTile';
@@ -21,7 +22,10 @@ export const getFiltersData = (aggregations: Aggregation[], mergeWith: FilterDat
 export const FiltersLayout = themed({
   tag: Box,
   defaultTheme: {
-    filtersPanelLayout: {}
+    filtersPanelLayout: {
+      display: 'grid',
+      gridGap: 'sm'
+    }
   }
 });
 
@@ -32,7 +36,11 @@ export const Filters: React.SFC<{ data: FilterData[] }> = ({ data }) => (
 
       return (
         <FiltersLayout>
-          {anyFilters && <Button onClick={removeAllFilters}>Clear all filters</Button>}
+          {anyFilters && (
+            <Button onClick={removeAllFilters}>
+              <T id="filters.clearAll" />
+            </Button>
+          )}
           {anyFilters && <FiltersSummary data={data} />}
           {data.map(item => {
             const selectedFilter = filters.find(x => x.field === item.field);

@@ -4,12 +4,7 @@ import { Box, H3, themed } from '@deity/falcon-ui';
 export const FilterLayout = themed({
   tag: Box,
   defaultTheme: {
-    filterLayout: {
-      py: {
-        sm: 'xs',
-        md: 'sm'
-      }
-    }
+    filterLayout: {}
   }
 });
 
