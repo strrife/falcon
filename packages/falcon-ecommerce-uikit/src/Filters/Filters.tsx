@@ -6,13 +6,6 @@ import { FilterTile, FilterLayout } from './FilterTile';
 import { FilterContent, SingleFilter } from './FilterContent';
 import { FiltersSummary } from './FiltersSummary';
 
-const FiltersLayout = themed({
-  tag: Box,
-  defaultTheme: {
-    filtersPanelLayout: {}
-  }
-});
-
 export const aggregationToFilterData = (aggregation: Aggregation, operator: FilterOperator = 'eq'): FilterData => ({
   field: aggregation.field,
   title: aggregation.title,
@@ -25,6 +18,13 @@ export const getFiltersData = (aggregations: Aggregation[], mergeWith: FilterDat
   [...[], ...aggregations.map(x => aggregationToFilterData(x)), ...mergeWith].sort((first, second) =>
     first.title < second.title ? -1 : 1
   );
+
+export const FiltersLayout = themed({
+  tag: Box,
+  defaultTheme: {
+    filtersPanelLayout: {}
+  }
+});
 
 export const Filters: React.SFC<{ data: FilterData[] }> = ({ data }) => (
   <SearchConsumer>
