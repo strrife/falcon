@@ -1,14 +1,17 @@
 import React from 'react';
-import { Box, Button, H3 } from '@deity/falcon-ui';
+import { Box, Button, H3, themed } from '@deity/falcon-ui';
 import { SearchConsumer } from '../Search';
 import { FilterInput, Aggregation } from '../Search/types';
 import { FilterTile, FilterLayout } from './FilterTile';
 import { FilterContent, SingleFilter } from './FilterContent';
 import { FiltersSummary } from './FiltersSummary';
 
-const filtersPanelTheme = {
-  filtersPanel: {}
-};
+const FiltersPanelLayout = themed({
+  tag: Box,
+  defaultTheme: {
+    filtersPanelLayout: {}
+  }
+});
 
 type FilterPanelProps = {
   aggregations: Aggregation[];
@@ -22,7 +25,7 @@ export const FiltersPanel: React.SFC<FilterPanelProps> = ({ aggregations }) => (
       // const selectedAggregations = aggregations.filter(x => filters.some(filter => filter.field === x.field));
 
       return (
-        <Box defaultTheme={filtersPanelTheme}>
+        <FiltersPanelLayout>
           {anyFilters && <Button onClick={removeAllFilters}>Clear all filters</Button>}
           {anyFilters && <FiltersSummary selected={filters} removeFilter={removeFilter} />}
           {aggregations
@@ -58,7 +61,7 @@ export const FiltersPanel: React.SFC<FilterPanelProps> = ({ aggregations }) => (
                 </FilterLayout>
               );
             })}
-        </Box>
+        </FiltersPanelLayout>
       );
     }}
   </SearchConsumer>
