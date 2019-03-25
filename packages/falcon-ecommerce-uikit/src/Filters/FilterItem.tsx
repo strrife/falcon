@@ -35,7 +35,7 @@ export const FilterItem: React.SFC<FilterItemProps> = ({ item, onClick }) => (
 );
 
 const SelectedFilterItemInnerDOM: React.SFC<any> = ({ onClick, children, ...rest }) => (
-  <Box {...rest}>
+  <ListItem {...rest}>
     <Icon
       src="close"
       size="md"
@@ -49,7 +49,7 @@ const SelectedFilterItemInnerDOM: React.SFC<any> = ({ onClick, children, ...rest
       })}
     />
     {children}
-  </Box>
+  </ListItem>
 );
 export const SelectedFilterItem = themed({
   tag: SelectedFilterItemInnerDOM,
