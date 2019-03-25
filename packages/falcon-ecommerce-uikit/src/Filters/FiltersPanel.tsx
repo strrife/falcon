@@ -11,18 +11,16 @@ const filtersPanelTheme = {
 };
 
 type FilterPanelProps = {
-  title?: string;
   aggregations: Aggregation[];
 };
 
-export const FiltersPanel: React.SFC<FilterPanelProps> = ({ title, aggregations }) => (
+export const FiltersPanel: React.SFC<FilterPanelProps> = ({ aggregations }) => (
   <SearchConsumer>
     {({ setFilter, removeFilter, state: { filters } }) => (
       // const a = 1;
       // const selectedAggregations = aggregations.filter(x => filters.some(filter => filter.field === x.field));
 
       <Box defaultTheme={filtersPanelTheme}>
-        {!!title && <H2>{title}</H2>}
         {filters.length > 0 && <FiltersSummary selected={filters} removeFilter={removeFilter} />}
         {aggregations
           .sort((first, second) => (first.title < second.title ? -1 : 1))
