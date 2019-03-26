@@ -120,7 +120,8 @@
     "lodash.isequal": "^4.5.0",
     "qs": "^6.6.0",
     "react-adopt": "^0.6.0",
-    "react-lazyload": "^2.3.0"
+    "react-lazyload": "^2.3.0",
+    "react-powerplug": "1.0.0"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }
