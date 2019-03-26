@@ -18,13 +18,13 @@ import { ProductsList } from '../ProductsList/ProductsList';
 import { toGridTemplate } from '../helpers';
 import { Filters, getFiltersData } from '../Filters';
 
-const CategoryArea = {
+export const CategoryArea = {
   navigation: 'navigation',
   heading: 'heading',
   content: 'content'
 };
 
-const CategoryLayout = themed({
+export const CategoryLayout = themed({
   tag: 'div',
 
   defaultTheme: {
@@ -104,7 +104,12 @@ export const ShowingOutOf: React.SFC<{ itemsCount: number; totalItems: number }>
   </Text>
 );
 
-export const SortOrderDropdown: React.SFC<any> = ({ sortOrders, activeSortOrder, onChange }) => (
+export type SortOrderDropdownProps<TItem = { name: string }> = {
+  sortOrders: TItem[];
+  activeSortOrder: TItem;
+  onChange: (value: TItem) => void;
+};
+export const SortOrderDropdown: React.SFC<SortOrderDropdownProps> = ({ sortOrders, activeSortOrder, onChange }) => (
   <FlexLayout alignItems="center">
     <Text mr="sm">
       <T id="productsList.sort.title" />
@@ -113,9 +118,9 @@ export const SortOrderDropdown: React.SFC<any> = ({ sortOrders, activeSortOrder,
       <Dropdown css={{ width: '100%' }} onChange={onChange}>
         <DropdownLabel>{activeSortOrder.name}</DropdownLabel>
         <DropdownMenu>
-          {sortOrders.map((sortOrder: any) => (
-            <DropdownMenuItem key={sortOrder.name} value={sortOrder}>
-              {sortOrder.name}
+          {sortOrders.map((x: any) => (
+            <DropdownMenuItem key={x.name} value={x}>
+              {x.name}
             </DropdownMenuItem>
           ))}
         </DropdownMenu>
