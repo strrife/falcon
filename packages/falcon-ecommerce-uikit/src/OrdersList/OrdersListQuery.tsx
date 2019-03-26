@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
-import { Query, FetchMore, PaginationQuery, Pagination } from '../Query';
+import { PaginationQuery, Pagination } from './../types';
+import { Query, FetchMore } from './../Query';
 import { Order } from './../Order';
 
 export const GET_ORDERS_LIST = gql`

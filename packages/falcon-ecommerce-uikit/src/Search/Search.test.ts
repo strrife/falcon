@@ -33,7 +33,8 @@ describe('Filters', () => {
       const input = {
         sort: {
           field: 'price',
-          direction: 'desc' as SortOrderDirection
+          direction: 'desc' as SortOrderDirection,
+          name: ''
         }
       };
 

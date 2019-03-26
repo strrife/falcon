@@ -106,7 +106,7 @@ describe('SearchProvider', () => {
   });
 
   it('setSortOrder() should update url and pass order in props', async () => {
-    searchInfo.setSortOrder({ field: 'price', direction: 'asc' as any });
+    searchInfo.setSortOrder({ field: 'price', direction: 'asc' as any, name: '' });
     wrapper!.update();
     // name: 'Price ascending' should be added as value passed to setSortOrder is matched with value from
     // sortOrders property passed to SearchProvider (from Query or via prop directly)

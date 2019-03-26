@@ -20,7 +20,8 @@ export function searchStateFromURL(url: string): Partial<SearchState> {
     const [field, direction] = parts.sort.split(':');
     searchState.sort = {
       field,
-      direction
+      direction,
+      name: ''
     };
   }
 
