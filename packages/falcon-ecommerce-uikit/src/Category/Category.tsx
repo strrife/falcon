@@ -7,6 +7,7 @@ import { ShowMore } from './ShowMore';
 import { toGridTemplate } from '../helpers';
 import { ProductsList } from '../ProductsList/ProductsList';
 import { Filters, getFiltersData } from '../Filters';
+import { SortOrder } from './../Search/types';
 
 export const CategoryArea = {
   navigation: 'navigation',
@@ -43,12 +44,6 @@ export const CategoryLayout = themed({
     }
   }
 });
-
-type SortOrder = {
-  name: string;
-  field: string;
-  direction: string;
-};
 
 export const Category: React.SFC<{
   category: { name: string; products: any };

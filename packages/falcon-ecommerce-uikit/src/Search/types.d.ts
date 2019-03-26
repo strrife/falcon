@@ -5,7 +5,7 @@ export type FilterOperator = 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'in' |
 export type SortOrder = {
   field: string;
   direction: SortOrderDirection;
-  name?: string;
+  name: string;
 };
 
 export type PaginationInput = {
