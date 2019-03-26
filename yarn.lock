@@ -2560,6 +2560,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-responsive@3.0.3":
+  version "3.0.3"
+  resolved "https://registry.npmjs.org/@types/react-responsive/-/react-responsive-3.0.3.tgz#a31b599c7cfe4135c5cc2f45d0b71df64803b23f"
+  integrity sha512-paTAvXIFgv/jG60d7WSV0+yWCjqJ05cG+KOV48SiqYGjGi9kFdss9QnVTTLnFJmbUwWnoM+VD1Iyay1JBy/HPQ==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-router-dom@4.3.1":
   version "4.3.1"
   resolved "https://registry.npmjs.org/@types/react-router-dom/-/react-router-dom-4.3.1.tgz#71fe2918f8f60474a891520def40a63997dafe04"
@@ -5726,6 +5733,11 @@ css-loader@1.0.1, css-loader@^1.0.0:
     postcss-value-parser "^3.3.0"
     source-list-map "^2.0.0"
 
+css-mediaquery@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.npmjs.org/css-mediaquery/-/css-mediaquery-0.1.2.tgz#6a2c37344928618631c54bd33cedd301da18bea0"
+  integrity sha1-aiw3NEkoYYYxxUvTPO3TAdoYvqA=
+
 css-prefers-color-scheme@^3.1.1:
   version "3.1.1"
   resolved "https://registry.npmjs.org/css-prefers-color-scheme/-/css-prefers-color-scheme-3.1.1.tgz#6f830a2714199d4f0d0d0bb8a27916ed65cff1f4"
@@ -8821,6 +8833,11 @@ husky@1.1.1:
     run-node "^1.0.0"
     slash "^2.0.0"
 
+hyphenate-style-name@^1.0.0:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/hyphenate-style-name/-/hyphenate-style-name-1.0.3.tgz#097bb7fa0b8f1a9cf0bd5c734cf95899981a9b48"
+  integrity sha512-EcuixamT82oplpoJ2XU4pDtKGWQ7b00CD9f1ug9IaQ3p1bkHMiKCZ9ut9QDI6qsa6cpUuB+A/I+zLtdNK4n2DQ==
+
 i18next-sync-fs-backend@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/i18next-sync-fs-backend/-/i18next-sync-fs-backend-1.1.0.tgz#abacb1f6624bc9d3cffc5e7d3a0871df3cd47afa"
@@ -11320,6 +11337,13 @@ match-sorter@^2.3.0:
   integrity sha512-0/F1ezfjs5vegTvdH0sJEDrIi+w7wvUeDW/yqLMsK6jQWgNNJRv8jYCLBc8QrCxQNpSEpei6vrOcnJwAbnYhkw==
   dependencies:
     diacritic "0.0.2"
+
+matchmediaquery@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.npmjs.org/matchmediaquery/-/matchmediaquery-0.3.0.tgz#6f672bcdbc44de16825c6917fbcdcfb9b82607b1"
+  integrity sha512-u0dlv+VENJ+3YepvwSPBieuvnA6DWfaYa/ctwysAR13y4XLJNyt7bEVKzNj/Nvjo+50d88Pj+xL9xaSo6JmX/w==
+  dependencies:
+    css-mediaquery "^0.1.2"
 
 math-random@^1.0.1:
   version "1.0.4"
@@ -14201,6 +14225,15 @@ react-powerplug@1.0.0, react-powerplug@^1.0.0:
   integrity sha512-H7U+1sNiOqlaPgZpfciVZ3BMHtXHsd0tkXrOmrwV7ZTpK+YGRddK7+Um1RT2OTe+4G+1muXfyFMAwcnasABMtA==
   dependencies:
     "@babel/runtime" "^7.0.0"
+
+react-responsive@6.1.1:
+  version "6.1.1"
+  resolved "https://registry.npmjs.org/react-responsive/-/react-responsive-6.1.1.tgz#3edfac93c2ada3e9bf5904683c2d7c5aab4a6296"
+  integrity sha512-Po6pOEz70Agp+2lUmTxAnhfdkk0zp0IFgo/6bGcxv/S4Pa1sz0YG06WzkrIcASbyKSQ8x6AkcggeozXW3zj3kA==
+  dependencies:
+    hyphenate-style-name "^1.0.0"
+    matchmediaquery "^0.3.0"
+    prop-types "^15.6.1"
 
 react-router-dom@4.4.0-beta.6, react-router-dom@^4.4.0-beta.6:
   version "4.4.0-beta.6"
