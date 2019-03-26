@@ -25,7 +25,10 @@ export const FiltersLayout = themed({
   defaultTheme: {
     filtersPanelLayout: {
       display: 'grid',
-      gridGap: 'sm'
+      gridGap: 'sm',
+      css: {
+        width: '100%'
+      }
     }
   }
 });
