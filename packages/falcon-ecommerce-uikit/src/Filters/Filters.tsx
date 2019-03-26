@@ -1,8 +1,9 @@
 import React from 'react';
+import { Toggle } from 'react-powerplug';
 import { T } from '@deity/falcon-i18n';
-import { Box, Button, H3, themed } from '@deity/falcon-ui';
+import { Box, Button, H3, Details, Summary, DetailsContent, themed } from '@deity/falcon-ui';
 import { SearchConsumer, Aggregation, FilterData, FilterOperator } from '../Search';
-import { FilterTile, FilterLayout } from './FilterTile';
+import { FilterLayout } from './FilterTile';
 import { FilterContent, SingleFilter } from './FilterContent';
 import { FiltersSummary } from './FiltersSummary';
 
@@ -29,13 +30,13 @@ export const FiltersLayout = themed({
   }
 });
 
-export const Filters: React.SFC<{ data: FilterData[] }> = ({ data }) => (
+export const Filters: React.SFC<{ data: FilterData[] }> = ({ data, ...rest }) => (
   <SearchConsumer>
     {({ setFilter, removeFilter, removeAllFilters, state: { filters } }) => {
       const anyFilters = filters.length > 0;
 
       return (
-        <FiltersLayout>
+        <FiltersLayout {...rest}>
           {anyFilters && (
             <Button onClick={removeAllFilters}>
               <T id="filters.clearAll" />
@@ -43,33 +44,44 @@ export const Filters: React.SFC<{ data: FilterData[] }> = ({ data }) => (
           )}
           {anyFilters && <FiltersSummary data={data} />}
           {data.map(item => {
-            const selectedFilter = filters.find(x => x.field === item.field);
-
-            if (item.field === 'color') {
-              return (
-                <FilterLayout key={item.field}>
-                  <H3>{item.title}</H3>
-                  <SingleFilter
-                    field={item.field}
-                    options={item.options}
-                    selected={selectedFilter ? selectedFilter.value[0] : undefined}
-                    setFilter={setFilter}
-                    removeFilter={removeFilter}
-                  />
-                </FilterLayout>
-              );
-            }
+            const filter = filters.find(x => x.field === item.field);
+            const selectedValue = filter ? filter.value : [];
 
             return (
               <FilterLayout key={item.field}>
-                <H3>{item.title}</H3>
-                <FilterContent
-                  singleMode={item.field === 'cat'}
-                  aggregation={item}
-                  selected={selectedFilter ? selectedFilter.value : []}
-                  setFilter={setFilter}
-                  removeFilter={removeFilter}
-                />
+                <Toggle initial={false}>
+                  {({ on, toggle }) => (
+                    <Details open={on || selectedValue.length > 0}>
+                      <Summary
+                        onClick={(e: any) => {
+                          e.preventDefault();
+                          toggle();
+                        }}
+                      >
+                        <H3>{item.title}</H3>
+                      </Summary>
+                      <DetailsContent>
+                        {item.field === 'color' ? (
+                          <SingleFilter
+                            field={item.field}
+                            options={item.options}
+                            selected={selectedValue[0]}
+                            setFilter={setFilter}
+                            removeFilter={removeFilter}
+                          />
+                        ) : (
+                          <FilterContent
+                            singleMode={item.field === 'cat'}
+                            aggregation={item}
+                            selected={selectedValue}
+                            setFilter={setFilter}
+                            removeFilter={removeFilter}
+                          />
+                        )}
+                      </DetailsContent>
+                    </Details>
+                  )}
+                </Toggle>
               </FilterLayout>
             );
           })}
