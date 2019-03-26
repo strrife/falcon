@@ -4,6 +4,9 @@ const { AuthenticationError, codes } = require('@deity/falcon-errors');
 const util = require('util');
 const addMinutes = require('date-fns/add_minutes');
 const _ = require('lodash');
+const semver = require('semver');
+
+const SUPPORTED_MAGENTO_MODULE_VERSION = '~2.0.0';
 
 /**
  * Base API features (configuration fetching, response parsing, token management etc.) required for communication
@@ -22,6 +25,23 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     this.storeList = [];
     this.storeConfigMap = {};
     this.itemUrlSuffix = this.config.itemUrlSuffix || '.html';
+  }
+
+  async checkCompatibility() {
+    // todo: /config endpoint is not implemented yet so just fake the response atm
+    // const result = await this.get('/config', {}, { context: { skipAuth: false }});
+    const result = { version: '1.0.0' };
+    const isOk = semver.satisfies(result.version, SUPPORTED_MAGENTO_MODULE_VERSION);
+
+    if (!isOk) {
+      throw new Error(
+        `!!! The version of your Falcon Magento Module is not supported. Falcon Shop Extension requires version ${SUPPORTED_MAGENTO_MODULE_VERSION} while your Falcon Magento Module is at ${
+          result.version
+        }`
+      );
+    }
+
+    return true;
   }
 
   /**

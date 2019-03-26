@@ -84,7 +84,12 @@ describe('Falcon Shop Extension', () => {
     let schema;
     let server;
     beforeAll(async () => {
-      const shop = new Shop({ extensionContainer: {} });
+      const shop = new Shop({
+        extensionContainer: {},
+        eventEmitter: {
+          on: () => {}
+        }
+      });
       shop.api = new CustomApi({});
 
       // prepare server with mocks for tests

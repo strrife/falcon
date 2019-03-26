@@ -34,7 +34,8 @@
     "graphql-tools": "4.0.4",
     "lodash": "4.17.11",
     "proper-url-join": "^1.2.0",
-    "qs": "6.6.0"
+    "qs": "6.6.0",
+    "semver": "^5.6.0"
   },
   "devDependencies": {
     "@deity/falcon-server": "^0.1.3",

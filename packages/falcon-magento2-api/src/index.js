@@ -45,7 +45,10 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       }
     };
     Logger.debug(`${this.name}: Adding additional resolve functions`);
-    addResolveFunctionsToSchema({ schema: this.gqlServerConfig.schema, resolvers });
+
+    if (this.gqlServerConfig && this.gqlServerConfig.schema) {
+      addResolveFunctionsToSchema({ schema: this.gqlServerConfig.schema, resolvers });
+    }
   }
 
   async getActiveStores() {
