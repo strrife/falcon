@@ -1,8 +1,9 @@
-import React, { MouseEventHandler } from 'react';
+import React from 'react';
 import { NetworkStatus } from 'apollo-client';
-import { themed, H1, Text, Divider, Button, Box, FlexLayout } from '@deity/falcon-ui';
-import { T } from '@deity/falcon-i18n';
+import { themed, H1, Divider, Box, FlexLayout } from '@deity/falcon-ui';
 import { SortOrderDropdown } from './SortOrderDropdown';
+import { ShowingOutOf } from './ShowingOutOf';
+import { ShowMore } from './ShowMore';
 import { toGridTemplate } from '../helpers';
 import { ProductsList } from '../ProductsList/ProductsList';
 import { Filters, getFiltersData } from '../Filters';
@@ -86,17 +87,3 @@ export const Category: React.SFC<{
     </CategoryLayout>
   );
 };
-
-export const ShowingOutOf: React.SFC<{ itemsCount: number; totalItems: number }> = ({ itemsCount, totalItems }) => (
-  <Text>
-    <T id="productsList.pagination.showingOutOf" {...{ itemsCount, totalItems }} />
-  </Text>
-);
-
-export const ShowMore: React.SFC<{ onClick: MouseEventHandler; loading: boolean }> = ({ onClick, loading }) => (
-  <Box>
-    <Button onClick={onClick} variant={loading ? 'loader' : 'secondary'} height="xl" my="sm">
-      <T id="productsList.pagination.showMore" />
-    </Button>
-  </Box>
-);
