@@ -64,8 +64,8 @@ export const Category: React.SFC<{
         <FlexLayout justifyContent="space-between" alignItems="center">
           <ShowingOutOf itemsCount={items.length} totalItems={pagination.totalItems} />
           <SortOrderDropdown
-            sortOrders={availableSortOrders}
-            activeSortOrder={activeSortOrder}
+            items={availableSortOrders}
+            value={activeSortOrder}
             onChange={x => setSortOrder(x as SortOrder)}
           />
         </FlexLayout>

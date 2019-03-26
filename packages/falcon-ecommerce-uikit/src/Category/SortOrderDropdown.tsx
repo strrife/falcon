@@ -3,20 +3,20 @@ import { Text, Box, FlexLayout, Dropdown, DropdownLabel, DropdownMenu, DropdownM
 import { T } from '@deity/falcon-i18n';
 
 export type SortOrderDropdownProps<TItem extends { name: string } = { name: string }> = {
-  sortOrders: TItem[];
-  activeSortOrder: TItem;
+  items: TItem[];
+  value: TItem;
   onChange: (value: TItem) => void;
 };
-export const SortOrderDropdown: React.SFC<SortOrderDropdownProps> = ({ sortOrders, activeSortOrder, onChange }) => (
+export const SortOrderDropdown: React.SFC<SortOrderDropdownProps> = ({ items, value, onChange }) => (
   <FlexLayout alignItems="center">
     <Text mr="sm">
       <T id="productsList.sort.title" />
     </Text>
     <Box display="flex">
       <Dropdown css={{ width: '100%' }} onChange={onChange}>
-        <DropdownLabel>{activeSortOrder.name}</DropdownLabel>
+        <DropdownLabel>{value.name}</DropdownLabel>
         <DropdownMenu>
-          {sortOrders.map((x: any) => (
+          {items.map((x: any) => (
             <DropdownMenuItem key={x.name} value={x}>
               {x.name}
             </DropdownMenuItem>
