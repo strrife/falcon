@@ -28,6 +28,7 @@ export const CategoryLayout = themed({
         xs: toGridTemplate([
           ['1fr'               ],
           [CategoryArea.heading],
+          [CategoryArea.navigation],
           [CategoryArea.content]
         ]),
         md: toGridTemplate([
