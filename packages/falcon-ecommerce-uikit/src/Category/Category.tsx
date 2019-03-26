@@ -1,21 +1,10 @@
 import React, { MouseEventHandler } from 'react';
 import { NetworkStatus } from 'apollo-client';
-import {
-  themed,
-  H1,
-  Text,
-  Divider,
-  Button,
-  Box,
-  FlexLayout,
-  Dropdown,
-  DropdownLabel,
-  DropdownMenu,
-  DropdownMenuItem
-} from '@deity/falcon-ui';
+import { themed, H1, Text, Divider, Button, Box, FlexLayout } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
-import { ProductsList } from '../ProductsList/ProductsList';
+import { SortOrderDropdown } from './SortOrderDropdown';
 import { toGridTemplate } from '../helpers';
+import { ProductsList } from '../ProductsList/ProductsList';
 import { Filters, getFiltersData } from '../Filters';
 
 export const CategoryArea = {
@@ -81,7 +70,7 @@ export const Category: React.SFC<{
           <SortOrderDropdown
             sortOrders={availableSortOrders}
             activeSortOrder={activeSortOrder}
-            onChange={setSortOrder}
+            onChange={x => setSortOrder(x as SortOrder)}
           />
         </FlexLayout>
         <Divider mt="xs" />
@@ -102,31 +91,6 @@ export const ShowingOutOf: React.SFC<{ itemsCount: number; totalItems: number }>
   <Text>
     <T id="productsList.pagination.showingOutOf" {...{ itemsCount, totalItems }} />
   </Text>
-);
-
-export type SortOrderDropdownProps<TItem = { name: string }> = {
-  sortOrders: TItem[];
-  activeSortOrder: TItem;
-  onChange: (value: TItem) => void;
-};
-export const SortOrderDropdown: React.SFC<SortOrderDropdownProps> = ({ sortOrders, activeSortOrder, onChange }) => (
-  <FlexLayout alignItems="center">
-    <Text mr="sm">
-      <T id="productsList.sort.title" />
-    </Text>
-    <Box display="flex">
-      <Dropdown css={{ width: '100%' }} onChange={onChange}>
-        <DropdownLabel>{activeSortOrder.name}</DropdownLabel>
-        <DropdownMenu>
-          {sortOrders.map((x: any) => (
-            <DropdownMenuItem key={x.name} value={x}>
-              {x.name}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenu>
-      </Dropdown>
-    </Box>
-  </FlexLayout>
 );
 
 export const ShowMore: React.SFC<{ onClick: MouseEventHandler; loading: boolean }> = ({ onClick, loading }) => (
