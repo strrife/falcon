@@ -1796,11 +1796,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     if (origin) {
       const paypalReturnSuccess = `${origin}${this.getPathWithPrefix(`${this.getCartPath()}/paypal-express-return`)}`;
       const paypalReturnCancel = `${origin}${this.getPathWithPrefix(`${this.getCartPath()}/paypal-express-cancel`)}`;
-      if (!input.paymentMethod.additionalData) {
-        input.paymentMethod.additionalData = {};
-      }
 
-      input.paymentMethod.additionalData = Object.assign(input.paymentMethod.additionalData, {
+      input.paymentMethod.additionalData = Object.assign({}, input.paymentMethod.additionalData, {
         paypal_return_success: paypalReturnSuccess,
         paypal_return_cancel: paypalReturnCancel,
         redirect_failure: 'failure',
