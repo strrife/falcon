@@ -58,7 +58,7 @@ type CheckoutLogicState = {
   loading: boolean;
   errors: CheckoutLogicErrors;
   values: CheckoutLogicData;
-  orderId?: number;
+  orderId?: string;
   availableShippingMethods: CheckoutShippingMethod[];
   availablePaymentMethods: CheckoutPaymentMethod[];
 };
@@ -79,7 +79,7 @@ export type CheckoutLogicInjectedProps = {
   loading: boolean;
   availableShippingMethods: CheckoutShippingMethod[];
   availablePaymentMethods: CheckoutPaymentMethod[];
-  orderId?: number;
+  orderId?: string;
   setEmail(email: string): void;
   setShippingAddress(address: CheckoutAddress): void;
   setBillingSameAsShipping(same: boolean): void;
