@@ -34,6 +34,11 @@ export const getSelectedFilterData = (data: FilterData[], filters: FilterInput[]
 export const FiltersSummary: React.SFC<FiltersSummaryProps> = ({ data }) => (
   <SearchConsumer>
     {({ state: { filters }, removeFilter }) => {
+      const anyFilters = filters.length > 0;
+      if (anyFilters === false) {
+        return null;
+      }
+
       const selected = getSelectedFilterData(data, filters);
 
       return (

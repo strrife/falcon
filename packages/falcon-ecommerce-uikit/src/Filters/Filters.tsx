@@ -1,11 +1,9 @@
 import React from 'react';
-import { Toggle } from 'react-powerplug';
 import { T } from '@deity/falcon-i18n';
 import { Box, Button, H3, DetailsContent, themed } from '@deity/falcon-ui';
 import { SearchConsumer, Aggregation, FilterData, FilterOperator } from '../Search';
-import { FilterLayout, FilterDetails, FilterSummary } from './FilterTile';
+import { FilterDetails, FilterSummary } from './FilterTile';
 import { FilterContent, SingleFilter } from './FilterContent';
-import { FiltersSummary } from './FiltersSummary';
 
 export const aggregationToFilterData = (aggregation: Aggregation, operator: FilterOperator = 'eq'): FilterData => ({
   field: aggregation.field,
@@ -46,7 +44,6 @@ export const Filters: React.SFC<{ data: FilterData[] }> = ({ data, ...rest }) =>
               <T id="filters.clearAll" />
             </Button>
           )}
-          {anyFilters && <FiltersSummary data={data} />}
           {data.map(item => {
             const filter = filters.find(x => x.field === item.field);
             const selectedValue = filter ? filter.value : [];

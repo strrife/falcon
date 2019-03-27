@@ -8,7 +8,7 @@ import { ShowingOutOf } from './ShowingOutOf';
 import { ShowMore } from './ShowMore';
 import { toGridTemplate } from '../helpers';
 import { ProductsList } from '../ProductsList/ProductsList';
-import { Filters, getFiltersData } from '../Filters';
+import { Filters, FiltersSummary, getFiltersData } from '../Filters';
 import { SortOrder } from './../Search/types';
 
 export const CategoryArea = {
@@ -63,6 +63,7 @@ export const Category: React.SFC<{
 }> = ({ category, availableSortOrders, activeSortOrder, setSortOrder, fetchMore, networkStatus }) => {
   const { products } = category;
   const { pagination, items, aggregations } = products;
+  const filtersData = getFiltersData(aggregations);
 
   return (
     <CategoryLayout>
@@ -82,14 +83,14 @@ export const Category: React.SFC<{
         <MediaQuery minWidth={860}>
           {(matches: boolean) =>
             matches ? (
-              <Filters data={getFiltersData(aggregations)} />
+              <Filters data={filtersData} />
             ) : (
               <Toggle initial={false}>
                 {({ on, toggle }: any) => (
                   <React.Fragment>
                     <Button onClick={toggle}>Filters</Button>
                     <Sidebar as={Portal} visible={on}>
-                      <Filters data={getFiltersData(aggregations)} />
+                      <Filters data={filtersData} />
                     </Sidebar>
                     <Backdrop onClick={toggle} as={Portal} visible={on} />
                   </React.Fragment>
@@ -100,6 +101,7 @@ export const Category: React.SFC<{
         </MediaQuery>
       </Box>
       <Box gridArea={CategoryArea.content}>
+        <FiltersSummary data={filtersData} />
         <ProductsList products={items} />
       </Box>
       <Box gridArea={CategoryArea.footer}>
