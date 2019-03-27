@@ -1,45 +1,25 @@
 import React from 'react';
-import { Query } from './Query';
-import { SORT_ORDERS_QUERY } from './Search';
+import { SortOrder } from './Category/SortOrdersQuery';
+import { SearchConsumer } from './Search';
 
-type SortOrder = {
-  name: string;
-  field: string;
-  direction: string;
-};
-
-type SortOrdersProviderState = {
-  active: SortOrder | null;
-};
-
-type SortOrdersProviderInjectedProps = {
-  availableSortOrders: SortOrder[];
-  activeSortOrder: SortOrder;
-  setSortOrder(active: SortOrder): void;
+type SortOrdersProviderRenderProps = {
+  items: SortOrder[];
+  value: SortOrder;
+  onChange(active: SortOrder): void;
 };
 
 type SortOrdersProviderProps = {
-  children(props: SortOrdersProviderInjectedProps): any;
+  children(props: SortOrdersProviderRenderProps): any;
 };
 
-export class SortOrdersProvider extends React.Component<SortOrdersProviderProps, SortOrdersProviderState> {
-  state = {
-    active: null
-  };
-
-  setSortOrder = (active: SortOrder) => this.setState({ active });
-
-  render() {
-    return (
-      <Query query={SORT_ORDERS_QUERY}>
-        {({ sortOrders }) =>
-          this.props.children({
-            availableSortOrders: sortOrders,
-            activeSortOrder: this.state.active || sortOrders[0],
-            setSortOrder: this.setSortOrder
-          })
-        }
-      </Query>
-    );
-  }
-}
+export const SortOrdersProvider: React.SFC<SortOrdersProviderProps> = ({ children }) => (
+  <SearchConsumer>
+    {({ state, availableSortOrders, setSortOrder }) =>
+      children({
+        value: state.sort,
+        items: availableSortOrders,
+        onChange: setSortOrder
+      })
+    }
+  </SearchConsumer>
+);
