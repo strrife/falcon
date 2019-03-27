@@ -1728,22 +1728,17 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Order>} last order data
    */
   async lastOrder() {
-    const { orderId, paypalExpressHash } = this.session;
-    let lastOrderId = orderId;
+    const { orderId, customerToken = {} } = this.session;
 
-    if (!orderId && paypalExpressHash) {
-      // fetch last order id based on hash generated when asking for paypal token
-      const orderIdRequest = await this.get(`/orders/get-order-from-paypal-hash/${paypalExpressHash}`);
-      lastOrderId = orderIdRequest.data;
-    }
-
-    if (!lastOrderId) {
+    if (!orderId) {
       Logger.warn(`${this.name} Trying to fetch order info without order id`);
-
       return {};
     }
 
-    const response = await this.get(`/orders/${lastOrderId}`, {}, { context: { useAdminToken: true } });
+    const isLoggedIn = customerToken && customerToken.token;
+    const orderEndpoint = isLoggedIn ? `/orders/${orderId}/order-info` : `/guest-orders/${orderId}/order-info`;
+
+    const response = await this.get(orderEndpoint, {}, { context: { useAdminToken: !isLoggedIn } });
     response.data = this.convertKeys(response.data);
     response.data.paymentMethodName = response.data.payment.method;
 
