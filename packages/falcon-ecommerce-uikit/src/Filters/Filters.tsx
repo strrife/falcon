@@ -34,6 +34,19 @@ export const FiltersLayout = themed({
   }
 });
 
+export const FilterSummary = themed({
+  tag: Summary,
+  defaultTheme: {
+    filterSummary: {
+      display: 'flex',
+      alignItems: 'center',
+      bg: 'transparent',
+      m: 'none',
+      px: 'none'
+    }
+  }
+});
+
 export const Filters: React.SFC<{ data: FilterData[] }> = ({ data, ...rest }) => (
   <SearchConsumer>
     {({ setFilter, removeFilter, removeAllFilters, state: { filters } }) => {
@@ -56,14 +69,14 @@ export const Filters: React.SFC<{ data: FilterData[] }> = ({ data, ...rest }) =>
                 <Toggle initial={false}>
                   {({ on, toggle }) => (
                     <Details open={on || selectedValue.length > 0}>
-                      <Summary
+                      <FilterSummary
                         onClick={(e: any) => {
                           e.preventDefault();
                           toggle();
                         }}
                       >
                         <H3>{item.title}</H3>
-                      </Summary>
+                      </FilterSummary>
                       <DetailsContent>
                         {item.field === 'color' ? (
                           <SingleFilter

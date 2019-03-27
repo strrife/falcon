@@ -10,7 +10,7 @@ export const FilterItemLayout = themed({
       alignItems: 'center',
       flexWrap: 'wrap',
       color: 'black',
-      pl: 'xs',
+      pr: 'xs',
       pb: 'xs',
       css: ({ theme }) => ({
         cursor: 'pointer',
@@ -57,8 +57,7 @@ export const SelectedFilterItem = themed({
     selectedFilterItemLayout: {
       display: 'flex',
       alignItems: 'center',
-      flexWrap: 'wrap',
-      pl: 'xs'
+      flexWrap: 'wrap'
     }
   }
 });
