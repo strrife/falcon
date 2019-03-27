@@ -9,7 +9,7 @@ import { ShowMore } from './ShowMore';
 import { toGridTemplate } from '../helpers';
 import { ProductsList } from '../ProductsList/ProductsList';
 import { Filters, FiltersSummary, getFiltersData } from '../Filters';
-import { SortOrder } from './../Search/types';
+import { SortOrdersProvider } from '../SortOrdersProvider';
 
 export const CategoryArea = {
   heading: 'heading',
@@ -54,13 +54,10 @@ export const CategoryLayout = themed({
 
 export const Category: React.SFC<{
   category: { name: string; products: any };
-  availableSortOrders: SortOrder[];
-  activeSortOrder: SortOrder;
-  setSortOrder(order: SortOrder): null;
   fetchMore: any;
   aggregations: any;
   networkStatus: NetworkStatus;
-}> = ({ category, availableSortOrders, activeSortOrder, setSortOrder, fetchMore, networkStatus }) => {
+}> = ({ category, fetchMore, networkStatus }) => {
   const { products } = category;
   const { pagination, items, aggregations } = products;
   const filtersData = getFiltersData(aggregations);
@@ -71,11 +68,7 @@ export const Category: React.SFC<{
         <H1>{category.name}</H1>
         <FlexLayout justifyContent="space-between" alignItems="center">
           <ShowingOutOf itemsCount={items.length} totalItems={pagination.totalItems} />
-          <SortOrderDropdown
-            items={availableSortOrders}
-            value={activeSortOrder}
-            onChange={x => setSortOrder(x as SortOrder)}
-          />
+          <SortOrdersProvider>{sortOrdersProps => <SortOrderDropdown {...sortOrdersProps} />}</SortOrdersProvider>
         </FlexLayout>
         <Divider mt="xs" />
       </Box>

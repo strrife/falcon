@@ -6,7 +6,7 @@ const copy = item => item && JSON.parse(JSON.stringify(item));
 
 const CategoryPage = ({ id }) => (
   <SearchConsumer>
-    {({ state, availableSortOrders, setSortOrder }) => (
+    {({ state }) => (
       <CategoryProductsQuery
         variables={{
           categoryId: id,
@@ -17,14 +17,7 @@ const CategoryPage = ({ id }) => (
           filters: copy(state.filters)
         }}
       >
-        {categoryProps => (
-          <Category
-            {...categoryProps}
-            availableSortOrders={availableSortOrders}
-            activeSortOrder={state.sort}
-            setSortOrder={setSortOrder}
-          />
-        )}
+        {categoryProps => <Category {...categoryProps} />}
       </CategoryProductsQuery>
     )}
   </SearchConsumer>

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Text, Box, FlexLayout, Dropdown, DropdownLabel, DropdownMenu, DropdownMenuItem } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
+import { SortOrder } from './SortOrdersQuery';
 
-export type SortOrderDropdownProps<TItem extends { name: string } = { name: string }> = {
+export type SortOrderDropdownProps<TItem extends { name: string } = SortOrder> = {
   items: TItem[];
   value: TItem;
   onChange: (value: TItem) => void;
