@@ -1,5 +1,7 @@
+const config = require('config');
+
 module.exports = {
-  devServerPort: 3001,
+  devServerPort: (config.port || 3000) + 1,
   clearConsole: false,
   useWebmanifest: true,
   i18n: {
