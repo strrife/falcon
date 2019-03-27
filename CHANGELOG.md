@@ -10,7 +10,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 - changed GraphQL Proxy config in favor of passing GraphQL URL explicitly ([#355](https://github.com/deity-io/falcon/pull/355))
 - changed the way of configuring PORT for `falcon-client` and `webpackDevServer` ([#364](https://github.com/deity-io/falcon/pull/364))
-- fixed vulnerability of razzle-dev-utils > react-dev-utils dependency ([305](https://github.com/deity-io/falcon/issues/305))
+- fixed vulnerability of `razzle-dev-utils` > `react-dev-utils` dependency ([305](https://github.com/deity-io/falcon/issues/305))
 
 
 ## Falcon 1.0 RC2 (2019-03-13)
