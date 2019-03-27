@@ -1,9 +1,9 @@
 import React from 'react';
 import { Toggle } from 'react-powerplug';
 import { T } from '@deity/falcon-i18n';
-import { Box, Button, H3, Details, Summary, DetailsContent, themed } from '@deity/falcon-ui';
+import { Box, Button, H3, DetailsContent, themed } from '@deity/falcon-ui';
 import { SearchConsumer, Aggregation, FilterData, FilterOperator } from '../Search';
-import { FilterLayout } from './FilterTile';
+import { FilterLayout, FilterDetails, FilterSummary } from './FilterTile';
 import { FilterContent, SingleFilter } from './FilterContent';
 import { FiltersSummary } from './FiltersSummary';
 
@@ -34,19 +34,6 @@ export const FiltersLayout = themed({
   }
 });
 
-export const FilterSummary = themed({
-  tag: Summary,
-  defaultTheme: {
-    filterSummary: {
-      display: 'flex',
-      alignItems: 'center',
-      bg: 'transparent',
-      m: 'none',
-      px: 'none'
-    }
-  }
-});
-
 export const Filters: React.SFC<{ data: FilterData[] }> = ({ data, ...rest }) => (
   <SearchConsumer>
     {({ setFilter, removeFilter, removeAllFilters, state: { filters } }) => {
@@ -65,41 +52,34 @@ export const Filters: React.SFC<{ data: FilterData[] }> = ({ data, ...rest }) =>
             const selectedValue = filter ? filter.value : [];
 
             return (
-              <FilterLayout key={item.field}>
-                <Toggle initial={false}>
-                  {({ on, toggle }) => (
-                    <Details open={on || selectedValue.length > 0}>
-                      <FilterSummary
-                        onClick={(e: any) => {
-                          e.preventDefault();
-                          toggle();
-                        }}
-                      >
-                        <H3>{item.title}</H3>
-                      </FilterSummary>
-                      <DetailsContent>
-                        {item.field === 'color' ? (
-                          <SingleFilter
-                            field={item.field}
-                            options={item.options}
-                            selected={selectedValue[0]}
-                            setFilter={setFilter}
-                            removeFilter={removeFilter}
-                          />
-                        ) : (
-                          <FilterContent
-                            singleMode={item.field === 'cat'}
-                            aggregation={item}
-                            selected={selectedValue}
-                            setFilter={setFilter}
-                            removeFilter={removeFilter}
-                          />
-                        )}
-                      </DetailsContent>
-                    </Details>
-                  )}
-                </Toggle>
-              </FilterLayout>
+              <FilterDetails key={item.field} initiallyOpen={selectedValue.length > 0}>
+                {({ toggle }) => (
+                  <React.Fragment>
+                    <FilterSummary onClick={toggle}>
+                      <H3>{item.title}</H3>
+                    </FilterSummary>
+                    <DetailsContent>
+                      {item.field === 'color' ? (
+                        <SingleFilter
+                          field={item.field}
+                          options={item.options}
+                          selected={selectedValue[0]}
+                          setFilter={setFilter}
+                          removeFilter={removeFilter}
+                        />
+                      ) : (
+                        <FilterContent
+                          singleMode={item.field === 'cat'}
+                          aggregation={item}
+                          selected={selectedValue}
+                          setFilter={setFilter}
+                          removeFilter={removeFilter}
+                        />
+                      )}
+                    </DetailsContent>
+                  </React.Fragment>
+                )}
+              </FilterDetails>
             );
           })}
         </FiltersLayout>
