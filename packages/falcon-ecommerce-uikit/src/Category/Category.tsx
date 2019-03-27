@@ -14,7 +14,8 @@ import { SortOrder } from './../Search/types';
 export const CategoryArea = {
   navigation: 'navigation',
   heading: 'heading',
-  content: 'content'
+  content: 'content',
+  pagination: 'pagination'
 };
 
 export const CategoryLayout = themed({
@@ -28,20 +29,23 @@ export const CategoryLayout = themed({
       // prettier-ignore
       gridTemplate: {
         xs: toGridTemplate([
-          ['1fr'               ],
-          [CategoryArea.heading],
+          ['1fr'                  ],
+          [CategoryArea.heading   ],
           [CategoryArea.navigation],
-          [CategoryArea.content]
+          [CategoryArea.content   ],
+          [CategoryArea.pagination]
         ]),
         md: toGridTemplate([
-          ['1fr',                   '3fr'               ],
-          [CategoryArea.heading,    CategoryArea.heading],
-          [CategoryArea.navigation, CategoryArea.content]
+          ['1fr',                   '3fr'                  ],
+          [CategoryArea.heading,    CategoryArea.heading   ],
+          [CategoryArea.navigation, CategoryArea.content   ],
+          [CategoryArea.pagination, CategoryArea.pagination]
         ]),
         lg: toGridTemplate([
-          ['1fr',                   '4fr'               ],
-          [CategoryArea.heading,    CategoryArea.heading],
-          [CategoryArea.navigation, CategoryArea.content]
+          ['1fr',                   '4fr'                  ],
+          [CategoryArea.heading,    CategoryArea.heading   ],
+          [CategoryArea.navigation, CategoryArea.content   ],
+          [CategoryArea.pagination, CategoryArea.pagination]
         ])
       }
     }
@@ -74,29 +78,31 @@ export const Category: React.SFC<{
         </FlexLayout>
         <Divider mt="xs" />
       </Box>
-
-      <MediaQuery minWidth={860}>
-        {(matches: boolean) =>
-          matches ? (
-            <Filters data={getFiltersData(aggregations)} />
-          ) : (
-            <Toggle initial={false}>
-              {({ on, toggle }: any) => (
-                <Box gridArea={CategoryArea.navigation}>
-                  <Button onClick={toggle}>Filters</Button>
-                  <Sidebar as={Portal} visible={on}>
-                    <Filters data={getFiltersData(aggregations)} />
-                  </Sidebar>
-                  <Backdrop onClick={toggle} as={Portal} visible={on} />
-                </Box>
-              )}
-            </Toggle>
-          )
-        }
-      </MediaQuery>
-
+      <Box gridArea={CategoryArea.navigation}>
+        <MediaQuery minWidth={860}>
+          {(matches: boolean) =>
+            matches ? (
+              <Filters data={getFiltersData(aggregations)} />
+            ) : (
+              <Toggle initial={false}>
+                {({ on, toggle }: any) => (
+                  <React.Fragment>
+                    <Button onClick={toggle}>Filters</Button>
+                    <Sidebar as={Portal} visible={on}>
+                      <Filters data={getFiltersData(aggregations)} />
+                    </Sidebar>
+                    <Backdrop onClick={toggle} as={Portal} visible={on} />
+                  </React.Fragment>
+                )}
+              </Toggle>
+            )
+          }
+        </MediaQuery>
+      </Box>
       <Box gridArea={CategoryArea.content}>
         <ProductsList products={items} />
+      </Box>
+      <Box gridArea={CategoryArea.pagination}>
         {pagination.nextPage && <Divider />}
         {pagination.nextPage && <ShowMore onClick={fetchMore} loading={networkStatus === NetworkStatus.fetchMore} />}
       </Box>
