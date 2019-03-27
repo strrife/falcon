@@ -27,7 +27,8 @@ export const FiltersLayout = themed({
       display: 'grid',
       gridGap: 'sm',
       css: {
-        width: '100%'
+        width: '100%',
+        alignContent: 'start'
       }
     }
   }
