@@ -24,7 +24,7 @@ const apiConfig = {
       typeDefs: [BaseSchema, Schema],
       resolvers: {
         PlaceOrderResult: {
-          // empty resolver
+          // passing empty type resolver to avoid warnings on the console
           __resolveType: () => ''
         }
       }
