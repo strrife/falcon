@@ -1,14 +1,7 @@
 import { PaginationInput } from './../types';
-
-export type SortOrderDirection = 'asc' | 'desc';
+import { SortOrder } from './../Category/SortOrdersQuery';
 
 export type FilterOperator = 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'in' | 'nin' | 'range';
-
-export type SortOrder = {
-  field: string;
-  direction: SortOrderDirection;
-  name: string;
-};
 
 export type FilterInput = {
   operator: FilterOperator;

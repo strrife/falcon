@@ -5,7 +5,7 @@ import { mockSingleLink } from 'react-apollo/test-utils';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-client';
 import { InMemoryCache as Cache } from 'apollo-cache-inmemory';
-import { SearchProvider, SORT_ORDERS_QUERY } from './SearchProvider';
+import { SearchProvider } from './SearchProvider';
 import { SearchContext, SearchContextType } from './SearchContext';
 import { SearchState } from './types';
 import { wait } from '../../../../test/helpers';

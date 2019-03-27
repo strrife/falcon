@@ -2,19 +2,13 @@ import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 // eslint-disable-next-line
 import { Location } from 'history';
-import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import { PaginationInput } from './../types';
-import { SearchState, FilterOperator, SortOrder } from './types';
+import { SearchState, FilterOperator } from './types';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
 import { SearchContext } from './SearchContext';
-
-export const SORT_ORDERS_QUERY = gql`
-  query SortOrdersQuery {
-    sortOrders @client
-  }
-`;
+import { SortOrder, SORT_ORDERS_QUERY } from '../Category/SortOrdersQuery';
 
 interface SearchProviderProps extends RouteComponentProps {
   searchStateFromURL?(url: string): Partial<SearchState>;
