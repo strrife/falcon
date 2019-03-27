@@ -12,10 +12,10 @@ import { Filters, getFiltersData } from '../Filters';
 import { SortOrder } from './../Search/types';
 
 export const CategoryArea = {
-  navigation: 'navigation',
   heading: 'heading',
+  filters: 'filters',
   content: 'content',
-  pagination: 'pagination'
+  footer: 'footer'
 };
 
 export const CategoryLayout = themed({
@@ -29,23 +29,23 @@ export const CategoryLayout = themed({
       // prettier-ignore
       gridTemplate: {
         xs: toGridTemplate([
-          ['1fr'                  ],
-          [CategoryArea.heading   ],
-          [CategoryArea.navigation],
-          [CategoryArea.content   ],
-          [CategoryArea.pagination]
+          ['1fr'               ],
+          [CategoryArea.heading],
+          [CategoryArea.filters],
+          [CategoryArea.content],
+          [CategoryArea.footer ]
         ]),
         md: toGridTemplate([
-          ['1fr',                   '3fr'                  ],
-          [CategoryArea.heading,    CategoryArea.heading   ],
-          [CategoryArea.navigation, CategoryArea.content   ],
-          [CategoryArea.pagination, CategoryArea.pagination]
+          ['1fr',                   '3fr'               ],
+          [CategoryArea.heading,    CategoryArea.heading],
+          [CategoryArea.filters,    CategoryArea.content],
+          [CategoryArea.footer,     CategoryArea.footer ]
         ]),
         lg: toGridTemplate([
-          ['1fr',                   '4fr'                  ],
-          [CategoryArea.heading,    CategoryArea.heading   ],
-          [CategoryArea.navigation, CategoryArea.content   ],
-          [CategoryArea.pagination, CategoryArea.pagination]
+          ['1fr',                   '4fr'               ],
+          [CategoryArea.heading,    CategoryArea.heading],
+          [CategoryArea.filters,    CategoryArea.content],
+          [CategoryArea.footer,     CategoryArea.footer ]
         ])
       }
     }
@@ -78,7 +78,7 @@ export const Category: React.SFC<{
         </FlexLayout>
         <Divider mt="xs" />
       </Box>
-      <Box gridArea={CategoryArea.navigation}>
+      <Box gridArea={CategoryArea.filters}>
         <MediaQuery minWidth={860}>
           {(matches: boolean) =>
             matches ? (
@@ -102,7 +102,7 @@ export const Category: React.SFC<{
       <Box gridArea={CategoryArea.content}>
         <ProductsList products={items} />
       </Box>
-      <Box gridArea={CategoryArea.pagination}>
+      <Box gridArea={CategoryArea.footer}>
         {pagination.nextPage && <Divider />}
         {pagination.nextPage && <ShowMore onClick={fetchMore} loading={networkStatus === NetworkStatus.fetchMore} />}
       </Box>
