@@ -51,7 +51,7 @@ const handleRemoteEndpoints = async (router, serverUrl, endpoints, redirs) => {
  * @param {object} redirs Map of redirections
  * @param {PaymentRedirectMap} redirs.payment Payment redirects
  */
-export const bootstrap = async (router, serverUrl, redirs) => {
+export const configureServer = async (router, serverUrl, redirs) => {
   if (!router) {
     Logger.error('"router" must be passed in your "bootstrap.js" file');
     return;
