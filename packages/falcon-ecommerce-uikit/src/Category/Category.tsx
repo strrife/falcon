@@ -1,6 +1,8 @@
 import React from 'react';
 import { NetworkStatus } from 'apollo-client';
-import { themed, H1, Divider, Box, FlexLayout } from '@deity/falcon-ui';
+import MediaQuery from 'react-responsive';
+import { Toggle } from 'react-powerplug';
+import { themed, H1, Divider, Box, FlexLayout, Button, Sidebar, Backdrop, Portal } from '@deity/falcon-ui';
 import { SortOrderDropdown } from './SortOrderDropdown';
 import { ShowingOutOf } from './ShowingOutOf';
 import { ShowMore } from './ShowMore';
@@ -72,9 +74,27 @@ export const Category: React.SFC<{
         </FlexLayout>
         <Divider mt="xs" />
       </Box>
-      <Box gridArea={CategoryArea.navigation}>
-        <Filters data={getFiltersData(aggregations)} />
-      </Box>
+
+      <MediaQuery minWidth={860}>
+        {(matches: boolean) =>
+          matches ? (
+            <Filters data={getFiltersData(aggregations)} />
+          ) : (
+            <Toggle initial={false}>
+              {({ on, toggle }: any) => (
+                <Box gridArea={CategoryArea.navigation}>
+                  <Button onClick={toggle}>Filters</Button>
+                  <Sidebar as={Portal} visible={on}>
+                    <Filters data={getFiltersData(aggregations)} />
+                  </Sidebar>
+                  <Backdrop onClick={toggle} as={Portal} visible={on} />
+                </Box>
+              )}
+            </Toggle>
+          )
+        }
+      </MediaQuery>
+
       <Box gridArea={CategoryArea.content}>
         <ProductsList products={items} />
         {pagination.nextPage && <Divider />}
