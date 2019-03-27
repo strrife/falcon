@@ -1,7 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import CreditCardInput from 'react-credit-card-input';
-import { Box, Input, withTheme, themed } from '@deity/falcon-ui';
+import { Box, Input, PropsWithTheme, withTheme, themed } from '@deity/falcon-ui';
 import { I18n } from '@deity/falcon-i18n';
 
 const CreditCardLayout = themed({
@@ -21,8 +20,34 @@ const CreditCardLayout = themed({
   }
 });
 
-class CreditCard extends React.Component {
-  constructor(props) {
+export type CreditCardProps = {
+  onCompletion: (creditCardInfo: CreditCardState) => void;
+} & PropsWithTheme;
+
+export type CreditCardState = {
+  number?: string;
+  expiry?: string;
+  cvc?: string;
+  name?: string;
+};
+
+type FieldValue = {
+  target: {
+    value: string;
+  };
+};
+
+type onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => void;
+
+type InputRenderer = {
+  props: object;
+  handleCardNumberChange: () => onChangeHandler;
+  handleCardExpiryChange: () => onChangeHandler;
+  handleCardCVCChange: () => onChangeHandler;
+};
+
+class CreditCardClass extends React.Component<CreditCardProps, CreditCardState> {
+  constructor(props: CreditCardProps) {
     super(props);
     this.state = {
       number: undefined,
@@ -32,7 +57,7 @@ class CreditCard extends React.Component {
     };
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_prevProps: CreditCardProps, prevState: CreditCardState) {
     const { number: prevNumber, expiry: prevExpiry, cvc: prevCvc, name: prevName } = prevState;
     const { number, expiry, cvc, name } = this.state;
 
@@ -83,29 +108,29 @@ class CreditCard extends React.Component {
               fieldStyle={{ border: '1px solid', borderColor: theme.colors.secondaryDark }}
               cardNumberInputProps={{
                 value: this.state.number,
-                onChange: ({ target: { value: number } }) => {
+                onChange: ({ target: { value: number } }: FieldValue) => {
                   this.setState({ number });
                 }
               }}
-              cardNumberInputRenderer={({ handleCardNumberChange, props }) => (
+              cardNumberInputRenderer={({ handleCardNumberChange, props }: InputRenderer) => (
                 <Input {...props} onChange={handleCardNumberChange()} />
               )}
               cardExpiryInputProps={{
                 value: this.state.expiry,
-                onChange: ({ target: { value: expiry } }) => {
+                onChange: ({ target: { value: expiry } }: FieldValue) => {
                   this.setState({ expiry });
                 }
               }}
-              cardExpiryInputRenderer={({ handleCardExpiryChange, props }) => (
+              cardExpiryInputRenderer={({ handleCardExpiryChange, props }: InputRenderer) => (
                 <Input {...props} onChange={handleCardExpiryChange()} />
               )}
               cardCVCInputProps={{
                 value: this.state.cvc,
-                onChange: ({ target: { value: cvc } }) => {
+                onChange: ({ target: { value: cvc } }: FieldValue) => {
                   this.setState({ cvc });
                 }
               }}
-              cardCVCInputRenderer={({ handleCardCVCChange, props }) => (
+              cardCVCInputRenderer={({ handleCardCVCChange, props }: InputRenderer) => (
                 <Input {...props} onChange={handleCardCVCChange()} />
               )}
             />
@@ -116,8 +141,4 @@ class CreditCard extends React.Component {
   }
 }
 
-CreditCard.propTypes = {
-  onCompletion: PropTypes.func.isRequired
-};
-
-export default withTheme(CreditCard);
+export const CreditCard = withTheme(CreditCardClass);

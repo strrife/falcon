@@ -7,6 +7,7 @@ export * from './Product';
 export * from './ProductsList';
 export * from './Category';
 export * from './Cart';
+export * from './CreditCard';
 export * from './Checkout';
 export * from './Config';
 export * from './MiniCart';

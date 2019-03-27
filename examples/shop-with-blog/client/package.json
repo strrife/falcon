@@ -38,7 +38,6 @@
     "prop-types": "15.6.2",
     "react": "^16.6.3",
     "react-adopt": "^0.6.0",
-    "react-credit-card-input": "1.1.1",
     "react-apollo": "2.5.1",
     "react-dom": "^16.6.3",
     "react-feather": "^1.1.3",
