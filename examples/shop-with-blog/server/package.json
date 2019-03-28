@@ -24,6 +24,9 @@
     "cross-env": "^5.2.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.7"
+    "nodemon": "^1.18.10"
+  },
+  "resolutions": {
+    "apollo-env": "0.3.1"
   }
 }

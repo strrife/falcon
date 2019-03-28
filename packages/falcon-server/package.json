@@ -40,15 +40,17 @@
     "apollo-server-env": "2.2.0",
     "apollo-server-koa": "2.4.8",
     "eventemitter2": "5.0.1",
-    "graphql": "14.1.0",
+    "graphql": "^14.1.1",
     "graphql-tools": "4.0.4",
+    "graphql-type-json": "0.2.1",
     "koa": "2.7.0",
+    "koa-body": "4.0.8",
     "koa-router": "7.4.0",
     "koa-session": "5.10.1",
     "lodash": "4.17.11"
   },
   "devDependencies": {
-    "supertest": "3.3.0"
+    "supertest": "3.4.2"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }
