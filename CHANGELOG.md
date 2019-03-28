@@ -10,7 +10,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 - changed GraphQL Proxy config in favor of passing GraphQL URL explicitly ([#355](https://github.com/deity-io/falcon/pull/355))
 - fixed issue where appHtmlMiddleware does not pass GoogleTagManager information to falcon-client/src/components/Html.js (even though the config is correct). ([#362](https://github.com/deity-io/falcon/pull/362))
-- added `bootstrap/endpoints` script to proxy requests from Falcon-Client to Falcon-Server ([#247](https://github.com/deity-io/falcon/pull/247))
+- added `bootstrap/configureServer` script to proxy requests from Falcon-Client to Falcon-Server ([#247](https://github.com/deity-io/falcon/pull/247))
 - added root client `Query.getConfig` resolver (`getConfig (key: "...") @client`) to extract config value for the specified key ([#247](https://github.com/deity-io/falcon/pull/247))
 
 ### Falcon Server
