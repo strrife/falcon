@@ -1,47 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Box, FlexLayout, Label, Details, DetailsContent, Text, Radio, Button } from '@deity/falcon-ui';
+import { Details, DetailsContent, Text, Button } from '@deity/falcon-ui';
 import { I18n, T } from '@deity/falcon-i18n';
+import { TwoStepWizard } from '@deity/falcon-ecommerce-uikit';
+import loadable from 'src/components/loadable';
 import SectionHeader from './CheckoutSectionHeader';
 import ErrorList from '../components/ErrorList';
 
-// we have to filter the methods until we have implementation for all of them
-const ALLOWED_PAYMENT_METHODS = ['checkmo'];
-
-const filterAvailablePaymentMethods = methods =>
-  methods.filter(option => ALLOWED_PAYMENT_METHODS.includes(option.code));
-
-const PaymentSelector = ({ availablePaymentMethods = [], onPaymentSelected }) => {
-  const paymentMethods = filterAvailablePaymentMethods(availablePaymentMethods);
-
-  return (
-    <Box my="md">
-      {paymentMethods.map(x => (
-        <FlexLayout key={x.code}>
-          <Radio size="sm" name="payment" id={`opt-${x.code}`} value={x.code} onChange={() => onPaymentSelected(x)} />
-          <Label mx="sm" flex="1" htmlFor={`opt-${x.code}`}>
-            {x.title}
-          </Label>
-        </FlexLayout>
-      ))}
-    </Box>
-  );
-};
-
-PaymentSelector.propTypes = {
-  availablePaymentMethods: PropTypes.arrayOf(PropTypes.shape({})),
-  onPaymentSelected: PropTypes.func
-};
+// Loading "PaymentMethodItem" component via loadable package
+// to avoid premature import of Payment frontend-plugins and their dependencies on SSR
+const PaymentMethodItem = loadable(() =>
+  import(/* webpackChunkName: "checkout/payment" */ './components/PaymentMethodItem')
+);
 
 class PaymentSection extends React.Component {
-  state = {
-    selectedPayment: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedPayment: null,
+      additionalData: null
+    };
+  }
 
-  onPaymentSelected = selectedPayment => this.setState({ selectedPayment });
+  onPaymentSelected = (selectedPayment, additionalData) => this.setState({ selectedPayment, additionalData });
+
+  resetSelected = () => this.setState({ selectedPayment: null, additionalData: null });
 
   submitPayment = () => {
-    this.props.setPayment(this.state.selectedPayment);
+    this.props.setPayment(this.state.selectedPayment, this.state.additionalData);
   };
 
   render() {
@@ -69,15 +55,27 @@ class PaymentSection extends React.Component {
       <Details open={open}>
         {header}
         <DetailsContent>
-          {filterAvailablePaymentMethods(availablePaymentMethods).length === 0 ? (
+          {availablePaymentMethods.length === 0 ? (
             <Text color="error" mb="sm">
               <T id="checkout.noPaymentMethodsAvailable" />
             </Text>
           ) : (
-            <PaymentSelector
-              availablePaymentMethods={availablePaymentMethods}
-              onPaymentSelected={this.onPaymentSelected}
-            />
+            <TwoStepWizard>
+              {({ selectedOption, selectOption }) =>
+                availablePaymentMethods.map(payment => (
+                  <PaymentMethodItem
+                    key={payment.code}
+                    {...payment}
+                    selectOption={code => {
+                      this.resetSelected();
+                      selectOption(code);
+                    }}
+                    selectedOption={selectedOption}
+                    onPaymentDetailsReady={additionalData => this.onPaymentSelected(payment, additionalData)}
+                  />
+                ))
+              }
+            </TwoStepWizard>
           )}
           <ErrorList errors={errors} />
           {availablePaymentMethods.length > 0 && (

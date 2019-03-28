@@ -32,9 +32,12 @@ ShippingSelector.propTypes = {
 };
 
 class ShippingSection extends React.Component {
-  state = {
-    selectedShipping: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedShipping: null
+    };
+  }
 
   onShippingSelected = selectedShipping => this.setState({ selectedShipping });
 
