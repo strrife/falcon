@@ -4,7 +4,8 @@ import Logger from '@deity/falcon-logger';
 async function falconWebServer() {
   const { Server } = require('./server');
   const app = require('./clientApp');
-  const bootstrap = require('./clientApp/bootstrap');
+  const clientBootstrap = require('./clientApp/bootstrap').default;
+  const bootstrap = await clientBootstrap();
   /* eslint-disable */
   const assetsManifest = require(process.env.ASSETS_MANIFEST);
   const loadableStats =
@@ -21,7 +22,7 @@ async function falconWebServer() {
   return Server({
     App: app.default,
     clientApolloSchema: app.clientApolloSchema,
-    bootstrap: bootstrap.default,
+    bootstrap,
     webpackAssets: {
       webmanifest: assetsManifest[''].webmanifest
     },
@@ -55,7 +56,8 @@ async function falconWebServer() {
 
       (async () => {
         try {
-          const newHandler = await falconWebServer().callback();
+          const newServer = await falconWebServer();
+          const newHandler = newServer.callback();
           httpServer.removeListener('request', currentWebServerHandler);
           httpServer.on('request', newHandler);
           currentWebServerHandler = newHandler;
