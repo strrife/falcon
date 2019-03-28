@@ -1,8 +1,8 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
-import { Box, Button, H4, DetailsContent, themed, ThemedComponentProps } from '@deity/falcon-ui';
+import { Box, Button, themed, ThemedComponentProps } from '@deity/falcon-ui';
 import { SearchConsumer, Aggregation, FilterData, FilterOperator } from '../Search';
-import { FilterDetails, FilterSummary } from './FilterTile';
+import { FilterTile } from './FilterTile';
 import { FilterContent, SingleFilter } from './FilterContent';
 
 export const aggregationToFilterData = (aggregation: Aggregation, operator: FilterOperator = 'eq'): FilterData => ({
@@ -52,34 +52,25 @@ export const Filters: React.SFC<{ data: FilterData[] } & ThemedComponentProps> =
             const selectedValue = filter ? filter.value : [];
 
             return (
-              <FilterDetails key={item.field} initiallyOpen={selectedValue.length > 0}>
-                {({ toggle }) => (
-                  <React.Fragment>
-                    <FilterSummary onClick={toggle}>
-                      <H4>{item.title}</H4>
-                    </FilterSummary>
-                    <DetailsContent>
-                      {item.field === 'color' ? (
-                        <SingleFilter
-                          field={item.field}
-                          options={item.options}
-                          selected={selectedValue[0]}
-                          setFilter={setFilter}
-                          removeFilter={removeFilter}
-                        />
-                      ) : (
-                        <FilterContent
-                          singleMode={item.field === 'cat'}
-                          aggregation={item}
-                          selected={selectedValue}
-                          setFilter={setFilter}
-                          removeFilter={removeFilter}
-                        />
-                      )}
-                    </DetailsContent>
-                  </React.Fragment>
+              <FilterTile key={item.field} title={item.title} initiallyOpen={selectedValue.length > 0}>
+                {item.field === 'color' ? (
+                  <SingleFilter
+                    field={item.field}
+                    options={item.options}
+                    selected={selectedValue[0]}
+                    setFilter={setFilter}
+                    removeFilter={removeFilter}
+                  />
+                ) : (
+                  <FilterContent
+                    singleMode={item.field === 'cat'}
+                    aggregation={item}
+                    selected={selectedValue}
+                    setFilter={setFilter}
+                    removeFilter={removeFilter}
+                  />
                 )}
-              </FilterDetails>
+              </FilterTile>
             );
           })}
         </FiltersLayout>
