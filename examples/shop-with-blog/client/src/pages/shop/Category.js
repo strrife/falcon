@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NetworkStatus } from 'apollo-client';
-import { H1, Box, FlexLayout, Divider } from '@deity/falcon-ui';
+import { Toggle } from 'react-powerplug';
+import { H1, H3, GridLayout, Box, FlexLayout, Divider, Button } from '@deity/falcon-ui';
 import {
   SearchConsumer,
   CategoryProductsQuery,
@@ -12,8 +13,11 @@ import {
   SortOrderDropdown,
   getFiltersData,
   FiltersSummary,
+  Filters,
   ProductsList,
-  ShowMore
+  ShowMore,
+  Responsive,
+  Sidebar
 } from '@deity/falcon-ecommerce-uikit';
 
 const copy = item => item && JSON.parse(JSON.stringify(item));
@@ -37,7 +41,6 @@ const CategoryPage = ({ id }) => (
           const filtersData = getFiltersData(aggregations);
 
           return (
-            // <Category {...categoryProps} />
             <CategoryLayout>
               <Box gridArea={CategoryArea.heading}>
                 <H1>{category.name}</H1>
@@ -50,25 +53,27 @@ const CategoryPage = ({ id }) => (
                 <Divider mt="xs" />
               </Box>
               <Box gridArea={CategoryArea.filters}>
-                {/* <MediaQuery minWidth={860}>
-                  {(matches: boolean) =>
+                <Responsive width="md">
+                  {matches =>
                     matches ? (
                       <Filters data={filtersData} />
                     ) : (
                       <Toggle initial={false}>
-                        {({ on, toggle }: any) => (
+                        {({ on, toggle }) => (
                           <React.Fragment>
                             <Button onClick={toggle}>Filters</Button>
-                            <Sidebar as={Portal} visible={on}>
-                              <Filters data={filtersData} />
+                            <Sidebar isOpen={on} side="left" close={toggle}>
+                              <GridLayout gridRowGap="md">
+                                <H3 ml="xl">Filters</H3>
+                                <Filters data={filtersData} px="md" />
+                              </GridLayout>
                             </Sidebar>
-                            <Backdrop onClick={toggle} as={Portal} visible={on} />
                           </React.Fragment>
                         )}
                       </Toggle>
                     )
                   }
-                </MediaQuery> */}
+                </Responsive>
               </Box>
               <Box gridArea={CategoryArea.content}>
                 <FiltersSummary data={filtersData} />

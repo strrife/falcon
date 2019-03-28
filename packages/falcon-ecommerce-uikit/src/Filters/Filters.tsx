@@ -1,6 +1,6 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
-import { Box, Button, H3, DetailsContent, themed } from '@deity/falcon-ui';
+import { Box, Button, H4, DetailsContent, themed, ThemedComponentProps } from '@deity/falcon-ui';
 import { SearchConsumer, Aggregation, FilterData, FilterOperator } from '../Search';
 import { FilterDetails, FilterSummary } from './FilterTile';
 import { FilterContent, SingleFilter } from './FilterContent';
@@ -13,8 +13,11 @@ export const aggregationToFilterData = (aggregation: Aggregation, operator: Filt
   options: aggregation.buckets
 });
 
+export const aggregationsToFiltersData = (aggregations: Aggregation[] = []) =>
+  aggregations.map(x => aggregationToFilterData(x));
+
 export const getFiltersData = (aggregations: Aggregation[], mergeWith: FilterData[] = []): FilterData[] =>
-  [...[], ...aggregations.map(x => aggregationToFilterData(x)), ...mergeWith].sort((first, second) =>
+  [...[], ...aggregationsToFiltersData(aggregations), ...mergeWith].sort((first, second) =>
     first.title < second.title ? -1 : 1
   );
 
@@ -32,13 +35,13 @@ export const FiltersLayout = themed({
   }
 });
 
-export const Filters: React.SFC<{ data: FilterData[] }> = ({ data, ...rest }) => (
+export const Filters: React.SFC<{ data: FilterData[] } & ThemedComponentProps> = ({ data, ...rest }) => (
   <SearchConsumer>
     {({ setFilter, removeFilter, removeAllFilters, state: { filters } }) => {
       const anyFilters = filters.length > 0;
 
       return (
-        <FiltersLayout {...rest}>
+        <FiltersLayout {...rest as any}>
           {anyFilters && (
             <Button onClick={removeAllFilters}>
               <T id="filters.clearAll" />
@@ -53,7 +56,7 @@ export const Filters: React.SFC<{ data: FilterData[] }> = ({ data, ...rest }) =>
                 {({ toggle }) => (
                   <React.Fragment>
                     <FilterSummary onClick={toggle}>
-                      <H3>{item.title}</H3>
+                      <H4>{item.title}</H4>
                     </FilterSummary>
                     <DetailsContent>
                       {item.field === 'color' ? (
