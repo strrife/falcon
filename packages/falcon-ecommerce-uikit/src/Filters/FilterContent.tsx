@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, List, Text, Icon, themed } from '@deity/falcon-ui';
-import { FilterInput, FilterData, FilterOption } from '../Search/types';
+import { Box, List, themed } from '@deity/falcon-ui';
+import { FilterData, FilterOption } from '../Search/types';
 import { FilterItem, FilterItemLayout } from './FilterItem';
 import { SelectedFilterItem } from './FilterItem';
 import { ColorTile } from './ColorTile';
