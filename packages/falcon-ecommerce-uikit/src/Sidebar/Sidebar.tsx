@@ -8,13 +8,16 @@ export type SidebarProps = {
 };
 
 export const Sidebar: React.SFC<SidebarProps> = ({ close, isOpen, side, children }) => {
-  const position = side === 'left' ? { left: 0 } : { right: 0 };
+  const position = {
+    top: 0,
+    ...(side === 'left' ? { left: 0 } : { right: 0 })
+  };
 
   return (
     <React.Fragment>
       <SidebarLayout as={Portal} visible={isOpen} side={side}>
         <Box position="relative" flex={1}>
-          <Icon src="close" stroke="black" position="absolute" {...position} top={0} onClick={() => close && close()} />
+          <Icon src="close" stroke="black" position="absolute" {...position} onClick={() => close && close()} />
           {children}
         </Box>
       </SidebarLayout>
