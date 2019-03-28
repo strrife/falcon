@@ -84,7 +84,7 @@ class CreditCardClass extends React.Component<CreditCardProps, CreditCardState> 
                 my="xs"
                 autoComplete="cc-name"
                 name="cc-name"
-                placeholder={t('creditCard.name')}
+                placeholder={t('creditCard.namePlaceholder')}
                 value={this.state.name}
                 onChange={({ target: { value: name } }) => {
                   this.setState({ name });
@@ -101,9 +101,9 @@ class CreditCardClass extends React.Component<CreditCardProps, CreditCardState> 
                 },
                 invalidCardNumber: t('creditCard.errors.invalidCardNumber'),
                 invalidCvc: t('creditCard.errors.invalidCvc'),
-                cardNumberPlaceholder: t('creditCard.number'),
-                expiryPlaceholder: t('creditCard.expiry'),
-                cvcPlaceholder: t('creditCard.cvc')
+                cardNumberPlaceholder: t('creditCard.numberPlaceholder'),
+                expiryPlaceholder: t('creditCard.expiryPlaceholder'),
+                cvcPlaceholder: t('creditCard.cvcPlaceholder')
               }}
               fieldStyle={{ border: '1px solid', borderColor: theme.colors.secondaryDark }}
               cardNumberInputProps={{

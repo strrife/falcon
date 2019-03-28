@@ -100,10 +100,10 @@
     "noPaymentMethodsAvailable": "There are no available payment methods for this order. Please contact shop administrator."
   },
   "creditCard": {
-    "name": "Name on card",
-    "number": "Card number",
-    "cvc": "CVC",
-    "expiry": "MM/YY",
+    "namePlaceholder": "Name on card",
+    "numberPlaceholder": "Card number",
+    "cvcPlaceholder": "CVC",
+    "expiryPlaceholder": "MM/YY",
     "errors": {
       "invalidCvc": "CVC is invalid",
       "invalidCardNumber": "Card number is invalid",
