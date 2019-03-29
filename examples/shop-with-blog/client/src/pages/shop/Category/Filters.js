@@ -16,16 +16,14 @@ export const Filters = ({ data, ...rest }) => (
           <FilterTile key={field} title={title} initiallyOpen={value.length > 0}>
             {(() => {
               switch (field) {
-                case 'cat':
+                case 'price':
                   return (
                     <SingleFilter
                       options={options}
-                      selected={value[0]}
-                      onChange={x => setFilter(field, x ? [x] : [], 'eq')}
+                      selected={value.join('-')}
+                      onChange={x => setFilter(field, x ? x.split('-').slice(0, 2) : [], 'eq')}
                     />
                   );
-                case 'price':
-                  return null;
                 case 'color':
                   return (
                     <ColorFilter
@@ -34,6 +32,7 @@ export const Filters = ({ data, ...rest }) => (
                       onChange={x => setFilter(field, x ? [x] : [], 'eq')}
                     />
                   );
+                case 'cat':
                 default:
                   return (
                     <SingleFilter
