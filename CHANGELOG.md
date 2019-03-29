@@ -32,6 +32,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon Magento2 API
 
 - added Adyen (credit card) and PayPal Payment Gateways support ([#247](https://github.com/deity-io/falcon/pull/247))
+- updated urls of Magento REST endpoints ([#376](https://github.com/deity-io/falcon/pull/376))
 
 ### Falcon Payment Plugin v0.0.1
 
