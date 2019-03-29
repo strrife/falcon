@@ -1,5 +1,5 @@
 export * from './CategoryProductsQuery';
-export * from './Category';
+export * from './CategoryLayout';
 export * from './SortOrdersQuery';
 export * from './SortOrderDropdown';
 export * from './ShowingOutOf';
