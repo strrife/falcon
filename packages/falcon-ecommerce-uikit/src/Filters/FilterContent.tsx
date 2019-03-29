@@ -59,45 +59,49 @@ export const FilterItemsList = themed({
   }
 });
 
-export const SingleFilter: React.SFC<
-  {
-    options: FilterOption[];
-    selected?: string;
-    onChange: (value?: string) => void;
-  } & ThemedComponentProps
-> = ({ options, selected, onChange, ...rest }) => {
-  const selectedOption = selected ? options.find(x => x.value === selected) : undefined;
+export type SingleFilterProps = {
+  options: FilterOption[];
+  selected?: string;
+  onChange: (value?: string) => void;
+};
+
+export const SingleFilter: React.SFC<SingleFilterProps & ThemedComponentProps> = ({
+  options,
+  selected,
+  onChange,
+  ...rest
+}) => {
+  const selectedOption = selected !== undefined ? options.find(x => x.value === selected) : undefined;
 
   return (
     <FilterItemsList {...rest as any}>
-      {selected && <SelectedFilterItem onClick={() => onChange()}>{selectedOption!.title}</SelectedFilterItem>}
-      {!selected &&
+      {selectedOption && <SelectedFilterItem onClick={() => onChange()}>{selectedOption!.title}</SelectedFilterItem>}
+      {!selectedOption &&
         options.map(x => (
           <FilterItemLayout key={x.title} onClick={() => onChange(x.value)}>
-            {x.title} ({x.count})
+            {x.title} ({x.count}) [ {x.value} ]
           </FilterItemLayout>
         ))}
     </FilterItemsList>
   );
 };
 
-export const ColorFilter: React.SFC<
-  {
-    options: FilterOption[];
-    selected?: string;
-    onChange: (value?: string) => void;
-  } & ThemedComponentProps
-> = ({ options, selected, onChange, ...rest }) => {
-  const selectedOption = selected ? options.find(x => x.value === selected) : undefined;
+export const ColorFilter: React.SFC<SingleFilterProps & ThemedComponentProps> = ({
+  options,
+  selected,
+  onChange,
+  ...rest
+}) => {
+  const selectedOption = selected !== undefined ? options.find(x => x.value === selected) : undefined;
 
   return (
     <FilterItemsList display="flex" flexWrap="wrap" {...rest as any}>
-      {selected && (
+      {selectedOption && (
         <SelectedFilterItem onClick={() => onChange()}>
           <ColorTile size="lg" color={selectedOption!.title} title={selectedOption!.title} />
         </SelectedFilterItem>
       )}
-      {!selected &&
+      {!selectedOption &&
         options.map(x => (
           <FilterItemLayout key={x.title} onClick={() => onChange(x.value)}>
             <ColorTile size="lg" color={x!.title} title={x!.title} />
