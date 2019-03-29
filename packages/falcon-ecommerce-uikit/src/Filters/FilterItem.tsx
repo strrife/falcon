@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Icon, ListItem, themed } from '@deity/falcon-ui';
+import { Icon, ListItem, themed } from '@deity/falcon-ui';
 import { AggregationBucket } from '../Search/types';
 
 export const FilterItemLayout = themed({
@@ -25,7 +25,6 @@ export const FilterItemLayout = themed({
 type FilterItemProps = {
   item: AggregationBucket;
   onClick?: (ev: any) => void;
-  // selected?: boolean;
 };
 
 export const FilterItem: React.SFC<FilterItemProps> = ({ item, onClick }) => (
