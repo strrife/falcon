@@ -56,7 +56,9 @@ export const SelectedFilterItem = themed({
     selectedFilterItemLayout: {
       display: 'flex',
       alignItems: 'center',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
+      pr: 'xs',
+      pb: 'xs'
     }
   }
 });

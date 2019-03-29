@@ -1,7 +1,14 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
 import { Button } from '@deity/falcon-ui';
-import { FiltersLayout, FilterTile, SingleFilter, ColorFilter, SearchConsumer } from '@deity/falcon-ecommerce-uikit';
+import {
+  FiltersLayout,
+  FilterTile,
+  SingleFilter,
+  ColorFilter,
+  MultipleFilter,
+  SearchConsumer
+} from '@deity/falcon-ecommerce-uikit';
 
 export const Filters = ({ data, ...rest }) => (
   <SearchConsumer>
@@ -31,6 +38,10 @@ export const Filters = ({ data, ...rest }) => (
                       selected={value[0]}
                       onChange={x => setFilter(field, x ? [x] : [], 'eq')}
                     />
+                  );
+                case 'material':
+                  return (
+                    <MultipleFilter options={options} selected={value} onChange={x => setFilter(field, x, 'eq')} />
                   );
                 case 'cat':
                 default:
