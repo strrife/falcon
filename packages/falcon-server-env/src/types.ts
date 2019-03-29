@@ -105,7 +105,7 @@ export type FetchUrlParams = {
 };
 
 export interface EndpointEntry {
-  methods: Array<RequestMethod>;
+  methods: Array<RequestMethod> | RequestMethod;
   handler: IMiddleware;
   path: string;
 }

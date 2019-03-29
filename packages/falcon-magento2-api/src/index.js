@@ -10,6 +10,7 @@ const { ApiUrlPriority, htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
 const { addResolveFunctionsToSchema } = require('graphql-tools');
 const Magento2ApiBase = require('./Magento2ApiBase');
+const url = require('url');
 
 /**
  * API for Magento2 store - provides resolvers for shop schema.
@@ -42,6 +43,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         breadcrumbs: (...args) => this.breadcrumbs(...args),
         products: (...args) => this.categoryProducts(...args),
         children: (...args) => this.categoryChildren(...args)
+      },
+      PaymentMethod: {
+        config: (...args) => this.getPaymentMethodConfig(...args)
       }
     };
     Logger.debug(`${this.name}: Adding additional resolve functions`);
@@ -1038,7 +1042,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       };
 
       // Remove guest cart. Magento merges guest cart with cart of authorized user so we'll have to refresh it
-      delete this.session.cart;
+      this.removeCartData();
       // make sure that cart is correctly loaded for signed in user
       await this.ensureCart();
 
@@ -1064,7 +1068,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   async signOut() {
     /* Remove logged in customer data */
     delete this.session.customerToken;
-    delete this.session.cart;
+    this.removeCartData();
 
     return true;
   }
@@ -1682,8 +1686,30 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     };
 
     const response = await this.performCartAction('/shipping-information', 'post', magentoData);
-
     return this.convertKeys(response.data);
+  }
+
+  getPaymentMethodConfig(paymentMethod) {
+    return paymentMethod.code in this.config.payments ? this.config.payments[paymentMethod.code] : {};
+  }
+
+  /**
+   * Sets payment method for the current cart
+   * @param {object} obj Root object
+   * @param {PlaceOrderInput} input Payment info payload
+   * @return {object} Result
+   */
+  async setPaymentInfo(obj, { input }) {
+    const address = this.prepareAddressForOrder(input.billingAddress);
+    const response = await this.performCartAction('/set-payment-information', 'post', {
+      email: input.email,
+      billingAddress: address,
+      paymentMethod: {
+        method: input.paymentMethod.method,
+        additionalData: input.paymentMethod.additionalData
+      }
+    });
+    return response.data;
   }
 
   /**
@@ -1694,8 +1720,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async placeOrder(obj, { input }) {
     let response;
+
+    if (input.paymentMethod.method === 'paypal_express') {
+      return this.handlePayPalToken(input);
+    }
+
     try {
-      response = await this.performCartAction('/place-order', 'put', Object.assign({}, input));
+      response = await this.performCartAction('/place-order', 'put', input);
     } catch (e) {
       // todo: use new version of error handler
       if (e.statusCode === 400) {
@@ -1706,12 +1737,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     const orderData = response.data;
-    if (orderData.extensionAttributes && orderData.extensionAttributes.adyen) {
-      orderData.adyen = orderData.extensionAttributes.adyen;
-      delete orderData.extensionAttributes.adyen;
-      response.data = orderData;
-    }
-
     this.session.orderId = orderData.orderId;
 
     if (!this.session.orderId) {
@@ -1720,7 +1745,87 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     this.session.orderQuoteId = this.session.cart.quoteId;
 
+    if (orderData.extensionAttributes && orderData.extensionAttributes.adyenCc) {
+      return this.handleAdyen3dSecure(orderData.extensionAttributes.adyenCc);
+    }
+    this.removeCartData();
+
     return response.data;
+  }
+
+  /**
+   * Handling Adyen 3D-secure payment
+   * @param {object} data adyenRedirect data
+   * @return {object} Redirect response data
+   */
+  handleAdyen3dSecure(data) {
+    const { origin } = this.context.headers;
+    const { issuerUrl, md, paRequest } = data;
+    let { termUrl } = data;
+
+    // `origin` is available on client-side request (checkout page)
+    // replacing "magento host" with the one from the client-side request
+    if (origin) {
+      const originUrl = url.parse(origin);
+      termUrl = url.format({
+        protocol: originUrl.protocol,
+        host: originUrl.host,
+        pathname: url.parse(termUrl).pathname
+      });
+    }
+
+    return {
+      url: issuerUrl,
+      method: 'POST',
+      fields: [
+        {
+          name: 'PaReq',
+          value: paRequest
+        },
+        {
+          name: 'MD',
+          value: md
+        },
+        {
+          name: 'TermUrl',
+          value: termUrl
+        }
+      ]
+    };
+  }
+
+  /**
+   * Handling PayPal payment on its own page
+   * @param {object} input Order payload
+   * @return {object} PayPal response data
+   */
+  async handlePayPalToken(input) {
+    const { origin } = this.context.headers;
+
+    if (origin) {
+      const paypalReturnSuccess = `${origin}${this.getPathWithPrefix(`${this.getCartPath()}/paypal-express-return`)}`;
+      const paypalReturnCancel = `${origin}${this.getPathWithPrefix(`${this.getCartPath()}/paypal-express-cancel`)}`;
+
+      input.paymentMethod.additionalData = Object.assign({}, input.paymentMethod.additionalData, {
+        paypal_return_success: paypalReturnSuccess,
+        paypal_return_cancel: paypalReturnCancel,
+        redirect_failure: 'failure',
+        redirect_cancel: 'cancel',
+        redirect_success: 'success'
+      });
+    }
+
+    const { data: setPaymentInfoResult } = await this.setPaymentInfo({}, { input });
+    if (!setPaymentInfoResult) {
+      throw new Error('Failed to set payment information');
+    }
+    const { data } = await this.performCartAction('/paypal-express-fetch-token', 'get');
+
+    return {
+      url: data.url,
+      method: 'GET',
+      fields: []
+    };
   }
 
   /**

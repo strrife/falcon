@@ -79,6 +79,10 @@ input PlaceOrderInput {
 
 input PaymentMethodInput {
   method: String
+  """
+  Selected payment-specific payload (like encrypted credit card info)
+  """
+  additionalData: JSON
 }
 
 input ShippingInput {
@@ -250,12 +254,47 @@ type Order {
   couponCode: String
 }
 
-type PlaceOrderResult {
-  # increment order id
+"""
+Successful placeOrder result
+"""
+type PlaceOrderSuccessfulResult {
+  """
+  Increment order id
+  """
   orderId: String
-  # like 0000001 - used for reference by customer
+  """
+  like 0000001 - used for reference by customer
+  """
   orderRealId: String
 }
+
+"""
+3D-secure placeOrder result
+"""
+type PlaceOrder3dSecureResult {
+  """
+  Issuer URL (target URL) for redirection
+  """
+  url: String!
+  """
+  HTTP method (GET or POST)
+  """
+  method: String
+  """
+  List of fields to pass to the issuer page
+  """
+  fields: [PlaceOrder3dSecureField]
+}
+
+type PlaceOrder3dSecureField {
+  name: String!
+  value: String
+}
+
+"""
+Mixed result for "Mutation.placeOrder" for
+"""
+union PlaceOrderResult = PlaceOrderSuccessfulResult | PlaceOrder3dSecureResult
 
 type Product {
   id: String
@@ -297,8 +336,18 @@ type ShippingInformation {
 }
 
 type PaymentMethod {
+  """
+  Internal Payment method code (like "paypal_express")
+  """
   code: String
+  """
+  Translated Payment method title (like "PayPal Express Checkout")
+  """
   title: String
+  """
+  Configuration object for the specific Payment method
+  """
+  config: JSON
 }
 
 type MenuItem {
@@ -367,13 +416,15 @@ type ProductSeo {
 
 type Cart {
   active: Boolean
-  #state wheather products will be shipped or not
+  """
+  State wheather products will be shipped or not
+  """
   virtual: Boolean
   items: [CartItem]
   itemsCount: Int
   itemsQty: Int
   totals: [CartTotal]
-  quoteCurrency: String
+  quoteCurrency: String @deprecated(reason: "Use ShopConfig.activeCurrency")
   couponCode: String
   billingAddress: Address
 }

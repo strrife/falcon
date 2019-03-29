@@ -163,7 +163,12 @@ module.exports = class ExtensionContainer extends BaseContainer {
     };
 
     config.schema = mergeSchemas({
-      schemas: [makeExecutableSchema({ typeDefs: config.schemas })],
+      schemas: [
+        makeExecutableSchema({
+          typeDefs: config.schemas,
+          resolvers: config.resolvers
+        })
+      ],
       resolvers: config.resolvers
     });
 

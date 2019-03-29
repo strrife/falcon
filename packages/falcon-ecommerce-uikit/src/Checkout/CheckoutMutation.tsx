@@ -39,6 +39,7 @@ export const SET_SHIPPING = gql`
       paymentMethods {
         code
         title
+        config
       }
     }
   }
@@ -53,13 +54,42 @@ export class SetShippingMutation extends Mutation {
 export const PLACE_ORDER = gql`
   mutation PlaceOrder($input: PlaceOrderInput!) {
     placeOrder(input: $input) {
-      orderId
-      orderRealId
+      __typename
+      ... on PlaceOrderSuccessfulResult {
+        orderId
+        orderRealId
+      }
+      ... on PlaceOrder3dSecureResult {
+        url
+        method
+        fields {
+          name
+          value
+        }
+      }
     }
   }
 `;
 
-export class PlaceOrderMutation extends Mutation {
+export type PlaceOrderSuccessfulResult = {
+  orderId: string;
+  orderRealId: string;
+};
+
+export type PlaceOrder3dSecureResult = {
+  url: string;
+  method: string;
+  fields: PlaceOrder3dSecureField[];
+};
+
+export type PlaceOrder3dSecureField = {
+  name: string;
+  value: string;
+};
+
+export type PlaceOrderResult = PlaceOrderSuccessfulResult | PlaceOrder3dSecureResult;
+
+export class PlaceOrderMutation extends Mutation<PlaceOrderResult> {
   static defaultProps = {
     mutation: PLACE_ORDER
   };

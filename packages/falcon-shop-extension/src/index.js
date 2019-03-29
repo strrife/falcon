@@ -10,6 +10,9 @@ class Shop extends Extension {
     const gqlConfig = await super.getGraphQLConfig(typeDefs);
 
     Object.assign(gqlConfig.resolvers, {
+      PlaceOrderResult: {
+        __resolveType: obj => (obj.url ? 'PlaceOrder3dSecureResult' : 'PlaceOrderSuccessfulResult')
+      },
       BackendConfig: {
         // Returning an empty object to make ShopConfig resolvers work
         shop: () => ({})

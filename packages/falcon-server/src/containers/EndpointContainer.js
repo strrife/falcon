@@ -24,6 +24,7 @@ module.exports = class EndpointContainer extends BaseContainer {
 
         const EndpointManagerClass = this.importModule(endpointManagerConfig.package);
         if (!EndpointManagerClass) {
+          Logger.warn(`${this.constructor.name}: Could not load ${endpointManagerConfig.package}`);
           return;
         }
         const endpointManager = new EndpointManagerClass({
