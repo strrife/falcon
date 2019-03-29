@@ -37,57 +37,53 @@ export const FiltersLayout = themed({
 
 export const Filters: React.SFC<{ data: FilterData[] } & ThemedComponentProps> = ({ data, ...rest }) => (
   <SearchConsumer>
-    {({ setFilter, removeFilters, state: { filters } }) => {
-      const anySelected = filters.length > 0;
+    {({ state: { filters }, setFilter, removeFilters }) => (
+      <FiltersLayout {...rest as any}>
+        {filters.length > 0 && (
+          <Button onClick={removeFilters}>
+            <T id="filters.clearAll" />
+          </Button>
+        )}
+        {data.map(({ field, title, options }) => {
+          const filter = filters.find(x => x.field === field);
+          const selectedValue = filter ? filter.value : [];
 
-      return (
-        <FiltersLayout {...rest as any}>
-          {anySelected && (
-            <Button onClick={removeFilters}>
-              <T id="filters.clearAll" />
-            </Button>
-          )}
-          {data.map(({ field, title, options }) => {
-            const filter = filters.find(x => x.field === field);
-            const selectedValue = filter ? filter.value : [];
-
-            return (
-              <FilterTile key={field} title={title} initiallyOpen={selectedValue.length > 0}>
-                {(() => {
-                  switch (field) {
-                    case 'cat':
-                      return (
-                        <SingleFilter
-                          options={options}
-                          selected={selectedValue[0]}
-                          onChange={x => setFilter(field, x ? [x] : [], 'eq')}
-                        />
-                      );
-                    case 'price':
-                      return null;
-                    case 'color':
-                      return (
-                        <ColorFilter
-                          options={options}
-                          selected={selectedValue[0]}
-                          onChange={x => setFilter(field, x ? [x] : [], 'eq')}
-                        />
-                      );
-                    default:
-                      return (
-                        <SingleFilter
-                          options={options}
-                          selected={selectedValue[0]}
-                          onChange={x => setFilter(field, x ? [x] : [], 'eq')}
-                        />
-                      );
-                  }
-                })()}
-              </FilterTile>
-            );
-          })}
-        </FiltersLayout>
-      );
-    }}
+          return (
+            <FilterTile key={field} title={title} initiallyOpen={selectedValue.length > 0}>
+              {(() => {
+                switch (field) {
+                  case 'cat':
+                    return (
+                      <SingleFilter
+                        options={options}
+                        selected={selectedValue[0]}
+                        onChange={x => setFilter(field, x ? [x] : [], 'eq')}
+                      />
+                    );
+                  case 'price':
+                    return null;
+                  case 'color':
+                    return (
+                      <ColorFilter
+                        options={options}
+                        selected={selectedValue[0]}
+                        onChange={x => setFilter(field, x ? [x] : [], 'eq')}
+                      />
+                    );
+                  default:
+                    return (
+                      <SingleFilter
+                        options={options}
+                        selected={selectedValue[0]}
+                        onChange={x => setFilter(field, x ? [x] : [], 'eq')}
+                      />
+                    );
+                }
+              })()}
+            </FilterTile>
+          );
+        })}
+      </FiltersLayout>
+    )}
   </SearchConsumer>
 );
