@@ -1,9 +1,10 @@
 export * from './Filters';
 export * from './FiltersSummary';
-
 export * from './Filter';
-export * from './ColorTile';
+export * from './SingleFilter';
+export * from './ColorFilter';
+export * from './MultipleFilter';
+export * from './RangeFilter';
 export * from './FilterItem';
-
 export * from './FilterTile';
 export * from './FilterDetails';
