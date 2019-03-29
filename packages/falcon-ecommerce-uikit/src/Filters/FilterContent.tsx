@@ -36,7 +36,7 @@ export const SingleFilter: React.SFC<SingleFilterProps & ThemedComponentProps> =
       {!selectedOption &&
         options.map(x => (
           <FilterItemLayout key={x.title} onClick={() => onChange(x.value)}>
-            {x.title} ({x.count}) [ {x.value} ]
+            {x.title} ({x.count})
           </FilterItemLayout>
         ))}
     </FilterItemsList>
