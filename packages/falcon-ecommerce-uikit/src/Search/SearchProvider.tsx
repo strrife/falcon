@@ -52,14 +52,17 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
     this.props.sortOrders.find(item => item.field === sort.field && item.direction === sort.direction);
 
   setFilter = (field: string, value: string[], operator: FilterOperator = 'eq') => {
-    const filters = [...this.state.filters];
-    const filter = filters.find(item => item.field === field);
+    let filters = [...this.state.filters];
 
-    if (!filter) {
-      filters.push({ field, value, operator });
+    if (value.length === 0) {
+      filters = filters.filter(x => x.field !== field);
     } else {
-      filter.operator = operator;
-      filter.value = value;
+      const filterIndex = filters.findIndex(x => x.field === field);
+      if (filterIndex >= 0) {
+        filters[filterIndex] = { ...filters[filterIndex], value, operator };
+      } else {
+        filters.push({ field, value, operator });
+      }
     }
 
     this.updateURL({ ...this.state, filters });
@@ -79,11 +82,6 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
   setPagination = (pagination: PaginationInput) => this.updateURL({ ...this.state, pagination });
 
   setTerm = (term: string) => this.updateURL({ ...this.state, term });
-
-  removeFilter = (field: string) => {
-    const filters = this.state.filters.filter(filter => filter.field !== field);
-    this.updateURL({ ...this.state, filters });
-  };
 
   removeAllFilters = () => this.updateURL({ ...this.state, filters: [] });
 
@@ -114,7 +112,6 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
           state: { ...this.state },
           availableSortOrders: this.props.sortOrders,
           setFilter: this.setFilter,
-          removeFilter: this.removeFilter,
           removeAllFilters: this.removeAllFilters,
           setSortOrder: this.setSortOrder,
           setPagination: this.setPagination,
