@@ -35,15 +35,14 @@ const CategoryPage = ({ id }) => (
           filters: copy(state.filters)
         }}
       >
-        {({ category, fetchMore, networkStatus }) => {
-          const { products } = category;
+        {({ category: { name, products }, fetchMore, networkStatus }) => {
           const { pagination, items, aggregations } = products;
-          const filtersData = getFiltersData(aggregations);
+          const filtersData = getFiltersData(state.filters, aggregations);
 
           return (
             <CategoryLayout>
               <Box gridArea={CategoryArea.heading}>
-                <H1>{category.name}</H1>
+                <H1>{name}</H1>
                 <FlexLayout justifyContent="space-between" alignItems="center">
                   <ShowingOutOf itemsCount={items.length} totalItems={pagination.totalItems} />
                   <SortOrdersProvider>
@@ -56,7 +55,7 @@ const CategoryPage = ({ id }) => (
                 <Responsive width="md">
                   {matches =>
                     matches ? (
-                      <Filters aggregations={aggregations} />
+                      <Filters data={filtersData} />
                     ) : (
                       <Toggle initial={false}>
                         {({ on, toggle }) => (
@@ -65,7 +64,7 @@ const CategoryPage = ({ id }) => (
                             <Sidebar isOpen={on} side="left" close={toggle}>
                               <GridLayout gridRowGap="md">
                                 <H3 ml="xl">Filters</H3>
-                                <Filters aggregations={aggregations} px="md" />
+                                <Filters data={filtersData} px="md" />
                               </GridLayout>
                             </Sidebar>
                           </React.Fragment>

@@ -35,7 +35,6 @@ export type FilterData = {
   field: string;
   title: string;
   type: SelectionType;
-  operator: FilterOperator;
   options: FilterOption[];
   value: string[];
 };
