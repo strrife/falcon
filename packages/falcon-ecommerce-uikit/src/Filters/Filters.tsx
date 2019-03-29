@@ -1,9 +1,6 @@
 import React from 'react';
-import { T } from '@deity/falcon-i18n';
-import { Box, Button, themed, ThemedComponentProps } from '@deity/falcon-ui';
+import { Box, themed } from '@deity/falcon-ui';
 import { SearchConsumer, Aggregation, FilterData, FilterOperator, FilterInput } from '../Search';
-import { FilterTile } from './FilterTile';
-import { SingleFilter, ColorFilter } from './FilterContent';
 
 export const aggregationToFilterData = (aggregation: Aggregation, operator: FilterOperator = 'eq'): FilterData => ({
   field: aggregation.field,
@@ -71,55 +68,3 @@ export const FiltersDataProvider: React.SFC<{
     </SearchConsumer>
   );
 };
-
-export const Filters: React.SFC<{ aggregations: Aggregation[]; data: FilterData[] } & ThemedComponentProps> = ({
-  data,
-  aggregations,
-  ...rest
-}) => (
-  <FiltersDataProvider aggregations={aggregations}>
-    {({ filters, anySelected, setFilter, removeFilters }) => (
-      <FiltersLayout {...rest as any}>
-        {anySelected && (
-          <Button onClick={removeFilters}>
-            <T id="filters.clearAll" />
-          </Button>
-        )}
-        {filters.map(({ field, title, options, value }) => (
-          <FilterTile key={field} title={title} initiallyOpen={value.length > 0}>
-            {(() => {
-              switch (field) {
-                case 'cat':
-                  return (
-                    <SingleFilter
-                      options={options}
-                      selected={value[0]}
-                      onChange={x => setFilter(field, x ? [x] : [], 'eq')}
-                    />
-                  );
-                case 'price':
-                  return null;
-                case 'color':
-                  return (
-                    <ColorFilter
-                      options={options}
-                      selected={value[0]}
-                      onChange={x => setFilter(field, x ? [x] : [], 'eq')}
-                    />
-                  );
-                default:
-                  return (
-                    <SingleFilter
-                      options={options}
-                      selected={value[0]}
-                      onChange={x => setFilter(field, x ? [x] : [], 'eq')}
-                    />
-                  );
-              }
-            })()}
-          </FilterTile>
-        ))}
-      </FiltersLayout>
-    )}
-  </FiltersDataProvider>
-);

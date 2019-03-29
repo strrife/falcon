@@ -13,12 +13,12 @@ import {
   SortOrderDropdown,
   getFiltersData,
   FiltersSummary,
-  Filters,
   ProductsList,
   ShowMore,
   Responsive,
   Sidebar
 } from '@deity/falcon-ecommerce-uikit';
+import { Filters } from './Filters';
 
 const copy = item => item && JSON.parse(JSON.stringify(item));
 
@@ -56,7 +56,7 @@ const CategoryPage = ({ id }) => (
                 <Responsive width="md">
                   {matches =>
                     matches ? (
-                      <Filters data={filtersData} />
+                      <Filters aggregations={aggregations} />
                     ) : (
                       <Toggle initial={false}>
                         {({ on, toggle }) => (
@@ -65,7 +65,7 @@ const CategoryPage = ({ id }) => (
                             <Sidebar isOpen={on} side="left" close={toggle}>
                               <GridLayout gridRowGap="md">
                                 <H3 ml="xl">Filters</H3>
-                                <Filters data={filtersData} px="md" />
+                                <Filters aggregations={aggregations} px="md" />
                               </GridLayout>
                             </Sidebar>
                           </React.Fragment>
