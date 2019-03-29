@@ -4,8 +4,8 @@ import { SortOrder } from './../Category/SortOrdersQuery';
 export type FilterOperator = 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'in' | 'nin' | 'range';
 
 export type FilterInput = {
-  operator: FilterOperator;
   field: string;
+  operator: FilterOperator;
   value: string[];
 };
 
@@ -37,6 +37,7 @@ export type FilterData = {
   type: SelectionType;
   operator: FilterOperator;
   options: FilterOption[];
+  value: string[];
 };
 
 export type FilterOption = {
