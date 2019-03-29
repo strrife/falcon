@@ -36,22 +36,22 @@ module.exports = class MagentoEndpoints extends EndpointManager {
     return [
       {
         methods: 'GET',
-        path: '/rest/*/V1/guest-carts/*/paypal-express-return',
+        path: '/rest/*/V1/falcon/guest-carts/*/paypal-express-return',
         handler: this.handleReturn()
       },
       {
         methods: 'GET',
-        path: '/rest/*/V1/guest-carts/*/paypal-express-cancel',
+        path: '/rest/*/V1/falcon/guest-carts/*/paypal-express-cancel',
         handler: this.handlePayPalCancel()
       },
       {
         methods: 'GET',
-        path: '/rest/*/V1/carts/mine/paypal-express-return',
+        path: '/rest/*/V1/falcon/carts/mine/paypal-express-return',
         handler: this.handleReturn(false)
       },
       {
         methods: 'GET',
-        path: '/rest/*/V1/carts/mine/paypal-express-cancel',
+        path: '/rest/*/V1/falcon/carts/mine/paypal-express-cancel',
         handler: this.handlePayPalCancel(false)
       }
     ];

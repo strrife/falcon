@@ -12,6 +12,14 @@ const { addResolveFunctionsToSchema } = require('graphql-tools');
 const Magento2ApiBase = require('./Magento2ApiBase');
 const url = require('url');
 
+const FALCON_CART_ACTIONS = [
+  '/save-payment-information-and-order',
+  '/paypal-express-fetch-token',
+  '/paypal-express-return',
+  '/paypal-express-cancel',
+  '/place-order'
+];
+
 /**
  * API for Magento2 store - provides resolvers for shop schema.
  */
@@ -1617,13 +1625,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   /**
    * Removes unnecesary fields from address entry so Magento doesn't crash
    * @param {AddressInput} address - address to process
-   * @return {AddresInput} processed address
+   * @return {AddressInput} processed address
    */
   prepareAddressForOrder(address) {
     const data = { ...address };
     delete data.defaultBilling;
     delete data.defaultShipping;
-    delete data.id;
     return data;
   }
 
@@ -1646,7 +1653,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     const cartPath = this.getCartPath();
 
-    const response = await this[method](`${cartPath}${path}`, method === 'get' ? null : data);
+    const falconPrefix = FALCON_CART_ACTIONS.indexOf(path) === -1 ? '' : '/falcon';
+
+    const response = await this[method](`${falconPrefix}${cartPath}${path}`, method === 'get' ? null : data);
 
     const cartData = this.convertKeys(response.data);
 
@@ -1717,7 +1726,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     try {
-      response = await this.performCartAction('/falcon/place-order', 'put', input);
+      response = await this.performCartAction('/place-order', 'put', input);
     } catch (e) {
       // todo: use new version of error handler
       if (e.statusCode === 400) {
@@ -1794,8 +1803,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { origin } = this.context.headers;
 
     if (origin) {
-      const paypalReturnSuccess = `${origin}${this.getPathWithPrefix(`${this.getCartPath()}/paypal-express-return`)}`;
-      const paypalReturnCancel = `${origin}${this.getPathWithPrefix(`${this.getCartPath()}/paypal-express-cancel`)}`;
+      const paypalReturnSuccess = `${origin}${this.getPathWithPrefix(
+        `/falcon${this.getCartPath()}/paypal-express-return`
+      )}`;
+      const paypalReturnCancel = `${origin}${this.getPathWithPrefix(
+        `/falcon${this.getCartPath()}/paypal-express-cancel`
+      )}`;
 
       input.paymentMethod.additionalData = Object.assign({}, input.paymentMethod.additionalData, {
         paypal_return_success: paypalReturnSuccess,
@@ -1810,7 +1823,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     if (!setPaymentInfoResult) {
       throw new Error('Failed to set payment information');
     }
-    const { data } = await this.performCartAction('/falcon/paypal-express-fetch-token', 'get');
+    const { data } = await this.performCartAction('/paypal-express-fetch-token', 'get');
 
     return {
       url: data.url,
