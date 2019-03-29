@@ -83,7 +83,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
 
   setTerm = (term: string) => this.updateURL({ ...this.state, term });
 
-  removeAllFilters = () => this.updateURL({ ...this.state, filters: [] });
+  removeFilters = () => this.updateURL({ ...this.state, filters: [] });
 
   private updateURL(state: SearchState) {
     const queryString = this.props.searchStateToURL!(state);
@@ -112,7 +112,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
           state: { ...this.state },
           availableSortOrders: this.props.sortOrders,
           setFilter: this.setFilter,
-          removeAllFilters: this.removeAllFilters,
+          removeFilters: this.removeFilters,
           setSortOrder: this.setSortOrder,
           setPagination: this.setPagination,
           setTerm: this.setTerm

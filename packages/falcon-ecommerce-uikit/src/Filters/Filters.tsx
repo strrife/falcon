@@ -37,13 +37,13 @@ export const FiltersLayout = themed({
 
 export const Filters: React.SFC<{ data: FilterData[] } & ThemedComponentProps> = ({ data, ...rest }) => (
   <SearchConsumer>
-    {({ setFilter, removeAllFilters, state: { filters } }) => {
-      const anyFilters = filters.length > 0;
+    {({ setFilter, removeFilters, state: { filters } }) => {
+      const anySelected = filters.length > 0;
 
       return (
         <FiltersLayout {...rest as any}>
-          {anyFilters && (
-            <Button onClick={removeAllFilters}>
+          {anySelected && (
+            <Button onClick={removeFilters}>
               <T id="filters.clearAll" />
             </Button>
           )}
