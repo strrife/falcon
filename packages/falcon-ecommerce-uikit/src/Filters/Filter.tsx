@@ -1,7 +1,7 @@
 import React from 'react';
-import { Box, List, themed, ThemedComponentProps } from '@deity/falcon-ui';
-import { FilterData, FilterOption, FilterOperator } from '../Search/types';
-import { FilterItem, FilterItemLayout } from './FilterItem';
+import { Label, Checkbox, List, themed, ThemedComponentProps } from '@deity/falcon-ui';
+import { FilterOption } from '../Search/types';
+import { FilterItemLayout } from './FilterItem';
 import { SelectedFilterItem } from './FilterItem';
 import { ColorTile } from './ColorTile';
 
@@ -73,21 +73,32 @@ type MultipleFilterProps = {
   onChange: (value: string[]) => void;
 };
 
-export const MultipleFilter: React.SFC<MultipleFilterProps> = ({ options, selected = [], onChange }) => (
-  <FilterItemsList>
-    {options.map(x =>
-      selected.find(value => value === x.value) ? (
-        <SelectedFilterItem key={x.value} onClick={() => onChange(selected.filter(value => value !== x.value))}>
-          {x.title}
-        </SelectedFilterItem>
-      ) : (
-        <FilterItemLayout key={x.value} onClick={() => onChange([...selected, x.value])}>
-          {x.title} ({x.count})
+export const MultipleFilter: React.SFC<MultipleFilterProps> = ({ options, selected = [], onChange }) => {
+  const handleOnChange = (option: FilterOption, isSelected: boolean) => {
+    if (isSelected) {
+      onChange([...selected, option.value]);
+    } else {
+      onChange(selected.filter(value => value !== option.value));
+    }
+  };
+
+  return (
+    <FilterItemsList>
+      {options.map(x => (
+        <FilterItemLayout key={x.value}>
+          <Checkbox
+            id={`${x.title}-${x.value}`}
+            checked={selected.some(value => value === x.value)}
+            onChange={e => handleOnChange(x, e.target.checked)}
+          />
+          <Label ml="sm" htmlFor={`${x.title}-${x.value}`}>
+            {x.title} ({x.count})
+          </Label>
         </FilterItemLayout>
-      )
-    )}
-  </FilterItemsList>
-);
+      ))}
+    </FilterItemsList>
+  );
+};
 
 type RangeFilterProps = {
   min: number;
