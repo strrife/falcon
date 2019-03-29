@@ -89,17 +89,17 @@ describe('SearchProvider', () => {
     expect(getLocation().search).toEqual(`?${JSON.stringify(getSearchInfo())}`);
   });
 
-  it('removeFiler() should update url and remove filter value from passed props', async () => {
+  it('setFilter() without value should update url and remove filter value from passed props', async () => {
     searchInfo.setFilter('price', ['10']);
-    searchInfo.removeFilter('price');
+    searchInfo.setFilter('price', []);
     wrapper!.update();
     expect(searchInfo.state.filters).toHaveLength(0);
     expect(getLocation().search).toEqual(`?${JSON.stringify(getSearchInfo())}`);
   });
 
-  it('setQuery() should update url and pass query in props', async () => {
+  it('setQuery() without value should update url and pass query in props', async () => {
     searchInfo.setTerm('searchQuery');
-    searchInfo.removeFilter('price');
+    searchInfo.setFilter('price', []);
     wrapper!.update();
     expect(searchInfo.state.term).toEqual('searchQuery');
     expect(getLocation().search).toEqual(`?${JSON.stringify(getSearchInfo())}`);

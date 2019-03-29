@@ -37,7 +37,7 @@ export const FiltersLayout = themed({
 
 export const Filters: React.SFC<{ data: FilterData[] } & ThemedComponentProps> = ({ data, ...rest }) => (
   <SearchConsumer>
-    {({ setFilter, removeFilter, removeAllFilters, state: { filters } }) => {
+    {({ setFilter, removeAllFilters, state: { filters } }) => {
       const anyFilters = filters.length > 0;
 
       return (
@@ -59,7 +59,8 @@ export const Filters: React.SFC<{ data: FilterData[] } & ThemedComponentProps> =
                     options={item.options}
                     selected={selectedValue[0]}
                     setFilter={setFilter}
-                    removeFilter={removeFilter}
+                    display="flex"
+                    flexWrap="wrap"
                   />
                 ) : (
                   <FilterContent
@@ -67,7 +68,6 @@ export const Filters: React.SFC<{ data: FilterData[] } & ThemedComponentProps> =
                     aggregation={item}
                     selected={selectedValue}
                     setFilter={setFilter}
-                    removeFilter={removeFilter}
                   />
                 )}
               </FilterTile>

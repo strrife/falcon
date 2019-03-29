@@ -33,7 +33,7 @@ export const getSelectedFilterData = (data: FilterData[], filters: FilterInput[]
 
 export const FiltersSummary: React.SFC<FiltersSummaryProps> = ({ data }) => (
   <SearchConsumer>
-    {({ state: { filters }, removeFilter }) => {
+    {({ state: { filters }, setFilter }) => {
       const anyFilters = filters.length > 0;
       if (anyFilters === false) {
         return null;
@@ -45,7 +45,7 @@ export const FiltersSummary: React.SFC<FiltersSummaryProps> = ({ data }) => (
         <FiltersSummaryLayout>
           <List>
             {selected.map(item => (
-              <SelectedFilterItem key={item.field} onClick={() => removeFilter(item.field)}>
+              <SelectedFilterItem key={item.field} onClick={() => setFilter(item.field, [])}>
                 {item.title}: {item.options.map(x => x.title || x.value).join(', ')}
               </SelectedFilterItem>
             ))}

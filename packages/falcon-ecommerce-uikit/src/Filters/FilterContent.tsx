@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, List, themed } from '@deity/falcon-ui';
-import { FilterData, FilterOption } from '../Search/types';
+import { Box, List, themed, ThemedComponentProps } from '@deity/falcon-ui';
+import { FilterData, FilterOption, FilterOperator } from '../Search/types';
 import { FilterItem, FilterItemLayout } from './FilterItem';
 import { SelectedFilterItem } from './FilterItem';
 import { ColorTile } from './ColorTile';
@@ -10,8 +10,7 @@ const filterContentTheme = {
 };
 
 type FilterContentProps = {
-  setFilter: (name: string, value: string[], operator?: string) => void;
-  removeFilter: (name: string) => void;
+  setFilter: (name: string, value: string[], operator?: FilterOperator) => void;
   selected: string[];
   aggregation: FilterData;
   singleMode?: boolean;
@@ -60,14 +59,15 @@ export const FilterItemsList = themed({
   }
 });
 
-export const SingleFilter: React.SFC<{
-  field: string;
-  options: FilterOption[];
-  selected?: string;
-  setFilter: (field: string, value: string[], operator?: string) => void;
-  removeFilter: (field: string) => void;
-}> = ({ field, options, selected, setFilter, removeFilter }) => {
-  const updateNormalFilter = (value: string) => setFilter(field, [value]);
+export const SingleFilter: React.SFC<
+  {
+    field: string;
+    options: FilterOption[];
+    selected?: string;
+    setFilter: (name: string, value: string[], operator?: FilterOperator) => void;
+  } & ThemedComponentProps
+> = ({ field, options, selected, setFilter, ...rest }) => {
+  const updateNormalFilter = (value?: string) => setFilter(field, value ? [value] : []);
 
   // const updatePriceFilter = (value: string) => {
   //   const [from, to] = value.split('-');
@@ -78,16 +78,16 @@ export const SingleFilter: React.SFC<{
   const selectedOption = selected ? options.find(x => x.value === selected) : undefined;
 
   return (
-    <FilterItemsList display="flex" flexWrap="wrap">
+    <FilterItemsList {...rest as any}>
       {selected && (
-        <SelectedFilterItem onClick={() => removeFilter(field)}>
+        <SelectedFilterItem onClick={() => updateFilter()}>
           <ColorTile size="lg" color={selectedOption!.title} title={selectedOption!.title} />
         </SelectedFilterItem>
       )}
       {!selected &&
-        options.map(item => (
-          <FilterItemLayout key={item.title} onClick={() => updateFilter(item.value)}>
-            <ColorTile size="lg" color={item!.title} title={item!.title} />
+        options.map(x => (
+          <FilterItemLayout key={x.title} onClick={() => updateFilter(x.value)}>
+            <ColorTile size="lg" color={x!.title} title={x!.title} />
           </FilterItemLayout>
         ))}
     </FilterItemsList>
