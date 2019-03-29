@@ -1,7 +1,7 @@
 export * from './Filters';
 export * from './FiltersSummary';
 
-export * from './FilterContent';
+export * from './Filter';
 export * from './ColorTile';
 export * from './FilterItem';
 
