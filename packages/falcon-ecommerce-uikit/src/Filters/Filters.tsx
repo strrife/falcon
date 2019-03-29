@@ -17,7 +17,7 @@ export const getFiltersData = (
 ): FilterData[] =>
   [...[], ...aggregations.map(x => aggregationToFilterData(x)), ...filterData]
     .map(x => {
-      const selected = filters.find(filter => filter.field === name);
+      const selected = filters.find(filter => filter.field === x.field);
 
       return {
         ...x,
