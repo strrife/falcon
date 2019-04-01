@@ -1,4 +1,4 @@
-export * from './Filters';
+export * from './FiltersDataProvider';
 export * from './FiltersSummary';
 export * from './Filter';
 export * from './SingleFilter';
