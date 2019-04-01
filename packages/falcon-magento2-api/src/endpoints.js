@@ -21,12 +21,12 @@ module.exports = class MagentoEndpoints extends EndpointManager {
     return [
       {
         methods: 'POST',
-        path: '/rest/*/V1/guest-orders/*/adyen-process-validate3d',
+        path: '/rest/*/V1/falcon/guest-orders/*/adyen-process-validate3d',
         handler: this.handleReturn()
       },
       {
         methods: 'POST',
-        path: '/rest/*/V1/orders/*/adyen-process-validate3d',
+        path: '/rest/*/V1/falcon/orders/*/adyen-process-validate3d',
         handler: this.handleReturn(false)
       }
     ];
