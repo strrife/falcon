@@ -1,3 +1,5 @@
+directive @customerRequired on FIELD_DEFINITION
+
 extend type Query {
   menu: [MenuItem]
   category(id: String!): Category
@@ -12,11 +14,11 @@ extend type Query {
   ): ProductList
   cart: Cart
   countries: CountryList
-  order(id: Int!): Order
+  order(id: Int!): Order @customerRequired
   lastOrder: Order
-  orders(pagination: PaginationInput): Orders
-  address(id: Int!): Address
-  addresses: AddressList
+  orders(pagination: PaginationInput): Orders @customerRequired
+  address(id: Int!): Address @customerRequired
+  addresses: AddressList @customerRequired
   customer: Customer
   cmsPage(id: Int, identifier: String): CmsPage
   cmsBlock(identifier: String): CmsBlock
@@ -35,13 +37,13 @@ extend type Mutation {
   signUp(input: SignUp!): Boolean
   signIn(input: SignIn!): Boolean
   signOut: Boolean
-  editCustomer(input: CustomerInput!): Customer
-  editAddress(input: EditAddressInput!): Address
-  addAddress(input: AddAddressInput!): Address
+  editCustomer(input: CustomerInput!): Customer @customerRequired
+  editAddress(input: EditAddressInput!): Address @customerRequired
+  addAddress(input: AddAddressInput!): Address @customerRequired
   estimateShippingMethods(input: EstimateShippingInput!): [ShippingMethod]
-  removeCustomerAddress(id: Int!): Boolean
+  removeCustomerAddress(id: Int!): Boolean @customerRequired
   requestCustomerPasswordResetToken(input: EmailInput!): Boolean
-  changeCustomerPassword(input: CustomerPassword!): Boolean
+  changeCustomerPassword(input: CustomerPassword!): Boolean @customerRequired
   resetCustomerPassword(input: CustomerPasswordReset!): Boolean
   # set current customer order shipping information
   setShipping(input: ShippingInput): ShippingInformation

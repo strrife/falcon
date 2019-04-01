@@ -25,6 +25,7 @@ export enum Events {
   BEFORE_ENDPOINTS_REGISTERED = 'falcon-server.before-endpoints-registered',
   AFTER_ENDPOINTS_REGISTERED = 'falcon-server.after-endpoints-registered',
 
+  API_DATA_SOURCE_LOADED = 'falcon-server.api-data-source-loaded',
   API_DATA_SOURCE_REGISTERED = 'falcon-server.api-data-source-registered',
   EXTENSION_REGISTERED = 'falcon-server.extension-registered'
 }

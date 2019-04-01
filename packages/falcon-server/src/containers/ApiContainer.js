@@ -41,6 +41,10 @@ module.exports = class ApiContainer extends BaseContainer {
         if (!ApiClass) {
           return;
         }
+
+        // TODO: find a better way of propagating GQL config from API to the GQL Server
+        this.eventEmitter.emit(Events.API_DATA_SOURCE_LOADED, ApiClass);
+
         const apiInstanceCb = apolloServerConfig => {
           /** @type {ApiDataSource} */
           const apiInstance = new ApiClass({

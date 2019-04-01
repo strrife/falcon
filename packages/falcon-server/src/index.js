@@ -27,6 +27,7 @@ class FalconServer {
     this.config = config;
     this.server = null;
     this.backendConfig = {};
+    this.schemaDirectives = {};
     const { maxListeners = 20, verboseEvents = false } = this.config;
     if (config.logLevel) {
       Logger.setLogLevel(config.logLevel);
@@ -71,6 +72,7 @@ class FalconServer {
     const dynamicRouteResolver = new DynamicRouteResolver(this.extensionContainer);
 
     const apolloServerConfig = await this.extensionContainer.createGraphQLConfig({
+      schemaDirectives: this.schemaDirectives,
       schemas: [BaseSchema],
       dataSources: () => {
         Logger.debug('FalconServer: Instantiating GraphQL DataSources');
@@ -163,6 +165,14 @@ class FalconServer {
    * @private
    */
   async initializeContainers() {
+    // TODO: temporary way of loading directives
+    this.eventEmitter.on(Events.API_DATA_SOURCE_LOADED, apiClass => {
+      const { schemaDirectives } = apiClass;
+      if (schemaDirectives) {
+        this.schemaDirectives = Object.assign({}, this.schemaDirectives, schemaDirectives);
+      }
+    });
+
     await this.eventEmitter.emitAsync(Events.BEFORE_API_CONTAINER_CREATED, this.config.apis);
     /** @type {ApiContainer} */
     this.apiContainer = new ApiContainer(this.eventEmitter);
