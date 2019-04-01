@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, themed } from '@deity/falcon-ui';
-import { SearchConsumer, Aggregation, FilterData, FilterOperator, FilterInput } from '../Search';
+import { SearchConsumer, Aggregation, FilterData, FilterOption, FilterOperator, FilterInput } from '../Search';
 
 export const aggregationToFilterData = (aggregation: Aggregation): FilterData => ({
   field: aggregation.field,
@@ -26,6 +26,17 @@ export const getFiltersData = (
     })
     .sort((first, second) => (first.title < second.title ? -1 : 1));
 
+export const getSelectedFilterOptionsFor = (data: FilterData[], field: string) => {
+  const filter = data.find(x => x.field === field);
+
+  if (filter === undefined) {
+    return [];
+  }
+  const { options, value } = filter;
+
+  return options.filter(option => value.some(x => x === option.value));
+};
+
 export const FiltersLayout = themed({
   tag: Box,
   defaultTheme: {
@@ -43,6 +54,7 @@ export const FiltersLayout = themed({
 export type FilterDataProviderRenderProps = {
   filters: FilterData[];
   anySelected: boolean;
+  getSelectedFilterOptionsFor: (data: FilterData[], field: string) => FilterOption[];
   setFilter(name: string, value: string[], operator?: FilterOperator): void;
   removeFilters(): void;
 };
@@ -57,6 +69,7 @@ export const FiltersDataProvider: React.SFC<{
       children({
         filters: getFiltersData(filters, aggregations || [], data || []),
         anySelected: filters.length > 0,
+        getSelectedFilterOptionsFor,
         setFilter,
         removeFilters
       })
