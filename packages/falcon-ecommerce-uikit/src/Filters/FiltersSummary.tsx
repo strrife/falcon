@@ -1,7 +1,8 @@
 import React from 'react';
-import { Box, List, ListItem, themed } from '@deity/falcon-ui';
-import { SearchConsumer, FilterData, FilterInput } from '../Search';
+import { Box, List, themed } from '@deity/falcon-ui';
+import { SearchConsumer, FilterData } from '../Search';
 import { SelectedFilterItem } from './FilterItem';
+import { getSelectedFilterOptionsFor } from './Filters';
 
 export const FiltersSummaryLayout = themed({
   tag: Box,
@@ -14,23 +15,6 @@ type FiltersSummaryProps = {
   data: FilterData[];
 };
 
-export const getSelectedFilterData = (data: FilterData[], filters: FilterInput[]): FilterData[] =>
-  filters
-    .reduce<FilterData[]>((result, { value, field }) => {
-      const filterData = data.find(item => item.field === field);
-
-      return filterData
-        ? [
-            ...result,
-            {
-              ...filterData,
-              options: filterData.options.filter(item => value.some(x => x === item.value))
-            }
-          ]
-        : result;
-    }, [])
-    .sort((first, second) => (first.title < second.title ? -1 : 1));
-
 export const FiltersSummary: React.SFC<FiltersSummaryProps> = ({ data }) => (
   <SearchConsumer>
     {({ state: { filters }, setFilter }) => {
@@ -39,16 +23,22 @@ export const FiltersSummary: React.SFC<FiltersSummaryProps> = ({ data }) => (
         return null;
       }
 
-      const selected = getSelectedFilterData(data, filters);
-
       return (
         <FiltersSummaryLayout>
           <List>
-            {selected.map(item => (
-              <SelectedFilterItem key={item.field} onClick={() => setFilter(item.field, [])}>
-                {item.title}: {item.options.map(x => x.title || x.value).join(', ')}
-              </SelectedFilterItem>
-            ))}
+            {data.map(({ field, title }) => {
+              const selectedFilterOptions = getSelectedFilterOptionsFor(data, field);
+
+              if (selectedFilterOptions.length === 0) {
+                return null;
+              }
+
+              return (
+                <SelectedFilterItem key={field} onClick={() => setFilter(field, [])}>
+                  {title}: {selectedFilterOptions.map(x => x.title || x.value).join(', ')}
+                </SelectedFilterItem>
+              );
+            })}
           </List>
         </FiltersSummaryLayout>
       );
