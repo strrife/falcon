@@ -9,9 +9,15 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon Client
 
 - changed GraphQL Proxy config in favor of passing GraphQL URL explicitly ([#355](https://github.com/deity-io/falcon/pull/355))
+- changed the way of configuring PORT for `falcon-client` and `webpackDevServer` ([#364](https://github.com/deity-io/falcon/pull/364))
+- fixed vulnerability of `razzle-dev-utils` > `react-dev-utils` dependency ([305](https://github.com/deity-io/falcon/issues/305))
 - fixed issue where appHtmlMiddleware does not pass GoogleTagManager information to falcon-client/src/components/Html.js (even though the config is correct). ([#362](https://github.com/deity-io/falcon/pull/362))
 - added `bootstrap/configureServer` script to proxy requests from Falcon-Client to Falcon-Server ([#247](https://github.com/deity-io/falcon/pull/247))
 - added root client `Query.getConfig` resolver (`getConfig (key: "...") @client`) to extract config value for the specified key ([#247](https://github.com/deity-io/falcon/pull/247))
+
+### Falcon UI
+
+- exposed `withTheme()` so theme values can be accessed from not themed components ([#371](https://github.com/deity-io/falcon/pull/371))
 
 ### Falcon Server
 
@@ -48,11 +54,6 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 ---
 
-### Falcon UI
-
-- exposed `withTheme()` so theme values can be accessed from not themed components ([#371](https://github.com/deity-io/falcon/pull/371))
-
----
 
 ## Falcon 1.0 RC2 (2019-03-13)
 
