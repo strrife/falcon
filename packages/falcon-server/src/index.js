@@ -1,6 +1,7 @@
 const Koa = require('koa');
 const Router = require('koa-router');
 const session = require('koa-session');
+const body = require('koa-body');
 const cors = require('@koa/cors');
 const get = require('lodash/get');
 const capitalize = require('lodash/capitalize');
@@ -15,6 +16,7 @@ const { resolve: resolvePath } = require('path');
 const { readFileSync } = require('fs');
 const { codes } = require('@deity/falcon-errors');
 const { Events, Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
+const GraphQLJSON = require('graphql-type-json');
 const DynamicRouteResolver = require('./resolvers/DynamicRouteResolver');
 
 const BaseSchema = readFileSync(resolvePath(__dirname, './schema.graphql'), 'utf8');
@@ -96,7 +98,8 @@ class FalconServer {
         },
         BackendConfig: {
           activeLocale: (_, __, { session: _session }) => _session.locale
-        }
+        },
+        JSON: GraphQLJSON
       },
       tracing: this.config.debug,
       playground: this.config.debug && {
@@ -130,10 +133,9 @@ class FalconServer {
     // Set signed cookie keys (https://koajs.com/#app-keys-)
     this.app.keys = this.config.session.keys;
 
-    this.router = new Router({
-      prefix: '/api'
-    });
+    this.router = new Router();
 
+    this.app.use(body());
     this.app.use(
       cors({
         credentials: true
@@ -173,7 +175,7 @@ class FalconServer {
     await this.extensionContainer.registerExtensions(this.config.extensions, this.apiContainer.dataSources);
     await this.eventEmitter.emitAsync(Events.AFTER_EXTENSION_CONTAINER_CREATED, this.extensionContainer);
 
-    this.endpointContainer = new EndpointContainer();
+    this.endpointContainer = new EndpointContainer(this.eventEmitter);
     await this.endpointContainer.registerEndpoints(this.config.endpoints);
   }
 
@@ -214,12 +216,19 @@ class FalconServer {
    * @private
    */
   async registerEndpoints() {
+    const endpoints = [];
     await this.eventEmitter.emitAsync(Events.BEFORE_ENDPOINTS_REGISTERED, this.endpointContainer.entries);
     this.endpointContainer.entries.forEach(({ methods, path: routerPath, handler }) => {
       (Array.isArray(methods) ? methods : [methods]).forEach(method => {
         Logger.debug(`FalconServer: registering endpoint ${method.toUpperCase()}: "${routerPath}"`);
         this.router[method.toLowerCase()](routerPath, handler);
+        if (endpoints.indexOf(routerPath) < 0) {
+          endpoints.push(routerPath);
+        }
       });
+    });
+    this.router.get('/config', ctx => {
+      ctx.body = { endpoints };
     });
 
     this.app.use(this.router.routes()).use(this.router.allowedMethods());

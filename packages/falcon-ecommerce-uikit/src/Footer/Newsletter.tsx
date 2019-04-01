@@ -33,7 +33,6 @@ export const Newsletter: React.SFC<{}> = () => (
             <Input
               type="email"
               required
-              height="lg"
               aria-label={t('newsletter.emailPlaceholder')}
               placeholder={t('newsletter.emailPlaceholder')}
             />

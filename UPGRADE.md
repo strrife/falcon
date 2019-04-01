@@ -69,6 +69,45 @@ If you wish to use your generated application without GraphQL proxy:
  }
 ```
 
+`client/bootstrap.js` now must return an async callback that initiates the bootstrap
+config:
+
+```diff
+const config = require('config');
+
+- export default {
++ export default async () => ({
+    config: { ...config }
+- };
++ });
+```
+
+To enable endpoints proxy (for handling Payment callbacks) - you need to modify your
+`client/bootstrap.js` file to fetch a list of endpoints from Falcon-Server and
+enable them for Falcon-Client:
+
+```js
+const config = require('config');
+const { fetchRemoteConfig, configureProxy } = require('@deity/falcon-client/src/bootstrap/configureServer');
+
+export default async () => {
+  const redirects = {
+    payment: {
+      success: '/checkout/confirmation',
+      failure: '/checkout/failure',
+      cancel: '/cart'
+    }
+  };
+  const serverUrl = config.graphqlUrl || config.apolloClient.httpLink.uri;
+  const serverConfig = await fetchRemoteConfig(serverUrl);
+
+  return {
+    config: { ...config },
+    onRouterCreated: async router => configureProxy(router, serverUrl, serverConfig.endpoints, redirects)
+  };
+};
+```
+
 ## Falcon 1.0-rc to 1.0-rc2
 
 Patch for this update can be found [here](https://github.com/deity-io/falcon/releases/download/v1.0-rc2/falcon-update-100rc-100rc2.patch).

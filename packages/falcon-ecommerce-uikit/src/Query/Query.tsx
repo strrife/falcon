@@ -15,10 +15,11 @@ export type QueryRenderProps<TData = any> = TData & {
   fetchMore: (() => any) | undefined;
 };
 
-export type QueryProps<TData = any, TVariables = any> = Omit<ApolloQueryProps<TData, TVariables>, 'children'> & {
+export type QueryProps<TData, TVariables> = Omit<ApolloQueryProps<TData, TVariables>, 'children'> & {
   children: (result: QueryRenderProps<TData>) => React.ReactNode;
   fetchMore?: FetchMore<TData, TVariables>;
   passLoading?: boolean;
+  variables?: TVariables | any;
 };
 
 export class Query<TData = any, TVariables = OperationVariables> extends React.Component<

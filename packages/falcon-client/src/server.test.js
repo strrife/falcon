@@ -13,10 +13,13 @@ import DynamicRoute from './components/DynamicRoute';
 import defaultConfiguration from './clientApp/defaultConfiguration';
 
 describe('Server', () => {
-  it('Should properly call eventHandlers', () => {
+  it('Should properly call eventHandlers', async () => {
     const onServerCreatedMock = jest.fn();
     const onServerInitializedMock = jest.fn();
     const onServerStartedMock = jest.fn();
+    const onRouterCreatedMock = jest.fn();
+    const onRouterInitializedMock = jest.fn();
+
     const config = defaultConfiguration({
       serverSideRendering: true,
       logLevel: 'error'
@@ -25,10 +28,12 @@ describe('Server', () => {
       config,
       onServerCreated: onServerCreatedMock,
       onServerInitialized: onServerInitializedMock,
-      onServerStarted: onServerStartedMock
+      onServerStarted: onServerStartedMock,
+      onRouterCreated: onRouterCreatedMock,
+      onRouterInitialized: onRouterInitializedMock
     };
 
-    const server = Server({
+    const server = await Server({
       App: () => <div />,
       bootstrap,
       clientApolloSchema: {
@@ -46,6 +51,13 @@ describe('Server', () => {
 
     expect(onServerStartedMock).toBeCalledWith(server.instance);
     expect(onServerStartedMock).toHaveBeenCalledAfter(onServerInitializedMock);
+
+    expect(onRouterCreatedMock).toBeCalled();
+    expect(onRouterCreatedMock).toHaveBeenCalledAfter(onServerCreatedMock);
+    expect(onRouterCreatedMock).toHaveBeenCalledBefore(onRouterInitializedMock);
+
+    expect(onRouterInitializedMock).toBeCalled();
+    expect(onRouterInitializedMock).toHaveBeenCalledBefore(onServerStartedMock);
   });
 
   it('Should render Home page (SSR)', async () => {
@@ -111,7 +123,7 @@ describe('Server', () => {
       }
     };
 
-    const serverHandler = Server({
+    const server = await Server({
       App,
       bootstrap,
       clientApolloSchema,
@@ -126,7 +138,8 @@ describe('Server', () => {
           }
         }
       }
-    }).callback();
+    });
+    const serverHandler = server.callback();
 
     const response = await supertest(serverHandler).get('/');
 

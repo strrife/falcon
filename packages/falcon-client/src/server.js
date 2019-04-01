@@ -14,27 +14,34 @@ import { renderAppShell, renderApp } from './middlewares/routes';
  * @param {ServerAppConfig} props Application parameters
  * @return {WebServer} Falcon web server
  */
-export function Server({ App, clientApolloSchema, bootstrap, webpackAssets, loadableStats }) {
+export async function Server({ App, clientApolloSchema, bootstrap, webpackAssets, loadableStats }) {
   const { config } = bootstrap;
   Logger.setLogLevel(config.logLevel);
 
   const instance = new Koa();
-  bootstrap.onServerCreated(instance);
+  if (bootstrap.onServerCreated) {
+    await bootstrap.onServerCreated(instance);
+  }
 
   const publicDir = process.env.PUBLIC_DIR;
   const router = new Router();
+  if (bootstrap.onRouterCreated) {
+    await bootstrap.onRouterCreated(router);
+  }
 
   if (config.graphqlUrl) {
     const { apolloClient } = config;
     const graphqlUri = (apolloClient && apolloClient.httpLink && apolloClient.httpLink.uri) || '/graphql';
     router.all(graphqlUri, graphqlProxy(config.graphqlUrl));
   }
-
   router.get('/sw.js', serve(publicDir, { maxage: 0 }));
   router.get('/static/*', serve(publicDir, { maxage: process.env.NODE_ENV === 'production' ? 31536000000 : 0 }));
   router.get('/*', serve(publicDir));
   router.get('/app-shell', ...renderAppShell({ config, webpackAssets, loadableStats }));
   router.get('/*', ...renderApp({ App, clientApolloSchema, config, webpackAssets, loadableStats }));
+  if (bootstrap.onRouterInitialized) {
+    await bootstrap.onRouterInitialized(router);
+  }
 
   instance
     .use(helmet())
@@ -44,7 +51,9 @@ export function Server({ App, clientApolloSchema, bootstrap, webpackAssets, load
     .use(router.routes())
     .use(router.allowedMethods());
 
-  bootstrap.onServerInitialized(instance);
+  if (bootstrap.onServerInitialized) {
+    await bootstrap.onServerInitialized(instance);
+  }
 
   return {
     instance,

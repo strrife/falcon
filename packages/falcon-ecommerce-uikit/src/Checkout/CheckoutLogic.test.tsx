@@ -2,14 +2,38 @@ import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { makeExecutableSchema, mergeSchemas } from 'graphql-tools';
 import { SchemaLink } from 'apollo-link-schema';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 import { BaseSchema } from '@deity/falcon-server';
 import { Schema } from '@deity/falcon-shop-extension';
 
 import { CheckoutLogic, CheckoutLogicInjectedProps } from './CheckoutLogic';
+import { PlaceOrderSuccessfulResult } from './CheckoutMutation';
 import { wait } from '../../../../test/helpers';
+
+const fragmentTypes = {
+  __schema: {
+    types: [
+      {
+        kind: 'UNION',
+        name: 'PlaceOrderResult',
+        possibleTypes: [
+          {
+            name: 'PlaceOrderSuccessfulResult'
+          },
+          {
+            name: 'PlaceOrder3dSecureResult'
+          }
+        ]
+      }
+    ]
+  }
+};
+
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData: fragmentTypes
+});
 
 const sampleAddress = {
   id: 1,
@@ -35,6 +59,7 @@ const sampleShippingMethod = {
 
 const samplePaymentMethod = {
   code: 'sample-payment',
+  config: null,
   title: 'Sample Payment'
 };
 
@@ -66,12 +91,16 @@ const resolversWithErrors = {
 };
 
 const createApolloClient = (resolvers: any) => {
+  resolvers.PlaceOrderResult = {
+    __resolveType: (obj: any) => (obj.orderId ? 'PlaceOrderSuccessfulResult' : 'PlaceOrder3dSecureResult')
+  };
+
   const schema = mergeSchemas({
-    schemas: [makeExecutableSchema({ typeDefs: [BaseSchema, Schema] })],
+    schemas: [makeExecutableSchema({ typeDefs: [BaseSchema, Schema], resolvers })],
     resolvers
   });
   const link = new SchemaLink({ schema });
-  const cache = new InMemoryCache({ addTypename: false });
+  const cache = new InMemoryCache({ addTypename: false, fragmentMatcher });
   return new ApolloClient({
     link,
     cache,
@@ -184,7 +213,7 @@ describe('CheckoutLogic', () => {
       getProps().setPaymentMethod(samplePaymentMethod);
       getProps().placeOrder();
       await wait(0);
-      expect(getProps().orderId).toBe('10');
+      expect((getProps().result! as PlaceOrderSuccessfulResult).orderId).toBe('10');
     });
   });
 

@@ -4,7 +4,7 @@ module.exports = class FakeBackendApi extends EndpointManager {
   getEntries() {
     return [
       {
-        path: '/info',
+        path: '/api/info',
         methods: ['get'],
         handler: (ctx, next) => {
           ctx.body = 'foo';

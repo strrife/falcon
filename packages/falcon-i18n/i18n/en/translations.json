@@ -99,6 +99,20 @@
     "noShippingMethodsAvailable": "There are no available shipping methods for your shipping address. Please contact shop administrator.",
     "noPaymentMethodsAvailable": "There are no available payment methods for this order. Please contact shop administrator."
   },
+  "creditCard": {
+    "namePlaceholder": "Name on card",
+    "numberPlaceholder": "Card number",
+    "cvcPlaceholder": "CVC",
+    "expiryPlaceholder": "MM/YY",
+    "errors": {
+      "invalidCvc": "CVC is invalid",
+      "invalidCardNumber": "Card number is invalid",
+      "invalidExpiryDate": "Expiry date is invalid",
+      "monthOutOfRange": "Expiry month must be between 01 and 12",
+      "yearOutOfRange": "Expiry year cannot be in the past",
+      "dateOutOfRange": "Expiry date cannot be in the past"
+    }
+  },
   "form": {
     "passwordRevealTitle_show": "Show password",
     "passwordRevealTitle_hide": "Hide password"
