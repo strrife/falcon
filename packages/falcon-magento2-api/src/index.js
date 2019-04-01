@@ -12,6 +12,14 @@ const { addResolveFunctionsToSchema } = require('graphql-tools');
 const Magento2ApiBase = require('./Magento2ApiBase');
 const url = require('url');
 
+const FALCON_CART_ACTIONS = [
+  '/save-payment-information-and-order',
+  '/paypal-express-fetch-token',
+  '/paypal-express-return',
+  '/paypal-express-cancel',
+  '/place-order'
+];
+
 /**
  * API for Magento2 store - provides resolvers for shop schema.
  */
@@ -77,7 +85,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<MenuItem[]>} requested Menu data
    */
   async menu() {
-    const response = await this.get('/menu');
+    const response = await this.get('/falcon/menus');
     const { data } = this.convertKeys(response);
 
     const mapMenu = x => {
@@ -135,7 +143,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { pagination = {} } = params;
     let response;
     try {
-      response = await this.get(`/categories/${obj.data.id}/products`, query, {
+      response = await this.get(`/falcon/categories/${obj.data.id}/products`, query, {
         context: {
           useAdminToken: true,
           pagination
@@ -694,7 +702,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { path } = params;
 
     return this.get(
-      '/url/',
+      '/falcon/urls/',
       {
         url: path
       },
@@ -1184,7 +1192,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       }
     });
 
-    const response = await this.get('/orders/mine', query, { context: { pagination } });
+    const response = await this.get('/falcon/orders/mine', query, { context: { pagination } });
 
     return this.convertKeys(response.data);
   }
@@ -1210,7 +1218,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       throw new Error('Failed to load an order.');
     }
 
-    const result = await this.get(`/orders/${id}/order-info`);
+    const result = await this.get(`/falcon/orders/${id}/order-info`);
 
     return this.convertOrder(result);
   }
@@ -1371,7 +1379,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Customer>} updated customer data
    */
   async editCustomer(obj, { input }) {
-    const response = await this.put('/customers/me', { customer: { ...input } });
+    const response = await this.put('/falcon/customers/me', { customer: { ...input } });
 
     return this.convertKeys(response.data);
   }
@@ -1390,7 +1398,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       throw new Error('You do not have an access to read address data');
     }
 
-    const response = await this.get(`/customers/me/address/${id}`);
+    const response = await this.get(`/falcon/customers/me/address/${id}`);
 
     return this.convertAddressData(response.data);
   }
@@ -1406,7 +1414,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       throw new Error('You do not have an access to read addresses data');
     }
 
-    const response = await this.get('/customers/me/address');
+    const response = await this.get('/falcon/customers/me/address');
     const items = response.data.items || [];
 
     return { items: items.map(x => this.convertAddressData(x)) };
@@ -1425,7 +1433,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       throw new Error('You do not have an access to add address data');
     }
 
-    const response = await this.post('/customers/me/address', { address: { ...input } });
+    const response = await this.post('/falcon/customers/me/address', { address: { ...input } });
 
     return this.convertAddressData(response.data);
   }
@@ -1443,7 +1451,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       throw new Error('You do not have an access to edit address data');
     }
 
-    const response = await this.put(`/customers/me/address`, { address: { ...input } });
+    const response = await this.put(`/falcon/customers/me/address`, { address: { ...input } });
 
     return this.convertAddressData(response.data);
   }
@@ -1462,7 +1470,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       throw new Error('You do not have an access to remove address data');
     }
 
-    const response = await this.delete(`/customers/me/address/${id}`);
+    const response = await this.delete(`/falcon/customers/me/address/${id}`);
 
     return response.data;
   }
@@ -1476,7 +1484,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async validatePasswordToken(obj, params) {
     const { token } = params;
-    const validatePath = `/customers/0/password/resetLinkToken/${token}`;
+    const validatePath = `/falcon/customers/0/password/resetLinkToken/${token}`;
 
     try {
       const result = await this.get(validatePath);
@@ -1514,7 +1522,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async resetCustomerPassword(obj, { input }) {
     const { resetToken, password: newPassword } = input;
-    const result = await this.put('/customers/password/reset', { email: '', resetToken, newPassword });
+    const result = await this.put('/falcon/customers/password/reset', { email: '', resetToken, newPassword });
     return result.data;
   }
 
@@ -1617,13 +1625,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   /**
    * Removes unnecesary fields from address entry so Magento doesn't crash
    * @param {AddressInput} address - address to process
-   * @return {AddresInput} processed address
+   * @return {AddressInput} processed address
    */
   prepareAddressForOrder(address) {
     const data = { ...address };
     delete data.defaultBilling;
     delete data.defaultShipping;
-    delete data.id;
     return data;
   }
 
@@ -1646,7 +1653,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     const cartPath = this.getCartPath();
 
-    const response = await this[method](`${cartPath}${path}`, method === 'get' ? null : data);
+    const falconPrefix = FALCON_CART_ACTIONS.indexOf(path) === -1 ? '' : '/falcon';
+
+    const response = await this[method](`${falconPrefix}${cartPath}${path}`, method === 'get' ? null : data);
 
     const cartData = this.convertKeys(response.data);
 
@@ -1794,8 +1803,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { origin } = this.context.headers;
 
     if (origin) {
-      const paypalReturnSuccess = `${origin}${this.getPathWithPrefix(`${this.getCartPath()}/paypal-express-return`)}`;
-      const paypalReturnCancel = `${origin}${this.getPathWithPrefix(`${this.getCartPath()}/paypal-express-cancel`)}`;
+      const paypalReturnSuccess = `${origin}${this.getPathWithPrefix(
+        `/falcon${this.getCartPath()}/paypal-express-return`
+      )}`;
+      const paypalReturnCancel = `${origin}${this.getPathWithPrefix(
+        `/falcon${this.getCartPath()}/paypal-express-cancel`
+      )}`;
 
       input.paymentMethod.additionalData = Object.assign({}, input.paymentMethod.additionalData, {
         paypal_return_success: paypalReturnSuccess,
@@ -1832,7 +1845,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     const isLoggedIn = customerToken && customerToken.token;
-    const orderEndpoint = isLoggedIn ? `/orders/${orderId}/order-info` : `/guest-orders/${orderId}/order-info`;
+    const orderEndpoint = isLoggedIn
+      ? `/falcon/orders/${orderId}/order-info`
+      : `/falcon/guest-orders/${orderId}/order-info`;
 
     const response = await this.get(orderEndpoint, {}, { context: { useAdminToken: !isLoggedIn } });
     response.data = this.convertKeys(response.data);
@@ -1853,7 +1868,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<[Breadcrumb]>} breadcrumbs fetched from backend
    */
   async breadcrumbs(obj, { path }) {
-    const resp = await this.get(`/breadcrumbs`, { url: path.replace(/^\//, '') }, { context: { useAdminToken: true } });
+    const resp = await this.get(
+      `/falcon/breadcrumbs`,
+      { url: path.replace(/^\//, '') },
+      { context: { useAdminToken: true } }
+    );
     return this.convertBreadcrumbs(this.convertKeys(resp.data));
   }
 
