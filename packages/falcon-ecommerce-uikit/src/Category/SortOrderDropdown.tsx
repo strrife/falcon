@@ -1,7 +1,18 @@
 import React from 'react';
-import { Text, Box, FlexLayout, Dropdown, DropdownLabel, DropdownMenu, DropdownMenuItem } from '@deity/falcon-ui';
+import { Text, Box, Dropdown, DropdownLabel, DropdownMenu, DropdownMenuItem, themed } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 import { SortOrder } from './SortOrdersQuery';
+
+export const SortOrderDropdownLayout = themed({
+  tag: Box,
+  defaultTheme: {
+    sortOrderDropdownLayout: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      alignItems: 'center'
+    }
+  }
+});
 
 export type SortOrderDropdownProps<TItem extends { name: string } = SortOrder> = {
   items: TItem[];
@@ -9,7 +20,7 @@ export type SortOrderDropdownProps<TItem extends { name: string } = SortOrder> =
   onChange: (value: TItem) => void;
 };
 export const SortOrderDropdown: React.SFC<SortOrderDropdownProps> = ({ items, value, onChange }) => (
-  <FlexLayout alignItems="center">
+  <SortOrderDropdownLayout>
     <Text mr="sm">
       <T id="productsList.sort.title" />
     </Text>
@@ -25,5 +36,5 @@ export const SortOrderDropdown: React.SFC<SortOrderDropdownProps> = ({ items, va
         </DropdownMenu>
       </Dropdown>
     </Box>
-  </FlexLayout>
+  </SortOrderDropdownLayout>
 );
