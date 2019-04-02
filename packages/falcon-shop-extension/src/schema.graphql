@@ -373,36 +373,6 @@ type ProductList {
   pagination: Pagination
 }
 
-type Aggregation {
-  field: String
-  type: AggregationType
-  buckets: [AggregationBucket]
-  title: String
-}
-
-enum AggregationType {
-  """
-  one from many
-  """
-  single
-
-  """
-  many from many
-  """
-  multiple
-
-  """
-  from to
-  """
-  range
-}
-
-type AggregationBucket {
-  value: String
-  count: Int
-  title: String
-}
-
 type Stock {
   isInStock: Boolean
   qty: Float!

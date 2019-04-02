@@ -138,3 +138,52 @@ input PaginationInput {
   """
   perPage: Int
 }
+
+type Aggregation {
+  """
+  field name to aggregate values on
+  """
+  field: String
+  """
+  Agregation type
+  """
+  type: AggregationType
+  """
+  Aggregated items
+  """
+  buckets: [AggregationBucket]
+  """
+  Title
+  """
+  title: String
+}
+
+enum AggregationType {
+  """
+  one from many
+  """
+  single
+  """
+  many from many
+  """
+  multiple
+  """
+  from to
+  """
+  range
+}
+
+type AggregationBucket {
+  """
+  Discriminator value
+  """
+  value: String
+  """
+  Items count
+  """
+  count: Int
+  """
+  Title
+  """
+  title: String
+}
