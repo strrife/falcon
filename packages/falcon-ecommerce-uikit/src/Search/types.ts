@@ -1,5 +1,5 @@
 import { PaginationInput } from './../types';
-import { SortOrder } from './../Category/SortOrdersQuery';
+import { SortOrderBase } from './../Category/SortOrdersQuery';
 
 const FilterOperatorValues = {
   eq: 'eq',
@@ -27,7 +27,7 @@ export type FilterInput = {
 export type SearchState = {
   term?: string;
   filters: FilterInput[];
-  sort: SortOrder;
+  sort: SortOrderBase;
   pagination?: PaginationInput;
 };
 

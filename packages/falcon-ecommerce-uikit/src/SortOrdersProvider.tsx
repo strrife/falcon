@@ -14,9 +14,9 @@ type SortOrdersProviderProps = {
 
 export const SortOrdersProvider: React.SFC<SortOrdersProviderProps> = ({ children }) => (
   <SearchConsumer>
-    {({ state, availableSortOrders, setSortOrder }) =>
+    {({ state: { sort }, availableSortOrders, setSortOrder }) =>
       children({
-        value: state.sort,
+        value: availableSortOrders.find(x => x.field === sort.field && x.direction === sort.direction)!,
         items: availableSortOrders,
         onChange: setSortOrder
       })
