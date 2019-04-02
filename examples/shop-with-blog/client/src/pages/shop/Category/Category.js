@@ -78,12 +78,12 @@ const CategoryPage = ({ id }) => (
                 <FiltersSummary data={filtersData} />
                 <ProductsList products={items} />
               </Box>
-              <Box gridArea={CategoryArea.footer}>
+              <FlexLayout gridArea={CategoryArea.footer} flexDirection="column" alignItems="center">
                 {pagination.nextPage && <Divider />}
                 {pagination.nextPage && (
                   <ShowMore onClick={fetchMore} loading={networkStatus === NetworkStatus.fetchMore} />
                 )}
-              </Box>
+              </FlexLayout>
             </CategoryLayout>
           );
         }}
