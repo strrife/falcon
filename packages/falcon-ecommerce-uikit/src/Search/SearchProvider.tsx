@@ -8,7 +8,7 @@ import { SearchState, FilterOperator } from './types';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
 import { SearchContext } from './SearchContext';
-import { SortOrder, SORT_ORDERS_QUERY } from '../Category/SortOrdersQuery';
+import { SortOrder, SortOrderBase, SORT_ORDERS_QUERY } from '../Category/SortOrdersQuery';
 
 interface SearchProviderProps extends RouteComponentProps {
   searchStateFromURL?(url: string): Partial<SearchState>;
@@ -48,7 +48,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
     };
   }
 
-  getFullSortOrderDefinition = (sort: SortOrder) =>
+  getFullSortOrderDefinition = (sort: SortOrderBase) =>
     this.props.sortOrders.find(item => item.field === sort.field && item.direction === sort.direction);
 
   setFilter = (field: string, value: string[], operator: FilterOperator = 'eq') => {
@@ -68,7 +68,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
     this.updateURL({ ...this.state, filters });
   };
 
-  setSortOrder = (sort: SortOrder) => {
+  setSortOrder = (sort: SortOrderBase) => {
     const sortItem = this.getFullSortOrderDefinition(sort);
     if (!sortItem) {
       throw new Error(

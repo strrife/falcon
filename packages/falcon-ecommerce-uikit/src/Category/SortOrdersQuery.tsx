@@ -9,9 +9,12 @@ export const SORT_ORDERS_QUERY = gql`
 
 export type SortOrderDirection = 'asc' | 'desc';
 
-export type SortOrder = {
+export type SortOrderBase = {
   field: string;
   direction: SortOrderDirection;
+};
+
+export type SortOrder = SortOrderBase & {
   name: string;
 };
 
