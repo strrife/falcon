@@ -4,7 +4,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Location } from 'history';
 import { graphql } from 'react-apollo';
 import { PaginationInput } from './../types';
-import { SearchState, FilterOperator } from './types';
+import { SearchState, FilterOperators } from './types';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
 import { SearchContext } from './SearchContext';
@@ -51,7 +51,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
   getFullSortOrderDefinition = (sort: SortOrderBase) =>
     this.props.sortOrders.find(item => item.field === sort.field && item.direction === sort.direction);
 
-  setFilter = (field: string, value: string[], operator: FilterOperator = 'eq') => {
+  setFilter = (field: string, value: string[], operator = FilterOperators.eq) => {
     let filters = [...this.state.filters];
 
     if (value.length === 0) {

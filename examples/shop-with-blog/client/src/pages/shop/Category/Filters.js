@@ -7,7 +7,8 @@ import {
   SingleFilter,
   ColorFilter,
   MultipleFilter,
-  SearchConsumer
+  SearchConsumer,
+  FilterOperators
 } from '@deity/falcon-ecommerce-uikit';
 
 export const Filters = ({ data, ...rest }) => (
@@ -28,7 +29,7 @@ export const Filters = ({ data, ...rest }) => (
                     <SingleFilter
                       options={options}
                       selected={value.join('-')}
-                      onChange={x => setFilter(field, x ? x.split('-').slice(0, 2) : [], 'eq')}
+                      onChange={x => setFilter(field, x ? x.split('-').slice(0, 2) : [], FilterOperators.eq)}
                     />
                   );
                 case 'color': {
@@ -44,14 +45,22 @@ export const Filters = ({ data, ...rest }) => (
                       options={options.map(x => ({ ...x, value: mapColors(x.title) }))}
                       selected={getSelected ? mapColors(getSelected.title) : undefined}
                       onChange={x =>
-                        setFilter(field, x ? [options.find(option => option.title === mapColors(x)).value] : [], 'eq')
+                        setFilter(
+                          field,
+                          x ? [options.find(option => option.title === mapColors(x)).value] : [],
+                          FilterOperators.eq
+                        )
                       }
                     />
                   );
                 }
                 case 'material':
                   return (
-                    <MultipleFilter options={options} selected={value} onChange={x => setFilter(field, x, 'eq')} />
+                    <MultipleFilter
+                      options={options}
+                      selected={value}
+                      onChange={x => setFilter(field, x, FilterOperators.eq)}
+                    />
                   );
                 case 'cat':
                 default:
@@ -59,7 +68,7 @@ export const Filters = ({ data, ...rest }) => (
                     <SingleFilter
                       options={options}
                       selected={value[0]}
-                      onChange={x => setFilter(field, x ? [x] : [], 'eq')}
+                      onChange={x => setFilter(field, x ? [x] : [], FilterOperators.eq)}
                     />
                   );
               }
