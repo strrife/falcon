@@ -4,7 +4,6 @@ export * from './Filter';
 export * from './SingleFilter';
 export * from './ColorFilter';
 export * from './MultipleFilter';
-export * from './RangeFilter';
 export * from './FilterItem';
 export * from './FilterTile';
 export * from './FilterDetails';
