@@ -40,7 +40,7 @@ Next, follow steps 2, 3 and 4 to install required dependencies.
 
 ## Falcon 1.0-rc2 to 1.0-rc3
 
-Full patch for this update can be found [here](https://github.com/deity-io/falcon/releases/download/v1.0-rc2/falcon-update-100rc2-100rc3.patch).
+Full patch for this update can be found [here](https://github.com/deity-io/falcon/releases/download/v1.0-rc3/falcon-update-100rc2-100rc3.patch).
 
 If you don't want to include all the changes from this release but you want to keep Falcon Server and Falcon Client at the latest version then please follow the guide below to adjust your application.
 
