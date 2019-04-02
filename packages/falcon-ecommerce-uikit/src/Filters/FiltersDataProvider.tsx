@@ -15,16 +15,14 @@ export const getFiltersData = (
   aggregations: Aggregation[] = [],
   filterData: FilterData[] = []
 ): FilterData[] =>
-  [...[], ...aggregations.map(x => aggregationToFilterData(x)), ...filterData]
-    .map(x => {
-      const selected = filters.find(filter => filter.field === x.field);
+  [...[], ...aggregations.map(x => aggregationToFilterData(x)), ...filterData].map(x => {
+    const selected = filters.find(filter => filter.field === x.field);
 
-      return {
-        ...x,
-        value: selected ? selected.value : []
-      };
-    })
-    .sort((first, second) => (first.title < second.title ? -1 : 1));
+    return {
+      ...x,
+      value: selected ? selected.value : []
+    };
+  });
 
 export const getSelectedFilterOptionsFor = (data: FilterData[], field: string) => {
   const filter = data.find(x => x.field === field);
