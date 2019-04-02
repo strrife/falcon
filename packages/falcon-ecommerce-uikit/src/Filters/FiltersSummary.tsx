@@ -17,8 +17,7 @@ type FiltersSummaryProps = {
 
 export const FiltersSummary: React.SFC<FiltersSummaryProps> = ({ data }) => (
   <SearchConsumer>
-    {({ state: { filters }, setFilter }) => {
-      const anyFilters = filters.length > 0;
+    {({ state: { filters }, removeFilter }) => {
       if (!filters.length) {
         return null;
       }
@@ -34,7 +33,7 @@ export const FiltersSummary: React.SFC<FiltersSummaryProps> = ({ data }) => (
               }
 
               return (
-                <SelectedFilterItem key={field} onClick={() => setFilter(field, [])}>
+                <SelectedFilterItem key={field} onClick={() => removeFilter(field)}>
                   {title}: {selectedFilterOptions.map(x => x.title || x.value).join(', ')}
                 </SelectedFilterItem>
               );

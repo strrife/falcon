@@ -7,6 +7,7 @@ export type SearchContextType = {
   state: SearchState;
   availableSortOrders: SortOrder[];
   setFilter(name: string, value: string[], operator?: FilterOperator): void;
+  removeFilter(name: string): void;
   removeFilters(): void;
   setSortOrder(sort: SortOrder): void;
   setTerm(term: string): void;
@@ -18,6 +19,7 @@ export const SearchContext = React.createContext<SearchContextType>({
   availableSortOrders: [],
   setTerm: () => {},
   setFilter: () => {},
+  removeFilter: () => {},
   removeFilters: () => {},
   setSortOrder: () => {},
   setPagination: () => {}

@@ -112,6 +112,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
           state: { ...this.state },
           availableSortOrders: this.props.sortOrders,
           setFilter: this.setFilter,
+          removeFilter: x => this.setFilter(x, []),
           removeFilters: this.removeFilters,
           setSortOrder: this.setSortOrder,
           setPagination: this.setPagination,

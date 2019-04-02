@@ -54,6 +54,7 @@ export type FilterDataProviderRenderProps = {
   anySelected: boolean;
   getSelectedFilterOptionsFor: (data: FilterData[], field: string) => FilterOption[];
   setFilter(name: string, value: string[], operator?: FilterOperator): void;
+  removeFilter(name: string): void;
   removeFilters(): void;
 };
 
@@ -63,12 +64,13 @@ export const FiltersDataProvider: React.SFC<{
   children: (renderProps: FilterDataProviderRenderProps) => React.ReactNode;
 }> = ({ children, aggregations, data }) => (
   <SearchConsumer>
-    {({ state: { filters }, setFilter, removeFilters }) =>
+    {({ state: { filters }, setFilter, removeFilter, removeFilters }) =>
       children({
         filters: getFiltersData(filters, aggregations || [], data || []),
         anySelected: filters.length > 0,
         getSelectedFilterOptionsFor,
         setFilter,
+        removeFilter,
         removeFilters
       })
     }
