@@ -19,7 +19,7 @@ export const FiltersSummary: React.SFC<FiltersSummaryProps> = ({ data }) => (
   <SearchConsumer>
     {({ state: { filters }, setFilter }) => {
       const anyFilters = filters.length > 0;
-      if (anyFilters === false) {
+      if (!filters.length) {
         return null;
       }
 
