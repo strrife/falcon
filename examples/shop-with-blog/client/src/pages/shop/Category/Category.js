@@ -16,7 +16,8 @@ import {
   ProductsList,
   ShowMore,
   Responsive,
-  Sidebar
+  Sidebar,
+  Loader
 } from '@deity/falcon-ecommerce-uikit';
 import { Filters } from './Filters';
 
@@ -34,13 +35,20 @@ const CategoryPage = ({ id }) => (
           },
           filters: copy(state.filters)
         }}
+        passLoading
       >
-        {({ category: { name, products }, fetchMore, networkStatus }) => {
+        {({ category, fetchMore, networkStatus, loading }) => {
+          if (!category && loading) {
+            return <Loader />;
+          }
+
+          const { name, products } = category;
           const { pagination, items, aggregations } = products;
           const filtersData = getFiltersData(state.filters, aggregations);
 
           return (
             <CategoryLayout>
+              {loading && <Loader variant="overlay" />}
               <Box gridArea={CategoryArea.heading}>
                 <H1>{name}</H1>
                 <FlexLayout justifyContent="space-between" alignItems="center">

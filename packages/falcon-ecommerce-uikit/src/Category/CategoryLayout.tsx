@@ -38,6 +38,9 @@ export const CategoryLayout = themed({
           [CategoryArea.filters,    CategoryArea.content],
           [CategoryArea.footer,     CategoryArea.footer ]
         ])
+      },
+      css: {
+        position: 'relative'
       }
     }
   }
