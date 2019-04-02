@@ -243,7 +243,7 @@ describe('Magento2Api', () => {
 
   it('breadcrumbs resolver should call proper endpoint with proper url without leading slash', async () => {
     nock(URL)
-      .get(createMagentoUrl('/breadcrumbs?url=sample-product.html'))
+      .get(createMagentoUrl('/falcon/breadcrumbs?url=sample-product.html'))
       .reply(200, []);
 
     const resp = await api.breadcrumbs({}, { path: '/sample-product.html' });
@@ -253,7 +253,7 @@ describe('Magento2Api', () => {
 
   it('categoryProducts() should correctly fetch category products', async () => {
     nock(URL)
-      .get(createMagentoUrl('/categories/1/products'))
+      .get(createMagentoUrl('/falcon/categories/1/products'))
       .query(() => true)
       .reply(200, magentoResponses.categoryProducts);
 
@@ -267,7 +267,7 @@ describe('Magento2Api', () => {
   it('categoryProducts() should always return pagination data', async () => {
     nock(URL)
       .persist(true)
-      .get(createMagentoUrl('/categories/1/products'))
+      .get(createMagentoUrl('/falcon/categories/1/products'))
       .query(() => true)
       .reply(200, magentoResponses.categoryProducts);
 
@@ -369,9 +369,9 @@ describe('Magento2Api', () => {
   });
 
   describe('fetchUrl()', () => {
-    it('Should call /url endpoint with proper params', async () => {
+    it('Should call /urls endpoint with proper params', async () => {
       nock(URL)
-        .get(createMagentoUrl('/url/?url=test.html'))
+        .get(createMagentoUrl('/falcon/urls/?url=test.html'))
         .reply(200, {
           entity_type: 'PRODUCT',
           entity_id: 1,
@@ -385,7 +385,7 @@ describe('Magento2Api', () => {
 
     it('Should correctly parse entity types', async () => {
       nock(URL)
-        .get(createMagentoUrl('/url/?url=test-product.html'))
+        .get(createMagentoUrl('/falcon/urls/?url=test-product.html'))
         .reply(200, {
           entity_type: 'PRODUCT',
           entity_id: 1,
@@ -393,7 +393,7 @@ describe('Magento2Api', () => {
         });
 
       nock(URL)
-        .get(createMagentoUrl('/url/?url=test-category.html'))
+        .get(createMagentoUrl('/falcon/urls/?url=test-category.html'))
         .reply(200, {
           entity_type: 'CATEGORY',
           entity_id: 2,
@@ -401,7 +401,7 @@ describe('Magento2Api', () => {
         });
 
       nock(URL)
-        .get(createMagentoUrl('/url/?url=test-page.html'))
+        .get(createMagentoUrl('/falcon/urls/?url=test-page.html'))
         .reply(200, {
           entity_type: 'CMS-PAGE',
           entity_id: 3,
