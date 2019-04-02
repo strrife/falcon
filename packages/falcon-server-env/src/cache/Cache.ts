@@ -20,6 +20,9 @@ export type GetCacheParams = {
   options?: SetCacheOptions;
 };
 
+/**
+ * Cache-wrapper with extended methods
+ */
 export default class Cache implements KeyValueCache {
   constructor(private cacheProvider: KeyValueCache) {}
 
