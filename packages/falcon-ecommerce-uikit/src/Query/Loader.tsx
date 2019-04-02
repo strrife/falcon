@@ -1,23 +1,33 @@
 import React from 'react';
-import { Icon, themed } from '@deity/falcon-ui';
+import { Icon, Box, themed } from '@deity/falcon-ui';
 
-export const LoaderLayout = themed({
-  tag: 'div',
+const LoaderInnerDOM: React.SFC = props => (
+  <Box {...props}>
+    <Icon src="loader" />
+  </Box>
+);
+
+export const Loader = themed({
+  tag: LoaderInnerDOM,
   defaultTheme: {
-    loaderLayout: {
+    loader: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       css: {
         height: '100vh',
         width: '100%'
+      },
+      variants: {
+        overlay: {
+          position: 'absolute',
+          css: {
+            background: 'rgba(255, 255, 255, 0.7)',
+            height: '100%',
+            width: '100%'
+          }
+        }
       }
     }
   }
 });
-
-export const Loader = () => (
-  <LoaderLayout>
-    <Icon src="loader" />
-  </LoaderLayout>
-);
