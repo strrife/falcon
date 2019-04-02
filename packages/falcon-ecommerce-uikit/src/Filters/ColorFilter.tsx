@@ -34,13 +34,13 @@ export const ColorFilter: React.SFC<SingleFilterProps & ThemedComponentProps> = 
     <FilterItemsList display="flex" flexWrap="wrap" {...rest as any}>
       {selectedOption && (
         <SelectedFilterItem onClick={() => onChange()}>
-          <ColorTile size="lg" color={selectedOption!.title} title={selectedOption!.title} />
+          <ColorTile size="lg" color={selectedOption!.value} title={selectedOption!.title} />
         </SelectedFilterItem>
       )}
       {!selectedOption &&
         options.map(x => (
           <FilterItemLayout key={x.value} onClick={() => onChange(x.value)}>
-            <ColorTile size="lg" color={x!.title} title={x!.title} />
+            <ColorTile size="lg" color={x!.value} title={x!.title} />
           </FilterItemLayout>
         ))}
     </FilterItemsList>

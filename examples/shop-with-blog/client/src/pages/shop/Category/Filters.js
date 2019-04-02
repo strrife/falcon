@@ -31,14 +31,24 @@ export const Filters = ({ data, ...rest }) => (
                       onChange={x => setFilter(field, x ? x.split('-').slice(0, 2) : [], 'eq')}
                     />
                   );
-                case 'color':
+                case 'color': {
+                  const colorsMap = {
+                    'Deity Green': '#a9cf38',
+                    '#a9cf38': 'Deity Green'
+                  };
+                  const mapColors = x => (colorsMap[x] !== undefined ? colorsMap[x] : x);
+                  const getSelected = options.find(option => option.value === value[0]);
+
                   return (
                     <ColorFilter
-                      options={options}
-                      selected={value[0]}
-                      onChange={x => setFilter(field, x ? [x] : [], 'eq')}
+                      options={options.map(x => ({ ...x, value: mapColors(x.title) }))}
+                      selected={getSelected ? mapColors(getSelected.title) : undefined}
+                      onChange={x =>
+                        setFilter(field, x ? [options.find(option => option.title === mapColors(x)).value] : [], 'eq')
+                      }
                     />
                   );
+                }
                 case 'material':
                   return (
                     <MultipleFilter options={options} selected={value} onChange={x => setFilter(field, x, 'eq')} />
