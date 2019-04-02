@@ -1,8 +1,8 @@
 import React from 'react';
 import { Label, Checkbox } from '@deity/falcon-ui';
-import { FilterOption } from '../Search/types';
+import { FilterOption } from './FiltersDataProvider';
 import { FilterItemLayout } from './FilterItem';
-import { FilterItemsList } from './Filter';
+import { FilterItemsList } from './FilterItemsList';
 
 export type MultipleFilterProps = {
   options: FilterOption[];

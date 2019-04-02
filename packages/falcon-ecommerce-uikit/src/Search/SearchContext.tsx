@@ -1,7 +1,7 @@
 import React from 'react';
 import { PaginationInput } from './../types';
 import { SearchState, FilterOperator } from './types';
-import { SortOrder, SortOrderInput } from './../Category/SortOrdersQuery';
+import { SortOrder, SortOrderInput } from '../SortOrders/SortOrdersQuery';
 
 export type SearchContextType = {
   state: SearchState;

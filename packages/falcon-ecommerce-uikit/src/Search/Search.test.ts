@@ -1,6 +1,6 @@
 import { searchStateToURL } from './searchStateToURL';
 import { searchStateFromURL } from './searchStateFromURL';
-import { SortOrderDirection } from '../Category/SortOrdersQuery';
+import { SortOrderDirection } from '../SortOrders/SortOrdersQuery';
 import { FilterOperators } from './types';
 
 describe('Filters', () => {

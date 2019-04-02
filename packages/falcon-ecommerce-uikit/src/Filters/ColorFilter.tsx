@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, themed, ThemedComponentProps } from '@deity/falcon-ui';
 import { FilterItemLayout, SelectedFilterItem } from './FilterItem';
-import { FilterItemsList } from './Filter';
+import { FilterItemsList } from './FilterItemsList';
 import { SingleFilterProps } from './SingleFilter';
 
 export const ColorTile = themed<{ color: string }, any>({

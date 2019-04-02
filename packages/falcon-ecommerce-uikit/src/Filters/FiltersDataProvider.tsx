@@ -1,6 +1,21 @@
 import React from 'react';
 import { Box, themed } from '@deity/falcon-ui';
-import { SearchConsumer, Aggregation, FilterData, FilterOption, FilterOperator, FilterInput } from '../Search';
+import { Aggregation, SelectionType } from '../Category';
+import { SearchConsumer, FilterOperator, FilterInput } from '../Search';
+
+export type FilterData = {
+  field: string;
+  title: string;
+  type: SelectionType;
+  options: FilterOption[];
+  value: string[];
+};
+
+export type FilterOption = {
+  title: string;
+  value: string;
+  count: number;
+};
 
 export const aggregationToFilterData = (aggregation: Aggregation): FilterData => ({
   field: aggregation.field,

@@ -1,6 +1,6 @@
 import React from 'react';
-import { SortOrder } from './Category/SortOrdersQuery';
-import { SearchConsumer } from './Search';
+import { SortOrder } from './SortOrdersQuery';
+import { SearchConsumer } from '../Search';
 
 type SortOrdersProviderRenderProps = {
   items: SortOrder[];

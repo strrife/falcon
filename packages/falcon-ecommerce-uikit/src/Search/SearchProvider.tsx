@@ -8,7 +8,7 @@ import { SearchState, FilterOperators } from './types';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
 import { SearchContext } from './SearchContext';
-import { SortOrder, SortOrderInput, SORT_ORDERS_QUERY } from '../Category/SortOrdersQuery';
+import { SortOrder, SortOrderInput, SORT_ORDERS_QUERY } from '../SortOrders/SortOrdersQuery';
 
 interface SearchProviderProps extends RouteComponentProps {
   searchStateFromURL?(url: string): Partial<SearchState>;

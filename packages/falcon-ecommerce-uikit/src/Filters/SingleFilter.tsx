@@ -1,8 +1,8 @@
 import React from 'react';
 import { ThemedComponentProps } from '@deity/falcon-ui';
-import { FilterOption } from '../Search/types';
+import { FilterOption } from './FiltersDataProvider';
 import { FilterItemLayout, SelectedFilterItem } from './FilterItem';
-import { FilterItemsList } from './Filter';
+import { FilterItemsList } from './FilterItemsList';
 
 export type SingleFilterProps = {
   options: FilterOption[];
