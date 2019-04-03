@@ -27,3 +27,6 @@ export class SortOrdersQuery extends Query<SortOrdersData> {
     query: SORT_ORDERS_QUERY
   };
 }
+
+export const AreSortOrdersSame = (a: SortOrderInput, b: SortOrderInput): boolean =>
+  a.field === b.field && a.direction === b.direction;
