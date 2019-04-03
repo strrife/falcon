@@ -110,7 +110,6 @@ describe('SearchProvider', () => {
   it('setSortOrder() should update url and pass order in props', async () => {
     searchInfo.setSortOrder({ field: 'price', direction: 'asc' as any });
     wrapper!.update();
-    console.log('asd:', getLocation().search);
     // sortOrders property passed to SearchProvider (from Query or via prop directly)
     expect(searchInfo.state.sort).toEqual({ field: 'price', direction: 'asc' });
     expect(getLocation().search).toEqual(`?${JSON.stringify(getSerializedSearchInfo())}`);
