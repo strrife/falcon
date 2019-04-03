@@ -38,8 +38,11 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
     this.historyUnlisten();
   }
 
-  get defaultSortOrder(): SortOrder {
-    return this.props.defaultSortOrder || this.props.sortOrders[0];
+  get defaultSortOrder(): SortOrderInput {
+    const { defaultSortOrder, sortOrders } = this.props;
+    const { name, ...result } = defaultSortOrder || sortOrders[0];
+
+    return result;
   }
 
   getStateFromURL(location: Location): SearchState {
@@ -49,12 +52,9 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
       ...rest,
       filters: Array.isArray(filters) ? filters : [],
       // if there's no sort set yet then return first available option (it's considered as default one)
-      sort: (sort && this.getFullSortOrderDefinition(sort)) || this.defaultSortOrder
+      sort: sort && this.sortOrderExists(sort) ? sort : this.defaultSortOrder
     };
   }
-
-  getFullSortOrderDefinition = (sort: SortOrderInput) =>
-    this.props.sortOrders.find(item => AreSortOrdersSame(item, sort));
 
   setFilter = (field: string, value: string[], operator = FilterOperators.eq) => {
     let filters = [...this.state.filters];
@@ -74,29 +74,34 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
   };
 
   setSortOrder = (sort: SortOrderInput) => {
-    const sortItem = this.getFullSortOrderDefinition(sort);
-    if (!sortItem) {
+    if (!this.sortOrderExists(sort)) {
       throw new Error(
         'Sort order value passed to SearchProvider.setSortOrder() does not match any of available sort orders'
       );
     }
 
-    this.updateURL({ ...this.state, sort: sortItem });
+    this.updateURL({ ...this.state, sort });
   };
 
   setPagination = (pagination: PaginationInput) => this.updateURL({ ...this.state, pagination });
 
   setTerm = (term: string) => this.updateURL({ ...this.state, term });
 
+  sortOrderExists = (sort: SortOrderInput): boolean => this.props.sortOrders.some(x => AreSortOrdersSame(x, sort));
+
   removeFilters = () => this.updateURL({ ...this.state, filters: [] });
 
-  private updateURL(state: SearchState) {
+  public stateToSerialize = (state: SearchState): Partial<SearchState> => {
     const stateToSerialize: Partial<SearchState> = { ...state };
     if (AreSortOrdersSame(state.sort, this.defaultSortOrder)) {
       delete stateToSerialize.sort;
     }
 
-    const queryString = this.props.searchStateToURL!(stateToSerialize);
+    return stateToSerialize;
+  };
+
+  private updateURL(state: SearchState) {
+    const queryString = this.props.searchStateToURL!(this.stateToSerialize(state));
     this.props.history.push(`${this.props.location.pathname}?${queryString}`);
   }
 
