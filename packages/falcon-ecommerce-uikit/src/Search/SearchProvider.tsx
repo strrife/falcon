@@ -8,12 +8,13 @@ import { SearchState, FilterOperators } from './types';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
 import { SearchContext } from './SearchContext';
-import { SortOrder, SortOrderInput, SORT_ORDERS_QUERY } from '../SortOrders/SortOrdersQuery';
+import { SortOrder, SortOrderInput, SORT_ORDERS_QUERY, AreSortOrdersSame } from '../SortOrders/SortOrdersQuery';
 
 interface SearchProviderProps extends RouteComponentProps {
   searchStateFromURL?(url: string): Partial<SearchState>;
   searchStateToURL?(state: Partial<SearchState>): string;
   sortOrders: SortOrder[];
+  defaultSortOrder?: SortOrder;
 }
 
 class SearchProviderImpl extends React.Component<SearchProviderProps, SearchState> {
@@ -37,6 +38,10 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
     this.historyUnlisten();
   }
 
+  get defaultSortOrder(): SortOrder {
+    return this.props.defaultSortOrder || this.props.sortOrders[0];
+  }
+
   getStateFromURL(location: Location): SearchState {
     const { sort, filters, ...rest } = this.props.searchStateFromURL!(location.search);
 
@@ -44,12 +49,12 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
       ...rest,
       filters: Array.isArray(filters) ? filters : [],
       // if there's no sort set yet then return first available option (it's considered as default one)
-      sort: (sort && this.getFullSortOrderDefinition(sort)) || this.props.sortOrders[0]
+      sort: (sort && this.getFullSortOrderDefinition(sort)) || this.defaultSortOrder
     };
   }
 
   getFullSortOrderDefinition = (sort: SortOrderInput) =>
-    this.props.sortOrders.find(item => item.field === sort.field && item.direction === sort.direction);
+    this.props.sortOrders.find(item => AreSortOrdersSame(item, sort));
 
   setFilter = (field: string, value: string[], operator = FilterOperators.eq) => {
     let filters = [...this.state.filters];
@@ -86,7 +91,12 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
   removeFilters = () => this.updateURL({ ...this.state, filters: [] });
 
   private updateURL(state: SearchState) {
-    const queryString = this.props.searchStateToURL!(state);
+    const stateToSerialize: Partial<SearchState> = { ...state };
+    if (AreSortOrdersSame(state.sort, this.defaultSortOrder)) {
+      delete stateToSerialize.sort;
+    }
+
+    const queryString = this.props.searchStateToURL!(stateToSerialize);
     this.props.history.push(`${this.props.location.pathname}?${queryString}`);
   }
 
