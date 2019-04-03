@@ -91,7 +91,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
 
   removeFilters = () => this.updateURL({ ...this.state, filters: [] });
 
-  public stateToSerialize = (state: SearchState): Partial<SearchState> => {
+  stateToSerialize = (state: SearchState): Partial<SearchState> => {
     const stateToSerialize: Partial<SearchState> = { ...state };
     if (AreSortOrdersSame(state.sort, this.defaultSortOrder)) {
       delete stateToSerialize.sort;
