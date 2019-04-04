@@ -29,10 +29,7 @@ const CategoryPage = ({ id }) => (
       <CategoryProductsQuery
         variables={{
           categoryId: id,
-          sort: {
-            direction: state.sort.direction,
-            field: state.sort.field
-          },
+          sort: state.sort,
           filters: copy(state.filters)
         }}
         passLoading
