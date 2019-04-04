@@ -9,7 +9,7 @@ export type SearchContextType = {
   setFilter(name: string, value: string[], operator?: FilterOperator): void;
   removeFilter(name: string): void;
   removeFilters(): void;
-  setSortOrder(sort: SortOrderInput): void;
+  setSortOrder(sort?: SortOrderInput): void;
   setTerm(term: string): void;
   setPagination(pagination: PaginationInput): void;
 };
