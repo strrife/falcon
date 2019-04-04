@@ -6,8 +6,7 @@ import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-client';
 import { InMemoryCache as Cache } from 'apollo-cache-inmemory';
 import { SearchProvider } from './SearchProvider';
-import { SearchContext, SearchContextType } from './SearchContext';
-import { SearchState } from './types';
+import { SearchContext, SearchContextType, SearchState } from './SearchContext';
 import { wait } from '../../../../test/helpers';
 
 // custom serializing and deserializing go avoid problems when default implementation of those changes

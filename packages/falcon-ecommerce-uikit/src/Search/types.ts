@@ -1,13 +1,6 @@
 import { PaginationInput } from './../types';
 import { SortOrderInput } from '../SortOrders/SortOrdersQuery';
 
-export type SearchState = {
-  term?: string;
-  filters: FilterInput[];
-  sort?: SortOrderInput;
-  pagination?: PaginationInput;
-};
-
 export type FilterInput = {
   field: string;
   operator: FilterOperator;
