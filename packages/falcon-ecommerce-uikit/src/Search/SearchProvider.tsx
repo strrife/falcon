@@ -9,21 +9,23 @@ import { searchStateToURL } from './searchStateToURL';
 import { SearchContext, SearchState } from './SearchContext';
 import { SortOrdersQuery, SortOrderInput, AreSortOrderInputsEqual } from '../SortOrders/SortOrdersQuery';
 
-interface SearchProviderProps extends RouteComponentProps {
-  sortOrders: (SortOrderInput | undefined)[];
-  defaultSortOrder?: SortOrderInput;
+export type SearchProviderProps = RouteComponentProps & {
   searchStateFromURL?(url: string): Partial<SearchState>;
   searchStateToURL?(state: Partial<SearchState>): string;
-}
+};
+type SearchProviderImplProps = SearchProviderProps & {
+  sortOrders: (SortOrderInput | undefined)[];
+  defaultSortOrder?: SortOrderInput;
+};
 
-class SearchProviderImpl extends React.Component<SearchProviderProps, SearchState> {
+class SearchProviderImpl extends React.Component<SearchProviderImplProps, SearchState> {
   static defaultProps = {
     searchStateFromURL,
     searchStateToURL,
     filters: []
   };
 
-  constructor(props: SearchProviderProps) {
+  constructor(props: SearchProviderImplProps) {
     super(props);
 
     this.state = this.getStateFromURL(props.location);
@@ -134,7 +136,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
   }
 }
 
-const SearchProviderWithSortOrders: React.SFC<RouteComponentProps> = ({ ...rest }) => (
+const SearchProviderWithSortOrders: React.SFC<SearchProviderProps> = ({ ...rest }) => (
   <SortOrdersQuery>
     {({ sortOrders }) => <SearchProviderImpl {...rest} sortOrders={sortOrders.map(x => x.value)} />}
   </SortOrdersQuery>
