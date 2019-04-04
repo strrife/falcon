@@ -7,11 +7,11 @@ import { FilterOperators } from './types';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
 import { SearchContext, SearchState } from './SearchContext';
-import { SortOrdersQuery, SortOrder, SortOrderInput, AreSortOrderInputsEqual } from '../SortOrders/SortOrdersQuery';
+import { SortOrdersQuery, SortOrderInput, AreSortOrderInputsEqual } from '../SortOrders/SortOrdersQuery';
 
 interface SearchProviderProps extends RouteComponentProps {
-  sortOrders: SortOrder[];
-  defaultSortOrder?: SortOrder;
+  sortOrders: (SortOrderInput | undefined)[];
+  defaultSortOrder?: SortOrderInput;
   searchStateFromURL?(url: string): Partial<SearchState>;
   searchStateToURL?(state: Partial<SearchState>): string;
 }
@@ -39,9 +39,14 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
 
   get defaultSortOrder(): SortOrderInput | undefined {
     const { defaultSortOrder, sortOrders } = this.props;
-    const defaultSort = defaultSortOrder || sortOrders.find(x => !x.value);
+    if (defaultSortOrder) {
+      return defaultSortOrder;
+    }
+    if (sortOrders.some(x => !x)) {
+      return undefined;
+    }
 
-    return defaultSort ? defaultSort.value : undefined;
+    return sortOrders[0];
   }
 
   getStateFromURL(location: Location): SearchState {
@@ -80,7 +85,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
   setTerm = (term: string) => this.updateURL({ ...this.state, term });
 
   sortOrderExists = (sort?: SortOrderInput): boolean =>
-    this.props.sortOrders.some(x => (!x.value && !sort) || AreSortOrderInputsEqual(x.value, sort));
+    this.props.sortOrders.some(x => (!x && !sort) || AreSortOrderInputsEqual(x, sort));
 
   removeFilters = () => this.updateURL({ ...this.state, filters: [] });
 
@@ -115,7 +120,6 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
       <SearchContext.Provider
         value={{
           state: { ...this.state },
-          availableSortOrders: this.props.sortOrders,
           setFilter: this.setFilter,
           removeFilter: x => this.setFilter(x, []),
           removeFilters: this.removeFilters,
@@ -131,7 +135,9 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
 }
 
 const SearchProviderWithSortOrders: React.SFC<RouteComponentProps> = ({ ...rest }) => (
-  <SortOrdersQuery>{({ sortOrders }) => <SearchProviderImpl {...rest} sortOrders={sortOrders} />}</SortOrdersQuery>
+  <SortOrdersQuery>
+    {({ sortOrders }) => <SearchProviderImpl {...rest} sortOrders={sortOrders.map(x => x.value)} />}
+  </SortOrdersQuery>
 );
 
 // wrap everything in router so SearchProviderImpl has access to history and location

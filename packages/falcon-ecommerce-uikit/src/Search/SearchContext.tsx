@@ -1,7 +1,7 @@
 import React from 'react';
 import { PaginationInput } from './../types';
 import { FilterOperator, FilterInput } from './types';
-import { SortOrder, SortOrderInput } from '../SortOrders/SortOrdersQuery';
+import { SortOrderInput } from '../SortOrders/SortOrdersQuery';
 
 export type SearchState = {
   term?: string;
@@ -12,7 +12,6 @@ export type SearchState = {
 
 export type SearchContextType = {
   state: SearchState;
-  availableSortOrders: SortOrder[];
   setFilter(name: string, value: string[], operator?: FilterOperator): void;
   removeFilter(name: string): void;
   removeFilters(): void;
@@ -25,7 +24,6 @@ export const SearchContext = React.createContext<SearchContextType>({
   state: {
     filters: []
   },
-  availableSortOrders: [],
   setTerm: () => {},
   setFilter: () => {},
   removeFilter: () => {},
