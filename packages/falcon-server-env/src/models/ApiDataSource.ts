@@ -208,6 +208,14 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
     return result;
   }
 
+  protected cacheKeyFor(request: Request): string {
+    const cacheKey: string = super.cacheKeyFor(request);
+    // Note: temporary disabling "memoized" map due to issues with GraphQL resolvers,
+    // GET-requests in particular ("fetchUrl" query)
+    this.memoizedResults.delete(cacheKey);
+    return cacheKey;
+  }
+
   private ensureContextPassed(init?: ContextRequestInit): ContextRequestInit {
     const processedInit: ContextRequestInit = init || {};
 
