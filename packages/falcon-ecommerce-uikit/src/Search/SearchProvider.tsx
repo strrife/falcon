@@ -2,19 +2,18 @@ import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 // eslint-disable-next-line
 import { Location } from 'history';
-import { graphql } from 'react-apollo';
 import { PaginationInput } from './../types';
 import { FilterOperators } from './types';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
 import { SearchContext, SearchState } from './SearchContext';
-import { SortOrder, SortOrderInput, SORT_ORDERS_QUERY, AreSortOrderInputsEqual } from '../SortOrders/SortOrdersQuery';
+import { SortOrdersQuery, SortOrder, SortOrderInput, AreSortOrderInputsEqual } from '../SortOrders/SortOrdersQuery';
 
 interface SearchProviderProps extends RouteComponentProps {
-  searchStateFromURL?(url: string): Partial<SearchState>;
-  searchStateToURL?(state: Partial<SearchState>): string;
   sortOrders: SortOrder[];
   defaultSortOrder?: SortOrder;
+  searchStateFromURL?(url: string): Partial<SearchState>;
+  searchStateToURL?(state: Partial<SearchState>): string;
 }
 
 class SearchProviderImpl extends React.Component<SearchProviderProps, SearchState> {
@@ -131,14 +130,9 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
   }
 }
 
-// wrap SearchProviderImpl with SORT_ORDERS_QUERY so sort orders are passed as props to SearchProviderImpl
-const SearchProviderWithSortOrders = graphql<any, { sortOrders: SortOrder[] }>(SORT_ORDERS_QUERY, {
-  // remap data received from apollo - return sortOrders directly
-  props: ({ data, ownProps }) => ({
-    sortOrders: data!.sortOrders,
-    ...ownProps
-  })
-})(SearchProviderImpl);
+const SearchProviderWithSortOrders: React.SFC<RouteComponentProps> = ({ ...rest }) => (
+  <SortOrdersQuery>{({ sortOrders }) => <SearchProviderImpl {...rest} sortOrders={sortOrders} />}</SortOrdersQuery>
+);
 
 // wrap everything in router so SearchProviderImpl has access to history and location
 export const SearchProvider = withRouter(SearchProviderWithSortOrders);
