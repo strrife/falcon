@@ -4,11 +4,11 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Location } from 'history';
 import { graphql } from 'react-apollo';
 import { PaginationInput } from './../types';
-import { SearchState, FilterOperators } from './types';
+import { FilterOperators } from './types';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
-import { SearchContext } from './SearchContext';
-import { SortOrder, SortOrderInput, SORT_ORDERS_QUERY, AreSortOrdersSame } from '../SortOrders/SortOrdersQuery';
+import { SearchContext, SearchState } from './SearchContext';
+import { SortOrder, SortOrderInput, SORT_ORDERS_QUERY, AreSortOrdersEqual } from '../SortOrders/SortOrdersQuery';
 
 interface SearchProviderProps extends RouteComponentProps {
   searchStateFromURL?(url: string): Partial<SearchState>;
@@ -38,21 +38,19 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
     this.historyUnlisten();
   }
 
-  get defaultSortOrder(): SortOrderInput {
+  get defaultSortOrder(): SortOrderInput | undefined {
     const { defaultSortOrder, sortOrders } = this.props;
-    const { name, ...result } = defaultSortOrder || sortOrders[0];
+    const defaultSort = defaultSortOrder || sortOrders.find(x => !x.value);
 
-    return result;
+    return defaultSort ? defaultSort.value : undefined;
   }
-
   getStateFromURL(location: Location): SearchState {
     const { sort, filters, ...rest } = this.props.searchStateFromURL!(location.search);
 
     return {
       ...rest,
       filters: Array.isArray(filters) ? filters : [],
-      // if there's no sort set yet then return first available option (it's considered as default one)
-      sort: sort && this.sortOrderExists(sort) ? sort : this.defaultSortOrder
+      sort: sort && this.sortOrderExists(sort) ? sort : undefined
     };
   }
 
@@ -73,35 +71,27 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
     this.updateURL({ ...this.state, filters });
   };
 
-  setSortOrder = (sort: SortOrderInput) => {
-    if (!this.sortOrderExists(sort)) {
-      throw new Error(
-        'Sort order value passed to SearchProvider.setSortOrder() does not match any of available sort orders'
-      );
-    }
-
-    this.updateURL({ ...this.state, sort });
+  setSortOrder = (sort?: SortOrderInput) => {
+    this.updateURL({ ...this.state, sort: this.sortOrderExists(sort) ? sort : this.defaultSortOrder });
   };
 
   setPagination = (pagination: PaginationInput) => this.updateURL({ ...this.state, pagination });
 
   setTerm = (term: string) => this.updateURL({ ...this.state, term });
 
-  sortOrderExists = (sort: SortOrderInput): boolean => this.props.sortOrders.some(x => AreSortOrdersSame(x, sort));
+  sortOrderExists = (sort?: SortOrderInput): boolean =>
+    this.props.sortOrders.some(x => (!x.value && !sort) || AreSortOrdersEqual(x.value, sort));
 
   removeFilters = () => this.updateURL({ ...this.state, filters: [] });
 
   stateToSerialize = (state: SearchState): Partial<SearchState> => {
     const stateToSerialize: Partial<SearchState> = { ...state };
-    if (AreSortOrdersSame(state.sort, this.defaultSortOrder)) {
-      delete stateToSerialize.sort;
-    }
 
     return stateToSerialize;
   };
 
   private updateURL(state: SearchState) {
-    const queryString = this.props.searchStateToURL!(this.stateToSerialize(state));
+    const queryString = this.props.searchStateToURL!(state);
     this.props.history.push(`${this.props.location.pathname}?${queryString}`);
   }
 
