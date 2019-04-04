@@ -14,8 +14,9 @@ export type SortOrderInput = {
   direction: SortOrderDirection;
 };
 
-export type SortOrder = SortOrderInput & {
+export type SortOrder = {
   name: string;
+  value?: SortOrderInput;
 };
 
 export type SortOrdersData = {
@@ -28,5 +29,5 @@ export class SortOrdersQuery extends Query<SortOrdersData> {
   };
 }
 
-export const AreSortOrdersSame = (item1: SortOrderInput, item2: SortOrderInput): boolean =>
-  item1.field === item2.field && item1.direction === item2.direction;
+export const AreSortOrdersEqual = (item1?: SortOrderInput, item2?: SortOrderInput): boolean =>
+  !!item1 && !!item2 && item1.field === item2.field && item1.direction === item2.direction;
