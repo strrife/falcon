@@ -1,5 +1,5 @@
 import React from 'react';
-import { SortOrder } from './SortOrdersQuery';
+import { SortOrder, AreSortOrdersEqual } from './SortOrdersQuery';
 import { SearchConsumer } from '../Search';
 
 type SortOrdersProviderRenderProps = {
@@ -16,9 +16,9 @@ export const SortOrdersProvider: React.SFC<SortOrdersProviderProps> = ({ childre
   <SearchConsumer>
     {({ state: { sort }, availableSortOrders, setSortOrder }) =>
       children({
-        value: availableSortOrders.find(x => x.field === sort.field && x.direction === sort.direction)!,
         items: availableSortOrders,
-        onChange: setSortOrder
+        value: availableSortOrders.find(x => (!x.value && !sort) || AreSortOrdersEqual(x.value, sort))!,
+        onChange: x => setSortOrder(x.value)
       })
     }
   </SearchConsumer>
