@@ -16,13 +16,11 @@ const stateFromUrl = (url: string) => (url ? JSON.parse(url.replace('?', '')) : 
 const sortOrders = [
   {
     name: 'Price ascending',
-    field: 'price',
-    direction: 'asc'
+    value: { field: 'price', direction: 'asc' }
   },
   {
     name: 'Price descending',
-    field: 'price',
-    direction: 'desc'
+    value: { field: 'price', direction: 'desc' }
   }
 ];
 
@@ -65,8 +63,6 @@ describe('SearchProvider', () => {
   const getLocation = () =>
     (wrapper!.find((SearchProvider as any).WrappedComponent).props() as RouteComponentProps).location;
   const getSearchInfo = () => wrapper!.find((SearchProvider as any).WrappedComponent).state();
-  const getSerializedSearchInfo = () =>
-    (wrapper!.find((SearchProvider as any).WrappedComponent).instance() as any).stateToSerialize(getSearchInfo());
 
   beforeEach(async () => {
     await renderSearchProvider();
@@ -87,7 +83,7 @@ describe('SearchProvider', () => {
     searchInfo.setFilter('price', ['10']);
     wrapper!.update();
     expect(searchInfo.state.filters).toHaveLength(1);
-    expect(getLocation().search).toEqual(`?${JSON.stringify(getSerializedSearchInfo())}`);
+    expect(getLocation().search).toEqual(`?${JSON.stringify(getSearchInfo())}`);
   });
 
   it('setFilter() without value should update url and remove filter value from passed props', async () => {
@@ -95,7 +91,7 @@ describe('SearchProvider', () => {
     searchInfo.setFilter('price', []);
     wrapper!.update();
     expect(searchInfo.state.filters).toHaveLength(0);
-    expect(getLocation().search).toEqual(`?${JSON.stringify(getSerializedSearchInfo())}`);
+    expect(getLocation().search).toEqual(`?${JSON.stringify(getSearchInfo())}`);
   });
 
   it('setQuery() without value should update url and pass query in props', async () => {
@@ -103,7 +99,7 @@ describe('SearchProvider', () => {
     searchInfo.setFilter('price', []);
     wrapper!.update();
     expect(searchInfo.state.term).toEqual('searchQuery');
-    expect(getLocation().search).toEqual(`?${JSON.stringify(getSerializedSearchInfo())}`);
+    expect(getLocation().search).toEqual(`?${JSON.stringify(getSearchInfo())}`);
   });
 
   it('setSortOrder() should update url and pass order in props', async () => {
@@ -111,14 +107,14 @@ describe('SearchProvider', () => {
     wrapper!.update();
     // sortOrders property passed to SearchProvider (from Query or via prop directly)
     expect(searchInfo.state.sort).toEqual({ field: 'price', direction: 'asc' });
-    expect(getLocation().search).toEqual(`?${JSON.stringify(getSerializedSearchInfo())}`);
+    expect(getLocation().search).toEqual(`?${JSON.stringify(getSearchInfo())}`);
   });
 
   it('setPagination() should update url and pass pagination in props', async () => {
     searchInfo.setPagination({ page: 1, perPage: 10 });
     wrapper!.update();
     expect(searchInfo.state.pagination).toEqual({ page: 1, perPage: 10 });
-    expect(getLocation().search).toEqual(`?${JSON.stringify(getSerializedSearchInfo())}`);
+    expect(getLocation().search).toEqual(`?${JSON.stringify(getSearchInfo())}`);
   });
 
   it('history change should trigger update of search state', async () => {
