@@ -8,7 +8,7 @@ import { FilterOperators } from './types';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
 import { SearchContext, SearchState } from './SearchContext';
-import { SortOrder, SortOrderInput, SORT_ORDERS_QUERY, AreSortOrdersEqual } from '../SortOrders/SortOrdersQuery';
+import { SortOrder, SortOrderInput, SORT_ORDERS_QUERY, AreSortOrderInputsEqual } from '../SortOrders/SortOrdersQuery';
 
 interface SearchProviderProps extends RouteComponentProps {
   searchStateFromURL?(url: string): Partial<SearchState>;
@@ -44,6 +44,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
 
     return defaultSort ? defaultSort.value : undefined;
   }
+
   getStateFromURL(location: Location): SearchState {
     const { sort, filters, ...rest } = this.props.searchStateFromURL!(location.search);
 
@@ -80,7 +81,7 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
   setTerm = (term: string) => this.updateURL({ ...this.state, term });
 
   sortOrderExists = (sort?: SortOrderInput): boolean =>
-    this.props.sortOrders.some(x => (!x.value && !sort) || AreSortOrdersEqual(x.value, sort));
+    this.props.sortOrders.some(x => (!x.value && !sort) || AreSortOrderInputsEqual(x.value, sort));
 
   removeFilters = () => this.updateURL({ ...this.state, filters: [] });
 

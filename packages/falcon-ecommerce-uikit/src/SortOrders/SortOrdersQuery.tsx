@@ -29,5 +29,5 @@ export class SortOrdersQuery extends Query<SortOrdersData> {
   };
 }
 
-export const AreSortOrdersEqual = (item1?: SortOrderInput, item2?: SortOrderInput): boolean =>
+export const AreSortOrderInputsEqual = (item1?: SortOrderInput, item2?: SortOrderInput): boolean =>
   !!item1 && !!item2 && item1.field === item2.field && item1.direction === item2.direction;
