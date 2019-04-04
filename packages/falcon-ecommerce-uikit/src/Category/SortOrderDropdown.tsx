@@ -25,7 +25,7 @@ export const SortOrderDropdown: React.SFC<SortOrderDropdownProps> = ({ items, va
       <T id="productsList.sort.title" />
     </Text>
     <Box display="flex">
-      <Dropdown css={{ width: '100%' }} onChange={onChange}>
+      <Dropdown css={{ width: '100%', minWidth: 200 }} onChange={onChange}>
         <DropdownLabel>{value.name}</DropdownLabel>
         <DropdownMenu>
           {items.map((x: any) => (
