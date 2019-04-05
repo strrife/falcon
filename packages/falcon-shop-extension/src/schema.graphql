@@ -315,7 +315,7 @@ type Product {
   configurableOptions: [ConfigurableProductOption]
   bundleOptions: [BundleProductOption]
   gallery: [GalleryEntry]
-  breadcrumbs(path: String!): [Breadcrumb]
+  breadcrumbs(path: String!): [Breadcrumb] @cache(ttl: 20)
   seo: ProductSeo
 }
 
