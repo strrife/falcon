@@ -1,5 +1,5 @@
 extend type Query {
-  menu: [MenuItem]
+  menu: [MenuItem] @cache(ttl: 15)
   category(id: String!): Category
   product(id: String!): Product
   products(

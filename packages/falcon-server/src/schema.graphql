@@ -1,3 +1,5 @@
+directive @cache(ttl: Int) on FIELD_DEFINITION
+
 schema {
   query: Query
   mutation: Mutation
@@ -24,11 +26,11 @@ type Query {
   """
   Returns a compiled backend config
   """
-  backendConfig: BackendConfig
+  backendConfig: BackendConfig @cache
   """
   URL-resolve query
   """
-  url(path: String!): Url
+  url(path: String!): Url @cache
 }
 
 """

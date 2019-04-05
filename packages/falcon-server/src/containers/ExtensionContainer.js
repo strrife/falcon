@@ -166,9 +166,11 @@ module.exports = class ExtensionContainer extends BaseContainer {
       schemas: [
         makeExecutableSchema({
           typeDefs: config.schemas,
+          schemaDirectives: config.schemaDirectives,
           resolvers: config.resolvers
         })
       ],
+      schemaDirectives: config.schemaDirectives,
       resolvers: config.resolvers
     });
 
