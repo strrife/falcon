@@ -1,12 +1,13 @@
 import qs from 'qs';
-import { SearchState, FilterOperator } from './types';
+import { SearchState } from './SearchContext';
+import { FilterOperator } from './types';
 
-export function searchStateFromURL(url: string) {
+export function searchStateFromURL(url: string): Partial<SearchState> {
   const parts: any = qs.parse(url.replace('?', ''));
-  const searchState: SearchState = {};
+  const searchState: Partial<SearchState> = {};
 
   if (parts.q) {
-    searchState.query = parts.q;
+    searchState.term = parts.q;
   }
 
   if (parts.p) {
@@ -31,7 +32,7 @@ export function searchStateFromURL(url: string) {
       const [field, operator] = names[i].split(':');
       searchState.filters.push({
         field,
-        operator: (operator || 'eq') as FilterOperator,
+        operator: (operator as FilterOperator) || FilterOperator.equals,
         value: parts.filters[names[i]].split(',')
       });
     }

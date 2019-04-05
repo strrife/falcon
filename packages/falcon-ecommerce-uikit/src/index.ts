@@ -1,3 +1,4 @@
+export * from './types';
 export * from './AppLayout';
 export * from './Header';
 export * from './Footer';
@@ -29,9 +30,11 @@ export * from './Sidebar';
 export * from './Forms';
 export * from './AccountRecovery';
 export * from './Errors';
-export * from './SortOrdersProvider';
 export * from './Search';
 export * from './OnlineStatus';
 export * from './EnsureTTI';
 export * from './BackendConfig';
+export * from './Filters';
+export * from './Responsive';
 export * from './TwoStepWizard';
+export * from './SortOrders';

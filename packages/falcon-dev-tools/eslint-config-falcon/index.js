@@ -87,6 +87,8 @@ module.exports = {
     'react/require-default-props': ['off'],
     'react/no-access-state-in-setstate': 'error',
     'react/prop-types': 'off',
+    'jsx-a11y/click-events-have-key-events': 'off',
+
     'valid-jsdoc': [
       'error',
       {

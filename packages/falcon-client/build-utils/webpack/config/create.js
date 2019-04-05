@@ -38,7 +38,7 @@ function getEsLintLoaderOptions(eslintRcPath, isDev) {
     emitWarning: isDev
   };
 
-  if (options.useEslintrc === false) {
+  if (!options.useEslintrc) {
     options.baseConfig = {
       extends: [require.resolve('@deity/eslint-config-falcon')]
     };
