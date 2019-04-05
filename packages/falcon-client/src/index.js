@@ -7,8 +7,8 @@ async function falconWebServer() {
   const clientBootstrap = require('./clientApp/bootstrap').default;
   const bootstrap = await clientBootstrap();
   /* eslint-disable */
-  const assetsManifest = require(process.env.ASSETS_MANIFEST);
-  const loadableStats =
+  // const assetsManifest = require(process.env.ASSETS_MANIFEST);
+  const webpackAssets =
     process.env.NODE_ENV === 'production'
       ? require(process.env.LOADABLE_STATS)
       : __non_webpack_require__(process.env.LOADABLE_STATS);
@@ -23,10 +23,7 @@ async function falconWebServer() {
     App: app.default,
     clientApolloSchema: app.clientApolloSchema,
     bootstrap,
-    webpackAssets: {
-      webmanifest: assetsManifest[''].webmanifest
-    },
-    loadableStats
+    webpackAssets
   });
 }
 

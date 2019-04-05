@@ -14,7 +14,7 @@ import { renderAppShell, renderApp } from './middlewares/routes';
  * @param {ServerAppConfig} props Application parameters
  * @return {WebServer} Falcon web server
  */
-export async function Server({ App, clientApolloSchema, bootstrap, webpackAssets, loadableStats }) {
+export async function Server({ App, clientApolloSchema, bootstrap, webpackAssets }) {
   const { config } = bootstrap;
   Logger.setLogLevel(config.logLevel);
 
@@ -38,8 +38,8 @@ export async function Server({ App, clientApolloSchema, bootstrap, webpackAssets
   router.get('/sw.js', serve(publicDir, { maxage: 0 }));
   router.get('/static/*', serve(publicDir, { maxage: process.env.NODE_ENV === 'production' ? 31536000000 : 0 }));
   router.get('/*', serve(publicDir));
-  router.get('/app-shell', ...renderAppShell({ config, webpackAssets, loadableStats }));
-  router.get('/*', ...renderApp({ App, clientApolloSchema, config, webpackAssets, loadableStats }));
+  router.get('/app-shell', ...renderAppShell({ config, webpackAssets }));
+  router.get('/*', ...renderApp({ App, clientApolloSchema, config, webpackAssets }));
   if (bootstrap.onRouterInitialized) {
     await bootstrap.onRouterInitialized(router);
   }
