@@ -1,5 +1,6 @@
 import qs from 'qs';
-import { SearchState, FilterOperators } from './types';
+import { SearchState } from './SearchContext';
+import { FilterOperator } from './types';
 
 type UrlParts = {
   // search query
@@ -23,7 +24,7 @@ export function searchStateToURL(state: Partial<SearchState>): string {
     parts.filters = {};
     for (let i = 0; i < filters.length; i++) {
       const filter = filters[i];
-      const name = filter.operator === FilterOperators.eq ? filter.field : `${filter.field}:${filter.operator}`;
+      const name = filter.operator === FilterOperator.equals ? filter.field : `${filter.field}:${filter.operator}`;
       parts.filters[name] = filter.value.join(',');
     }
   }

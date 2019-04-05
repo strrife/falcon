@@ -1,5 +1,6 @@
 import qs from 'qs';
-import { SearchState, FilterOperator, FilterOperators } from './types';
+import { SearchState } from './SearchContext';
+import { FilterOperator } from './types';
 
 export function searchStateFromURL(url: string): Partial<SearchState> {
   const parts: any = qs.parse(url.replace('?', ''));
@@ -31,7 +32,7 @@ export function searchStateFromURL(url: string): Partial<SearchState> {
       const [field, operator] = names[i].split(':');
       searchState.filters.push({
         field,
-        operator: (operator as FilterOperator) || FilterOperators.eq,
+        operator: (operator as FilterOperator) || FilterOperator.equals,
         value: parts.filters[names[i]].split(',')
       });
     }

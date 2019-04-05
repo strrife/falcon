@@ -3,7 +3,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 // eslint-disable-next-line
 import { Location } from 'history';
 import { PaginationInput } from './../types';
-import { FilterOperators } from './types';
+import { FilterOperator } from './types';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
 import { SearchContext, SearchState } from './SearchContext';
@@ -61,7 +61,7 @@ class SearchProviderImpl extends React.Component<SearchProviderImplProps, Search
     };
   }
 
-  setFilter = (field: string, value: string[], operator = FilterOperators.eq) => {
+  setFilter = (field: string, value: string[], operator = FilterOperator.equals) => {
     let filters = [...this.state.filters];
 
     if (value.length === 0) {

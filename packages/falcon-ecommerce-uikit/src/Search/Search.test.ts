@@ -1,7 +1,7 @@
 import { searchStateToURL } from './searchStateToURL';
 import { searchStateFromURL } from './searchStateFromURL';
 import { SortOrderDirection } from '../SortOrders/SortOrdersQuery';
-import { FilterOperators } from './types';
+import { FilterOperator } from './types';
 
 describe('Filters', () => {
   describe('serializing and deserializing', () => {
@@ -10,7 +10,7 @@ describe('Filters', () => {
         filters: [
           {
             field: 'price',
-            operator: FilterOperators.eq,
+            operator: FilterOperator.equals,
             value: ['10']
           }
         ]

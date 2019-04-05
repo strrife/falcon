@@ -4,19 +4,19 @@ export type FilterInput = {
   value: string[];
 };
 
-const FilterOperatorValues = {
-  eq: 'eq',
-  neq: 'neq',
-  lt: 'lt',
-  lte: 'lte',
-  gt: 'gt',
-  gte: 'gte',
-  in: 'in',
-  nin: 'nin',
-  range: 'range'
-};
-export type FilterOperator = keyof typeof FilterOperatorValues;
-type FilterOperatorsType = Record<FilterOperator, FilterOperator>;
-export const FilterOperators: FilterOperatorsType = Object.freeze<FilterOperatorsType>({
-  ...(FilterOperatorValues as FilterOperatorsType)
-});
+export enum FilterOperator {
+  /** can bee used also as `inSet`, when array is passed */
+  equals = 'eq',
+  /** can be used as `notInSet` when array is passed */
+  notEquals = 'neq',
+  lessThan = 'lt',
+  lessThanOrEquals = 'lte',
+  greaterThan = 'gt',
+  greaterThanOrEquals = 'gte',
+  /** in the set */
+  inSet = 'in',
+  /** not in the set */
+  notInSet = 'nin',
+  /** in the range */
+  range = 'range'
+}

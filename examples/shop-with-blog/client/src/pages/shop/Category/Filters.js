@@ -8,7 +8,7 @@ import {
   ColorFilter,
   MultipleFilter,
   SearchConsumer,
-  FilterOperators
+  FilterOperator
 } from '@deity/falcon-ecommerce-uikit';
 
 export const Filters = ({ data, ...rest }) => (
@@ -29,7 +29,7 @@ export const Filters = ({ data, ...rest }) => (
                     <SingleFilter
                       options={options}
                       selected={value.join('-')}
-                      onChange={x => setFilter(field, x ? x.split('-').slice(0, 2) : [], FilterOperators.eq)}
+                      onChange={x => setFilter(field, x ? x.split('-').slice(0, 2) : [], FilterOperator.equals)}
                     />
                   );
                 case 'color': {
@@ -48,7 +48,7 @@ export const Filters = ({ data, ...rest }) => (
                         setFilter(
                           field,
                           x ? [options.find(option => option.title === mapColors(x)).value] : [],
-                          FilterOperators.eq
+                          FilterOperator.equals
                         )
                       }
                     />
@@ -59,7 +59,7 @@ export const Filters = ({ data, ...rest }) => (
                     <MultipleFilter
                       options={options}
                       selected={value}
-                      onChange={x => setFilter(field, x, FilterOperators.eq)}
+                      onChange={x => setFilter(field, x, FilterOperator.equals)}
                     />
                   );
                 case 'cat':
@@ -68,7 +68,7 @@ export const Filters = ({ data, ...rest }) => (
                     <SingleFilter
                       options={options}
                       selected={value[0]}
-                      onChange={x => setFilter(field, x ? [x] : [], FilterOperators.eq)}
+                      onChange={x => setFilter(field, x ? [x] : [], FilterOperator.equals)}
                     />
                   );
               }
