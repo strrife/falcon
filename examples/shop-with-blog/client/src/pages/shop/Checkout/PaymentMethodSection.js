@@ -10,7 +10,7 @@ import ErrorList from '../components/ErrorList';
 // Loading "PaymentMethodItem" component via loadable package
 // to avoid premature import of Payment frontend-plugins and their dependencies on SSR
 const PaymentMethodItem = loadable(() =>
-  import(/* webpackChunkName: "checkout/payment" */ './components/PaymentMethodItem')
+  import(/* webpackChunkName: "checkout/payment-item" */ './components/PaymentMethodItem')
 );
 
 class PaymentSection extends React.Component {
