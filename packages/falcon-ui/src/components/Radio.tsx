@@ -65,7 +65,7 @@ export const Radio = themed({
             }
           },
           ':hover': {
-            cursor: 'pointer'
+            cursor: 'inherit'
           },
           ':hover + .-inner-radio-frame': {
             borderColor: theme.colors.primaryLight,
