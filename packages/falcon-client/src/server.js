@@ -23,7 +23,6 @@ export async function Server({ App, clientApolloSchema, bootstrap, webpackAssets
     await bootstrap.onServerCreated(instance);
   }
 
-  const publicDir = process.env.PUBLIC_DIR;
   const router = new Router();
   if (bootstrap.onRouterCreated) {
     await bootstrap.onRouterCreated(router);
@@ -34,6 +33,8 @@ export async function Server({ App, clientApolloSchema, bootstrap, webpackAssets
     const graphqlUri = (apolloClient && apolloClient.httpLink && apolloClient.httpLink.uri) || '/graphql';
     router.all(graphqlUri, graphqlProxy(config.graphqlUrl));
   }
+
+  const publicDir = process.env.PUBLIC_DIR;
   router.get('/sw.js', serve(publicDir, { maxage: 0 }));
   router.get('/static/*', serve(publicDir, { maxage: process.env.NODE_ENV === 'production' ? 31536000000 : 0 }));
   router.get('/*', serve(publicDir));
