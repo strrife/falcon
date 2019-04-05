@@ -14,7 +14,8 @@ export default ({ loadableStats }) => async (ctx, next) => {
   const { config } = client.readQuery({ query: APP_INIT });
   const chunkExtractor = new ChunkExtractor({
     stats: loadableStats,
-    entrypoints: ['client']
+    entrypoints: ['client'],
+    outputPath: process.env.OUTPUT_DIR
   });
 
   const markup = (

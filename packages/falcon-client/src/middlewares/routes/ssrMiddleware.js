@@ -16,7 +16,8 @@ export default ({ App, loadableStats }) => async (ctx, next) => {
   const { i18next } = ctx;
   const chunkExtractor = new ChunkExtractor({
     stats: loadableStats,
-    entrypoints: ['client']
+    entrypoints: ['client'],
+    outputPath: process.env.OUTPUT_DIR
   });
   const routerContext = {};
 
