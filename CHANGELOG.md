@@ -4,6 +4,15 @@
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
 
+## Falcon (Next)
+
+### Falcon Magento2 API (next)
+
+- fixed issue with merging guest's with customer's carts
+- fixed issue with 0 price for the first product added to cart by authorized user
+
+---
+
 ## Falcon 1.0 RC3 (2019-04-02)
 
 ### Falcon Client v0.4.0 (2019-04-02)
