@@ -18,7 +18,7 @@ type SearchProviderImplProps = SearchProviderProps & {
   defaultSortOrder?: SortOrderInput;
 };
 
-class SearchProviderImpl extends React.Component<SearchProviderImplProps, SearchState> {
+export class SearchProviderImpl extends React.Component<SearchProviderImplProps, SearchState> {
   static defaultProps = {
     searchStateFromURL,
     searchStateToURL,

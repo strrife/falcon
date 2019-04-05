@@ -5,7 +5,7 @@ import { mockSingleLink } from 'react-apollo/test-utils';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-client';
 import { InMemoryCache as Cache } from 'apollo-cache-inmemory';
-import { SearchProvider } from './SearchProvider';
+import { SearchProvider, SearchProviderImpl } from './SearchProvider';
 import { SearchContext, SearchContextType, SearchState } from './SearchContext';
 import { wait } from '../../../../test/helpers';
 
@@ -62,7 +62,7 @@ describe('SearchProvider', () => {
 
   const getLocation = () =>
     (wrapper!.find((SearchProvider as any).WrappedComponent).props() as RouteComponentProps).location;
-  const getSearchInfo = () => wrapper!.find((SearchProvider as any).WrappedComponent).state();
+  const getSearchInfo = () => wrapper!.find(SearchProviderImpl as any).state();
 
   beforeEach(async () => {
     await renderSearchProvider();
