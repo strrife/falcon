@@ -4,6 +4,14 @@
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
 
+## Falcon (Next)
+
+### Falcon E-commerce UI Kit v0.4.0 (2019-04-02)
+
+- added basic component set (queries, mutations and ui) to build filters ([#365](https://github.com/deity-io/falcon/pull/365))
+
+---
+
 ## Falcon 1.0 RC3 (2019-04-02)
 
 ### Falcon Client v0.4.0 (2019-04-02)
@@ -28,7 +36,6 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon E-commerce UI Kit v0.4.0 (2019-04-02)
 
 - `CheckoutMutation` now handles "union" result types from Falcon-Server ([#247](https://github.com/deity-io/falcon/pull/247))
-- added basic component set (queries, mutations and ui) to build filters ([#365](https://github.com/deity-io/falcon/pull/365))
 
 ### Falcon Shop Extension v0.4.0 (2019-04-02)
 
