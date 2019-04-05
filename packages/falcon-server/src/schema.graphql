@@ -26,7 +26,7 @@ type Query {
   """
   Returns a compiled backend config
   """
-  backendConfig: BackendConfig @cache
+  backendConfig: BackendConfig
   """
   URL-resolve query
   """

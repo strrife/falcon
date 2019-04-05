@@ -9,7 +9,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon-Server
 
 - added `@cache` GraphQL directive to cache resolver results ([#374](https://github.com/deity-io/falcon/pull/374))
-- `url` and `backendConfig` resolvers are cached now ([#374](https://github.com/deity-io/falcon/pull/374))
+- `url` resolver is cached now ([#374](https://github.com/deity-io/falcon/pull/374))
 
 ### Falcon Shop Extension
 
