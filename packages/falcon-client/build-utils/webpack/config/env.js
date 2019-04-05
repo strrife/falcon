@@ -19,6 +19,7 @@ function getClientEnv(target, options, envToBuildIn) {
         PUBLIC_PATH: env === 'production' ? publicPath : undefined,
         ASSETS_MANIFEST: paths.appManifest,
         LOADABLE_STATS: paths.appLoadableStats,
+        OUTPUT_DIR: path.relative(paths.appPath, paths.appBuildPublic),
         PUBLIC_DIR: path.relative(paths.appPath, env === 'production' ? paths.appBuildPublic : paths.appPublic)
       }
     );
