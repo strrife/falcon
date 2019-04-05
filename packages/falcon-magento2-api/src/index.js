@@ -161,6 +161,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       throw ex;
     }
     const { data } = response;
+
     return {
       items: response.data.items.map(item => this.reduceProduct({ data: item })),
       aggregations: this.processAggregations(data.filters),
@@ -350,7 +351,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {object} - request params with additional filter
    */
   addSearchFilter(params = {}, field, value, operator = 'eq') {
-    params.filterGroups = isEmpty(params.filters) ? [] : params.filters;
+    params.filterGroups = isEmpty(params.filterGroups) ? [] : params.filterGroups;
     const newFilterGroups = this.createMagentoFilter(field, value, operator);
     newFilterGroups.forEach(filterGroup => params.filterGroups.push(filterGroup));
 
@@ -417,6 +418,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         return [
           {
             filters: [this.createSimpleFilter(field, value.join(','), operator)]
+          }
+        ];
+
+      case 'range':
+        // translate range to 'from' - 'to' filters - because 'range' doesn't work in Magento
+        return [
+          {
+            filters: [this.createSimpleFilter(field, value[0], 'from'), this.createSimpleFilter(field, value[1], 'to')]
           }
         ];
 
@@ -1895,13 +1904,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   processAggregations(rawAggregations = []) {
     return rawAggregations.map(item => ({
-      key: item.code,
-      name: item.label,
+      field: item.code,
+      type: undefined,
       buckets: item.options.map(option => ({
+        count: option.count,
         value: option.value,
-        name: htmlHelpers.stripHtml(option.label),
-        count: option.count
-      }))
+        title: htmlHelpers.stripHtml(option.label)
+      })),
+      title: item.label
     }));
   }
 };

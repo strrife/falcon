@@ -5,28 +5,45 @@ import { GET_SIDEBAR_STATE } from './pages/shop/components/Sidebar';
 
 const sortOrders = [
   {
+    name: 'Position',
+    value: undefined,
+    __typename: 'SortOrder'
+  },
+  {
     name: 'Price ascending',
-    field: 'price',
-    direction: 'asc',
-    __typename: 'SortOrderValue'
+    value: {
+      field: 'price',
+      direction: 'asc',
+      __typename: 'SortOrderValue'
+    },
+    __typename: 'SortOrder'
   },
   {
     name: 'Price descending',
-    field: 'price',
-    direction: 'desc',
-    __typename: 'SortOrderValue'
+    value: {
+      field: 'price',
+      direction: 'desc',
+      __typename: 'SortOrderValue'
+    },
+    __typename: 'SortOrder'
   },
   {
     name: 'Name ascending',
-    field: 'name',
-    direction: 'asc',
-    __typename: 'SortOrderValue'
+    value: {
+      field: 'name',
+      direction: 'asc',
+      __typename: 'SortOrderValue'
+    },
+    __typename: 'SortOrder'
   },
   {
     name: 'Name descending',
-    field: 'name',
-    direction: 'desc',
-    __typename: 'SortOrderValue'
+    value: {
+      field: 'name',
+      direction: 'desc',
+      __typename: 'SortOrderValue'
+    },
+    __typename: 'SortOrder'
   }
 ];
 

@@ -10,7 +10,8 @@ import {
   OnlyUnauthenticatedRoute,
   OnlineStatus,
   LocaleProvider,
-  SearchProvider
+  SearchProvider,
+  Sidebar
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
@@ -19,7 +20,7 @@ import { Footer } from 'src/components/footer';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
 import DynamicRoute from 'src/pages/DynamicRoute';
-import { Sidebar, SidebarContainer } from 'src/pages/shop/components/Sidebar';
+import { SidebarContainer } from 'src/pages/shop/components/Sidebar';
 import { deityGreenTheme, globalCss } from './theme';
 
 const HeadMetaTags = () => (

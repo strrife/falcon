@@ -104,9 +104,9 @@ input ShopPageQuery {
 }
 
 input FilterInput {
-  operator: FilterOperator
   field: String
   value: [String]
+  operator: FilterOperator
 }
 
 enum FilterOperator {
@@ -371,18 +371,6 @@ type ProductList {
   items: [Product]!
   aggregations: [Aggregation]
   pagination: Pagination
-}
-
-type Aggregation {
-  key: String
-  name: String
-  buckets: [AggregationBucket]
-}
-
-type AggregationBucket {
-  value: String
-  name: String
-  count: Int
 }
 
 type Stock {
