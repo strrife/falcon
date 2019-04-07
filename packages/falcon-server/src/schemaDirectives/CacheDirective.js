@@ -4,6 +4,7 @@ const crypto = require('crypto');
 
 // Default cache TTL (10 minutes)
 const DEFAULT_TTL = 10;
+const INPUT_TTL = 'cacheTtl';
 
 /**
  * `@cache` directive
@@ -20,8 +21,11 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
     const { ttl = DEFAULT_TTL } = this.args;
     let { resolve = defaultFieldResolver } = field;
 
+    // Injecting a scalar input type instead of "InputObjectType"
+    // because the latter doesn't allow to set proper default values
+    // so a developer would be able to override just a single parameter
     field.args.push({
-      name: 'cacheTtl',
+      name: INPUT_TTL,
       type: GraphQLInt,
       description: `Modifies the default cache TTL value for this data`,
       defaultValue: ttl
@@ -41,8 +45,9 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
 
   getResolverWithCache(resolve, field) {
     return async function fieldResolver(...args) {
-      const { cacheTtl, ...params } = args[1];
+      const params = args[1];
       const context = args[2];
+      const { [INPUT_TTL]: ttl } = params;
       const { name: fieldName } = field;
       // Generating short and unique cache-key
       const cacheKey = crypto
@@ -53,7 +58,7 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
       return context.cache.get({
         key: cacheKey,
         options: {
-          ttl: cacheTtl * 60 // minutes to seconds
+          ttl: ttl * 60 // minutes to seconds
         },
         callback: async () => resolve.apply(this, args)
       });
