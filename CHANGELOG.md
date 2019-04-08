@@ -11,6 +11,10 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 - fixed issue with merging guest's with customer's carts ([#394](https://github.com/deity-io/falcon/pull/394))
 - fixed issue with 0 price for the first product added to cart by authorized user ([#394](https://github.com/deity-io/falcon/pull/394))
 
+### Falcon E-commerce UI Kit (Next)
+
+- added basic component set (queries, mutations and ui) to build filters ([#365](https://github.com/deity-io/falcon/pull/365))
+
 ---
 
 ## Falcon 1.0 RC3 (2019-04-02)
@@ -37,7 +41,6 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon E-commerce UI Kit v0.4.0 (2019-04-02)
 
 - `CheckoutMutation` now handles "union" result types from Falcon-Server ([#247](https://github.com/deity-io/falcon/pull/247))
-- added basic component set (queries, mutations and ui) to build filters ([#365](https://github.com/deity-io/falcon/pull/365))
 
 ### Falcon Shop Extension v0.4.0 (2019-04-02)
 
