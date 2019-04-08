@@ -2,34 +2,32 @@ import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 // eslint-disable-next-line
 import { Location } from 'history';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import { SearchState, FilterOperator, SortOrder, PaginationInput } from './types';
+import { PaginationInput } from './../types';
+import { FilterOperator } from './types';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
-import { SearchContext } from './SearchContext';
+import { SearchContext, SearchState } from './SearchContext';
+import { SortOrdersQuery, SortOrderInput, AreSortOrderInputsEqual } from '../SortOrders/SortOrdersQuery';
 
-export const SORT_ORDERS_QUERY = gql`
-  query SortOrdersQuery {
-    sortOrders @client
-  }
-`;
+export type SearchProviderProps = RouteComponentProps & {
+  searchStateFromURL?(url: string): Partial<SearchState>;
+  searchStateToURL?(state: Partial<SearchState>): string;
+};
+type SearchProviderImplProps = SearchProviderProps & {
+  sortOrders: (SortOrderInput | undefined)[];
+  defaultSortOrder?: SortOrderInput;
+};
 
-interface SearchProviderProps extends RouteComponentProps {
-  searchStateToURL?(state: SearchState): string;
-  searchStateFromURL?(url: string): SearchState;
-  sortOrders: SortOrder[];
-}
-
-class SearchProviderImpl extends React.Component<SearchProviderProps, SearchState> {
+export class SearchProviderImpl extends React.Component<SearchProviderImplProps, SearchState> {
   static defaultProps = {
     searchStateFromURL,
     searchStateToURL,
-    sortOrders: []
+    filters: []
   };
 
-  constructor(props: SearchProviderProps) {
+  constructor(props: SearchProviderImplProps) {
     super(props);
+
     this.state = this.getStateFromURL(props.location);
   }
 
@@ -41,115 +39,95 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
     this.historyUnlisten();
   }
 
-  getStateFromURL(location: Location) {
-    const state = this.props.searchStateFromURL!(location.search);
-    // if sort order was passed in url then make sure that it's available
-    if (state.sort) {
-      const sortOrderItem = this.getFullSortOrderDefinition(state.sort);
-      if (sortOrderItem) {
-        state.sort = sortOrderItem;
+  get defaultSortOrder(): SortOrderInput | undefined {
+    const { defaultSortOrder, sortOrders } = this.props;
+    if (defaultSortOrder) {
+      return defaultSortOrder;
+    }
+    if (sortOrders.some(x => !x)) {
+      return undefined;
+    }
+
+    return sortOrders[0];
+  }
+
+  getStateFromURL(location: Location): SearchState {
+    const { sort, filters, ...rest } = this.props.searchStateFromURL!(location.search);
+
+    return {
+      ...rest,
+      filters: Array.isArray(filters) ? filters : [],
+      sort: sort && this.sortOrderExists(sort) ? sort : undefined
+    };
+  }
+
+  setFilter = (field: string, value: string[], operator = FilterOperator.equals) => {
+    let filters = [...this.state.filters];
+
+    if (value.length === 0) {
+      filters = filters.filter(x => x.field !== field);
+    } else {
+      const filterIndex = filters.findIndex(x => x.field === field);
+      if (filterIndex >= 0) {
+        filters[filterIndex] = { ...filters[filterIndex], value, operator };
       } else {
-        delete state.sort;
+        filters.push({ field, value, operator });
       }
     }
 
-    return state;
-  }
-
-  getFullSortOrderDefinition(sort: SortOrder) {
-    return this.props.sortOrders.find(item => item.field === sort.field && item.direction === sort.direction);
-  }
-
-  setFilter = (field: string, value: string[], operator: FilterOperator = 'eq') => {
-    const filters = this.state.filters ? [...this.state.filters] : [];
-    let filter = filters.find(item => item.field === field);
-
-    if (!filter) {
-      filter = {
-        operator,
-        field,
-        value
-      };
-      filters.push(filter);
-    } else {
-      filter.operator = operator;
-      filter.value = value;
-    }
-
-    this.updateURL({
-      ...this.state,
-      filters
-    });
+    this.updateURL({ ...this.state, filters });
   };
 
-  setSortOrder = (sort: SortOrder) => {
-    const sortItem = this.getFullSortOrderDefinition(sort);
-    if (!sortItem) {
-      throw new Error(
-        'Sort order value passed to SearchProvider.setSortOrder() does not match any of available sort orders'
-      );
-    }
-
-    this.updateURL({
-      ...this.state,
-      sort: sortItem
-    });
+  setSortOrder = (sort?: SortOrderInput) => {
+    this.updateURL({ ...this.state, sort: this.sortOrderExists(sort) ? sort : this.defaultSortOrder });
   };
 
-  setPagination = (pagination: PaginationInput) => {
-    this.updateURL({
-      ...this.state,
-      pagination
-    });
+  setPagination = (pagination: PaginationInput) => this.updateURL({ ...this.state, pagination });
+
+  setTerm = (term: string) => this.updateURL({ ...this.state, term });
+
+  sortOrderExists = (sort?: SortOrderInput): boolean =>
+    this.props.sortOrders.some(x => (!x && !sort) || AreSortOrderInputsEqual(x, sort));
+
+  removeFilters = () => this.updateURL({ ...this.state, filters: [] });
+
+  stateToSerialize = (state: SearchState): Partial<SearchState> => {
+    const stateToSerialize: Partial<SearchState> = { ...state };
+
+    return stateToSerialize;
   };
 
-  setQuery = (query: string) => {
-    this.updateURL({
-      ...this.state,
-      query
-    });
-  };
-
-  removeFilter = (field: string) => {
-    if (!this.state.filters) {
-      return;
-    }
-
-    const filters = this.state.filters.filter(filter => filter.field !== field);
-
-    this.updateURL({
-      ...this.state,
-      filters
-    });
-  };
-
-  private historyUnlisten = () => {};
-
-  updateURL(state: SearchState) {
+  private updateURL(state: SearchState) {
     const queryString = this.props.searchStateToURL!(state);
     this.props.history.push(`${this.props.location.pathname}?${queryString}`);
   }
 
-  restoreStateFromURL = (location: any) => {
+  private restoreStateFromURL = (location: any) => {
     const state = this.getStateFromURL(location);
+    // state created from URL might be empty so we have to make sure that all the items are correctly
+    // removed from current state - setting undefined for non existing value will do the trick
+    Object.keys(this.state).forEach(key => {
+      if (!(key in state)) {
+        state[key as keyof SearchState] = undefined;
+      }
+    });
+
     this.setState(state);
   };
+
+  private historyUnlisten = () => {};
 
   render() {
     return (
       <SearchContext.Provider
         value={{
-          state: {
-            ...this.state,
-            // if there's no sort set yet then return first available option (it's considered as default one)
-            sort: this.state.sort || this.props.sortOrders[0]
-          },
-          availableSortOrders: this.props.sortOrders,
+          state: { ...this.state },
           setFilter: this.setFilter,
-          removeFilter: this.removeFilter,
+          removeFilter: x => this.setFilter(x, []),
+          removeFilters: this.removeFilters,
           setSortOrder: this.setSortOrder,
           setPagination: this.setPagination,
-          setQuery: this.setQuery
+          setTerm: this.setTerm
         }}
       >
         {this.props.children}
@@ -158,14 +136,11 @@ class SearchProviderImpl extends React.Component<SearchProviderProps, SearchStat
   }
 }
 
-// wrap SearchProviderImpl with SORT_ORDERS_QUERY so sort orders are passed as props to SearchProviderImpl
-const SearchProviderWithSortOrders = graphql<any, { sortOrders: SortOrder[] }>(SORT_ORDERS_QUERY, {
-  // remap data received from apollo - return sortOrders directly
-  props: ({ data, ownProps }) => ({
-    sortOrders: data!.sortOrders,
-    ...ownProps
-  })
-})(SearchProviderImpl);
+const SearchProviderWithSortOrders: React.SFC<SearchProviderProps> = ({ ...rest }) => (
+  <SortOrdersQuery>
+    {({ sortOrders }) => <SearchProviderImpl {...rest} sortOrders={sortOrders.map(x => x.value)} />}
+  </SortOrdersQuery>
+);
 
 // wrap everything in router so SearchProviderImpl has access to history and location
 export const SearchProvider = withRouter(SearchProviderWithSortOrders);

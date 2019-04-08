@@ -75,7 +75,7 @@ export class EnsureTTI extends React.Component<EnsureTTIProps, EnsureTTIState> {
 
   /** Sets isReady even before timeout */
   forceReady = () => {
-    if (this.state.isReady === false) {
+    if (!this.state.isReady) {
       this.setState(x => ({
         ...x,
         isReady: true

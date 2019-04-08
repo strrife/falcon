@@ -1,23 +1,34 @@
 import React from 'react';
-import { SearchState, SortOrder, PaginationInput } from './types';
+import { PaginationInput } from './../types';
+import { FilterOperator, FilterInput } from './types';
+import { SortOrderInput } from '../SortOrders/SortOrdersQuery';
+
+export type SearchState = {
+  term?: string;
+  filters: FilterInput[];
+  sort?: SortOrderInput;
+  pagination?: PaginationInput;
+};
 
 export type SearchContextType = {
   state: SearchState;
-  availableSortOrders: SortOrder[];
-  setFilter(name: string, value: string[]): void;
+  setFilter(name: string, value: string[], operator?: FilterOperator): void;
   removeFilter(name: string): void;
-  setSortOrder(sort: SortOrder): void;
-  setQuery(query: string): void;
+  removeFilters(): void;
+  setSortOrder(sort?: SortOrderInput): void;
+  setTerm(term: string): void;
   setPagination(pagination: PaginationInput): void;
 };
 
 export const SearchContext = React.createContext<SearchContextType>({
-  state: {},
-  availableSortOrders: [],
+  state: {
+    filters: []
+  },
+  setTerm: () => {},
   setFilter: () => {},
   removeFilter: () => {},
+  removeFilters: () => {},
   setSortOrder: () => {},
-  setQuery: () => {},
   setPagination: () => {}
 });
 

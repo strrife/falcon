@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
-import { Box, H2, H4, Button, Divider, Icon } from '@deity/falcon-ui';
+import { Box, H2, H4, Button, Divider } from '@deity/falcon-ui';
 import {
   CheckoutLogic,
   CartQuery,
   CountriesQuery,
   CustomerQuery,
   GET_CUSTOMER_WITH_ADDRESSES,
-  toGridTemplate
+  toGridTemplate,
+  Loader
 } from '@deity/falcon-ecommerce-uikit';
 import { Test3dSecure } from '@deity/falcon-payment-plugin';
 import CheckoutCartSummary from './CheckoutCartSummary';
@@ -75,23 +76,6 @@ const checkoutLayout = {
     })
   }
 };
-
-// loader that covers content of the container (container must have position: relative/absolute)
-const Loader = ({ visible }) => (
-  <Box
-    css={{
-      position: 'absolute',
-      display: visible ? 'flex' : 'none',
-      justifyContent: 'center',
-      alignItems: 'center',
-      background: 'rgba(255, 255, 255, 0.7)',
-      height: '100%',
-      width: '100%'
-    }}
-  >
-    <Icon src="loader" />
-  </Box>
-);
 
 // helper that computes step that should be open based on values from CheckoutLogic
 const computeStepFromValues = (values, errors) => {
@@ -219,7 +203,7 @@ class CheckoutWizard extends React.Component {
                   </Box>
                   <Divider gridArea={CheckoutArea.divider} />
                   <Box gridArea={CheckoutArea.checkout} position="relative">
-                    <Loader visible={loading || result} />
+                    {(loading || result) && <Loader variant="overlay" />}
                     <CustomerSelector
                       open={currentStep === CHECKOUT_STEPS.EMAIL}
                       onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.EMAIL)}

@@ -76,6 +76,9 @@
       "descending": "descending"
     }
   },
+  "filters": {
+    "clearAll": "Clear all filters"
+  },
   "miniCart": {
     "title": "Shopping cart",
     "checkout": "Secure checkout",

@@ -1,5 +1,6 @@
 import React from 'react';
 import { DefaultThemeProps, Box, H3 } from '@deity/falcon-ui';
+import { FixCenteredLayout } from '../FixCenteredLayout';
 
 const miniFormLayout: DefaultThemeProps = {
   miniFormLayout: {
@@ -11,14 +12,6 @@ const miniFormLayout: DefaultThemeProps = {
 export const MiniFormLayout: React.SFC<{ title?: string }> = ({ title, children }) => (
   <Box defaultTheme={miniFormLayout}>
     {title && <H3>{title}</H3>}
-    <Box
-      css={{
-        maxWidth: 300,
-        width: '100%',
-        margin: '0 auto'
-      }}
-    >
-      {children}
-    </Box>
+    <FixCenteredLayout maxWidth="70%">{children}</FixCenteredLayout>
   </Box>
 );

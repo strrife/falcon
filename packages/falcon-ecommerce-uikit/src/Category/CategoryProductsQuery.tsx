@@ -1,6 +1,21 @@
 import gql from 'graphql-tag';
 import { Query } from '../Query/Query';
 
+export type Aggregation = {
+  field: string;
+  type: SelectionType;
+  buckets: AggregationBucket[];
+  title: string;
+};
+
+export type SelectionType = 'single' | 'multiple' | 'range';
+
+export type AggregationBucket = {
+  value: string;
+  count: number;
+  title: string;
+};
+
 export const GET_CATEGORY_PRODUCTS = gql`
   query CategoryProducts(
     $categoryId: String!
@@ -24,13 +39,14 @@ export const GET_CATEGORY_PRODUCTS = gql`
           nextPage
         }
         aggregations {
-          key
-          name
+          field
+          type
           buckets {
-            name
             value
             count
+            title
           }
+          title
         }
       }
     }

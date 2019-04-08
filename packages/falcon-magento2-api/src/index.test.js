@@ -286,58 +286,58 @@ describe('Magento2Api', () => {
   it('processAggregations() should properly parse aggregations data from Magento', () => {
     const expectedOutput = [
       {
-        key: 'price',
-        name: 'Price',
+        field: 'price',
+        title: 'Price',
         buckets: [
           {
-            name: '$10.00 - $19.99',
+            title: '$10.00 - $19.99',
             value: '10-20',
             count: 3
           },
           {
-            name: '$20.00 - $29.99',
+            title: '$20.00 - $29.99',
             value: '20-30',
             count: 8
           }
         ]
       },
       {
-        key: 'color',
-        name: 'Color',
+        field: 'color',
+        title: 'Color',
         buckets: [
           {
-            name: 'Black',
+            title: 'Black',
             value: '49',
             count: 1
           },
           {
-            name: 'Blue',
+            title: 'Blue',
             value: '50',
             count: 6
           },
           {
-            name: 'Gray',
+            title: 'Gray',
             value: '52',
             count: 3
           }
         ]
       },
       {
-        key: 'material',
-        name: 'Material',
+        field: 'material',
+        title: 'Material',
         buckets: [
           {
-            name: 'Cotton',
+            title: 'Cotton',
             value: '33',
             count: 1
           },
           {
-            name: 'Polyester',
+            title: 'Polyester',
             value: '38',
             count: 10
           },
           {
-            name: 'Organic Cotton',
+            title: 'Organic Cotton',
             value: '154',
             count: 6
           }
