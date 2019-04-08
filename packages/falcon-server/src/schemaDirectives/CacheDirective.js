@@ -44,15 +44,13 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
   }
 
   getResolverWithCache(resolve, field) {
-    return async function fieldResolver(...args) {
-      const params = args[1];
-      const context = args[2];
+    return async function fieldResolver(parent, params, context, info) {
       const { [INPUT_TTL]: ttl } = params;
       const { name: fieldName } = field;
       // Generating short and unique cache-key
       const cacheKey = crypto
         .createHash('sha1')
-        .update(`${fieldName}-${JSON.stringify(params)}`)
+        .update([fieldName, JSON.stringify(parent), JSON.stringify(params)].join(':'))
         .digest('base64');
 
       return context.cache.get({
@@ -60,7 +58,7 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
         options: {
           ttl: ttl * 60 // minutes to seconds
         },
-        callback: async () => resolve.apply(this, args)
+        callback: async () => resolve.apply(this, [parent, params, context, info])
       });
     };
   }
