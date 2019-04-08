@@ -47,6 +47,7 @@ export const Radio = themed({
       css: ({ theme }) => ({
         display: 'inline-flex',
         position: 'relative',
+        cursor: 'default',
         // radio input is not visible but interactive
         input: {
           position: 'absolute',
@@ -57,15 +58,13 @@ export const Radio = themed({
           margin: 0,
           opacity: 0,
           zIndex: 1,
+          cursor: 'inherit',
           ':checked + .-inner-radio-frame': {
             borderColor: theme.colors.primary,
             '.-inner-radio-icon': {
               opacity: 1,
               fill: theme.colors.primary
             }
-          },
-          ':hover': {
-            cursor: 'inherit'
           },
           ':hover + .-inner-radio-frame': {
             borderColor: theme.colors.primaryLight,
