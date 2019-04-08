@@ -88,6 +88,7 @@ class FalconServer {
       // inject session and headers into GraphQL context
       context: ({ ctx }) => ({
         cache,
+        config: this.config,
         headers: ctx.req.headers,
         session: ctx.req.session
       }),

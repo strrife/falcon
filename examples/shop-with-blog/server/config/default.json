@@ -90,5 +90,13 @@
       "rolling": false,
       "renew": false
     }
+  },
+  "cache": {
+    "default": {
+      "ttl": 10
+    },
+    "query.menu": {
+      "ttl": 15
+    }
   }
 }

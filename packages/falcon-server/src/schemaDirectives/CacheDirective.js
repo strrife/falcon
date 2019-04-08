@@ -1,12 +1,9 @@
 const { SchemaDirectiveVisitor } = require('graphql-tools');
-const { defaultFieldResolver, GraphQLInt, GraphQLInputObjectType } = require('graphql');
+const { defaultFieldResolver } = require('graphql');
 const crypto = require('crypto');
 
 // Default cache TTL (10 minutes)
 const DEFAULT_TTL = 10;
-const INPUT_TTL = 'cacheTtl';
-const INPUT_NAME = 'cacheOptions';
-const INPUT_OBJECT_TYPE_NAME = 'CacheOptionsInput';
 
 /**
  * `@cache` directive
@@ -19,46 +16,12 @@ const INPUT_OBJECT_TYPE_NAME = 'CacheOptionsInput';
  * ```
  */
 module.exports = class CacheDirective extends SchemaDirectiveVisitor {
-  constructor(config) {
-    super(config);
-    // Injecting "CacheOptionsInput" type definition into the GraphQL Schema
-    if (!(INPUT_OBJECT_TYPE_NAME in this.schema._typeMap)) { // eslint-disable-line
-      this.schema._typeMap[INPUT_OBJECT_TYPE_NAME] = this.getCacheOptionsInput(); // eslint-disable-line
-    }
-  }
-
-  /**
-   * Generates "INPUT_OBJECT_TYPE_NAME" input object type for overriding cache options
-   * @param {number} [defaultTtl=DEFAULT_TTL] Default TTL value
-   * @return {GraphQLInputObjectType} GraphQL Input Object Type instance
-   */
-  getCacheOptionsInput(defaultTtl = DEFAULT_TTL) {
-    return new GraphQLInputObjectType({
-      name: INPUT_OBJECT_TYPE_NAME,
-      fields: {
-        ttl: {
-          name: INPUT_TTL,
-          type: GraphQLInt,
-          description: 'Modifies the default cache TTL value for this data',
-          defaultValue: defaultTtl
-        }
-      }
-    });
-  }
-
   visitFieldDefinition(field) {
     const { ttl = DEFAULT_TTL } = this.args;
     let { resolve = defaultFieldResolver } = field;
     const defaultValue = {
       ttl
     };
-
-    // Injecting cache options argument to the type resolver (into the GQL Schema)
-    field.args.push({
-      name: INPUT_NAME,
-      type: this.getCacheOptionsInput(ttl),
-      defaultValue
-    });
 
     // Some APIDataSources may provide extra type-resolvers during the runtime via "addResolveFunctionsToSchema"
     // which will override "wrapped" resolve functions during Falcon-Server startup. By providing getter/setter
@@ -73,9 +36,12 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
   }
 
   getResolverWithCache(resolve, field, defaultValue) {
+    const thisDirective = this;
     return async function fieldResolver(parent, params, context, info) {
-      const { [INPUT_NAME]: cacheOptions = {} } = params;
-      const { ttl } = Object.assign({}, defaultValue, cacheOptions);
+      const {
+        config: { cache: cacheConfig = {} }
+      } = context;
+      const { ttl } = thisDirective.getCacheConfigForField(info, cacheConfig, defaultValue);
       const { name: fieldName } = field;
       // Generating short and unique cache-key
       const cacheKey = crypto
@@ -91,5 +57,35 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
         callback: async () => resolve.apply(this, [parent, params, context, info])
       });
     };
+  }
+
+  /**
+   * Returns cache options object based on the provided data in this order/prio:
+   * - default cache config
+   * - default cache config provided from `context.config`
+   * - cache config provided in `@cache(...)` directive
+   * - cache config for a specific operation via `context.config`
+   * @param {object} info GraphQL Request info object
+   * @param {object} cacheConfig Cache object provided via `context.config`
+   * @param {object} defaultDirectiveValue Default options defined in cache directive for the specific type
+   * @return {object} Final cache options object
+   */
+  getCacheConfigForField(info, cacheConfig, defaultDirectiveValue) {
+    const { path: gqlPath, operation } = info;
+
+    // Generates a path-like string for the provided request
+    // for `query { foo { bar } }` - it will generate "foo.bar" string
+    const getFullPath = node => {
+      const { key, prev } = node;
+      const keys = [key];
+      if (prev) {
+        keys.unshift(getFullPath(prev));
+      }
+      return keys.join('.');
+    };
+    const fullPath = `${operation.operation}.${getFullPath(gqlPath)}`;
+    const { [fullPath]: operationConfig = {}, default: defaultConfig = {} } = cacheConfig;
+
+    return Object.assign({}, defaultConfig, defaultDirectiveValue, operationConfig);
   }
 };
