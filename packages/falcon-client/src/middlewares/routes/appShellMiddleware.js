@@ -7,14 +7,16 @@ import HtmlHead from '../../components/HtmlHead';
 
 /**
  * App shell rendering middleware.
+ * @param {{webpackAssets: object}} params webpack assets
  * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
-export default ({ loadableStats }) => async (ctx, next) => {
+export default ({ webpackAssets }) => async (ctx, next) => {
   const { client } = ctx.state;
   const { config } = client.readQuery({ query: APP_INIT });
   const chunkExtractor = new ChunkExtractor({
-    stats: loadableStats,
-    entrypoints: ['client']
+    stats: webpackAssets,
+    entrypoints: ['client'],
+    outputPath: process.env.OUTPUT_DIR
   });
 
   const markup = (
