@@ -39,7 +39,18 @@ describe('Server', () => {
       clientApolloSchema: {
         data: {}
       },
-      webpackAssets: {}
+      webpackAssets: {
+        publicPath: '',
+        assets: [],
+        namedChunkGroups: {
+          client: {
+            chunks: [],
+            assets: [],
+            children: {},
+            childAssets: {}
+          }
+        }
+      }
     });
     server.started();
 
@@ -127,8 +138,9 @@ describe('Server', () => {
       App,
       bootstrap,
       clientApolloSchema,
-      webpackAssets: {},
-      loadableStats: {
+      webpackAssets: {
+        publicPath: '',
+        assets: [],
         namedChunkGroups: {
           client: {
             chunks: [],

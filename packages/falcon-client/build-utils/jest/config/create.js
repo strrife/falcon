@@ -7,7 +7,7 @@ module.exports = paths => {
     setupFilesAfterEnv: fs.existsSync(paths.testsSetup) ? ['<rootDir>/src/setupTests.js'] : undefined,
     testEnvironment: 'node',
     testURL: 'http://localhost',
-    testMatch: ['<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}', '<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}'],
+    testMatch: ['**/src/**/__tests__/**/*.{js,jsx,mjs}', '**/src/**/?(*.)(spec|test).{js,jsx,mjs}'],
     transform: {
       '^.+\\.(gql|graphql)$': 'jest-transform-graphql',
       '^.+\\.(js|jsx|mjs)$': path.resolve(__dirname, 'babelTransform.js'),

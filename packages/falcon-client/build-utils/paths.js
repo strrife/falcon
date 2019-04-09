@@ -53,8 +53,7 @@ module.exports = {
   appBuild: resolveApp('build'),
   appBuildPublic: resolveApp('build/public'),
   appPublic: resolveApp('public'),
-  appManifest: resolveApp('build/assets.json'),
-  appLoadableStats: resolveApp('build/loadable-stats.json'),
+  appWebpackAssets: resolveApp('build/assets.json'),
 
   testsSetup: resolveApp('src/setupTests.js'),
   appBabelRc: resolveApp('.babelrc'),

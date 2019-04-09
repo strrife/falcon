@@ -6,7 +6,7 @@ module.exports = () => {
   process.env.PORT = process.env.PORT || 3000;
   process.env.PUBLIC_PATH = process.env.PUBLIC_PATH || '/';
   process.env.BUILD_TARGET = process.env.BUILD_TARGET || '';
-  process.env.ASSETS_MANIFEST = process.env.ASSETS_MANIFEST || 'assets/manifest.json';
+  process.env.WEBPACK_ASSETS = process.env.WEBPACK_ASSETS || 'assets/manifest.json';
   process.env.PUBLIC_DIR = process.env.PUBLIC_DIR || 'public/dir';
 
   const paths = require('./../paths');
