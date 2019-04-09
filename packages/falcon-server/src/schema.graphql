@@ -1,3 +1,5 @@
+directive @cache(ttl: Int) on FIELD_DEFINITION
+
 schema {
   query: Query
   mutation: Mutation
@@ -28,7 +30,7 @@ type Query {
   """
   URL-resolve query
   """
-  url(path: String!): Url
+  url(path: String!): Url @cache
 }
 
 """

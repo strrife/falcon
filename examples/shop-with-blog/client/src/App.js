@@ -2,13 +2,13 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { ThemeProvider } from '@deity/falcon-ui';
-import { OnlineStatus } from '@deity/falcon-ecommerce-uikit';
 import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
 import {
   AppLayout,
+  Header,
   ProtectedRoute,
   OnlyUnauthenticatedRoute,
-  Header,
+  OnlineStatus,
   LocaleProvider,
   SearchProvider,
   Sidebar

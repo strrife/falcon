@@ -38,7 +38,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
           return JSON.stringify(rawValue);
         },
         options: {
-          ttl: 10 * 60 * 1000 // 10 min
+          ttl: 10 * 60 // 10 min
         }
       });
       return JSON.parse(value);
@@ -299,7 +299,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       const tokenTimeInMinutes = validTime * 60 - 5;
       const tokenExpirationTime = addMinutes(Date.now(), tokenTimeInMinutes);
 
-      result.options.ttl = tokenTimeInMinutes * 60 * 1000;
+      result.options.ttl = tokenTimeInMinutes * 60;
       Logger.debug(`${this.name}: Admin token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
     }
 
