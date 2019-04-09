@@ -38,10 +38,22 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
   getResolverWithCache(resolve, field, defaultValue) {
     const thisDirective = this;
     return async function fieldResolver(parent, params, context, info) {
+      const resolver = async () => resolve.call(this, parent, params, context, info);
       const {
-        config: { cache: cacheConfig = {} }
+        config: { cache: { schema: cacheConfig = {} } = {} }
       } = context;
+
+      if (cacheConfig.enabled !== true) {
+        // Schema caching is disabled globally
+        return resolver();
+      }
       const { ttl } = thisDirective.getCacheConfigForField(info, cacheConfig, defaultValue);
+
+      if (!ttl) {
+        // TTL is falsy - skip cache checks
+        return resolver();
+      }
+
       const { name: fieldName } = field;
       // Generating short and unique cache-key
       const cacheKey = crypto
@@ -54,7 +66,7 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
         options: {
           ttl: ttl * 60 // minutes to seconds
         },
-        callback: async () => resolve.call(this, parent, params, context, info)
+        callback: resolver
       });
     };
   }

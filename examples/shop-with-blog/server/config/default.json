@@ -92,11 +92,14 @@
     }
   },
   "cache": {
-    "default": {
-      "ttl": 10
-    },
-    "query.menu": {
-      "ttl": 15
+    "schema": {
+      "enabled": true,
+      "default": {
+        "ttl": 10
+      },
+      "query.menu": {
+        "ttl": 15
+      }
     }
   }
 }
