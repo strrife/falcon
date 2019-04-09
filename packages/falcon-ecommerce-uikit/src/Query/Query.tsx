@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { Query as ApolloQuery, OperationVariables, QueryProps as ApolloQueryProps, QueryResult } from 'react-apollo';
 import { NetworkStatus, ApolloError } from 'apollo-client';
 import { Loader } from './Loader';
-
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+import { Omit } from './../types';
 
 export type ApolloFetchMore<TData, TVariables> = QueryResult<TData, TVariables>['fetchMore'];
 export type FetchMore<TData, TVariables> = (data: TData, fetchMore: ApolloFetchMore<TData, TVariables>) => any;
@@ -15,10 +14,11 @@ export type QueryRenderProps<TData = any> = TData & {
   fetchMore: (() => any) | undefined;
 };
 
-export type QueryProps<TData = any, TVariables = any> = Omit<ApolloQueryProps<TData, TVariables>, 'children'> & {
+export type QueryProps<TData, TVariables> = Omit<ApolloQueryProps<TData, TVariables>, 'children'> & {
   children: (result: QueryRenderProps<TData>) => React.ReactNode;
   fetchMore?: FetchMore<TData, TVariables>;
   passLoading?: boolean;
+  variables?: TVariables | any;
 };
 
 export class Query<TData = any, TVariables = OperationVariables> extends React.Component<
@@ -76,21 +76,3 @@ export class Query<TData = any, TVariables = OperationVariables> extends React.C
     );
   }
 }
-
-export type PaginationQuery = {
-  pagination: PaginationInput;
-};
-
-export type PaginationInput = {
-  perPage: number;
-  page: number;
-};
-
-export type Pagination = {
-  totalPages: number;
-  totalItems: number;
-  perPage: number;
-  currentPage: number;
-  nextPage: number;
-  prevPage: number;
-};

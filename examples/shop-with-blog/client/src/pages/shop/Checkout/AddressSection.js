@@ -24,7 +24,10 @@ class AddressSection extends React.Component {
   submitSelectedAddress = () => {
     const selectedAddressId = this.state.selectedAddressId || this.props.defaultSelected.id;
     const selectedAddress = this.props.availableAddresses.find(item => item.id === selectedAddressId);
-    this.props.setAddress(selectedAddress);
+    // make sure we don't send __typename field
+    const addressInput = { ...selectedAddress };
+    delete addressInput.__typename; // eslint-disable-line no-underscore-dangle
+    this.props.setAddress(addressInput);
   };
 
   render() {

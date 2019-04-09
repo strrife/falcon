@@ -14,25 +14,35 @@ import { renderAppShell, renderApp } from './middlewares/routes';
  * @param {ServerAppConfig} props Application parameters
  * @return {WebServer} Falcon web server
  */
-export function Server({ App, clientApolloSchema, bootstrap, webpackAssets, port, loadableStats }) {
+export async function Server({ App, clientApolloSchema, bootstrap, webpackAssets }) {
   const { config } = bootstrap;
   Logger.setLogLevel(config.logLevel);
 
   const instance = new Koa();
-  bootstrap.onServerCreated(instance);
-
-  const publicDir = process.env.PUBLIC_DIR;
-  const router = new Router();
-
-  if (config.graphqlProxy) {
-    router.all('/graphql', graphqlProxy(config, port));
+  if (bootstrap.onServerCreated) {
+    await bootstrap.onServerCreated(instance);
   }
 
+  const router = new Router();
+  if (bootstrap.onRouterCreated) {
+    await bootstrap.onRouterCreated(router);
+  }
+
+  if (config.graphqlUrl) {
+    const { apolloClient } = config;
+    const graphqlUri = (apolloClient && apolloClient.httpLink && apolloClient.httpLink.uri) || '/graphql';
+    router.all(graphqlUri, graphqlProxy(config.graphqlUrl));
+  }
+
+  const publicDir = process.env.PUBLIC_DIR;
   router.get('/sw.js', serve(publicDir, { maxage: 0 }));
   router.get('/static/*', serve(publicDir, { maxage: process.env.NODE_ENV === 'production' ? 31536000000 : 0 }));
   router.get('/*', serve(publicDir));
-  router.get('/app-shell', ...renderAppShell({ config, webpackAssets, loadableStats }));
-  router.get('/*', ...renderApp({ App, clientApolloSchema, config, webpackAssets, loadableStats }));
+  router.get('/app-shell', ...renderAppShell({ config, webpackAssets }));
+  router.get('/*', ...renderApp({ App, clientApolloSchema, config, webpackAssets }));
+  if (bootstrap.onRouterInitialized) {
+    await bootstrap.onRouterInitialized(router);
+  }
 
   instance
     .use(helmet())
@@ -42,10 +52,13 @@ export function Server({ App, clientApolloSchema, bootstrap, webpackAssets, port
     .use(router.routes())
     .use(router.allowedMethods());
 
-  bootstrap.onServerInitialized(instance);
+  if (bootstrap.onServerInitialized) {
+    await bootstrap.onServerInitialized(instance);
+  }
 
   return {
     instance,
+    port: config.port,
     callback: () => instance.callback(),
     started: () => bootstrap.onServerStarted(instance)
   };
@@ -63,5 +76,6 @@ export function Server({ App, clientApolloSchema, bootstrap, webpackAssets, port
  * @typedef {object} WebServer
  * @property {Koa} instance Server instance
  * @property {function} callback Initial configuration
+ * @property {number} port Desired PORT to run at
  * @property {object} clientApolloSchema Apollo State object
  */

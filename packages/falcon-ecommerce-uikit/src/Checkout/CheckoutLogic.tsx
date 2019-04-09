@@ -6,7 +6,8 @@ import {
   EstimateShippingMethodsData,
   SET_SHIPPING,
   SetShippingData,
-  PLACE_ORDER
+  PLACE_ORDER,
+  PlaceOrderResult
 } from './CheckoutMutation';
 
 type CheckoutAddress = {
@@ -46,6 +47,7 @@ type CheckoutLogicData = {
   billingSameAsShipping: boolean | null;
   shippingMethod: CheckoutShippingMethod | null;
   paymentMethod: CheckoutPaymentMethod | null;
+  paymentAdditionalData: object | null;
 };
 
 type CheckoutLogicError = {
@@ -58,7 +60,7 @@ type CheckoutLogicState = {
   loading: boolean;
   errors: CheckoutLogicErrors;
   values: CheckoutLogicData;
-  orderId?: number;
+  result?: PlaceOrderResult;
   availableShippingMethods: CheckoutShippingMethod[];
   availablePaymentMethods: CheckoutPaymentMethod[];
 };
@@ -79,13 +81,13 @@ export type CheckoutLogicInjectedProps = {
   loading: boolean;
   availableShippingMethods: CheckoutShippingMethod[];
   availablePaymentMethods: CheckoutPaymentMethod[];
-  orderId?: number;
+  result?: PlaceOrderResult;
   setEmail(email: string): void;
   setShippingAddress(address: CheckoutAddress): void;
   setBillingSameAsShipping(same: boolean): void;
   setBillingAddress(address: CheckoutAddress): void;
   setShippingMethod(shipping: CheckoutShippingMethod): void;
-  setPaymentMethod(payment: CheckoutPaymentMethod): void;
+  setPaymentMethod(payment: CheckoutPaymentMethod, additionalData?: any): void;
   placeOrder(): void;
 };
 
@@ -169,8 +171,10 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
   setBillingAddress = (billingAddress: CheckoutAddress) =>
     this.setLoading(true, () => this.setPartialState({ loading: false, values: { billingAddress } }));
 
-  setPaymentMethod = (paymentMethod: CheckoutPaymentMethod) =>
-    this.setLoading(true, () => this.setPartialState({ loading: false, values: { paymentMethod } }));
+  setPaymentMethod = (paymentMethod: CheckoutPaymentMethod, additionalData?: any) =>
+    this.setLoading(true, () =>
+      this.setPartialState({ loading: false, values: { paymentMethod, paymentAdditionalData: additionalData } })
+    );
 
   setShippingAddress = (shippingAddress: CheckoutAddress) => {
     this.setLoading(true, () => {
@@ -279,7 +283,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
         this.setPartialState({
           loading: false,
           error: null,
-          orderId: resp.data!.placeOrder.orderId
+          result: resp.data!.placeOrder
         });
       }
     };
@@ -291,15 +295,13 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           // update cart once order is placed successfully
           refetchQueries: ['Cart', 'Orders'],
           awaitRefetchQueries: true,
-          // when refetchQueries and awaitRefetchQueries are set then we cannot use promise
-          // because it's not called (Apollo's bug), but we can update state based on
-          // update() callback
-          update: (_, resp) => handleResponse(resp),
           variables: {
             input: {
               email: this.state.values.email,
+              billingAddress: this.state.values.billingAddress,
               paymentMethod: {
-                method: this.state.values.paymentMethod!.code
+                method: this.state.values.paymentMethod!.code,
+                additionalData: this.state.values.paymentAdditionalData
               }
             }
           }
@@ -317,7 +319,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           loading: this.state.loading,
           values: this.state.values,
           errors: this.state.errors,
-          orderId: this.state.orderId,
+          result: this.state.result,
           availablePaymentMethods: this.state.availablePaymentMethods,
           availableShippingMethods: this.state.availableShippingMethods,
           setEmail: this.setEmail,

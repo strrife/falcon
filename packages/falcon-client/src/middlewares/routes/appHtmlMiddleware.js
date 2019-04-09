@@ -8,17 +8,23 @@ import Html from '../../components/Html';
  * @param {{webpackAssets: object}} params webpack assets
  * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
-export default ({ webpackAssets }) => async ctx => {
+export default ({ webpackAssets, config }) => async ctx => {
   const { AppMarkup, client, chunkExtractor, helmetContext, serverTiming } = ctx.state;
   const renderTimer = serverTiming.start('HTML renderToString()');
 
+  const { publicPath, assets } = webpackAssets;
+  const webmanifest = assets.find(x => x.name.endsWith('webmanifest'));
+
   const htmlDocument = renderToString(
     <Html
-      assets={webpackAssets}
+      assets={{
+        webmanifest: webmanifest ? `${publicPath}${webmanifest.name}` : undefined
+      }}
       chunkExtractor={chunkExtractor}
       helmetContext={helmetContext}
       state={client.extract()}
       i18nextState={extractI18nextState(ctx)}
+      googleTagManager={config.googleTagManager}
     >
       {AppMarkup}
     </Html>

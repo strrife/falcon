@@ -1,14 +1,16 @@
 import React from 'react';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
-import { Box, H2, Button, Divider, Icon } from '@deity/falcon-ui';
+import { Box, H2, H4, Button, Divider } from '@deity/falcon-ui';
 import {
   CheckoutLogic,
   CartQuery,
   CountriesQuery,
   CustomerQuery,
   GET_CUSTOMER_WITH_ADDRESSES,
-  toGridTemplate
+  toGridTemplate,
+  Loader
 } from '@deity/falcon-ecommerce-uikit';
+import { Test3dSecure } from '@deity/falcon-payment-plugin';
 import CheckoutCartSummary from './CheckoutCartSummary';
 import CustomerSelector from './CustomerSelector';
 import ShippingMethodSection from './ShippingMethodSection';
@@ -67,27 +69,13 @@ const checkoutLayout = {
       'details article': {
         paddingLeft: theme.spacing.xxl,
         paddingRight: theme.spacing.xxl
+      },
+      '.redirect h4': {
+        textAlign: 'center'
       }
     })
   }
 };
-
-// loader that covers content of the container (container must have position: relative/absolute)
-const Loader = ({ visible }) => (
-  <Box
-    css={{
-      position: 'absolute',
-      display: visible ? 'flex' : 'none',
-      justifyContent: 'center',
-      alignItems: 'center',
-      background: 'rgba(255, 255, 255, 0.7)',
-      height: '100%',
-      width: '100%'
-    }}
-  >
-    <Icon src="loader" />
-  </Box>
-);
 
 // helper that computes step that should be open based on values from CheckoutLogic
 const computeStepFromValues = (values, errors) => {
@@ -150,7 +138,7 @@ class CheckoutWizard extends React.Component {
       values,
       loading,
       errors,
-      orderId,
+      result,
       availableShippingMethods,
       availablePaymentMethods,
       setEmail,
@@ -164,14 +152,26 @@ class CheckoutWizard extends React.Component {
 
     const { customerData } = this.props;
 
-    if (orderId) {
-      // order has been placed successfully so we show confirmation
-      return <Redirect to="/checkout/confirmation" />;
-    }
-
     let addresses;
     let defaultShippingAddress;
     let defaultBillingAddress;
+    let orderResult = null;
+
+    if (!loading && result) {
+      if (result.url) {
+        orderResult = (
+          <Box className="redirect">
+            <H4 fontSize="md" mb="md">
+              Redirecting to the external Payment Gateway URL...
+            </H4>
+            <Test3dSecure {...result} />
+          </Box>
+        );
+      } else if (result.orderId) {
+        // order has been placed successfully so we show confirmation
+        orderResult = <Redirect to="/checkout/confirmation" />;
+      }
+    }
 
     // detect if user is logged in - if so and he has address list then use it for address sections
     if (customerData && customerData.addresses && customerData.addresses.length) {
@@ -185,8 +185,8 @@ class CheckoutWizard extends React.Component {
         {({ countries }) => (
           <CartQuery>
             {({ cart }) => {
-              // cart is empty so redirect user to the homepage
-              if (cart.itemsQty === 0) {
+              // cart is empty and it's not a "placeOrder" result so redirect user to the homepage
+              if (!loading && !orderResult && cart.itemsQty === 0) {
                 return <Redirect to="/" />;
               }
 
@@ -203,7 +203,7 @@ class CheckoutWizard extends React.Component {
                   </Box>
                   <Divider gridArea={CheckoutArea.divider} />
                   <Box gridArea={CheckoutArea.checkout} position="relative">
-                    <Loader visible={loading} />
+                    {(loading || result) && <Loader variant="overlay" />}
                     <CustomerSelector
                       open={currentStep === CHECKOUT_STEPS.EMAIL}
                       onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.EMAIL)}
@@ -274,6 +274,7 @@ class CheckoutWizard extends React.Component {
                     <ErrorList errors={errors.order} />
                     {currentStep === CHECKOUT_STEPS.CONFIRMATION && <Button onClick={placeOrder}>Place order</Button>}
                   </Box>
+                  {orderResult}
                 </Box>
               );
             }}

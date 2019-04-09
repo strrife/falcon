@@ -4,6 +4,8 @@ schema {
   subscription: Subscription
 }
 
+scalar JSON
+
 type Mutation {
   """
   Sets the locale (for example, "en-US")
@@ -135,4 +137,53 @@ input PaginationInput {
   Limit items per page
   """
   perPage: Int
+}
+
+type Aggregation {
+  """
+  field name to aggregate values on
+  """
+  field: String
+  """
+  Agregation type
+  """
+  type: AggregationType
+  """
+  Aggregated items
+  """
+  buckets: [AggregationBucket]
+  """
+  Title
+  """
+  title: String
+}
+
+enum AggregationType {
+  """
+  one from many
+  """
+  single
+  """
+  many from many
+  """
+  multiple
+  """
+  from to
+  """
+  range
+}
+
+type AggregationBucket {
+  """
+  Discriminator value
+  """
+  value: String
+  """
+  Items count
+  """
+  count: Int
+  """
+  Title
+  """
+  title: String
 }

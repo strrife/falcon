@@ -165,7 +165,10 @@ export default abstract class Extension {
                 // Removing type references from the base schema types
                 .replace(/:\s*(\w+)/gm, ': Int')
                 .replace(/\[\s*(\w+)\s*]/gm, '[Int]')
-        ]
+        ],
+        resolverValidationOptions: {
+          requireResolversForResolveType: false
+        }
       });
 
       [executableSchema.getQueryType(), executableSchema.getMutationType()].forEach(

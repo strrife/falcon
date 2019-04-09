@@ -1,7 +1,8 @@
+const path = require('path');
 const paths = require('./../../paths');
 
 function getClientEnv(target, options, envToBuildIn) {
-  const { env, port, publicPath } = options;
+  const { env, devServerPort, publicPath } = options;
 
   const raw = Object.keys(process.env)
     .filter(x => envToBuildIn.find(e => e === x))
@@ -13,12 +14,12 @@ function getClientEnv(target, options, envToBuildIn) {
       {
         NODE_ENV: env,
         BABEL_ENV: env,
-        ...(env === 'development' ? { PORT: port } : {}),
+        ...(env === 'development' ? { DEV_SERVER_PORT: devServerPort } : {}),
         BUILD_TARGET: target === 'web' ? 'client' : 'server',
         PUBLIC_PATH: env === 'production' ? publicPath : undefined,
-        ASSETS_MANIFEST: paths.appManifest,
-        LOADABLE_STATS: paths.appLoadableStats,
-        PUBLIC_DIR: env === 'production' ? paths.appBuildPublic : paths.appPublic
+        WEBPACK_ASSETS: paths.appWebpackAssets,
+        OUTPUT_DIR: path.relative(paths.appPath, paths.appBuildPublic),
+        PUBLIC_DIR: path.relative(paths.appPath, env === 'production' ? paths.appBuildPublic : paths.appPublic)
       }
     );
 

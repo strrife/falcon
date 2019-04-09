@@ -9,14 +9,16 @@ import HtmlHead from '../../components/HtmlHead';
 /**
  * Server Side Rendering middleware.
  * @param {{App: React.Component}} App - React Component to render
+ * @param {{webpackAssets: object}} params webpack assets
  * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
-export default ({ App, loadableStats }) => async (ctx, next) => {
+export default ({ App, webpackAssets }) => async (ctx, next) => {
   const { client, serverTiming } = ctx.state;
   const { i18next } = ctx;
   const chunkExtractor = new ChunkExtractor({
-    stats: loadableStats,
-    entrypoints: ['client']
+    stats: webpackAssets,
+    entrypoints: ['client'],
+    outputPath: process.env.OUTPUT_DIR
   });
   const routerContext = {};
 

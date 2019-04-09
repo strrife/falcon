@@ -10,7 +10,8 @@ import {
   OnlyUnauthenticatedRoute,
   Header,
   LocaleProvider,
-  SearchProvider
+  SearchProvider,
+  Sidebar
 } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
@@ -19,7 +20,7 @@ import { Footer } from 'src/components/footer';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
 import DynamicRoute from 'src/pages/DynamicRoute';
-import { Sidebar, SidebarContainer } from 'src/pages/shop/components/Sidebar';
+import { SidebarContainer } from 'src/pages/shop/components/Sidebar';
 import { deityGreenTheme, globalCss } from './theme';
 
 const HeadMetaTags = () => (
@@ -47,6 +48,7 @@ const Checkout = loadable(() => import(/* webpackChunkName: "shop/checkout" */ '
 const CheckoutConfirmation = loadable(() =>
   import(/* webpackChunkName: "shop/checkout" */ './pages/shop/CheckoutConfirmation')
 );
+const CheckoutFailure = loadable(() => import(/* webpackChunkName: "shop/checkout" */ './pages/shop/CheckoutFailure'));
 const SidebarContents = loadable(() =>
   import(/* webpackPrefetch: true, webpackChunkName: "shop/SidebarContents" */ './pages/shop/components/Sidebar/SidebarContents')
 );
@@ -77,6 +79,7 @@ const App = () => (
                   <Route exact path="/cart" component={Cart} />
                   <Route exact path="/checkout" component={Checkout} />
                   <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
+                  <Route exact path="/checkout/failure" component={CheckoutFailure} />
                   <ProtectedRoute path="/account" component={Account} />
                   <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
                   <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />

@@ -38,10 +38,83 @@ where `xxxxxx` should be changed to a proper name of the patch.
 
 Next, follow steps 2, 3 and 4 to install required dependencies.
 
+## Falcon 1.0-rc2 to 1.0-rc3
+
+Full patch for this update can be found [here](https://github.com/deity-io/falcon/releases/download/v1.0-rc3/falcon-update-100rc2-100rc3.patch).
+
+If you don't want to include all the changes from this release but you want to keep Falcon Server and Falcon Client at the latest version then please follow the guide below to adjust your application.
+
+In your falcon-client project - check `apolloClient.httpLink.uri` and `graphqlUrl` (your project may not have this key) config values
+(in `config/default.json` file). If `apolloClient.httpLink.uri` uses a full GraphQL URL and you would like to enable proxying for
+GraphQL server - make the following changes to your config file:
+
+```diff
+ {
++  "graphqlUrl": "http://localhost:4000/graphql",
+   "apolloClient": {
+     "httpLink": {
+-      "uri": "http://localhost:4000/graphql"
++      "uri": "/graphql"
+     }
+   }
+ }
+```
+
+If you wish to use your generated application without GraphQL proxy:
+
+```diff
+ {
++  "graphqlUrl": false,
+   "apolloClient": {
+     "httpLink": {
+       "uri": "http://localhost:4000/graphql"
+     }
+   }
+ }
+```
+
+`client/bootstrap.js` now must return an async callback that initiates the bootstrap
+config:
+
+```diff
+const config = require('config');
+
+- export default {
++ export default async () => ({
+    config: { ...config }
+- };
++ });
+```
+
+To enable endpoints proxy (for handling Payment callbacks) - you need to modify your
+`client/bootstrap.js` file to fetch a list of endpoints from Falcon-Server and
+enable them for Falcon-Client:
+
+```js
+const config = require('config');
+const { fetchRemoteConfig, configureProxy } = require('@deity/falcon-client/src/bootstrap/configureServer');
+
+export default async () => {
+  const redirects = {
+    payment: {
+      success: '/checkout/confirmation',
+      failure: '/checkout/failure',
+      cancel: '/cart'
+    }
+  };
+  const serverUrl = config.graphqlUrl || config.apolloClient.httpLink.uri;
+  const serverConfig = await fetchRemoteConfig(serverUrl);
+
+  return {
+    config: { ...config },
+    onRouterCreated: async router => configureProxy(router, serverUrl, serverConfig.endpoints, redirects)
+  };
+};
+```
+
 ## Falcon 1.0-rc to 1.0-rc2
 
 Patch for this update can be found [here](https://github.com/deity-io/falcon/releases/download/v1.0-rc2/falcon-update-100rc-100rc2.patch).
-
 
 ## Falcon 0.3.0 to 1.0-rc
 
