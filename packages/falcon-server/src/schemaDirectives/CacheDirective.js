@@ -54,7 +54,7 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
         options: {
           ttl: ttl * 60 // minutes to seconds
         },
-        callback: async () => resolve.apply(this, [parent, params, context, info])
+        callback: async () => resolve.call(this, parent, params, context, info)
       });
     };
   }
@@ -72,20 +72,24 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
    */
   getCacheConfigForField(info, cacheConfig, defaultDirectiveValue) {
     const { path: gqlPath, operation } = info;
-
-    // Generates a path-like string for the provided request
-    // for `query { foo { bar } }` - it will generate "foo.bar" string
-    const getFullPath = node => {
-      const { key, prev } = node;
-      const keys = [key];
-      if (prev) {
-        keys.unshift(getFullPath(prev));
-      }
-      return keys.join('.');
-    };
-    const fullPath = `${operation.operation}.${getFullPath(gqlPath)}`;
+    const fullPath = `${operation.operation}.${this.getOperationPath(gqlPath)}`;
     const { [fullPath]: operationConfig = {}, default: defaultConfig = {} } = cacheConfig;
 
     return Object.assign({}, defaultConfig, defaultDirectiveValue, operationConfig);
+  }
+
+  /**
+   * Generates a path-like string for the provided request
+   * for `query { foo { bar } }` - it will generate "foo.bar" string
+   * @param {object} node Operation path object
+   * @return {string} Generated operation path string
+   */
+  getOperationPath(node) {
+    const { key, prev } = node;
+    const keys = [key];
+    if (prev) {
+      keys.unshift(this.getOperationPath(prev));
+    }
+    return keys.join('.');
   }
 };

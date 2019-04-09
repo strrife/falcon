@@ -5,7 +5,7 @@ export type SetCacheOptions = {
   ttl?: number;
 };
 
-export type CacheResult = string | any | undefined;
+export type CacheResult = any;
 
 export type GetCacheCallbackResult =
   | CacheResult
