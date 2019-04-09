@@ -92,7 +92,7 @@
     }
   },
   "cache": {
-    "schema": {
+    "resolvers": {
       "enabled": true,
       "default": {
         "ttl": 10

@@ -40,14 +40,14 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
     return async function fieldResolver(parent, params, context, info) {
       const resolver = async () => resolve.call(this, parent, params, context, info);
       const {
-        config: { cache: { schema: cacheConfig = {} } = {} }
+        config: { cache: { resolvers: resolversCacheConfig = {} } = {} }
       } = context;
 
-      if (cacheConfig.enabled !== true) {
+      if (resolversCacheConfig.enabled !== true) {
         // Schema caching is disabled globally
         return resolver();
       }
-      const { ttl } = thisDirective.getCacheConfigForField(info, cacheConfig, defaultValue);
+      const { ttl } = thisDirective.getCacheConfigForField(info, resolversCacheConfig, defaultValue);
 
       if (!ttl) {
         // TTL is falsy - skip cache checks
@@ -78,14 +78,14 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
    * - cache config provided in `@cache(...)` directive
    * - cache config for a specific operation via `context.config`
    * @param {object} info GraphQL Request info object
-   * @param {object} cacheConfig Cache object provided via `context.config`
+   * @param {object} resolversCacheConfig Cache object provided via `context.config`
    * @param {object} defaultDirectiveValue Default options defined in cache directive for the specific type
    * @return {object} Final cache options object
    */
-  getCacheConfigForField(info, cacheConfig, defaultDirectiveValue) {
+  getCacheConfigForField(info, resolversCacheConfig, defaultDirectiveValue) {
     const { path: gqlPath, operation } = info;
     const fullPath = `${operation.operation}.${this.getOperationPath(gqlPath)}`;
-    const { [fullPath]: operationConfig = {}, default: defaultConfig = {} } = cacheConfig;
+    const { [fullPath]: operationConfig = {}, default: defaultConfig = {} } = resolversCacheConfig;
 
     return Object.assign({}, defaultConfig, defaultDirectiveValue, operationConfig);
   }
