@@ -17,7 +17,7 @@ describe('Cache', () => {
   it('Should properly pass arguments to "set" method', async () => {
     await cache.set('key', 'value');
     expect(provider.set).toBeCalledWith('key', 'value', undefined);
-    provider.set.mockClear();
+    (provider.set as jest.Mock).mockClear();
 
     await cache.set('key', 'value', { ttl: 1 });
     expect(provider.set).toBeCalledWith('key', 'value', { ttl: 1 });
@@ -37,7 +37,7 @@ describe('Cache', () => {
     provider.get = jest.fn(() => undefined);
     const value: string | undefined = await cache.get({
       key: 'key',
-      callback: () => 'new_value',
+      callback: () => Promise.resolve('new_value'),
       options: {
         ttl: 1
       }
@@ -51,12 +51,13 @@ describe('Cache', () => {
     provider.get = jest.fn(() => undefined);
     const value: string | undefined = await cache.get({
       key: 'key',
-      callback: () => ({
-        value: 'value',
-        options: {
-          ttl: 10
-        }
-      })
+      callback: () =>
+        Promise.resolve({
+          value: 'value',
+          options: {
+            ttl: 10
+          }
+        })
     });
 
     expect(provider.get).toBeCalledWith('key');

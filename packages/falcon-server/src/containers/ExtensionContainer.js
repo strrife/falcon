@@ -169,6 +169,7 @@ module.exports = class ExtensionContainer extends BaseContainer {
           resolvers: config.resolvers
         })
       ],
+      schemaDirectives: config.schemaDirectives,
       resolvers: config.resolvers
     });
 

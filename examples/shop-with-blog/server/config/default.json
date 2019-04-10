@@ -90,5 +90,16 @@
       "rolling": false,
       "renew": false
     }
+  },
+  "cache": {
+    "resolvers": {
+      "enabled": true,
+      "default": {
+        "ttl": 10
+      },
+      "query.menu": {
+        "ttl": 15
+      }
+    }
   }
 }

@@ -8,7 +8,6 @@ import i18next from './i18nextMiddleware';
  * @typedef {object} RenderAppShell
  * @property {object} config App configuration
  * @property {object} webpackAssets webpack assets
- * @property {object} loadableStats @loadable components stats
  */
 
 /**
@@ -16,13 +15,13 @@ import i18next from './i18nextMiddleware';
  * @param {RenderAppShell} params params
  * @return {function(ctx: object, next: function)[]} Koa middlewares
  */
-export function renderAppShell({ config, webpackAssets, loadableStats }) {
+export function renderAppShell({ config, webpackAssets }) {
   const { apolloClient } = config;
   const configSchema = { data: { config } };
 
   return [
     apolloClientProvider({ config: apolloClient, clientStates: { configSchema } }),
-    appShell({ loadableStats }),
+    appShell({ webpackAssets }),
     appHtml({ webpackAssets, config })
   ];
 }
@@ -32,8 +31,7 @@ export function renderAppShell({ config, webpackAssets, loadableStats }) {
  * @property {function} App React Component
  * @property {object} config App configuration
  * @property {object} clientApolloSchema Apollo State object
- * @property {object} webpackAssets webpack assets,
- * @property {object} loadableStats @loadable components stats
+ * @property {object} webpackAssets webpack assets
  */
 
 /**
@@ -41,7 +39,7 @@ export function renderAppShell({ config, webpackAssets, loadableStats }) {
  * @param {RenderApp} params params
  * @return {function(ctx: object, next: function)[]} Koa middlewares
  */
-export function renderApp({ config, clientApolloSchema, App, webpackAssets, loadableStats }) {
+export function renderApp({ config, clientApolloSchema, App, webpackAssets }) {
   const { i18n, serverSideRendering, apolloClient } = config;
   const configSchema = { data: { config } };
 
@@ -54,7 +52,7 @@ export function renderApp({ config, clientApolloSchema, App, webpackAssets, load
       }
     }),
     i18next({ ...i18n }),
-    serverSideRendering ? ssr({ App, loadableStats }) : appShell({ loadableStats }),
+    serverSideRendering ? ssr({ App, webpackAssets }) : appShell({ webpackAssets }),
     appHtml({ webpackAssets, config })
   ].filter(x => x);
 }
