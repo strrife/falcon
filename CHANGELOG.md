@@ -6,6 +6,11 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 ## Falcon (Next)
 
+### Falcon Magento2 API (next)
+
+- fixed issue with merging guest's with customer's carts ([#394](https://github.com/deity-io/falcon/pull/394))
+- fixed issue with 0 price for the first product added to cart by authorized user ([#394](https://github.com/deity-io/falcon/pull/394))
+
 ### Falcon-Server (Next)
 
 - introduced `@cache` GraphQL directive to cache resolver results ([#374](https://github.com/deity-io/falcon/pull/374))

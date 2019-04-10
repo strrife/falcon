@@ -850,6 +850,19 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
+   * Merges guest cart with the cart of the signed in user
+   * @param {string} guestQuoteId - masked id of guest cart
+   * @return {object} - new cart data
+   */
+  async mergeGuestCart(guestQuoteId) {
+    // send masked_quote_id as param so Magento merges guest's cart with user's cart
+    const response = await this.post('/falcon/carts/mine', { masked_quote_id: guestQuoteId });
+    this.session.cart = { quoteId: response.data };
+
+    return this.session.cart;
+  }
+
+  /**
    * Ensure customer has cart in the session.
    * Creates cart if it doesn't yet exist.
    * @return {object} - new cart data
@@ -861,7 +874,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       return cart;
     }
 
-    const cartPath = token ? '/carts/mine' : '/guest-carts';
+    const cartPath = token ? '/falcon/carts/mine' : '/guest-carts';
     const response = await this.post(cartPath);
 
     this.session.cart = { quoteId: response.data };
@@ -1020,7 +1033,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<boolean>} true if login was successful
    */
   async signIn(obj, { input }) {
-    const { cart: { quoteId = null } = {} } = this.session;
+    const { cart: { quoteId } = {} } = this.session;
     const dateNow = Date.now();
 
     try {
@@ -1028,8 +1041,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         '/integration/customer/token',
         {
           username: input.email,
-          password: input.password,
-          guest_quote_id: quoteId
+          password: input.password
         },
         { context: { skipAuth: true } }
       );
@@ -1049,10 +1061,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         expirationTime: tokenExpirationTime.getTime()
       };
 
-      // Remove guest cart. Magento merges guest cart with cart of authorized user so we'll have to refresh it
       this.removeCartData();
-      // make sure that cart is correctly loaded for signed in user
-      await this.ensureCart();
+
+      // if guest has the cart then merge it with customer's cart
+      if (quoteId) {
+        await this.mergeGuestCart(quoteId);
+      } else {
+        await this.ensureCart();
+      }
 
       // true when user signed in correctly
       return true;
