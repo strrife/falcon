@@ -6,7 +6,8 @@ import { Box, Button } from '@deity/falcon-ui';
 const AddressFormArea = {
   firstName: 'firstName',
   lastName: 'lastName',
-  street: 'street',
+  street1: 'street1',
+  street2: 'street2',
   number: 'number',
   postCode: 'postCode',
   city: 'city',
@@ -29,7 +30,8 @@ const addressFormLayout = {
       [AddressFormArea.email      ],
       [AddressFormArea.firstName  ],
       [AddressFormArea.lastName   ],
-      [AddressFormArea.street     ],
+      [AddressFormArea.street1    ],
+      [AddressFormArea.street2    ],
       [AddressFormArea.number     ],
       [AddressFormArea.postCode   ],
       [AddressFormArea.city       ],
@@ -61,11 +63,17 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
         gridArea={AddressFormArea.lastName}
       />
       <FormField
-        name="street"
-        label="Street"
+        name="street1"
+        label="Street Line 1"
         required
-        autoComplete={getAutoComplete('street-address')}
-        gridArea={AddressFormArea.street}
+        autoComplete={getAutoComplete('address-line1')}
+        gridArea={AddressFormArea.street1}
+      />
+      <FormField
+        name="street2"
+        label="Street Line 2"
+        autoComplete={getAutoComplete('address-line2')}
+        gridArea={AddressFormArea.street2}
       />
       <FormField
         name="countryId"
