@@ -44,7 +44,7 @@ const CategoryPage = ({ id }) => (
           const filtersData = getFiltersData(state.filters, aggregations);
 
           return (
-            <CategoryLayout>
+            <CategoryLayout variant={!filtersData.length && 'noFilters'}>
               {loading && <Loader variant="overlay" />}
               <Box gridArea={CategoryArea.heading}>
                 <H1>{name}</H1>
@@ -56,29 +56,31 @@ const CategoryPage = ({ id }) => (
                 </FlexLayout>
                 <Divider mt="xs" />
               </Box>
-              <Box gridArea={CategoryArea.filters}>
-                <Responsive width="md">
-                  {matches =>
-                    matches ? (
-                      <Filters data={filtersData} />
-                    ) : (
-                      <Toggle initial={false}>
-                        {({ on, toggle }) => (
-                          <React.Fragment>
-                            <Button onClick={toggle}>Filters</Button>
-                            <Sidebar isOpen={on} side="left" close={toggle}>
-                              <GridLayout gridRowGap="md">
-                                <H3 ml="xl">Filters</H3>
-                                <Filters data={filtersData} px="md" />
-                              </GridLayout>
-                            </Sidebar>
-                          </React.Fragment>
-                        )}
-                      </Toggle>
-                    )
-                  }
-                </Responsive>
-              </Box>
+              {filtersData.length && (
+                <Box gridArea={CategoryArea.filters}>
+                  <Responsive width="md">
+                    {matches =>
+                      matches ? (
+                        <Filters data={filtersData} />
+                      ) : (
+                        <Toggle initial={false}>
+                          {({ on, toggle }) => (
+                            <React.Fragment>
+                              <Button onClick={toggle}>Filters</Button>
+                              <Sidebar isOpen={on} side="left" close={toggle}>
+                                <GridLayout gridRowGap="md">
+                                  <H3 ml="xl">Filters</H3>
+                                  <Filters data={filtersData} px="md" />
+                                </GridLayout>
+                              </Sidebar>
+                            </React.Fragment>
+                          )}
+                        </Toggle>
+                      )
+                    }
+                  </Responsive>
+                </Box>
+              )}
               <Box gridArea={CategoryArea.content}>
                 <FiltersSummary data={filtersData} />
                 <ProductsList products={items} />
