@@ -1643,12 +1643,18 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
-   * Removes unnecesary fields from address entry so Magento doesn't crash
+   * Removes unnecessary fields from address entry and adds proper id so Magento doesn't crash
    * @param {AddressInput} address - address to process
    * @return {AddressInput} processed address
    */
   prepareAddressForOrder(address) {
     const data = { ...address };
+    // if that's a saved addr it will have proper id - in this case we have to add customer_address_id field
+    // as magento accepts that one (not plain "id")
+    if (data.id) {
+      data.customer_address_id = data.id;
+      delete data.id;
+    }
     delete data.defaultBilling;
     delete data.defaultShipping;
     return data;
