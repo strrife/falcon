@@ -21,7 +21,7 @@ export class ProductsList extends React.Component<ProductsListProps> {
     const { products: nextProducts } = nextProps;
 
     if (prevProducts !== nextProducts) {
-      setTimeout(() => forceCheck());
+      setTimeout(forceCheck);
     }
 
     return null;
@@ -34,7 +34,7 @@ export class ProductsList extends React.Component<ProductsListProps> {
         {products.map((product: any) => (
           <li key={product.id}>
             <ProductCardLayout to={product.urlPath}>
-              <LazyLoad key={product.id}>
+              <LazyLoad key={product.id} height="100%" offset={150}>
                 <Image
                   key={product.id}
                   css={{ flex: '1 1 100%', minHeight: '0%' }}
