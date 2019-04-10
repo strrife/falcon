@@ -2590,7 +2590,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-lazyload@^2.3.1":
+"@types/react-lazyload@2.3.2":
   version "2.3.2"
   resolved "https://registry.npmjs.org/@types/react-lazyload/-/react-lazyload-2.3.2.tgz#8b0381bf3a45cee6efaec6b09bacce9d9b9a6c2a"
   integrity sha512-v7tAhSUE00gSM63VKhbcKqNoKFm8jfcVSMV6ONaz6a7CjpVDIlGdTZ/VPdysjJNkGXAr/MzmzqBQNjvcn9J2gg==
@@ -14034,7 +14034,7 @@ react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4:
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.8.4.tgz#90f336a68c3a29a096a3d648ab80e87ec61482a2"
   integrity sha512-PVadd+WaUDOAciICm/J1waJaSvgq+4rHE/K70j0PFqKhkTBsPv/82UGQJNXAngz1fOQLLxI6z1sEDmJDQhCTAA==
 
-react-lazyload@^2.3.0:
+react-lazyload@2.5.0:
   version "2.5.0"
   resolved "https://registry.npmjs.org/react-lazyload/-/react-lazyload-2.5.0.tgz#7ed20bf0408dc684c10e808060e51d904cc0ab8d"
   integrity sha512-RkEwpJDqEUVkXodxBXAI/UDyGYUBTZCU9kdG0Lwmg8BIv8zDvP+exFwUzc7wP4HX6n33CCsz+cjG2FpwdRoxpw==
