@@ -1686,7 +1686,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     const falconPrefix = FALCON_CART_ACTIONS.indexOf(path) === -1 ? '' : '/falcon';
 
-
     const response = await this[method](`${falconPrefix}${cartPath}${path}`, method === 'get' ? null : data);
 
     const cartData = this.convertKeys(response.data);
