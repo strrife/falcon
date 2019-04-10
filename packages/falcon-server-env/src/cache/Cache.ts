@@ -5,7 +5,7 @@ export type SetCacheOptions = {
   ttl?: number;
 };
 
-export type CacheResult = string | undefined;
+export type CacheResult = any;
 
 export type GetCacheCallbackResult =
   | CacheResult
@@ -20,8 +20,11 @@ export type GetCacheParams = {
   options?: SetCacheOptions;
 };
 
-export default class Cache implements KeyValueCache {
-  constructor(private cacheProvider: KeyValueCache) {}
+/**
+ * Cache-wrapper with extended methods
+ */
+export default class Cache implements KeyValueCache<CacheResult> {
+  constructor(private cacheProvider: KeyValueCache<CacheResult>) {}
 
   /**
    * Returns cached value for the provided key or options object
@@ -37,13 +40,13 @@ export default class Cache implements KeyValueCache {
       let { options } = keyOrOptions;
       const cacheResult: GetCacheCallbackResult = await callback();
       if (typeof cacheResult !== 'undefined') {
-        if (typeof cacheResult === 'string') {
-          value = cacheResult;
-        } else if (typeof cacheResult === 'object') {
+        if (typeof cacheResult === 'object' && 'value' in cacheResult) {
           ({ value } = cacheResult);
           if (cacheResult.options) {
             ({ options } = cacheResult);
           }
+        } else {
+          value = cacheResult;
         }
 
         if (typeof value !== 'undefined') {
@@ -55,7 +58,7 @@ export default class Cache implements KeyValueCache {
     return value;
   }
 
-  async set(key: string, value: string, options?: SetCacheOptions): Promise<void> {
+  async set(key: string, value: CacheResult, options?: SetCacheOptions): Promise<void> {
     return this.cacheProvider.set(key, value, options);
   }
 

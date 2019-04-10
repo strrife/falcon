@@ -41,6 +41,18 @@ export const CategoryLayout = themed({
       },
       css: {
         position: 'relative'
+      },
+
+      variants: {
+        noFilters: {
+          // prettier-ignore
+          gridTemplate: toGridTemplate([
+              ['1fr'],
+              [CategoryArea.heading],
+              [CategoryArea.content],
+              [CategoryArea.footer]
+            ])
+        }
       }
     }
   }

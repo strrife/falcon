@@ -17,8 +17,8 @@ class AddressSection extends React.Component {
     };
   }
 
-  submitAddress = values => {
-    this.props.setAddress({ ...values, street: [values.street] });
+  submitAddress = ({ street1, street2, ...restValues }) => {
+    this.props.setAddress({ ...restValues, street: [street1, street2] });
   };
 
   submitSelectedAddress = () => {
@@ -48,16 +48,18 @@ class AddressSection extends React.Component {
     let header;
     let content;
 
+    const { street = [], ...selectedAddressRest } = selectedAddress || {};
     const initialAddressValue = {
       email: '',
       firstname: '',
       lastname: '',
-      street: '',
+      street1: street[0] || '',
+      street2: street.length > 1 ? street[1] : '',
       postcode: '',
       city: '',
       telephone: '',
       countryId: '',
-      ...selectedAddress
+      ...selectedAddressRest
     };
 
     if (!open && selectedAddress) {
