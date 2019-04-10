@@ -1105,20 +1105,15 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {string} input.firstname - customer first name
    * @param {String} input.lastname - customer last name
    * @param {String} input.password - customer password
-   * @param {string|number} input.cart.quoteId - cart id
    * @return {Promise<Customer>} - new customer data
    */
   async signUp(obj, { input }) {
     const { email, firstname, lastname, password, autoSignIn } = input;
-    const { cart: { quoteId = null } = {} } = this.session;
     const customerData = {
       customer: {
         email,
         firstname,
-        lastname,
-        extension_attributes: {
-          guest_quote_id: quoteId
-        }
+        lastname
       },
       password
     };
