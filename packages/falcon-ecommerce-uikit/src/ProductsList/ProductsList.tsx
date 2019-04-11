@@ -2,6 +2,7 @@ import React from 'react';
 import { forceCheck } from 'react-lazyload';
 import { themed, List, ListItem } from '@deity/falcon-ui';
 import { ProductCard } from './ProductCard';
+import { EmptyProductList } from './EmptyProductList';
 
 export type ProductsListProps = {
   products: any[];
@@ -28,6 +29,11 @@ export class ProductsList extends React.Component<ProductsListProps> {
 
   render() {
     const { products } = this.props;
+
+    if (!products.length) {
+      return <EmptyProductList />;
+    }
+
     return (
       <ProductListLayout>
         {products.map((product: any) => (
