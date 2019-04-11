@@ -28,7 +28,7 @@ export type ProductCardProps = {
 };
 export const ProductCard: React.SFC<ProductCardProps> = ({ product }) => (
   <ProductCardLayout to={product.urlPath}>
-    <LazyLoad key={product.id} height="100%" offset={150}>
+    <LazyLoad height="100%" offset={150}>
       <Image css={{ flex: '1 1 100%', minHeight: '0%' }} src={product.thumbnail} alt={product.name} />
     </LazyLoad>
     <Text py="xs" ellipsis>
