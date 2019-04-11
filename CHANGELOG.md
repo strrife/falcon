@@ -28,6 +28,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 - added basic component set (queries, mutations and ui) to build filters ([#365](https://github.com/deity-io/falcon/pull/365))
 - fix for not reloaded Product Thumbnails on ProductList ([#407](https://github.com/deity-io/falcon/pull/407))
+- added message placeholder for empty Product List ([#408](https://github.com/deity-io/falcon/issues/408))
 
 ---
 
