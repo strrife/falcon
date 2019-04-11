@@ -54,11 +54,19 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
         return resolver();
       }
 
+      const cacheContext = {};
+      Object.keys(context.dataSources).forEach(dsName => {
+        const ds = context.dataSources[dsName];
+        if (ds.getCacheContext) {
+          cacheContext[dsName] = ds.getCacheContext();
+        }
+      });
+
       const { name: fieldName } = field;
       // Generating short and unique cache-key
       const cacheKey = crypto
         .createHash('sha1')
-        .update([fieldName, JSON.stringify(parent), JSON.stringify(params)].join(':'))
+        .update([fieldName, JSON.stringify([parent, params, cacheContext])].join(':'))
         .digest('base64');
 
       return context.cache.get({

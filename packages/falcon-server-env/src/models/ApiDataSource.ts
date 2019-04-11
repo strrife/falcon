@@ -139,6 +139,13 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = Gr
     info: GraphQLResolveInfo
   ): Promise<FetchUrlResult>;
 
+  /**
+   * Optional method to get a cache context object which should contain a distinguish data
+   * that must be taken into account while calculating the cache key for this specific DataSource
+   * It could be a storeCode, selected locale etc.
+   */
+  getCacheContext?(): object;
+
   async fetchBackendConfig?(obj: object, args: object, context: TContext, info: GraphQLResolveInfo): Promise<object>;
 
   protected async willSendRequest(request: ContextRequestOptions): Promise<void> {
