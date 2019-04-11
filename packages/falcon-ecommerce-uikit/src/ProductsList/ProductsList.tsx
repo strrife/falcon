@@ -1,31 +1,53 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import LazyLoad from 'react-lazyload';
-import { themed, Image, Text } from '@deity/falcon-ui';
-import { Price } from '../Locale';
+import { forceCheck } from 'react-lazyload';
+import { themed, List, ListItem } from '@deity/falcon-ui';
+import { ProductCard } from './ProductCard';
+import { EmptyProductList } from './EmptyProductList';
 
-export const ProductsList: React.SFC<{ products: any[] }> = ({ products }) => (
-  <ProductListLayout>
-    {products.map((product: any) => (
-      <li key={product.id}>
-        <ProductCardLayout to={product.urlPath}>
-          <LazyLoad height="100%" offset={150}>
-            <Image css={{ flex: '1 1 100%', minHeight: '0%' }} src={product.thumbnail} alt={product.name} />
-          </LazyLoad>
+export type ProductsListProps = {
+  products: any[];
+};
+export class ProductsList extends React.Component<ProductsListProps> {
+  constructor(props: ProductsListProps) {
+    super(props);
 
-          <Text py="xs" ellipsis>
-            {product.name}
-          </Text>
+    this.state = {
+      getPrevProps: () => this.props
+    };
+  }
 
-          <Price fontSize="md" value={product.price} />
-        </ProductCardLayout>
-      </li>
-    ))}
-  </ProductListLayout>
-);
+  static getDerivedStateFromProps(nextProps: ProductsListProps, prevState: any) {
+    const { products: prevProducts } = prevState.getPrevProps();
+    const { products: nextProducts } = nextProps;
+
+    if (prevProducts !== nextProducts) {
+      setTimeout(forceCheck);
+    }
+
+    return null;
+  }
+
+  render() {
+    const { products } = this.props;
+
+    if (!products.length) {
+      return <EmptyProductList />;
+    }
+
+    return (
+      <ProductListLayout>
+        {products.map((product: any) => (
+          <ListItem key={product.id}>
+            <ProductCard product={product} />
+          </ListItem>
+        ))}
+      </ProductListLayout>
+    );
+  }
+}
 
 export const ProductListLayout = themed({
-  tag: 'ul',
+  tag: List,
   defaultTheme: {
     productListLayout: {
       display: 'grid',
@@ -36,25 +58,6 @@ export const ProductListLayout = themed({
       p: 'none',
       css: {
         listStyle: 'none'
-      }
-    }
-  }
-});
-
-export const ProductCardLayout = themed({
-  tag: Link,
-  defaultTheme: {
-    card: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      color: 'secondaryText',
-
-      css: {
-        height: '100%',
-        textDecoration: 'none',
-        overflow: 'hidden',
-        cursor: 'pointer'
       }
     }
   }

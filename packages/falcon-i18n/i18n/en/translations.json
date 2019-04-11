@@ -74,7 +74,8 @@
       "disabled": "No sort",
       "ascending": "ascending",
       "descending": "descending"
-    }
+    },
+    "empty": "No products found."
   },
   "filters": {
     "clearAll": "Clear all filters"
