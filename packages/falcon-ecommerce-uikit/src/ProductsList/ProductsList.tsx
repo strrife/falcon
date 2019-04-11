@@ -1,8 +1,7 @@
 import React from 'react';
-import LazyLoad, { forceCheck } from 'react-lazyload';
-import { themed, Image, Text, List, ListItem } from '@deity/falcon-ui';
-import { Price } from '../Locale';
-import { ProductCardLayout } from './ProductCardLayout';
+import { forceCheck } from 'react-lazyload';
+import { themed, List, ListItem } from '@deity/falcon-ui';
+import { ProductCard } from './ProductCard';
 
 export type ProductsListProps = {
   products: any[];
@@ -33,20 +32,7 @@ export class ProductsList extends React.Component<ProductsListProps> {
       <ProductListLayout>
         {products.map((product: any) => (
           <ListItem key={product.id}>
-            <ProductCardLayout to={product.urlPath}>
-              <LazyLoad key={product.id} height="100%" offset={150}>
-                <Image
-                  key={product.id}
-                  css={{ flex: '1 1 100%', minHeight: '0%' }}
-                  src={product.thumbnail}
-                  alt={product.name}
-                />
-              </LazyLoad>
-              <Text py="xs" ellipsis>
-                {product.name}
-              </Text>
-              <Price fontSize="md" value={product.price} />
-            </ProductCardLayout>
+            <ProductCard product={product} />
           </ListItem>
         ))}
       </ProductListLayout>
