@@ -604,7 +604,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     this.convertAttributesSet(response);
     let { data } = response;
     data = this.convertKeys(data);
-    const { extensionAttributes = {}, customAttributes } = data;
+    const { extensionAttributes, customAttributes } = data;
 
     data.urlPath = this.convertPathToUrl(data.urlPath);
     data.currency = currency;
@@ -620,7 +620,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       max: undefined
     };
 
-    if (extensionAttributes && !isEmpty(extensionAttributes)) {
+    if (extensionAttributes) {
       const {
         thumbnailUrl,
         mediaGallerySizes,
