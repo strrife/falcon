@@ -611,22 +611,22 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     data.name = htmlHelpers.stripHtml(data.name);
     data.priceType = customAttributes.priceType || '1';
 
-    data.price = {
-      regular: data.price.regularPrice,
-      // regular: minPrice && data.price.regularPrice === 0 ? minPrice : data.price.regularPrice,
+    const { minPrice, maxPrice } = extensionAttributes || {};
+    const price = {
+      regular: minPrice && data.price.regularPrice === 0 ? minPrice : data.price.regularPrice,
       special: data.price.specialPrice,
       minTier: data.price.minTierPrice,
-      min: undefined,
-      max: undefined
+      min: minPrice,
+      max: maxPrice
     };
+
+    data.price = price;
 
     if (extensionAttributes) {
       const {
         thumbnailUrl,
         mediaGallerySizes,
         stockItem,
-        minPrice,
-        maxPrice,
         configurableProductOptions,
         bundleProductOptions
       } = extensionAttributes;
@@ -639,25 +639,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       // old API passes thumbnailUrl in extension_attributes, new api passes image field directly
       data.thumbnail = thumbnailUrl || data.image;
       data.gallery = mediaGallerySizes || [];
-
-      if (minPrice) {
-        data.minPrice = minPrice;
-        delete extensionAttributes.minPrice;
-      }
-
-      if (maxPrice) {
-        data.maxPrice = maxPrice;
-        delete extensionAttributes.maxPrice;
-      }
-
-      if (data.minPrice && data.price.regular === 0) {
-        data.price = data.minPrice;
-      }
-
-      if (data.minPrice === data.maxPrice) {
-        delete data.minPrice;
-        delete data.maxPrice;
-      }
 
       if (stockItem) {
         data.stock = pick(stockItem, 'qty', 'isInStock');
