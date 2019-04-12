@@ -11,7 +11,11 @@ const HOMEPAGE_PRODUCTS_QUERY = gql`
         items {
           id
           name
-          price
+          price {
+            regular
+            special
+            minTier
+          }
           thumbnail
           urlPath
         }
