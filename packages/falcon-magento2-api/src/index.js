@@ -605,9 +605,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     let { data } = response;
     data = this.convertKeys(data);
     const { extensionAttributes = {}, customAttributes } = data;
-    const catalogPrice = extensionAttributes.catalogDisplayPrice;
-    const price =
-      catalogPrice || (typeof data.price.regularPrice !== 'undefined' ? data.price.regularPrice : data.price);
+    const price = typeof data.price.regularPrice !== 'undefined' ? data.price.regularPrice : data.price;
 
     data.urlPath = this.convertPathToUrl(data.urlPath);
     data.priceAmount = data.price;
