@@ -296,6 +296,14 @@ Mixed result for "Mutation.placeOrder" for
 """
 union PlaceOrderResult = PlaceOrderSuccessfulResult | PlaceOrder3dSecureResult
 
+type ProductPrice {
+  regular: String
+  special: String
+  minTier: String
+  min: String
+  max: String
+}
+
 type Product {
   id: String
   sku: String!
@@ -304,8 +312,8 @@ type Product {
   urlPath: String!
   # Full url to resized product image
   thumbnail: String
+  price: ProductPrice!
   priceType: String
-  price: String
   minPrice: String
   maxPrice: String
   currency: String
