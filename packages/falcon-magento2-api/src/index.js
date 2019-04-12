@@ -605,14 +605,21 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     let { data } = response;
     data = this.convertKeys(data);
     const { extensionAttributes = {}, customAttributes } = data;
-    const price = typeof data.price.regularPrice !== 'undefined' ? data.price.regularPrice : data.price;
 
     data.urlPath = this.convertPathToUrl(data.urlPath);
     data.priceAmount = data.price;
     data.currency = currency;
-    data.price = price;
     data.name = htmlHelpers.stripHtml(data.name);
     data.priceType = customAttributes.priceType || '1';
+
+    data.price = {
+      regular: data.price.regularPrice,
+      // regular: minPrice && data.price.regularPrice === 0 ? minPrice : data.price.regularPrice,
+      special: data.price.specialPrice,
+      minTier: data.price.minTierPrice,
+      min: undefined,
+      max: undefined
+    };
 
     if (extensionAttributes && !isEmpty(extensionAttributes)) {
       const {
@@ -644,7 +651,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         delete extensionAttributes.maxPrice;
       }
 
-      if (data.minPrice && price === 0) {
+      if (data.minPrice && data.price.regular === 0) {
         data.price = data.minPrice;
       }
 
