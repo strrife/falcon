@@ -33,6 +33,20 @@ export const Price = themed({
       css: {
         whiteSpace: 'nowrap',
         overflow: 'hidden'
+      },
+      variants: {
+        old: {
+          css: {
+            textDecorationStyle: 'solid',
+            textDecorationLine: 'line-through'
+          }
+        },
+        special: {
+          fontWeight: 'bold',
+          css: {
+            color: 'red'
+          }
+        }
       }
     }
   }

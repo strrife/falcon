@@ -40,8 +40,8 @@ export const ProductCard: React.SFC<ProductCardProps> = ({ product }) => {
       <FlexLayout>
         {price.special ? (
           <React.Fragment>
-            <Price fontSize="sm" value={price.regular} />
-            <Price fontSize="md" color="error" value={price.special} />
+            <Price fontSize="md" variant="old" mr="xs" value={price.regular} />
+            <Price fontSize="md" variant="special" value={price.special} />
           </React.Fragment>
         ) : (
           <Price fontSize="md" value={price.regular} />
