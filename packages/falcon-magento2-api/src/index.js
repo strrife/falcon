@@ -607,7 +607,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { extensionAttributes = {}, customAttributes } = data;
 
     data.urlPath = this.convertPathToUrl(data.urlPath);
-    data.priceAmount = data.price;
     data.currency = currency;
     data.name = htmlHelpers.stripHtml(data.name);
     data.priceType = customAttributes.priceType || '1';
