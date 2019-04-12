@@ -25,6 +25,7 @@ export default {
       h1: {
         fontSize: 48,
         fontWeight: 300,
+        fontFamily: '"Segoe UI", system-ui, sans-serif',
         margin: '32px 0',
         letterSpacing: 0,
         '::before': {
@@ -34,8 +35,15 @@ export default {
       h2: {
         fontSize: 39,
         fontWeight: 400,
+        fontFamily: '"Segoe UI", system-ui, sans-serif',
         letterSpacing: 0,
         '::before': {
+          display: 'none'
+        }
+      },
+      ul: {
+        listStyleType: 'circle',
+        'li:before': {
           display: 'none'
         }
       }
