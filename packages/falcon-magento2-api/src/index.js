@@ -612,10 +612,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     data.priceType = customAttributes.priceType || '1';
 
     const { minPrice, maxPrice } = extensionAttributes || {};
+    const dataPrice = typeof data.price === 'number' ? { regularPrice: data.price } : data.price;
     const price = {
-      regular: minPrice && data.price.regularPrice === 0 ? minPrice : data.price.regularPrice,
-      special: data.price.specialPrice,
-      minTier: data.price.minTierPrice,
+      regular: minPrice && dataPrice.regularPrice === 0 ? minPrice : dataPrice.regularPrice,
+      special: dataPrice.specialPrice,
+      minTier: dataPrice.minTierPrice,
       min: minPrice,
       max: maxPrice
     };
@@ -771,8 +772,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Product>} product data
    */
   async product(obj, { id }) {
-    const productData = await this.get(`/products/${id}`, {}, { context: { useAdminToken: true } });
-    const product = this.reduceProduct(productData);
+    const response = await this.get(`/products/${id}`, {}, { context: { useAdminToken: true } });
+    const product = this.reduceProduct(response);
+
     return product;
   }
 
