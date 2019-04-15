@@ -13,33 +13,6 @@
     "src"
   ],
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "diagnostics": false
-      }
-    },
-    "collectCoverageFrom": [
-      "src/**/*.ts",
-      "src/**/*.tsx",
-      "!src/index.ts"
-    ],
-    "coverageReporters": [
-      "html",
-      "text",
-      "text-summary",
-      "lcov"
-    ],
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json",
-      "node"
-    ],
     "setupFilesAfterEnv": [
       "./../../test/setupTests.js"
     ]
@@ -49,8 +22,8 @@
     "prepare": "npm run clean && npm run build",
     "build": "falcon build-package",
     "watch": "falcon watch",
-    "test": "jest --watch",
-    "test:coverage": "jest --ci --coverage"
+    "test": "falcon test",
+    "test:coverage": "falcon test:coverage"
   },
   "peerDependencies": {
     "@deity/falcon-i18n": "0.0.3",
