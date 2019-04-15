@@ -15,48 +15,17 @@
   "publishConfig": {
     "access": "public"
   },
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "diagnostics": false
-      }
-    },
-    "collectCoverageFrom": [
-      "src/**/*.ts",
-      "src/**/*.tsx",
-      "!src/index.ts"
-    ],
-    "coverageReporters": [
-      "html",
-      "text",
-      "text-summary",
-      "lcov"
-    ],
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json",
-      "node"
-    ],
-    "setupTestFrameworkScriptFile": "./../../test/setupTests.js"
-  },
   "scripts": {
     "clean": "rimraf dist",
-    "prepare": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:tsDeclarations",
-    "build:tsDeclarations": "tsc",
-    "build:esm": "babel src -d dist -x .ts,.tsx -s",
-    "build:cjs": "rollup -c",
-    "watch": "babel src -d dist -x .ts,.tsx -s --watch"
+    "prepare": "npm run clean && npm run build",
+    "build": "falcon build-package",
+    "watch": "falcon watch"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0"
   },
   "devDependencies": {
+    "@deity/falcon-scripts": "0.0.1",
     "@babel/cli": "7.1.5",
     "@babel/core": "7.2.2",
     "@babel/plugin-proposal-class-properties": "7.3.0",
