@@ -19,6 +19,7 @@ extend type Query {
   customer: Customer
   cmsPage(id: Int, identifier: String): CmsPage
   cmsBlock(identifier: String): CmsBlock
+  cmsBlocks(identifiers: [String]): [CmsBlock]
   validatePasswordToken(token: String!): Boolean
   search(
     query: String
