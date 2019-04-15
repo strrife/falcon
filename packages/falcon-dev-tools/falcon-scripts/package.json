@@ -28,9 +28,11 @@
     "@mdx-js/tag": "0.16.1",
     "babel-plugin-annotate-pure-calls": "0.4.0",
     "babel-plugin-module-resolver": "3.1.1",
+    "babel-plugin-graphql-tag": "^1.6.0",
     "rimraf": "2.6.3",
     "rollup": "0.66.4",
     "rollup-plugin-babel": "4.0.3",
+    "rollup-plugin-commonjs": "9.1.8",
     "rollup-plugin-node-resolve": "3.4.0",
     "size-limit": "0.20.1",
     "typescript": "3.2.1"

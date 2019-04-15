@@ -1,7 +1,8 @@
 const path = require('path');
 const rollup = require('rollup');
 const babel = require('rollup-plugin-babel');
-const resolve = require('rollup-plugin-node-resolve');
+const nodeResolve = require('rollup-plugin-node-resolve');
+const commonjs = require('rollup-plugin-commonjs');
 const Logger = require('@deity/falcon-logger');
 
 const makeExternalPredicate = externalsArr => {
@@ -36,6 +37,7 @@ module.exports = async ({ packagePath }) => {
       require.resolve('@babel/preset-react')
     ],
     plugins: [
+      require.resolve('babel-plugin-graphql-tag'),
       require.resolve('@babel/plugin-proposal-class-properties'),
       [require.resolve('@babel/plugin-transform-runtime'), { useESModules: false }],
       [require.resolve('@babel/plugin-proposal-object-rest-spread'), { loose: true, useBuiltIns: true }],
@@ -47,14 +49,15 @@ module.exports = async ({ packagePath }) => {
     input: path.join(packagePath, 'src/index.ts'),
     external: makeExternalPredicate(externals),
     plugins: [
-      resolve({
+      nodeResolve({
         extensions
       }),
       babel({
         extensions,
         runtimeHelpers: true,
         ...babelConfig
-      })
+      }),
+      commonjs()
     ]
   };
   const outputOptions = { file: pkg.main, format: 'cjs', sourcemap: true };
