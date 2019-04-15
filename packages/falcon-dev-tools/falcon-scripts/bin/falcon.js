@@ -54,7 +54,7 @@ const glob = require('glob');
         ];
 
         const files = glob.sync(`${path.join(projectPath, 'src')}@(.*)`);
-        const result2 = spawn.sync(`tsc ${files.join(' ')} ${tsCompilerOptions.join(' ')}`, [], {
+        const result2 = spawn.sync(`tsc ${tsCompilerOptions.join(' ')} ${files.join(' ')}`, [], {
           stdio: 'inherit'
         });
         if (result2.status !== 0) {

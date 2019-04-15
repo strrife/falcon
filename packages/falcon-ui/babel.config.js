@@ -1,4 +1,5 @@
 const notARollupCjsBuild = process.env.ROLLUP === undefined;
+
 module.exports = {
   presets: [
     [
