@@ -23,27 +23,6 @@ module.exports = async ({ packagePath }) => {
 
   const externals = [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})];
   const extensions = ['.ts', '.tsx', '.js', '.jsx'];
-  const babelConfig = {
-    presets: [
-      [
-        require.resolve('@babel/preset-env'),
-        {
-          modules: false,
-          loose: true,
-          targets: 'defaults'
-        }
-      ],
-      require.resolve('@babel/preset-typescript'),
-      require.resolve('@babel/preset-react')
-    ],
-    plugins: [
-      require.resolve('babel-plugin-graphql-tag'),
-      require.resolve('@babel/plugin-proposal-class-properties'),
-      [require.resolve('@babel/plugin-transform-runtime'), { useESModules: false }],
-      [require.resolve('@babel/plugin-proposal-object-rest-spread'), { loose: true, useBuiltIns: true }],
-      require.resolve('babel-plugin-annotate-pure-calls')
-    ].filter(Boolean)
-  };
 
   const inputOptions = {
     input: path.join(packagePath, 'src/index.ts'),
@@ -55,7 +34,7 @@ module.exports = async ({ packagePath }) => {
       babel({
         extensions,
         runtimeHelpers: true,
-        ...babelConfig
+        ...require('../babel.config')
       }),
       commonjs()
     ]

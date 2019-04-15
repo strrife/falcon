@@ -30,7 +30,7 @@ const buildTsDeclarations = require('../scripts/build-tsDeclarations');
         break;
       }
       case 'watch': {
-        const configRelativePath = path.relative(packagePath, require.resolve('../src/build-package/babel.config.js'));
+        const configRelativePath = path.relative(packagePath, require.resolve('../babel.config.js'));
 
         const result = spawn.sync(
           `babel src -d dist -x .ts,.tsx -s --watch --config-file ${configRelativePath}`,
