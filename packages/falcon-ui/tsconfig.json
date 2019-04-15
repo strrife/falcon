@@ -13,12 +13,12 @@
     "noImplicitReturns": true,
     "noUnusedParameters": true,
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
     "sourceMap": true,
     "emitDeclarationOnly": true,
     "declaration": true,
-    "skipLibCheck": true,
-    "declarationDir": "dist",
     "declarationMap": true,
-    "forceConsistentCasingInFileNames": true
+    "declarationDir": "dist"
   }
 }
