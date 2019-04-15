@@ -12,18 +12,36 @@ const makeExternalPredicate = externalsArr => {
   return id => externalPattern.test(id);
 };
 
-async function build() {
-  Logger.log(`building cjs...`);
+module.exports = async ({ packagePath }) => {
+  Logger.log('building cjs...');
 
   process.env.ROLLUP = true;
-
-  const packagePath = process.cwd();
 
   // eslint-disable-next-line
   const pkg = require(path.join(packagePath, './package.json'));
 
   const externals = [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})];
   const extensions = ['.ts', '.tsx', '.js', '.jsx'];
+  const babelConfig = {
+    presets: [
+      [
+        require.resolve('@babel/preset-env'),
+        {
+          modules: false,
+          loose: true,
+          targets: 'defaults'
+        }
+      ],
+      require.resolve('@babel/preset-typescript'),
+      require.resolve('@babel/preset-react')
+    ],
+    plugins: [
+      require.resolve('@babel/plugin-proposal-class-properties'),
+      [require.resolve('@babel/plugin-transform-runtime'), { useESModules: false }],
+      [require.resolve('@babel/plugin-proposal-object-rest-spread'), { loose: true, useBuiltIns: true }],
+      require.resolve('babel-plugin-annotate-pure-calls')
+    ].filter(Boolean)
+  };
 
   const inputOptions = {
     input: path.join(packagePath, 'src/index.ts'),
@@ -35,7 +53,7 @@ async function build() {
       babel({
         extensions,
         runtimeHelpers: true,
-        ...require('./babel.config')
+        ...babelConfig
       })
     ]
   };
@@ -43,8 +61,4 @@ async function build() {
 
   const bundle = await rollup.rollup(inputOptions);
   await bundle.write(outputOptions);
-}
-
-module.exports = {
-  build
 };
