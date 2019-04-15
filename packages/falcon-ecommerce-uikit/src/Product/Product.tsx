@@ -185,7 +185,7 @@ export class Product extends React.PureComponent<{ product: any }> {
                   <Box gridArea={Area.price}>
                     {product.price.special ? (
                       <React.Fragment>
-                        <Price fontSize="md" variant="old" mr="xs" value={product.price.regular} />
+                        <Price fontSize="xl" variant="old" mr="xs" value={product.price.regular} />
                         <Price fontSize="xl" variant="special" value={product.price.special} />
                       </React.Fragment>
                     ) : (
