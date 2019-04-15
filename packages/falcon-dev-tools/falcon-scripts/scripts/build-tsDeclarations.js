@@ -1,6 +1,7 @@
 const path = require('path');
 const glob = require('glob');
 const ts = require('typescript');
+const Logger = require('@deity/falcon-logger');
 
 function tsc(fileNames, options) {
   const program = ts.createProgram(fileNames, options);
@@ -9,6 +10,8 @@ function tsc(fileNames, options) {
 }
 
 module.exports = ({ packagePath }) => {
+  Logger.log(`building ts declarations...`);
+
   const files = glob.sync(`${path.join(packagePath, 'src')}/*(*.ts|*.tsx)`);
 
   tsc(files, {
