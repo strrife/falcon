@@ -1,4 +1,4 @@
-directive @cache(ttl: Int) on FIELD_DEFINITION
+directive @cache(ttl: Int, idField: String = "id") on FIELD_DEFINITION
 
 schema {
   query: Query
@@ -30,7 +30,7 @@ type Query {
   """
   URL-resolve query
   """
-  url(path: String!): Url @cache
+  url(path: String!): Url @cache(idField: "path")
 }
 
 """
