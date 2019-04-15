@@ -14,6 +14,8 @@ const path = require('path');
 const buildEsm = require('../scripts/build-esm');
 const buildCjs = require('../scripts/build-cjs');
 const buildTsDeclarations = require('../scripts/build-tsDeclarations');
+const testWatch = require('../scripts/test-watch');
+const testCoverage = require('../scripts/test-coverage');
 
 (async () => {
   const script = process.argv[2];
@@ -39,6 +41,16 @@ const buildTsDeclarations = require('../scripts/build-tsDeclarations');
         );
         process.exit(result.status);
 
+        break;
+      }
+
+      case 'test': {
+        await testWatch({ packagePath });
+        break;
+      }
+
+      case 'test:coverage': {
+        await testCoverage({ packagePath });
         break;
       }
 
