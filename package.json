@@ -55,6 +55,7 @@
     "packages/falcon-dev-tools/babel-preset-falcon-client",
     "packages/falcon-dev-tools/eslint-config-falcon",
     "packages/falcon-dev-tools/falcon-i18n-webpack-plugin",
+    "packages/falcon-dev-tools/falcon-scripts",
     "packages/falcon-dev-tools/normal-module-override-webpack-plugin",
     "packages/eject-ts",
     "examples/shop-with-blog/client",

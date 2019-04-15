@@ -1,0 +1,37 @@
+{
+  "name": "@deity/falcon-scripts",
+  "version": "0.0.1",
+  "license": "OSL-3.0",
+  "main": "index.js",
+  "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-dev-tools/falcon-scripts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "falcon": "./bin/falcon.js"
+  },
+  "dependencies": {
+    "@deity/falcon-logger": "^0.1.1",
+    "cross-spawn": "6.0.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.1.5",
+    "@babel/core": "7.2.2",
+    "@babel/plugin-proposal-class-properties": "7.3.0",
+    "@babel/plugin-proposal-object-rest-spread": "7.3.2",
+    "@babel/plugin-transform-runtime": "7.2.0",
+    "@babel/preset-env": "7.3.1",
+    "@babel/preset-react": "7.0.0",
+    "@babel/preset-typescript": "7.1.0",
+    "@mdx-js/tag": "0.16.1",
+    "babel-plugin-annotate-pure-calls": "0.4.0",
+    "babel-plugin-module-resolver": "3.1.1",
+    "rimraf": "2.6.3",
+    "rollup": "0.66.4",
+    "rollup-plugin-babel": "4.0.3",
+    "rollup-plugin-node-resolve": "3.4.0",
+    "size-limit": "0.20.1",
+    "typescript": "3.2.1"
+  },
+  "peerDependencies": {}
+}
