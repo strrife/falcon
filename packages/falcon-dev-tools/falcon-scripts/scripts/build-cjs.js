@@ -19,9 +19,12 @@ module.exports = async ({ packagePath }) => {
   process.env.ROLLUP = true;
 
   // eslint-disable-next-line
-  const pkg = require(path.join(packagePath, './package.json'));
+  const packageJson = require(path.join(packagePath, './package.json'));
 
-  const externals = [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})];
+  const externals = [
+    ...Object.keys(packageJson.dependencies || {}),
+    ...Object.keys(packageJson.peerDependencies || {})
+  ];
   const extensions = ['.ts', '.tsx', '.js', '.jsx'];
 
   const inputOptions = {
@@ -39,7 +42,7 @@ module.exports = async ({ packagePath }) => {
       commonjs()
     ]
   };
-  const outputOptions = { file: pkg.main, format: 'cjs', sourcemap: true };
+  const outputOptions = { file: packageJson.main, format: 'cjs', sourcemap: true };
 
   const bundle = await rollup.rollup(inputOptions);
   await bundle.write(outputOptions);
