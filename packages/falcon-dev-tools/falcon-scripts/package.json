@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "@deity/falcon-logger": "^0.1.1",
-    "cross-spawn": "6.0.5"
+    "cross-spawn": "6.0.5",
+    "glob": "^7.1.3"
   },
   "devDependencies": {
     "@babel/cli": "7.1.5",
