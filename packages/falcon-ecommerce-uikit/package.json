@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon-ecommerce-uikit",
   "license": "OSL-3.0",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-ecommerce-uikit",
   "publishConfig": {
     "access": "public"
@@ -42,10 +42,10 @@
   },
   "devDependencies": {
     "@deity/falcon-scripts": "0.0.1",
-    "@deity/falcon-i18n": "^0.2.3",
-    "@deity/falcon-server": "^0.2.0",
-    "@deity/falcon-shop-extension": "^0.4.0",
-    "@deity/falcon-ui": "^0.2.0",
+    "@deity/falcon-i18n": "^0.2.4",
+    "@deity/falcon-server": "^0.2.1",
+    "@deity/falcon-shop-extension": "^0.4.1",
+    "@deity/falcon-ui": "^0.2.1",
     "@types/enzyme": "3.1.18",
     "@types/enzyme-adapter-react-16": "1.0.5",
     "@types/i18next": "12.1.0",

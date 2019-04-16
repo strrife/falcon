@@ -699,6 +699,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     return path.endsWith(this.itemUrlSuffix) ? ApiUrlPriority.HIGH : ApiUrlPriority.NORMAL;
   }
 
+  getCacheContext() {
+    return {
+      storeCode: this.session.storeCode || this.storePrefix
+    };
+  }
+
   /**
    * Special endpoint to fetch any magento entity by it's url, for example product, cms page
    * @param {object} _ Parent object

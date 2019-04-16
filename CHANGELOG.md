@@ -4,34 +4,35 @@
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
 
-## Falcon (Next)
+## Falcon v1.0
 
-### Falcon Magento2 API (next)
+### Falcon Magento2 API v0.5.0 (2019-04-11)
 
 - fixed issue with merging guest's with customer's carts ([#394](https://github.com/deity-io/falcon/pull/394))
 - fixed issue with 0 price for the first product added to cart by authorized user ([#394](https://github.com/deity-io/falcon/pull/394))
 
-### Falcon-Server (Next)
+### Falcon-Server v0.2.1 (2019-04-11)
 
 - introduced `@cache` GraphQL directive to cache resolver results ([#374](https://github.com/deity-io/falcon/pull/374))
 - `url` resolver is cached now ([#374](https://github.com/deity-io/falcon/pull/374))
 
-### Falcon Shop Extension (Next)
+### Falcon Shop Extension v0.4.1 (2019-04-11)
 
 - `menu`, `Category`, `Category.products`, `Product` and `Product.breadcrumbs` resolvers are cached now ([#374](https://github.com/deity-io/falcon/pull/374))
 
-### Falcon Client (Next)
+### Falcon Client v0.4.1 (2019-04-11)
 
 - fixed absolute path to output directory embedded in bundle ([385](https://github.com/deity-io/falcon/issues/385))
 
-### Falcon E-commerce UI Kit (Next)
+### Falcon E-commerce UI Kit v0.4.1 (2019-04-11)
 
 - added basic component set (queries, mutations and ui) to build filters ([#365](https://github.com/deity-io/falcon/pull/365))
 - fix for not reloaded Product Thumbnails on ProductList ([#407](https://github.com/deity-io/falcon/pull/407))
+- added message placeholder for empty Product List ([#408](https://github.com/deity-io/falcon/issues/408))
 
 ---
 
-## Falcon 1.0 RC3 (2019-04-02)
+## Falcon v1.0 RC3 (2019-04-02)
 
 ### Falcon Client v0.4.0 (2019-04-02)
 
@@ -81,7 +82,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 ---
 
-## Falcon 1.0 RC2 (2019-03-13)
+## Falcon v1.0 RC2 (2019-03-13)
 
 ### Falcon Client v0.3.1 (2019-03-13)
 
@@ -105,7 +106,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 ---
 
-## Falcon 1.0 RC (2019-02-14)
+## Falcon v1.0 RC (2019-02-14)
 
 ### Falcon Shop Extension v0.3.0 (2019-02-14)
 
