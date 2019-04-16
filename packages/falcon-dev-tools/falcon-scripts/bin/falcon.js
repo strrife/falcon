@@ -8,12 +8,6 @@ process.on('uncaughtException', ex => {
 });
 
 const Logger = require('@deity/falcon-logger');
-const buildEsm = require('../scripts/build-esm');
-const buildCjs = require('../scripts/build-cjs');
-const buildTsDeclarations = require('../scripts/build-tsDeclarations');
-const watchBuild = require('../scripts/watch-build');
-const watchTest = require('../scripts/watch-test');
-const testCoverage = require('../scripts/test-coverage');
 
 (async () => {
   const script = process.argv[2];
@@ -23,6 +17,10 @@ const testCoverage = require('../scripts/test-coverage');
   try {
     switch (script) {
       case 'build-package': {
+        const buildEsm = require('../src/build-esm');
+        const buildTsDeclarations = require('../src/build-tsDeclarations');
+        const buildCjs = require('../src/build-cjs');
+
         buildEsm({ packagePath });
         buildTsDeclarations({ packagePath });
         await buildCjs({ packagePath });
@@ -30,16 +28,22 @@ const testCoverage = require('../scripts/test-coverage');
         break;
       }
       case 'watch': {
+        const watchBuild = require('../src/watch-build');
+
         watchBuild();
         break;
       }
 
       case 'test': {
+        const watchTest = require('../src/watch-test');
+
         await watchTest({ packagePath });
         break;
       }
 
       case 'test:coverage': {
+        const testCoverage = require('../src/test-coverage');
+
         await testCoverage({ packagePath });
         break;
       }

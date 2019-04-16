@@ -42,7 +42,7 @@ module.exports = async ({ packagePath }) => {
       babel({
         extensions,
         runtimeHelpers: true,
-        ...require('../babel.config')
+        ...require('./babel/babel.config')
       }),
       commonjs()
     ]
