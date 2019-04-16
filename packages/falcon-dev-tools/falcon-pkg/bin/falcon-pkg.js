@@ -16,7 +16,7 @@ const Logger = require('@deity/falcon-logger');
 
   try {
     switch (script) {
-      case 'build-package': {
+      case 'build': {
         const buildEsm = require('../src/build-esm');
         const buildTsDeclarations = require('../src/build-tsDeclarations');
         const buildCjs = require('../src/build-cjs');
@@ -50,7 +50,7 @@ const Logger = require('@deity/falcon-logger');
 
       default:
         Logger.log(`Unknown script "${script}".`);
-        Logger.log('Perhaps you need to update @deity/falcon-scripts?');
+        Logger.log('Perhaps you need to update @deity/falcon-pkg?');
         process.exit();
 
         break;

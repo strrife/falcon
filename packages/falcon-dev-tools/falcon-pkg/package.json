@@ -1,14 +1,14 @@
 {
-  "name": "@deity/falcon-scripts",
+  "name": "@deity/falcon-pkg",
   "version": "0.0.1",
   "license": "OSL-3.0",
   "main": "index.js",
-  "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-dev-tools/falcon-scripts",
+  "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-dev-tools/falcon-pkg",
   "publishConfig": {
     "access": "public"
   },
   "bin": {
-    "falcon": "./bin/falcon.js"
+    "falcon-pkg": "./bin/falcon-pkg.js"
   },
   "dependencies": {
     "@babel/cli": "7.2.3",
