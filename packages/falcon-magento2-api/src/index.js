@@ -860,7 +860,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const cartPath = this.getCartPath();
 
     try {
-      const [{ quote }, { totals }] = await Promise.all([
+      const [quote, totals] = await Promise.all([
         this.get(
           cartPath,
           {},
