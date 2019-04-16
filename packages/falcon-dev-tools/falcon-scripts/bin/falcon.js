@@ -8,18 +8,16 @@ process.on('uncaughtException', ex => {
 });
 
 const Logger = require('@deity/falcon-logger');
-const spawn = require('cross-spawn');
-const path = require('path');
-
 const buildEsm = require('../scripts/build-esm');
 const buildCjs = require('../scripts/build-cjs');
 const buildTsDeclarations = require('../scripts/build-tsDeclarations');
+const watchBuild = require('../scripts/watch-build');
 const testWatch = require('../scripts/test-watch');
 const testCoverage = require('../scripts/test-coverage');
 
 (async () => {
   const script = process.argv[2];
-  const args = process.argv.slice(3);
+  // const args = process.argv.slice(3);
   const packagePath = process.cwd();
 
   try {
@@ -32,15 +30,7 @@ const testCoverage = require('../scripts/test-coverage');
         break;
       }
       case 'watch': {
-        const configRelativePath = path.relative(packagePath, require.resolve('../babel.config.js'));
-
-        const result = spawn.sync(
-          `babel src -d dist -x .ts,.tsx -s --watch --config-file ${configRelativePath}`,
-          [...args],
-          { stdio: 'inherit' }
-        );
-        process.exit(result.status);
-
+        watchBuild();
         break;
       }
 
