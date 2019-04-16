@@ -12,7 +12,7 @@ const buildEsm = require('../scripts/build-esm');
 const buildCjs = require('../scripts/build-cjs');
 const buildTsDeclarations = require('../scripts/build-tsDeclarations');
 const watchBuild = require('../scripts/watch-build');
-const testWatch = require('../scripts/test-watch');
+const watchTest = require('../scripts/watch-test');
 const testCoverage = require('../scripts/test-coverage');
 
 (async () => {
@@ -35,7 +35,7 @@ const testCoverage = require('../scripts/test-coverage');
       }
 
       case 'test': {
-        await testWatch({ packagePath });
+        await watchTest({ packagePath });
         break;
       }
 
