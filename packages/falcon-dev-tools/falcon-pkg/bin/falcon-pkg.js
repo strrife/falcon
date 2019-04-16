@@ -27,10 +27,18 @@ const Logger = require('@deity/falcon-logger');
 
         break;
       }
+
       case 'watch': {
         const watchBuild = require('../src/watch-build');
 
         watchBuild();
+        break;
+      }
+
+      case 'clean': {
+        const clean = require('../src/clean');
+
+        await clean();
         break;
       }
 

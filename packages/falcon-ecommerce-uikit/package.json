@@ -21,8 +21,8 @@
     ]
   },
   "scripts": {
-    "clean": "rimraf dist",
     "prepare": "npm run clean && npm run build",
+    "clean": "falcon-pkg clean",
     "build": "falcon-pkg build",
     "watch": "falcon-pkg watch",
     "test": "falcon-pkg test",
@@ -69,7 +69,6 @@
     "react-dom": "^16.6.3",
     "react-router-dom": "5.0.0",
     "react-test-renderer": "^16.6.3",
-    "rimraf": "2.6.3",
     "size-limit": "0.20.1"
   },
   "peerDependencies": {

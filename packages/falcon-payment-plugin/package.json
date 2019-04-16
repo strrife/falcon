@@ -16,8 +16,8 @@
     "access": "public"
   },
   "scripts": {
-    "clean": "rimraf dist",
     "prepare": "npm run clean && npm run build",
+    "clean": "falcon-pkg clean",
     "build": "falcon-pkg build",
     "watch": "falcon-pkg watch"
   },
@@ -34,7 +34,6 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-test-renderer": "^16.6.3",
-    "rimraf": "2.6.3",
     "size-limit": "0.20.1"
   },
   "peerDependencies": {

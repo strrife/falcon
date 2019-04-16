@@ -17,8 +17,8 @@
     "i18n"
   ],
   "scripts": {
-    "clean": "rimraf dist",
     "prepare": "npm run clean && npm run build",
+    "clean": "falcon-pkg clean",
     "build": "falcon-pkg build",
     "watch": "falcon-pkg watch"
   },
@@ -31,8 +31,7 @@
     "i18next": "^12.1.0",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
-    "react-dom": "^16.6.3",
-    "rimraf": "2.6.2"
+    "react-dom": "^16.6.3"
   },
   "peerDependencies": {
     "i18next": "^12.1.0",
