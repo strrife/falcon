@@ -52,11 +52,11 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     ]);
 
     // Processing "active" items only
-    const activeStoreViews = storeViews.data.filter(x => x.extension_attributes.is_active && x.website_id);
-    const activeStoreWebsites = storeWebsites.data.filter(storeWebsite => storeWebsite.id);
-    const activeStoreGroups = storeGroups.data.filter(storeGroup => storeGroup.id);
+    const activeStoreViews = storeViews.filter(x => x.extension_attributes.is_active && x.website_id);
+    const activeStoreWebsites = storeWebsites.filter(storeWebsite => storeWebsite.id);
+    const activeStoreGroups = storeGroups.filter(storeGroup => storeGroup.id);
 
-    const activeStoreConfigs = storeConfigs.data.map(storeConfig => ({
+    const activeStoreConfigs = storeConfigs.map(storeConfig => ({
       ..._.pick(storeConfig, [
         'id',
         'code',
@@ -265,7 +265,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     };
     Logger.info(`${this.name}: Retrieving admin token.`);
 
-    const response = await this.post(
+    const token = await this.post(
       '/integration/admin/token',
       {
         username: this.config.username,
@@ -274,7 +274,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       { context: { skipAuth: true } }
     );
 
-    const { data: token } = response;
     // todo: validTime should be extracted from the response, but after recent changes Magento doesn't send it
     // so that should be changed once https://github.com/deity-io/falcon-magento2-development/issues/32 is resolved
     const validTime = 1;
@@ -328,15 +327,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   async didReceiveResponse(response) {
     const cookies = (response.headers.get('set-cookie') || '').split('; ');
-    const responseTags = response.headers.get('x-cache-tags');
     const data = await super.didReceiveResponse(response);
     const { pagination: paginationInput } = response.context;
-
-    const meta = {};
-
-    if (responseTags) {
-      meta.tags = responseTags.split(',');
-    }
 
     if (cookies.length) {
       // For "customer/token" API call - we don't get PHPSESSID cookie
@@ -349,7 +341,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
     // no pagination data requested - skip computation of pagination
     if (!paginationInput) {
-      return { data, meta };
+      return data;
     }
 
     const { page, perPage } = paginationInput;
@@ -357,7 +349,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
     // process search criteria
     const pagination = this.processPagination(total, page, perPage);
-    return { data: { items: data.items, filters: data.filters || [], pagination }, meta };
+    return { items: data.items, filters: data.filters || [], pagination };
   }
 
   /**
