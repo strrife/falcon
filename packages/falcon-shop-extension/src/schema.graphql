@@ -297,7 +297,7 @@ Mixed result for "Mutation.placeOrder" for
 union PlaceOrderResult = PlaceOrderSuccessfulResult | PlaceOrder3dSecureResult
 
 type Product {
-  id: String
+  id: ID!
   sku: String!
   name: String!
   image: String
@@ -315,7 +315,7 @@ type Product {
   configurableOptions: [ConfigurableProductOption]
   bundleOptions: [BundleProductOption]
   gallery: [GalleryEntry]
-  breadcrumbs(path: String!): [Breadcrumb] @cache(ttl: 20)
+  breadcrumbs(path: String!): [Breadcrumb] @cache(ttl: 20, idPath: ["$parent"])
   seo: ProductSeo
 }
 
@@ -359,12 +359,13 @@ type MenuItem {
 }
 
 type Category {
-  id: String
+  id: ID!
   name: String
   children: [Category]
   description: String
   breadcrumbs(path: String!): [Breadcrumb]
-  products(pagination: PaginationInput, sort: SortOrderInput, filters: [FilterInput]): ProductList @cache(ttl: 15)
+  products(pagination: PaginationInput, sort: SortOrderInput, filters: [FilterInput]): ProductList
+    @cache(ttl: 15, idPath: ["$parent", "items"])
 }
 
 type ProductList {
