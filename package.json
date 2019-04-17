@@ -10,6 +10,7 @@
     "cleanup:all": "rimraf yarn.lock && yarn cleanup",
     "test": "lerna run test:coverage",
     "coverage": "codecov -p packages",
+    "watch": "lerna run watch --parallel",
     "prepublish": "lerna run --scope=@deity/falcon-ui --stream prepare",
     "prepare": "lerna run --stream prepare",
     "lint": "eslint ./"
