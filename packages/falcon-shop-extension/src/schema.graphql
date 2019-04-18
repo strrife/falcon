@@ -297,8 +297,8 @@ Mixed result for "Mutation.placeOrder" for
 union PlaceOrderResult = PlaceOrderSuccessfulResult | PlaceOrder3dSecureResult
 
 type Product {
-  id: ID!
-  sku: String!
+  id: String!
+  sku: ID!
   name: String!
   image: String
   urlPath: String!
