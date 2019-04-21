@@ -621,14 +621,14 @@ type CountryList {
 }
 
 type CmsBlock {
-  id: String
+  id: ID!
   title: String
   content: String
   active: Boolean
 }
 
 type CmsPage {
-  id: String
+  id: ID!
   title: String
   content: String
 }
