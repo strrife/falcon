@@ -3,6 +3,7 @@ import { KeyValueCache } from 'apollo-server-caching';
 
 export type SetCacheOptions = {
   ttl?: number;
+  tags?: string[];
 };
 
 export type CacheResult = any;
@@ -43,7 +44,7 @@ export default class Cache implements KeyValueCache<CacheResult> {
         if (typeof cacheResult === 'object' && 'value' in cacheResult) {
           ({ value } = cacheResult);
           if (cacheResult.options) {
-            ({ options } = cacheResult);
+            options = Object.assign({}, options, cacheResult.options);
           }
         } else {
           value = cacheResult;
@@ -64,5 +65,12 @@ export default class Cache implements KeyValueCache<CacheResult> {
 
   async delete(key: string): Promise<boolean | void> {
     return this.cacheProvider.delete(key);
+  }
+
+  async deleteByTags(keys: string[]): Promise<void> {
+    if (!keys.length) {
+      return;
+    }
+    await Promise.all(keys.map(key => this.delete(key)));
   }
 }

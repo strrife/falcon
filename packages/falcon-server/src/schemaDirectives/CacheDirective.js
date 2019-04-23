@@ -101,18 +101,25 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
    * @return {object} Final resolver result
    */
   handleCacheCallbackResponse(result, parent, info) {
+    const resolverResult = result && result.value ? result.value : result;
     const { idPath = [] } = this.args;
     const { name: returnTypeName } = this.getRootType(info.returnType);
     const tags = [returnTypeName];
 
     // Checking if Type is "self-cacheable"
-    tags.push(...this.getTagsForField(result, info.returnType));
+    tags.push(...this.getTagsForField(resolverResult, info.returnType));
 
     idPath.forEach(idPathEntry => {
-      tags.push(...this.extractTagsForIdPath(idPathEntry, result, info, parent));
+      tags.push(...this.extractTagsForIdPath(idPathEntry, resolverResult, info, parent));
     });
 
-    return result;
+    return {
+      value: resolverResult,
+      options: {
+        ...(result.options || {}),
+        tags
+      }
+    };
   }
 
   /**
