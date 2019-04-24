@@ -17,15 +17,15 @@
   },
   "scripts": {
     "prepare": "npm run clean && npm run build",
-    "clean": "falcon-pkg clean",
-    "build": "falcon-pkg build",
-    "watch": "falcon-pkg watch"
+    "clean": "falcon-scripts clean",
+    "build": "falcon-scripts build",
+    "watch": "falcon-scripts watch"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0"
   },
   "devDependencies": {
-    "@deity/falcon-pkg": "0.0.1",
+    "@deity/falcon-scripts": "0.0.1",
     "@types/enzyme": "3.1.18",
     "@types/enzyme-adapter-react-16": "1.0.5",
     "@types/react": "16.7.20",
