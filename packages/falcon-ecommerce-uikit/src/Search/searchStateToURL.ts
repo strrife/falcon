@@ -1,5 +1,6 @@
 import qs from 'qs';
-import { SearchState } from './types';
+import { SearchState } from './SearchContext';
+import { FilterOperator } from './types';
 
 type UrlParts = {
   // search query
@@ -14,8 +15,8 @@ type UrlParts = {
   sort?: string;
 };
 
-export function searchStateToURL(state: SearchState) {
-  const { query, filters, sort, pagination } = state;
+export function searchStateToURL(state: Partial<SearchState>): string {
+  const { term, filters, sort, pagination } = state;
 
   const parts: UrlParts = {};
 
@@ -23,7 +24,7 @@ export function searchStateToURL(state: SearchState) {
     parts.filters = {};
     for (let i = 0; i < filters.length; i++) {
       const filter = filters[i];
-      const name = filter.operator === 'eq' ? filter.field : `${filter.field}:${filter.operator}`;
+      const name = filter.operator === FilterOperator.equals ? filter.field : `${filter.field}:${filter.operator}`;
       parts.filters[name] = filter.value.join(',');
     }
   }
@@ -37,8 +38,8 @@ export function searchStateToURL(state: SearchState) {
     parts.p = pagination.page.toString();
   }
 
-  if (query) {
-    parts.q = query; // eslint-disable-line id-length
+  if (term) {
+    parts.q = term; // eslint-disable-line id-length
   }
 
   return qs.stringify(parts, { encode: false });

@@ -23,7 +23,7 @@ module.exports = class BaseContainer {
       module = require(pathOrPackage); // eslint-disable-line import/no-dynamic-require
       Logger.debug(`${prefix}: "${pathOrPackage}" loaded as a package`);
     } catch (packageError) {
-      if (pathOrPackage.startsWith('.') === false) {
+      if (!pathOrPackage.startsWith('.')) {
         // Log the error for (more likely) non-local modules (NPM dependency)
         Logger.warn(`${prefix}: ${packageError.message}`);
       }

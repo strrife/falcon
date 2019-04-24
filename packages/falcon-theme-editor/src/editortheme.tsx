@@ -19,7 +19,6 @@ export const editorTheme = createTheme({
         </svg>
       )
     },
-
     component: {
       icon: (props: any) => (
         <svg viewBox="5 0 90 90" {...props}>

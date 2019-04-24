@@ -161,6 +161,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       throw ex;
     }
     const { data } = response;
+
     return {
       items: response.data.items.map(item => this.reduceProduct({ data: item })),
       aggregations: this.processAggregations(data.filters),
@@ -350,7 +351,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {object} - request params with additional filter
    */
   addSearchFilter(params = {}, field, value, operator = 'eq') {
-    params.filterGroups = isEmpty(params.filters) ? [] : params.filters;
+    params.filterGroups = isEmpty(params.filterGroups) ? [] : params.filterGroups;
     const newFilterGroups = this.createMagentoFilter(field, value, operator);
     newFilterGroups.forEach(filterGroup => params.filterGroups.push(filterGroup));
 
@@ -417,6 +418,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         return [
           {
             filters: [this.createSimpleFilter(field, value.join(','), operator)]
+          }
+        ];
+
+      case 'range':
+        // translate range to 'from' - 'to' filters - because 'range' doesn't work in Magento
+        return [
+          {
+            filters: [this.createSimpleFilter(field, value[0], 'from'), this.createSimpleFilter(field, value[1], 'to')]
           }
         ];
 
@@ -690,6 +699,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     return path.endsWith(this.itemUrlSuffix) ? ApiUrlPriority.HIGH : ApiUrlPriority.NORMAL;
   }
 
+  getCacheContext() {
+    return {
+      storeCode: this.session.storeCode || this.storePrefix
+    };
+  }
+
   /**
    * Special endpoint to fetch any magento entity by it's url, for example product, cms page
    * @param {object} _ Parent object
@@ -841,6 +856,19 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
+   * Merges guest cart with the cart of the signed in user
+   * @param {string} guestQuoteId - masked id of guest cart
+   * @return {object} - new cart data
+   */
+  async mergeGuestCart(guestQuoteId) {
+    // send masked_quote_id as param so Magento merges guest's cart with user's cart
+    const response = await this.post('/falcon/carts/mine', { masked_quote_id: guestQuoteId });
+    this.session.cart = { quoteId: response.data };
+
+    return this.session.cart;
+  }
+
+  /**
    * Ensure customer has cart in the session.
    * Creates cart if it doesn't yet exist.
    * @return {object} - new cart data
@@ -852,7 +880,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       return cart;
     }
 
-    const cartPath = token ? '/carts/mine' : '/guest-carts';
+    const cartPath = token ? '/falcon/carts/mine' : '/guest-carts';
     const response = await this.post(cartPath);
 
     this.session.cart = { quoteId: response.data };
@@ -1011,7 +1039,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<boolean>} true if login was successful
    */
   async signIn(obj, { input }) {
-    const { cart: { quoteId = null } = {} } = this.session;
+    const { cart: { quoteId } = {} } = this.session;
     const dateNow = Date.now();
 
     try {
@@ -1019,8 +1047,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         '/integration/customer/token',
         {
           username: input.email,
-          password: input.password,
-          guest_quote_id: quoteId
+          password: input.password
         },
         { context: { skipAuth: true } }
       );
@@ -1040,10 +1067,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         expirationTime: tokenExpirationTime.getTime()
       };
 
-      // Remove guest cart. Magento merges guest cart with cart of authorized user so we'll have to refresh it
       this.removeCartData();
-      // make sure that cart is correctly loaded for signed in user
-      await this.ensureCart();
+
+      // if guest has the cart then merge it with customer's cart
+      if (quoteId) {
+        await this.mergeGuestCart(quoteId);
+      } else {
+        await this.ensureCart();
+      }
 
       // true when user signed in correctly
       return true;
@@ -1080,20 +1111,15 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {string} input.firstname - customer first name
    * @param {String} input.lastname - customer last name
    * @param {String} input.password - customer password
-   * @param {string|number} input.cart.quoteId - cart id
    * @return {Promise<Customer>} - new customer data
    */
   async signUp(obj, { input }) {
     const { email, firstname, lastname, password, autoSignIn } = input;
-    const { cart: { quoteId = null } = {} } = this.session;
     const customerData = {
       customer: {
         email,
         firstname,
-        lastname,
-        extension_attributes: {
-          guest_quote_id: quoteId
-        }
+        lastname
       },
       password
     };
@@ -1623,12 +1649,18 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
-   * Removes unnecesary fields from address entry so Magento doesn't crash
+   * Removes unnecessary fields from address entry and adds proper id so Magento doesn't crash
    * @param {AddressInput} address - address to process
    * @return {AddressInput} processed address
    */
   prepareAddressForOrder(address) {
     const data = { ...address };
+    // if that's a saved addr it will have proper id - in this case we have to add customer_address_id field
+    // as magento accepts that one (not plain "id")
+    if (data.id) {
+      data.customer_address_id = data.id;
+      delete data.id;
+    }
     delete data.defaultBilling;
     delete data.defaultShipping;
     return data;
@@ -1895,13 +1927,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   processAggregations(rawAggregations = []) {
     return rawAggregations.map(item => ({
-      key: item.code,
-      name: item.label,
+      field: item.code,
+      type: undefined,
       buckets: item.options.map(option => ({
+        count: option.count,
         value: option.value,
-        name: htmlHelpers.stripHtml(option.label),
-        count: option.count
-      }))
+        title: htmlHelpers.stripHtml(option.label)
+      })),
+      title: item.label
     }));
   }
 };

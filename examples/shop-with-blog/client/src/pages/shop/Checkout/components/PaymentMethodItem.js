@@ -4,7 +4,9 @@ import { FlexLayout, Label, Image, Radio } from '@deity/falcon-ui';
 import { SimplePayment } from '@deity/falcon-payment-plugin';
 import AdyenCCPlugin from '@deity/falcon-adyen-plugin';
 import PayPalExpressPlugin from '@deity/falcon-paypal-plugin';
-import { CreditCard } from '@deity/falcon-ecommerce-uikit';
+import loadable from 'src/components/loadable';
+
+const CreditCard = loadable(() => import(/* webpackChunkName: "checkout/payment/credit-card" */ './CreditCard'));
 
 const paymentPlugins = {
   adyen_cc: AdyenCCPlugin,

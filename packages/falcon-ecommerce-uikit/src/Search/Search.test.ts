@@ -1,6 +1,7 @@
 import { searchStateToURL } from './searchStateToURL';
 import { searchStateFromURL } from './searchStateFromURL';
-import { SortOrderDirection, FilterOperator } from './types';
+import { SortOrderDirection } from '../SortOrders/SortOrdersQuery';
+import { FilterOperator } from './types';
 
 describe('Filters', () => {
   describe('serializing and deserializing', () => {
@@ -9,7 +10,7 @@ describe('Filters', () => {
         filters: [
           {
             field: 'price',
-            operator: 'eq' as FilterOperator,
+            operator: FilterOperator.equals,
             value: ['10']
           }
         ]
@@ -42,7 +43,7 @@ describe('Filters', () => {
 
     it('should correctly deal with search query', () => {
       const input = {
-        query: 'foo'
+        term: 'foo'
       };
 
       expect(searchStateFromURL(searchStateToURL(input))).toEqual(input);

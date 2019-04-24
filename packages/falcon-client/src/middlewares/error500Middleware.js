@@ -28,7 +28,7 @@ export default () => async (ctx, next) => {
     }
 
     let viewsDir = resolvePath(__dirname, './../../', 'views');
-    if (existsSync(joinPath(viewsDir, '/errors/500.html')) === false) {
+    if (!existsSync(joinPath(viewsDir, '/errors/500.html'))) {
       viewsDir = resolvePath(resolve.sync('@deity/falcon-client/views/errors/500.html'), './../..');
     }
     ctx.status = status;

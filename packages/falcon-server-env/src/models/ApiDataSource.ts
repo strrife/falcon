@@ -1,6 +1,7 @@
 import * as Logger from '@deity/falcon-logger';
 import { Body, Request, RESTDataSource } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
+import { KeyValueCache } from 'apollo-server-caching';
 import { GraphQLResolveInfo, GraphQLSchema } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
 import { stringify } from 'qs';
@@ -20,21 +21,34 @@ import {
   GraphQLContext,
   FetchUrlParams,
   FetchUrlResult,
-  PaginationData
+  PaginationData,
+  DataSources
 } from '../types';
 
 export type PaginationValue = number | string | null;
 
-export interface GqlServerConfig {
+export interface GqlServerConfig<TContext = any> {
   schema: GraphQLSchema;
+  formatError?: Function;
+  context?: TContext;
+  formatResponse?: Function;
+  dataSources?: () => DataSources;
+  cache?: KeyValueCache;
+  debug?: boolean;
+  tracing?: boolean;
 }
 
 export type ConfigurableContainerConstructorParams = ConfigurableConstructorParams<ApiDataSourceConfig> & {
   apiContainer: ApiContainer;
-  gqlServerConfig: any;
+  gqlServerConfig: GqlServerConfig<any>;
+  eventEmitter: EventEmitter2;
+  name: string;
+  config: ApiDataSourceConfig;
 };
 
-export default abstract class ApiDataSource<TContext extends GraphQLContext = any> extends RESTDataSource<TContext> {
+export default abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLContext> extends RESTDataSource<
+  TContext
+> {
   public name: string;
   public config: ApiDataSourceConfig;
   public fetchUrlPriority: number = ApiUrlPriority.NORMAL;
@@ -43,7 +57,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
   protected apiContainer: ApiContainer;
   protected eventEmitter: EventEmitter2;
   protected cache?: Cache;
-  protected gqlServerConfig: GraphQLSchema;
+  protected gqlServerConfig: GqlServerConfig<TContext>;
 
   /**
    * @param {ConfigurableContainerConstructorParams} params Constructor params
@@ -51,16 +65,16 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
    * @param {string} params.name API DataSource short-name
    * @param {ApiContainer} params.apiContainer ApiContainer instance
    * @param {EventEmitter2} params.eventEmitter EventEmitter2 instance
+   * @param {GqlServerConfig} params.gqlServerConfig GqlServerConfig instance
    */
   constructor(params: ConfigurableContainerConstructorParams) {
     super();
-    const { config, name, apiContainer, eventEmitter } = params;
 
     this.gqlServerConfig = params.gqlServerConfig;
-    this.name = name || this.constructor.name;
-    this.config = config || {};
-    this.apiContainer = apiContainer;
-    this.eventEmitter = eventEmitter;
+    this.name = params.name || this.constructor.name;
+    this.config = params.config || {};
+    this.apiContainer = params.apiContainer;
+    this.eventEmitter = params.eventEmitter;
 
     const { host, fetchUrlPriority, perPage } = this.config;
     if (host) {
@@ -124,6 +138,13 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = an
     context: TContext,
     info: GraphQLResolveInfo
   ): Promise<FetchUrlResult>;
+
+  /**
+   * Optional method to get a cache context object which should contain a distinguish data
+   * that must be taken into account while calculating the cache key for this specific DataSource
+   * It could be a storeCode, selected locale etc.
+   */
+  getCacheContext?(): object;
 
   async fetchBackendConfig?(obj: object, args: object, context: TContext, info: GraphQLResolveInfo): Promise<object>;
 

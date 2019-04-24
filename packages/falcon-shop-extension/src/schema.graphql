@@ -1,7 +1,7 @@
 extend type Query {
-  menu: [MenuItem]
-  category(id: String!): Category
-  product(id: String!): Product
+  menu: [MenuItem] @cache(ttl: 15)
+  category(id: String!): Category @cache(ttl: 15)
+  product(id: String!): Product @cache(ttl: 5)
   products(
     categoryId: String
     includeSubcategories: Boolean
@@ -104,9 +104,9 @@ input ShopPageQuery {
 }
 
 input FilterInput {
-  operator: FilterOperator
   field: String
   value: [String]
+  operator: FilterOperator
 }
 
 enum FilterOperator {
@@ -315,7 +315,7 @@ type Product {
   configurableOptions: [ConfigurableProductOption]
   bundleOptions: [BundleProductOption]
   gallery: [GalleryEntry]
-  breadcrumbs(path: String!): [Breadcrumb]
+  breadcrumbs(path: String!): [Breadcrumb] @cache(ttl: 20)
   seo: ProductSeo
 }
 
@@ -364,25 +364,13 @@ type Category {
   children: [Category]
   description: String
   breadcrumbs(path: String!): [Breadcrumb]
-  products(pagination: PaginationInput, sort: SortOrderInput, filters: [FilterInput]): ProductList
+  products(pagination: PaginationInput, sort: SortOrderInput, filters: [FilterInput]): ProductList @cache(ttl: 15)
 }
 
 type ProductList {
   items: [Product]!
   aggregations: [Aggregation]
   pagination: Pagination
-}
-
-type Aggregation {
-  key: String
-  name: String
-  buckets: [AggregationBucket]
-}
-
-type AggregationBucket {
-  value: String
-  name: String
-  count: Int
 }
 
 type Stock {

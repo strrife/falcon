@@ -64,8 +64,8 @@ const EditAddress = ({ match, history }) => {
               >
                 {() => (
                   <Form id={id} i18nId="editAddress">
-                    {address.defaultBilling === false && <CheckboxFormField name="defaultBilling" />}
-                    {address.defaultShipping === false && <CheckboxFormField name="defaultShipping" />}
+                    {!address.defaultBilling && <CheckboxFormField name="defaultBilling" />}
+                    {!address.defaultShipping && <CheckboxFormField name="defaultShipping" />}
                     <TwoColumnsLayout>
                       <GridLayout gridArea={TwoColumnsLayoutArea.left}>
                         <FormField name="company" />

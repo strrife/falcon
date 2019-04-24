@@ -2,7 +2,6 @@ const fs = require('fs-extra');
 const path = require('path');
 const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const AssetsPlugin = require('assets-webpack-plugin');
 const StartServerPlugin = require('start-server-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackBar = require('webpackbar');
@@ -38,7 +37,7 @@ function getEsLintLoaderOptions(eslintRcPath, isDev) {
     emitWarning: isDev
   };
 
-  if (options.useEslintrc === false) {
+  if (!options.useEslintrc) {
     options.baseConfig = {
       extends: [require.resolve('@deity/eslint-config-falcon')]
     };
@@ -311,7 +310,7 @@ module.exports = (target = 'web', options, buildConfig) => {
           name: 'server.js',
           nodeArgs: ['-r', 'source-map-support/register', options.inspect].filter(x => x)
         }),
-        new webpack.WatchIgnorePlugin([paths.appManifest])
+        new webpack.WatchIgnorePlugin([paths.appWebpackAssets])
       ];
     }
   }
@@ -335,13 +334,11 @@ module.exports = (target = 'web', options, buildConfig) => {
         output: 'build/i18n',
         filter: i18n.filter || {}
       }),
-      new AssetsPlugin({
-        path: paths.appBuild,
-        filename: 'assets.json',
-        includeAllFileTypes: true,
-        prettyPrint: true
-      }),
-      new LoadablePlugin({ outputAsset: false, writeToDisk: { filename: paths.appBuild } })
+      new LoadablePlugin({
+        outputAsset: false,
+        filename: path.basename(paths.appWebpackAssets),
+        writeToDisk: { filename: path.dirname(paths.appWebpackAssets) }
+      })
     ];
 
     if (IS_DEV) {
