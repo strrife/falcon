@@ -24,6 +24,16 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     this.itemUrlSuffix = this.config.itemUrlSuffix || '.html';
   }
 
+  initialize(config) {
+    super.initialize(config);
+
+    const { customerToken } = this.session;
+    if (customerToken && !this.isCustomerTokenValid(customerToken)) {
+      this.session = {};
+      this.context.session.save();
+    }
+  }
+
   /**
    * Makes sure that context required for http calls exists
    * Gets basic store configuration from Magento
@@ -142,16 +152,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   findStoreConfig(code) {
     return this.storeConfigMap[code];
-  }
-
-  initialize(config) {
-    super.initialize(config);
-
-    const { customerToken } = this.session;
-    if (customerToken && !this.isCustomerTokenValid(customerToken)) {
-      this.session = {};
-      this.context.session.save();
-    }
   }
 
   /**
