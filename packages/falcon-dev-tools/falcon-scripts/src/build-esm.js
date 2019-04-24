@@ -6,7 +6,7 @@ module.exports = () => {
 
   const babelConfigPath = require.resolve('./babel/babel.config');
 
-  const result = spawn.sync(`babel src -d dist -x .js,.jsx,.ts,.tsx -s --config-file ${babelConfigPath}`, [], {
+  const result = spawn.sync(`babel`, ['src', '-d', 'dist', '-x', '.ts,.tsx', '-s', '--config-file', babelConfigPath], {
     stdio: 'inherit'
   });
 
