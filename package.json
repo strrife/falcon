@@ -11,6 +11,7 @@
     "test": "lerna run test:coverage",
     "coverage": "codecov -p packages",
     "watch": "lerna run watch --parallel",
+    "start": "cross-env CI=true lerna run start:dbg --scope=@deity/example-shop-with-blog* --parallel",
     "prepublish": "lerna run --scope=@deity/falcon-ui --stream prepare",
     "prepare": "lerna run --stream prepare",
     "lint": "eslint ./"
