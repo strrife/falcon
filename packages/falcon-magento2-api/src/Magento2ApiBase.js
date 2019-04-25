@@ -291,7 +291,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     }
 
     result.value = token;
-    this.tokenExpirationTime = null;
 
     if (validTime) {
       // convert validTime from hours to milliseconds and subtract 5 minutes buffer

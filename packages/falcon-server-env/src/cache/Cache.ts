@@ -6,6 +6,14 @@ export type SetCacheOptions = {
   tags?: string[];
 };
 
+export type ValueOptions = {
+  tags?: CacheTags;
+};
+
+export type CacheTags = {
+  [key: string]: string;
+};
+
 export type CacheResult = any;
 
 export type GetCacheCallbackResult =
@@ -36,16 +44,24 @@ export default class Cache implements KeyValueCache<CacheResult> {
     const cacheKey: string = typeof keyOrOptions === 'string' ? keyOrOptions : keyOrOptions.key;
     let value: CacheResult = await this.cacheProvider.get(cacheKey);
 
+    // Validating by cache tags
+    if (this.isValueWithOptions(value)) {
+      const { tags: cachedTags } = value.options as ValueOptions;
+      if (!this.areTagsValid(cachedTags as CacheTags)) {
+        value = undefined;
+      }
+    }
+
     if (typeof value === 'undefined' && typeof keyOrOptions === 'object') {
       const { callback } = keyOrOptions;
       let { options } = keyOrOptions;
       const cacheResult: GetCacheCallbackResult = await callback();
       if (typeof cacheResult !== 'undefined') {
-        if (typeof cacheResult === 'object' && 'value' in cacheResult) {
+        if (this.isValueWithOptions(cacheResult)) {
           ({ value } = cacheResult);
-          if (cacheResult.options) {
-            options = Object.assign({}, options, cacheResult.options);
-          }
+          const { options: cacheResultOptions = {} } = cacheResult;
+          // Merging cache options from the "callback" result and passed method argument
+          options = Object.assign({}, options, cacheResultOptions);
         } else {
           value = cacheResult;
         }
@@ -60,17 +76,93 @@ export default class Cache implements KeyValueCache<CacheResult> {
   }
 
   async set(key: string, value: CacheResult, options?: SetCacheOptions): Promise<void> {
-    return this.cacheProvider.set(key, value, options);
+    let cachedValue: CacheResult = value;
+    const { tags } = options || ({} as SetCacheOptions);
+    if (tags) {
+      const tagValues = await this.getTagValues(tags, true);
+      cachedValue = {
+        value: cachedValue,
+        options: {
+          tags: tagValues
+        }
+      };
+    }
+    return this.cacheProvider.set(key, cachedValue, options);
   }
 
-  async delete(key: string): Promise<boolean | void> {
+  /**
+   * Cache key or array of cache keys to be removed from the cache.
+   * Can be used to invalidate cache by tags
+   * @param {string|string[]} key One or more cache keys to be removed
+   * @return {Promise<boolean|void>} Result
+   */
+  async delete(key: string | string[]): Promise<boolean | void> {
+    if (Array.isArray(key)) {
+      await Promise.all(key.map(kKey => this.delete(kKey)));
+      return;
+    }
     return this.cacheProvider.delete(key);
   }
 
-  async deleteByTags(keys: string[]): Promise<void> {
-    if (!keys.length) {
-      return;
+  private async areTagsValid(tags: CacheTags): Promise<boolean> {
+    const tagNames: string[] = Object.keys(tags || {});
+    if (!tagNames.length) {
+      // No tags available - we have nothing to validate against to
+      return true;
     }
-    await Promise.all(keys.map(key => this.delete(key)));
+    const storedTags = await this.getTagValues(tagNames);
+
+    // Simple key count check
+    if (tagNames.length !== Object.keys(storedTags).length) {
+      return false;
+    }
+
+    // Pair checking
+    // eslint-disable-next-line no-restricted-syntax
+    for (const tagName of tagNames) {
+      const { [tagName]: tagValue } = tags;
+      const { [tagName]: storedTagValue } = storedTags;
+
+      // if values for the same tag name are different - terminate further checks, cached tags are invalid
+      if (storedTagValue !== tagValue) {
+        return false;
+      }
+    }
+
+    // Cache tags are valid
+    return true;
+  }
+
+  private async getTagValues(tags: string[], upsert: boolean = false): Promise<CacheTags> {
+    const tagValues: CacheTags = {};
+    await Promise.all(
+      tags.map(async tag => {
+        let tagValue = await this.get(tag);
+        if (typeof tagValue === 'undefined' && upsert) {
+          // For "upsert" flag - generate new tag value and save it to the cache
+          tagValue = this.generateTagValue();
+          await this.set(tag, tagValue);
+        }
+
+        if (tagValue) {
+          tagValues[tag] = tagValue;
+        }
+      })
+    );
+
+    return tagValues;
+  }
+
+  private isValueWithOptions(data: any): boolean {
+    return typeof data === 'object' && data.value && data.options;
+  }
+
+  /**
+   * Generating a short and safe tag value
+   * @return {string} Tag value
+   */
+  private generateTagValue(): string {
+    const date: Date = new Date();
+    return `${date.getSeconds()}${date.getMilliseconds()}`;
   }
 }
