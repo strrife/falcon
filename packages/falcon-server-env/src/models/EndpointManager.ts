@@ -23,10 +23,6 @@ export default abstract class EndpointManager {
     this.eventEmitter = params.eventEmitter;
     this.entries = params.entries || [];
     this.baseUrl = formatUrl(this.config);
-
-    if (!this.baseUrl) {
-      throw new Error('"host" and "protocol" are required!');
-    }
   }
 
   /**
