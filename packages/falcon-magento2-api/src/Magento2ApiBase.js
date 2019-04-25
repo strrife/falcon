@@ -2,7 +2,7 @@ const Logger = require('@deity/falcon-logger');
 const { ApiDataSource } = require('@deity/falcon-server-env');
 const { AuthenticationError, codes } = require('@deity/falcon-errors');
 const util = require('util');
-const addMinutes = require('date-fns/add_minutes');
+const addMilliseconds = require('date-fns/add_milliseconds');
 const _ = require('lodash');
 const OAuth = require('oauth');
 
@@ -287,6 +287,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
     Logger.info(`${this.name}: Retrieving admin token.`);
 
+    const dataNow = Date.now();
     const { data: token } = await this.post(
       '/integration/admin/token',
       {
@@ -295,9 +296,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       },
       { context: { skipAuth: true } }
     );
-    // todo: validTime should be extracted from the response, but after recent changes Magento doesn't send it
-    // so that should be changed once https://github.com/deity-io/falcon-magento2-development/issues/32 is resolved
-    const validTime = 1;
 
     if (token === undefined) {
       const noTokenError = new Error(
@@ -310,24 +308,20 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       Logger.info(`${this.name}: Admin token found.`);
     }
 
-    const result = {
-      value: token,
-      options: {
-        ttl: undefined
-      }
-    };
     this.tokenExpirationTime = null;
 
-    if (validTime) {
-      // convert validTime from hours to milliseconds and subtract 5 minutes buffer
-      const tokenTimeInMinutes = validTime * 60 - 5;
-      const tokenExpirationTime = addMinutes(Date.now(), tokenTimeInMinutes);
+    // FIXME: bellow code does not make sense anymore !!!
+    // according to https://github.com/deity-io/falcon-magento2-development/issues/32
+    // admin_token_ttl is returned via `/store/storeConfigs`, so if we want to cache adminToken
+    // we need to do it right after fetching `storeConfig`. Be aware that adminToken is required to fetch storeConfig :)
+    const validTime = 1;
+    const ttl = (validTime * 60 - 5) * 60;
+    Logger.debug(`${this.name}: Admin token valid for ${validTime} hours, till ${addMilliseconds(dataNow, ttl)}`);
 
-      result.options.ttl = tokenTimeInMinutes * 60;
-      Logger.debug(`${this.name}: Admin token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
-    }
-
-    return result;
+    return {
+      value: token,
+      options: { ttl }
+    };
   }
 
   /**
