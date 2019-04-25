@@ -4,6 +4,7 @@ const { AuthenticationError, codes } = require('@deity/falcon-errors');
 const util = require('util');
 const addMinutes = require('date-fns/add_minutes');
 const _ = require('lodash');
+const OAuth = require('oauth');
 
 /**
  * Base API features (configuration fetching, response parsing, token management etc.) required for communication
@@ -219,14 +220,37 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     const { useAdminToken } = req.context || {};
     const { customerToken } = this.session || {};
 
-    let token;
     // FIXME: it looks like `useAdminToken` flag is not used very often and do not cover all api requests
     // there is an assumption that if customer token is not provided then admin token should be used
     if (useAdminToken || !customerToken) {
-      token = await this.getAdminToken();
+      const { auth } = this.config;
+      if (auth.type === 'admin-token') {
+        const token = await this.getAdminToken();
+        req.headers.set('Authorization', `Bearer ${token}`);
+      } else if (auth.type === 'integration-token') {
+        const oauth = new OAuth.OAuth(
+          this.baseURL.concat('/oauth/token/request'),
+          this.baseURL.concat('/oauth/token/access'),
+          auth.consumerKey,
+          auth.consumerSecret,
+          '1',
+          null,
+          'HMAC-SHA1'
+        );
+
+        const url = await this.resolveURL(req);
+        req.params.forEach((value, key) => url.searchParams.append(key, value));
+
+        const authorizationHeader = oauth.authHeader(
+          url.toString(),
+          auth.accessToken,
+          auth.accessTokenSecret,
+          req.method
+        );
+        req.headers.set('Authorization', authorizationHeader);
+      }
     } else if (this.isCustomerTokenValid(customerToken)) {
-      // eslint-disable-next-line prefer-destructuring
-      token = customerToken.token;
+      req.headers.set('Authorization', `Bearer ${customerToken.token}`);
     } else {
       const sessionExpiredError = new AuthenticationError(`Customer token has expired.`);
       sessionExpiredError.statusCode = 401;
@@ -234,7 +258,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       throw sessionExpiredError;
     }
 
-    req.headers.set('Authorization', `Bearer ${token}`);
     req.headers.set('Content-Type', 'application/json');
     req.headers.set('Cookie', this.cookie);
   }
@@ -256,25 +279,22 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    * Retrieves admin token
    * @return {{ value: string, options: { ttl: number } }} Result
    */
-  async retrieveAdminToken() {
-    const result = {
-      value: undefined,
-      options: {
-        ttl: undefined
-      }
-    };
+  async adminToken() {
+    const { auth } = this.config || {};
+    if (auth.type !== 'admin-token') {
+      throw new Error(`API client is not configured for "admin-token" authentication method.`);
+    }
+
     Logger.info(`${this.name}: Retrieving admin token.`);
 
-    const response = await this.post(
+    const { data: token } = await this.post(
       '/integration/admin/token',
       {
-        username: this.config.username,
-        password: this.config.password
+        username: auth.username,
+        password: auth.password
       },
       { context: { skipAuth: true } }
     );
-
-    const { data: token } = response;
     // todo: validTime should be extracted from the response, but after recent changes Magento doesn't send it
     // so that should be changed once https://github.com/deity-io/falcon-magento2-development/issues/32 is resolved
     const validTime = 1;
@@ -283,7 +303,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       const noTokenError = new Error(
         'Magento Admin token not found. Did you install the latest version of the falcon-magento2-module on magento?'
       );
-
       noTokenError.statusCode = 501;
       noTokenError.code = codes.CUSTOMER_TOKEN_NOT_FOUND;
       throw noTokenError;
@@ -291,7 +310,12 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       Logger.info(`${this.name}: Admin token found.`);
     }
 
-    result.value = token;
+    const result = {
+      value: token,
+      options: {
+        ttl: undefined
+      }
+    };
     this.tokenExpirationTime = null;
 
     if (validTime) {
@@ -315,7 +339,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     if (!this.reqToken) {
       this.reqToken = this.cache.get({
         key: [this.name, 'admin_token'].join(':'),
-        callback: async () => this.retrieveAdminToken()
+        callback: async () => this.adminToken()
       });
     }
     return this.reqToken;
