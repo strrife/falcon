@@ -104,6 +104,11 @@ export default class Cache implements KeyValueCache<CacheResult> {
     return this.cacheProvider.delete(key);
   }
 
+  /**
+   * Check provided key-value tag object with the tags from the cache backend
+   * @param {CacheTags} tags Key-value object (tags)
+   * @return {Promise<boolean>} Result
+   */
   private async areTagsValid(tags: CacheTags): Promise<boolean> {
     const tagNames: string[] = Object.keys(tags || {});
     if (!tagNames.length) {
@@ -133,6 +138,12 @@ export default class Cache implements KeyValueCache<CacheResult> {
     return true;
   }
 
+  /**
+   * Fetch tag values from the cache backend
+   * @param {string[]} tags List of tags to be fetched from the Cache Backend
+   * @param {boolean} [upsert=false] Flag whether to upsert new tag values for missing tags
+   * @return {Promise<CacheTags>} Key-value object
+   */
   private async getTagValues(tags: string[], upsert: boolean = false): Promise<CacheTags> {
     const tagValues: CacheTags = {};
     await Promise.all(
@@ -153,6 +164,11 @@ export default class Cache implements KeyValueCache<CacheResult> {
     return tagValues;
   }
 
+  /**
+   * Check if the provided values contains cache "options" object
+   * @param {any} data Data to be checked
+   * @return {boolean} Result of check
+   */
   private isValueWithOptions(data: any): boolean {
     return typeof data === 'object' && data.value && data.options;
   }
