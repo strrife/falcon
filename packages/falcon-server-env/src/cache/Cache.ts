@@ -47,7 +47,10 @@ export default class Cache implements KeyValueCache<CacheResult> {
     // Validating by cache tags
     if (this.isValueWithOptions(value)) {
       const { tags: cachedTags } = value.options as ValueOptions;
-      if (!this.areTagsValid(cachedTags as CacheTags)) {
+      if (await this.areTagsValid(cachedTags as CacheTags)) {
+        ({ value } = value);
+      } else {
+        // If tags are invalid - set value as "not found"
         value = undefined;
       }
     }
