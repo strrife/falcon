@@ -41,6 +41,7 @@ module.exports = class ApiContainer extends BaseContainer {
         if (!ApiClass) {
           return;
         }
+
         const apiInstanceCb = apolloServerConfig => {
           /** @type {ApiDataSource} */
           const apiInstance = new ApiClass({
