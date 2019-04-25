@@ -36,6 +36,84 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
+   * Will send request
+   * @param {RequestOptions} req - request params
+   */
+  async willSendRequest(req) {
+    const { context } = req;
+
+    // Authorize all requests, except case when authorization is explicitly disabled via context settings
+    context.isAuthRequired = !context.skipAuth;
+
+    await super.willSendRequest(req);
+  }
+
+  /**
+   * Process received response data
+   * @param {Response} response - received response from the api
+   * @return {object} processed response data
+   */
+  async didReceiveResponse(response) {
+    const cookies = (response.headers.get('set-cookie') || '').split('; ');
+    const responseTags = response.headers.get('x-cache-tags');
+    const data = await super.didReceiveResponse(response);
+    const { pagination: paginationInput } = response.context;
+
+    const meta = {};
+
+    if (responseTags) {
+      meta.tags = responseTags.split(',');
+    }
+
+    if (cookies.length) {
+      // For "customer/token" API call - we don't get PHPSESSID cookie
+      cookies.forEach(cookieString => {
+        if (cookieString.match(/PHPSESSID=(\w+\d+)/)) {
+          this.cookie = cookieString.match(/PHPSESSID=(\w+\d+)/)[0];
+        }
+      });
+    }
+
+    // no pagination data requested - skip computation of pagination
+    if (!paginationInput) {
+      return { data, meta };
+    }
+
+    const { page, perPage } = paginationInput;
+    const { total_count: total } = data;
+
+    // process search criteria
+    const pagination = this.processPagination(total, page, perPage);
+    return { data: { items: data.items, filters: data.filters || [], pagination }, meta };
+  }
+
+  /**
+   * Handle error occurred during http response
+   * @param {Error} error Error to process
+   * @param {object} req Request object
+   */
+  didEncounterError(error, req) {
+    const { extensions } = error;
+    const { response } = extensions || {};
+
+    // Re-formatting error message using provided response data from Magento
+    if (response) {
+      const { body } = response;
+      const { message, parameters } = body || {};
+
+      if (Array.isArray(parameters)) {
+        error.message = util.format(message.replace(/(%\d)/g, '%s'), ...parameters);
+      } else if (typeof parameters === 'object') {
+        error.message = util.format(message.replace(/(%\w+\b)/g, '%s'), ...Object.values(parameters));
+      } else {
+        error.message = message;
+      }
+    }
+
+    super.didEncounterError(error, req);
+  }
+
+  /**
    * Makes sure that context required for http calls exists
    * Gets basic store configuration from Magento
    * @return {object} Magento config
@@ -203,13 +281,67 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
-   * Authorize all requests, except case when authorization is explicitly disabled via context settings
-   * @param {RequestOptions} req - request params
+   * Get Magento API authorized admin token or perform request to create it.
+   * "reqToken" property is being used for parallel calls
+   * @return {Promise<string>} token value
    */
-  async willSendRequest(req) {
-    const { context } = req;
-    context.isAuthRequired = !context.skipAuth;
-    await super.willSendRequest(req);
+  async getAdminToken() {
+    if (!this.reqToken) {
+      this.reqToken = this.cache.get({
+        key: [this.name, 'admin_token'].join(':'),
+        callback: async () => this.adminToken()
+      });
+    }
+    return this.reqToken;
+  }
+
+  /**
+   * Retrieves admin token
+   * @return {{ value: string, options: { ttl: number } }} Result
+   */
+  async adminToken() {
+    const { auth } = this.config || {};
+    if (auth.type !== 'admin-token') {
+      throw new Error(`API client is not configured for "admin-token" authentication method.`);
+    }
+
+    Logger.info(`${this.name}: Retrieving admin token.`);
+
+    const dataNow = Date.now();
+    const { data: token } = await this.post(
+      '/integration/admin/token',
+      {
+        username: auth.username,
+        password: auth.password
+      },
+      { context: { skipAuth: true } }
+    );
+
+    if (token === undefined) {
+      const noTokenError = new Error(
+        'Magento Admin token not found. Did you install the latest version of the falcon-magento2-module on magento?'
+      );
+      noTokenError.statusCode = 501;
+      noTokenError.code = codes.CUSTOMER_TOKEN_NOT_FOUND;
+      throw noTokenError;
+    } else {
+      Logger.info(`${this.name}: Admin token found.`);
+    }
+
+    this.tokenExpirationTime = null;
+
+    // FIXME: bellow code does not make sense anymore !!!
+    // according to https://github.com/deity-io/falcon-magento2-development/issues/32
+    // admin_token_ttl is returned via `/store/storeConfigs`, so if we want to cache adminToken
+    // we need to do it right after fetching `storeConfig`. Be aware that adminToken is required to fetch storeConfig :)
+    const validTime = 1;
+    const ttl = (validTime * 60 - 5) * 60;
+    Logger.debug(`${this.name}: Admin token valid for ${validTime} hours, till ${addMilliseconds(dataNow, ttl)}`);
+
+    return {
+      value: token,
+      options: { ttl }
+    };
   }
 
   /**
@@ -298,135 +430,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     }
 
     return authToken.expirationTime > Date.now();
-  }
-
-  /**
-   * Retrieves admin token
-   * @return {{ value: string, options: { ttl: number } }} Result
-   */
-  async adminToken() {
-    const { auth } = this.config || {};
-    if (auth.type !== 'admin-token') {
-      throw new Error(`API client is not configured for "admin-token" authentication method.`);
-    }
-
-    Logger.info(`${this.name}: Retrieving admin token.`);
-
-    const dataNow = Date.now();
-    const { data: token } = await this.post(
-      '/integration/admin/token',
-      {
-        username: auth.username,
-        password: auth.password
-      },
-      { context: { skipAuth: true } }
-    );
-
-    if (token === undefined) {
-      const noTokenError = new Error(
-        'Magento Admin token not found. Did you install the latest version of the falcon-magento2-module on magento?'
-      );
-      noTokenError.statusCode = 501;
-      noTokenError.code = codes.CUSTOMER_TOKEN_NOT_FOUND;
-      throw noTokenError;
-    } else {
-      Logger.info(`${this.name}: Admin token found.`);
-    }
-
-    this.tokenExpirationTime = null;
-
-    // FIXME: bellow code does not make sense anymore !!!
-    // according to https://github.com/deity-io/falcon-magento2-development/issues/32
-    // admin_token_ttl is returned via `/store/storeConfigs`, so if we want to cache adminToken
-    // we need to do it right after fetching `storeConfig`. Be aware that adminToken is required to fetch storeConfig :)
-    const validTime = 1;
-    const ttl = (validTime * 60 - 5) * 60;
-    Logger.debug(`${this.name}: Admin token valid for ${validTime} hours, till ${addMilliseconds(dataNow, ttl)}`);
-
-    return {
-      value: token,
-      options: { ttl }
-    };
-  }
-
-  /**
-   * Get Magento API authorized admin token or perform request to create it.
-   * "reqToken" property is being used for parallel calls
-   * @return {Promise<string>} token value
-   */
-  async getAdminToken() {
-    if (!this.reqToken) {
-      this.reqToken = this.cache.get({
-        key: [this.name, 'admin_token'].join(':'),
-        callback: async () => this.adminToken()
-      });
-    }
-    return this.reqToken;
-  }
-
-  /**
-   * Process received response data
-   * @param {Response} response - received response from the api
-   * @return {object} processed response data
-   */
-  async didReceiveResponse(response) {
-    const cookies = (response.headers.get('set-cookie') || '').split('; ');
-    const responseTags = response.headers.get('x-cache-tags');
-    const data = await super.didReceiveResponse(response);
-    const { pagination: paginationInput } = response.context;
-
-    const meta = {};
-
-    if (responseTags) {
-      meta.tags = responseTags.split(',');
-    }
-
-    if (cookies.length) {
-      // For "customer/token" API call - we don't get PHPSESSID cookie
-      cookies.forEach(cookieString => {
-        if (cookieString.match(/PHPSESSID=(\w+\d+)/)) {
-          this.cookie = cookieString.match(/PHPSESSID=(\w+\d+)/)[0];
-        }
-      });
-    }
-
-    // no pagination data requested - skip computation of pagination
-    if (!paginationInput) {
-      return { data, meta };
-    }
-
-    const { page, perPage } = paginationInput;
-    const { total_count: total } = data;
-
-    // process search criteria
-    const pagination = this.processPagination(total, page, perPage);
-    return { data: { items: data.items, filters: data.filters || [], pagination }, meta };
-  }
-
-  /**
-   * Handle error occurred during http response
-   * @param {Error} error Error to process
-   * @param {object} req Request object
-   */
-  didEncounterError(error, req) {
-    const { extensions } = error;
-    const { response } = extensions || {};
-
-    // Re-formatting error message using provided response data from Magento
-    if (response) {
-      const { body } = response;
-      const { message, parameters } = body || {};
-
-      if (Array.isArray(parameters)) {
-        error.message = util.format(message.replace(/(%\d)/g, '%s'), ...parameters);
-      } else if (typeof parameters === 'object') {
-        error.message = util.format(message.replace(/(%\w+\b)/g, '%s'), ...Object.values(parameters));
-      } else {
-        error.message = message;
-      }
-    }
-
-    super.didEncounterError(error, req);
   }
 
   /**
