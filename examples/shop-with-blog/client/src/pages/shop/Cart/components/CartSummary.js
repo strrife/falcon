@@ -48,7 +48,7 @@ const ApplyCouponForm = adopt({
 
   formik: ({ couponCode, applyCouponMutation, cancelCouponMutation, validate, render }) => (
     <Formik
-      initialValues={{ couponCode }}
+      initialValues={{ couponCode: couponCode || '' }}
       validate={validate}
       onSubmit={values => {
         if (!couponCode) {
