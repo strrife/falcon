@@ -213,6 +213,40 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
+   * Get Magento API authorized admin token or perform request to create it.
+   * "reqToken" property is being used for parallel calls
+   * @return {Promise<OAuth>} token value
+   */
+  async getOAuth() {
+    if (!this.oAuth) {
+      this.oAuth = this.cache.get({
+        key: [this.name, 'oAuth'].join(':'),
+        callback: async () => {
+          const { auth } = this.config;
+          if (auth.type !== 'integration-token') {
+            throw new Error(`API client is not configured for "integration-token" authentication method.`);
+          }
+
+          const oauth = new OAuth.OAuth(
+            this.baseURL.concat('/oauth/token/request'),
+            this.baseURL.concat('/oauth/token/access'),
+            auth.consumerKey,
+            auth.consumerSecret,
+            '1',
+            null,
+            'HMAC-SHA1'
+          );
+
+          // TODO: make full handshake
+
+          return oauth;
+        }
+      });
+    }
+    return this.oAuth;
+  }
+
+  /**
    * Sets authorization headers for the passed request
    * @param {RequestOptions} req - request input
    */
@@ -228,19 +262,10 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
         const token = await this.getAdminToken();
         req.headers.set('Authorization', `Bearer ${token}`);
       } else if (auth.type === 'integration-token') {
-        const oauth = new OAuth.OAuth(
-          this.baseURL.concat('/oauth/token/request'),
-          this.baseURL.concat('/oauth/token/access'),
-          auth.consumerKey,
-          auth.consumerSecret,
-          '1',
-          null,
-          'HMAC-SHA1'
-        );
-
         const url = await this.resolveURL(req);
         req.params.forEach((value, key) => url.searchParams.append(key, value));
 
+        const oauth = await this.getOAuth();
         const authorizationHeader = oauth.authHeader(
           url.toString(),
           auth.accessToken,
