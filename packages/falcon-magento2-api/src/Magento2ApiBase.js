@@ -280,6 +280,18 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
     throw new Error(`Attempt to authenticate the request using an unsupported method: "${authMethod}"!`);
   }
+  /**
+   * Check if authentication token is valid
+   * @param {AuthToken} authToken - authentication token
+   * @return {boolean} - true if token is valid
+   */
+  isCustomerTokenValid(authToken) {
+    if (!authToken || !authToken.token || !authToken.expirationTime) {
+      return false;
+    }
+
+    return authToken.expirationTime > Date.now();
+  }
 
   /**
    * Get Magento API authorized admin token or perform request to create it.
@@ -377,19 +389,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       });
     }
     return this.oAuth;
-  }
-
-  /**
-   * Check if authentication token is valid
-   * @param {AuthToken} authToken - authentication token
-   * @return {boolean} - true if token is valid
-   */
-  isCustomerTokenValid(authToken) {
-    if (!authToken || !authToken.token || !authToken.expirationTime) {
-      return false;
-    }
-
-    return authToken.expirationTime > Date.now();
   }
 
   /**
