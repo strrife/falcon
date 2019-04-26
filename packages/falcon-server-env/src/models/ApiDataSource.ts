@@ -192,7 +192,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = Gr
     init?: ContextRequestInit
   ): Promise<TResult> {
     const processedInit: ContextRequestInit = this.ensureContextPassed(init);
-    return super.get<TResult>(path, this.preprocessParams(params), processedInit);
+    return super.get<TResult>(path, this.toURLSearchParams(params), processedInit);
   }
 
   protected async post<TResult = any>(path: string, body?: Body, init?: ContextRequestInit): Promise<TResult> {
@@ -216,7 +216,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = Gr
     init?: ContextRequestInit
   ): Promise<TResult> {
     const processedInit: ContextRequestInit = this.ensureContextPassed(init);
-    return super.delete<TResult>(path, this.preprocessParams(params), processedInit);
+    return super.delete<TResult>(path, this.toURLSearchParams(params), processedInit);
   }
 
   protected async didReceiveResponse<TResult = any>(res: ContextFetchResponse, req: Request): Promise<TResult> {
@@ -279,7 +279,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = Gr
    * @param {URLSearchParamsInit} params Search params
    * @return {URLSearchParams} URLSearchParam
    */
-  private preprocessParams(params?: URLSearchParamsInit): URLSearchParams {
+  private toURLSearchParams(params?: URLSearchParamsInit): URLSearchParams {
     // qs.stringify assures that nested object will be converted correctly to search params
     const searchString: string = stringify(params, {
       encodeValuesOnly: true
