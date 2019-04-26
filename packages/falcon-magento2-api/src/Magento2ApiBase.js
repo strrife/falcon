@@ -32,71 +32,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
-   * Process received response data
-   * @param {Response} response - received response from the api
-   * @return {object} processed response data
-   */
-  async didReceiveResponse(response) {
-    const cookies = (response.headers.get('set-cookie') || '').split('; ');
-    const responseTags = response.headers.get('x-cache-tags');
-    const data = await super.didReceiveResponse(response);
-    const { pagination: paginationInput } = response.context;
-
-    const meta = {};
-
-    if (responseTags) {
-      meta.tags = responseTags.split(',');
-    }
-
-    if (cookies.length) {
-      // For "customer/token" API call - we don't get PHPSESSID cookie
-      cookies.forEach(cookieString => {
-        if (cookieString.match(/PHPSESSID=(\w+\d+)/)) {
-          this.cookie = cookieString.match(/PHPSESSID=(\w+\d+)/)[0];
-        }
-      });
-    }
-
-    // no pagination data requested - skip computation of pagination
-    if (!paginationInput) {
-      return { data, meta };
-    }
-
-    const { page, perPage } = paginationInput;
-    const { total_count: total } = data;
-
-    // process search criteria
-    const pagination = this.processPagination(total, page, perPage);
-    return { data: { items: data.items, filters: data.filters || [], pagination }, meta };
-  }
-
-  /**
-   * Handle error occurred during http response
-   * @param {Error} error Error to process
-   * @param {object} req Request object
-   */
-  didEncounterError(error, req) {
-    const { extensions } = error;
-    const { response } = extensions || {};
-
-    // Re-formatting error message using provided response data from Magento
-    if (response) {
-      const { body } = response;
-      const { message, parameters } = body || {};
-
-      if (Array.isArray(parameters)) {
-        error.message = util.format(message.replace(/(%\d)/g, '%s'), ...parameters);
-      } else if (typeof parameters === 'object') {
-        error.message = util.format(message.replace(/(%\w+\b)/g, '%s'), ...Object.values(parameters));
-      } else {
-        error.message = message;
-      }
-    }
-
-    super.didEncounterError(error, req);
-  }
-
-  /**
    * Makes sure that context required for http calls exists
    * Gets basic store configuration from Magento
    * @return {object} Magento config
@@ -455,6 +390,71 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     }
 
     return authToken.expirationTime > Date.now();
+  }
+
+  /**
+   * Process received response data
+   * @param {Response} response - received response from the api
+   * @return {object} processed response data
+   */
+  async didReceiveResponse(response) {
+    const cookies = (response.headers.get('set-cookie') || '').split('; ');
+    const responseTags = response.headers.get('x-cache-tags');
+    const data = await super.didReceiveResponse(response);
+    const { pagination: paginationInput } = response.context;
+
+    const meta = {};
+
+    if (responseTags) {
+      meta.tags = responseTags.split(',');
+    }
+
+    if (cookies.length) {
+      // For "customer/token" API call - we don't get PHPSESSID cookie
+      cookies.forEach(cookieString => {
+        if (cookieString.match(/PHPSESSID=(\w+\d+)/)) {
+          this.cookie = cookieString.match(/PHPSESSID=(\w+\d+)/)[0];
+        }
+      });
+    }
+
+    // no pagination data requested - skip computation of pagination
+    if (!paginationInput) {
+      return { data, meta };
+    }
+
+    const { page, perPage } = paginationInput;
+    const { total_count: total } = data;
+
+    // process search criteria
+    const pagination = this.processPagination(total, page, perPage);
+    return { data: { items: data.items, filters: data.filters || [], pagination }, meta };
+  }
+
+  /**
+   * Handle error occurred during http response
+   * @param {Error} error Error to process
+   * @param {object} req Request object
+   */
+  didEncounterError(error, req) {
+    const { extensions } = error;
+    const { response } = extensions || {};
+
+    // Re-formatting error message using provided response data from Magento
+    if (response) {
+      const { body } = response;
+      const { message, parameters } = body || {};
+
+      if (Array.isArray(parameters)) {
+        error.message = util.format(message.replace(/(%\d)/g, '%s'), ...parameters);
+      } else if (typeof parameters === 'object') {
+        error.message = util.format(message.replace(/(%\w+\b)/g, '%s'), ...Object.values(parameters));
+      } else {
+        error.message = message;
+      }
+    }
+
+    super.didEncounterError(error, req);
   }
 
   /**
