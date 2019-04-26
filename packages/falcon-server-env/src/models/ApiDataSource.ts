@@ -274,9 +274,13 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = Gr
     }
   }
 
-  private preprocessParams(params?: URLSearchParamsInit): URLSearchParamsInit {
-    // if params is plain object then convert it to URLSearchParam with help of qs.stringify - that way
-    // we can be sure that nested object will be converted correctly to search params
+  /**
+   * Converts params to URLSearchParam if it is plain object
+   * @param {URLSearchParamsInit} params Search params
+   * @return {URLSearchParams} URLSearchParam
+   */
+  private preprocessParams(params?: URLSearchParamsInit): URLSearchParams {
+    // qs.stringify assures that nested object will be converted correctly to search params
     const searchString: string = stringify(params, {
       encodeValuesOnly: true
     });
