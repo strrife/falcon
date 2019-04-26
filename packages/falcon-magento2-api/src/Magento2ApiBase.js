@@ -31,39 +31,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     this.itemUrlSuffix = this.config.itemUrlSuffix || '.html';
   }
 
-  initialize(config) {
-    super.initialize(config);
-
-    const { auth = {} } = this.config;
-    if (!isIntegrationAuthTypeSupported(auth.type)) {
-      throw new Error(`Unsupported auth.type: "${auth.type}"!`);
-    }
-
-    const { customerToken } = this.session;
-    if (customerToken && !this.isCustomerTokenValid(customerToken)) {
-      this.session = {};
-      this.context.session.save();
-    }
-  }
-
-  /**
-   * Will send request
-   * @param {RequestOptions} req - request params
-   */
-  async willSendRequest(req) {
-    const { context } = req;
-
-    // apply default request authorization convention
-    context.auth = context.auth === undefined ? getDefaultAuthMethod(!!this.session.customerToken) : context.auth;
-    // if isAuthRequired is not explicitly set, we infer it from context.auth
-    context.isAuthRequired = context.isAuthRequired === undefined ? !!context.auth : context.isAuthRequired;
-
-    req.headers.set('Content-Type', 'application/json');
-    req.headers.set('Cookie', this.cookie);
-
-    await super.willSendRequest(req);
-  }
-
   /**
    * Process received response data
    * @param {Response} response - received response from the api
@@ -249,6 +216,21 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     return this.storeConfigMap[code];
   }
 
+  initialize(config) {
+    super.initialize(config);
+
+    const { auth = {} } = this.config;
+    if (!isIntegrationAuthTypeSupported(auth.type)) {
+      throw new Error(`Unsupported auth.type: "${auth.type}"!`);
+    }
+
+    const { customerToken } = this.session;
+    if (customerToken && !this.isCustomerTokenValid(customerToken)) {
+      this.session = {};
+      this.context.session.save();
+    }
+  }
+
   /**
    * Helper method to recursively change key naming from underscore (snake case) to camelCase
    * @param {object} data - argument to process
@@ -294,6 +276,74 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   getPathWithPrefix(path) {
     const { storeCode = this.storePrefix } = this.session;
     return `/rest/${storeCode}/V1${path}`;
+  }
+
+  /**
+   * Will send request
+   * @param {RequestOptions} req - request params
+   */
+  async willSendRequest(req) {
+    const { context } = req;
+
+    // apply default request authorization convention
+    context.auth = context.auth === undefined ? getDefaultAuthMethod(!!this.session.customerToken) : context.auth;
+    // if isAuthRequired is not explicitly set, we infer it from context.auth
+    context.isAuthRequired = context.isAuthRequired === undefined ? !!context.auth : context.isAuthRequired;
+
+    req.headers.set('Content-Type', 'application/json');
+    req.headers.set('Cookie', this.cookie);
+
+    await super.willSendRequest(req);
+  }
+
+  /**
+   * Sets authorization headers for the passed request
+   * @param {RequestOptions} req - request input
+   */
+  async authorizeRequest(req) {
+    const { auth: authMethod } = req.context;
+
+    if (authMethod === AuthMethod.Integration) {
+      const { auth } = this.config;
+      if (auth.type === IntegrationAuthType.adminToken) {
+        const token = await this.getAdminToken();
+        req.headers.set('Authorization', `Bearer ${token}`);
+
+        return;
+      }
+
+      if (auth.type === IntegrationAuthType.integrationToken) {
+        const url = await this.resolveURL(req);
+        req.params.forEach((value, key) => url.searchParams.append(key, value));
+
+        const oauth = await this.getOAuth();
+        const authorizationHeader = oauth.authHeader(
+          url.toString(),
+          auth.accessToken,
+          auth.accessTokenSecret,
+          req.method
+        );
+        req.headers.set('Authorization', authorizationHeader);
+        return;
+      }
+    }
+
+    if (authMethod === AuthMethod.Customer) {
+      const { customerToken } = this.session || {};
+
+      if (this.isCustomerTokenValid(customerToken)) {
+        req.headers.set('Authorization', `Bearer ${customerToken.token}`);
+      } else {
+        const sessionExpiredError = new AuthenticationError(`Customer token has expired.`);
+        sessionExpiredError.statusCode = 401;
+        sessionExpiredError.code = codes.CUSTOMER_TOKEN_EXPIRED;
+        throw sessionExpiredError;
+      }
+
+      return;
+    }
+
+    throw new Error(`Attempt to authenticate the request using an unsupported method: "${authMethod}"!`);
   }
 
   /**
@@ -392,56 +442,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       });
     }
     return this.oAuth;
-  }
-
-  /**
-   * Sets authorization headers for the passed request
-   * @param {RequestOptions} req - request input
-   */
-  async authorizeRequest(req) {
-    const { auth: authMethod } = req.context;
-
-    if (authMethod === AuthMethod.Integration) {
-      const { auth } = this.config;
-      if (auth.type === IntegrationAuthType.adminToken) {
-        const token = await this.getAdminToken();
-        req.headers.set('Authorization', `Bearer ${token}`);
-
-        return;
-      }
-
-      if (auth.type === IntegrationAuthType.integrationToken) {
-        const url = await this.resolveURL(req);
-        req.params.forEach((value, key) => url.searchParams.append(key, value));
-
-        const oauth = await this.getOAuth();
-        const authorizationHeader = oauth.authHeader(
-          url.toString(),
-          auth.accessToken,
-          auth.accessTokenSecret,
-          req.method
-        );
-        req.headers.set('Authorization', authorizationHeader);
-        return;
-      }
-    }
-
-    if (authMethod === AuthMethod.Customer) {
-      const { customerToken } = this.session || {};
-
-      if (this.isCustomerTokenValid(customerToken)) {
-        req.headers.set('Authorization', `Bearer ${customerToken.token}`);
-      } else {
-        const sessionExpiredError = new AuthenticationError(`Customer token has expired.`);
-        sessionExpiredError.statusCode = 401;
-        sessionExpiredError.code = codes.CUSTOMER_TOKEN_EXPIRED;
-        throw sessionExpiredError;
-      }
-
-      return;
-    }
-
-    throw new Error(`Attempt to authenticate the request using an unsupported method: "${authMethod}"!`);
   }
 
   /**
