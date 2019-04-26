@@ -1,16 +1,17 @@
 const qs = require('qs');
+const url = require('url');
+const urlJoin = require('proper-url-join');
 const isEmpty = require('lodash/isEmpty');
 const pick = require('lodash/pick');
 const has = require('lodash/has');
 const forEach = require('lodash/forEach');
 const isPlainObject = require('lodash/isPlainObject');
-const urlJoin = require('proper-url-join');
 const addMinutes = require('date-fns/add_minutes');
+const { addResolveFunctionsToSchema } = require('graphql-tools');
 const { ApiUrlPriority, htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
-const { addResolveFunctionsToSchema } = require('graphql-tools');
 const Magento2ApiBase = require('./Magento2ApiBase');
-const url = require('url');
+const { AuthMethod } = require('./authorization');
 
 const FALCON_CART_ACTIONS = [
   '/save-payment-information-and-order',
@@ -110,7 +111,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Category>} - converted response with category data
    */
   async category(obj, { id }) {
-    const response = await this.get(`/categories/${id}`, {}, { context: { useAdminToken: true } });
+    const response = await this.get(`/categories/${id}`, {}, { context: { auth: AuthMethod.Integration } });
     return this.convertCategoryData(response);
   }
 
@@ -145,7 +146,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     try {
       response = await this.get(`/falcon/categories/${obj.data.id}/products`, query, {
         context: {
-          useAdminToken: true,
+          auth: AuthMethod.Integration,
           pagination
         }
       });
@@ -533,7 +534,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         searchCriteria
       },
       {
-        context: { useAdminToken: true }
+        context: { auth: AuthMethod.Integration }
       }
     );
 
@@ -786,7 +787,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Product>} product data
    */
   async product(obj, { id }) {
-    const productData = await this.get(`/products/${id}`, {}, { context: { useAdminToken: true } });
+    const productData = await this.get(`/products/${id}`, {}, { context: { auth: AuthMethod.Integration } });
     const product = this.reduceProduct(productData);
     return product;
   }
@@ -1018,7 +1019,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {CountriesList} parsed country list
    */
   async countries() {
-    const response = await this.get('/directory/countries', {}, { context: { useAdminToken: false } });
+    const response = await this.get('/directory/countries', {}, { context: { isAuthRequired: false } });
 
     const countries = response.data.map(item => ({
       code: item.id,
@@ -1049,7 +1050,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
           username: input.email,
           password: input.password
         },
-        { context: { skipAuth: true } }
+        { context: { isAuthRequired: false } }
       );
 
       const { data: token } = response;
@@ -1876,12 +1877,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       return {};
     }
 
-    const isLoggedIn = customerToken && customerToken.token;
-    const orderEndpoint = isLoggedIn
-      ? `/falcon/orders/${orderId}/order-info`
-      : `/falcon/guest-orders/${orderId}/order-info`;
+    const isCustomerLoggedIn = customerToken && customerToken.token;
+    const response = await (isCustomerLoggedIn
+      ? this.get(`/falcon/orders/${orderId}/order-info`, {}, { context: { auth: AuthMethod.Customer } })
+      : this.get(`/falcon/guest-orders/${orderId}/order-info`, {}, { context: { auth: AuthMethod.Integration } }));
 
-    const response = await this.get(orderEndpoint, {}, { context: { useAdminToken: !isLoggedIn } });
     response.data = this.convertKeys(response.data);
     response.data.paymentMethodName = response.data.payment.method;
 
@@ -1903,7 +1903,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const resp = await this.get(
       `/falcon/breadcrumbs`,
       { url: path.replace(/^\//, '') },
-      { context: { useAdminToken: true } }
+      { context: { auth: AuthMethod.Integration } }
     );
     return this.convertBreadcrumbs(this.convertKeys(resp.data));
   }

@@ -1,10 +1,16 @@
+const util = require('util');
+const _ = require('lodash');
+const OAuth = require('oauth');
+const addMilliseconds = require('date-fns/add_milliseconds');
 const Logger = require('@deity/falcon-logger');
 const { ApiDataSource } = require('@deity/falcon-server-env');
 const { AuthenticationError, codes } = require('@deity/falcon-errors');
-const util = require('util');
-const addMilliseconds = require('date-fns/add_milliseconds');
-const _ = require('lodash');
-const OAuth = require('oauth');
+const {
+  AuthMethod,
+  IntegrationAuthType,
+  getDefaultAuthMethod,
+  isIntegrationAuthTypeSupported
+} = require('./authorization');
 
 /**
  * Base API features (configuration fetching, response parsing, token management etc.) required for communication
@@ -28,6 +34,11 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   initialize(config) {
     super.initialize(config);
 
+    const { auth = {} } = this.config;
+    if (!isIntegrationAuthTypeSupported(auth.type)) {
+      throw new Error(`Unsupported auth.type: "${auth.type}"!`);
+    }
+
     const { customerToken } = this.session;
     if (customerToken && !this.isCustomerTokenValid(customerToken)) {
       this.session = {};
@@ -42,8 +53,13 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   async willSendRequest(req) {
     const { context } = req;
 
-    // Authorize all requests, except case when authorization is explicitly disabled via context settings
-    context.isAuthRequired = !context.skipAuth;
+    // apply default request authorization convention
+    context.auth = context.auth === undefined ? getDefaultAuthMethod(!!this.session.customerToken) : context.auth;
+    // if isAuthRequired is not explicitly set, we infer it from context.auth
+    context.isAuthRequired = context.isAuthRequired === undefined ? !!context.auth : context.isAuthRequired;
+
+    req.headers.set('Content-Type', 'application/json');
+    req.headers.set('Cookie', this.cookie);
 
     await super.willSendRequest(req);
   }
@@ -123,7 +139,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       const value = await this.cache.get({
         key: [this.name, this.session.storeCode || 'default', url].join(':'),
         callback: async () => {
-          const rawValue = await this.get(url, {}, { context: { useAdminToken: true } });
+          const rawValue = await this.get(url, {}, { context: { auth: AuthMethod.Integration } });
           return JSON.stringify(rawValue);
         },
         options: {
@@ -314,7 +330,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
         username: auth.username,
         password: auth.password
       },
-      { context: { skipAuth: true } }
+      { context: { isAuthRequired: false } }
     );
 
     if (token === undefined) {
@@ -383,17 +399,18 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    * @param {RequestOptions} req - request input
    */
   async authorizeRequest(req) {
-    const { useAdminToken } = req.context || {};
-    const { customerToken } = this.session || {};
+    const { auth: authMethod } = req.context;
 
-    // FIXME: it looks like `useAdminToken` flag is not used very often and do not cover all api requests
-    // there is an assumption that if customer token is not provided then admin token should be used
-    if (useAdminToken || !customerToken) {
+    if (authMethod === AuthMethod.Integration) {
       const { auth } = this.config;
-      if (auth.type === 'admin-token') {
+      if (auth.type === IntegrationAuthType.adminToken) {
         const token = await this.getAdminToken();
         req.headers.set('Authorization', `Bearer ${token}`);
-      } else if (auth.type === 'integration-token') {
+
+        return;
+      }
+
+      if (auth.type === IntegrationAuthType.integrationToken) {
         const url = await this.resolveURL(req);
         req.params.forEach((value, key) => url.searchParams.append(key, value));
 
@@ -405,18 +422,26 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
           req.method
         );
         req.headers.set('Authorization', authorizationHeader);
+        return;
       }
-    } else if (this.isCustomerTokenValid(customerToken)) {
-      req.headers.set('Authorization', `Bearer ${customerToken.token}`);
-    } else {
-      const sessionExpiredError = new AuthenticationError(`Customer token has expired.`);
-      sessionExpiredError.statusCode = 401;
-      sessionExpiredError.code = codes.CUSTOMER_TOKEN_EXPIRED;
-      throw sessionExpiredError;
     }
 
-    req.headers.set('Content-Type', 'application/json');
-    req.headers.set('Cookie', this.cookie);
+    if (authMethod === AuthMethod.Customer) {
+      const { customerToken } = this.session || {};
+
+      if (this.isCustomerTokenValid(customerToken)) {
+        req.headers.set('Authorization', `Bearer ${customerToken.token}`);
+      } else {
+        const sessionExpiredError = new AuthenticationError(`Customer token has expired.`);
+        sessionExpiredError.statusCode = 401;
+        sessionExpiredError.code = codes.CUSTOMER_TOKEN_EXPIRED;
+        throw sessionExpiredError;
+      }
+
+      return;
+    }
+
+    throw new Error(`Attempt to authenticate the request using an unsupported method: "${authMethod}"!`);
   }
 
   /**
