@@ -15,7 +15,10 @@ const ee = new EventEmitter2();
 const apiConfig = {
   config: {
     host: 'example.com',
-    protocol: 'http'
+    protocol: 'http',
+    auth: {
+      type: 'admin-token'
+    }
   },
   name: 'api-magento2',
   eventEmitter: ee,

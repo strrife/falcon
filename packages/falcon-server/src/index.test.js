@@ -9,7 +9,10 @@ describe('Falcon Server', () => {
     endpoints: {
       'fake-api': {
         package: 'fake-backend-api',
-        config: {}
+        config: {
+          host: 'fake.host.com',
+          protocol: 'http'
+        }
       }
     },
     session: {
