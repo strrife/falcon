@@ -298,10 +298,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    * @return {{ value: string, options: { ttl: number } }} Result
    */
   async adminToken() {
-    const { auth } = this.config || {};
-    if (auth.type !== 'admin-token') {
-      throw new Error(`API client is not configured for "admin-token" authentication method.`);
-    }
+    const { auth } = this.config;
 
     Logger.info(`${this.name}: Retrieving admin token.`);
 
