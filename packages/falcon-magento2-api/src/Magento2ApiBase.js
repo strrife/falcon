@@ -294,21 +294,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
-   * Get Magento API authorized admin token or perform request to create it.
-   * "reqToken" property is being used for parallel calls
-   * @return {Promise<string>} token value
-   */
-  async getAdminToken() {
-    if (!this.reqToken) {
-      this.reqToken = this.cache.get({
-        key: [this.name, 'admin_token'].join(':'),
-        callback: async () => this.adminToken()
-      });
-    }
-    return this.reqToken;
-  }
-
-  /**
    * Retrieves admin token
    * @return {{ value: string, options: { ttl: number } }} Result
    */
@@ -355,6 +340,21 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       value: token,
       options: { ttl }
     };
+  }
+
+  /**
+   * Get Magento API authorized admin token or perform request to create it.
+   * "reqToken" property is being used for parallel calls
+   * @return {Promise<string>} token value
+   */
+  async getAdminToken() {
+    if (!this.reqToken) {
+      this.reqToken = this.cache.get({
+        key: [this.name, 'admin_token'].join(':'),
+        callback: async () => this.adminToken()
+      });
+    }
+    return this.reqToken;
   }
 
   /**
