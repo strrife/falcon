@@ -38,6 +38,29 @@ where `xxxxxx` should be changed to a proper name of the patch.
 
 Next, follow steps 2, 3 and 4 to install required dependencies.
 
+## Falcon 1.0 to next
+
+API configuration
+configuration for falcon server
+
+- Change your `magento2` api config key to the following structure:
+
+```diff
+{
+  ...,
+  "magento2": {
+    "config":{
++     "auth": {
++       "type:" "admin-token"
+        "username": "[username]",
+        "password": "[password]"
++     }
+    }
+  }
+}
+
+```
+
 ## Falcon 1.0-rc3 to 1.0
 
 Patch for this update can be found [here](https://github.com/deity-io/falcon/releases/download/v1.0/falcon-update-100rc3-100.patch).
