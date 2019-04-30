@@ -33,7 +33,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     const getCachedValue = async url => {
       const value = await this.cache.get({
         key: [this.name, this.session.storeCode || 'default', url].join(':'),
-        callback: async () => {
+        fetchData: async () => {
           const rawValue = await this.get(url, {}, { context: { useAdminToken: true } });
           return JSON.stringify(rawValue);
         },
@@ -313,7 +313,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     if (!this.reqToken) {
       this.reqToken = this.cache.get({
         key: [this.name, 'admin_token'].join(':'),
-        callback: async () => this.retrieveAdminToken()
+        fetchData: async () => this.retrieveAdminToken()
       });
     }
     return this.reqToken;

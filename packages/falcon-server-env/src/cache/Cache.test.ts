@@ -33,11 +33,11 @@ describe('Cache', () => {
     expect(provider.get).toBeCalledWith('key');
   });
 
-  it('Should properly handle a callback option to fill the cache for "get" method', async () => {
+  it('Should properly handle a fetchData option to fill the cache for "get" method', async () => {
     provider.get = jest.fn(() => undefined);
     const value: string | undefined = await cache.get({
       key: 'key',
-      callback: () => Promise.resolve('new_value'),
+      fetchData: () => Promise.resolve('new_value'),
       options: {
         ttl: 1
       }
@@ -47,11 +47,11 @@ describe('Cache', () => {
     expect(provider.set).toBeCalledWith('key', 'new_value', { ttl: 1 });
   });
 
-  it('Should be able to define TTL dynamically from callback for "get" method', async () => {
+  it('Should be able to define TTL dynamically from fetchData for "get" method', async () => {
     provider.get = jest.fn(() => undefined);
     const value: string | undefined = await cache.get({
       key: 'key',
-      callback: () =>
+      fetchData: () =>
         Promise.resolve({
           value: 'value',
           options: {

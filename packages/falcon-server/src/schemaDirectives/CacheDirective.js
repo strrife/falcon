@@ -85,7 +85,7 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
         options: {
           ttl: ttl * 60 // minutes to seconds
         },
-        callback: async () => {
+        fetchData: async () => {
           const result = await resolver();
           return thisDirective.handleCacheCallbackResponse(result, parent, info);
         }

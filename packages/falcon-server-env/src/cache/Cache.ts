@@ -16,7 +16,7 @@ export type CacheTags = {
 
 export type CacheResult = any;
 
-export type GetCacheCallbackResult =
+export type GetCacheFetchResult =
   | CacheResult
   | {
       value: CacheResult;
@@ -25,7 +25,7 @@ export type GetCacheCallbackResult =
 
 export type GetCacheParams = {
   key: string;
-  callback: () => Promise<GetCacheCallbackResult>;
+  fetchData: () => Promise<GetCacheFetchResult>;
   options?: SetCacheOptions;
 };
 
@@ -56,14 +56,14 @@ export default class Cache implements KeyValueCache<CacheResult> {
     }
 
     if (typeof value === 'undefined' && typeof keyOrOptions === 'object') {
-      const { callback } = keyOrOptions;
+      const { fetchData } = keyOrOptions;
       let { options } = keyOrOptions;
-      const cacheResult: GetCacheCallbackResult = await callback();
+      const cacheResult: GetCacheFetchResult = await fetchData();
       if (typeof cacheResult !== 'undefined') {
         if (this.isValueWithOptions(cacheResult)) {
           ({ value } = cacheResult);
           const { options: cacheResultOptions = {} } = cacheResult;
-          // Merging cache options from the "callback" result and passed method argument
+          // Merging cache options from the "fetchData" result and passed method argument
           options = Object.assign({}, options, cacheResultOptions);
         } else {
           value = cacheResult;
