@@ -35,7 +35,8 @@ module.exports = class CacheDirective extends SchemaDirectiveVisitor {
       // Handling potential "addResolveFunctionsToSchema" calls that define dynamic resolvers
       set: newResolve => {
         resolve = newResolve;
-      }
+      },
+      configurable: true
     });
   }
 
