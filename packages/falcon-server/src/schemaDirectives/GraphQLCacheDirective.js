@@ -1,5 +1,5 @@
 const { SchemaDirectiveVisitor } = require('graphql-tools');
-const { defaultFieldResolver } = require('graphql');
+const { defaultFieldResolver, isScalarType } = require('graphql');
 const crypto = require('crypto');
 
 // Default cache TTL (10 minutes)
@@ -51,9 +51,7 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
     const thisDirective = this;
     return async function fieldResolver(parent, params, context, info) {
       const resolver = async () => resolve.call(this, parent, params, context, info);
-      const {
-        config: { cache: { resolvers: resolversCacheConfig = {} } = {} }
-      } = context;
+      const { config: { cache: { resolvers: resolversCacheConfig = {} } = {} } = {} } = context;
 
       if (resolversCacheConfig.enabled !== true) {
         // Schema caching is disabled globally
@@ -67,7 +65,7 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
       }
 
       const cacheContext = {};
-      Object.keys(context.dataSources).forEach(dsName => {
+      Object.keys(context.dataSources || {}).forEach(dsName => {
         const ds = context.dataSources[dsName];
         if (ds.getCacheContext) {
           cacheContext[dsName] = ds.getCacheContext();
@@ -117,7 +115,7 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
     return {
       value: resolverResult,
       options: {
-        ...(result.options || {}),
+        ...((result && result.options) || {}),
         tags
       }
     };
@@ -180,7 +178,10 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
    * @return {string|undefined} Name of the field with
    */
   findTagIdFieldName(objectType) {
-    const { _fields: fields } = this.getRootType(objectType);
+    const { _fields: fields, name: objectTypeName } = this.getRootType(objectType);
+    if (isScalarType(objectType)) {
+      throw new Error(`Caching for "${objectTypeName}" scalar type is not supported yet`);
+    }
 
     return Object.keys(fields).find(fieldName => {
       const { [fieldName]: fieldType } = fields;
@@ -196,6 +197,9 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
    * @return {undefined|string|string[]} Value or list of values (in case of "value" argument is an array)
    */
   extractFieldValue(value, fieldName) {
+    if (typeof value === 'undefined' && typeof fieldName === 'undefined') {
+      return undefined;
+    }
     if (Array.isArray(value)) {
       return value.map(item => this.extractFieldValue(item, fieldName));
     }
