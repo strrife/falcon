@@ -19,7 +19,7 @@ const PARENT_KEYWORD = '$parent';
  * }
  * ```
  */
-module.exports = class CacheDirective extends SchemaDirectiveVisitor {
+module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
   visitFieldDefinition(field) {
     const { ttl = DEFAULT_TTL } = this.args;
     let { resolve = defaultFieldResolver } = field;
