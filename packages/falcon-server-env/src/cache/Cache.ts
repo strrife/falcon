@@ -177,7 +177,7 @@ export default class Cache implements KeyValueCache<CacheResult> {
   }
 
   /**
-   * Generating a short and safe tag value
+   * Generating a short and safe enough tag value (second + ms = will ensure a unique value for the same tag)
    * @return {string} Tag value
    */
   private generateTagValue(): string {
