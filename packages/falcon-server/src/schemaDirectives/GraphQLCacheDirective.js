@@ -150,7 +150,8 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
    */
   getTagsForField(value, typeField, pathParts = []) {
     if (!pathParts.length) {
-      return this.generateCacheTags(typeField, this.extractFieldValue(value, this.findTagIdFieldName(typeField)));
+      const { name: typeName } = this.getRootType(typeField);
+      return this.generateCacheTags(typeName, this.extractFieldValue(value, this.findTagIdFieldName(typeField)));
     }
 
     const [currentPath, ...restIdPath] = pathParts;

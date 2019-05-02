@@ -119,35 +119,124 @@ describe('@cache directive', () => {
     expect(data).toEqual({ foo: { name: 'bar' } });
   });
 
-  it('Should properly extract tags', async () => {
-    const cacheSetSpy = jest.spyOn(cache, 'set');
-    const typeDefs = `
-      directive @cache(ttl: Int, idPath: [String]) on FIELD_DEFINITION
-      type Query {
-        foo: Foo @cache
-      }
-      type Foo {
-        id: ID!
-        name: String
-      }
-    `;
+  describe('cache by tags', () => {
+    it('Should properly extract tags for object type', async () => {
+      const cacheSetSpy = jest.spyOn(cache, 'set');
+      const typeDefs = `
+        directive @cache(ttl: Int, idPath: [String]) on FIELD_DEFINITION
+        type Query {
+          foo: Foo @cache
+        }
+        type Foo {
+          id: ID!
+          name: String
+        }
+      `;
 
-    const resolvers = {
-      Query: {
-        foo: () => ({
-          id: 1,
-          name: 'foo'
-        })
-      }
-    };
-    const query = `query { foo { id name } }`;
-    const expected = { foo: { id: '1', name: 'foo' } };
+      const resolvers = {
+        Query: {
+          foo: () => ({
+            id: 1,
+            name: 'foo'
+          })
+        }
+      };
+      const query = `query { foo { id name } }`;
+      const expected = { foo: { id: '1', name: 'foo' } };
 
-    const { data } = await run(typeDefs, resolvers, query, { cache, config });
-    expect(data).toEqual(expected);
-    expect(cacheSetSpy).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
-      tags: ['Foo', 'Foo:1'],
-      ttl: 600
+      const { data } = await run(typeDefs, resolvers, query, { cache, config });
+      expect(data).toEqual(expected);
+      expect(cacheSetSpy).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
+        tags: ['Foo', 'Foo:1'],
+        ttl: 600
+      });
+    });
+
+    it('Should be able to extract tags for the nested item list', async () => {
+      const cacheSetSpy = jest.spyOn(cache, 'set');
+      const typeDefs = `
+        directive @cache(ttl: Int, idPath: [String]) on FIELD_DEFINITION
+        type Query {
+          foo: Foo
+        }
+        type Foo {
+          id: ID!
+          name: String
+          list: [Bar] @cache(ttl: 1, idPath: ["$parent"])
+          barList: BarList @cache(ttl: 1, idPath: ["$parent", "items"])
+        }
+        type Bar {
+          id: ID!
+          name: String
+        }
+        type BarList {
+          items: [Bar]
+        }
+      `;
+
+      const barList = [
+        {
+          id: '1',
+          name: 'bar1'
+        },
+        {
+          id: '2',
+          name: 'bar2'
+        }
+      ];
+      const resolvers = {
+        Query: {
+          foo: () => ({
+            id: 1,
+            name: 'foo',
+            list: barList,
+            barList: {
+              items: barList
+            }
+          })
+        }
+      };
+      const query = `query {
+        foo {
+          id
+          name
+          list {
+            id
+            name
+          }
+          barList {
+            items {
+              id
+              name
+            }
+          }
+        }
+      }`;
+      const expected = {
+        foo: {
+          id: '1',
+          name: 'foo',
+          list: barList,
+          barList: {
+            items: barList
+          }
+        }
+      };
+
+      const { data } = await run(typeDefs, resolvers, query, { cache, config });
+      expect(data).toEqual(expected);
+      expect(cacheSetSpy).toHaveBeenCalledWith(
+        expect.anything(),
+        { items: barList },
+        {
+          tags: ['BarList', 'Foo:1', 'Bar', 'Bar:1', 'Bar:2'],
+          ttl: 60
+        }
+      );
+      expect(cacheSetSpy).toHaveBeenCalledWith(expect.anything(), barList, {
+        tags: ['Bar', 'Bar:1', 'Bar:2', 'Foo:1'],
+        ttl: 60
+      });
     });
   });
 });
