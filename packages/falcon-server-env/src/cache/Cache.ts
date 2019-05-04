@@ -23,7 +23,7 @@ export type GetCacheFetchResult =
       options?: SetCacheOptions;
     };
 
-export type GetCacheParams = {
+export type GetCacheOptions = {
   key: string;
   fetchData: () => Promise<GetCacheFetchResult>;
   options?: SetCacheOptions;
@@ -37,10 +37,10 @@ export default class Cache implements KeyValueCache<CacheResult> {
 
   /**
    * Returns cached value for the provided key or options object
-   * @param {string|GetCacheParams} keyOrOptions Cache key or object with specified callback method to provide
+   * @param {string|GetCacheOptions} keyOrOptions Cache key or object with specified callback method to provide
    * @return {Promise<string|undefined>} Cached value
    */
-  async get(keyOrOptions: string | GetCacheParams): Promise<CacheResult> {
+  async get(keyOrOptions: string | GetCacheOptions): Promise<CacheResult> {
     const cacheKey: string = typeof keyOrOptions === 'string' ? keyOrOptions : keyOrOptions.key;
     let value: CacheResult = await this.cacheProvider.get(cacheKey);
 
@@ -177,7 +177,7 @@ export default class Cache implements KeyValueCache<CacheResult> {
   }
 
   /**
-   * Generating a short and safe enough tag value (second + ms = will ensure a unique value for the same tag)
+   * Generating a short and safe enough tag value (second + ms = will ensure a unique value for the same tag name)
    * @return {string} Tag value
    */
   private generateTagValue(): string {
