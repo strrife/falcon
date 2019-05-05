@@ -121,6 +121,57 @@ describe('@cache directive', () => {
     expect(data).toEqual({ foo: { name: 'bar' } });
   });
 
+  it('Should handle falsy and disabled cache properly', async () => {
+    const cacheSetSpy = jest.spyOn(cache, 'set');
+    const typeDefs = `
+      ${directiveDefinition}
+      type Query {
+        foo: Foo @cache
+      }
+      type Foo {
+        id: ID!
+        name: String
+      }
+    `;
+    const typeDefsNonCached = `
+      ${directiveDefinition}
+      type Query {
+        foo: Foo @cache(ttl: 0)
+      }
+      type Foo {
+        id: ID!
+        name: String
+      }
+    `;
+    const resolvers = {
+      Query: {
+        foo: () => ({
+          id: '1',
+          name: 'foo2'
+        })
+      }
+    };
+    const query = `query {
+      foo {
+        id
+        name
+      }
+    }`;
+    const expected = {
+      foo: {
+        id: '1',
+        name: 'foo2'
+      }
+    };
+
+    const { data } = await run(typeDefsNonCached, resolvers, query, { cache, config });
+    expect(data).toEqual(expected);
+    expect(cacheSetSpy).not.toHaveBeenCalled();
+    const { data: data2 } = await run(typeDefs, resolvers, query, { cache });
+    expect(data2).toEqual(expected);
+    expect(cacheSetSpy).not.toHaveBeenCalled();
+  });
+
   describe('cache by tags', () => {
     it('Should properly extract tags for object type', async () => {
       const cacheSetSpy = jest.spyOn(cache, 'set');
@@ -199,57 +250,6 @@ describe('@cache directive', () => {
         tags: ['Foo', 'Foo:1'],
         ttl: customTtl
       });
-    });
-
-    it('Should handle falsy and disabled cache properly', async () => {
-      const cacheSetSpy = jest.spyOn(cache, 'set');
-      const typeDefs = `
-        ${directiveDefinition}
-        type Query {
-          foo: Foo @cache
-        }
-        type Foo {
-          id: ID!
-          name: String
-        }
-      `;
-      const typeDefsNonCached = `
-        ${directiveDefinition}
-        type Query {
-          foo: Foo @cache(ttl: 0)
-        }
-        type Foo {
-          id: ID!
-          name: String
-        }
-      `;
-      const resolvers = {
-        Query: {
-          foo: () => ({
-            id: '1',
-            name: 'foo2'
-          })
-        }
-      };
-      const query = `query {
-        foo {
-          id
-          name
-        }
-      }`;
-      const expected = {
-        foo: {
-          id: '1',
-          name: 'foo2'
-        }
-      };
-
-      const { data } = await run(typeDefsNonCached, resolvers, query, { cache, config });
-      expect(data).toEqual(expected);
-      expect(cacheSetSpy).not.toHaveBeenCalled();
-      const { data: data2 } = await run(typeDefs, resolvers, query, { cache });
-      expect(data2).toEqual(expected);
-      expect(cacheSetSpy).not.toHaveBeenCalled();
     });
 
     it('Should be able to extract tags for the nested item list', async () => {
