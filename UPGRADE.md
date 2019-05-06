@@ -40,8 +40,7 @@ Next, follow steps 2, 3 and 4 to install required dependencies.
 
 ## Falcon 1.0 to next
 
-API configuration
-configuration for falcon server
+API configuration for falcon server
 
 - Change your `magento2` api config key to the following structure:
 
