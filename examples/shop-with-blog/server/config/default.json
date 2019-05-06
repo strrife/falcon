@@ -92,6 +92,7 @@
     }
   },
   "cache": {
+    "url": "/cache",
     "resolvers": {
       "enabled": true,
       "default": {
