@@ -17,7 +17,7 @@ export const EmptyProductListLayout = themed({
 export const EmptyProductList: React.SFC<{}> = () => (
   <EmptyProductListLayout>
     <Text fontSize="md" mb="xs">
-      <T id="productsList.empty" />
+      <T id="productList.empty" />
     </Text>
   </EmptyProductListLayout>
 );

@@ -15,21 +15,21 @@ const OrderListItemArea = {
   actions: 'actions'
 };
 
-export const OrdersList: React.SFC<{ items: Order[] }> = ({ items }) => (
-  <OrdersListLayout>
+export const OrderList: React.SFC<{ items: Order[] }> = ({ items }) => (
+  <OrderListLayout>
     <OrderListHeader />
     <List css={{ listStyle: 'none' }}>
       {items.map(x => (
         <OrderListItem key={x.incrementId} {...x} />
       ))}
     </List>
-  </OrdersListLayout>
+  </OrderListLayout>
 );
 
-export const OrdersListLayout = themed({
+export const OrderListLayout = themed({
   tag: Box,
   defaultTheme: {
-    ordersListLayout: {
+    orderListLayout: {
       display: 'flex',
       flexDirection: 'column'
     }
@@ -68,7 +68,7 @@ export const OrderListItem: React.SFC<Order> = props => (
   <ListItem defaultTheme={orderListItemLayout}>
     <Box gridArea={OrderListItemArea.id} display="flex" alignContent="flex-start">
       <CellLabel>
-        <T id="ordersList.idLabel" />
+        <T id="orderList.idLabel" />
       </CellLabel>
       <Link as={RouterLink} to={`/account/orders/${props.entityId}`}>
         {props.incrementId}
@@ -76,31 +76,31 @@ export const OrderListItem: React.SFC<Order> = props => (
     </Box>
     <Box gridArea={OrderListItemArea.createdAt} display="flex" alignContent="flex-start">
       <CellLabel>
-        <T id="ordersList.createdAtLabel" />
+        <T id="orderList.createdAtLabel" />
       </CellLabel>
       <DateFormat value={props.createdAt} display="flex" />
     </Box>
     <Box gridArea={OrderListItemArea.shipTo} display="flex" alignContent="flex-start">
       <CellLabel>
-        <T id="ordersList.shipToLabel" />
+        <T id="orderList.shipToLabel" />
       </CellLabel>
       {`${props.customerFirstname} ${props.customerLastname}`}
     </Box>
     <Box gridArea={OrderListItemArea.grandTotal} display="flex" alignContent="flex-start">
       <CellLabel>
-        <T id="ordersList.grandTotalLabel" />
+        <T id="orderList.grandTotalLabel" />
       </CellLabel>
       <Price value={props.grandTotal} currency={props.orderCurrencyCode} display="flex" />
     </Box>
     <Box gridArea={OrderListItemArea.status} display="flex" alignContent="flex-start">
       <CellLabel>
-        <T id="ordersList.statusLabel" />
+        <T id="orderList.statusLabel" />
       </CellLabel>
       <T id="order.status" context={props.status || 'na'} />
     </Box>
     <Box gridArea={OrderListItemArea.actions} display="flex" alignContent="flex-start">
       <Link as={RouterLink} to={`/account/orders/${props.entityId}`}>
-        <T id="ordersList.viewOrderLink" />
+        <T id="orderList.viewOrderLink" />
       </Link>
     </Box>
   </ListItem>
@@ -136,22 +136,22 @@ const orderListHeaderLayout: DefaultThemeProps = {
 export const OrderListHeader = () => (
   <Box defaultTheme={orderListHeaderLayout}>
     <Box gridArea={OrderListItemArea.id}>
-      <T id="ordersList.idLabel" />
+      <T id="orderList.idLabel" />
     </Box>
     <Box gridArea={OrderListItemArea.createdAt}>
-      <T id="ordersList.createdAtLabel" />
+      <T id="orderList.createdAtLabel" />
     </Box>
     <Box gridArea={OrderListItemArea.shipTo}>
-      <T id="ordersList.shipToLabel" />
+      <T id="orderList.shipToLabel" />
     </Box>
     <Box gridArea={OrderListItemArea.grandTotal}>
-      <T id="ordersList.grandTotalLabel" />
+      <T id="orderList.grandTotalLabel" />
     </Box>
     <Box gridArea={OrderListItemArea.status}>
-      <T id="ordersList.statusLabel" />
+      <T id="orderList.statusLabel" />
     </Box>
     <Box gridArea={OrderListItemArea.actions}>
-      <T id="ordersList.actionsLabel" />
+      <T id="orderList.actionsLabel" />
     </Box>
   </Box>
 );

@@ -52,6 +52,7 @@ export default class Cache implements KeyValueCache<CacheResult> {
       } else {
         // If tags are invalid - set value as "not found"
         value = undefined;
+        await this.delete(cacheKey);
       }
     }
 

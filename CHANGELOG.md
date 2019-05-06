@@ -14,6 +14,10 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 - initial release
 
+### Falcon E-commerce UI Kit v0.4.1 (2019-04-11)
+
+- feat: (Breaking change) corrected names for collections `[noun]sList` --> `[noun]List` ([#427](https://github.com/deity-io/falcon/pull/427))
+
 ---
 
 ## Falcon v1.0
