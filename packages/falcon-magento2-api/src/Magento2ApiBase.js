@@ -280,6 +280,17 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
     throw new Error(`Attempt to authenticate the request using an unsupported method: "${authMethod}"!`);
   }
+
+  /**
+   * Determines if Customer is Logged In via checking if its token exists
+   * @return {boolean} - true if token exists
+   */
+  isCustomerLoggedIn() {
+    const { customerToken } = this.session;
+
+    return customerToken && customerToken.token;
+  }
+
   /**
    * Check if authentication token is valid
    * @param {AuthToken} authToken - authentication token

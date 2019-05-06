@@ -875,16 +875,17 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {object} - new cart data
    */
   async ensureCart() {
-    const { cart, customerToken: { token } = {} } = this.session;
+    const { cart } = this.session;
 
     if (cart && cart.quoteId) {
       return cart;
     }
 
-    const cartPath = token ? '/falcon/carts/mine' : '/guest-carts';
-    const response = await this.post(cartPath);
+    const response = await this.post(this.isCustomerLoggedIn() ? '/falcon/carts/mine' : '/guest-carts');
 
-    this.session.cart = { quoteId: response.data };
+    this.session.cart = {
+      quoteId: response.data
+    };
 
     return this.session.cart;
   }
@@ -894,13 +895,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {string} - prefix for cart endpoints
    */
   getCartPath() {
-    const { cart, customerToken = {} } = this.session;
+    const { cart } = this.session;
 
-    if (!customerToken.token && !cart) {
+    if (!this.isCustomerLoggedIn() && !cart) {
       throw new Error('No cart in session for not registered user.');
     }
 
-    return customerToken.token ? '/carts/mine' : `/guest-carts/${cart.quoteId}`;
+    return this.isCustomerLoggedIn() ? '/carts/mine' : `/guest-carts/${cart.quoteId}`;
   }
 
   /**
@@ -1150,9 +1151,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Customer>} - converted customer data
    */
   async customer() {
-    const { customerToken = {} } = this.session;
-
-    if (!customerToken.token) {
+    if (!this.isCustomerLoggedIn()) {
       // returning null cause that it is easier to check on client side if User is authenticated
       // in other cases we should throw AuthenticationError()
       return null;
@@ -1870,15 +1869,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Order>} last order data
    */
   async lastOrder() {
-    const { orderId, customerToken = {} } = this.session;
+    const { orderId } = this.session;
 
     if (!orderId) {
       Logger.warn(`${this.name} Trying to fetch order info without order id`);
       return {};
     }
 
-    const isCustomerLoggedIn = customerToken && customerToken.token;
-    const response = await (isCustomerLoggedIn
+    const response = await (this.isCustomerLoggedIn()
       ? this.get(`/falcon/orders/${orderId}/order-info`, {}, { context: { auth: AuthMethod.Customer } })
       : this.get(`/falcon/guest-orders/${orderId}/order-info`, {}, { context: { auth: AuthMethod.Integration } }));
 
