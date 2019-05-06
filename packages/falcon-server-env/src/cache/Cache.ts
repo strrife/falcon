@@ -46,7 +46,7 @@ export default class Cache implements KeyValueCache<CacheResult> {
 
     // Validating by cache tags
     if (this.isValueWithOptions(value)) {
-      const { tags: cachedTags } = value.options as ValueOptions;
+      const { tags: cachedTags = {} } = value.options as ValueOptions;
       if (await this.areTagsValid(cachedTags as CacheTags)) {
         ({ value } = value);
       } else {
@@ -114,7 +114,7 @@ export default class Cache implements KeyValueCache<CacheResult> {
    * @return {Promise<boolean>} Result
    */
   private async areTagsValid(tags: CacheTags): Promise<boolean> {
-    const tagNames: string[] = Object.keys(tags || {});
+    const tagNames: string[] = Object.keys(tags);
     if (!tagNames.length) {
       // No tags available - we have nothing to validate against to
       return true;
