@@ -6,7 +6,7 @@ import { T } from '@deity/falcon-i18n';
 export const NoOrders: React.SFC<{}> = () => (
   <Box display="flex" flexDirection="column" alignItems="center" p="sm">
     <Text fontSize="md" mb="xs">
-      <T id="ordersList.empty" />
+      <T id="orderList.empty" />
     </Text>
     <Button as={RouterLink} to="/">
       <T id="cart.goShoppingButton" />

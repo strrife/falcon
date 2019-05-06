@@ -3,7 +3,7 @@ import { PaginationQuery, Pagination } from './../types';
 import { Query, FetchMore } from './../Query';
 import { Order } from './../Order';
 
-export const GET_ORDERS_LIST = gql`
+export const GET_ORDER_LIST = gql`
   query Orders($pagination: PaginationInput) {
     orders(pagination: $pagination) {
       items {
@@ -53,9 +53,9 @@ const fetchMore: FetchMore<OrdersData, PaginationQuery> = (data, apolloFetchMore
     }
   });
 
-export class OrdersListQuery extends Query<OrdersData, PaginationQuery> {
+export class OrderListQuery extends Query<OrdersData, PaginationQuery> {
   static defaultProps = {
-    query: GET_ORDERS_LIST,
+    query: GET_ORDER_LIST,
     fetchMore,
     notifyOnNetworkStatusChange: true
   };

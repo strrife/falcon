@@ -1,10 +1,10 @@
 import React from 'react';
 import { List, themed } from '@deity/falcon-ui';
 
-export const FilterItemsList = themed({
+export const FilterItemList = themed({
   tag: List,
   defaultTheme: {
-    filterItemsList: {
+    filterItemList: {
       css: {
         listStyle: 'none'
       }
