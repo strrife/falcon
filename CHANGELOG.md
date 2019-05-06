@@ -12,7 +12,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 ### Falcon Magento2 API v
 
-- added oAuth authorization for integration requests ([#165](https://github.com/deity-io/falcon/issues/165))
+- added oAuth authorization for integration requests ([#424](https://github.com/deity-io/falcon/pull/424))
 
 ---
 
