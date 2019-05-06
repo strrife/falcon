@@ -6,17 +6,11 @@ declare type UrlParams = {
   port?: number;
 };
 
-export const canFormatUrl = ({ protocol, host }: UrlParams) => {
-  if (!protocol || !host) {
-    return false;
-  }
-
-  return true;
-};
+export const canFormatUrl = ({ host }: UrlParams) => !!host;
 
 export const formatUrl = ({ protocol, host, port }: UrlParams): string => {
-  if (!canFormatUrl({ protocol, host })) {
-    throw new Error('"host" and "protocol" are required!');
+  if (!canFormatUrl({ host })) {
+    throw new Error('"host" is required!');
   }
 
   return format({
