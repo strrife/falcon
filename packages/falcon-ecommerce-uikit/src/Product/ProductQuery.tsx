@@ -2,11 +2,9 @@ import gql from 'graphql-tag';
 import { Query } from '../Query';
 
 export type ProductPrice = {
-  regular: string;
-  special: string;
-  minTier: string;
-  min: string;
-  max: string;
+  regular: Number;
+  special?: Number;
+  minTier?: Number;
 };
 
 export type Product = {
@@ -18,8 +16,6 @@ export type Product = {
   thumbnail?: string;
   price: ProductPrice;
   priceType: string;
-  minPrice: string;
-  maxPrice: string;
   currency: string;
   description: string;
   stock: any; // Stock

@@ -297,11 +297,9 @@ Mixed result for "Mutation.placeOrder" for
 union PlaceOrderResult = PlaceOrderSuccessfulResult | PlaceOrder3dSecureResult
 
 type ProductPrice {
-  regular: String
-  special: String
-  minTier: String
-  min: String
-  max: String
+  regular: Float!
+  special: Float
+  minTier: Float
 }
 
 type Product {
@@ -314,8 +312,7 @@ type Product {
   thumbnail: String
   price: ProductPrice!
   priceType: String
-  minPrice: String
-  maxPrice: String
+
   currency: String
   description: String
   stock: Stock
