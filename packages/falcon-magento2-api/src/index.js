@@ -602,26 +602,27 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   reduceProduct(response, currency = null) {
     this.convertAttributesSet(response);
-    let { data } = response;
-    data = this.convertKeys(data);
+    const data = this.convertKeys(response.data);
     const { extensionAttributes, customAttributes } = data;
 
-    data.urlPath = this.convertPathToUrl(data.urlPath);
-    data.currency = currency;
-    data.name = htmlHelpers.stripHtml(data.name);
-    data.priceType = customAttributes.priceType || '1';
+    const result = {
+      ...data,
+      urlPath: this.convertPathToUrl(data.urlPath),
+      currency,
+      name: htmlHelpers.stripHtml(data.name),
+      priceType: customAttributes.priceType || '1'
+    };
 
-    const { minPrice, maxPrice } = extensionAttributes || {};
-    const dataPrice = typeof data.price === 'number' ? { regularPrice: data.price } : data.price;
+    const { minPrice } = extensionAttributes || {};
+
+    const dataPrice = typeof data.price === 'object' ? data.price : { regularPrice: data.price };
     const price = {
       regular: minPrice && dataPrice.regularPrice === 0 ? minPrice : dataPrice.regularPrice,
       special: dataPrice.specialPrice,
-      minTier: dataPrice.minTierPrice,
-      min: minPrice,
-      max: maxPrice
+      minTier: dataPrice.minTierPrice
     };
 
-    data.price = price;
+    result.price = price;
 
     if (extensionAttributes) {
       const {
@@ -634,18 +635,18 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
       // temporary workaround until Magento returns product id correctly
       if (!data.id) {
-        data.id = data.sku;
+        result.id = data.sku;
       }
 
       // old API passes thumbnailUrl in extension_attributes, new api passes image field directly
-      data.thumbnail = thumbnailUrl || data.image;
-      data.gallery = mediaGallerySizes || [];
+      result.thumbnail = thumbnailUrl || data.image;
+      result.gallery = mediaGallerySizes || [];
 
       if (stockItem) {
-        data.stock = pick(stockItem, 'qty', 'isInStock');
+        result.stock = pick(stockItem, 'qty', 'isInStock');
       }
 
-      data.configurableOptions = configurableProductOptions || [];
+      result.configurableOptions = configurableProductOptions || [];
 
       if (bundleProductOptions) {
         // remove extension attributes for option product links
@@ -657,23 +658,22 @@ module.exports = class Magento2Api extends Magento2ApiBase {
           option.productLinks = reducedProductLink;
         });
 
-        data.bundleOptions = bundleProductOptions;
+        result.bundleOptions = bundleProductOptions;
       }
     }
 
     if (customAttributes && !isEmpty(customAttributes)) {
-      const { description, metaTitle, metaDescription, metaKeyword } = customAttributes;
-
-      data.description = description;
-
-      data.seo = {
-        title: metaTitle,
-        description: metaDescription,
-        keywords: metaKeyword
+      result.description = customAttributes.description;
+      result.seo = {
+        title: customAttributes.metaTitle,
+        description: customAttributes.metaDescription,
+        keywords: customAttributes.metaKeyword
       };
     }
 
-    return response;
+    return {
+      data: result
+    };
   }
 
   /**
