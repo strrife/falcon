@@ -606,18 +606,20 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const data = this.convertKeys(response.data);
     const { extensionAttributes, customAttributes } = data;
 
-    const resolveProductPrice = x =>
-      // const priceTiers = x.tierPrices || [];
+    const resolveProductPrice = product => {
+      const { tierPrices = [] } = product;
 
-      ({
-        regular: tryParseNumber(x.price) || 0.0,
-        special: tryParseNumber(x.customAttributes && x.customAttributes.specialPrice)
-        // minTier: dataPrice.minTierPrice
-      });
-    const resolveProductListItemPrice = x => ({
-      regular: tryParseNumber(x.price.regularPrice) || 0.0,
-      special: tryParseNumber(x.price.specialPrice),
-      minTier: tryParseNumber(x.price.minTierPrice)
+      return {
+        regular: tryParseNumber(product.price) || 0.0,
+        special: tryParseNumber(product.customAttributes && product.customAttributes.specialPrice),
+        minTier: tierPrices.length ? Math.min(...tierPrices.map(x => tryParseNumber(x.value))) : undefined
+      };
+    };
+
+    const resolveProductListItemPrice = product => ({
+      regular: tryParseNumber(product.price.regularPrice) || 0.0,
+      special: tryParseNumber(product.price.specialPrice),
+      minTier: tryParseNumber(product.price.minTierPrice)
     });
 
     const result = {
