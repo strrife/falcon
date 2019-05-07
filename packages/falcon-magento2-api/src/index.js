@@ -111,7 +111,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async category(obj, { id }) {
     const response = await this.get(`/categories/${id}`, {}, { context: { useAdminToken: true } });
-    return this.convertCategoryData(response);
+    return this.convertCategory(response);
   }
 
   /**
@@ -170,28 +170,28 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Process category data from Magento2 response
-   * @param {object} categoryObject - categoryObject from Magento2 backend
+   * @param {object} data - categoryObject from Magento2 backend
    * @return {Category} processed response
    */
-  convertCategoryData(categoryObject) {
-    this.convertAttributesSet(categoryObject);
-    const { custom_attributes: customAttributes } = categoryObject;
+  convertCategory(data) {
+    this.convertAttributesSet(data);
+    const { custom_attributes: customAttributes } = data;
 
     // for specific category record
     let urlPath = customAttributes.url_path;
 
     if (!urlPath) {
       // in case of categories tree - URL path can be found in data.url_path
-      urlPath = categoryObject.url_path;
-      delete categoryObject.url_path;
+      urlPath = data.url_path;
+      delete data.url_path;
     }
 
-    delete categoryObject.created_at;
-    delete categoryObject.product_count;
+    delete data.created_at;
+    delete data.product_count;
 
-    categoryObject.urlPath = this.convertPathToUrl(urlPath);
+    data.urlPath = this.convertPathToUrl(urlPath);
 
-    return categoryObject;
+    return data;
   }
 
   /**
@@ -555,7 +555,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
       // If category
       if (element.level) {
-        this.convertCategoryData(element);
+        this.convertCategory(element);
       }
     });
 
