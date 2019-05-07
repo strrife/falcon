@@ -225,7 +225,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     // if isAuthRequired is not explicitly set, we infer it from context.auth
     context.isAuthRequired = context.isAuthRequired === undefined ? !!context.auth : context.isAuthRequired;
 
-    req.headers.set('Content-Type', 'application/json');
     req.headers.set('Cookie', this.cookie);
 
     await super.willSendRequest(req);
