@@ -564,25 +564,27 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Reduce product data to what is needed.
-   * @param {object} productObject - API response from Magento2 backend
+   * @param {object} product - API response from Magento2 backend
    * @param {string} [currency] - currency code
    * @return {Product} - reduced data
    */
-  reduceProduct(productObject, currency = null) {
-    this.convertAttributesSet(productObject);
-    const productObj = this.convertKeys(productObject);
-    const { extensionAttributes = {}, customAttributes } = productObj;
+  reduceProduct(product, currency = null) {
+    this.convertAttributesSet(product);
+    const reducedProduct = this.convertKeys(product);
+    const { extensionAttributes = {}, customAttributes } = reducedProduct;
     const catalogPrice = extensionAttributes.catalogDisplayPrice;
     const price =
       catalogPrice ||
-      (typeof productObj.price.regularPrice !== 'undefined' ? productObj.price.regularPrice : productObj.price);
+      (typeof reducedProduct.price.regularPrice !== 'undefined'
+        ? reducedProduct.price.regularPrice
+        : reducedProduct.price);
 
-    productObj.urlPath = this.convertPathToUrl(productObj.urlPath);
-    productObj.priceAmount = productObj.price;
-    productObj.currency = currency;
-    productObj.price = price;
-    productObj.name = htmlHelpers.stripHtml(productObj.name);
-    productObj.priceType = customAttributes.priceType || '1';
+    reducedProduct.urlPath = this.convertPathToUrl(reducedProduct.urlPath);
+    reducedProduct.priceAmount = reducedProduct.price;
+    reducedProduct.currency = currency;
+    reducedProduct.price = price;
+    reducedProduct.name = htmlHelpers.stripHtml(reducedProduct.name);
+    reducedProduct.priceType = customAttributes.priceType || '1';
 
     if (extensionAttributes && !isEmpty(extensionAttributes)) {
       const {
@@ -596,38 +598,38 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       } = extensionAttributes;
 
       // temporary workaround until Magento returns product id correctly
-      if (!productObj.id) {
-        productObj.id = productObj.sku;
+      if (!reducedProduct.id) {
+        reducedProduct.id = reducedProduct.sku;
       }
 
       // old API passes thumbnailUrl in extension_attributes, new api passes image field directly
-      productObj.thumbnail = thumbnailUrl || productObj.image;
-      productObj.gallery = mediaGallerySizes || [];
+      reducedProduct.thumbnail = thumbnailUrl || reducedProduct.image;
+      reducedProduct.gallery = mediaGallerySizes || [];
 
       if (minPrice) {
-        productObj.minPrice = minPrice;
+        reducedProduct.minPrice = minPrice;
         delete extensionAttributes.minPrice;
       }
 
       if (maxPrice) {
-        productObj.maxPrice = maxPrice;
+        reducedProduct.maxPrice = maxPrice;
         delete extensionAttributes.maxPrice;
       }
 
-      if (productObj.minPrice && price === 0) {
-        productObj.price = productObj.minPrice;
+      if (reducedProduct.minPrice && price === 0) {
+        reducedProduct.price = reducedProduct.minPrice;
       }
 
-      if (productObj.minPrice === productObj.maxPrice) {
-        delete productObj.minPrice;
-        delete productObj.maxPrice;
+      if (reducedProduct.minPrice === reducedProduct.maxPrice) {
+        delete reducedProduct.minPrice;
+        delete reducedProduct.maxPrice;
       }
 
       if (stockItem) {
-        productObj.stock = pick(stockItem, 'qty', 'isInStock');
+        reducedProduct.stock = pick(stockItem, 'qty', 'isInStock');
       }
 
-      productObj.configurableOptions = configurableProductOptions || [];
+      reducedProduct.configurableOptions = configurableProductOptions || [];
 
       if (bundleProductOptions) {
         // remove extension attributes for option product links
@@ -639,23 +641,23 @@ module.exports = class Magento2Api extends Magento2ApiBase {
           option.productLinks = reducedProductLink;
         });
 
-        productObj.bundleOptions = bundleProductOptions;
+        reducedProduct.bundleOptions = bundleProductOptions;
       }
     }
 
     if (customAttributes && !isEmpty(customAttributes)) {
       const { description, metaTitle, metaDescription, metaKeyword } = customAttributes;
 
-      productObj.description = description;
+      reducedProduct.description = description;
 
-      productObj.seo = {
+      reducedProduct.seo = {
         title: metaTitle,
         description: metaDescription,
         keywords: metaKeyword
       };
     }
 
-    return productObj;
+    return reducedProduct;
   }
 
   /**
