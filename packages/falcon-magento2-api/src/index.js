@@ -4,13 +4,14 @@ const pick = require('lodash/pick');
 const has = require('lodash/has');
 const forEach = require('lodash/forEach');
 const isPlainObject = require('lodash/isPlainObject');
+const url = require('url');
 const urlJoin = require('proper-url-join');
 const addMinutes = require('date-fns/add_minutes');
+const { addResolveFunctionsToSchema } = require('graphql-tools');
 const { ApiUrlPriority, htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
-const { addResolveFunctionsToSchema } = require('graphql-tools');
 const Magento2ApiBase = require('./Magento2ApiBase');
-const url = require('url');
+const { tryParseNumber } = require('./infrastructure/number');
 
 const FALCON_CART_ACTIONS = [
   '/save-payment-information-and-order',
@@ -605,24 +606,29 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const data = this.convertKeys(response.data);
     const { extensionAttributes, customAttributes } = data;
 
+    const resolveProductPrice = x =>
+      // const priceTiers = x.tierPrices || [];
+
+      ({
+        regular: tryParseNumber(x.price) || 0.0,
+        special: tryParseNumber(x.customAttributes && x.customAttributes.specialPrice)
+        // minTier: dataPrice.minTierPrice
+      });
+    const resolveProductListItemPrice = x => ({
+      regular: tryParseNumber(x.price.regularPrice) || 0.0,
+      special: tryParseNumber(x.price.specialPrice),
+      minTier: tryParseNumber(x.price.minTierPrice)
+    });
+
     const result = {
       ...data,
       urlPath: this.convertPathToUrl(data.urlPath),
       currency,
       name: htmlHelpers.stripHtml(data.name),
-      priceType: customAttributes.priceType || '1'
+      priceType: customAttributes.priceType || '1',
+      price: typeof data.price === 'object' ? resolveProductListItemPrice(data) : resolveProductPrice(data),
+      priceTiers: []
     };
-
-    const { minPrice } = extensionAttributes || {};
-
-    const dataPrice = typeof data.price === 'object' ? data.price : { regularPrice: data.price };
-    const price = {
-      regular: minPrice && dataPrice.regularPrice === 0 ? minPrice : dataPrice.regularPrice,
-      special: dataPrice.specialPrice,
-      minTier: dataPrice.minTierPrice
-    };
-
-    result.price = price;
 
     if (extensionAttributes) {
       const {
