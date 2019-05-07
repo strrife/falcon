@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { Query } from '../Query';
 import { Product } from '../Product/ProductQuery';
 
-export const GET_PRODUCTS_LIST = gql`
+export const GET_PRODUCT_LIST = gql`
   query Products {
     products {
       items {
@@ -24,8 +24,8 @@ export type Products = {
   items: Product[];
 };
 
-export class ProductsListQuery extends Query<Products> {
+export class ProductListQuery extends Query<Products> {
   static defaultProps = {
-    query: GET_PRODUCTS_LIST
+    query: GET_PRODUCT_LIST
   };
 }

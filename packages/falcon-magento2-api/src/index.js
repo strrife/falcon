@@ -1002,7 +1002,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Fetch country data
-   * @return {CountriesList} parsed country list
+   * @return {CountryList} parsed country list
    */
   async countries() {
     const response = await this.get('/directory/countries', {}, { context: { useAdminToken: false } });
