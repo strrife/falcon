@@ -638,7 +638,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       ...data,
       id: data.id ? data.id : data.sku, // temporary workaround until Magento returns product id correctly
       urlPath: this.convertPathToUrl(data.urlPath),
-      priceType: customAttributes.priceType || '1',
       price: isProductListItem ? resolveProductListItemPrice(data) : resolveProductPrice(data),
       tierPrices: isProductListItem ? undefined : resolveTierPrices(data),
       currency,

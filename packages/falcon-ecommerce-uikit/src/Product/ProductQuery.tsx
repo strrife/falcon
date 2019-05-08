@@ -9,7 +9,6 @@ export type Product = {
   urlPath: string;
   thumbnail?: string;
   price: ProductPrice;
-  priceType: string;
   tierPrices?: ProductTierPrice[];
   currency: string;
   description: string;
