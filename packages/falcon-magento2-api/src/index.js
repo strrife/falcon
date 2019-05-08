@@ -604,7 +604,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   reduceProduct(response, currency = null) {
     this.convertAttributesSet(response);
     const data = this.convertKeys(response.data);
-    const { extensionAttributes, customAttributes } = data;
+    const { extensionAttributes, customAttributes = {} } = data;
 
     const resolveTierPrices = product => {
       const { tierPrices = [] } = product;
@@ -631,16 +631,24 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       minTier: tryParseNumber(product.price.minTierPrice)
     });
 
+    // FIXME: spread this `reduceProduct` function into separate functions for Product and ProductListItem
     const isProductListItem = typeof data.price === 'object';
 
     const result = {
       ...data,
+      id: data.id ? data.id : data.sku, // temporary workaround until Magento returns product id correctly
       urlPath: this.convertPathToUrl(data.urlPath),
       currency,
       name: htmlHelpers.stripHtml(data.name),
       priceType: customAttributes.priceType || '1',
       price: isProductListItem ? resolveProductListItemPrice(data) : resolveProductPrice(data),
-      tierPrices: isProductListItem ? undefined : resolveTierPrices(data)
+      tierPrices: isProductListItem ? undefined : resolveTierPrices(data),
+      description: customAttributes.description,
+      seo: {
+        title: customAttributes.metaTitle,
+        description: customAttributes.metaDescription,
+        keywords: customAttributes.metaKeyword
+      }
     };
 
     if (extensionAttributes) {
@@ -651,11 +659,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         configurableProductOptions,
         bundleProductOptions
       } = extensionAttributes;
-
-      // temporary workaround until Magento returns product id correctly
-      if (!data.id) {
-        result.id = data.sku;
-      }
 
       // old API passes thumbnailUrl in extension_attributes, new api passes image field directly
       result.thumbnail = thumbnailUrl || data.image;
@@ -679,15 +682,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
         result.bundleOptions = bundleProductOptions;
       }
-    }
-
-    if (customAttributes && !isEmpty(customAttributes)) {
-      result.description = customAttributes.description;
-      result.seo = {
-        title: customAttributes.metaTitle,
-        description: customAttributes.metaDescription,
-        keywords: customAttributes.metaKeyword
-      };
     }
 
     return {
