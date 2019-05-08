@@ -7,10 +7,10 @@ export type SetCacheOptions = {
 };
 
 export type ValueOptions = {
-  tags?: CacheTags;
+  tags?: TagMap;
 };
 
-export type CacheTags = {
+export type TagMap = {
   [key: string]: string;
 };
 
@@ -42,8 +42,8 @@ export default class Cache<V = any> implements KeyValueCache<V> {
     let value: GetCacheFetchResult = await this.cacheProvider.get(key);
     // Validating by cache tags
     if (this.isValueWithOptions(value)) {
-      const { tags: cachedTags = {} } = value.options as ValueOptions;
-      if (await this.areTagsValid(cachedTags as CacheTags)) {
+      const { tags: tagMap = {} } = value.options as ValueOptions;
+      if (await this.isTagMapValid(tagMap as TagMap)) {
         ({ value } = value);
       } else {
         // If tags are invalid - set value as "not found"
@@ -79,7 +79,7 @@ export default class Cache<V = any> implements KeyValueCache<V> {
     let cachedValue: V | GetCacheFetchResult = value;
     const { tags } = options || ({} as SetCacheOptions);
     if (tags) {
-      const tagValues = await this.getTagValues(tags, true);
+      const tagValues = await this.getTagsByNames(tags, true);
       cachedValue = {
         value: cachedValue,
         options: {
@@ -106,16 +106,16 @@ export default class Cache<V = any> implements KeyValueCache<V> {
 
   /**
    * Check provided key-value tag object with the tags from the cache backend
-   * @param {CacheTags} tags Key-value object (tags)
+   * @param {TagMap} tagMap Key-value object (tags)
    * @return {Promise<boolean>} Result
    */
-  private async areTagsValid(tags: CacheTags): Promise<boolean> {
-    const tagNames: string[] = Object.keys(tags);
+  private async isTagMapValid(tagMap: TagMap): Promise<boolean> {
+    const tagNames: string[] = Object.keys(tagMap);
     if (!tagNames.length) {
       // No tags available - we have nothing to validate against to
       return true;
     }
-    const storedTags = await this.getTagValues(tagNames);
+    const storedTags = await this.getTagsByNames(tagNames);
 
     // Simple key count check
     if (tagNames.length !== Object.keys(storedTags).length) {
@@ -123,31 +123,19 @@ export default class Cache<V = any> implements KeyValueCache<V> {
     }
 
     // Pair checking
-    // eslint-disable-next-line no-restricted-syntax
-    for (const tagName of tagNames) {
-      const { [tagName]: tagValue } = tags;
-      const { [tagName]: storedTagValue } = storedTags;
-
-      // if values for the same tag name are different - terminate further checks, cached tags are invalid
-      if (storedTagValue !== tagValue) {
-        return false;
-      }
-    }
-
-    // Cache tags are valid
-    return true;
+    return !tagNames.some(name => tagMap[name] !== storedTags[name]);
   }
 
   /**
-   * Fetch tag values from the cache backend
-   * @param {string[]} tags List of tags to be fetched from the Cache Backend
-   * @param {boolean} [createIfMissing=false] Flag whether to create new tag values for missing tags
-   * @return {Promise<CacheTags>} Key-value object
+   * Load tag values from the cache backend
+   * @param {string[]} names List of tag names to be loaded from the Cache Backend
+   * @param {boolean} [createIfMissing=false] Flag whether to create new values for missing tags
+   * @return {Promise<TagMap>} Key-value object
    */
-  private async getTagValues(tags: string[], createIfMissing: boolean = false): Promise<CacheTags> {
-    const tagValues: CacheTags = {};
+  private async getTagsByNames(names: string[], createIfMissing: boolean = false): Promise<TagMap> {
+    const tagValues: TagMap = {};
     await Promise.all(
-      tags.map(async tag => {
+      names.map(async tag => {
         let tagValue: any = await this.get(tag);
         if (typeof tagValue === 'undefined' && createIfMissing) {
           // For "createIfMissing" flag - generate new tag value and save it to the cache
