@@ -3,6 +3,7 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
 import { I18n } from '@deity/falcon-i18n';
 import { themed, Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
+import { Locale } from './../Locale';
 import { Breadcrumbs } from '../Breadcrumbs';
 import { ProductGallery } from './ProductGallery';
 import { ProductConfigurableOptions } from './ConfigurableOptions';
@@ -192,11 +193,19 @@ export class Product extends React.PureComponent<{ product: ProductModel }> {
                     ) : (
                       <Price fontSize="xl" value={product.price.regular} />
                     )}
-                    {(product.tierPrices || []).map(x => (
-                      <Text key={x.qty}>
-                        Buy {x.qty} for {x.value} and safe {x.discount}%
-                      </Text>
-                    ))}
+                    <Locale>
+                      {({ priceFormat }) =>
+                        (product.tierPrices || []).map(x => (
+                          <Text key={x.qty}>
+                            {t('product.tierPriceDescription', {
+                              qty: x.qty,
+                              price: priceFormat(x.value),
+                              discount: x.discount
+                            })}
+                          </Text>
+                        ))
+                      }
+                    </Locale>
                   </Box>
                   <ProductConfigurableOptions
                     options={product.configurableOptions}
