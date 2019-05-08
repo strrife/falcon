@@ -11,6 +11,7 @@ import { OpenSidebarMutation } from '../Sidebar';
 import { ProductConfigurator } from './ProductConfigurator';
 import { Price } from '../Locale';
 import { toGridTemplate } from '../helpers';
+import { Product as ProductModel } from './ProductQuery';
 
 export const ProductLayout = themed({
   tag: 'div',
@@ -134,8 +135,8 @@ const ProductForm = adopt({
   )
 });
 
-export class Product extends React.PureComponent<{ product: any }> {
-  createValidator(product: any, t: any) {
+export class Product extends React.PureComponent<{ product: ProductModel }> {
+  createValidator(product: ProductModel, t: any) {
     return (values: any) => {
       const errors: any = {};
 
@@ -191,6 +192,11 @@ export class Product extends React.PureComponent<{ product: any }> {
                     ) : (
                       <Price fontSize="xl" value={product.price.regular} />
                     )}
+                    {(product.tierPrices || []).map(x => (
+                      <Text key={x.qty}>
+                        Buy {x.qty} for {x.value} and safe {x.discount}%
+                      </Text>
+                    ))}
                   </Box>
                   <ProductConfigurableOptions
                     options={product.configurableOptions}

@@ -607,11 +607,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { extensionAttributes, customAttributes = {} } = data;
 
     const resolveTierPrices = product => {
-      const { tierPrices = [] } = product;
+      const { price, tierPrices = [] } = product;
+      const regularPrice = tryParseNumber(price) || 0.0;
 
       return tierPrices.map(x => ({
         qty: x.qty,
-        value: x.value
+        value: x.value,
+        discount: regularPrice ? 100 - (100 * x.value) / regularPrice : 0.0
       }));
     };
 

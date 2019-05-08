@@ -18,6 +18,7 @@ export type Product = {
   bundleOptions: []; // [BundleProductOption]
   gallery: []; // [GalleryEntry]
   seo: any; // ProductSeo
+  breadcrumbs: any;
 };
 
 export type ProductPrice = {
@@ -29,6 +30,7 @@ export type ProductPrice = {
 export type ProductTierPrice = {
   qty: number;
   value: number;
+  discount: number;
 };
 
 export const GET_PRODUCT = gql`
@@ -42,6 +44,11 @@ export const GET_PRODUCT = gql`
         regular
         special
         minTier
+      }
+      tierPrices {
+        qty
+        value
+        discount
       }
       currency
       gallery {

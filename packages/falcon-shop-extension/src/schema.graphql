@@ -305,6 +305,7 @@ type ProductPrice {
 type ProductTierPrice {
   qty: Float!
   value: Float!
+  discount: Float!
 }
 
 type Product {
