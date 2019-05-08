@@ -1,24 +1,19 @@
 import React from 'react';
 import { themed, Text } from '@deity/falcon-ui';
-import { LocaleContext } from './LocaleContext';
+import { Locale, DateTimeFormatOptions } from './LocaleContext';
 
 type DateFormatProps = {
   value: string;
   locale?: string;
-  options?: Intl.DateTimeFormatOptions;
+  options?: DateTimeFormatOptions;
 };
 
 const DateFormatInnerDOM: React.SFC<DateFormatProps> = ({ value, locale, options, ...rest }) => (
-  <LocaleContext.Consumer>
-    {localeContext => {
-      const localeCode = locale || localeContext.locale;
-      const localFallback = 'en';
-
-      return (
-        <Text {...rest}>{new Intl.DateTimeFormat([localeCode, localFallback], options).format(new Date(value))}</Text>
-      );
-    }}
-  </LocaleContext.Consumer>
+  <Locale>
+    {({ dateTimeFormat }) => (
+      <Text {...rest}>{dateTimeFormat(value, { ...options, ...(locale ? { locale } : {}) })}</Text>
+    )}
+  </Locale>
 );
 
 export const DateFormat = themed({
