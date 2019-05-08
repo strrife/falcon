@@ -1,12 +1,6 @@
 import gql from 'graphql-tag';
 import { Query } from '../Query';
 
-export type ProductPrice = {
-  regular: Number;
-  special?: Number;
-  minTier?: Number;
-};
-
 export type Product = {
   id: string;
   sku: string;
@@ -16,6 +10,7 @@ export type Product = {
   thumbnail?: string;
   price: ProductPrice;
   priceType: string;
+  tierPrices?: ProductTierPrice[];
   currency: string;
   description: string;
   stock: any; // Stock
@@ -24,6 +19,17 @@ export type Product = {
   bundleOptions: []; // [BundleProductOption]
   gallery: []; // [GalleryEntry]
   seo: any; // ProductSeo
+};
+
+export type ProductPrice = {
+  regular: number;
+  special?: number;
+  minTier?: number;
+};
+
+export type ProductTierPrice = {
+  qty: number;
+  value: number;
 };
 
 export const GET_PRODUCT = gql`
