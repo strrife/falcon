@@ -606,6 +606,15 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const data = this.convertKeys(response.data);
     const { extensionAttributes, customAttributes } = data;
 
+    const resolveTierPrices = product => {
+      const { tierPrices = [] } = product;
+
+      return tierPrices.map(x => ({
+        qty: x.qty,
+        value: x.value
+      }));
+    };
+
     const resolveProductPrice = product => {
       const { tierPrices = [] } = product;
 
@@ -622,14 +631,16 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       minTier: tryParseNumber(product.price.minTierPrice)
     });
 
+    const isProductListItem = typeof data.price === 'object';
+
     const result = {
       ...data,
       urlPath: this.convertPathToUrl(data.urlPath),
       currency,
       name: htmlHelpers.stripHtml(data.name),
       priceType: customAttributes.priceType || '1',
-      price: typeof data.price === 'object' ? resolveProductListItemPrice(data) : resolveProductPrice(data),
-      priceTiers: []
+      price: isProductListItem ? resolveProductListItemPrice(data) : resolveProductPrice(data),
+      tierPrices: isProductListItem ? undefined : resolveTierPrices(data)
     };
 
     if (extensionAttributes) {
