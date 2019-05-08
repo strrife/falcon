@@ -79,8 +79,7 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
         .update([fieldName, JSON.stringify([parent, params, cacheContext])].join(':'))
         .digest('base64');
 
-      return context.cache.get({
-        key: cacheKey,
+      return context.cache.get(cacheKey, {
         options: {
           ttl: ttl * 60 // minutes to seconds
         },
