@@ -16,9 +16,16 @@ export type Product = {
   type: string;
   configurableOptions: []; // [ConfigurableProductOption]
   bundleOptions: []; // [BundleProductOption]
-  gallery: []; // [GalleryEntry]
+  gallery: GalleryEntry[];
   seo: any; // ProductSeo
   breadcrumbs: any;
+};
+
+export type GalleryEntry = {
+  type: string;
+  full: string;
+  thumbnail?: string;
+  embedUrl?: string;
 };
 
 export type ProductPrice = {

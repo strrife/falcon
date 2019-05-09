@@ -46,15 +46,18 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         weightUnit: () => this.session.weightUnit
       },
       Product: {
-        breadcrumbs: (...args) => this.breadcrumbs(...args)
+        price: (...x) => this.productPrice(...x),
+        tierPrices: (...x) => this.productTierPrices(...x),
+        configurableOptions: (...x) => this.configurableProductOptions(...x),
+        breadcrumbs: (...x) => this.breadcrumbs(...x)
       },
       Category: {
-        breadcrumbs: (...args) => this.breadcrumbs(...args),
-        products: (...args) => this.categoryProducts(...args),
-        children: (...args) => this.categoryChildren(...args)
+        breadcrumbs: (...x) => this.breadcrumbs(...x),
+        products: (...x) => this.categoryProducts(...x),
+        children: (...x) => this.categoryChildren(...x)
       },
       PaymentMethod: {
-        config: (...args) => this.getPaymentMethodConfig(...args)
+        config: (...x) => this.getPaymentMethodConfig(...x)
       }
     };
     Logger.debug(`${this.name}: Adding additional resolve functions`);
@@ -604,47 +607,26 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   reduceProduct(response, currency = null) {
     this.convertAttributesSet(response);
     const data = this.convertKeys(response.data);
-    const { extensionAttributes, customAttributes = {} } = data;
+    const { customAttributes = {} } = data;
 
-    const resolveTierPrices = product => {
-      const { price, tierPrices = [] } = product;
-      const regularPrice = tryParseNumber(price) || 0.0;
+    const resolveGallery = product => {
+      const { extensionAttributes: attrs, mediaGallerySizes } = product;
+      if (attrs && attrs.mediaGallerySizes) {
+        return attrs.mediaGallerySizes;
+      }
 
-      return tierPrices.map(x => ({
-        qty: x.qty,
-        value: x.value,
-        discount: regularPrice ? 100 - (100 * x.value) / regularPrice : 0.0
-      }));
+      return mediaGallerySizes || [];
     };
-
-    const resolveProductPrice = product => {
-      const { tierPrices = [] } = product;
-
-      return {
-        regular: tryParseNumber(product.price) || 0.0,
-        special: tryParseNumber(product.customAttributes && product.customAttributes.specialPrice),
-        minTier: tierPrices.length ? Math.min(...tierPrices.map(x => tryParseNumber(x.value))) : undefined
-      };
-    };
-
-    const resolveProductListItemPrice = product => ({
-      regular: tryParseNumber(product.price.regularPrice) || 0.0,
-      special: tryParseNumber(product.price.specialPrice),
-      minTier: tryParseNumber(product.price.minTierPrice)
-    });
-
-    // FIXME: spread this `reduceProduct` function into separate functions for Product and ProductListItem
-    const isProductListItem = typeof data.price === 'object';
 
     const result = {
       ...data,
-      id: data.id ? data.id : data.sku, // temporary workaround until Magento returns product id correctly
+      id: data.id || data.sku, // temporary workaround until Magento returns product id correctly
+      sku: data.sku,
       urlPath: this.convertPathToUrl(data.urlPath),
-      price: isProductListItem ? resolveProductListItemPrice(data) : resolveProductPrice(data),
-      tierPrices: isProductListItem ? undefined : resolveTierPrices(data),
       currency,
       name: htmlHelpers.stripHtml(data.name),
       description: customAttributes.description,
+      gallery: resolveGallery(data),
       seo: {
         title: customAttributes.metaTitle,
         description: customAttributes.metaDescription,
@@ -652,18 +634,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       }
     };
 
-    if (extensionAttributes) {
-      const {
-        thumbnailUrl,
-        mediaGallerySizes,
-        stockItem,
-        configurableProductOptions,
-        bundleProductOptions
-      } = extensionAttributes;
+    if (data.extensionAttributes) {
+      const { thumbnailUrl, stockItem, configurableProductOptions, bundleProductOptions } = data.extensionAttributes;
 
       // old API passes thumbnailUrl in extension_attributes, new api passes image field directly
       result.thumbnail = thumbnailUrl || data.image;
-      result.gallery = mediaGallerySizes || [];
 
       if (stockItem) {
         result.stock = pick(stockItem, 'qty', 'isInStock');
@@ -688,6 +663,78 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     return {
       data: result
     };
+  }
+
+  /**
+   * Resolve Product Price from Product
+   * @param {Object} obj - parent (MagentoProduct or MagentoProductListItem)
+   * @return {ProductPrice} product price
+   */
+  productPrice({ data }) {
+    const { price } = data;
+
+    const isProductListItem = typeof price === 'object';
+    if (isProductListItem) {
+      return {
+        regular: tryParseNumber(price.regularPrice) || 0.0,
+        special: tryParseNumber(price.specialPrice),
+        minTier: tryParseNumber(price.minTierPrice)
+      };
+    }
+    const { tierPrices = [], customAttributes } = data;
+
+    return {
+      regular: tryParseNumber(price) || 0.0,
+      special: tryParseNumber(customAttributes && customAttributes.specialPrice),
+      minTier: tierPrices.length ? Math.min(...tierPrices.map(x => tryParseNumber(x.value))) : undefined
+    };
+  }
+
+  /**
+   * Resolve Product Tier Price from Product
+   * @param {Object} obj - parent (MagentoProduct or MagentoProductListItem)
+   * @return {TierPrice[]} product price
+   */
+  productTierPrices({ data }) {
+    const isProductListItem = typeof data.price === 'object';
+    if (isProductListItem) {
+      throw new Error('fetching product by its id is not implemented!');
+    }
+
+    const { price, tierPrices = [] } = data;
+    const regularPrice = tryParseNumber(price.regularPrice) || 0.0;
+
+    return tierPrices.map(x => ({
+      qty: x.qty,
+      value: x.value,
+      discount: regularPrice ? 100 - (100 * x.value) / regularPrice : 0.0
+    }));
+  }
+
+  /**
+   * Resolve Configurable Product Options from Product
+   * @param {Object} obj - parent (MagentoProduct or MagentoProductListItem)
+   * @return {ConfigurableProductOption} configurable product options
+   */
+  configurableProductOptions({ data }) {
+    const { extensionAttributes = {} } = data;
+
+    if (extensionAttributes.configurableProductOptions === undefined) {
+      throw new Error('fetching product by its id is not implemented!');
+    }
+
+    const { configurableProductOptions = [] } = extensionAttributes;
+
+    return configurableProductOptions.map(({ values = [], ...restOptions }) => ({
+      ...restOptions,
+      values: values.length
+        ? values.map(x => ({
+            valueIndex: x.valueIndex,
+            inStock: x.extensionAttributes.inStock,
+            label: x.extensionAttributes.label
+          }))
+        : []
+    }));
   }
 
   /**
@@ -786,7 +833,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Product>} product data
    */
   async product(obj, { id }) {
-    const response = await this.get(`/products/${id}`, {}, { context: { useAdminToken: true } });
+    const response = await this.get(`/falcon/products/${id}`, {}, { context: { useAdminToken: true } });
     const product = this.reduceProduct(response);
 
     return product;
