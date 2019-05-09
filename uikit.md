@@ -1,14 +1,31 @@
 # Re-work of falcon-ecommerce-uikit library
 
-## Goals:
+The purpose of this issue is to plan rework of the `@deity/falcon-ecommerce-uikit` package. The initial idea was to have a set of UI components that help building UI for shops. Unfortunately over the time we put almost everything related to front-end of shop in there - Queries, Mutations, higher order components that provide logic without rendering UI, reusable UI pieces and even full page views.
 
-1. Splitting code to separate logical pieces
-2. Separating code (UI from business logic, so UI library is not forced)
-3. Splitting code to small units so component overriding works at all levels
-4. Providing documentation for everything
+Because of that it's very hard to maintain that library and also provide enough flexibility so developers are not forced to use particular things.
+
+Besides architectural issues there are a lot of issues with naming (mentioned at the end of this description) that we need to solve during this word.
+
+> NOTE: the term "business level components" in this issue relates to the components that do not render UI by themselves but provide a piece of logic that's required to achieve a particular functionality. That mostly covers Higher Order Components and Render Prop Components.
+
+## Goals to achieve:
+
+1. Organizing the code into separate logical packages (UI, business logic, data access)
+2. Splitting the code to small units (component per file approach?) so component overriding works at all levels
+3. Providing documentation for everything (listing components and their purpose)
+4. Moving pieces that should not be inside separate libraries to the example shop
 5. Unifying naming convention
+6. Produce conventions/standards for naming:
 
-## Existing Queries and Mutation classes:
+- gql constants
+- Query and Mutation components
+- data types
+- "business level" components
+- UI components
+
+## List of currently existing things
+
+### Existing Queries and Mutation classes:
 
 - RequestPasswordResetMutation
 - ResetCustomerPasswordMutation
@@ -105,7 +122,7 @@
 
 - SortOrdersQuery
 
-## Existing constants:
+### Existing constants:
 
 - REQUEST_CUSTOMER_PASSWORD_RESET_TOKEN_MUTATION
 - RESET_CUSTOMER_PASSWORD_MUTATION
@@ -206,7 +223,7 @@
 
 - SORT_ORDERS_QUERY
 
-## Existing TypeScript types and interfaces (without component props definitions):
+### Existing TypeScript types and interfaces (without component props definitions):
 
 - RequestPasswordResetVariables
 - RequestPasswordResetMutationVariables
@@ -355,7 +372,7 @@
 - SortOrders
 - SortOrdersData
 
-## Existing UI components:
+### Existing UI components:
 
 - ForgotPasswordForm
 - ResetPassword
@@ -534,7 +551,7 @@
 - TwoColumnsLayout
 - TwoStepWizard
 
-## Existing "business level" components:
+### Existing "business level" components:
 
 - CheckoutLogic
 - DynamicRoute
@@ -567,5 +584,5 @@
 - `falcon-ui-widgets` (contains all high level UI components for both blog and shop)
 - `falcon-shop-data` (contains gql definitions, Queries and Mutations for shop)
 - `falcon-blog-data` (contains gql definitions, Queries for blog)
-- what about "business level" components?
+- what about business level components?
 - what about TS typings (probably placing those in one file within the package that uses those is the best option to keep things simple)
