@@ -725,15 +725,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     const { configurableProductOptions = [] } = extensionAttributes;
 
-    return configurableProductOptions.map(({ values = [], ...restOptions }) => ({
+    return configurableProductOptions.map(({ values, ...restOptions }) => ({
       ...restOptions,
-      values: values.length
-        ? values.map(x => ({
-            valueIndex: x.valueIndex,
-            inStock: x.extensionAttributes.inStock,
-            label: x.extensionAttributes.label
-          }))
-        : []
+      values: values.map(x => ({
+        valueIndex: x.valueIndex,
+        inStock: x.extensionAttributes.inStock,
+        label: x.extensionAttributes.label
+      }))
     }));
   }
 

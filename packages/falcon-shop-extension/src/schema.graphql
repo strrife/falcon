@@ -574,18 +574,18 @@ type Breadcrumb {
 }
 
 type ConfigurableProductOption {
-  id: String
-  attributeId: String
+  id: String!
+  attributeId: String!
   label: String
   position: String
-  productId: String
-  values: [ConfigurableProductOptionValue]
+  productId: String!
+  values: [ConfigurableProductOptionValue]!
 }
 
 type ConfigurableProductOptionValue {
-  inStock: [String]
-  label: String
-  valueIndex: String
+  inStock: [String]!
+  label: String!
+  valueIndex: String!
 }
 
 type BundleProductOption {

@@ -14,11 +14,26 @@ export type Product = {
   description: string;
   stock: any; // Stock
   type: string;
-  configurableOptions: []; // [ConfigurableProductOption]
+  configurableOptions: ConfigurableProductOption[];
   bundleOptions: []; // [BundleProductOption]
   gallery: GalleryEntry[];
   seo: any; // ProductSeo
   breadcrumbs: any;
+};
+
+export type ConfigurableProductOption = {
+  id: string;
+  attributeId: string;
+  label?: string;
+  position: string;
+  productId: string;
+  values: ConfigurableProductOptionValue[];
+};
+
+export type ConfigurableProductOptionValue = {
+  inStock: string;
+  label: string;
+  valueIndex: string;
 };
 
 export type GalleryEntry = {
