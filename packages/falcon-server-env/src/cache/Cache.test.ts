@@ -35,8 +35,7 @@ describe('Cache', () => {
 
   it('Should properly handle a fetchData option to fill the cache for "get" method', async () => {
     provider.get = jest.fn(() => undefined);
-    const value: string | undefined = await cache.get({
-      key: 'key',
+    const value: string | undefined = await cache.get('key', {
       fetchData: () => Promise.resolve('new_value'),
       options: {
         ttl: 1
@@ -49,8 +48,7 @@ describe('Cache', () => {
 
   it('Should be able to define TTL dynamically from fetchData for "get" method', async () => {
     provider.get = jest.fn(() => undefined);
-    const value: string | undefined = await cache.get({
-      key: 'key',
+    const value: string | undefined = await cache.get('key', {
       fetchData: () =>
         Promise.resolve({
           value: 'value',

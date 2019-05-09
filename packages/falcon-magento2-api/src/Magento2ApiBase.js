@@ -31,8 +31,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   async fetchBackendConfig() {
     const getCachedValue = async url => {
-      const value = await this.cache.get({
-        key: [this.name, this.session.storeCode || 'default', url].join(':'),
+      const value = await this.cache.get([this.name, this.session.storeCode || 'default', url].join(':'), {
         fetchData: async () => {
           const rawValue = await this.get(url, {}, { context: { useAdminToken: true } });
           return JSON.stringify(rawValue);
@@ -311,8 +310,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   async getAdminToken() {
     if (!this.reqToken) {
-      this.reqToken = this.cache.get({
-        key: [this.name, 'admin_token'].join(':'),
+      this.reqToken = this.cache.get([this.name, 'admin_token'].join(':'), {
         fetchData: async () => this.retrieveAdminToken()
       });
     }
