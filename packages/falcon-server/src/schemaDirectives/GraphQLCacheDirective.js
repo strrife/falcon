@@ -129,34 +129,35 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
    * @return {string[]} List of tags
    */
   extractTagsForIdPath(idPath, result, info, parent) {
-    const [rootPath, ...pathParts] = idPath.split(PATH_SEPARATOR);
+    const [rootPath, ...fieldPathSections] = idPath.split(PATH_SEPARATOR);
     const valueToCheck = rootPath === PARENT_KEYWORD ? parent : result;
     const typeToCheck = this.getRootType(rootPath === PARENT_KEYWORD ? info.parentType : info.returnType);
     if (rootPath !== PARENT_KEYWORD) {
-      // Put first path section back to "pathParts" for non-parent entries
-      pathParts.unshift(rootPath);
+      // Put first path section back to "fieldPathSections" for non-parent entries
+      fieldPathSections.unshift(rootPath);
     }
 
-    return this.getTagsForField(valueToCheck, typeToCheck, pathParts);
+    return this.getTagsForField(valueToCheck, typeToCheck, fieldPathSections);
   }
 
   /**
-   * Get a list of tags from the provided value for the specified typeField
-   * @param {object} value Value to checks
-   * @param {object} typeField GraphQL Type Object
-   * @param {string[]} [pathParts=[]] Path parts
-   * @return {string[]} List of tags
+   * Get a list of tags from the provided `sourceValue` using specified `fieldType` and `fieldPathSections` (for nested values)
+   * @param {object} sourceValue Source value to get tags from
+   * @param {object} fieldType GraphQL Field Type object
+   * @param {string[]} [fieldPathSections=[]] An optional field path sections (example: ["products", "items"] which are created from a relative "products.items" field path)
+   * that are going to be used to get tags from. If not passed or empty - tags will be received from `sourceValue` directly.
+   * @return {string[]} List of tag names
    */
-  getTagsForField(value, typeField, pathParts = []) {
-    if (!pathParts.length) {
-      const { name: typeName } = this.getRootType(typeField);
-      return this.generateCacheTags(typeName, this.extractFieldValue(value, this.findTagIdFieldName(typeField)));
+  getTagsForField(sourceValue, fieldType, fieldPathSections = []) {
+    if (!fieldPathSections.length) {
+      const { name: typeName } = this.getRootType(fieldType);
+      return this.generateTagNames(typeName, this.getFieldValue(sourceValue, this.findTagIdFieldName(fieldType)));
     }
 
-    const [currentPath, ...restIdPath] = pathParts;
-    const { _fields: fields } = typeField;
-    let { name: typeName } = typeField;
-    let fieldValue = this.extractFieldValue(value, currentPath);
+    const [currentPath, ...restIdPath] = fieldPathSections;
+    const { _fields: fields } = fieldType;
+    let { name: typeName } = fieldType;
+    let fieldValue = this.getFieldValue(sourceValue, currentPath);
 
     // Keep looking for nested ID path until it reaches the end node
     if (currentPath && restIdPath.length) {
@@ -166,20 +167,20 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
       const currentType = this.getRootType(fields[currentPath].type);
       typeName = currentType.name;
       const currentCacheIdFieldName = this.findTagIdFieldName(currentType);
-      fieldValue = this.extractFieldValue(fieldValue, currentCacheIdFieldName);
+      fieldValue = this.getFieldValue(fieldValue, currentCacheIdFieldName);
     }
 
-    return [typeName, ...this.generateCacheTags(typeName, fieldValue)];
+    return [typeName, ...this.generateTagNames(typeName, fieldValue)];
   }
 
   /**
    * Find a field name with TAG_ID_FIELD_TYPE type
-   * @param {object} objectType GQL Object Type
+   * @param {object} gqlType GQL Object Type
    * @return {string|undefined} Name of the field with
    */
-  findTagIdFieldName(objectType) {
-    const { _fields: fields, name: objectTypeName } = this.getRootType(objectType);
-    if (isScalarType(objectType)) {
+  findTagIdFieldName(gqlType) {
+    const { _fields: fields, name: objectTypeName } = this.getRootType(gqlType);
+    if (isScalarType(gqlType)) {
       throw new Error(`Caching for "${objectTypeName}" scalar type is not supported yet`);
     }
 
@@ -191,29 +192,29 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
   }
 
   /**
-   * Extract a value by fieldName from the provided "value" argument
-   * @param {object|object[]} value Value to check
+   * Extract a value by `fieldName` from the provided `sourceValue`
+   * @param {object|object[]} sourceValue Source object to get a field value from
    * @param {string} fieldName Name of the field
-   * @return {undefined|string|string[]} Value or list of values (in case of "value" argument is an array)
+   * @return {undefined|string|string[]} Value or list of values (in case of `sourceValue` is an array)
    */
-  extractFieldValue(value, fieldName) {
-    if (typeof value === 'undefined' && typeof fieldName === 'undefined') {
+  getFieldValue(sourceValue, fieldName) {
+    if (typeof sourceValue === 'undefined' || typeof fieldName === 'undefined') {
       return undefined;
     }
-    if (Array.isArray(value)) {
-      return value.map(item => this.extractFieldValue(item, fieldName));
+    if (Array.isArray(sourceValue)) {
+      return sourceValue.map(item => this.getFieldValue(item, fieldName));
     }
 
-    return fieldName in value ? value[fieldName] : undefined;
+    return fieldName in sourceValue ? sourceValue[fieldName] : undefined;
   }
 
   /**
-   * Generate cache tag(s) by concatenating entityName with entityId(s)
-   * @param {string} entityName Entity Type name
-   * @param {string|string[]} entityId Entity ID or list of IDs
-   * @return {string[]} Concatenated cache-tag array of strings
+   * Generate tag names using `entityName` and `entityId`
+   * @param {string} entityName Entity Type name (like "Product")
+   * @param {string|string[]} entityId Entity ID or list of IDs (like: "1" or ["1", "2"])
+   * @return {string[]} List of tag names (example: ["Product:1", "Product:2"])
    */
-  generateCacheTags(entityName, entityId) {
+  generateTagNames(entityName, entityId) {
     if (!entityId) {
       return [];
     }
