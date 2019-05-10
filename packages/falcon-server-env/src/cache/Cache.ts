@@ -1,4 +1,4 @@
-/* eslint-disable no-useless-constructor, no-empty-function */
+/* eslint-disable no-useless-constructor, no-dupe-class-members, no-empty-function */
 import { KeyValueCache } from 'apollo-server-caching';
 
 export type SetCacheOptions = {
@@ -31,6 +31,9 @@ export type GetCacheOptions = {
  */
 export default class Cache<V = any> implements KeyValueCache<V> {
   constructor(private cacheProvider: KeyValueCache<V>) {}
+
+  async get(key: string): Promise<V>;
+  async get(key: string, setOptions: GetCacheOptions): Promise<V>;
 
   /**
    * Returns cached value for the provided key and setOptions object
@@ -67,7 +70,7 @@ export default class Cache<V = any> implements KeyValueCache<V> {
         }
 
         if (typeof value !== 'undefined') {
-          await this.set(key, value, options);
+          await this.set(key, value, options as SetCacheOptions);
         }
       }
     }
@@ -75,6 +78,8 @@ export default class Cache<V = any> implements KeyValueCache<V> {
     return value;
   }
 
+  async set(key: string, value: V): Promise<void>;
+  async set(key: string, value: V, options: SetCacheOptions): Promise<void>;
   async set(key: string, value: V, options?: SetCacheOptions): Promise<void> {
     let cachedValue: V | GetCacheFetchResult = value;
     const { tags } = options || ({} as SetCacheOptions);
@@ -89,6 +94,9 @@ export default class Cache<V = any> implements KeyValueCache<V> {
     }
     return this.cacheProvider.set(key, cachedValue, options);
   }
+
+  async delete(key: string): Promise<boolean>;
+  async delete(key: string[]): Promise<void>;
 
   /**
    * Cache key or array of cache keys to be removed from the cache.
