@@ -11,7 +11,7 @@ const { addResolveFunctionsToSchema } = require('graphql-tools');
 const { ApiUrlPriority, htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
 const Magento2ApiBase = require('./Magento2ApiBase');
-const { AuthMethod } = require('./authorization');
+const { AuthScope } = require('./authorization');
 
 const FALCON_CART_ACTIONS = [
   '/save-payment-information-and-order',
@@ -111,7 +111,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Category>} - converted response with category data
    */
   async category(obj, { id }) {
-    const response = await this.get(`/categories/${id}`, {}, { context: { auth: AuthMethod.Integration } });
+    const response = await this.get(`/categories/${id}`, {}, { context: { auth: AuthScope.Integration } });
     return this.convertCategoryData(response);
   }
 
@@ -146,7 +146,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     try {
       response = await this.get(`/falcon/categories/${obj.data.id}/products`, query, {
         context: {
-          auth: AuthMethod.Integration,
+          auth: AuthScope.Integration,
           pagination
         }
       });
@@ -534,7 +534,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         searchCriteria
       },
       {
-        context: { auth: AuthMethod.Integration }
+        context: { auth: AuthScope.Integration }
       }
     );
 
@@ -787,7 +787,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Product>} product data
    */
   async product(obj, { id }) {
-    const productData = await this.get(`/products/${id}`, {}, { context: { auth: AuthMethod.Integration } });
+    const productData = await this.get(`/products/${id}`, {}, { context: { auth: AuthScope.Integration } });
     const product = this.reduceProduct(productData);
     return product;
   }
@@ -1877,8 +1877,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     const response = await (this.isCustomerLoggedIn()
-      ? this.get(`/falcon/orders/${orderId}/order-info`, {}, { context: { auth: AuthMethod.Customer } })
-      : this.get(`/falcon/guest-orders/${orderId}/order-info`, {}, { context: { auth: AuthMethod.Integration } }));
+      ? this.get(`/falcon/orders/${orderId}/order-info`, {}, { context: { auth: AuthScope.Customer } })
+      : this.get(`/falcon/guest-orders/${orderId}/order-info`, {}, { context: { auth: AuthScope.Integration } }));
 
     response.data = this.convertKeys(response.data);
     response.data.paymentMethodName = response.data.payment.method;
@@ -1901,7 +1901,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const resp = await this.get(
       `/falcon/breadcrumbs`,
       { url: path.replace(/^\//, '') },
-      { context: { auth: AuthMethod.Integration } }
+      { context: { auth: AuthScope.Integration } }
     );
     return this.convertBreadcrumbs(this.convertKeys(resp.data));
   }

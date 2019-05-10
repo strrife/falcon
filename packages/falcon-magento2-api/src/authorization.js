@@ -1,7 +1,7 @@
 /**
- * Request authorization method
+ * Request authorization scope
  */
-const AuthMethod = {
+const AuthScope = {
   /** Authorize request using Integration credentials (integration-token or admin-token) */
   Integration: 'integration',
 
@@ -21,16 +21,16 @@ const IntegrationAuthType = {
 };
 
 /**
- * Calculate default request authorization method
+ * Calculate default request authorization scope
  * @param {boolean} customerTokenExists Customer authorization token
- * @returns {'integration' | 'customer' } Authorization method
+ * @returns {'integration' | 'customer' } Authorization scope
  */
-function getDefaultAuthMethod(customerTokenExists) {
+function getDefaultAuthScope(customerTokenExists) {
   if (customerTokenExists) {
-    return AuthMethod.Customer;
+    return AuthScope.Customer;
   }
 
-  return AuthMethod.Integration;
+  return AuthScope.Integration;
 }
 
 /**
@@ -43,8 +43,8 @@ function isIntegrationAuthTypeSupported(authType) {
 }
 
 module.exports = {
-  AuthMethod,
+  AuthScope,
   IntegrationAuthType,
-  getDefaultAuthMethod,
+  getDefaultAuthScope,
   isIntegrationAuthTypeSupported
 };

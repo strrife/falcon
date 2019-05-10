@@ -6,9 +6,9 @@ const Logger = require('@deity/falcon-logger');
 const { ApiDataSource } = require('@deity/falcon-server-env');
 const { AuthenticationError, codes } = require('@deity/falcon-errors');
 const {
-  AuthMethod,
+  AuthScope,
   IntegrationAuthType,
-  getDefaultAuthMethod,
+  getDefaultAuthScope,
   isIntegrationAuthTypeSupported
 } = require('./authorization');
 
@@ -41,7 +41,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       const value = await this.cache.get({
         key: [this.name, this.session.storeCode || 'default', url].join(':'),
         callback: async () => {
-          const rawValue = await this.get(url, {}, { context: { auth: AuthMethod.Integration } });
+          const rawValue = await this.get(url, {}, { context: { auth: AuthScope.Integration } });
           return JSON.stringify(rawValue);
         },
         options: {
@@ -221,7 +221,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     const { context } = req;
 
     // apply default request authorization convention
-    context.auth = context.auth === undefined ? getDefaultAuthMethod(!!this.session.customerToken) : context.auth;
+    context.auth = context.auth === undefined ? getDefaultAuthScope(!!this.session.customerToken) : context.auth;
     // if isAuthRequired is not explicitly set, we infer it from context.auth
     context.isAuthRequired = context.isAuthRequired === undefined ? !!context.auth : context.isAuthRequired;
 
@@ -235,9 +235,9 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    * @param {RequestOptions} req - request input
    */
   async authorizeRequest(req) {
-    const { auth: authMethod } = req.context;
+    const { auth: authScope } = req.context;
 
-    if (authMethod === AuthMethod.Integration) {
+    if (authScope === AuthScope.Integration) {
       const { auth } = this.config;
       if (auth.type === IntegrationAuthType.adminToken) {
         const token = await this.getAdminToken();
@@ -262,7 +262,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       }
     }
 
-    if (authMethod === AuthMethod.Customer) {
+    if (authScope === AuthScope.Customer) {
       const { customerToken } = this.session || {};
 
       if (this.isCustomerTokenValid(customerToken)) {
@@ -277,7 +277,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       return;
     }
 
-    throw new Error(`Attempt to authenticate the request using an unsupported method: "${authMethod}"!`);
+    throw new Error(`Attempt to authenticate the request using an unsupported scope: "${authScope}"!`);
   }
 
   /**
