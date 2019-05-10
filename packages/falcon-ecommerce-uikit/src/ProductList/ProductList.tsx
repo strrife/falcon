@@ -4,11 +4,11 @@ import { themed, List, ListItem } from '@deity/falcon-ui';
 import { ProductCard } from './ProductCard';
 import { EmptyProductList } from './EmptyProductList';
 
-export type ProductsListProps = {
+export type ProductListProps = {
   products: any[];
 };
-export class ProductsList extends React.Component<ProductsListProps> {
-  constructor(props: ProductsListProps) {
+export class ProductList extends React.Component<ProductListProps> {
+  constructor(props: ProductListProps) {
     super(props);
 
     this.state = {
@@ -16,7 +16,7 @@ export class ProductsList extends React.Component<ProductsListProps> {
     };
   }
 
-  static getDerivedStateFromProps(nextProps: ProductsListProps, prevState: any) {
+  static getDerivedStateFromProps(nextProps: ProductListProps, prevState: any) {
     const { products: prevProducts } = prevState.getPrevProps();
     const { products: nextProducts } = nextProps;
 

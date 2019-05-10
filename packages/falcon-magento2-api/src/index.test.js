@@ -50,7 +50,7 @@ describe('Magento2Api', () => {
     nock(URL)
       .persist(true)
       .post(createMagentoUrl('/integration/admin/token'))
-      .reply(200, magentoResponses.adminToken.data);
+      .reply(200, magentoResponses.adminToken);
 
     nock(URL)
       .persist(true)
@@ -103,7 +103,7 @@ describe('Magento2Api', () => {
 
   it('Should correctly fetch admin token', async () => {
     const result = await api.getAdminToken();
-    expect(result).toEqual(magentoResponses.adminToken.data);
+    expect(result).toEqual(magentoResponses.adminToken);
   });
 
   it('Should correctly fetch category data', async () => {
@@ -113,7 +113,7 @@ describe('Magento2Api', () => {
 
     api.session.storeCode = '';
     const result = await api.category({}, { id: 20 });
-    expect(result.data.id).toEqual(magentoResponses.category.data.id);
+    expect(result.id).toEqual(magentoResponses.category.data.id);
   });
 
   it('Should correctly handle request error without token', async () => {
@@ -260,7 +260,7 @@ describe('Magento2Api', () => {
       .query(() => true)
       .reply(200, magentoResponses.categoryProducts);
 
-    const response = await api.categoryProducts({ data: { id: 1 } }, {});
+    const response = await api.categoryProducts({ id: 1 }, {});
 
     expect(response.items).toHaveLength(5);
     expect(response.aggregations).toHaveLength(3);
@@ -277,12 +277,12 @@ describe('Magento2Api', () => {
     // this is usually passed via config but api instance is already created
     // and we just want it to use a different value
     api.perPage = 3;
-    let response = await api.categoryProducts({ data: { id: 1 } }, {});
+    let response = await api.categoryProducts({ id: 1 }, {});
     expect(response.pagination.totalPages).toEqual(4);
 
     // check if pagination will be computed correctly when perPage in config changes
     api.perPage = 5;
-    response = await api.categoryProducts({ data: { id: 1 } }, {});
+    response = await api.categoryProducts({ id: 1 }, {});
     expect(response.pagination.totalPages).toEqual(3);
   });
 
@@ -353,7 +353,7 @@ describe('Magento2Api', () => {
 
   it('categoryChildren() should fetch category data for each children of the passed category', async () => {
     // magento sends children as array joined with comma
-    const category = { data: { children: '12,13' } };
+    const category = { children: '12,13' };
     nock(URL)
       .get(createMagentoUrl('/categories/12'))
       .reply(200, {
@@ -368,7 +368,7 @@ describe('Magento2Api', () => {
 
     const result = await api.categoryChildren(category);
     // compare only ids - these should be the same
-    expect(result.map(item => ({ id: item.data.id }))).toEqual([{ id: 12 }, { id: 13 }]);
+    expect(result.map(item => ({ id: item.id }))).toEqual([{ id: 12 }, { id: 13 }]);
   });
 
   describe('fetchUrl()', () => {
@@ -383,7 +383,7 @@ describe('Magento2Api', () => {
 
       const response = await api.fetchUrl({}, { path: 'test.html' });
 
-      expect(response.data.id).toEqual(1);
+      expect(response.id).toEqual(1);
     });
 
     it('Should correctly parse entity types', async () => {
@@ -417,9 +417,9 @@ describe('Magento2Api', () => {
         api.fetchUrl({}, { path: 'test-page.html' })
       ]);
 
-      expect(product.data.type).toEqual('shop-product');
-      expect(category.data.type).toEqual('shop-category');
-      expect(page.data.type).toEqual('shop-page');
+      expect(product.type).toEqual('shop-product');
+      expect(category.type).toEqual('shop-category');
+      expect(page.type).toEqual('shop-page');
     });
   });
 

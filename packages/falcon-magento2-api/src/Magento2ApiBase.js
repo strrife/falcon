@@ -71,10 +71,10 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   async fetchBackendConfig() {
     const getCachedValue = async url => {
-      const value = await this.cache.get({
-        key: [this.name, this.session.storeCode || 'default', url].join(':'),
-        callback: async () => {
+      const value = await this.cache.get([this.name, this.session.storeCode || 'default', url].join(':'), {
+        fetchData: async () => {
           const rawValue = await this.getForIntegration(url);
+
           return JSON.stringify(rawValue);
         },
         options: {
@@ -92,11 +92,11 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     ]);
 
     // Processing "active" items only
-    const activeStoreViews = storeViews.data.filter(x => x.extension_attributes.is_active && x.website_id);
-    const activeStoreWebsites = storeWebsites.data.filter(storeWebsite => storeWebsite.id);
-    const activeStoreGroups = storeGroups.data.filter(storeGroup => storeGroup.id);
+    const activeStoreViews = storeViews.filter(x => x.extension_attributes.is_active && x.website_id);
+    const activeStoreWebsites = storeWebsites.filter(storeWebsite => storeWebsite.id);
+    const activeStoreGroups = storeGroups.filter(storeGroup => storeGroup.id);
 
-    const activeStoreConfigs = storeConfigs.data.map(storeConfig => ({
+    const activeStoreConfigs = storeConfigs.map(storeConfig => ({
       ..._.pick(storeConfig, [
         'id',
         'code',
@@ -346,7 +346,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     Logger.info(`${this.name}: Retrieving admin token.`);
 
     const dataNow = Date.now();
-    const { data: token } = await this.post(
+    const token = await this.post(
       '/integration/admin/token',
       {
         username: auth.username,
@@ -389,9 +389,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   async getAdminToken() {
     if (!this.reqToken) {
-      this.reqToken = this.cache.get({
-        key: [this.name, 'admin_token'].join(':'),
-        callback: async () => this.adminToken()
+      this.reqToken = this.cache.get([this.name, 'admin_token'].join(':'), {
+        fetchData: async () => this.adminToken()
       });
     }
     return this.reqToken;
@@ -403,9 +402,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   async getOAuth() {
     if (!this.oAuth) {
-      this.oAuth = this.cache.get({
-        key: [this.name, 'oAuth'].join(':'),
-        callback: async () => {
+      this.oAuth = this.cache.get([this.name, 'oAuth'].join(':'), {
+        fetchData: async () => {
           const { auth } = this.config;
           if (auth.type !== 'integration-token') {
             throw new Error(`API client is not configured for "integration-token" authentication method.`);
@@ -437,15 +435,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   async didReceiveResponse(response) {
     const cookies = (response.headers.get('set-cookie') || '').split('; ');
-    const responseTags = response.headers.get('x-cache-tags');
     const data = await super.didReceiveResponse(response);
     const { pagination: paginationInput } = response.context;
-
-    const meta = {};
-
-    if (responseTags) {
-      meta.tags = responseTags.split(',');
-    }
 
     if (cookies.length) {
       // For "customer/token" API call - we don't get PHPSESSID cookie
@@ -458,7 +449,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
     // no pagination data requested - skip computation of pagination
     if (!paginationInput) {
-      return { data, meta };
+      return data;
     }
 
     const { page, perPage } = paginationInput;
@@ -466,7 +457,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
     // process search criteria
     const pagination = this.processPagination(total, page, perPage);
-    return { data: { items: data.items, filters: data.filters || [], pagination }, meta };
+    return { items: data.items, filters: data.filters || [], pagination };
   }
 
   /**
