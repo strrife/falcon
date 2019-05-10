@@ -11,7 +11,6 @@ const { addResolveFunctionsToSchema } = require('graphql-tools');
 const { ApiUrlPriority, htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
 const Magento2ApiBase = require('./Magento2ApiBase');
-const { AuthScope } = require('./authorization');
 
 const FALCON_CART_ACTIONS = [
   '/save-payment-information-and-order',
@@ -111,7 +110,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Category>} - converted response with category data
    */
   async category(obj, { id }) {
-    const response = await this.get(`/categories/${id}`, {}, { context: { auth: AuthScope.Integration } });
+    const response = await this.getForIntegration(`/categories/${id}`);
     return this.convertCategoryData(response);
   }
 
@@ -144,11 +143,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { pagination = {} } = params;
     let response;
     try {
-      response = await this.get(`/falcon/categories/${obj.data.id}/products`, query, {
-        context: {
-          auth: AuthScope.Integration,
-          pagination
-        }
+      response = await this.getForIntegration(`/falcon/categories/${obj.data.id}/products`, query, {
+        context: { pagination }
       });
     } catch (ex) {
       // if is_anchor is set to "0" then we cannot fetch category contents (as it doesn't have products)
@@ -526,17 +522,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       searchCriteria.sortOrders = sortOrders;
     }
 
-    const response = await this.get(
-      path,
-      {
-        includeSubcategories,
-        withAttributeFilters,
-        searchCriteria
-      },
-      {
-        context: { auth: AuthScope.Integration }
-      }
-    );
+    const response = await this.getForIntegration(path, {
+      includeSubcategories,
+      withAttributeFilters,
+      searchCriteria
+    });
 
     return this.convertList(response, this.session.currency);
   }
@@ -787,9 +777,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Product>} product data
    */
   async product(obj, { id }) {
-    const productData = await this.get(`/products/${id}`, {}, { context: { auth: AuthScope.Integration } });
-    const product = this.reduceProduct(productData);
-    return product;
+    const productData = await this.getForIntegration(`/products/${id}`);
+    return this.reduceProduct(productData);
   }
 
   /**
@@ -1876,9 +1865,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       return {};
     }
 
-    const response = await (this.isCustomerLoggedIn()
-      ? this.get(`/falcon/orders/${orderId}/order-info`, {}, { context: { auth: AuthScope.Customer } })
-      : this.get(`/falcon/guest-orders/${orderId}/order-info`, {}, { context: { auth: AuthScope.Integration } }));
+    const response = this.isCustomerLoggedIn()
+      ? await this.getForCustomer(`/falcon/orders/${orderId}/order-info`)
+      : await this.getForIntegration(`/falcon/guest-orders/${orderId}/order-info`);
 
     response.data = this.convertKeys(response.data);
     response.data.paymentMethodName = response.data.payment.method;
@@ -1898,12 +1887,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<[Breadcrumb]>} breadcrumbs fetched from backend
    */
   async breadcrumbs(obj, { path }) {
-    const resp = await this.get(
-      `/falcon/breadcrumbs`,
-      { url: path.replace(/^\//, '') },
-      { context: { auth: AuthScope.Integration } }
-    );
-    return this.convertBreadcrumbs(this.convertKeys(resp.data));
+    const response = await this.getForIntegration(`/falcon/breadcrumbs`, { url: path.replace(/^\//, '') });
+    return this.convertBreadcrumbs(this.convertKeys(response.data));
   }
 
   /**

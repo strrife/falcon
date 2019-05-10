@@ -1,5 +1,6 @@
 const util = require('util');
 const _ = require('lodash');
+const deepMerge = require('deepmerge');
 const OAuth = require('oauth');
 const addMilliseconds = require('date-fns/add_milliseconds');
 const Logger = require('@deity/falcon-logger');
@@ -31,6 +32,38 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     this.itemUrlSuffix = this.config.itemUrlSuffix || '.html';
   }
 
+  async getForIntegration(path, params = undefined, init = {}) {
+    return super.get(path, params, deepMerge(init, { context: { auth: AuthScope.Integration } }));
+  }
+  async postForIntegration(path, body = undefined, init = {}) {
+    return super.post(path, body, deepMerge(init, { context: { auth: AuthScope.Integration } }));
+  }
+  async patchForIntegration(path, body = undefined, init = {}) {
+    return super.patch(path, body, deepMerge(init, { context: { auth: AuthScope.Integration } }));
+  }
+  async putForIntegration(path, body = undefined, init = {}) {
+    return super.put(path, body, deepMerge(init, { context: { auth: AuthScope.Integration } }));
+  }
+  async deleteForIntegration(path, params = undefined, init = {}) {
+    return super.delete(path, params, deepMerge(init, { context: { auth: AuthScope.Integration } }));
+  }
+  async getForCustomer(path, params = undefined, init = {}) {
+    return super.get(path, params, deepMerge(init, { context: { auth: AuthScope.Customer } }));
+  }
+  async postForCustomer(path, body = undefined, init = {}) {
+    return super.post(path, body, deepMerge(init, { context: { auth: AuthScope.Customer } }));
+  }
+  async patchForCustomer(path, body = undefined, init = {}) {
+    return super.patch(path, body, deepMerge(init, { context: { auth: AuthScope.Customer } }));
+  }
+  async putForCustomer(path, body = undefined, init = {}) {
+    return super.put(path, body, deepMerge(init, { context: { auth: AuthScope.Customer } }));
+  }
+  async deleteForCustomer(path, params = undefined, init = {}) {
+    return super.delete(path, params, deepMerge(init, { context: { auth: AuthScope.Customer } }));
+  }
+
+  // async
   /**
    * Makes sure that context required for http calls exists
    * Gets basic store configuration from Magento
@@ -41,7 +74,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       const value = await this.cache.get({
         key: [this.name, this.session.storeCode || 'default', url].join(':'),
         callback: async () => {
-          const rawValue = await this.get(url, {}, { context: { auth: AuthScope.Integration } });
+          const rawValue = await this.getForIntegration(url);
           return JSON.stringify(rawValue);
         },
         options: {
