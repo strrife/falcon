@@ -26,11 +26,7 @@ const IntegrationAuthType = {
  * @returns {'integration' | 'customer' } Authorization scope
  */
 function getDefaultAuthScope(customerTokenExists) {
-  if (customerTokenExists) {
-    return AuthScope.Customer;
-  }
-
-  return AuthScope.Integration;
+  return customerTokenExists ? AuthScope.Customer : AuthScope.Integration;
 }
 
 /**
