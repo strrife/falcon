@@ -398,8 +398,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
-   * Get Magento API authorized admin token or perform request to create it.
-   * "reqToken" property is being used for parallel calls
+   * Get Magento oAuth authorization configuration.
    * @return {Promise<OAuth>} token value
    */
   async getOAuth() {
