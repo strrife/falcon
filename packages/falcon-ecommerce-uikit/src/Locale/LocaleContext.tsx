@@ -8,11 +8,13 @@ type LocaleContextType = {
   currency: string;
 };
 
-const LocaleContext = React.createContext<LocaleContextType>({
+const localeDefaults = {
   locale: 'en',
+  // TODO: get locale fallback from i18n config?
   localeFallback: 'en',
   currency: 'EUR'
-});
+};
+const LocaleContext = React.createContext<LocaleContextType>(localeDefaults);
 
 export type LocaleProviderProps = {
   currency?: string;
@@ -24,16 +26,11 @@ export const LocaleProvider: React.SFC<LocaleProviderProps> = ({ children, ...pr
         activeLocale: locale,
         shop: { activeCurrency: currency }
       }
-    }) => {
-      // TODO: get locale fallback from i18n config?
-      const localeFallback = 'en';
-
-      return (
-        <LocaleContext.Provider value={{ locale, localeFallback, currency, ...props }}>
-          {children}
-        </LocaleContext.Provider>
-      );
-    }}
+    }) => (
+      <LocaleContext.Provider value={{ ...localeDefaults, locale, currency, ...props }}>
+        {children}
+      </LocaleContext.Provider>
+    )}
   </BackendConfigQuery>
 );
 
