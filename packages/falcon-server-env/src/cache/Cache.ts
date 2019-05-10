@@ -175,6 +175,8 @@ export default class Cache<V = any> implements KeyValueCache<V> {
    */
   private generateTagValue(): string {
     const date: Date = new Date();
-    return `${date.getSeconds()}${date.getMilliseconds()}`;
+    return `${Date.now()
+      .toString()
+      .substr(6)}`;
   }
 }
