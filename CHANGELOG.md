@@ -10,9 +10,13 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 - initial release
 
-### Falcon E-commerce UI Kit v0.4.1 (2019-04-11)
+### Falcon E-commerce UI Kit vNEXT
 
 - feat: (Breaking change) corrected names for collections `[noun]sList` --> `[noun]List` ([#427](https://github.com/deity-io/falcon/pull/427))
+
+### Falcon Magento2 API vNEXT
+
+- fixed issue with lack of product price info which has an impact on products ordering by price ([#417](https://github.com/deity-io/falcon/issues/417))
 
 ---
 
