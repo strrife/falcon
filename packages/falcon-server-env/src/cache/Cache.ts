@@ -96,7 +96,7 @@ export default class Cache<V = any> implements KeyValueCache<V> {
   }
 
   async delete(key: string): Promise<boolean>;
-  async delete(key: string[]): Promise<void>;
+  async delete(keys: string[]): Promise<void>;
 
   /**
    * Cache key or array of cache keys to be removed from the cache.
