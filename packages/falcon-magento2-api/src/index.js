@@ -12,6 +12,7 @@ const { ApiUrlPriority, htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
 const Magento2ApiBase = require('./Magento2ApiBase');
 const { tryParseNumber } = require('./infrastructure/number');
+const { typeResolverPathToString } = require('./infrastructure/apollo');
 
 const FALCON_CART_ACTIONS = [
   '/save-payment-information-and-order',
@@ -692,13 +693,18 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Resolve Product Tier Price from Product
-   * @param {Object} obj - parent (MagentoProduct or MagentoProductListItem)
+   * @param {Object} parent parent (MagentoProduct or MagentoProductListItem)
+   * @param {Object} args arguments
+   * @param {Object} context context
+   * @param {Object} info info
    * @return {TierPrice[]} product price
    */
-  productTierPrices({ data }) {
-    const isProductListItem = typeof data.price === 'object';
-    if (isProductListItem) {
-      throw new Error('fetching product by its id is not implemented!');
+  async productTierPrices(parent, args, context, info) {
+    let { data } = parent;
+    if (typeResolverPathToString(info.path).startsWith('category.products')) {
+      const response = await this.get(`/falcon/products/${data.id}`, {}, { context: { useAdminToken: true } });
+      this.convertAttributesSet(response);
+      data = this.convertKeys(response.data);
     }
 
     const { price, tierPrices = [] } = data;
@@ -713,16 +719,22 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Resolve Configurable Product Options from Product
-   * @param {Object} obj - parent (MagentoProduct or MagentoProductListItem)
+   * @param {Object} parent parent (MagentoProduct or MagentoProductListItem)
+   * @param {Object} args arguments
+   * @param {Object} context context
+   * @param {Object} info info
    * @return {ConfigurableProductOption} configurable product options
    */
-  configurableProductOptions({ data }) {
-    const { extensionAttributes = {} } = data;
+  async configurableProductOptions(parent, args, context, info) {
+    let { data } = parent;
 
-    if (extensionAttributes.configurableProductOptions === undefined) {
-      throw new Error('fetching product by its id is not implemented!');
+    if (typeResolverPathToString(info.path).startsWith('category.products')) {
+      const response = await this.get(`/falcon/products/${data.id}`, {}, { context: { useAdminToken: true } });
+      this.convertAttributesSet(response);
+      data = this.convertKeys(response.data);
     }
 
+    const { extensionAttributes = {} } = data;
     const { configurableProductOptions = [] } = extensionAttributes;
 
     return configurableProductOptions.map(({ values, ...restOptions }) => ({
