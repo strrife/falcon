@@ -30,6 +30,7 @@ class FalconServer {
     this.loggableErrorCodes = [codes.INTERNAL_SERVER_ERROR, codes.GRAPHQL_PARSE_FAILED];
     this.config = config;
     this.server = null;
+    this.cache = null;
     this.backendConfig = {};
     const { maxListeners = 20, verboseEvents = false } = this.config;
     if (config.logLevel) {
@@ -71,7 +72,7 @@ class FalconServer {
   }
 
   async getApolloServerConfig() {
-    const cache = new Cache(this.getCacheProvider());
+    this.cache = new Cache(this.getCacheProvider());
     const dynamicRouteResolver = new DynamicRouteResolver(this.extensionContainer);
 
     const apolloServerConfig = await this.extensionContainer.createGraphQLConfig({
@@ -90,12 +91,12 @@ class FalconServer {
       formatError: error => this.formatGraphqlError(error),
       // inject session and headers into GraphQL context
       context: ({ ctx }) => ({
-        cache,
+        cache: this.cache,
         config: this.config,
         headers: ctx.req.headers,
         session: ctx.req.session
       }),
-      cache,
+      cache: this.cache,
       resolvers: {
         Query: {
           url: async (...params) => dynamicRouteResolver.fetchUrl(...params),
