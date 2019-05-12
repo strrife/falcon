@@ -151,7 +151,10 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
   getTagsForField(sourceValue, fieldType, fieldPathSections = []) {
     if (!fieldPathSections.length) {
       const { name: typeName } = this.getRootType(fieldType);
-      return this.generateTagNames(typeName, this.getFieldValue(sourceValue, this.findTagIdFieldName(fieldType)));
+      return GraphQLCacheDirective.generateTagNames(
+        typeName,
+        this.getFieldValue(sourceValue, this.findTagIdFieldName(fieldType))
+      );
     }
 
     const [currentPath, ...restIdPath] = fieldPathSections;
@@ -170,7 +173,7 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
       fieldValue = this.getFieldValue(fieldValue, currentCacheIdFieldName);
     }
 
-    return [typeName, ...this.generateTagNames(typeName, fieldValue)];
+    return [typeName, ...GraphQLCacheDirective.generateTagNames(typeName, fieldValue)];
   }
 
   /**
@@ -214,7 +217,7 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
    * @param {string|string[]} entityId Entity ID or list of IDs (like: "1" or ["1", "2"])
    * @return {string[]} List of tag names (example: ["Product:1", "Product:2"])
    */
-  generateTagNames(entityName, entityId) {
+  static generateTagNames(entityName, entityId) {
     if (!entityId) {
       return [];
     }
