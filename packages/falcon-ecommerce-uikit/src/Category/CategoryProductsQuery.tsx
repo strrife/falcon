@@ -82,6 +82,7 @@ const fetchMore = (data: any, apolloFetchMore: any) =>
 export class CategoryProductsQuery extends Query<any> {
   static defaultProps = {
     query: GET_CATEGORY_PRODUCTS,
+    fetchPolicy: 'cache-and-network',
     fetchMore,
     notifyOnNetworkStatusChange: true
   };

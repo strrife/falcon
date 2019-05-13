@@ -40,6 +40,7 @@ export const GET_PRODUCT = gql`
 
 export class ProductQuery extends Query<any> {
   static defaultProps = {
-    query: GET_PRODUCT
+    query: GET_PRODUCT,
+    fetchPolicy: 'cache-and-network'
   };
 }
