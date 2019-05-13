@@ -91,7 +91,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async menu() {
     const response = await this.get('/falcon/menus');
-    const { data } = this.convertKeys(response);
+    const menuItems = this.convertKeys(response);
 
     const mapMenu = x => {
       if (Array.isArray(x)) {
@@ -105,7 +105,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       };
     };
 
-    return mapMenu(data);
+    return mapMenu(menuItems);
   }
 
   /**
@@ -116,7 +116,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async category(obj, { id }) {
     const response = await this.get(`/categories/${id}`, {}, { context: { useAdminToken: true } });
-    return this.convertCategoryData(response);
+    return this.convertCategory(response);
   }
 
   /**
@@ -148,7 +148,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { pagination = {} } = params;
     let response;
     try {
-      response = await this.get(`/falcon/categories/${obj.data.id}/products`, query, {
+      response = await this.get(`/falcon/categories/${obj.id}/products`, query, {
         context: {
           useAdminToken: true,
           pagination
@@ -157,7 +157,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     } catch (ex) {
       // if is_anchor is set to "0" then we cannot fetch category contents (as it doesn't have products)
       // in that case if Magento returns error "Bucked does not exist" we return empty array to avoid displaying errors
-      if (ex.message.match(/Bucket does not exist/) && obj.data.custom_attributes.is_anchor === '0') {
+      if (ex.message.match(/Bucket does not exist/) && obj.custom_attributes.is_anchor === '0') {
         return {
           items: [],
           pagination: this.processPagination(0)
@@ -165,26 +165,22 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       }
       throw ex;
     }
-    const { data } = response;
 
     return {
-      items: response.data.items.map(item => this.reduceProduct({ data: item })),
-      aggregations: this.processAggregations(data.filters),
-      pagination: data.pagination
+      items: response.items.map(item => this.reduceProduct(item)),
+      aggregations: this.processAggregations(response.filters),
+      pagination: response.pagination
     };
   }
 
   /**
    * Process category data from Magento2 response
-   * @param {object} response - response from Magento2 backend
+   * @param {object} data - categoryObject from Magento2 backend
    * @return {Category} processed response
    */
-  convertCategoryData(response) {
-    const { data } = response;
-
-    this.convertAttributesSet(response);
-
-    const { custom_attributes: customAttributes, children_data: childrenData = [] } = data;
+  convertCategory(data) {
+    this.convertAttributesSet(data);
+    const { custom_attributes: customAttributes } = data;
 
     // for specific category record
     let urlPath = customAttributes.url_path;
@@ -199,9 +195,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     delete data.product_count;
 
     data.urlPath = this.convertPathToUrl(urlPath);
-    childrenData.map(item => this.convertCategoryData({ data: item }).data);
 
-    return response;
+    return data;
   }
 
   /**
@@ -211,8 +206,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {object} converted response
    */
   convertAttributesSet(response) {
-    const { data } = response;
-    const { custom_attributes: attributes = [] } = data;
+    const { custom_attributes: attributes = [] } = response;
     const attributesSet = {};
 
     if (Array.isArray(attributes)) {
@@ -220,7 +214,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         attributesSet[attribute.attribute_code] = attribute.value;
       });
 
-      data.custom_attributes = attributesSet;
+      response.custom_attributes = attributesSet;
     }
 
     return response;
@@ -552,10 +546,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {object} - processed response
    */
   convertList(response = {}, currency = null) {
-    const {
-      data: { items = [] },
-      data: { custom_attributes: attributes }
-    } = response;
+    const { items = [], custom_attributes: attributes } = response;
 
     if (attributes) {
       this.reduceProduct(response, currency);
@@ -564,37 +555,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     items.forEach(element => {
       // If product
       if (element.sku) {
-        this.reduceProduct({ data: element }, currency);
+        this.reduceProduct(element, currency);
       }
 
       // If category
       if (element.level) {
-        this.convertCategoryData({ data: element });
+        this.convertCategory(element);
       }
     });
-
-    return response;
-  }
-
-  /**
-   * Special endpoint to fetch any magento entity by it's url, for example product, cms page
-   * @param {object} params - request params
-   * @param {string} [params.path] - request path to be checked against api urls
-   * @return {Promise} - request promise
-   */
-
-  /**
-   * Reduce cms page data
-   * @param {object} response - full api response
-   * @return {CmsPage} - reduced response
-   */
-  reduceCmsPage(response) {
-    const { data } = response;
-    const { title, id } = data;
-    let { content } = data;
-
-    content = this.replaceLinks(content);
-    response.data = { id, content, title };
 
     return response;
   }
@@ -607,7 +575,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   reduceProduct(response, currency = null) {
     this.convertAttributesSet(response);
-    const data = this.convertKeys(response.data);
+    const data = this.convertKeys(response);
     const { customAttributes = {} } = data;
 
     const resolveGallery = product => {
@@ -650,29 +618,27 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       if (bundleProductOptions) {
         // remove extension attributes for option product links
         bundleProductOptions.forEach(option => {
-          const reducedProductLink = option.productLinks.map(productLink => ({
+          const dataLink = option.productLinks.map(productLink => ({
             ...productLink,
             ...productLink.extensionAttributes
           }));
-          option.productLinks = reducedProductLink;
+          option.productLinks = dataLink;
         });
 
         result.bundleOptions = bundleProductOptions;
       }
     }
 
-    return {
-      data: result
-    };
+    return result;
   }
 
   /**
    * Resolve Product Price from Product
-   * @param {Object} obj - parent (MagentoProduct or MagentoProductListItem)
+   * @param {Object} parent - parent (MagentoProduct or MagentoProductListItem)
    * @return {ProductPrice} product price
    */
-  productPrice({ data }) {
-    const { price } = data;
+  productPrice(parent) {
+    const { price } = parent;
 
     const isProductListItem = typeof price === 'object';
     if (isProductListItem) {
@@ -682,7 +648,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         minTier: tryParseNumber(price.minTierPrice)
       };
     }
-    const { tierPrices = [], customAttributes } = data;
+    const { tierPrices = [], customAttributes } = parent;
 
     return {
       regular: tryParseNumber(price) || 0.0,
@@ -700,7 +666,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {TierPrice[]} product price
    */
   async productTierPrices(parent, args, context, info) {
-    let { data } = parent;
+    let data = parent;
+
     if (typeResolverPathToString(info.path).startsWith('category.products')) {
       const response = await this.get(`/falcon/products/${data.id}`, {}, { context: { useAdminToken: true } });
       this.convertAttributesSet(response);
@@ -726,7 +693,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {ConfigurableProductOption} configurable product options
    */
   async configurableProductOptions(parent, args, context, info) {
-    let { data } = parent;
+    let data = parent;
 
     if (typeResolverPathToString(info.path).startsWith('category.products')) {
       const response = await this.get(`/falcon/products/${data.id}`, {}, { context: { useAdminToken: true } });
@@ -734,17 +701,16 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       data = this.convertKeys(response.data);
     }
 
-    const { extensionAttributes = {} } = data;
-    const { configurableProductOptions = [] } = extensionAttributes;
-
-    return configurableProductOptions.map(({ values, ...restOptions }) => ({
-      ...restOptions,
-      values: values.map(x => ({
-        valueIndex: x.valueIndex,
-        inStock: x.extensionAttributes.inStock,
-        label: x.extensionAttributes.label
-      }))
-    }));
+    if (data.extensionAttributes && Array.isArray(data.extensionAttributes.configurableProductOptions)) {
+      return data.extensionAttributes.configurableProductOptions.map(({ values, ...restOptions }) => ({
+        ...restOptions,
+        values: values.map(({ extensionAttributes = {}, ...x }) => ({
+          valueIndex: x.valueIndex,
+          inStock: extensionAttributes.inStock || [],
+          label: extensionAttributes.label
+        }))
+      }));
+    }
   }
 
   /**
@@ -788,52 +754,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         }
       }
     );
-  }
-
-  /**
-   * Reduce url endpoint data.
-   * Find entity reducer and use it.
-   *
-   * @param {object} data - parsed response Api Response
-   * @param {string} [currency] currency code
-   * @return {CmsPage | Product | Category} reduced data
-   */
-  reduceUrl(data, currency = null) {
-    const type = data.entity_type;
-    const entityData = data[type.replace('-', '_')];
-    // unify the types so client receives 'shop-page, 'shop-product', 'shop-category, etc.
-    const unifiedType = `shop-${type.replace('cms-', '')}`;
-
-    if (entityData === null) {
-      return { id: data.entity_id, type: unifiedType };
-    }
-
-    let reducer;
-
-    if (type === 'cms-page') {
-      reducer = this.reduceCmsPage;
-    } else if (type === 'product') {
-      reducer = this.reduceProduct;
-    } else if (type === 'category') {
-      reducer = this.reduceCategory;
-    } else {
-      throw new Error(`Unknown url entity type: ${type} in magento api.`);
-    }
-
-    const reducedEntityData = reducer.call(this, { data: entityData }, currency);
-
-    return Object.assign(reducedEntityData.data, { type: unifiedType });
-  }
-
-  /**
-   * Reduce category data
-   * @param {object} response - api response
-   * @return {Category} reduced data
-   */
-  reduceCategory(response) {
-    this.convertCategoryData(response);
-
-    return response;
   }
 
   /**
@@ -889,7 +809,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     try {
-      const { data: cartItem } = await this.post(`${cartPath}/items`, product);
+      const cartItem = await this.post(`${cartPath}/items`, product);
 
       this.convertKeys(cartItem);
       this.processPrice(cartItem, ['price']);
@@ -921,7 +841,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   async mergeGuestCart(guestQuoteId) {
     // send masked_quote_id as param so Magento merges guest's cart with user's cart
     const response = await this.post('/falcon/carts/mine', { masked_quote_id: guestQuoteId });
-    this.session.cart = { quoteId: response.data };
+    this.session.cart = { quoteId: response };
 
     return this.session.cart;
   }
@@ -941,7 +861,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const cartPath = token ? '/falcon/carts/mine' : '/guest-carts';
     const response = await this.post(cartPath);
 
-    this.session.cart = { quoteId: response.data };
+    this.session.cart = { quoteId: response };
+    this.context.session.save();
 
     return this.session.cart;
   }
@@ -995,7 +916,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const cartPath = this.getCartPath();
 
     try {
-      const [{ data: quote }, { data: totals }] = await Promise.all([
+      const [quote, totals] = await Promise.all([
         this.get(
           cartPath,
           {},
@@ -1078,7 +999,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   async countries() {
     const response = await this.get('/directory/countries', {}, { context: { useAdminToken: false } });
 
-    const countries = response.data.map(item => ({
+    const countries = response.map(item => ({
       code: item.id,
       englishName: item.full_name_english,
       localName: item.full_name_locale,
@@ -1101,7 +1022,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const dateNow = Date.now();
 
     try {
-      const response = await this.post(
+      const token = await this.post(
         '/integration/customer/token',
         {
           username: input.email,
@@ -1110,7 +1031,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         { context: { skipAuth: true } }
       );
 
-      const { data: token } = response;
       // todo: validTime should be extracted from the response, but after recent changes Magento doesn't send it
       // so that should be changed once https://github.com/deity-io/falcon-magento2-development/issues/32 is resolved
       const validTime = 1;
@@ -1217,7 +1137,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     const response = await this.get('/customers/me');
 
-    const convertedData = this.convertKeys(response.data);
+    const convertedData = this.convertKeys(response);
     convertedData.addresses = convertedData.addresses.map(addr => this.convertAddressData(addr));
 
     const { extensionAttributes = {} } = convertedData;
@@ -1278,7 +1198,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     const response = await this.get('/falcon/orders/mine', query, { context: { pagination } });
 
-    return this.convertKeys(response.data);
+    return this.convertKeys(response);
   }
 
   /**
@@ -1313,29 +1233,27 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Order} processed order
    */
   convertOrder(response) {
-    const { data } = response;
-
-    if (!data || isEmpty(data)) {
+    if (!response || isEmpty(response)) {
       return response;
     }
 
-    response.data = this.convertKeys(response.data);
-    response.data.items = this.convertItemsResponse(data.items);
-    response = this.convertTotals(response);
+    const order = this.convertKeys(response);
+    order.items = this.convertItemsResponse(order.items);
+    response = this.convertTotals(order);
 
-    const { extensionAttributes, payment } = data;
+    const { extensionAttributes, payment } = order;
 
     if (extensionAttributes) {
-      response.data.shippingAddress = extensionAttributes.shippingAddress;
-      delete response.data.extensionAttributes;
+      order.shippingAddress = extensionAttributes.shippingAddress;
+      delete order.extensionAttributes;
     }
 
     if (payment && payment.extensionAttributes) {
-      response.data.paymentMethodName = payment.extensionAttributes.methodName;
-      delete response.data.payment;
+      order.paymentMethodName = payment.extensionAttributes.methodName;
+      delete order.payment;
     }
 
-    return response.data;
+    return order;
   }
 
   /**
@@ -1366,8 +1284,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {object} processed response
    */
   convertTotals(response) {
-    let totalsData = response.data;
-
+    let totalsData = response;
     totalsData = this.convertKeys(totalsData);
 
     const { totalSegments } = totalsData;
@@ -1384,7 +1301,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       }
     }
 
-    return response;
+    return totalsData;
   }
 
   /**
@@ -1419,7 +1336,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       }
     };
 
-    const { data: cartItem } = await this.put(`${cartPath}/items/${itemId}`, data);
+    const cartItem = await this.put(`${cartPath}/items/${itemId}`, data);
 
     this.convertKeys(cartItem);
     this.processPrice(cartItem, ['price']);
@@ -1442,16 +1359,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     if (cart && cart.quoteId) {
       const result = await this.delete(`${cartPath}/items/${itemId}`);
-      if (result.data) {
+      if (result) {
         return {
           itemId
         };
       }
-
-      return {};
+    } else {
+      Logger.warn(`${this.name}: Trying to remove cart item without quoteId`);
     }
-
-    Logger.warn(`${this.name}: Trying to remove cart item without quoteId`);
 
     return {};
   }
@@ -1465,7 +1380,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   async editCustomer(obj, { input }) {
     const response = await this.put('/falcon/customers/me', { customer: { ...input } });
 
-    return this.convertKeys(response.data);
+    return this.convertKeys(response);
   }
 
   /**
@@ -1484,7 +1399,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     const response = await this.get(`/falcon/customers/me/address/${id}`);
 
-    return this.convertAddressData(response.data);
+    return this.convertAddressData(response);
   }
 
   /**
@@ -1499,7 +1414,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     const response = await this.get('/falcon/customers/me/address');
-    const items = response.data.items || [];
+    const items = response.items || [];
 
     return { items: items.map(x => this.convertAddressData(x)) };
   }
@@ -1519,7 +1434,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     const response = await this.post('/falcon/customers/me/address', { address: { ...input } });
 
-    return this.convertAddressData(response.data);
+    return this.convertAddressData(response);
   }
 
   /**
@@ -1537,7 +1452,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     const response = await this.put(`/falcon/customers/me/address`, { address: { ...input } });
 
-    return this.convertAddressData(response.data);
+    return this.convertAddressData(response);
   }
 
   /**
@@ -1554,9 +1469,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       throw new Error('You do not have an access to remove address data');
     }
 
-    const response = await this.delete(`/falcon/customers/me/address/${id}`);
-
-    return response.data;
+    return this.delete(`/falcon/customers/me/address/${id}`);
   }
 
   /**
@@ -1571,8 +1484,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const validatePath = `/falcon/customers/0/password/resetLinkToken/${token}`;
 
     try {
-      const result = await this.get(validatePath);
-      return result.data;
+      return this.get(validatePath);
     } catch (e) {
       // todo: use new version of error handler
       e.userMessage = true;
@@ -1606,8 +1518,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async resetCustomerPassword(obj, { input }) {
     const { resetToken, password: newPassword } = input;
-    const result = await this.put('/falcon/customers/password/reset', { email: '', resetToken, newPassword });
-    return result.data;
+    return this.put('/falcon/customers/password/reset', { email: '', resetToken, newPassword });
   }
 
   /**
@@ -1628,8 +1539,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     try {
-      const result = await this.put('/customers/me/password', { currentPassword, newPassword });
-      return result.data;
+      return this.put('/customers/me/password', { currentPassword, newPassword });
     } catch (e) {
       // todo: use new version of error handler
       if ([401, 503].includes(e.statusCode)) {
@@ -1659,8 +1569,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     try {
-      const result = await this.put(`${route}/coupons/${input.couponCode}`);
-      return result.data;
+      return this.put(`${route}/coupons/${input.couponCode}`);
     } catch (e) {
       if (e.statusCode === 404) {
         e.userMessage = true;
@@ -1680,8 +1589,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const route = this.getCartPath();
 
     if (cart && cart.quoteId) {
-      const result = this.delete(`${route}/coupons`);
-      return result.data;
+      return this.delete(`${route}/coupons`);
     }
 
     throw new Error('Trying to remove coupon without quoteId in session');
@@ -1699,11 +1607,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       Object.assign({}, input)
     );
 
-    response.data.forEach(method => {
+    response.forEach(method => {
       method.currency = this.session.currency;
     });
 
-    return this.convertKeys(response.data);
+    return this.convertKeys(response);
   }
 
   /**
@@ -1742,22 +1650,18 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     const cartPath = this.getCartPath();
-
     const falconPrefix = FALCON_CART_ACTIONS.indexOf(path) === -1 ? '' : '/falcon';
-
     const response = await this[method](`${falconPrefix}${cartPath}${path}`, method === 'get' ? null : data);
 
-    const cartData = this.convertKeys(response.data);
+    const cartData = this.convertKeys(response);
 
     if (cartData instanceof Object) {
       return response;
     }
 
-    response.data = {
+    return {
       data: cartData
     };
-
-    return response;
   }
 
   /**
@@ -1776,7 +1680,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     };
 
     const response = await this.performCartAction('/shipping-information', 'post', magentoData);
-    return this.convertKeys(response.data);
+    return this.convertKeys(response);
   }
 
   getPaymentMethodConfig(paymentMethod) {
@@ -1791,7 +1695,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async setPaymentInfo(obj, { input }) {
     const address = this.prepareAddressForOrder(input.billingAddress);
-    const response = await this.performCartAction('/set-payment-information', 'post', {
+    return this.performCartAction('/set-payment-information', 'post', {
       email: input.email,
       billingAddress: address,
       paymentMethod: {
@@ -1799,7 +1703,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         additionalData: input.paymentMethod.additionalData
       }
     });
-    return response.data;
   }
 
   /**
@@ -1809,14 +1712,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<PlaceOrderResult>} order data
    */
   async placeOrder(obj, { input }) {
-    let response;
+    let placeOrderResult;
 
     if (input.paymentMethod.method === 'paypal_express') {
       return this.handlePayPalToken(input);
     }
 
     try {
-      response = await this.performCartAction('/place-order', 'put', input);
+      placeOrderResult = await this.performCartAction('/place-order', 'put', input);
     } catch (e) {
       // todo: use new version of error handler
       if (e.statusCode === 400) {
@@ -1826,8 +1729,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       throw e;
     }
 
-    const orderData = response.data;
-    this.session.orderId = orderData.orderId;
+    this.session.orderId = placeOrderResult.orderId;
 
     if (!this.session.orderId) {
       throw new Error('no order id from magento.');
@@ -1835,23 +1737,23 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     this.session.orderQuoteId = this.session.cart.quoteId;
 
-    if (orderData.extensionAttributes && orderData.extensionAttributes.adyenCc) {
-      return this.handleAdyen3dSecure(orderData.extensionAttributes.adyenCc);
+    if (placeOrderResult.extensionAttributes && placeOrderResult.extensionAttributes.adyenCc) {
+      return this.handleAdyen3dSecure(placeOrderResult.extensionAttributes.adyenCc);
     }
     this.removeCartData();
 
-    return response.data;
+    return placeOrderResult;
   }
 
   /**
    * Handling Adyen 3D-secure payment
-   * @param {object} data adyenRedirect data
+   * @param {object} adyenCcResult adyenRedirect data
    * @return {object} Redirect response data
    */
-  handleAdyen3dSecure(data) {
+  handleAdyen3dSecure(adyenCcResult) {
     const { origin } = this.context.headers;
-    const { issuerUrl, md, paRequest } = data;
-    let { termUrl } = data;
+    const { issuerUrl, md, paRequest } = adyenCcResult;
+    let { termUrl } = adyenCcResult;
 
     // `origin` is available on client-side request (checkout page)
     // replacing "magento host" with the one from the client-side request
@@ -1909,14 +1811,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       });
     }
 
-    const { data: setPaymentInfoResult } = await this.setPaymentInfo({}, { input });
+    const setPaymentInfoResult = await this.setPaymentInfo({}, { input });
     if (!setPaymentInfoResult) {
       throw new Error('Failed to set payment information');
     }
-    const { data } = await this.performCartAction('/paypal-express-fetch-token', 'get');
+    const fetchTokenResult = await this.performCartAction('/paypal-express-fetch-token', 'get');
 
     return {
-      url: data.url,
+      url: fetchTokenResult.url,
       method: 'GET',
       fields: []
     };
@@ -1940,10 +1842,10 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       : `/falcon/guest-orders/${orderId}/order-info`;
 
     const response = await this.get(orderEndpoint, {}, { context: { useAdminToken: !isLoggedIn } });
-    response.data = this.convertKeys(response.data);
-    response.data.paymentMethodName = response.data.payment.method;
+    const lastOrder = this.convertKeys(response);
+    lastOrder.paymentMethodName = lastOrder.payment.method;
 
-    return response.data;
+    return lastOrder;
   }
 
   removeCartData() {
@@ -1963,7 +1865,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       { url: path.replace(/^\//, '') },
       { context: { useAdminToken: true } }
     );
-    return this.convertBreadcrumbs(this.convertKeys(resp.data));
+    return this.convertBreadcrumbs(this.convertKeys(resp));
   }
 
   /**
@@ -1974,7 +1876,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async categoryChildren(obj) {
     return new Promise((res, rej) => {
-      Promise.all(obj.data.children.split(',').map(id => this.category(obj, { id }))).then(res, rej);
+      Promise.all(obj.children.split(',').map(id => this.category(obj, { id }))).then(res, rej);
     });
   }
 
