@@ -85,18 +85,22 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<MenuItem[]>} requested Menu data
    */
   async menu() {
-    const response = await this.get('/falcon/menus');
+    const response = await this.getForIntegration('/falcon/menus');
     const menuItems = this.convertKeys(response);
 
     const mapMenu = x => {
+      if (!x) {
+        return [];
+      }
+
       if (Array.isArray(x)) {
-        return x.length > 0 ? x.map(mapMenu) : [];
+        return x.map(mapMenu);
       }
 
       return {
         ...x,
         urlPath: urlJoin(x.urlPath, undefined, { leadingSlash: true }),
-        children: x.children && x.children.length > 0 ? x.children.map(mapMenu) : []
+        children: mapMenu(x.children)
       };
     };
 
