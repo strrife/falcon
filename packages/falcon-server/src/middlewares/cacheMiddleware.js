@@ -7,11 +7,18 @@ const GraphQLCacheDirective = require('../schemaDirectives/GraphQLCacheDirective
  * @property {string} id Entity ID
  */
 
-/* eslint-disable-next-line valid-jsdoc */
+/**
+ * @typedef {import('@deity/falcon-server-env').Cache} Cache
+ */
+
+/**
+ * @typedef {import('koa').Middleware} Middleware
+ */
+
 /**
  * Cache middleware for handling web-hooks to flush the cache by tags
- * @param {import('@deity/falcon-server-env').Cache} cache Cache component
- * @return {import('koa').Middleware} Koa middleware callback
+ * @param {Cache} cache Cache component
+ * @return {Middleware} Koa middleware callback
  */
 const cacheMiddleware = cache => async ctx => {
   /** @type {Array<CacheTagEntry>} List of posted cache tag entries to invalidate */
