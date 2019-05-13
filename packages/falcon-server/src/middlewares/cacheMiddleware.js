@@ -7,6 +7,7 @@ const GraphQLCacheDirective = require('../schemaDirectives/GraphQLCacheDirective
  * @property {string} id Entity ID
  */
 
+/* eslint-disable-next-line valid-jsdoc */
 /**
  * Cache middleware for handling web-hooks to flush the cache by tags
  * @param {import('@deity/falcon-server-env').Cache} cache Cache component
