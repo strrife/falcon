@@ -635,25 +635,18 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   /**
    * Resolve Product Price from Product
    * @param {Object} parent - parent (MagentoProduct or MagentoProductListItem)
+   * @param {Object} args arguments
+   * @param {Object} context context
+   * @param {Object} info info
    * @return {ProductPrice} product price
    */
   productPrice(parent) {
     const { price } = parent;
 
-    const isProductListItem = typeof price === 'object';
-    if (isProductListItem) {
-      return {
-        regular: tryParseNumber(price.regularPrice) || 0.0,
-        special: tryParseNumber(price.specialPrice),
-        minTier: tryParseNumber(price.minTierPrice)
-      };
-    }
-    const { tierPrices = [], customAttributes } = parent;
-
     return {
-      regular: tryParseNumber(price) || 0.0,
-      special: tryParseNumber(customAttributes && customAttributes.specialPrice),
-      minTier: tierPrices.length ? Math.min(...tierPrices.map(x => tryParseNumber(x.value))) : undefined
+      regular: tryParseNumber(price.regularPrice) || 0.0,
+      special: tryParseNumber(price.specialPrice),
+      minTier: tryParseNumber(price.minTierPrice)
     };
   }
 
@@ -666,13 +659,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {TierPrice[]} product price
    */
   async productTierPrices(parent, args, context, info) {
-    let data = parent;
-
-    if (typeResolverPathToString(info.path).startsWith('category.products')) {
-      const response = await this.get(`/falcon/products/${data.id}`, {}, { context: { useAdminToken: true } });
-      this.convertAttributesSet(response);
-      data = this.convertKeys(response.data);
-    }
+    const data = typeResolverPathToString(info.path).startsWith('category.products')
+      ? await this.fetchProduct(parent.id)
+      : parent;
 
     const { price, tierPrices = [] } = data;
     const regularPrice = tryParseNumber(price.regularPrice) || 0.0;
@@ -693,24 +682,22 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {ConfigurableProductOption} configurable product options
    */
   async configurableProductOptions(parent, args, context, info) {
-    let data = parent;
+    const data = typeResolverPathToString(info.path).startsWith('category.products')
+      ? await this.fetchProduct(parent.id)
+      : parent;
 
-    if (typeResolverPathToString(info.path).startsWith('category.products')) {
-      const response = await this.get(`/falcon/products/${data.id}`, {}, { context: { useAdminToken: true } });
-      this.convertAttributesSet(response);
-      data = this.convertKeys(response.data);
+    if (!data.extensionAttributes || !Array.isArray(data.extensionAttributes.configurableProductOptions)) {
+      return [];
     }
 
-    if (data.extensionAttributes && Array.isArray(data.extensionAttributes.configurableProductOptions)) {
-      return data.extensionAttributes.configurableProductOptions.map(({ values, ...restOptions }) => ({
-        ...restOptions,
-        values: values.map(({ extensionAttributes = {}, ...x }) => ({
-          valueIndex: x.valueIndex,
-          inStock: extensionAttributes.inStock || [],
-          label: extensionAttributes.label
-        }))
-      }));
-    }
+    return data.extensionAttributes.configurableProductOptions.map(({ values, ...restOptions }) => ({
+      ...restOptions,
+      values: values.map(({ extensionAttributes = {}, ...x }) => ({
+        valueIndex: x.valueIndex,
+        inStock: extensionAttributes.inStock || [],
+        label: extensionAttributes.label
+      }))
+    }));
   }
 
   /**
@@ -763,10 +750,17 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Product>} product data
    */
   async product(obj, { id }) {
-    const response = await this.get(`/falcon/products/${id}`, {}, { context: { useAdminToken: true } });
-    const product = this.reduceProduct(response);
+    const data = await this.fetchProduct(id);
+    const product = this.reduceProduct(data);
 
     return product;
+  }
+
+  async fetchProduct(id) {
+    const data = await this.get(`/falcon/products/${id}`, {}, { context: { useAdminToken: true } });
+    this.convertAttributesSet(data);
+
+    return this.convertKeys(data);
   }
 
   /**
