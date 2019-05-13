@@ -2,17 +2,12 @@ const Logger = require('@deity/falcon-logger');
 const GraphQLCacheDirective = require('../schemaDirectives/GraphQLCacheDirective');
 
 /**
+ * @typedef {import('@deity/falcon-server-env').Cache} Cache
+ * @typedef {import('koa').Middleware} Middleware
+ *
  * @typedef {object} CacheTagEntry
  * @property {string} type Entity Type
  * @property {string} id Entity ID
- */
-
-/**
- * @typedef {import('@deity/falcon-server-env').Cache} Cache
- */
-
-/**
- * @typedef {import('koa').Middleware} Middleware
  */
 
 /**
