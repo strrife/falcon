@@ -1,29 +1,4 @@
-# Re-work of falcon-ecommerce-uikit library
-
-The purpose of this issue is to plan rework of the `@deity/falcon-ecommerce-uikit` package. The initial idea was to have a set of UI components that help building UI for shops. Unfortunately over the time we put almost everything related to front-end of shop in there - Queries, Mutations, higher order components that provide logic without rendering UI, reusable UI pieces and even full page views.
-
-Because of that it's very hard to maintain that library and also provide enough flexibility so developers are not forced to use particular things.
-
-Besides architectural issues there are a lot of issues with naming (mentioned at the end of this description) that we need to solve during this word.
-
-> NOTE: the term "business level components" in this issue relates to the components that do not render UI by themselves but provide a piece of logic that's required to achieve a particular functionality. That mostly covers Higher Order Components and Render Prop Components.
-
-## Goals to achieve:
-
-1. Organizing the code into separate logical packages (UI, business logic, data access)
-2. Splitting the code to small units (component per file approach?) so component overriding works at all levels
-3. Providing documentation for everything (listing components and their purpose)
-4. Moving pieces that should not be inside separate libraries to the example shop
-5. Unifying naming convention
-6. Produce conventions/standards for naming:
-
-- gql constants
-- Query and Mutation components
-- data types
-- "business level" components
-- UI components
-
-## List of currently existing things
+# List of components in @deity/falcon-ecommerce-uikit
 
 ### Existing Queries and Mutation classes:
 
@@ -570,19 +545,3 @@ Besides architectural issues there are a lot of issues with naming (mentioned at
 - SearchProvider
 - SignOutLogic
 - SortOrdersProvider
-
-## NOTES
-
-- `RenderProps` vs `InjectedProps` (e.g. `EnsureTTIRenderProps` and `CheckoutLogicInjectedProps`)
-- `Logic` vs `Provider` (e.g. `CheckoutLogic` and `FiltersDataProvider`)
-- `ContextType` vs `ContextData` (e.g. `LocaleContextType` is a definition of context data so in that case `LocalContextData` seems to be a better choice)
-- `SomethingLayout` components (created usually with `themed()` call or as React.SFC) vs `itemSomethingLayout` properties - defined as props of `DefaultThemeProps` type - both have "Layout" in the name and that's confusing. Examples: `MiniFormLayout` (React.SFC), `AddressCardLayout` (`themed()`) and `orderItemSummaryLayout` (const of `DefaultThemeProps` type)
-- inconsistencies between query names and its data (`OrderListQuery` returns `OrdersData`, while it should be `OrderListData`)
-
-## Suggested naming for packages:
-
-- `falcon-ui-widgets` (contains all high level UI components for both blog and shop)
-- `falcon-shop-data` (contains gql definitions, Queries and Mutations for shop)
-- `falcon-blog-data` (contains gql definitions, Queries for blog)
-- what about business level components?
-- what about TS typings (probably placing those in one file within the package that uses those is the best option to keep things simple)
