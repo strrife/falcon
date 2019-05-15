@@ -63,7 +63,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     return super.delete(path, params, deepMerge(init, { context: { auth: AuthScope.Customer } }));
   }
 
-  // async
   /**
    * Makes sure that context required for http calls exists
    * Gets basic store configuration from Magento
@@ -310,7 +309,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       return;
     }
 
-    throw new Error(`Attempt to authenticate the request using an unsupported scope: "${authScope}"!`);
+    throw new Error(`Attempted to authenticate the request using an unsupported scope: "${authScope}"!`);
   }
 
   /**

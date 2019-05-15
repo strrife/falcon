@@ -30,7 +30,7 @@ function getDefaultAuthScope(customerTokenExists) {
 }
 
 /**
- * Check if authType is one of supported IntegrationAuthType
+ * Check if authType is one of the supported IntegrationAuthType entries
  * @param {string} authType Integration authentication method type
  * @returns {boolean} true if it is supported
  */
