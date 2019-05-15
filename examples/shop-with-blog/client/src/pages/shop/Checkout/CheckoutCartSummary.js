@@ -51,7 +51,7 @@ const CartItem = ({ item }) => (
 
 const OptionRow = ({ option }) => (
   <Box display="flex" fontSize="xs">
-    <Text flex="1">{option.label}:</Text>
+    <Text flex="1">{`${option.label}:`}</Text>
     <Text flex="2">{option.value}</Text>
   </Box>
 );

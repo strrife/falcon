@@ -58,6 +58,7 @@ module.exports = class FalconI18nPlugin {
 
     return Object.keys(watcher.mtimes);
   }
+
   /**
    * Opens all JSON files from definition, merges and writes
    * @param {{lng: string, ns: string, sources: string[]}} sourceDefinition - definition according to which merging should be performed.

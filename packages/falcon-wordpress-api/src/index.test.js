@@ -1,5 +1,5 @@
-const WordpressApi = require('./');
 const nock = require('nock');
+const WordpressApi = require('./');
 
 describe('WordPress API', () => {
   let wpApi;
