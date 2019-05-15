@@ -39,10 +39,15 @@ export interface GqlServerConfig<TContext = any> {
 }
 
 export type ConfigurableContainerConstructorParams = ConfigurableConstructorParams<ApiDataSourceConfig> & {
+  /** ApiContainer instance */
   apiContainer: ApiContainer;
+  /** GqlServerConfig instance */
   gqlServerConfig: GqlServerConfig<any>;
+  /** EventEmitter2 instance */
   eventEmitter: EventEmitter2;
+  /** API DataSource short-name */
   name: string;
+  /** API DataSource config */
   config: ApiDataSourceConfig;
 };
 
@@ -67,11 +72,6 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = Gr
 
   /**
    * @param {ConfigurableContainerConstructorParams} params Constructor params
-   * @param {ApiDataSourceConfig} params.config API DataSource config
-   * @param {string} params.name API DataSource short-name
-   * @param {ApiContainer} params.apiContainer ApiContainer instance
-   * @param {EventEmitter2} params.eventEmitter EventEmitter2 instance
-   * @param {GqlServerConfig} params.gqlServerConfig GqlServerConfig instance
    */
   constructor(params: ConfigurableContainerConstructorParams) {
     super();
