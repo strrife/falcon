@@ -61,7 +61,7 @@ module.exports = {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.tsx'] }],
     'react/no-danger': 'off',
     'react/no-multi-comp': 'off',
-    // 'react/require-default-props': ['off'],
+    'react/require-default-props': ['off'],
     'react/no-access-state-in-setstate': 'error',
     'react/prop-types': 'off',
     'react/destructuring-assignment': 'off',
