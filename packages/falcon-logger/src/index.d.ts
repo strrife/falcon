@@ -1,4 +1,4 @@
-declare namespace Logger {
+export declare namespace Logger {
   function setLogLevel(level: string): void;
   function log(...args: any[]): void;
   function debug(...args: any[]): void;
@@ -7,5 +7,3 @@ declare namespace Logger {
   function error(...args: any[]): void;
   function verbose(...args: any[]): void;
 }
-
-export = Logger;

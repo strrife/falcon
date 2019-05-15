@@ -1,3 +1,1 @@
-import * as Logger from './src';
-
-export = Logger;
+export * from './src';
