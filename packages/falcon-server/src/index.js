@@ -19,7 +19,7 @@ const ExtensionContainer = require('./containers/ExtensionContainer');
 const EndpointContainer = require('./containers/EndpointContainer');
 const DynamicRouteResolver = require('./resolvers/DynamicRouteResolver');
 const cacheMiddleware = require('./middlewares/cacheMiddleware');
-const GraphQLCacheDirective = require('./schemaDirectives/GraphQLCacheDirective');
+const schemaDirectives = require('./schemaDirectives');
 
 const BaseSchema = readFileSync(resolvePath(__dirname, './schema.graphql'), 'utf8');
 
@@ -85,9 +85,7 @@ class FalconServer {
         });
         return dataSources;
       },
-      schemaDirectives: {
-        cache: GraphQLCacheDirective
-      },
+      schemaDirectives,
       formatError: error => this.formatGraphqlError(error),
       // inject session and headers into GraphQL context
       context: ({ ctx }) => ({
