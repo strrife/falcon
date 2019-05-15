@@ -11,7 +11,7 @@ module.exports = ({ target }) => {
 
   const result = spawn.sync(
     `babel`,
-    ['src', '-d', 'dist', '-x', '.ts,.tsx', '-s', '--config-file', babelConfigPath, '--source-map', 'inline'],
+    ['src', '-d', 'dist', '-x', '.ts,.tsx,.js,.jsx', '-s', '--config-file', babelConfigPath, '--source-map', 'inline'],
     {
       stdio: 'inherit'
     }
