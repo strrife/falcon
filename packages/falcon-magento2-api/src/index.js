@@ -683,9 +683,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     return this.get(
       '/falcon/urls/',
-      {
-        url: path
-      },
+      { url: path },
       {
         context: {
           didReceiveResult: result => ({
