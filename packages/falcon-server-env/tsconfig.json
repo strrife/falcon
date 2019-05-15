@@ -27,5 +27,5 @@
     "pretty": true,
     "esModuleInterop": true
   },
-  "exclude": ["src/**/*.test.ts"]
+  "exclude": ["src/**/*.test.ts", "dist/**/*"]
 }
