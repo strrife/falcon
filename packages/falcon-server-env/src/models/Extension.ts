@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo, GraphQLSchema, GraphQLObjectType } from 'graphql';
 import { makeExecutableSchema } from 'graphql-tools';
 import { EventEmitter2 } from 'eventemitter2';
-import * as Logger from '@deity/falcon-logger';
+import Logger from '@deity/falcon-logger';
 import ApiDataSource from './ApiDataSource';
 import {
   ApiUrlPriority,
@@ -39,10 +39,13 @@ export type GraphQLResolverMap = {
 
 export default abstract class Extension {
   public config: ExtensionConfig;
+
   public name: string;
+
   public api?: ApiDataSource;
 
   protected extensionContainer: ExtensionContainer;
+
   protected eventEmitter: EventEmitter2;
 
   /**

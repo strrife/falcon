@@ -1,4 +1,4 @@
-import * as Logger from '@deity/falcon-logger';
+import Logger from '@deity/falcon-logger';
 import { Body, Request, RESTDataSource } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
 import { KeyValueCache } from 'apollo-server-caching';
@@ -50,13 +50,19 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = Gr
   TContext
 > {
   public name: string;
+
   public config: ApiDataSourceConfig;
+
   public fetchUrlPriority: number = ApiUrlPriority.NORMAL;
+
   public perPage: number = 20;
 
   protected apiContainer: ApiContainer;
+
   protected eventEmitter: EventEmitter2;
+
   protected cache?: Cache;
+
   protected gqlServerConfig: GqlServerConfig<TContext>;
 
   /**
