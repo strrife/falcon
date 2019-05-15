@@ -37,7 +37,7 @@ export type GraphQLResolverMap = {
   };
 };
 
-export default abstract class Extension {
+export abstract class Extension {
   public config: ExtensionConfig;
 
   public name: string;
