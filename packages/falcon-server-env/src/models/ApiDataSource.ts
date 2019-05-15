@@ -275,7 +275,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = Gr
   }
 
   /**
-   * Converts params to URLSearchParam if it is plain object
+   * Converts params to URLSearchParam if it is a plain object
    * @param {URLSearchParamsInit} params Search params
    * @return {URLSearchParams} URLSearchParam
    */
