@@ -1,20 +1,29 @@
 {
   "name": "@deity/falcon-magento2-api",
   "license": "OSL-3.0",
-  "main": "src/index.js",
   "version": "0.5.0",
   "homepage": "https://falcon.deity.io/docs/falcon-server/api-providers#falcon-magento-2-api",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-magento2-api",
   "publishConfig": {
     "access": "public"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "source": "src/index.js",
+  "files": [
+    "dist",
+    "src"
+  ],
   "jest": {
     "setupFiles": [
       "../../test/nodeEnvSetupFile"
     ]
   },
   "scripts": {
+    "prepare": "npm run clean && npm run build",
     "clean": "falcon-scripts clean",
+    "build": "falcon-scripts build --target=NODE",
+    "watch": "falcon-scripts watch",
     "test": "falcon-scripts test",
     "test:coverage": "falcon-scripts test:coverage"
   },
