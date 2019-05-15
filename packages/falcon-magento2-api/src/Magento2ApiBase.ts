@@ -1,10 +1,12 @@
+import { ApiDataSource } from '@deity/falcon-server-env';
+
 const util = require('util');
 const _ = require('lodash');
 const deepMerge = require('deepmerge');
 const OAuth = require('oauth');
 const addMilliseconds = require('date-fns/add_milliseconds');
 const Logger = require('@deity/falcon-logger');
-const { ApiDataSource } = require('@deity/falcon-server-env');
+
 const { AuthenticationError, codes } = require('@deity/falcon-errors');
 const {
   AuthScope,
@@ -31,6 +33,22 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     this.storeConfigMap = {};
     this.itemUrlSuffix = this.config.itemUrlSuffix || '.html';
   }
+
+  storePrefix: string;
+
+  cookie: any;
+
+  magentoConfig: any;
+
+  storeList: any[];
+
+  storeConfigMap: any;
+
+  itemUrlSuffix: string;
+
+  oAuth: any;
+
+  reqToken: any;
 
   // /**
   //  * create authorized GET request
@@ -254,12 +272,11 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Resolves url based on passed parameters
-   * @param {object} req - request params
+   * @param {RequestOptions} req - request params
    * @return {Promise<URL>} resolved url object
    */
   async resolveURL(req) {
-    const { path } = req;
-    return super.resolveURL({ path: this.getPathWithPrefix(path) });
+    return super.resolveURL({ ...req, path: this.getPathWithPrefix(req.path) });
   }
 
   getPathWithPrefix(path) {
@@ -387,8 +404,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       Logger.info(`${this.name}: Admin token found.`);
     }
 
-    this.tokenExpirationTime = null;
-
     // FIXME: bellow code does not make sense anymore !!!
     // according to https://github.com/deity-io/falcon-magento2-development/issues/32
     // admin_token_ttl is returned via `/store/storeConfigs`, so if we want to cache adminToken
@@ -452,11 +467,12 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   /**
    * Process received response data
    * @param {Response} response - received response from the api
+   * @param {Request} request - request
    * @return {object} processed response data
    */
-  async didReceiveResponse(response) {
+  async didReceiveResponse(response, request) {
     const cookies = (response.headers.get('set-cookie') || '').split('; ');
-    const data = await super.didReceiveResponse(response);
+    const data = await super.didReceiveResponse(response, request);
     const { pagination: paginationInput } = response.context;
 
     if (cookies.length) {
