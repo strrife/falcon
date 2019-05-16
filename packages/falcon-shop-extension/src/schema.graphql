@@ -13,7 +13,7 @@ extend type Query {
   cart: Cart
   countries: CountryList
   order(id: Int!): Order
-  lastOrder: Order
+  lastOrder: Order @cacheInvalidator(idPath: [{ path: "items", type: "Product" }])
   orders(pagination: PaginationInput): Orders
   address(id: Int!): Address
   addresses: AddressList
@@ -438,7 +438,7 @@ type CartItemOptionValue {
 
 type OrderItem {
   itemId: Int!
-  sku: String!
+  sku: ID!
   qty: Float!
   name: String
   availableQty: Float
