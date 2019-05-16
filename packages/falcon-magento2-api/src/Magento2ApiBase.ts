@@ -305,13 +305,6 @@ export class Magento2ApiBase extends ApiDataSource {
    * @param {RequestOptions} req - request params
    */
   async willSendRequest(req) {
-    const { context } = req;
-
-    // apply default request authorization convention
-    context.auth = context.auth === undefined ? getDefaultAuthScope(!!this.session.customerToken) : context.auth;
-
-    req.context.isAuthRequired = inferIsAuthRequired(context);
-
     req.headers.set('Cookie', this.cookie);
 
     await super.willSendRequest(req);
@@ -345,6 +338,7 @@ export class Magento2ApiBase extends ApiDataSource {
           req.method
         );
         req.headers.set('Authorization', authorizationHeader);
+
         return;
       }
     }
@@ -352,14 +346,14 @@ export class Magento2ApiBase extends ApiDataSource {
     if (authScope === AuthScope.Customer) {
       const { customerToken } = this.session;
 
-      if (this.isCustomerTokenValid(customerToken)) {
-        req.headers.set('Authorization', `Bearer ${customerToken.token}`);
-      } else {
+      if (!this.isCustomerTokenValid(customerToken)) {
         const sessionExpiredError = new AuthenticationError(`Customer token has expired.`);
         sessionExpiredError.statusCode = 401;
         sessionExpiredError.code = codes.CUSTOMER_TOKEN_EXPIRED;
         throw sessionExpiredError;
       }
+
+      req.headers.set('Authorization', `Bearer ${customerToken.token}`);
 
       return;
     }
