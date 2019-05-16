@@ -1,25 +1,26 @@
 import { ApiDataSource } from '@deity/falcon-server-env';
+import {
+  AuthScope,
+  IntegrationAuthType,
+  getDefaultAuthScope,
+  isIntegrationAuthTypeSupported,
+  inferIsAuthRequired,
+  setAuthScope
+} from './authorization';
 
 const util = require('util');
 const _ = require('lodash');
-const deepMerge = require('deepmerge');
 const OAuth = require('oauth');
 const addMilliseconds = require('date-fns/add_milliseconds');
 const Logger = require('@deity/falcon-logger');
 
 const { AuthenticationError, codes } = require('@deity/falcon-errors');
-const {
-  AuthScope,
-  IntegrationAuthType,
-  getDefaultAuthScope,
-  isIntegrationAuthTypeSupported
-} = require('./authorization');
 
 /**
  * Base API features (configuration fetching, response parsing, token management etc.) required for communication
  * with Magento2. Extracted to separate class to keep final class clean (only resolvers-related logic should be there).
  */
-module.exports = class Magento2ApiBase extends ApiDataSource {
+export class Magento2ApiBase extends ApiDataSource {
   /**
    * Create Magento api wrapper instance
    * @param {object} params configuration params
@@ -58,49 +59,64 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   //  * @param {object} init ss
   //  * @returns {Promise} sd
   //  */
-  // async getAuth(scope, path, params = undefined, init = {}) {
-  //   return super.get(path, params, deepMerge(init, { context: { auth: scope } }));
-  // }
-
-  async getForIntegration(path, params = undefined, init = {}) {
-    // this.getAuth('integration', 's');
-    return super.get(path, params, deepMerge(init, { context: { auth: AuthScope.Integration } }));
+  async getAuth(path, params = undefined, init: any = {}) {
+    return super.get(path, params, setAuthScope(init, !!this.session.customerToken));
   }
 
-  async postForIntegration(path, body = undefined, init = {}) {
-    return super.post(path, body, deepMerge(init, { context: { auth: AuthScope.Integration } }));
+  async postAuth(path, body = undefined, init: any = {}) {
+    return super.post(path, body, setAuthScope(init, !!this.session.customerToken));
   }
 
-  async patchForIntegration(path, body = undefined, init = {}) {
-    return super.patch(path, body, deepMerge(init, { context: { auth: AuthScope.Integration } }));
+  async patchAuth(path, body = undefined, init: any = {}) {
+    return super.patch(path, body, setAuthScope(init, !!this.session.customerToken));
   }
 
-  async putForIntegration(path, body = undefined, init = {}) {
-    return super.put(path, body, deepMerge(init, { context: { auth: AuthScope.Integration } }));
+  async putAuth(path, body = undefined, init: any = {}) {
+    return super.put(path, body, setAuthScope(init, !!this.session.customerToken));
   }
 
-  async deleteForIntegration(path, params = undefined, init = {}) {
-    return super.delete(path, params, deepMerge(init, { context: { auth: AuthScope.Integration } }));
+  async deleteAuth(path, params = undefined, init: any = {}) {
+    return super.delete(path, params, setAuthScope(init, !!this.session.customerToken));
   }
 
-  async getForCustomer(path, params = undefined, init = {}) {
-    return super.get(path, params, deepMerge(init, { context: { auth: AuthScope.Customer } }));
+  async getForIntegration(path, params = undefined, init: any = {}) {
+    return super.get(path, params, setAuthScope(init, AuthScope.Integration));
   }
 
-  async postForCustomer(path, body = undefined, init = {}) {
-    return super.post(path, body, deepMerge(init, { context: { auth: AuthScope.Customer } }));
+  async postForIntegration(path, body = undefined, init: any = {}) {
+    return super.post(path, body, setAuthScope(init, AuthScope.Integration));
   }
 
-  async patchForCustomer(path, body = undefined, init = {}) {
-    return super.patch(path, body, deepMerge(init, { context: { auth: AuthScope.Customer } }));
+  async patchForIntegration(path, body = undefined, init: any = {}) {
+    return super.patch(path, body, setAuthScope(init, AuthScope.Integration));
   }
 
-  async putForCustomer(path, body = undefined, init = {}) {
-    return super.put(path, body, deepMerge(init, { context: { auth: AuthScope.Customer } }));
+  async putForIntegration(path, body = undefined, init: any = {}) {
+    return super.put(path, body, setAuthScope(init, AuthScope.Integration));
   }
 
-  async deleteForCustomer(path, params = undefined, init = {}) {
-    return super.delete(path, params, deepMerge(init, { context: { auth: AuthScope.Customer } }));
+  async deleteForIntegration(path, params = undefined, init: any = {}) {
+    return super.delete(path, params, setAuthScope(init, AuthScope.Integration));
+  }
+
+  async getForCustomer(path, params = undefined, init: any = {}) {
+    return super.get(path, params, setAuthScope(init, AuthScope.Customer));
+  }
+
+  async postForCustomer(path, body = undefined, init: any = {}) {
+    return super.post(path, body, setAuthScope(init, AuthScope.Customer));
+  }
+
+  async patchForCustomer(path, body = undefined, init: any = {}) {
+    return super.patch(path, body, setAuthScope(init, AuthScope.Customer));
+  }
+
+  async putForCustomer(path, body = undefined, init: any = {}) {
+    return super.put(path, body, setAuthScope(init, AuthScope.Customer));
+  }
+
+  async deleteForCustomer(path, params = undefined, init: any = {}) {
+    return super.delete(path, params, setAuthScope(init, AuthScope.Customer));
   }
 
   /**
@@ -112,7 +128,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     const getCachedValue = async url => {
       const value = await this.cache.get([this.name, this.session.storeCode || 'default', url].join(':'), {
         fetchData: async () => {
-          const rawValue = await this.getForIntegration(url);
+          const rawValue = await this.getAuth(url);
 
           return JSON.stringify(rawValue);
         },
@@ -293,8 +309,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
     // apply default request authorization convention
     context.auth = context.auth === undefined ? getDefaultAuthScope(!!this.session.customerToken) : context.auth;
-    // if isAuthRequired is not explicitly set, we infer it from context.auth
-    context.isAuthRequired = context.isAuthRequired === undefined ? !!context.auth : context.isAuthRequired;
+
+    req.context.isAuthRequired = inferIsAuthRequired(context);
 
     req.headers.set('Cookie', this.cookie);
 
@@ -541,4 +557,4 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     delete this.session.cart;
     await this.setShopStore({}, { storeCode: 'default' });
   }
-};
+}
