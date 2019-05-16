@@ -1,4 +1,4 @@
-import { ApiDataSource } from '@deity/falcon-server-env';
+import { ApiDataSource, ContextRequestInit } from '@deity/falcon-server-env';
 import {
   AuthScope,
   IntegrationAuthType,
@@ -51,70 +51,167 @@ export class Magento2ApiBase extends ApiDataSource {
 
   reqToken: any;
 
-  // /**
-  //  * create authorized GET request
-  //  * @param {'integration' | 'customer' } scope authrization scope
-  //  * @param {string} path path
-  //  * @param {object} params ss
-  //  * @param {object} init ss
-  //  * @returns {Promise} sd
-  //  */
+  /**
+   * Create authorized GET request, for `customer` scope if customer logged in or `integration` otherwise
+   * @param {string} path path
+   * @param {object} params object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
   async getAuth(path, params = undefined, init: any = {}) {
     return super.get(path, params, setAuthScope(init, !!this.session.customerToken));
   }
 
+  /**
+   * Create authorized POST request, for `customer` scope if customer logged in or `integration` otherwise
+   * @param {string} path path
+   * @param {object} body body
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
   async postAuth(path, body = undefined, init: any = {}) {
     return super.post(path, body, setAuthScope(init, !!this.session.customerToken));
   }
 
+  /**
+   * Create authorized PATCH request, for `customer` scope if customer logged in or `integration` otherwise
+   * @param {string} path path
+   * @param {object} body body
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
   async patchAuth(path, body = undefined, init: any = {}) {
     return super.patch(path, body, setAuthScope(init, !!this.session.customerToken));
   }
 
+  /**
+   * Create authorized PUT request, for `customer` scope if customer logged in or `integration` otherwise
+   * @param {string} path path
+   * @param {object} body body
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
   async putAuth(path, body = undefined, init: any = {}) {
     return super.put(path, body, setAuthScope(init, !!this.session.customerToken));
   }
 
+  /**
+   * Create authorized DELETE request, for `customer` scope if customer logged in or `integration` otherwise
+   * @param {string} path path
+   * @param {object} params object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
   async deleteAuth(path, params = undefined, init: any = {}) {
     return super.delete(path, params, setAuthScope(init, !!this.session.customerToken));
   }
 
+  /**
+   * Create authorized GET request, for `integration` scope
+   * @param {string} path path
+   * @param {object} params object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
   async getForIntegration(path, params = undefined, init: any = {}) {
     return super.get(path, params, setAuthScope(init, AuthScope.Integration));
   }
 
+  /**
+   * Create authorized POST request, for `integration` scope
+   * @param {string} path path
+   * @param {object} body object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
   async postForIntegration(path, body = undefined, init: any = {}) {
     return super.post(path, body, setAuthScope(init, AuthScope.Integration));
   }
 
+  /**
+   * Create authorized PATCH request, for `integration` scope
+   * @param {string} path path
+   * @param {object} body object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
   async patchForIntegration(path, body = undefined, init: any = {}) {
     return super.patch(path, body, setAuthScope(init, AuthScope.Integration));
   }
 
+  /**
+   * Create authorized PUT request, for `integration` scope
+   * @param {string} path path
+   * @param {object} body object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
   async putForIntegration(path, body = undefined, init: any = {}) {
     return super.put(path, body, setAuthScope(init, AuthScope.Integration));
   }
 
+  /**
+   * Create authorized DELETE request, for `integration` scope
+   * @param {string} path path
+   * @param {object} params object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
   async deleteForIntegration(path, params = undefined, init: any = {}) {
     return super.delete(path, params, setAuthScope(init, AuthScope.Integration));
   }
 
+  /**
+   * Create authorized GET request, for `customer` scope
+   * @param {string} path path
+   * @param {object} params object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
   async getForCustomer(path, params = undefined, init: any = {}) {
     return super.get(path, params, setAuthScope(init, AuthScope.Customer));
   }
 
+  /**
+   * Create authorized POST request, for `customer` scope
+   * @param {string} path path
+   * @param {object} body object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
   async postForCustomer(path, body = undefined, init: any = {}) {
     return super.post(path, body, setAuthScope(init, AuthScope.Customer));
   }
 
+  /**
+   * Create authorized PATCH request, for `customer` scope
+   * @param {string} path path
+   * @param {object} body object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
   async patchForCustomer(path, body = undefined, init: any = {}) {
     return super.patch(path, body, setAuthScope(init, AuthScope.Customer));
   }
 
+  /**
+   * Create authorized PUT request, for `customer` scope
+   * @param {string} path path
+   * @param {object} body object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
   async putForCustomer(path, body = undefined, init: any = {}) {
     return super.put(path, body, setAuthScope(init, AuthScope.Customer));
   }
 
+  /**
+   * Create authorized DELETE request, for `customer` scope
+   * @param {string} path path
+   * @param {object} params object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
   async deleteForCustomer(path, params = undefined, init: any = {}) {
     return super.delete(path, params, setAuthScope(init, AuthScope.Customer));
   }
