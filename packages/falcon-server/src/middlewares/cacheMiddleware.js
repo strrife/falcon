@@ -1,5 +1,5 @@
 const Logger = require('@deity/falcon-logger');
-const GraphQLCacheDirective = require('../schemaDirectives/GraphQLCacheDirective');
+const { generateTagNames } = require('./../graphqlUtils');
 
 /**
  * @typedef {import('@deity/falcon-server-env').Cache} Cache
@@ -27,7 +27,7 @@ const cacheMiddleware = cache => async ctx => {
 
   /** @type {Array<string>} List of cache tags */
   const tags = requestTags
-    .map(({ id, type }) => (id && type ? GraphQLCacheDirective.generateTagNames(type, id) : type))
+    .map(({ id, type }) => (id && type ? generateTagNames(type, id) : type))
     .filter(value => value);
 
   Logger.debug(`Flushing cache tags: ${tags.join(', ')}`);

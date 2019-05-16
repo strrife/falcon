@@ -3,10 +3,13 @@ const { isScalarType } = require('graphql');
 /**
  * @typedef {import('graphql').GraphQLType} GraphQLType
  * @typedef {import('graphql').ResponsePath} ResponsePath
+ * @typedef {import('graphql').GraphQLResolveInfo} GraphQLResolveInfo
  */
 
 const PATH_SEPARATOR = '.';
 const ID_FIELD_TYPE = 'ID';
+const TAG_SEPARATOR = ':';
+const PARENT_KEYWORD = '$parent';
 
 /**
  * Generates a path-like string for the provided request
@@ -68,11 +71,82 @@ const findIdFieldName = gqlType => {
   });
 };
 
+/**
+ * Generate tag names using `entityName` and `entityId`
+ * @param {string} entityName Entity Type name (like "Product")
+ * @param {string|string[]} entityId Entity ID or list of IDs (like: "1" or ["1", "2"])
+ * @return {string[]} List of tag names (example: ["Product:1", "Product:2"])
+ */
+const generateTagNames = (entityName, entityId) => {
+  if (!entityId) {
+    return [];
+  }
+  const ids = Array.isArray(entityId) ? entityId.filter(element => element) : [entityId];
+  return ids.map(id => `${entityName}${TAG_SEPARATOR}${id}`);
+};
+
+/**
+ * Get a list of tags from the provided `sourceValue` using specified `fieldType` and `fieldPathSections` (for nested values)
+ * @param {object} sourceValue Source value to get tags from
+ * @param {GraphQLType} fieldType GraphQL Field Type object
+ * @param {string[]} [fieldPathSections=[]] An optional field path sections (example: ["products", "items"] which are created from a relative "products.items" field path)
+ * that are going to be used to get tags from. If not passed or empty - tags will be received from `sourceValue` directly.
+ * @return {string[]} List of tag names
+ */
+const getTagsForField = (sourceValue, fieldType, fieldPathSections = []) => {
+  if (!fieldPathSections.length) {
+    const { name: typeName } = getRootType(fieldType);
+    return generateTagNames(typeName, getFieldValue(sourceValue, findIdFieldName(fieldType)));
+  }
+
+  const [currentPath, ...restIdPath] = fieldPathSections;
+  const fields = fieldType.getFields();
+  let { name: typeName } = fieldType;
+  let fieldValue = getFieldValue(sourceValue, currentPath);
+
+  // Keep looking for nested ID path until it reaches the end node
+  if (currentPath && restIdPath.length) {
+    return getTagsForField(fieldValue, getRootType(fields[currentPath].type), restIdPath);
+  }
+  if (Array.isArray(fieldValue)) {
+    const currentType = getRootType(fields[currentPath].type);
+    typeName = currentType.name;
+    const currentCacheIdFieldName = findIdFieldName(currentType);
+    fieldValue = getFieldValue(fieldValue, currentCacheIdFieldName);
+  }
+
+  return [typeName, ...generateTagNames(typeName, fieldValue)];
+};
+
+/**
+ * Extract cache tags for the provided ID path and return a list of tags
+ * @param {string} idPath ID operation path string (like "$parent.items" or "items")
+ * @param {object} result Resolver result
+ * @param {GraphQLResolveInfo} info GraphQL info object
+ * @param {object} parent GraphQL parent object
+ * @return {string[]} List of tags
+ */
+const extractTagsForIdPath = (idPath, result, info, parent) => {
+  const [rootPath, ...fieldPathSections] = idPath.split(PATH_SEPARATOR);
+  const valueToCheck = rootPath === PARENT_KEYWORD ? parent : result;
+  const typeToCheck = getRootType(rootPath === PARENT_KEYWORD ? info.parentType : info.returnType);
+  if (rootPath !== PARENT_KEYWORD) {
+    // Put first path section back to "fieldPathSections" for non-parent entries
+    fieldPathSections.unshift(rootPath);
+  }
+
+  return getTagsForField(valueToCheck, typeToCheck, fieldPathSections);
+};
+
 module.exports = {
   PATH_SEPARATOR,
   ID_FIELD_TYPE,
+  PARENT_KEYWORD,
   getRootType,
   getOperationPath,
   getFieldValue,
+  getTagsForField,
+  generateTagNames,
+  extractTagsForIdPath,
   findIdFieldName
 };
