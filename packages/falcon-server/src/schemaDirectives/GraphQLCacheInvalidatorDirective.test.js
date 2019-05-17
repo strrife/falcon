@@ -97,5 +97,21 @@ describe('@cacheInvalidator directive', () => {
     const { data } = await buildSchemaAndRunQuery(typeDefs, resolvers, query, { cache, config }, schemaDirectives);
     expect(data).toEqual(expected);
     expect(cacheDeleteSpy).toHaveBeenCalledWith(['Bar:1', 'Bar:2']);
+    cacheDeleteSpy.mockClear();
+
+    const emptyResolvers = {
+      Query: {
+        foo: () => ({})
+      }
+    };
+    const { data: emptyData } = await buildSchemaAndRunQuery(
+      typeDefs,
+      emptyResolvers,
+      query,
+      { cache, config },
+      schemaDirectives
+    );
+    expect(emptyData).toEqual({ foo: { items: null } });
+    expect(cacheDeleteSpy).toHaveBeenCalledWith([]);
   });
 });
