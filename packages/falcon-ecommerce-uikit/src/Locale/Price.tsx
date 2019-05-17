@@ -1,25 +1,28 @@
 import React from 'react';
-import { themed, Text } from '@deity/falcon-ui';
-import { LocaleContext } from './LocaleContext';
+import PropTypes from 'prop-types';
+import { themed, Text, ThemedComponents } from '@deity/falcon-ui';
+import { Locale } from './LocaleContext';
 
-// Price formatting based on Intl api, see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
-const PriceInnerDom: React.SFC<any> = ({ value, currency, locale, ...rest }) => (
-  <LocaleContext.Consumer>
-    {localeContext => {
-      const localeCode = locale || localeContext.locale;
-      const localFallback = 'en';
+export type PriceProps = {
+  value: number;
+  currency?: string;
+  locale?: string;
+};
 
-      return (
-        <Text {...rest}>
-          {new Intl.NumberFormat([localeCode, localFallback], {
-            style: 'currency',
-            currency: currency || localeContext.currency
-          }).format(value)}
-        </Text>
-      );
-    }}
-  </LocaleContext.Consumer>
+const PriceInnerDom: React.SFC<PriceProps> = ({ value, currency, locale, children, ...rest }) => (
+  <Locale>
+    {({ priceFormat }) => (
+      <Text m="lg" {...rest}>
+        {priceFormat(value, { currency, locale })}
+      </Text>
+    )}
+  </Locale>
 );
+PriceInnerDom.propTypes = {
+  value: PropTypes.number.isRequired,
+  currency: PropTypes.string,
+  locale: PropTypes.string
+};
 
 export const Price = themed({
   tag: PriceInnerDom,
@@ -33,6 +36,20 @@ export const Price = themed({
       css: {
         whiteSpace: 'nowrap',
         overflow: 'hidden'
+      },
+      variants: {
+        old: {
+          css: {
+            textDecorationStyle: 'solid',
+            textDecorationLine: 'line-through'
+          }
+        },
+        special: {
+          fontWeight: 'bold',
+          css: {
+            color: 'red'
+          }
+        }
       }
     }
   }
