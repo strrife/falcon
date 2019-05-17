@@ -1,6 +1,13 @@
 /**
- * Build string representation of Apollo TypeResolver path
- * @param {{ key: string, prev: { key: string, prev: prev}}} typeResolverPath apollo type resolver path
+ * Path segment definition (graphql ResponsePath)
+ * @typedef {object} ResponsePath
+ * @property {string} key path segment
+ * @property {ResponsePath} prev previous path segment definition
+ */
+
+/**
+ * Build string representation of Apollo TypeResolver info path
+ * @param {ResponsePath} typeResolverPath apollo type resolver path
  * @returns {string} path
  */
 function typeResolverPathToString(typeResolverPath) {

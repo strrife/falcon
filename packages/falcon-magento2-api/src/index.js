@@ -11,8 +11,8 @@ const { addResolveFunctionsToSchema } = require('graphql-tools');
 const { ApiUrlPriority, htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
 const Magento2ApiBase = require('./Magento2ApiBase');
-const { tryParseNumber } = require('./infrastructure/number');
-const { typeResolverPathToString } = require('./infrastructure/apollo');
+const { tryParseNumber } = require('./utils/number');
+const { typeResolverPathToString } = require('./utils/apollo');
 
 const FALCON_CART_ACTIONS = [
   '/save-payment-information-and-order',

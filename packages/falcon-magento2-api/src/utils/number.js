@@ -1,7 +1,7 @@
 /**
- * Try to parse provided value to Number (using Number.parseFloat())
+ * Try to parse provided value to `number` (using `Number.parseFloat()`)
  * @param {object} x value to parse
- * @return {Number|undefined} `Number` if can or `undefined` otherwise
+ * @return {number|undefined} if can parse then `number` or `undefined` otherwise
  */
 function tryParseNumber(x) {
   const parsed = Number.parseFloat(x);
