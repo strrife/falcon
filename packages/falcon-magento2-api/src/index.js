@@ -666,10 +666,10 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { price, tierPrices = [] } = data;
     const regularPrice = tryParseNumber(price.regularPrice) || 0.0;
 
-    return tierPrices.map(x => ({
-      qty: x.qty,
-      value: x.value,
-      discount: regularPrice ? 100 - (100 * x.value) / regularPrice : 0.0
+    return tierPrices.map(tierPrice => ({
+      qty: tierPrice.qty,
+      value: tierPrice.value,
+      discount: regularPrice ? 100 - (100 * tierPrice.value) / regularPrice : 0.0
     }));
   }
 
