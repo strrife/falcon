@@ -29,7 +29,11 @@ export const GET_CATEGORY_PRODUCTS = gql`
         items {
           id
           name
-          price
+          price {
+            regular
+            special
+            minTier
+          }
           thumbnail
           urlPath
         }

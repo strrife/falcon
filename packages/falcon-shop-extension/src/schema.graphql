@@ -296,6 +296,18 @@ Mixed result for "Mutation.placeOrder" for
 """
 union PlaceOrderResult = PlaceOrderSuccessfulResult | PlaceOrder3dSecureResult
 
+type ProductPrice {
+  regular: Float!
+  special: Float
+  minTier: Float
+}
+
+type ProductTierPrice {
+  qty: Float!
+  value: Float!
+  discount: Float!
+}
+
 type Product {
   id: String!
   sku: ID!
@@ -304,10 +316,8 @@ type Product {
   urlPath: String!
   # Full url to resized product image
   thumbnail: String
-  priceType: String
-  price: String
-  minPrice: String
-  maxPrice: String
+  price: ProductPrice!
+  tierPrices: [ProductTierPrice]
   currency: String
   description: String
   stock: Stock
@@ -565,18 +575,18 @@ type Breadcrumb {
 }
 
 type ConfigurableProductOption {
-  id: String
-  attributeId: String
+  id: String!
+  attributeId: String!
   label: String
   position: String
-  productId: String
-  values: [ConfigurableProductOptionValue]
+  productId: String!
+  values: [ConfigurableProductOptionValue]!
 }
 
 type ConfigurableProductOptionValue {
-  inStock: [String]
+  inStock: [String]!
   label: String
-  valueIndex: String
+  valueIndex: String!
 }
 
 type BundleProductOption {
