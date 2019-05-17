@@ -2,7 +2,7 @@ const util = require('util');
 const _ = require('lodash');
 const deepMerge = require('deepmerge');
 const OAuth = require('oauth');
-const addMilliseconds = require('date-fns/add_milliseconds');
+const addSeconds = require('date-fns/add_milliseconds');
 const Logger = require('@deity/falcon-logger');
 const { ApiDataSource } = require('@deity/falcon-server-env');
 const { AuthenticationError, codes } = require('@deity/falcon-errors');
@@ -372,7 +372,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     // we need to do it right after fetching `storeConfig`. Be aware that adminToken is required to fetch storeConfig :)
     const validTime = 1;
     const ttl = (validTime * 60 - 5) * 60;
-    Logger.debug(`${this.name}: Admin token valid for ${validTime} hours, till ${addMilliseconds(dataNow, ttl)}`);
+    Logger.debug(`${this.name}: Admin token valid for ${validTime} hours, till ${addSeconds(dataNow, ttl)}`);
 
     return {
       value: token,
