@@ -1,8 +1,8 @@
 /**
  * This method expands flatten Apollo cache value into a nested object
- * @param {object} state Apollo state object
+ * @param {Object} state Apollo state object
  * @param {string} key Apollo state key
- * @return {object} Expanded object
+ * @returns {Object} Expanded object
  */
 export const apolloStateToObject = (state, key) => {
   const value = Object.assign({}, state[key]);
