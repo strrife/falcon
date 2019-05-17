@@ -246,20 +246,21 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
-   * Will send request
-   * @param {RequestOptions} req - request params
+   * Hook that is going to be executed for every REST request before calling `resolveURL` method
+   * @param {ContextRequestOptions} request request
+   * @return {Promise<void>} promise
    */
-  async willSendRequest(req) {
-    const { context } = req;
+  async willSendRequest(request) {
+    const { context } = request;
 
     // apply default request authorization convention
     context.auth = context.auth === undefined ? getDefaultAuthScope(!!this.session.customerToken) : context.auth;
     // if isAuthRequired is not explicitly set, we infer it from context.auth
     context.isAuthRequired = context.isAuthRequired === undefined ? !!context.auth : context.isAuthRequired;
 
-    req.headers.set('Cookie', this.cookie);
+    request.headers.set('Cookie', this.cookie);
 
-    await super.willSendRequest(req);
+    return super.willSendRequest(request);
   }
 
   /**

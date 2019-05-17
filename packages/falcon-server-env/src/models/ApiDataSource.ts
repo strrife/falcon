@@ -148,10 +148,15 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = Gr
 
   async fetchBackendConfig?(obj: object, args: object, context: TContext, info: GraphQLResolveInfo): Promise<object>;
 
+  /**
+   * Hook that is going to be executed for every REST request before calling `resolveURL` method
+   * @param {ContextRequestOptions} request request
+   * @return {Promise<void>} promise
+   */
   protected async willSendRequest(request: ContextRequestOptions): Promise<void> {
     const { context } = request;
     if (context && context.isAuthRequired && this.authorizeRequest) {
-      await this.authorizeRequest(request);
+      return this.authorizeRequest(request);
     }
   }
 
