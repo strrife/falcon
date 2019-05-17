@@ -91,12 +91,13 @@ const generateTagNames = (entityName, entityId) => {
  * @param {GraphQLType} fieldType GraphQL Field Type object
  * @param {string[]} [fieldPathSections=[]] An optional field path sections (example: ["products", "items"] which are created from a relative "products.items" field path)
  * that are going to be used to get tags from. If not passed or empty - tags will be received from `sourceValue` directly.
+ * @param {string|undefined} forceTypeName type name to force as a tag name
  * @return {string[]} List of tag names
  */
-const getTagsForField = (sourceValue, fieldType, fieldPathSections = []) => {
+const getTagsForField = (sourceValue, fieldType, fieldPathSections = [], forceTypeName = undefined) => {
   if (!fieldPathSections.length) {
     const { name: typeName } = getRootType(fieldType);
-    return generateTagNames(typeName, getFieldValue(sourceValue, findIdFieldName(fieldType)));
+    return generateTagNames(forceTypeName || typeName, getFieldValue(sourceValue, findIdFieldName(fieldType)));
   }
 
   const [currentPath, ...restIdPath] = fieldPathSections;
@@ -114,6 +115,7 @@ const getTagsForField = (sourceValue, fieldType, fieldPathSections = []) => {
     const currentCacheIdFieldName = findIdFieldName(currentType);
     fieldValue = getFieldValue(fieldValue, currentCacheIdFieldName);
   }
+  typeName = forceTypeName || typeName;
 
   return [typeName, ...generateTagNames(typeName, fieldValue)];
 };
@@ -124,9 +126,10 @@ const getTagsForField = (sourceValue, fieldType, fieldPathSections = []) => {
  * @param {object} result Resolver result
  * @param {GraphQLResolveInfo} info GraphQL info object
  * @param {object} parent GraphQL parent object
+ * @param {string|undefined} forceTypeName type name to force as a tag name
  * @return {string[]} List of tags
  */
-const extractTagsForIdPath = (idPath, result, info, parent) => {
+const extractTagsForIdPath = (idPath, result, info, parent, forceTypeName = undefined) => {
   const [rootPath, ...fieldPathSections] = idPath.split(PATH_SEPARATOR);
   const valueToCheck = rootPath === PARENT_KEYWORD ? parent : result;
   const typeToCheck = getRootType(rootPath === PARENT_KEYWORD ? info.parentType : info.returnType);
@@ -135,7 +138,7 @@ const extractTagsForIdPath = (idPath, result, info, parent) => {
     fieldPathSections.unshift(rootPath);
   }
 
-  return getTagsForField(valueToCheck, typeToCheck, fieldPathSections);
+  return getTagsForField(valueToCheck, typeToCheck, fieldPathSections, forceTypeName);
 };
 
 module.exports = {
