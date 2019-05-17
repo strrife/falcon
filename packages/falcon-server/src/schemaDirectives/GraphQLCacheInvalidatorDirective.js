@@ -87,11 +87,11 @@ module.exports = class GraphQLCacheInvalidatorDirective extends SchemaDirectiveV
   async invalidateCacheByResult(result, idPathEntry, parent, context, info) {
     const { path, type } = idPathEntry;
     const tags = extractTagsForIdPath(path, result, info, parent, type);
+    // Removing first "clean" tag (like "Product")
+    tags.shift();
     if (!tags.length) {
       return;
     }
-    // Removing first "clean" tag (like "Product")
-    tags.shift();
     return context.cache.delete(tags);
   }
 };
