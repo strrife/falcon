@@ -1,12 +1,18 @@
 module.exports = {
   parser: 'babel-eslint',
   extends: ['eslint-config-airbnb', 'plugin:prettier/recommended'],
-  plugins: ['react', 'import', 'prettier'],
+  plugins: ['react', 'import', 'prettier', 'jsdoc'],
   settings: {
     'import/parser': 'babel-eslint',
     'import/resolver': {
       node: true,
       'eslint-import-resolver-typescript': true
+    },
+    jsdoc: {
+      tagNamePreference: {
+        param: 'param',
+        return: 'returns'
+      }
     }
   },
   env: {
@@ -39,6 +45,7 @@ module.exports = {
         components: ['Link']
       }
     ],
+    'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/label-has-for': [
       2,
       {
@@ -87,14 +94,25 @@ module.exports = {
     'react/require-default-props': ['off'],
     'react/no-access-state-in-setstate': 'error',
     'react/prop-types': 'off',
-    'jsx-a11y/click-events-have-key-events': 'off',
+    'react/destructuring-assignment': 'off',
 
-    'valid-jsdoc': [
-      'error',
-      {
-        requireReturn: false
-      }
-    ]
+    'jsdoc/check-alignment': 1,
+    'jsdoc/check-indentation': 1,
+    'jsdoc/check-param-names': 1,
+    'jsdoc/check-syntax': 1,
+    'jsdoc/check-tag-names': 1,
+    'jsdoc/check-types': 1,
+    // 'jsdoc/no-undefined-types': 1,
+    // 'jsdoc/valid-types': 1
+    'jsdoc/require-hyphen-before-param-description': [1, 'never'],
+    'jsdoc/newline-after-description': [1, 'never'],
+    'jsdoc/require-param': 1,
+    'jsdoc/require-param-description': 1,
+    'jsdoc/require-param-name': 1,
+    'jsdoc/require-param-type': 1,
+    'jsdoc/require-returns-check': 1,
+    'jsdoc/require-returns-description': 1,
+    'jsdoc/require-returns-type': 1
   },
   globals: {
     __DEVELOPMENT__: true,
