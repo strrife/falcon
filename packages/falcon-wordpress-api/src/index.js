@@ -66,26 +66,33 @@ module.exports = class WordpressApi extends ApiDataSource {
   }
 
   async fetchBackendConfig() {
-    const config = await this.get('blog/info');
-    const { languages = {} } = config;
-    this.languageSupported = !!Object.keys(languages).length;
+    return this.context.cache.get(this.resolveURL({ path: 'blog/info' }), {
+      fetchData: async () => {
+        const config = await this.get('blog/info');
+        const { languages = {} } = config;
+        this.languageSupported = !!Object.keys(languages).length;
 
-    if (this.languageSupported) {
-      this.baseLanguage = languages.default;
+        if (this.languageSupported) {
+          this.baseLanguage = languages.default;
 
-      this.languageMap = languages.options.reduce((result, option) => {
-        const localeCode = option.default_locale.replace('_', '-');
+          this.languageMap = languages.options.reduce((result, option) => {
+            const localeCode = option.default_locale.replace('_', '-');
 
-        return {
-          ...result,
-          [localeCode]: option.language_code
-        };
-      }, {});
+            return {
+              ...result,
+              [localeCode]: option.language_code
+            };
+          }, {});
 
-      this.wpConfig.locales = Object.keys(this.languageMap) || [];
-    }
+          this.wpConfig.locales = Object.keys(this.languageMap) || [];
+        }
 
-    return this.wpConfig;
+        return this.wpConfig;
+      },
+      options: {
+        ttl: 300
+      }
+    });
   }
 
   /**
