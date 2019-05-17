@@ -56,10 +56,10 @@ export class ProductGallery extends React.Component<{ items: GalleryEntry[] }> {
     return (
       <ProductGalleryLayout>
         <Box gridArea="thumbs">
-          {items.map((x, index) => (
+          {items.map((item, index) => (
             <Box
               onClick={this.scrollToItem(index)}
-              key={x.full}
+              key={item.full}
               border="regular"
               borderRadius="medium"
               borderColor={index === activeIndex ? 'primary' : 'secondary'}
@@ -85,7 +85,7 @@ export class ProductGallery extends React.Component<{ items: GalleryEntry[] }> {
                 }
               }}
             >
-              <I18n>{t => <Image key={x.thumbnail} src={x.thumbnail} alt={t('productGallery.imageAlt')} />}</I18n>
+              <I18n>{t => <Image key={item.thumbnail} src={item.thumbnail} alt={t('productGallery.imageAlt')} />}</I18n>
             </Box>
           ))}
         </Box>
