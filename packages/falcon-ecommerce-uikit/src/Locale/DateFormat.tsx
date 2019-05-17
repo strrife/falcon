@@ -9,11 +9,7 @@ type DateFormatProps = {
 };
 
 const DateFormatInnerDOM: React.SFC<DateFormatProps> = ({ value, locale, options, ...rest }) => (
-  <Locale>
-    {({ dateTimeFormat }) => (
-      <Text {...rest}>{dateTimeFormat(value, { ...options, ...(locale ? { locale } : {}) })}</Text>
-    )}
-  </Locale>
+  <Locale>{({ dateTimeFormat }) => <Text {...rest}>{dateTimeFormat(value, { ...options, locale })}</Text>}</Locale>
 );
 
 export const DateFormat = themed({
