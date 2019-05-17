@@ -366,8 +366,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       Logger.info(`${this.name}: Admin token found.`);
     }
 
-    this.tokenExpirationTime = null;
-
     // FIXME: bellow code does not make sense anymore !!!
     // according to https://github.com/deity-io/falcon-magento2-development/issues/32
     // admin_token_ttl is returned via `/store/storeConfigs`, so if we want to cache adminToken
