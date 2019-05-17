@@ -55,12 +55,17 @@ module.exports = class GraphQLCacheInvalidatorDirective extends SchemaDirectiveV
    * @return {Function} Resolver function
    */
   getResolverWithCacheInvalidator(resolve, idPath) {
+    const thisDirective = this;
     return async function fieldResolver(parent, params, context, info) {
       const resolver = async () => resolve.call(this, parent, params, context, info);
+      const { config: { cache: { resolvers: { invalidation = false } = {} } = {} } = {} } = context;
       const result = await resolver();
-      await Promise.all(
-        idPath.map(idPathEntry => this.invalidateCacheByResult(result, idPathEntry, parent, context, info))
-      );
+      if (invalidation) {
+        await Promise.all(
+          idPath.map(idPathEntry => thisDirective.invalidateCacheByResult(result, idPathEntry, parent, context, info))
+        );
+      }
+
       return result;
     };
   }
@@ -77,6 +82,11 @@ module.exports = class GraphQLCacheInvalidatorDirective extends SchemaDirectiveV
   async invalidateCacheByResult(result, idPathEntry, parent, context, info) {
     const { path, type } = idPathEntry;
     const tags = extractTagsForIdPath(path, result, info, parent, type);
+    if (!tags.length) {
+      return;
+    }
+    // Removing first "clean" tag (like "Product")
+    tags.shift();
     return context.cache.delete(tags);
   }
 };
