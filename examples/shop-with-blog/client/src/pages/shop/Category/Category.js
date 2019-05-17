@@ -56,7 +56,7 @@ const CategoryPage = ({ id }) => (
                 </FlexLayout>
                 <Divider mt="xs" />
               </Box>
-              {filtersData.length && (
+              {!!filtersData.length && (
                 <Box gridArea={CategoryArea.filters}>
                   <Responsive width="md">
                     {matches =>

@@ -1,11 +1,7 @@
 import React from 'react';
 import { Text, Image, themed, Swipeable, SwipeableItem, Box } from '@deity/falcon-ui';
 import { I18n, T } from '@deity/falcon-i18n';
-
-type Item = {
-  thumbnail: string;
-  full: string;
-};
+import { GalleryEntry } from './ProductQuery';
 
 const ProductGalleryLayout = themed({
   tag: 'div',
@@ -27,10 +23,12 @@ const ProductGalleryLayout = themed({
   }
 });
 
-export class ProductGallery extends React.Component<{ items: Item[] }> {
+export class ProductGallery extends React.Component<{ items: GalleryEntry[] }> {
   state = {
     activeIndex: 0
   };
+
+  scrollableEl = React.createRef<HTMLDivElement>();
 
   scrollToItem = (index: number) => () => {
     this.setState({
@@ -41,8 +39,6 @@ export class ProductGallery extends React.Component<{ items: Item[] }> {
       this.scrollableEl.current.scrollLeft = index * this.scrollableEl.current.clientWidth;
     }
   };
-
-  scrollableEl = React.createRef<HTMLDivElement>();
 
   render() {
     const { items } = this.props;
