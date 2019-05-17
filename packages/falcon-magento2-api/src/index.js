@@ -569,13 +569,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Reduce product data to what is needed.
-   * @param {object} response - API response from Magento2 backend
+   * @param {object} data - API response from Magento2 backend
    * @param {string} [currency] - currency code
    * @return {Product} - reduced data
    */
-  reduceProduct(response, currency = null) {
-    this.convertAttributesSet(response);
-    const data = this.convertKeys(response);
+  reduceProduct(data, currency = null) {
+    this.convertAttributesSet(data);
+    data = this.convertKeys(data);
+
     const { customAttributes = {} } = data;
 
     const resolveGallery = product => {
@@ -659,6 +660,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {TierPrice[]} product price
    */
   async productTierPrices(parent, args, context, info) {
+    // a parent could be an item of Magento Product List, which does not contain necessary data, so we need to fetch Product by its id
     const data = typeResolverPathToString(info.path).startsWith('category.products')
       ? await this.fetchProduct(parent.id)
       : parent;
@@ -682,6 +684,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {ConfigurableProductOption} configurable product options
    */
   async configurableProductOptions(parent, args, context, info) {
+    // a parent could be an item of Magento Product List, which does not contain necessary data, so we need to fetch Product by its id
     const data = typeResolverPathToString(info.path).startsWith('category.products')
       ? await this.fetchProduct(parent.id)
       : parent;
