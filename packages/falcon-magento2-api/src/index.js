@@ -47,18 +47,18 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         weightUnit: () => this.session.weightUnit
       },
       Product: {
-        price: (...x) => this.productPrice(...x),
-        tierPrices: (...x) => this.productTierPrices(...x),
+        price: (...args) => this.productPrice(...args),
+        tierPrices: (...args) => this.productTierPrices(...args),
         configurableOptions: (...x) => this.configurableProductOptions(...x),
-        breadcrumbs: (...x) => this.breadcrumbs(...x)
+        breadcrumbs: (...args) => this.breadcrumbs(...args)
       },
       Category: {
-        breadcrumbs: (...x) => this.breadcrumbs(...x),
-        products: (...x) => this.categoryProducts(...x),
-        children: (...x) => this.categoryChildren(...x)
+        breadcrumbs: (...args) => this.breadcrumbs(...args),
+        products: (...args) => this.categoryProducts(...args),
+        children: (...args) => this.categoryChildren(...args)
       },
       PaymentMethod: {
-        config: (...x) => this.getPaymentMethodConfig(...x)
+        config: (...args) => this.getPaymentMethodConfig(...args)
       }
     };
     Logger.debug(`${this.name}: Adding additional resolve functions`);
