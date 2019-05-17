@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { themed, Image, Text } from '@deity/falcon-ui';
+import { themed, Image, Text, FlexLayout } from '@deity/falcon-ui';
 import { Price } from '../Locale';
+import { Product } from './ProductsListQuery';
 
 export const ProductCardLayout = themed({
   tag: Link,
@@ -24,16 +25,28 @@ export const ProductCardLayout = themed({
 });
 
 export type ProductCardProps = {
-  product: any;
+  product: Product;
 };
-export const ProductCard: React.SFC<ProductCardProps> = ({ product }) => (
-  <ProductCardLayout to={product.urlPath}>
-    <LazyLoad height="100%" offset={150}>
-      <Image css={{ flex: '1 1 100%', minHeight: '0%' }} src={product.thumbnail} alt={product.name} />
-    </LazyLoad>
-    <Text py="xs" ellipsis>
-      {product.name}
-    </Text>
-    <Price fontSize="md" value={product.price} />
-  </ProductCardLayout>
-);
+export const ProductCard: React.SFC<ProductCardProps> = ({ product }) => {
+  const { price } = product;
+  return (
+    <ProductCardLayout to={product.urlPath}>
+      <LazyLoad height="100%" offset={150}>
+        <Image css={{ flex: '1 1 100%', minHeight: '0%' }} src={product.thumbnail} alt={product.name} />
+      </LazyLoad>
+      <Text py="xs" ellipsis>
+        {product.name}
+      </Text>
+      <FlexLayout>
+        {price.special ? (
+          <React.Fragment>
+            <Price fontSize="md" variant="old" mr="xs" value={price.regular} />
+            <Price fontSize="md" variant="special" value={price.special} />
+          </React.Fragment>
+        ) : (
+          <Price fontSize="md" value={price.regular} />
+        )}
+      </FlexLayout>
+    </ProductCardLayout>
+  );
+};

@@ -14,13 +14,14 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 - initial release
 
-### Falcon Magento2 API vNext
-
-- added oAuth authorization type for integration requests ([#424](https://github.com/deity-io/falcon/pull/424))
-
 ### Falcon E-commerce UI Kit vNext
 
 - feat: (Breaking change) corrected names for collections `[noun]sList` --> `[noun]List` ([#427](https://github.com/deity-io/falcon/pull/427))
+
+### Falcon Magento2 API vNext
+
+- fixed issue with incomplete product price data which led to incorrect rendering of products ([#417](https://github.com/deity-io/falcon/issues/417))
+- added oAuth authorization type for integration requests ([#424](https://github.com/deity-io/falcon/pull/424))
 
 ---
 
