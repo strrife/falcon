@@ -180,24 +180,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   initialize(config) {
     super.initialize(config);
 
-    const { type, ...restAuthConfig } = this.config.auth || {};
-    if (type === IntegrationAuthType.adminToken) {
-      this.adminTokenAuth = new BearerAuth(async () => this.getAdminToken());
-    } else if (type === IntegrationAuthType.integrationToken) {
-      const oAuth1Auth = new OAuth1Auth(
-        {
-          requestTokenUrl: this.baseURL.concat('/oauth/token/request'),
-          accessTokenUrl: this.baseURL.concat('/oauth/token/access'),
-          ...restAuthConfig
-        },
-        { resolveURL: x => this.resolveURL(x) }
-      );
-      oAuth1Auth.initialize();
-
-      this.oAuth1Auth = oAuth1Auth;
-    } else {
-      throw new Error(`Unsupported integration authorization type ('auth.type': '${type}')!`);
-    }
+    this.integrationAuth = this.setupIntegrationScopeAuth(this.config.auth || {});
 
     this.customerTokenAuth = new BearerAuth(() => {
       if (!this.isCustomerTokenValid(this.session.customerToken)) {
@@ -214,6 +197,30 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       this.session = {};
       this.context.session.save();
     }
+  }
+
+  setupIntegrationScopeAuth(authConfig) {
+    const { type, ...restAuthConfig } = authConfig;
+
+    if (type === IntegrationAuthType.adminToken) {
+      return new BearerAuth(async () => this.getAdminToken());
+    }
+
+    if (type === IntegrationAuthType.integrationToken) {
+      const oAuth1Auth = new OAuth1Auth(
+        {
+          requestTokenUrl: this.baseURL.concat('/oauth/token/request'),
+          accessTokenUrl: this.baseURL.concat('/oauth/token/access'),
+          ...restAuthConfig
+        },
+        { resolveURL: x => this.resolveURL(x) }
+      );
+      oAuth1Auth.initialize();
+
+      return oAuth1Auth;
+    }
+
+    throw new Error(`Unsupported integration authorization type ('auth.type': '${type}')!`);
   }
 
   /**
@@ -282,21 +289,15 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
-   * Sets authorization headers for the passed request
-   * @param {RequestOptions} request request
-   * @returns {Promise} Promise
+   * Hook that is going to be executed for every REST request if authorization is required
+   * @param {ContextRequestOptions} request request
+   * @return {Promise<void>} promise
    */
   async authorizeRequest(request) {
     const { auth: authScope } = request.context;
 
     if (authScope === AuthScope.Integration) {
-      const { auth } = this.config;
-      if (auth.type === IntegrationAuthType.adminToken) {
-        return this.adminTokenAuth.authorize(request);
-      }
-      if (auth.type === IntegrationAuthType.integrationToken) {
-        return this.oAuth1Auth.authorize(request);
-      }
+      return this.integrationAuth.authorize(request);
     }
 
     if (authScope === AuthScope.Customer) {

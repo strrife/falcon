@@ -160,6 +160,11 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = Gr
     }
   }
 
+  /**
+   * Hook that is going to be executed for every REST request if authorization is required
+   * @param {ContextRequestOptions} request request
+   * @return {Promise<void>} promise
+   */
   async authorizeRequest?(req: ContextRequestOptions): Promise<void>;
 
   /**
