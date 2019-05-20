@@ -8,6 +8,12 @@ const { AuthenticationError, codes } = require('@deity/falcon-errors');
 const { AuthScope, IntegrationAuthType, getDefaultAuthScope, OAuth1Auth } = require('./authorization');
 
 /**
+ * @typedef {object} CustomerToken
+ * @property {string} token authorization bearer
+ * @property {Date} expirationTime expiration date
+ */
+
+/**
  * Base API features (configuration fetching, response parsing, token management etc.) required for communication
  * with Magento2. Extracted to separate class to keep final class clean (only resolvers-related logic should be there).
  */
@@ -183,8 +189,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     this.integrationScopeAuth = this.setupIntegrationScopeAuth(this.config.auth || {});
     this.customerScopeAuth = this.setupCustomerScopeAuth(this.session);
 
-    const { customerToken } = this.session;
-    if (customerToken && !this.isCustomerTokenValid(customerToken)) {
+    if (this.isCustomerSessionExpired(this.session)) {
       this.session = {};
       this.context.session.save();
     }
@@ -222,7 +227,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   /**
    * Setting up authorization handler for Customer requests
    * @param {Object} session session
-   * @param {Object} session.customerToken customer token
+   * @param {CustomerToken} session.customerToken customer token
    * @returns {IAuthorizeRequest} authorization handler
    */
   setupCustomerScopeAuth(session) {
@@ -236,6 +241,17 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       sessionExpiredError.statusCode = 401;
       throw sessionExpiredError;
     });
+  }
+
+  /**
+   * Determines if Customer's session is expired (Customer needs to be signed out)
+   * @param {Object} session the session
+   * @param {CustomerToken} session.customerToken the Customer token
+   * @returns {boolean} `true` if the session is expired, `false` otherwise
+   */
+  isCustomerSessionExpired(session) {
+    const { customerToken } = session;
+    return customerToken && !this.isCustomerTokenValid(customerToken);
   }
 
   /**
