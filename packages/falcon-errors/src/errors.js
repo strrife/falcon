@@ -17,16 +17,25 @@ class FalconError extends Error {
   }
 }
 
-module.exports.AuthenticationError = class AuthenticationError extends FalconError {
-  constructor(message) {
-    super(message, codes.UNAUTHENTICATED);
+class AuthenticationError extends FalconError {
+  /**
+   * @param {string} message message
+   * @param {string | undefined} code optional error code, default is `UNAUTHENTICATED`
+   */
+  constructor(message, code) {
+    super(message, code || codes.UNAUTHENTICATED);
     Object.defineProperty(this, 'name', { value: 'AuthenticationError' });
   }
-};
+}
 
-module.exports.EntityNotFoundError = class EntityNotFoundError extends FalconError {
+class EntityNotFoundError extends FalconError {
   constructor(message = 'Entity not found') {
     super(message, codes.NOT_FOUND);
     Object.defineProperty(this, 'name', { value: 'EntityNotFoundError' });
   }
+}
+
+module.exports = {
+  AuthenticationError,
+  EntityNotFoundError
 };
