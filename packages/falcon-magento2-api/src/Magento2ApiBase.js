@@ -1,17 +1,11 @@
 const util = require('util');
 const _ = require('lodash');
 const deepMerge = require('deepmerge');
-const OAuth = require('oauth');
 const addSeconds = require('date-fns/add_milliseconds');
 const Logger = require('@deity/falcon-logger');
-const { ApiDataSource } = require('@deity/falcon-server-env');
+const { ApiDataSource, BearerAuth } = require('@deity/falcon-server-env');
 const { AuthenticationError, codes } = require('@deity/falcon-errors');
-const {
-  AuthScope,
-  IntegrationAuthType,
-  getDefaultAuthScope,
-  isIntegrationAuthTypeSupported
-} = require('./authorization');
+const { AuthScope, IntegrationAuthType, getDefaultAuthScope, OAuth1Auth } = require('./authorization');
 
 /**
  * Base API features (configuration fetching, response parsing, token management etc.) required for communication
@@ -186,10 +180,34 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   initialize(config) {
     super.initialize(config);
 
-    const { auth = {} } = this.config;
-    if (!isIntegrationAuthTypeSupported(auth.type)) {
-      throw new Error(`Unsupported auth.type: "${auth.type}"!`);
+    const { type, ...restAuthConfig } = this.config.auth || {};
+    if (type === IntegrationAuthType.adminToken) {
+      this.adminTokenAuth = new BearerAuth(async () => this.getAdminToken());
+    } else if (type === IntegrationAuthType.integrationToken) {
+      const oAuth1Auth = new OAuth1Auth(
+        {
+          requestTokenUrl: this.baseURL.concat('/oauth/token/request'),
+          accessTokenUrl: this.baseURL.concat('/oauth/token/access'),
+          ...restAuthConfig
+        },
+        { resolveURL: x => this.resolveURL(x) }
+      );
+      oAuth1Auth.initialize();
+
+      this.oAuth1Auth = oAuth1Auth;
+    } else {
+      throw new Error(`Unsupported integration authorization type ('auth.type': '${type}')!`);
     }
+
+    this.customerTokenAuth = new BearerAuth(() => {
+      if (!this.isCustomerTokenValid(this.session.customerToken)) {
+        return this.session.customerToken;
+      }
+      const sessionExpiredError = new AuthenticationError(`Customer token has expired.`, codes.CUSTOMER_TOKEN_EXPIRED);
+      sessionExpiredError.statusCode = 401;
+
+      throw sessionExpiredError;
+    });
 
     const { customerToken } = this.session;
     if (customerToken && !this.isCustomerTokenValid(customerToken)) {
@@ -265,49 +283,24 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Sets authorization headers for the passed request
-   * @param {RequestOptions} req - request input
+   * @param {RequestOptions} request request
+   * @returns {Promise} Promise
    */
-  async authorizeRequest(req) {
-    const { auth: authScope } = req.context;
+  async authorizeRequest(request) {
+    const { auth: authScope } = request.context;
 
     if (authScope === AuthScope.Integration) {
       const { auth } = this.config;
       if (auth.type === IntegrationAuthType.adminToken) {
-        const token = await this.getAdminToken();
-        req.headers.set('Authorization', `Bearer ${token}`);
-
-        return;
+        return this.adminTokenAuth.authorize(request);
       }
-
       if (auth.type === IntegrationAuthType.integrationToken) {
-        const url = await this.resolveURL(req);
-        req.params.forEach((value, key) => url.searchParams.append(key, value));
-
-        const oauth = await this.getOAuth();
-        const authorizationHeader = oauth.authHeader(
-          url.toString(),
-          auth.accessToken,
-          auth.accessTokenSecret,
-          req.method
-        );
-        req.headers.set('Authorization', authorizationHeader);
-        return;
+        return this.oAuth1Auth.authorize(request);
       }
     }
 
     if (authScope === AuthScope.Customer) {
-      const { customerToken } = this.session || {};
-
-      if (this.isCustomerTokenValid(customerToken)) {
-        req.headers.set('Authorization', `Bearer ${customerToken.token}`);
-      } else {
-        const sessionExpiredError = new AuthenticationError(`Customer token has expired.`);
-        sessionExpiredError.statusCode = 401;
-        sessionExpiredError.code = codes.CUSTOMER_TOKEN_EXPIRED;
-        throw sessionExpiredError;
-      }
-
-      return;
+      return this.customerTokenAuth.authorize(request);
     }
 
     throw new Error(`Attempted to authenticate the request using an unsupported scope: "${authScope}"!`);
@@ -392,38 +385,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       });
     }
     return this.reqToken;
-  }
-
-  /**
-   * Get Magento oAuth authorization configuration.
-   * @return {Promise<OAuth>} token value
-   */
-  async getOAuth() {
-    if (!this.oAuth) {
-      this.oAuth = this.cache.get([this.name, 'oAuth'].join(':'), {
-        fetchData: async () => {
-          const { auth } = this.config;
-          if (auth.type !== 'integration-token') {
-            throw new Error(`API client is not configured for "integration-token" authentication method.`);
-          }
-
-          const oauth = new OAuth.OAuth(
-            this.baseURL.concat('/oauth/token/request'),
-            this.baseURL.concat('/oauth/token/access'),
-            auth.consumerKey,
-            auth.consumerSecret,
-            '1',
-            null,
-            'HMAC-SHA1'
-          );
-
-          // TODO: make full handshake
-
-          return oauth;
-        }
-      });
-    }
-    return this.oAuth;
   }
 
   /**
