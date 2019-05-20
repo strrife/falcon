@@ -180,17 +180,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   initialize(config) {
     super.initialize(config);
 
-    this.integrationAuth = this.setupIntegrationScopeAuth(this.config.auth || {});
-
-    this.customerTokenAuth = new BearerAuth(() => {
-      if (!this.isCustomerTokenValid(this.session.customerToken)) {
-        return this.session.customerToken;
-      }
-      const sessionExpiredError = new AuthenticationError(`Customer token has expired.`, codes.CUSTOMER_TOKEN_EXPIRED);
-      sessionExpiredError.statusCode = 401;
-
-      throw sessionExpiredError;
-    });
+    this.integrationScopeAuth = this.setupIntegrationScopeAuth(this.config.auth || {});
+    this.customerScopeAuth = this.setupCustomerScopeAuth(this.session);
 
     const { customerToken } = this.session;
     if (customerToken && !this.isCustomerTokenValid(customerToken)) {
@@ -199,6 +190,11 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     }
   }
 
+  /**
+   * Setting up authorization handler for Integration requests
+   * @param {Object} authConfig configuration
+   * @returns {IAuthorizeRequest} authorization handler
+   */
   setupIntegrationScopeAuth(authConfig) {
     const { type, ...restAuthConfig } = authConfig;
 
@@ -221,6 +217,25 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     }
 
     throw new Error(`Unsupported integration authorization type ('auth.type': '${type}')!`);
+  }
+
+  /**
+   * Setting up authorization handler for Customer requests
+   * @param {Object} session session
+   * @param {Object} session.customerToken customer token
+   * @returns {IAuthorizeRequest} authorization handler
+   */
+  setupCustomerScopeAuth(session) {
+    return new BearerAuth(() => {
+      const { customerToken } = session;
+      if (this.isCustomerTokenValid(customerToken)) {
+        return customerToken.token;
+      }
+
+      const sessionExpiredError = new AuthenticationError(`Customer token has expired.`, codes.CUSTOMER_TOKEN_EXPIRED);
+      sessionExpiredError.statusCode = 401;
+      throw sessionExpiredError;
+    });
   }
 
   /**
@@ -296,12 +311,13 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   async authorizeRequest(request) {
     const { auth: authScope } = request.context;
 
-    if (authScope === AuthScope.Integration) {
-      return this.integrationAuth.authorize(request);
+    if (!authScope) {
+      throw new Error(`Cannot authorize request because authorization scope is no defined!`);
     }
 
-    if (authScope === AuthScope.Customer) {
-      return this.customerTokenAuth.authorize(request);
+    const authHandlerName = `${request.context.auth}ScopeAuth`;
+    if (this[authHandlerName]) {
+      return this[authHandlerName].authorize(request);
     }
 
     throw new Error(`Attempted to authenticate the request using an unsupported scope: "${authScope}"!`);
@@ -319,8 +335,10 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Check if authentication token is valid
-   * @param {AuthToken} authToken - authentication token
-   * @return {boolean} - true if token is valid
+   * @param {Object} authToken authentication token
+   * @param {string} authToken.token value
+   * @param {Date} authToken.expirationTime expiration time
+   * @return {boolean} true if token is valid
    */
   isCustomerTokenValid(authToken) {
     if (!authToken || !authToken.token || !authToken.expirationTime) {
