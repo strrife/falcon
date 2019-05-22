@@ -752,7 +752,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   async fetchProduct(id) {
-    const data = await this.get(`/falcon/products/${id}`, {}, { context: { useAdminToken: true } });
+    const data = await this.getForIntegration(`/falcon/products/${id}`);
     this.convertAttributesSet(data);
 
     return this.convertKeys(data);
