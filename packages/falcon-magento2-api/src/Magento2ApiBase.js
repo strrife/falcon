@@ -1,7 +1,7 @@
 const util = require('util');
 const _ = require('lodash');
 const deepMerge = require('deepmerge');
-const addSeconds = require('date-fns/add_milliseconds');
+const addSeconds = require('date-fns/add_seconds');
 const Logger = require('@deity/falcon-logger');
 const { ApiDataSource, BearerAuth } = require('@deity/falcon-server-env');
 const { AuthenticationError, codes } = require('@deity/falcon-errors');
@@ -186,7 +186,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   initialize(config) {
     super.initialize(config);
 
-    this.integrationScopeAuth = this.setupIntegrationScopeAuth(this.config.auth || {});
+    this.integrationScopeAuth = this.setupIntegrationScopeAuth(this.config.auth);
     this.customerScopeAuth = this.setupCustomerScopeAuth(this.session);
 
     if (this.isCustomerSessionExpired(this.session)) {
@@ -201,7 +201,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    * @returns {IAuthorizeRequest} authorization handler
    */
   setupIntegrationScopeAuth(authConfig) {
-    const { type, ...restAuthConfig } = authConfig;
+    const { type, ...restAuthConfig } = authConfig || {};
 
     if (type === IntegrationAuthType.adminToken) {
       return new BearerAuth(async () => this.getAdminToken());
@@ -233,8 +233,15 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   setupCustomerScopeAuth(session) {
     return new BearerAuth(() => {
       const { customerToken } = session;
+
       if (this.isCustomerTokenValid(customerToken)) {
         return customerToken.token;
+      }
+
+      if (!customerToken) {
+        const unauthorizedError = new AuthenticationError(`Customer unauthorized.`);
+        unauthorizedError.statusCode = 401;
+        throw unauthorizedError;
       }
 
       const sessionExpiredError = new AuthenticationError(`Customer token has expired.`, codes.CUSTOMER_TOKEN_EXPIRED);
@@ -331,7 +338,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
       throw new Error(`Cannot authorize request because authorization scope is no defined!`);
     }
 
-    const authHandlerName = `${request.context.auth}ScopeAuth`;
+    const authHandlerName = `${authScope}ScopeAuth`;
     if (this[authHandlerName]) {
       return this[authHandlerName].authorize(request);
     }
