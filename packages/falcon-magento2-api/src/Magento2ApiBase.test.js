@@ -150,8 +150,8 @@ describe('Magento2ApiBase', () => {
   });
 
   it('Should correctly fetch admin token', async () => {
-    const result = await api.getAdminToken();
-    expect(result).toEqual(magentoResponses.adminToken);
+    const result = await api.fetchAdminToken({});
+    expect(result.value).toEqual(magentoResponses.adminToken);
   });
 
   it('Should correctly handle request error without token', async () => {

@@ -3,7 +3,7 @@ const util = require('util');
 const _ = require('lodash');
 const addSeconds = require('date-fns/add_seconds');
 const Logger = require('@deity/falcon-logger');
-const { AuthenticationError, codes } = require('@deity/falcon-errors');
+const { FalconError, AuthenticationError, codes } = require('@deity/falcon-errors');
 const { AuthScope, IntegrationAuthType, setAuthScope, OAuth1Auth } = require('./authorization');
 
 /**
@@ -500,33 +500,27 @@ class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Retrieves admin token
+   * @param {{Object}} credentials admin credentials
+   * @param {{string}} credentials.username username
+   * @param {{string}} credentials.password password
    * @return {{ value: string, options: { ttl: number } }} Result
    */
-  async adminToken() {
-    const { auth } = this.config;
-
+  async fetchAdminToken({ username, password }) {
     Logger.info(`${this.name}: Retrieving admin token.`);
 
     const dataNow = Date.now();
-    const token = await this.post(
-      '/integration/admin/token',
-      {
-        username: auth.username,
-        password: auth.password
-      },
-      { context: { isAuthRequired: false } }
-    );
-
+    const token = await this.post('/integration/admin/token', { username, password });
     if (token === undefined) {
-      const noTokenError = new Error(
-        'Magento Admin token not found. Did you install the latest version of the falcon-magento2-module on magento?'
+      const noTokenError = new FalconError(
+        'Magento Admin token not found. Did you install the latest version of the falcon-magento2-module on magento?',
+        codes.CUSTOMER_TOKEN_NOT_FOUND
       );
       noTokenError.statusCode = 501;
-      noTokenError.code = codes.CUSTOMER_TOKEN_NOT_FOUND;
+
       throw noTokenError;
-    } else {
-      Logger.info(`${this.name}: Admin token found.`);
     }
+
+    Logger.info(`${this.name}: Admin token found.`);
 
     // FIXME: bellow code does not make sense anymore !!!
     // according to https://github.com/deity-io/falcon-magento2-development/issues/32
@@ -548,12 +542,14 @@ class Magento2ApiBase extends ApiDataSource {
    * @return {Promise<string>} token value
    */
   async getAdminToken() {
-    if (!this.reqToken) {
-      this.reqToken = this.cache.get([this.name, 'admin_token'].join(':'), {
-        fetchData: async () => this.adminToken()
+    /* eslint-disable */
+    if (!this.__adminToken) {
+      this.__adminToken = this.cache.get([this.name, 'admin_token'].join(':'), {
+        fetchData: async () => this.fetchAdminToken(this.config.auth)
       });
     }
-    return this.reqToken;
+    return this.__adminToken;
+    /* eslint-enable */
   }
 
   /**
