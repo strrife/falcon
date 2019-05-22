@@ -84,7 +84,7 @@ class OAuth1Auth {
       this.config.accessTokenSecret,
       request.method
     );
-    request.headers.set('Authorization', authorizationHeader);
+    request.headers.append('Authorization', authorizationHeader);
 
     return request;
   }

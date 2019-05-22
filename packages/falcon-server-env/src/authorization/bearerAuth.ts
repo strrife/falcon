@@ -20,7 +20,8 @@ export class BearerAuth implements IAuthorizeRequest {
 
   async authorize<TRequest extends RequestOptions = RequestOptions>(request: TRequest): Promise<TRequest> {
     const tokenValue = await this.token();
-    request.headers.set('Authorization', `Bearer ${tokenValue}`);
+
+    request.headers.append('Authorization', `Bearer ${tokenValue}`);
 
     return request;
   }
