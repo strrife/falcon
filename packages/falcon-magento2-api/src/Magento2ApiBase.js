@@ -31,7 +31,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   async fetchBackendConfig() {
     const getCachedValue = async url => {
-      const value = await this.cache.get([this.name, this.session.storeCode || 'default', url].join(':'), {
+      const value = await this.cache.get([this.name, this.session.storeCode || this.storePrefix, url].join(':'), {
         fetchData: async () => {
           const rawValue = await this.get(url, {}, { context: { useAdminToken: true } });
           return JSON.stringify(rawValue);
@@ -391,6 +391,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     Logger.debug(`${this.name}: ${storeCode ? 'is invalid' : 'store code is missing'}, removing cart data`);
     delete this.session.storeCode;
     delete this.session.cart;
-    await this.setShopStore({}, { storeCode: 'default' });
+    await this.setShopStore({}, { storeCode: this.storePrefix });
   }
 };
