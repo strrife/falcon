@@ -13,7 +13,13 @@ export default ({ webpackAssets }) => {
   });
 
   return async (ctx, next) => {
-    ctx.state.webpackAssets = webpackAssets;
+    const { assets, publicPath } = webpackAssets;
+    const webmanifest = assets.find(x => x.name.endsWith('webmanifest'));
+
+    ctx.state.assets = {
+      webpackAssets,
+      webmanifest: webmanifest ? `${publicPath}${webmanifest.name}` : undefined
+    };
     ctx.state.chunkExtractor = chunkExtractor;
 
     return next();

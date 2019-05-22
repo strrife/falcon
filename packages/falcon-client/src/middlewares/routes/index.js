@@ -3,7 +3,7 @@ import ssr from './ssrMiddleware';
 import appShell from './appShellMiddleware';
 import appHtml from './appHtmlMiddleware';
 import i18next from './i18nextMiddleware';
-import webpack from './webpackAssetsMiddleware';
+import assets from './assetsMiddleware';
 
 /**
  * @typedef {object} RenderAppShell
@@ -21,7 +21,7 @@ export function renderAppShell({ config, webpackAssets }) {
   const configSchema = { data: { config } };
 
   return [
-    webpack({ webpackAssets }),
+    assets({ webpackAssets }),
     apolloClientProvider({ config: apolloClient, clientStates: { configSchema } }),
     appShell(),
     appHtml({ config })
@@ -46,7 +46,7 @@ export function renderApp({ config, clientApolloSchema, App, webpackAssets }) {
   const configSchema = { data: { config } };
 
   return [
-    webpack({ webpackAssets }),
+    assets({ webpackAssets }),
     apolloClientProvider({
       config: apolloClient,
       clientStates: {
