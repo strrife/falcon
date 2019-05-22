@@ -48,7 +48,7 @@
   },
   "productList": {
     "pagination": {
-      "showingOutOf": "{{ItemsCount}} producten worden weergegeven uit {{totalItems}},
+      "showingOutOf": "{{ItemsCount}} producten worden weergegeven uit {{totalItems}}",
       "showMore": "Meer producten weergeven"
     },
     "sort": {
