@@ -5,14 +5,14 @@ import Html from '../../components/Html';
 
 /**
  * Application html renderer middleware.
- * @param {{webpackAssets: object}} params webpack assets
  * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
-export default ({ webpackAssets, config }) => async ctx => {
-  const { AppMarkup, client, chunkExtractor, helmetContext, serverTiming } = ctx.state;
+export default ({ config }) => async ctx => {
+  const { AppMarkup, client, webpackAssets, chunkExtractor, helmetContext, serverTiming } = ctx.state;
+  const { publicPath, assets } = webpackAssets;
+
   const renderTimer = serverTiming.start('HTML renderToString()');
 
-  const { publicPath, assets } = webpackAssets;
   const webmanifest = assets.find(x => x.name.endsWith('webmanifest'));
 
   const htmlDocument = renderToString(
