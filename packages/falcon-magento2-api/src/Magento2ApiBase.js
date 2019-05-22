@@ -1,11 +1,16 @@
-const { ApiDataSource } = require('@deity/falcon-server-env');
+const { ApiDataSource, BearerAuth } = require('@deity/falcon-server-env');
 const util = require('util');
 const _ = require('lodash');
-const OAuth = require('oauth');
-const addMilliseconds = require('date-fns/add_milliseconds');
+const addSeconds = require('date-fns/add_seconds');
 const Logger = require('@deity/falcon-logger');
 const { AuthenticationError, codes } = require('@deity/falcon-errors');
-const { AuthScope, IntegrationAuthType, isIntegrationAuthTypeSupported, setAuthScope } = require('./authorization');
+const { AuthScope, IntegrationAuthType, setAuthScope, OAuth1Auth } = require('./authorization');
+
+/**
+ * @typedef {object} CustomerToken
+ * @property {string} token authorization bearer
+ * @property {Date} expirationTime expiration date
+ */
 
 /**
  * Base API features (configuration fetching, response parsing, token management etc.) required for communication
@@ -314,16 +319,81 @@ class Magento2ApiBase extends ApiDataSource {
   initialize(config) {
     super.initialize(config);
 
-    const { auth = {} } = this.config;
-    if (!isIntegrationAuthTypeSupported(auth.type)) {
-      throw new Error(`Unsupported auth.type: "${auth.type}"!`);
-    }
+    this.integrationScopeAuth = this.setupIntegrationScopeAuth(this.config.auth);
+    this.customerScopeAuth = this.setupCustomerScopeAuth(this.session);
 
-    const { customerToken } = this.session;
-    if (customerToken && !this.isCustomerTokenValid(customerToken)) {
+    if (this.isCustomerSessionExpired(this.session)) {
       this.session = {};
       this.context.session.save();
     }
+  }
+
+  /**
+   * Setting up authorization handler for Integration requests
+   * @param {Object} authConfig configuration
+   * @returns {IAuthorizeRequest} authorization handler
+   */
+  setupIntegrationScopeAuth(authConfig) {
+    const { type, ...restAuthConfig } = authConfig || {};
+
+    if (type === IntegrationAuthType.adminToken) {
+      return new BearerAuth(async () => this.getAdminToken());
+    }
+
+    if (type === IntegrationAuthType.integrationToken) {
+      const oAuth1Auth = new OAuth1Auth(
+        {
+          requestTokenUrl: this.baseURL.concat('/oauth/token/request'),
+          accessTokenUrl: this.baseURL.concat('/oauth/token/access'),
+          ...restAuthConfig
+        },
+        { resolveURL: x => this.resolveURL(x) }
+      );
+      oAuth1Auth.initialize();
+
+      return oAuth1Auth;
+    }
+
+    throw new Error(`Unsupported integration authorization type ('auth.type': '${type}')!`);
+  }
+
+  /**
+   * Setting up authorization handler for Customer requests
+   * @param {Object} session session
+   * @param {CustomerToken} session.customerToken customer token
+   * @returns {IAuthorizeRequest} authorization handler
+   */
+  setupCustomerScopeAuth(session) {
+    return new BearerAuth(() => {
+      const { customerToken } = session;
+
+      if (this.isCustomerTokenValid(customerToken)) {
+        return customerToken.token;
+      }
+
+      if (!customerToken) {
+        const unauthorizedError = new AuthenticationError(`Customer unauthorized.`);
+        unauthorizedError.statusCode = 401;
+
+        throw unauthorizedError;
+      }
+
+      const sessionExpiredError = new AuthenticationError(`Customer token has expired.`, codes.CUSTOMER_TOKEN_EXPIRED);
+      sessionExpiredError.statusCode = 401;
+
+      throw sessionExpiredError;
+    });
+  }
+
+  /**
+   * Determines if Customer's session is expired (Customer needs to be signed out)
+   * @param {Object} session the session
+   * @param {CustomerToken} session.customerToken the Customer token
+   * @returns {boolean} `true` if the session is expired, `false` otherwise
+   */
+  isCustomerSessionExpired(session) {
+    const { customerToken } = session;
+    return customerToken && !this.isCustomerTokenValid(customerToken);
   }
 
   /**
@@ -373,61 +443,31 @@ class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
-   * Will send request
-   * @param {RequestOptions} req - request params
+   * Hook that is going to be executed for every REST request before calling `resolveURL` method
+   * @param {ContextRequestOptions} request request
+   * @return {Promise<void>} promise
    */
-  async willSendRequest(req) {
-    req.headers.set('Cookie', this.cookie);
+  async willSendRequest(request) {
+    request.headers.set('Cookie', this.cookie);
 
-    await super.willSendRequest(req);
+    return super.willSendRequest(request);
   }
 
   /**
-   * Sets authorization headers for the passed request
-   * @param {RequestOptions} req - request input
+   * Hook that is going to be executed for every REST request if authorization is required
+   * @param {ContextRequestOptions} request request
+   * @return {Promise<void>} promise
    */
-  async authorizeRequest(req) {
-    const { auth: authScope } = req.context;
+  async authorizeRequest(request) {
+    const { auth: authScope } = request.context;
 
-    if (authScope === AuthScope.Integration) {
-      const { auth } = this.config;
-      if (auth.type === IntegrationAuthType.adminToken) {
-        const token = await this.getAdminToken();
-        req.headers.set('Authorization', `Bearer ${token}`);
-
-        return;
-      }
-
-      if (auth.type === IntegrationAuthType.integrationToken) {
-        const url = await this.resolveURL(req);
-        req.params.forEach((value, key) => url.searchParams.append(key, value));
-
-        const oauth = await this.getOAuth();
-        const authorizationHeader = oauth.authHeader(
-          url.toString(),
-          auth.accessToken,
-          auth.accessTokenSecret,
-          req.method
-        );
-        req.headers.set('Authorization', authorizationHeader);
-
-        return;
-      }
+    if (!authScope) {
+      throw new Error(`Cannot authorize request because authorization scope is no defined!`);
     }
 
-    if (authScope === AuthScope.Customer) {
-      const { customerToken } = this.session;
-
-      if (!this.isCustomerTokenValid(customerToken)) {
-        const sessionExpiredError = new AuthenticationError(`Customer token has expired.`);
-        sessionExpiredError.statusCode = 401;
-        sessionExpiredError.code = codes.CUSTOMER_TOKEN_EXPIRED;
-        throw sessionExpiredError;
-      }
-
-      req.headers.set('Authorization', `Bearer ${customerToken.token}`);
-
-      return;
+    const authHandlerName = `${authScope}ScopeAuth`;
+    if (this[authHandlerName]) {
+      return this[authHandlerName].authorize(request);
     }
 
     throw new Error(`Attempted to authenticate the request using an unsupported scope: "${authScope}"!`);
@@ -445,8 +485,10 @@ class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Check if authentication token is valid
-   * @param {AuthToken} authToken - authentication token
-   * @return {boolean} - true if token is valid
+   * @param {Object} authToken authentication token
+   * @param {string} authToken.token value
+   * @param {Date} authToken.expirationTime expiration time
+   * @return {boolean} true if token is valid
    */
   isCustomerTokenValid(authToken) {
     if (!authToken || !authToken.token || !authToken.expirationTime) {
@@ -492,7 +534,7 @@ class Magento2ApiBase extends ApiDataSource {
     // we need to do it right after fetching `storeConfig`. Be aware that adminToken is required to fetch storeConfig :)
     const validTime = 1;
     const ttl = (validTime * 60 - 5) * 60;
-    Logger.debug(`${this.name}: Admin token valid for ${validTime} hours, till ${addMilliseconds(dataNow, ttl)}`);
+    Logger.debug(`${this.name}: Admin token valid for ${validTime} hours, till ${addSeconds(dataNow, ttl)}`);
 
     return {
       value: token,
@@ -512,38 +554,6 @@ class Magento2ApiBase extends ApiDataSource {
       });
     }
     return this.reqToken;
-  }
-
-  /**
-   * Get Magento oAuth authorization configuration.
-   * @return {Promise<OAuth>} token value
-   */
-  async getOAuth() {
-    if (!this.oAuth) {
-      this.oAuth = this.cache.get([this.name, 'oAuth'].join(':'), {
-        fetchData: async () => {
-          const { auth } = this.config;
-          if (auth.type !== 'integration-token') {
-            throw new Error(`API client is not configured for "integration-token" authentication method.`);
-          }
-
-          const oauth = new OAuth.OAuth(
-            this.baseURL.concat('/oauth/token/request'),
-            this.baseURL.concat('/oauth/token/access'),
-            auth.consumerKey,
-            auth.consumerSecret,
-            '1',
-            null,
-            'HMAC-SHA1'
-          );
-
-          // TODO: make full handshake
-
-          return oauth;
-        }
-      });
-    }
-    return this.oAuth;
   }
 
   /**

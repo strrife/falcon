@@ -1,7 +1,6 @@
 global.__SERVER__ = true; // eslint-disable-line no-underscore-dangle
 
 const { Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
-const { codes } = require('@deity/falcon-errors');
 const { BaseSchema } = require('@deity/falcon-server');
 const { Schema } = require('@deity/falcon-shop-extension');
 const { makeExecutableSchema } = require('graphql-tools');
@@ -101,38 +100,13 @@ describe('Magento2Api', () => {
     nock.restore();
   });
 
-  it('Should correctly fetch admin token', async () => {
-    const result = await api.getAdminToken();
-    expect(result).toEqual(magentoResponses.adminToken);
-  });
-
   it('Should correctly fetch category data', async () => {
     nock(URL)
       .get(uri => /\/categories\/20/.test(uri)) // regexp as query params might be there
       .reply(200, magentoResponses.category.data);
 
-    api.session.storeCode = '';
     const result = await api.category({}, { id: 20 });
     expect(result.id).toEqual(magentoResponses.category.data.id);
-  });
-
-  it('Should correctly handle request error without token', async () => {
-    nock(URL)
-      .get(uri => uri.indexOf(createMagentoUrl('/products') > 0))
-      .reply(401, {
-        message: 'Consumer is not authorized to access %resources',
-        parameters: {
-          resources: 'Magento_Catalog::categories'
-        }
-      });
-
-    try {
-      await api.products({}, {});
-    } catch (error) {
-      expect(error.extensions.code).toBe(codes.UNAUTHENTICATED);
-      expect(error.message).toBe('Consumer is not authorized to access Magento_Catalog::categories');
-      expect(error.extensions.response.status).toBe(401);
-    }
   });
 
   it('Should correctly convert paths returned by Magento2 to urls', () => {

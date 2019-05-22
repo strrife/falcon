@@ -3,6 +3,7 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
 import { I18n } from '@deity/falcon-i18n';
 import { themed, Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
+import { Locale } from '../Locale';
 import { Breadcrumbs } from '../Breadcrumbs';
 import { ProductGallery } from './ProductGallery';
 import { ProductConfigurableOptions } from './ConfigurableOptions';
@@ -11,6 +12,7 @@ import { OpenSidebarMutation } from '../Sidebar';
 import { ProductConfigurator } from './ProductConfigurator';
 import { Price } from '../Locale';
 import { toGridTemplate } from '../helpers';
+import { Product as ProductModel } from './ProductQuery';
 
 export const ProductLayout = themed({
   tag: 'div',
@@ -134,8 +136,8 @@ const ProductForm = adopt({
   )
 });
 
-export class Product extends React.PureComponent<{ product: any }> {
-  createValidator(product: any, t: any) {
+export class Product extends React.PureComponent<{ product: ProductModel }> {
+  createValidator(product: ProductModel, t: any) {
     return (values: any) => {
       const errors: any = {};
 
@@ -182,7 +184,29 @@ export class Product extends React.PureComponent<{ product: any }> {
                   </Text>
                   <H1 gridArea={Area.title}>{product.name}</H1>
 
-                  <Price fontSize="xl" gridArea={Area.price} value={product.price} />
+                  <Box gridArea={Area.price}>
+                    {product.price.special ? (
+                      <React.Fragment>
+                        <Price fontSize="xl" variant="old" mr="xs" value={product.price.regular} />
+                        <Price fontSize="xl" variant="special" value={product.price.special} />
+                      </React.Fragment>
+                    ) : (
+                      <Price fontSize="xl" value={product.price.regular} />
+                    )}
+                    <Locale>
+                      {({ priceFormat }) =>
+                        (product.tierPrices || []).map(x => (
+                          <Text key={x.qty}>
+                            {t('product.tierPriceDescription', {
+                              qty: x.qty,
+                              price: priceFormat(x.value),
+                              discount: x.discount
+                            })}
+                          </Text>
+                        ))
+                      }
+                    </Locale>
+                  </Box>
                   <ProductConfigurableOptions
                     options={product.configurableOptions}
                     error={errors.configurableOptions}

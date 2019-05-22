@@ -21,6 +21,7 @@
     "@deity/falcon-errors": "^0.1.1",
     "@deity/falcon-logger": "^0.1.1",
     "@deity/falcon-server-env": "^0.1.4",
+    "apollo-server-env": "2.2.0",
     "date-fns": "1.30.1",
     "deepmerge": "^2.2.1",
     "graphql-tools": "4.0.4",

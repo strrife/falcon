@@ -7,3 +7,4 @@ export { default as Cache } from './cache/Cache';
 export * from './types';
 export { default as htmlHelpers } from './helpers/htmlHelpers';
 export { Events } from './events';
+export * from './authorization';
