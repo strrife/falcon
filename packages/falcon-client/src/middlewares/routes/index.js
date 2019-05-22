@@ -23,7 +23,7 @@ export function renderAppShell({ config, webpackAssets }) {
   return [
     webpack({ webpackAssets }),
     apolloClientProvider({ config: apolloClient, clientStates: { configSchema } }),
-    appShell({ webpackAssets }),
+    appShell(),
     appHtml({ config })
   ];
 }
