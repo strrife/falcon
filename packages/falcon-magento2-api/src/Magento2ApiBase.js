@@ -24,6 +24,10 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     this.itemUrlSuffix = this.config.itemUrlSuffix || '.html';
   }
 
+  getStoreCode() {
+    return this.session.storeCode || this.storeCode;
+  }
+
   /**
    * Makes sure that context required for http calls exists
    * Gets basic store configuration from Magento
@@ -31,7 +35,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   async fetchBackendConfig() {
     const getCachedValue = async url => {
-      const value = await this.cache.get([this.name, this.session.storeCode || this.storeCode, url].join(':'), {
+      const value = await this.cache.get([this.name, this.getStoreCode(), url].join(':'), {
         fetchData: async () => {
           const rawValue = await this.get(url, {}, { context: { useAdminToken: true } });
           return JSON.stringify(rawValue);
