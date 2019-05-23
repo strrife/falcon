@@ -4,6 +4,7 @@ const Logger = require('@deity/falcon-logger');
 const WebpackDevServer = require('webpack-dev-server-speedy');
 const clearConsole = require('react-dev-utils/clearConsole');
 const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react-dev-utils/FileSizeReporter');
+const serviceWorker = require('./../serviceWorker');
 
 const paths = require('./../paths');
 const {
@@ -17,7 +18,6 @@ const {
   logDeityGreenInfo
 } = require('./tools');
 const createConfig = require('./config/create');
-const { generateSW } = require('./workbox');
 
 module.exports.startDevServer = async () => {
   exitIfBuildingItself();
@@ -129,7 +129,7 @@ module.exports.build = async () => {
 
     Logger.log();
 
-    generateSW();
+    await serviceWorker.build();
   } catch (error) {
     Logger.error(`${chalk.red('\nFailed to compile.\n')}`);
     Logger.error(error);
