@@ -65,6 +65,7 @@ module.exports = {
     'react/no-access-state-in-setstate': 'error',
     'react/prop-types': 'off',
     'react/destructuring-assignment': 'off',
+    'react/jsx-one-expression-per-line': 'off',
     'valid-jsdoc': ['error', { requireReturn: false }]
   },
   globals: {

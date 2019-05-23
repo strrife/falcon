@@ -43,7 +43,7 @@ const CartItemDetails = ({ options = [], ...props }) =>
       {options.map(option => (
         <Box display="flex" key={option.label}>
           <Text flex="1" fontSize="xs">
-            {`${option.label}:`}
+            {option.label}:
           </Text>
           <Text flex="3" fontSize="xs">
             {option.value}
