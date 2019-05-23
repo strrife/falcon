@@ -19,12 +19,14 @@ const { generateTagNames } = require('../graphqlUtils');
 const cacheInvalidatorMiddleware = cache => async ctx => {
   /** @type {Array<CacheTagEntry>} List of posted cache tag entries to invalidate */
   const requestTags = ctx.request.body;
-  if (ctx.request.get('content-type') !== 'application/json') {
-    throw new Error('Invalid Content-Type, must be "application/json"');
-  }
-  if (!Array.isArray(requestTags)) {
-    throw new Error('Invalid POST data');
-  }
+
+  ctx.assert.equal(
+    ctx.request.get('content-type'),
+    'application/json',
+    400,
+    'Invalid Content-Type, must be "application/json"'
+  );
+  ctx.assert.equal(Array.isArray(requestTags), true, 400, 'Invalid POST data');
 
   /** @type {Array<string>} List of cache tags */
   const tags = requestTags
