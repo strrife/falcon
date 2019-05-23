@@ -6,6 +6,7 @@ const { formatBytes } = require('./tools');
 
 module.exports.generateSW = async () => {
   const swLocation = path.join('build', 'public', 'sw.js');
+
   try {
     const configuration = {
       swSrc: path.join(paths.ownSrc, 'serviceWorker/sw.js'),
