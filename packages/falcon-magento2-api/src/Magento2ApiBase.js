@@ -16,12 +16,16 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   constructor(params) {
     super(params);
-    this.storePrefix = this.config.storePrefix || 'default';
+    this.storeCode = this.config.defaultStoreCode || 'default';
     this.cookie = null;
     this.magentoConfig = {};
     this.storeList = [];
     this.storeConfigMap = {};
     this.itemUrlSuffix = this.config.itemUrlSuffix || '.html';
+  }
+
+  getStoreCode() {
+    return this.session.storeCode || this.storeCode;
   }
 
   /**
@@ -31,7 +35,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    */
   async fetchBackendConfig() {
     const getCachedValue = async url => {
-      const value = await this.cache.get([this.name, this.session.storeCode || 'default', url].join(':'), {
+      const value = await this.cache.get([this.name, this.getStoreCode(), url].join(':'), {
         fetchData: async () => {
           const rawValue = await this.get(url, {}, { context: { useAdminToken: true } });
           return JSON.stringify(rawValue);
@@ -196,7 +200,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   getPathWithPrefix(path) {
-    const { storeCode = this.storePrefix } = this.session;
+    const { storeCode = this.storeCode } = this.session;
     return `/rest/${storeCode}/V1${path}`;
   }
 
@@ -391,6 +395,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     Logger.debug(`${this.name}: ${storeCode ? 'is invalid' : 'store code is missing'}, removing cart data`);
     delete this.session.storeCode;
     delete this.session.cart;
-    await this.setShopStore({}, { storeCode: 'default' });
+    await this.setShopStore({}, { storeCode: this.storeCode });
   }
 };
