@@ -89,7 +89,7 @@ const generateTagNames = (entityName, entityId) => {
  * Get a list of tags from the provided `sourceValue` using specified `fieldType` and `fieldPathSections` (for nested values)
  * @param {object} sourceValue Source value to get tags from
  * @param {GraphQLType} fieldType GraphQL Field Type object
- * @param {string[]} [fieldPathSections=[]] An optional field path sections (example: ["products", "items"] which are created from a relative "products.items" field path)
+ * @param {string[]} [fieldPathSections=[]] An optional field path sections (example: `["products", "items"]` which are created from a relative `products.items` field path)
  * that are going to be used to get tags from. If not passed or empty - tags will be received from `sourceValue` directly.
  * @param {string|undefined} forceTypeName type name to force as a tag name
  * @return {string[]} List of tag names
