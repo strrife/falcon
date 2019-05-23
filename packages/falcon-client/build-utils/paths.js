@@ -45,6 +45,7 @@ module.exports = {
   appPath: resolveApp('.'),
   appSrc: resolveApp('src'),
   appIndexJs: resolveApp('index.js'),
+  appSwJs: resolveApp('sw.js'),
   appBootstrapJs: resolveApp('bootstrap.js'),
   appBuildConfigJs: resolveApp('falcon-client.build.config.js'),
   appWebmanifest: resolveApp('src/manifest.webmanifest'),
