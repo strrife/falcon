@@ -8,5 +8,12 @@ module.exports = {
   i18n: {
     resourcePackages: ['@deity/falcon-i18n']
   },
-  moduleOverride: {}
+  moduleOverride: {
+    // Banner replacement works
+    '@deity/falcon-ecommerce-uikit/dist/Header/Banner': 'src/components/Header/Banner'
+
+    // and those 2 below don't work:
+    // '@deity/falcon-ecommerce-uikit/dist/Header': 'src/components/Header'
+    // '@deity/falcon-ecommerce-uikit/dist/Header/Header': 'src/components/Header/Header'
+  }
 };
