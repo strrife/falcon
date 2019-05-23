@@ -18,7 +18,7 @@ const ApiContainer = require('./containers/ApiContainer');
 const ExtensionContainer = require('./containers/ExtensionContainer');
 const EndpointContainer = require('./containers/EndpointContainer');
 const DynamicRouteResolver = require('./resolvers/DynamicRouteResolver');
-const cacheMiddleware = require('./middlewares/cacheMiddleware');
+const cacheInvalidatorMiddleware = require('./middlewares/cacheInvalidatorMiddleware');
 const schemaDirectives = require('./schemaDirectives');
 
 const BaseSchema = readFileSync(resolvePath(__dirname, './schema.graphql'), 'utf8');
@@ -244,7 +244,7 @@ class FalconServer {
       if (cacheUrl === '/cache' && isProduction) {
         Logger.warn('Consider changing "cache.url" config value with a unique route to secure your Cache endpoint');
       }
-      this.router.post(cacheUrl, cacheMiddleware(this.cache));
+      this.router.post(cacheUrl, cacheInvalidatorMiddleware(this.cache));
     }
 
     this.app.use(this.router.routes()).use(this.router.allowedMethods());

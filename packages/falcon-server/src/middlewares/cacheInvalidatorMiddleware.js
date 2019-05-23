@@ -1,5 +1,5 @@
 const Logger = require('@deity/falcon-logger');
-const { generateTagNames } = require('./../graphqlUtils');
+const { generateTagNames } = require('../graphqlUtils');
 
 /**
  * @typedef {import('@deity/falcon-server-env').Cache} Cache
@@ -16,7 +16,7 @@ const { generateTagNames } = require('./../graphqlUtils');
  * @param {Cache} cache Cache component
  * @return {Middleware} Koa middleware callback
  */
-const cacheMiddleware = cache => async ctx => {
+const cacheInvalidatorMiddleware = cache => async ctx => {
   /** @type {Array<CacheTagEntry>} List of posted cache tag entries to invalidate */
   const requestTags = ctx.request.body;
   if (ctx.request.get('content-type') !== 'application/json') {
@@ -36,4 +36,4 @@ const cacheMiddleware = cache => async ctx => {
   ctx.body = 'ok';
 };
 
-module.exports = cacheMiddleware;
+module.exports = cacheInvalidatorMiddleware;
