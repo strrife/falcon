@@ -15,12 +15,7 @@ async function getManifestEntries() {
     };
 
     const { manifestEntries, size, warnings } = await workbox.getManifest(configuration);
-    console.log(JSON.stringify(manifestEntries, null, 2));
 
-    // const { count, size, warnings } = await workbox.injectManifest(configuration);
-    // Logger.log(
-    //   `Generated Service Worker ${swLocation} which will precache ${count} files, totaling ${formatBytes(size)}.\n`
-    // );
     if (warnings.length) {
       Logger.warn(warnings.join('\n'));
     }
