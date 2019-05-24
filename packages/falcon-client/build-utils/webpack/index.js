@@ -4,7 +4,7 @@ const Logger = require('@deity/falcon-logger');
 const WebpackDevServer = require('webpack-dev-server-speedy');
 const clearConsole = require('react-dev-utils/clearConsole');
 const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react-dev-utils/FileSizeReporter');
-const serviceWorker = require('./../serviceWorker');
+const serviceWorker = require('../serviceWorker');
 
 const paths = require('./../paths');
 const {
