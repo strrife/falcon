@@ -85,8 +85,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Fetch Menu
-   * @param {Object} obj Parent object
-   * @param {Object} params request params
    * @returns {Promise<MenuItem[]>} requested Menu data
    */
   async menu() {
@@ -267,13 +265,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * Get list of products based on filters from params
    * @param {Object} obj Parent object
    * @param {Object} params request params
-   * @param {number} [params.categoryId] id of the category to search in
-   * @param {boolean} [params.includeSubcategories] flag indicates if products from subcategories should be included
-   * @param {ShopPageQuery} [params.query] definitions of aggregations
-   * @param {SortOrder[]} [params.sortOrders] definition of sort orders
-   * @param {Filter[]} [params.filters] filters that should be used for filtering
-   * @param {string[]} [skus] skus of products that search should be narrowed to
-   * @returns {Promise<Product[]>} - response with list of products
+   * @param {number} params.categoryId id of the category to search in
+   * @param {boolean} params.includeSubcategories flag indicates if products from subcategories should be included
+   * @param {ShopPageQuery} params.query definitions of aggregations
+   * @param {SortOrder[]} params.sortOrders definition of sort orders
+   * @param {Filter[]} params.filters filters that should be used for filtering
+   * @param {string[]} params.skus skus of products that search should be narrowed to
+   * @returns {Promise<Product[]>}  response with list of products
    */
   async products(obj, params) {
     const { filters: simpleFilters = [], categoryId, skus } = params;
@@ -569,9 +567,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   /**
    * Reduce product data to what is needed.
-   * @param {Object} product API response from Magento2 backend
-   * @param {string} [currency] currency code
-   * @returns {Product} - reduced data
+   * @param {Object} data API response from Magento2 backend
+   * @param {string} currency currency code
+   * @returns {Product} reduced data
    */
   reduceProduct(data, currency = null) {
     this.convertAttributesSet(data);
@@ -636,9 +634,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   /**
    * Resolve Product Price from Product
    * @param {Object} parent parent (MagentoProduct or MagentoProductListItem)
-   * @param {Object} args arguments
-   * @param {Object} context context
-   * @param {Object} info info
    * @returns {ProductPrice} product price
    */
   productPrice(parent) {
@@ -1305,14 +1300,10 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * Update items in cart
    * @param {Object} obj Parent object
    * @param {UpdateCartItemInput} input cart item data
-   * @param {string} [input.sku] item sku
-   * @param {number} [input.qty] item qty
-   * @param {Object} session request params
-   * @param {string} [params.customerToken] customer token
-   * @param {string} [params.storeCode] selected store code
-   * @param {Object} [params.cart] customer cart
-   * @param {string|number} [params.cart.quoteId] cart id
-   * @returns {Promise<CartItemPayload>} - updated item data
+   * @param {string} input.sku item sku
+   * @param {number} input.qty item qty
+   * @param {number} input.itemId item id
+   * @returns {Promise<CartItemPayload>} updated item data
    */
   async updateCartItem(obj, { input }) {
     const { cart } = this.session;
@@ -1345,9 +1336,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * Remove item from cart
    * @param {Object} obj Parent object
    * @param {RemoveCartItemInput} input cart item data
-   * @param {string} [input.itemId] item id
-   * @param {string|number} [params.cart.quoteId] cart id
-   * @returns {Promise<RemoveCartItemResponse>} - RemoveCartItemResponse with itemId when operation was successfull
+   * @param {string} input.itemId item id
+   * @returns {Promise<RemoveCartItemResponse>} RemoveCartItemResponse with itemId when operation was successful
    */
   async removeCartItem(obj, { input }) {
     const { cart } = this.session;
@@ -1868,7 +1858,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   /**
    * Fetches subcategories of fetched category
    * @param {Object} obj parent object
-   * @param {*} params query params
    * @returns {Promise<[Category]>} fetched subcategories
    */
   async categoryChildren(obj) {

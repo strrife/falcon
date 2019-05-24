@@ -90,7 +90,6 @@ module.exports = class WordpressApi extends ApiDataSource {
 
   /**
    * Fetch single published post by slug
-   * @query
    * @param {Object} _ GraphQL root object
    * @param {string} path WP "slug" value
    * @returns {Object} Post data
@@ -121,10 +120,10 @@ module.exports = class WordpressApi extends ApiDataSource {
 
   /**
    * Fetch published posts.
-   * @query
    * @param {Object} _ GraphQL root object
-   * @param {Object} query Query object
-   * @param {Object} pagination Pagination
+   * @param {Object} args arguments
+   * @param {Object} args.query Query object
+   * @param {Object} args.pagination Pagination
    * @returns {Object[]} posts data
    */
   async blogPosts(_, { query, pagination }) {

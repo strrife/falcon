@@ -5,8 +5,9 @@ import { ApolloClient } from '../../service';
 
 /**
  * Apollo Client Provider middleware, sets ApolloClient on ctx.state.client
- * @param {Object} config ApolloClient configuration
- * @param {Object.<string, {data, resolvers}>} - dictionary of Apollo States.
+ * @param {Object} params params
+ * @param {Object} params.config ApolloClient configuration
+ * @param {Object.<string, {data, resolvers}>} params.clientStates dictionary of Apollo States
  * @returns {function(ctx: object, next: function): Promise<void>} Koa middleware function
  */
 export default ({ config, clientStates = {} }) => {

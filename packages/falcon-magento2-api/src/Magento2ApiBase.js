@@ -381,7 +381,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Ensuring that user gets storeCode in the session with the first hit.
-   * @param {Object} context Context object
    */
   async ensureStoreCode() {
     const { storeCode } = this.session;
