@@ -200,7 +200,7 @@ class FalconServer {
   /**
    * Create instance of cache backend based on configuration ("cache" key from config)
    * @private
-   * @return {KeyValueCache} instance of cache backend
+   * @returns {KeyValueCache} instance of cache backend
    */
   getCacheProvider() {
     const { type, options = {} } = this.config.cache || {};

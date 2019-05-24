@@ -12,7 +12,7 @@ const _ = require('lodash');
 module.exports = class Magento2ApiBase extends ApiDataSource {
   /**
    * Create Magento api wrapper instance
-   * @param {object} params configuration params
+   * @param {Object} params configuration params
    */
   constructor(params) {
     super(params);
@@ -31,7 +31,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   /**
    * Makes sure that context required for http calls exists
    * Gets basic store configuration from Magento
-   * @return {object} Magento config
+   * @returns {Object} Magento config
    */
   async fetchBackendConfig() {
     const getCachedValue = async url => {
@@ -159,8 +159,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Helper method to recursively change key naming from underscore (snake case) to camelCase
-   * @param {object} data - argument to process
-   * @return {object} converted object
+   * @param {Object} data argument to process
+   * @returns {Object} converted object
    */
   convertKeys(data) {
     // handle simple types
@@ -191,8 +191,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Resolves url based on passed parameters
-   * @param {object} req - request params
-   * @return {Promise<URL>} resolved url object
+   * @param {Object} req request params
+   * @returns {Promise<URL>} resolved url object
    */
   async resolveURL(req) {
     const { path } = req;
@@ -206,7 +206,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Authorize all requests, except case when authorization is explicitly disabled via context settings
-   * @param {RequestOptions} req - request params
+   * @param {RequestOptions} req request params
    */
   async willSendRequest(req) {
     const { context } = req;
@@ -216,7 +216,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Sets authorization headers for the passed request
-   * @param {RequestOptions} req - request input
+   * @param {RequestOptions} req request input
    */
   async authorizeRequest(req) {
     const { useAdminToken } = req.context || {};
@@ -244,8 +244,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Check if authentication token is valid
-   * @param {AuthToken} authToken - authentication token
-   * @return {boolean} - true if token is valid
+   * @param {AuthToken} authToken authentication token
+   * @returns {boolean} - true if token is valid
    */
   isCustomerTokenValid(authToken) {
     if (!authToken || !authToken.token || !authToken.expirationTime) {
@@ -257,7 +257,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Retrieves admin token
-   * @return {{ value: string, options: { ttl: number } }} Result
+   * @returns {{ value: string, options: { ttl: number } }} Result
    */
   async retrieveAdminToken() {
     const result = {
@@ -310,7 +310,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   /**
    * Get Magento API authorized admin token or perform request to create it.
    * "reqToken" property is being used for parallel calls
-   * @return {Promise<string>} token value
+   * @returns {Promise<string>} token value
    */
   async getAdminToken() {
     if (!this.reqToken) {
@@ -323,8 +323,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Process received response data
-   * @param {Response} response - received response from the api
-   * @return {object} processed response data
+   * @param {Response} response received response from the api
+   * @returns {Object} processed response data
    */
   async didReceiveResponse(response) {
     const cookies = (response.headers.get('set-cookie') || '').split('; ');
@@ -356,7 +356,7 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   /**
    * Handle error occurred during http response
    * @param {Error} error Error to process
-   * @param {object} req Request object
+   * @param {Object} req Request object
    */
   didEncounterError(error, req) {
     const { extensions } = error;
@@ -381,7 +381,6 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Ensuring that user gets storeCode in the session with the first hit.
-   * @param {object} context Context object
    */
   async ensureStoreCode() {
     const { storeCode } = this.session;

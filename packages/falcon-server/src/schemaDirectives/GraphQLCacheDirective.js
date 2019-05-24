@@ -43,9 +43,9 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
   /**
    * Get a resolver function with caching capabilities (depends on the provided config)
    * @param {Function} resolve Native GQL resolver function
-   * @param {object} field Field info object
-   * @param {object} defaultCacheConfig Default cache config
-   * @return {Function} Resolver function with caching
+   * @param {Object} field Field info object
+   * @param {Object} defaultCacheConfig Default cache config
+   * @returns {Function} Resolver function with caching
    */
   getResolverWithCache(resolve, field, defaultCacheConfig) {
     const thisDirective = this;
@@ -93,10 +93,10 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
 
   /**
    * Execute the actual GraphQL resolver and generate cache tags
-   * @param {object} result Resolver result
-   * @param {object} parent GraphQL parent object
-   * @param {object} info GraphQL Info object
-   * @return {object} Final resolver result
+   * @param {Object} result Resolver result
+   * @param {Object} parent GraphQL parent object
+   * @param {Object} info GraphQL Info object
+   * @returns {Object} Final resolver result
    */
   handleCacheCallbackResponse(result, parent, info) {
     const resolverResult = result && result.value ? result.value : result;
@@ -123,10 +123,10 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
   /**
    * Extract cache tags for the provided ID path and return a list of tags
    * @param {string} idPath ID operation path string (like "$parent.items" or "items")
-   * @param {object} result Resolver result
-   * @param {object} info GraphQL info object
-   * @param {object} parent GraphQL parent object
-   * @return {string[]} List of tags
+   * @param {Object} result Resolver result
+   * @param {Object} info GraphQL info object
+   * @param {Object} parent GraphQL parent object
+   * @returns {string[]} List of tags
    */
   extractTagsForIdPath(idPath, result, info, parent) {
     const [rootPath, ...fieldPathSections] = idPath.split(PATH_SEPARATOR);
@@ -142,11 +142,11 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
 
   /**
    * Get a list of tags from the provided `sourceValue` using specified `fieldType` and `fieldPathSections` (for nested values)
-   * @param {object} sourceValue Source value to get tags from
-   * @param {object} fieldType GraphQL Field Type object
+   * @param {Object} sourceValue Source value to get tags from
+   * @param {Object} fieldType GraphQL Field Type object
    * @param {string[]} [fieldPathSections=[]] An optional field path sections (example: ["products", "items"] which are created from a relative "products.items" field path)
    * that are going to be used to get tags from. If not passed or empty - tags will be received from `sourceValue` directly.
-   * @return {string[]} List of tag names
+   * @returns {string[]} List of tag names
    */
   getTagsForField(sourceValue, fieldType, fieldPathSections = []) {
     if (!fieldPathSections.length) {
@@ -175,8 +175,8 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
 
   /**
    * Find a field name with TAG_ID_FIELD_TYPE type
-   * @param {object} gqlType GQL Object Type
-   * @return {string|undefined} Name of the field with
+   * @param {Object} gqlType GQL Object Type
+   * @returns {string|undefined} Name of the field with
    */
   findTagIdFieldName(gqlType) {
     const { _fields: fields, name: objectTypeName } = this.getRootType(gqlType);
@@ -193,9 +193,9 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
 
   /**
    * Extract a value by `fieldName` from the provided `sourceValue`
-   * @param {object|object[]} sourceValue Source object to get a field value from
+   * @param {Object|Array<Object>} sourceValue Source object to get a field value from
    * @param {string} fieldName Name of the field
-   * @return {undefined|string|string[]} Value or list of values (in case of `sourceValue` is an array)
+   * @returns {undefined|string|string[]} Value or list of values (in case of `sourceValue` is an array)
    */
   getFieldValue(sourceValue, fieldName) {
     if (typeof sourceValue === 'undefined' || typeof fieldName === 'undefined') {
@@ -212,7 +212,7 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
    * Generate tag names using `entityName` and `entityId`
    * @param {string} entityName Entity Type name (like "Product")
    * @param {string|string[]} entityId Entity ID or list of IDs (like: "1" or ["1", "2"])
-   * @return {string[]} List of tag names (example: ["Product:1", "Product:2"])
+   * @returns {string[]} List of tag names (example: ["Product:1", "Product:2"])
    */
   generateTagNames(entityName, entityId) {
     if (!entityId) {
@@ -228,10 +228,10 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
    * - default cache config provided from `context.config`
    * - cache config provided in `@cache(...)` directive
    * - cache config for a specific operation via `context.config`
-   * @param {object} info GraphQL Request info object
-   * @param {object} resolversCacheConfig Cache object provided via `context.config`
-   * @param {object} defaultDirectiveValue Default options defined in cache directive for the specific type
-   * @return {object} Final cache options object
+   * @param {Object} info GraphQL Request info object
+   * @param {Object} resolversCacheConfig Cache object provided via `context.config`
+   * @param {Object} defaultDirectiveValue Default options defined in cache directive for the specific type
+   * @returns {Object} Final cache options object
    */
   getCacheConfigForField(info, resolversCacheConfig, defaultDirectiveValue) {
     const { path: gqlPath, operation } = info;
@@ -244,8 +244,8 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
   /**
    * Generates a path-like string for the provided request
    * for `query { foo { bar } }` - it will generate `foo.bar` string
-   * @param {object} node Operation path object
-   * @return {string} Generated operation path string
+   * @param {Object} node Operation path object
+   * @returns {string} Generated operation path string
    */
   getOperationPath(node) {
     const { key, prev } = node;
@@ -259,8 +259,8 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
   /**
    * Extract "root" type from GQL field by getting "ofType" sub-type until it reaches the root field
    * @private
-   * @param {object} type GQL Object type
-   * @return {object} "root" object type
+   * @param {Object} type GQL Object type
+   * @returns {Object} "root" object type
    */
   getRootType(type) {
     const realType = type.ofType || type;
