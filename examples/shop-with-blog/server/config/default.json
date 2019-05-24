@@ -60,6 +60,7 @@
           "de": ["de_store"],
           "fr": ["fr_store"]
         },
+        "defaultStoreCode": "default",
         "codeMapping": {
           "default": "default",
           "nl_store": "nl_store",

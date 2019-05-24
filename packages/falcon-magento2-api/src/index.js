@@ -705,7 +705,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   getCacheContext() {
     return {
-      storeCode: this.session.storeCode || this.storePrefix
+      storeCode: this.getStoreCode()
     };
   }
 
