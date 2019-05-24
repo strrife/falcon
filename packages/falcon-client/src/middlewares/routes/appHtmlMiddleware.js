@@ -5,7 +5,9 @@ import Html from '../../components/Html';
 
 /**
  * Application html renderer middleware.
- * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
+ * @param {Object} params params
+ * @param {Object} params.config configuration
+ * @returns {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
 export default ({ config }) => async ctx => {
   const { AppMarkup, client, assets, chunkExtractor, helmetContext, serverTiming } = ctx.state;

@@ -73,11 +73,11 @@ module.exports = class ExtensionContainer extends BaseContainer {
 
   /**
    * Initializes each registered extension (in sequence)
-   * @param {object} obj Parent object
-   * @param {object} args GQL args
-   * @param {object} context GQL context
-   * @param {object} info GQL info
-   * @return {BackendConfig} Merged config
+   * @param {Object} obj Parent object
+   * @param {Object} args GQL args
+   * @param {Object} context GQL context
+   * @param {Object} info GQL info
+   * @returns {BackendConfig} Merged config
    */
   async fetchBackendConfig(obj, args, context, info) {
     const configs = [];
@@ -97,7 +97,7 @@ module.exports = class ExtensionContainer extends BaseContainer {
   /**
    * Merges
    * @param {Object[]} configs List of API config
-   * @return {BackendConfig} Merged config
+   * @returns {BackendConfig} Merged config
    */
   mergeConfigs(configs) {
     return configs.reduce((prev, current) => {
@@ -128,8 +128,8 @@ module.exports = class ExtensionContainer extends BaseContainer {
 
   /**
    * Creates a complete configuration for ApolloServer
-   * @param {Object} defaultConfig - default configuration that should be used
-   * @return {Object} resolved configuration
+   * @param {Object} defaultConfig default configuration that should be used
+   * @returns {Object} resolved configuration
    */
   async createGraphQLConfig(defaultConfig = {}) {
     const config = Object.assign(
@@ -229,8 +229,8 @@ module.exports = class ExtensionContainer extends BaseContainer {
 
   /**
    * Returns array of extensions for which filterFn function called with extension instance as a param returns true
-   * @param {function} filterFn - function to be executed for each extension instance
-   * @returns {array} matched extensions
+   * @param {Function} filterFn function to be executed for each extension instance
+   * @returns {Array} matched extensions
    */
   getExtensionsByCriteria(filterFn) {
     const result = [];

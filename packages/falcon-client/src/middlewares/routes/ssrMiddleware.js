@@ -8,8 +8,9 @@ import HtmlHead from '../../components/HtmlHead';
 
 /**
  * Server Side Rendering middleware.
- * @param {{App: React.Component}} App - React Component to render
- * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
+ * @param {Object} params params
+ * @param {{App: React.Component}} params.App React Component to render
+ * @returns {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
 export default ({ App }) => async (ctx, next) => {
   const { client, chunkExtractor, serverTiming } = ctx.state;

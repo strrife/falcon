@@ -14,7 +14,7 @@ import assets from './assetsMiddleware';
 /**
  * Configure App Shell rendering middlewares
  * @param {RenderAppShell} params params
- * @return {function(ctx: object, next: function)[]} Koa middlewares
+ * @returns {function(ctx: object, next: function)[]} Koa middlewares
  */
 export function renderAppShell({ config, webpackAssets }) {
   const { apolloClient } = config;
@@ -39,7 +39,7 @@ export function renderAppShell({ config, webpackAssets }) {
 /**
  * Configure App rendering middlewares
  * @param {RenderApp} params params
- * @return {function(ctx: object, next: function)[]} Koa middlewares
+ * @returns {function(ctx: object, next: function)[]} Koa middlewares
  */
 export function renderApp({ config, clientApolloSchema, App, webpackAssets }) {
   const { i18n, serverSideRendering, apolloClient } = config;

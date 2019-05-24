@@ -7,7 +7,7 @@ import HtmlHead from '../../components/HtmlHead';
 
 /**
  * App shell rendering middleware.
- * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
+ * @returns {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
 export default () => async (ctx, next) => {
   const { client, chunkExtractor } = ctx.state;
