@@ -40,7 +40,6 @@ module.exports.build = async () => {
             }
           ]
         })
-        // isProductionBuild ? terser() : undefined
       ].map(x => x)
     };
 
