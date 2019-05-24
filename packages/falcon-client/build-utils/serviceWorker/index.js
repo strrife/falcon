@@ -3,7 +3,6 @@ const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs');
 const rollup = require('rollup');
-// const { terser } = require('rollup-plugin-terser');
 const resolve = require('rollup-plugin-node-resolve');
 const re = require('rollup-plugin-re');
 const alias = require('rollup-plugin-alias');
