@@ -4,13 +4,15 @@ const pick = require('lodash/pick');
 const has = require('lodash/has');
 const forEach = require('lodash/forEach');
 const isPlainObject = require('lodash/isPlainObject');
+const url = require('url');
 const urlJoin = require('proper-url-join');
 const addMinutes = require('date-fns/add_minutes');
+const { addResolveFunctionsToSchema } = require('graphql-tools');
 const { ApiUrlPriority, htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
-const { addResolveFunctionsToSchema } = require('graphql-tools');
 const Magento2ApiBase = require('./Magento2ApiBase');
-const url = require('url');
+const { tryParseNumber } = require('./utils/number');
+const { typeResolverPathToString } = require('./utils/apollo');
 
 const FALCON_CART_ACTIONS = [
   '/save-payment-information-and-order',
@@ -45,6 +47,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         weightUnit: () => this.session.weightUnit
       },
       Product: {
+        price: (...args) => this.productPrice(...args),
+        tierPrices: (...args) => this.productTierPrices(...args),
+        configurableOptions: (...x) => this.configurableProductOptions(...x),
         breadcrumbs: (...args) => this.breadcrumbs(...args)
       },
       Category: {
@@ -568,96 +573,134 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {string} [currency] currency code
    * @returns {Product} - reduced data
    */
-  reduceProduct(product, currency = null) {
-    this.convertAttributesSet(product);
-    const reducedProduct = this.convertKeys(product);
-    const { extensionAttributes = {}, customAttributes } = reducedProduct;
-    const catalogPrice = extensionAttributes.catalogDisplayPrice;
-    const price =
-      catalogPrice ||
-      (typeof reducedProduct.price.regularPrice !== 'undefined'
-        ? reducedProduct.price.regularPrice
-        : reducedProduct.price);
+  reduceProduct(data, currency = null) {
+    this.convertAttributesSet(data);
+    data = this.convertKeys(data);
 
-    reducedProduct.urlPath = this.convertPathToUrl(reducedProduct.urlPath);
-    reducedProduct.priceAmount = reducedProduct.price;
-    reducedProduct.currency = currency;
-    reducedProduct.price = price;
-    reducedProduct.name = htmlHelpers.stripHtml(reducedProduct.name);
-    reducedProduct.priceType = customAttributes.priceType || '1';
+    const { customAttributes = {} } = data;
 
-    if (extensionAttributes && !isEmpty(extensionAttributes)) {
-      const {
-        thumbnailUrl,
-        mediaGallerySizes,
-        stockItem,
-        minPrice,
-        maxPrice,
-        configurableProductOptions,
-        bundleProductOptions
-      } = extensionAttributes;
-
-      // temporary workaround until Magento returns product id correctly
-      if (!reducedProduct.id) {
-        reducedProduct.id = reducedProduct.sku;
+    const resolveGallery = product => {
+      const { extensionAttributes: attrs, mediaGallerySizes } = product;
+      if (attrs && attrs.mediaGallerySizes) {
+        return attrs.mediaGallerySizes;
       }
+
+      return mediaGallerySizes || [];
+    };
+
+    const result = {
+      ...data,
+      id: data.id || data.sku, // temporary workaround until Magento returns product id correctly
+      sku: data.sku,
+      urlPath: this.convertPathToUrl(data.urlPath),
+      currency,
+      name: htmlHelpers.stripHtml(data.name),
+      description: customAttributes.description,
+      gallery: resolveGallery(data),
+      seo: {
+        title: customAttributes.metaTitle,
+        description: customAttributes.metaDescription,
+        keywords: customAttributes.metaKeyword
+      }
+    };
+
+    if (data.extensionAttributes) {
+      const { thumbnailUrl, stockItem, configurableProductOptions, bundleProductOptions } = data.extensionAttributes;
 
       // old API passes thumbnailUrl in extension_attributes, new api passes image field directly
-      reducedProduct.thumbnail = thumbnailUrl || reducedProduct.image;
-      reducedProduct.gallery = mediaGallerySizes || [];
-
-      if (minPrice) {
-        reducedProduct.minPrice = minPrice;
-        delete extensionAttributes.minPrice;
-      }
-
-      if (maxPrice) {
-        reducedProduct.maxPrice = maxPrice;
-        delete extensionAttributes.maxPrice;
-      }
-
-      if (reducedProduct.minPrice && price === 0) {
-        reducedProduct.price = reducedProduct.minPrice;
-      }
-
-      if (reducedProduct.minPrice === reducedProduct.maxPrice) {
-        delete reducedProduct.minPrice;
-        delete reducedProduct.maxPrice;
-      }
+      result.thumbnail = thumbnailUrl || data.image;
 
       if (stockItem) {
-        reducedProduct.stock = pick(stockItem, 'qty', 'isInStock');
+        result.stock = pick(stockItem, 'qty', 'isInStock');
       }
 
-      reducedProduct.configurableOptions = configurableProductOptions || [];
+      result.configurableOptions = configurableProductOptions || [];
 
       if (bundleProductOptions) {
         // remove extension attributes for option product links
         bundleProductOptions.forEach(option => {
-          const reducedProductLink = option.productLinks.map(productLink => ({
+          const dataLink = option.productLinks.map(productLink => ({
             ...productLink,
             ...productLink.extensionAttributes
           }));
-          option.productLinks = reducedProductLink;
+          option.productLinks = dataLink;
         });
 
-        reducedProduct.bundleOptions = bundleProductOptions;
+        result.bundleOptions = bundleProductOptions;
       }
     }
 
-    if (customAttributes && !isEmpty(customAttributes)) {
-      const { description, metaTitle, metaDescription, metaKeyword } = customAttributes;
+    return result;
+  }
 
-      reducedProduct.description = description;
+  /**
+   * Resolve Product Price from Product
+   * @param {Object} parent parent (MagentoProduct or MagentoProductListItem)
+   * @param {Object} args arguments
+   * @param {Object} context context
+   * @param {Object} info info
+   * @returns {ProductPrice} product price
+   */
+  productPrice(parent) {
+    const { price } = parent;
 
-      reducedProduct.seo = {
-        title: metaTitle,
-        description: metaDescription,
-        keywords: metaKeyword
-      };
+    return {
+      regular: tryParseNumber(price.regularPrice) || 0.0,
+      special: tryParseNumber(price.specialPrice),
+      minTier: tryParseNumber(price.minTierPrice)
+    };
+  }
+
+  /**
+   * Resolve Product Tier Price from Product
+   * @param {Object} parent parent (MagentoProduct or MagentoProductListItem)
+   * @param {Object} args arguments
+   * @param {Object} context context
+   * @param {Object} info info
+   * @returns {TierPrice[]} product price
+   */
+  async productTierPrices(parent, args, context, info) {
+    // a parent could be an item of Magento Product List, which does not contain necessary data, so we need to fetch Product by its id
+    const data = typeResolverPathToString(info.path).startsWith('category.products')
+      ? await this.fetchProduct(parent.id)
+      : parent;
+
+    const { price, tierPrices = [] } = data;
+    const regularPrice = tryParseNumber(price.regularPrice) || 0.0;
+
+    return tierPrices.map(tierPrice => ({
+      qty: tierPrice.qty,
+      value: tierPrice.value,
+      discount: regularPrice ? 100 - (100 * tierPrice.value) / regularPrice : 0.0
+    }));
+  }
+
+  /**
+   * Resolve Configurable Product Options from Product
+   * @param {Object} parent parent (MagentoProduct or MagentoProductListItem)
+   * @param {Object} args arguments
+   * @param {Object} context context
+   * @param {Object} info info
+   * @returns {ConfigurableProductOption} configurable product options
+   */
+  async configurableProductOptions(parent, args, context, info) {
+    // a parent could be an item of Magento Product List, which does not contain necessary data, so we need to fetch Product by its id
+    const data = typeResolverPathToString(info.path).startsWith('category.products')
+      ? await this.fetchProduct(parent.id)
+      : parent;
+
+    if (!data.extensionAttributes || !Array.isArray(data.extensionAttributes.configurableProductOptions)) {
+      return [];
     }
 
-    return reducedProduct;
+    return data.extensionAttributes.configurableProductOptions.map(({ values, ...restOptions }) => ({
+      ...restOptions,
+      values: values.map(({ extensionAttributes = {}, ...x }) => ({
+        valueIndex: x.valueIndex,
+        inStock: extensionAttributes.inStock || [],
+        label: extensionAttributes.label
+      }))
+    }));
   }
 
   /**
@@ -671,7 +714,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
   getCacheContext() {
     return {
-      storeCode: this.session.storeCode || this.storePrefix
+      storeCode: this.getStoreCode()
     };
   }
 
@@ -710,9 +753,17 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @returns {Promise<Product>} product data
    */
   async product(obj, { id }) {
-    const productData = await this.get(`/products/${id}`, {}, { context: { useAdminToken: true } });
-    const product = this.reduceProduct(productData);
+    const data = await this.fetchProduct(id);
+    const product = this.reduceProduct(data);
+
     return product;
+  }
+
+  async fetchProduct(id) {
+    const data = await this.get(`/falcon/products/${id}`, {}, { context: { useAdminToken: true } });
+    this.convertAttributesSet(data);
+
+    return this.convertKeys(data);
   }
 
   /**
