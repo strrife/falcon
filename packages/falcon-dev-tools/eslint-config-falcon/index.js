@@ -4,10 +4,7 @@ module.exports = {
   plugins: ['react', 'import', 'prettier'],
   settings: {
     'import/parser': 'babel-eslint',
-    'import/resolver': {
-      node: true,
-      'eslint-import-resolver-typescript': true
-    }
+    'import/resolver': { node: true }
   },
   env: {
     browser: true,
@@ -18,12 +15,7 @@ module.exports = {
     'class-methods-use-this': 'off',
     'consistent-return': 'off',
     'global-require': 'off',
-    'id-length': [
-      1,
-      {
-        exceptions: ['_', 'e', 't', 'x', 'p', 'm', 'i', 'j']
-      }
-    ],
+    'id-length': [1, { exceptions: ['_', 'e', 't', 'x', 'p', 'm', 'i', 'j'] }],
     'import/default': 'off',
     'import/no-duplicates': 'off',
     'import/named': 'off',
@@ -33,19 +25,13 @@ module.exports = {
     'import/extensions': ['off', 'never'],
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'import/prefer-default-export': 'off',
-    'jsx-a11y/anchor-is-valid': [
-      'off',
-      {
-        components: ['Link']
-      }
-    ],
+    'jsx-a11y/anchor-is-valid': ['off', { components: ['Link'] }],
+    'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/label-has-for': [
       2,
       {
         components: ['Label'],
-        required: {
-          every: ['id']
-        },
+        required: { every: ['id'] },
         allowChildren: false
       }
     ],
@@ -62,9 +48,7 @@ module.exports = {
         array: false,
         object: true
       },
-      {
-        enforceForRenamedProperties: false
-      }
+      { enforceForRenamedProperties: false }
     ],
     'prettier/prettier': [
       'error',
@@ -74,27 +58,15 @@ module.exports = {
         printWidth: 120
       }
     ],
-    'react/jsx-filename-extension': [
-      1,
-      {
-        extensions: ['.js', '.jsx', '.tsx']
-      }
-    ],
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.tsx'] }],
     'react/no-danger': 'off',
     'react/no-multi-comp': 'off',
-    // problem with redux-connect decorator so we cannot use required on props,
-    // therefore everything would need to be defined in default props
     'react/require-default-props': ['off'],
     'react/no-access-state-in-setstate': 'error',
     'react/prop-types': 'off',
-    'jsx-a11y/click-events-have-key-events': 'off',
-
-    'valid-jsdoc': [
-      'error',
-      {
-        requireReturn: false
-      }
-    ]
+    'react/destructuring-assignment': 'off',
+    'react/jsx-one-expression-per-line': 'off',
+    'valid-jsdoc': ['error', { requireReturn: false }]
   },
   globals: {
     __DEVELOPMENT__: true,
@@ -107,8 +79,8 @@ module.exports = {
   overrides: [
     {
       files: ['**/*.ts', '**/*.tsx'],
-      parser: 'typescript-eslint-parser',
-      plugins: ['typescript'],
+      parser: '@typescript-eslint/parser',
+      plugins: ['@typescript-eslint'],
       rules: {
         'no-undef': 'off',
         'no-unused-vars': 'off',

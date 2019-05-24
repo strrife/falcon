@@ -1,30 +1,21 @@
 {
   "name": "@deity/falcon-magento2-api",
   "license": "OSL-3.0",
-  "main": "src/index.js",
   "version": "0.5.0",
   "homepage": "https://falcon.deity.io/docs/falcon-server/api-providers#falcon-magento-2-api",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-magento2-api",
   "publishConfig": {
     "access": "public"
   },
-  "scripts": {
-    "test": "jest --watch",
-    "test:coverage": "jest --ci --coverage"
-  },
+  "main": "src/index.js",
   "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.js"
-    ],
-    "coverageReporters": [
-      "html",
-      "text",
-      "text-summary",
-      "lcov"
-    ],
     "setupFiles": [
       "../../test/nodeEnvSetupFile"
     ]
+  },
+  "scripts": {
+    "test": "falcon-scripts test",
+    "test:coverage": "falcon-scripts test:coverage"
   },
   "dependencies": {
     "@deity/falcon-errors": "^0.1.1",
@@ -40,6 +31,7 @@
     "qs": "6.6.0"
   },
   "devDependencies": {
+    "@deity/falcon-scripts": "0.0.1",
     "@deity/falcon-server": "^0.2.1",
     "@deity/falcon-shop-extension": "^0.4.1",
     "eventemitter2": "5.0.1",

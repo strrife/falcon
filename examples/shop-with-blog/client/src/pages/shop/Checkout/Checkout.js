@@ -81,15 +81,24 @@ const checkoutLayout = {
 const computeStepFromValues = (values, errors) => {
   if (!values.email || errors.email) {
     return CHECKOUT_STEPS.EMAIL;
-  } else if (!values.shippingAddress || errors.shippingAddress) {
+  }
+
+  if (!values.shippingAddress || errors.shippingAddress) {
     return CHECKOUT_STEPS.SHIPPING_ADDRESS;
-  } else if (!values.billingAddress || errors.billingAddress) {
+  }
+
+  if (!values.billingAddress || errors.billingAddress) {
     return CHECKOUT_STEPS.BILLING_ADDRESS;
-  } else if (!values.shippingMethod || errors.shippingMethod) {
+  }
+
+  if (!values.shippingMethod || errors.shippingMethod) {
     return CHECKOUT_STEPS.SHIPPING;
-  } else if (!values.paymentMethod || errors.paymentMethod) {
+  }
+
+  if (!values.paymentMethod || errors.paymentMethod) {
     return CHECKOUT_STEPS.PAYMENT;
   }
+
   return CHECKOUT_STEPS.CONFIRMATION;
 };
 

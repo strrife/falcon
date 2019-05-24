@@ -10,7 +10,7 @@ const addMinutes = require('date-fns/add_minutes');
 const { addResolveFunctionsToSchema } = require('graphql-tools');
 const { ApiUrlPriority, htmlHelpers } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
-const Magento2ApiBase = require('./Magento2ApiBase');
+const { Magento2ApiBase } = require('./Magento2ApiBase');
 const { tryParseNumber } = require('./utils/number');
 const { typeResolverPathToString } = require('./utils/apollo');
 
@@ -90,18 +90,22 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<MenuItem[]>} requested Menu data
    */
   async menu() {
-    const response = await this.get('/falcon/menus');
+    const response = await this.getForIntegration('/falcon/menus');
     const menuItems = this.convertKeys(response);
 
     const mapMenu = x => {
+      if (!x) {
+        return [];
+      }
+
       if (Array.isArray(x)) {
-        return x.length > 0 ? x.map(mapMenu) : [];
+        return x.map(mapMenu);
       }
 
       return {
         ...x,
         urlPath: urlJoin(x.urlPath, undefined, { leadingSlash: true }),
-        children: x.children && x.children.length > 0 ? x.children.map(mapMenu) : []
+        children: mapMenu(x.children)
       };
     };
 
@@ -722,9 +726,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     return this.get(
       '/falcon/urls/',
-      {
-        url: path
-      },
+      { url: path },
       {
         context: {
           didReceiveResult: result => ({
@@ -750,7 +752,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   async fetchProduct(id) {
-    const data = await this.get(`/falcon/products/${id}`, {}, { context: { useAdminToken: true } });
+    const data = await this.getForIntegration(`/falcon/products/${id}`);
     this.convertAttributesSet(data);
 
     return this.convertKeys(data);
@@ -796,7 +798,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     try {
-      const cartItem = await this.post(`${cartPath}/items`, product);
+      const cartItem = await this.postAuth(`${cartPath}/items`, product);
 
       this.convertKeys(cartItem);
       this.processPrice(cartItem, ['price']);
@@ -827,7 +829,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async mergeGuestCart(guestQuoteId) {
     // send masked_quote_id as param so Magento merges guest's cart with user's cart
-    const response = await this.post('/falcon/carts/mine', { masked_quote_id: guestQuoteId });
+    const response = await this.postAuth('/falcon/carts/mine', { masked_quote_id: guestQuoteId });
     this.session.cart = { quoteId: response };
 
     return this.session.cart;
@@ -845,7 +847,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       return cart;
     }
 
-    const response = await this.post(this.isCustomerLoggedIn() ? '/falcon/carts/mine' : '/guest-carts');
+    const response = await this.postAuth(this.isCustomerLoggedIn() ? '/falcon/carts/mine' : '/guest-carts');
 
     this.session.cart = { quoteId: response };
     this.context.session.save();
@@ -903,20 +905,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     try {
       const [quote, totals] = await Promise.all([
-        this.get(
-          cartPath,
-          {},
-          {
-            context: { didReceiveResult: result => this.convertKeys(result) }
-          }
-        ),
-        this.get(
-          `${cartPath}/totals`,
-          {},
-          {
-            context: { didReceiveResult: result => this.convertKeys(result) }
-          }
-        )
+        this.getAuth(cartPath, {}, { context: { didReceiveResult: result => this.convertKeys(result) } }),
+        this.getAuth(`${cartPath}/totals`, {}, { context: { didReceiveResult: result => this.convertKeys(result) } })
       ]);
       return this.convertCartData(quote, totals);
     } catch (ex) {
@@ -983,7 +973,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {CountryList} parsed country list
    */
   async countries() {
-    const response = await this.get('/directory/countries', {}, { context: { isAuthRequired: false } });
+    const response = await this.getAuth('/directory/countries', {}, { context: { isAuthRequired: false } });
 
     const countries = response.map(item => ({
       code: item.id,
@@ -1008,14 +998,10 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const dateNow = Date.now();
 
     try {
-      const token = await this.post(
-        '/integration/customer/token',
-        {
-          username: input.email,
-          password: input.password
-        },
-        { context: { isAuthRequired: false } }
-      );
+      const token = await this.post('/integration/customer/token', {
+        username: input.email,
+        password: input.password
+      });
 
       // todo: validTime should be extracted from the response, but after recent changes Magento doesn't send it
       // so that should be changed once https://github.com/deity-io/falcon-magento2-development/issues/32 is resolved
@@ -1089,7 +1075,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     };
 
     try {
-      await this.post('/customers', customerData);
+      await this.postAuth('/customers', customerData);
 
       if (autoSignIn) {
         return this.signIn(obj, { input: { email, password } });
@@ -1119,7 +1105,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       return null;
     }
 
-    const response = await this.get('/customers/me');
+    const response = await this.getForCustomer('/customers/me');
 
     const convertedData = this.convertKeys(response);
     convertedData.addresses = convertedData.addresses.map(addr => this.convertAddressData(addr));
@@ -1166,11 +1152,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async orders(obj, params) {
     const { pagination = { perPage: this.perPage, page: 1 } } = params;
-    const { customerToken = {} } = this.session;
-
-    if (!customerToken.token) {
-      throw new Error('Trying to fetch customer orders without valid customer token');
-    }
 
     const query = this.createSearchParams({
       pagination,
@@ -1180,7 +1161,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       }
     });
 
-    const response = await this.get('/falcon/orders/mine', query, { context: { pagination } });
+    const response = await this.getForCustomer('/falcon/orders/mine', query, { context: { pagination } });
 
     return this.convertKeys(response);
   }
@@ -1194,19 +1175,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async order(obj, params) {
     const { id } = params;
-    const { customerToken = {} } = this.session;
 
     if (!id) {
       Logger.error(`${this.name}: Trying to fetch customer order info without order id`);
       throw new Error('Failed to load an order.');
     }
 
-    if (!customerToken.token) {
-      Logger.error(`${this.name}: Trying to fetch customer order info without customer token`);
-      throw new Error('Failed to load an order.');
-    }
-
-    const result = await this.get(`/falcon/orders/${id}/order-info`);
+    const result = await this.getForCustomer(`/falcon/orders/${id}/order-info`);
 
     return this.convertOrder(result);
   }
@@ -1320,7 +1295,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       }
     };
 
-    const cartItem = await this.put(`${cartPath}/items/${itemId}`, data);
+    const cartItem = await this.putAuth(`${cartPath}/items/${itemId}`, data);
 
     this.convertKeys(cartItem);
     this.processPrice(cartItem, ['price']);
@@ -1342,7 +1317,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const cartPath = this.getCartPath();
 
     if (cart && cart.quoteId) {
-      const result = await this.delete(`${cartPath}/items/${itemId}`);
+      const result = await this.deleteAuth(`${cartPath}/items/${itemId}`);
       if (result) {
         return {
           itemId
@@ -1362,7 +1337,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Customer>} updated customer data
    */
   async editCustomer(obj, { input }) {
-    const response = await this.put('/falcon/customers/me', { customer: { ...input } });
+    const response = await this.putAuth('/falcon/customers/me', { customer: { ...input } });
 
     return this.convertKeys(response);
   }
@@ -1375,13 +1350,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Address>} requested address data
    */
   async address(obj, { id }) {
-    const { customerToken = {} } = this.session;
-    if (!customerToken.token) {
-      Logger.error(`${this.name}: Trying to read address data without customer token`);
-      throw new Error('You do not have an access to read address data');
-    }
-
-    const response = await this.get(`/falcon/customers/me/address/${id}`);
+    const response = await this.getForCustomer(`/falcon/customers/me/address/${id}`);
 
     return this.convertAddressData(response);
   }
@@ -1391,13 +1360,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<AddressList>} requested addresses data
    */
   async addresses() {
-    const { customerToken = {} } = this.session;
-    if (!customerToken.token) {
-      Logger.error(`${this.name}: Trying to read addresses data without customer token`);
-      throw new Error('You do not have an access to read addresses data');
-    }
-
-    const response = await this.get('/falcon/customers/me/address');
+    const response = await this.getForCustomer('/falcon/customers/me/address');
     const items = response.items || [];
 
     return { items: items.map(x => this.convertAddressData(x)) };
@@ -1410,13 +1373,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Address>} added address data
    */
   async addAddress(obj, { input }) {
-    const { customerToken = {} } = this.session;
-    if (!customerToken.token) {
-      Logger.error(`${this.name}: Trying to add address data without customer token`);
-      throw new Error('You do not have an access to add address data');
-    }
-
-    const response = await this.post('/falcon/customers/me/address', { address: { ...input } });
+    const response = await this.postForCustomer('/falcon/customers/me/address', { address: { ...input } });
 
     return this.convertAddressData(response);
   }
@@ -1428,13 +1385,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {Promise<Address>} updated address data
    */
   async editAddress(obj, { input }) {
-    const { customerToken = {} } = this.session;
-    if (!customerToken.token) {
-      Logger.error(`${this.name}: Trying to edit address data without customer token`);
-      throw new Error('You do not have an access to edit address data');
-    }
-
-    const response = await this.put(`/falcon/customers/me/address`, { address: { ...input } });
+    const response = await this.putForCustomer(`/falcon/customers/me/address`, { address: { ...input } });
 
     return this.convertAddressData(response);
   }
@@ -1447,13 +1398,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @return {boolean} true when removed successfully
    */
   async removeCustomerAddress(obj, { id }) {
-    const { customerToken = {} } = this.session;
-    if (!customerToken.token) {
-      Logger.error(`${this.name}: Trying to remove address data without customer token`);
-      throw new Error('You do not have an access to remove address data');
-    }
-
-    return this.delete(`/falcon/customers/me/address/${id}`);
+    return this.deleteForCustomer(`/falcon/customers/me/address/${id}`);
   }
 
   /**
@@ -1465,10 +1410,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async validatePasswordToken(obj, params) {
     const { token } = params;
-    const validatePath = `/falcon/customers/0/password/resetLinkToken/${token}`;
 
     try {
-      return this.get(validatePath);
+      return this.getAuth(`/falcon/customers/0/password/resetLinkToken/${token}`);
     } catch (e) {
       // todo: use new version of error handler
       e.userMessage = true;
@@ -1487,7 +1431,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async requestCustomerPasswordResetToken(obj, { input }) {
     const { email } = input;
-    await this.put('/customers/password', { email, template: 'email_reset' });
+    await this.putAuth('/customers/password', { email, template: 'email_reset' });
     return true;
   }
 
@@ -1502,7 +1446,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async resetCustomerPassword(obj, { input }) {
     const { resetToken, password: newPassword } = input;
-    return this.put('/falcon/customers/password/reset', { email: '', resetToken, newPassword });
+    return this.putAuth('/falcon/customers/password/reset', { email: '', resetToken, newPassword });
   }
 
   /**
@@ -1515,15 +1459,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async changeCustomerPassword(obj, { input }) {
     const { password: newPassword, currentPassword } = input;
-    const { customerToken = {} } = this.session;
-
-    if (!customerToken.token) {
-      Logger.error(`${this.name}: Trying to edit customer data without customer token`);
-      throw new Error('You do not have an access to edit account data');
-    }
 
     try {
-      return this.put('/customers/me/password', { currentPassword, newPassword });
+      return this.putForCustomer('/customers/me/password', { currentPassword, newPassword });
     } catch (e) {
       // todo: use new version of error handler
       if ([401, 503].includes(e.statusCode)) {
@@ -1553,7 +1491,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     }
 
     try {
-      return this.put(`${route}/coupons/${input.couponCode}`);
+      return this.putAuth(`${route}/coupons/${input.couponCode}`);
     } catch (e) {
       if (e.statusCode === 404) {
         e.userMessage = true;
@@ -1573,7 +1511,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const route = this.getCartPath();
 
     if (cart && cart.quoteId) {
-      return this.delete(`${route}/coupons`);
+      return this.deleteAuth(`${route}/coupons`);
     }
 
     throw new Error('Trying to remove coupon without quoteId in session');
@@ -1635,7 +1573,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     const cartPath = this.getCartPath();
     const falconPrefix = FALCON_CART_ACTIONS.indexOf(path) === -1 ? '' : '/falcon';
-    const response = await this[method](`${falconPrefix}${cartPath}${path}`, method === 'get' ? null : data);
+    const response = await this[`${method}Auth`](`${falconPrefix}${cartPath}${path}`, method === 'get' ? null : data);
 
     const cartData = this.convertKeys(response);
 

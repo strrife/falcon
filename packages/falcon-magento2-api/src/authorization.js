@@ -1,3 +1,4 @@
+const deepMerge = require('deepmerge');
 const OAuth = require('oauth');
 
 /**
@@ -22,22 +23,18 @@ const IntegrationAuthType = {
   adminToken: 'admin-token'
 };
 
-/**
- * Calculate default request authorization scope
- * @param {boolean} customerTokenExists Customer authorization token
- * @returns {'integration' | 'customer' } Authorization scope
+/** Sets authorization info onto the request
+ * @param {{ context: any }} requestOptions request options
+ * @param {string|boolean} param desired authorization scope or if true then `customer` scope otherwise `integration`
+ * @returns {string} authorization scope
  */
-function getDefaultAuthScope(customerTokenExists) {
-  return customerTokenExists ? AuthScope.Customer : AuthScope.Integration;
-}
+function setAuthScope(requestOptions, param) {
+  const authContext =
+    typeof param === 'string'
+      ? { isAuthRequired: true, auth: param }
+      : { isAuthRequired: true, auth: param ? AuthScope.Customer : AuthScope.Integration };
 
-/**
- * Check if authType is one of the supported IntegrationAuthType entries
- * @param {string} authType Integration authentication method type
- * @returns {boolean} true if it is supported
- */
-function isIntegrationAuthTypeSupported(authType) {
-  return Object.keys(IntegrationAuthType).some(x => IntegrationAuthType[x] === authType);
+  return deepMerge(requestOptions, { context: authContext });
 }
 
 /**
@@ -93,7 +90,6 @@ class OAuth1Auth {
 module.exports = {
   AuthScope,
   IntegrationAuthType,
-  getDefaultAuthScope,
-  isIntegrationAuthTypeSupported,
+  setAuthScope,
   OAuth1Auth
 };

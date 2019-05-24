@@ -6,8 +6,7 @@
  */
 
 import { AllHtmlEntities } from 'html-entities';
-
-import stripTags = require('striptags');
+import stripTags from 'striptags';
 
 const entities: AllHtmlEntities = new AllHtmlEntities();
 

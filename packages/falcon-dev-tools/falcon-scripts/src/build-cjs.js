@@ -47,7 +47,7 @@ module.exports = async ({ packagePath }) => {
       commonjs()
     ]
   };
-  const outputOptions = { file: packageJson.main, format: 'cjs', sourcemap: true };
+  const outputOptions = { file: packageJson.main, format: 'cjs', sourcemap: 'inline' };
 
   const bundle = await rollup.rollup(inputOptions);
   await bundle.write(outputOptions);

@@ -1,5 +1,5 @@
 import { RequestOptions } from 'apollo-datasource-rest/dist/RESTDataSource';
-import { IAuthorizeRequest } from './';
+import { IAuthorizeRequest } from '.';
 
 export interface TokenProvider {
   (): Promise<string>;

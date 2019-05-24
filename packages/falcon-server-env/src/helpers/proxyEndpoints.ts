@@ -1,4 +1,4 @@
-import * as Logger from '@deity/falcon-logger';
+import Logger from '@deity/falcon-logger';
 import { IRouterContext } from 'koa-router';
 import { parse } from 'url';
 import EndpointManager from '../models/EndpointManager';

@@ -1,5 +1,5 @@
-const FalconServer = require('./');
 const supertest = require('supertest');
+const FalconServer = require('./');
 
 describe('Falcon Server', () => {
   const config = {

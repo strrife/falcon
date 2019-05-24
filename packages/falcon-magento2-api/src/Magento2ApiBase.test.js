@@ -1,17 +1,17 @@
 global.__SERVER__ = true; // eslint-disable-line no-underscore-dangle
 
+const nock = require('nock');
 const { Cache, InMemoryLRUCache, BearerAuth } = require('@deity/falcon-server-env');
 const { codes } = require('@deity/falcon-errors');
 const { BaseSchema } = require('@deity/falcon-server');
 const { Schema } = require('@deity/falcon-shop-extension');
 const { makeExecutableSchema } = require('graphql-tools');
 const { EventEmitter2 } = require('eventemitter2');
-const nock = require('nock');
-const Magento2ApiBase = require('./Magento2ApiBase');
-const magentoResponses = require('./__mocks__/apiResponses');
-const { AuthScope, IntegrationAuthType } = require('./authorization');
 const addSeconds = require('date-fns/add_seconds');
 const { Headers } = require('apollo-server-env');
+const { Magento2ApiBase } = require('./Magento2ApiBase');
+const magentoResponses = require('./__mocks__/apiResponses');
+const { AuthScope, IntegrationAuthType } = require('./authorization');
 
 const URL = 'http://example.com';
 const ee = new EventEmitter2();
@@ -43,15 +43,6 @@ const inMemoryCache = new Cache(new InMemoryLRUCache());
 describe('Magento2ApiBase', () => {
   let api;
   let cache;
-
-  beforeEach(() => {
-    cache = inMemoryCache;
-    api = new Magento2ApiBase(apiConfig);
-    api.initialize({ context: {}, cache });
-    api.context = {
-      session: jest.fn(() => {})
-    };
-  });
 
   beforeAll(async () => {
     nock(URL)
@@ -108,6 +99,15 @@ describe('Magento2ApiBase', () => {
     nock.restore();
   });
 
+  beforeEach(() => {
+    cache = inMemoryCache;
+    api = new Magento2ApiBase(apiConfig);
+    api.initialize({ context: {}, cache });
+    api.context = {
+      session: jest.fn(() => {})
+    };
+  });
+
   describe('initialize', () => {
     it('Should throw an error if auth type is not supported', async () => {
       api = new Magento2ApiBase({
@@ -150,8 +150,8 @@ describe('Magento2ApiBase', () => {
   });
 
   it('Should correctly fetch admin token', async () => {
-    const result = await api.getAdminToken();
-    expect(result).toEqual(magentoResponses.adminToken);
+    const result = await api.fetchAdminToken({});
+    expect(result.value).toEqual(magentoResponses.adminToken);
   });
 
   it('Should correctly handle request error without token', async () => {
