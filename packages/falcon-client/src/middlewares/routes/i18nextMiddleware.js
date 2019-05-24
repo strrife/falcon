@@ -13,8 +13,8 @@ import { GET_BACKEND_CONFIG } from '../../graphql/config.gql';
 
 /**
  * i18next instance server side factory
- * @argument {Options} options - options
- * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
+ * @param {Options} options options
+ * @returns {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
 export default options => async (ctx, next) => {
   const { client } = ctx.state;

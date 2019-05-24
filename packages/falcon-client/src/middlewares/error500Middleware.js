@@ -7,7 +7,7 @@ import { codes } from '@deity/falcon-errors';
 
 /**
  * Custom 500 error middleware.
- * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
+ * @returns {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
 export default () => async (ctx, next) => {
   try {

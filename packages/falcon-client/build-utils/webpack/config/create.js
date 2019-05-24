@@ -116,7 +116,7 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
  * @param {'web' | 'node' } target target
  * @param {{ env: ('development' | 'production'), inspect: string, publicPath: string }} options environment
  * @param {FalconClientBuildConfig} buildConfig config
- * @returns {object} webpack config
+ * @returns {Object} webpack config
  */
 module.exports = (target = 'web', options, buildConfig) => {
   const { env, paths } = options;

@@ -11,7 +11,7 @@ import Backend from 'i18next-sync-fs-backend';
 
 /**
  * i18next instance server side factory
- * @argument {Options} options - options
+ * @param {Options} options options
  * @returns {Promise<i18next.i18n>} - Promise with initialized i18n instance
  */
 export default ({ lng = 'en', fallbackLng = 'en', whitelist = ['en'], debug = false, resources } = {}) =>
