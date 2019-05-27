@@ -67,33 +67,32 @@ module.exports = class WordpressApi extends ApiDataSource {
 
   async fetchBackendConfig() {
     const key = await this.resolveURL({ path: 'blog/info' });
-    return this.context.cache.get(key.href, {
-      fetchData: async () => {
-        const config = await this.get('blog/info');
-        const { languages = {} } = config;
-        this.languageSupported = !!Object.keys(languages).length;
-
-        if (this.languageSupported) {
-          this.baseLanguage = languages.default;
-
-          this.languageMap = languages.options.reduce((result, option) => {
-            const localeCode = option.default_locale.replace('_', '-');
-
-            return {
-              ...result,
-              [localeCode]: option.language_code
-            };
-          }, {});
-
-          this.wpConfig.locales = Object.keys(this.languageMap) || [];
-        }
-
-        return this.wpConfig;
-      },
+    this.wpConfig = await this.context.cache.get(key.href, {
+      fetchData: async () => this.get('blog/info'),
       options: {
         ttl: 300
       }
     });
+
+    const { languages = {} } = this.wpConfig;
+    this.languageSupported = !!Object.keys(languages).length;
+
+    if (this.languageSupported) {
+      this.baseLanguage = languages.default;
+
+      this.languageMap = languages.options.reduce((result, option) => {
+        const localeCode = option.default_locale.replace('_', '-');
+
+        return {
+          ...result,
+          [localeCode]: option.language_code
+        };
+      }, {});
+
+      this.wpConfig.locales = Object.keys(this.languageMap) || [];
+    }
+
+    return this.wpConfig;
   }
 
   /**
