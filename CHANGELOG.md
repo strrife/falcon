@@ -9,6 +9,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon Client vNext
 
 - fixed issue with lack of third-party packages source-maps ([#455](https://github.com/deity-io/falcon/issues/455))
+- added possibility to customize Service Worker ([#454](https://github.com/deity-io/falcon/pull/454))
 
 ### Falcon Server vNext
 
