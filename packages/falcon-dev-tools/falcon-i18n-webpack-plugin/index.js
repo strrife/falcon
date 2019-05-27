@@ -7,7 +7,7 @@ module.exports = class FalconI18nPlugin {
   /**
    * Webpack Plugin which merges localization json files from specified directories and emit them into configurable directory.
    * Files emitting is done on compilation hook, which allows to import them and build chunks.
-   * @param {{ mainSource, defaultSources, output }} options - options
+   * @param {{ mainSource, defaultSources, output }} options options
    */
   constructor({ mainSource, defaultSources = [], output = 'public/i18n', filter }) {
     this.name = 'FalconI18nPlugin';
@@ -60,9 +60,9 @@ module.exports = class FalconI18nPlugin {
   }
   /**
    * Opens all JSON files from definition, merges and writes
-   * @param {{lng: string, ns: string, sources: string[]}} sourceDefinition - definition according to which merging should be performed.
-   * @param {string} output - directory where localization files should be stored
-   * @param {string} relativeFrom - context path (required to ensure that output dir is created)
+   * @param {{lng: string, ns: string, sources: string[]}} sourceDefinition definition according to which merging should be performed.
+   * @param {string} output directory where localization files should be stored
+   * @param {string} relativeFrom context path (required to ensure that output dir is created)
    * @returns {void}
    */
   createOutputResourceFile(sourceDefinition, output, relativeFrom) {
@@ -82,7 +82,7 @@ module.exports = class FalconI18nPlugin {
 
   /**
    * Adds selected input files into webpack watch
-   * @param {{}} compilation - webpack compilation
+   * @param {{}} compilation webpack compilation
    * @returns {void}
    */
   watchSourceLocaleFiles(compilation) {

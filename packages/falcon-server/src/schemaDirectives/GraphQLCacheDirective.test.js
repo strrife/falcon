@@ -1,7 +1,7 @@
 const { Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
-const { graphql } = require('graphql');
-const { makeExecutableSchema, addResolveFunctionsToSchema } = require('graphql-tools');
+const { addResolveFunctionsToSchema } = require('graphql-tools');
 const GraphQLCacheDirective = require('./GraphQLCacheDirective');
+const { runQuery, buildSchema, buildSchemaAndRunQuery } = require('../utils/testing');
 
 const directiveDefinition = `directive @cache(ttl: Int, idPath: [String]) on FIELD_DEFINITION`;
 
@@ -13,23 +13,9 @@ const config = {
   }
 };
 
-const runQuery = async (schema, query, context) =>
-  graphql({
-    schema,
-    source: query,
-    contextValue: context
-  });
-
-const buildSchema = (typeDefs, resolvers) =>
-  makeExecutableSchema({
-    typeDefs,
-    resolvers,
-    schemaDirectives: {
-      cache: GraphQLCacheDirective
-    }
-  });
-
-const run = async (typeDefs, resolvers, query, context) => runQuery(buildSchema(typeDefs, resolvers), query, context);
+const schemaDirectives = {
+  cache: GraphQLCacheDirective
+};
 
 describe('@cache directive', () => {
   let cacheProvider;
@@ -65,9 +51,15 @@ describe('@cache directive', () => {
     const query = `query { foo { name } }`;
     const expected = { foo: { name: 'foo' } };
 
-    const { data } = await run(typeDefs, resolvers, query, { cache, config });
+    const { data } = await buildSchemaAndRunQuery(typeDefs, resolvers, query, { cache, config }, schemaDirectives);
     expect(data).toEqual(expected);
-    const { data: data2 } = await run(typeDefs, resolvers, query, { cache, config });
+    const { data: data2 } = await buildSchemaAndRunQuery(
+      typeDefs,
+      resolvers,
+      query,
+      { cache, config },
+      schemaDirectives
+    );
     expect(callCount).toBe(1);
     expect(data2).toEqual(expected);
   });
@@ -81,7 +73,7 @@ describe('@cache directive', () => {
     `;
 
     const query = `query { foo }`;
-    const { data, errors } = await run(typeDefs, {}, query, { cache, config });
+    const { data, errors } = await buildSchemaAndRunQuery(typeDefs, {}, query, { cache, config }, schemaDirectives);
     expect(data).toEqual({ foo: null });
     expect(errors[0].message).toBe('Caching for "String" scalar type is not supported yet');
   });
@@ -103,7 +95,7 @@ describe('@cache directive', () => {
         })
       }
     };
-    const schema = buildSchema(typeDefs, resolvers);
+    const schema = buildSchema(typeDefs, resolvers, schemaDirectives);
     addResolveFunctionsToSchema({
       schema,
       resolvers: {
@@ -164,10 +156,16 @@ describe('@cache directive', () => {
       }
     };
 
-    const { data } = await run(typeDefsNonCached, resolvers, query, { cache, config });
+    const { data } = await buildSchemaAndRunQuery(
+      typeDefsNonCached,
+      resolvers,
+      query,
+      { cache, config },
+      schemaDirectives
+    );
     expect(data).toEqual(expected);
     expect(cacheSetSpy).not.toHaveBeenCalled();
-    const { data: data2 } = await run(typeDefs, resolvers, query, { cache });
+    const { data: data2 } = await buildSchemaAndRunQuery(typeDefs, resolvers, query, { cache }, schemaDirectives);
     expect(data2).toEqual(expected);
     expect(cacheSetSpy).not.toHaveBeenCalled();
   });
@@ -197,7 +195,7 @@ describe('@cache directive', () => {
       const query = `query { foo { id name } }`;
       const expected = { foo: { id: '1', name: 'foo' } };
 
-      const { data } = await run(typeDefs, resolvers, query, { cache, config });
+      const { data } = await buildSchemaAndRunQuery(typeDefs, resolvers, query, { cache, config }, schemaDirectives);
       expect(data).toEqual(expected);
       expect(cacheSetSpy).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
         tags: ['Foo', 'Foo:1'],
@@ -244,7 +242,7 @@ describe('@cache directive', () => {
         }
       };
 
-      const { data } = await run(typeDefs, resolvers, query, { cache, config });
+      const { data } = await buildSchemaAndRunQuery(typeDefs, resolvers, query, { cache, config }, schemaDirectives);
       expect(data).toEqual(expected);
       expect(cacheSetSpy).toHaveBeenCalledWith(expect.anything(), expected.foo, {
         tags: ['Foo', 'Foo:1'],
@@ -323,7 +321,7 @@ describe('@cache directive', () => {
         }
       };
 
-      const { data } = await run(typeDefs, resolvers, query, { cache, config });
+      const { data } = await buildSchemaAndRunQuery(typeDefs, resolvers, query, { cache, config }, schemaDirectives);
       expect(data).toEqual(expected);
       expect(cacheSetSpy).toHaveBeenCalledWith(
         expect.anything(),

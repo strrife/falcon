@@ -22,8 +22,8 @@ module.exports = class WordpressApi extends ApiDataSource {
 
   /**
    * Resolves url based on passed parameters
-   * @param {object} req - request params
-   * @return {string} resolved url object
+   * @param {Object} req request params
+   * @returns {string} resolved url object
    */
   async resolveURL(req) {
     const { path } = req;
@@ -40,9 +40,9 @@ module.exports = class WordpressApi extends ApiDataSource {
 
   /**
    * Parses response and returns data in format accepted by falcon-blog-extension
-   * @param {object} res object
-   * @param {object} req native request object
-   * @return {object} parsed response
+   * @param {Object} res object
+   * @param {Object} req native request object
+   * @returns {Object} parsed response
    */
   async didReceiveResponse(res, req) {
     const data = await super.didReceiveResponse(res, req);
@@ -98,10 +98,9 @@ module.exports = class WordpressApi extends ApiDataSource {
 
   /**
    * Fetch single published post by slug
-   * @query
-   * @param {object} _ GraphQL root object
+   * @param {Object} _ GraphQL root object
    * @param {string} path WP "slug" value
-   * @return {Object} Post data
+   * @returns {Object} Post data
    */
   async blogPost(_, { path }) {
     const slug = path.replace('/', '');
@@ -129,11 +128,11 @@ module.exports = class WordpressApi extends ApiDataSource {
 
   /**
    * Fetch published posts.
-   * @query
-   * @param {object} _ GraphQL root object
-   * @param {object} query Query object
-   * @param {object} pagination Pagination
-   * @return {Object[]} posts data
+   * @param {Object} _ GraphQL root object
+   * @param {Object} args arguments
+   * @param {Object} args.query Query object
+   * @param {Object} args.pagination Pagination
+   * @returns {Object[]} posts data
    */
   async blogPosts(_, { query, pagination }) {
     const payload = {
@@ -155,8 +154,8 @@ module.exports = class WordpressApi extends ApiDataSource {
 
   /**
    * @private
-   * @param {object} post Post object
-   * @return {object} Processed Post object
+   * @param {Object} post Post object
+   * @returns {Object} Processed Post object
    */
   processPost(post) {
     if (!post) {
@@ -202,9 +201,9 @@ module.exports = class WordpressApi extends ApiDataSource {
 
   /**
    * Removes language prefix from passed url
-   * @param {String} urlToReplace - url
-   * @param {String} prefix - prefix to remove
-   * @returns {String} url without prefix
+   * @param {string} urlToReplace url
+   * @param {string} prefix prefix to remove
+   * @returns {string} url without prefix
    */
   replaceLanguagePrefix(urlToReplace, prefix) {
     return prefix && urlToReplace.indexOf(prefix) === 0 ? urlToReplace.replace(prefix, '') : urlToReplace;
@@ -324,8 +323,8 @@ module.exports = class WordpressApi extends ApiDataSource {
 
   /**
    * Make sure that pathname that will be checked always starts and ends with '/'
-   * @param {String} pathname to convert
-   * @return {String} converted pathname
+   * @param {string} pathname to convert
+   * @returns {string} converted pathname
    */
   preparePathname(pathname) {
     let path = pathname;
@@ -343,10 +342,9 @@ module.exports = class WordpressApi extends ApiDataSource {
 
   /**
    * Based on api response check if requested pathname contains redirect
-   *
-   * @param {String} dataPath - pathname from wordpress api response
-   * @param {String} requestedPath - pathname requested by client
-   * @return {String|Boolean} - pathname if has redirect or false
+   * @param {string} dataPath pathname from wordpress api response
+   * @param {string} requestedPath pathname requested by client
+   * @returns {string|boolean} - pathname if has redirect or false
    */
   isEntityRedirect(dataPath, requestedPath) {
     if (dataPath !== requestedPath && !this.isDraft(dataPath)) {
@@ -363,10 +361,10 @@ module.exports = class WordpressApi extends ApiDataSource {
   /**
    * Fetch wordpress url based on pathname and check if it contains any redirect.
    * Convert response based on data type (page | post | category )
-   * @param {object} _ GQL root object
-   * @param {object} params GQL params object
+   * @param {Object} _ GQL root object
+   * @param {Object} params GQL params object
    * @param {string} params.path URL path param
-   * @return {Object} response - with reduced and converted data
+   * @returns {Object} response - with reduced and converted data
    */
   async fetchUrl(_, { path }) {
     const { locale } = this.context.session;

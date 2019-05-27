@@ -55,6 +55,7 @@
           "de": ["de_store"],
           "fr": ["fr_store"]
         },
+        "defaultStoreCode": "default",
         "codeMapping": {
           "default": "default",
           "nl_store": "nl_store",
@@ -92,8 +93,10 @@
     }
   },
   "cache": {
+    "url": "/cache",
     "resolvers": {
       "enabled": true,
+      "invalidation": true,
       "default": {
         "ttl": 10
       },

@@ -3,6 +3,7 @@ import ssr from './ssrMiddleware';
 import appShell from './appShellMiddleware';
 import appHtml from './appHtmlMiddleware';
 import i18next from './i18nextMiddleware';
+import assets from './assetsMiddleware';
 
 /**
  * @typedef {object} RenderAppShell
@@ -13,16 +14,17 @@ import i18next from './i18nextMiddleware';
 /**
  * Configure App Shell rendering middlewares
  * @param {RenderAppShell} params params
- * @return {function(ctx: object, next: function)[]} Koa middlewares
+ * @returns {function(ctx: object, next: function)[]} Koa middlewares
  */
 export function renderAppShell({ config, webpackAssets }) {
   const { apolloClient } = config;
   const configSchema = { data: { config } };
 
   return [
+    assets({ webpackAssets }),
     apolloClientProvider({ config: apolloClient, clientStates: { configSchema } }),
-    appShell({ webpackAssets }),
-    appHtml({ webpackAssets, config })
+    appShell(),
+    appHtml({ config })
   ];
 }
 
@@ -37,13 +39,14 @@ export function renderAppShell({ config, webpackAssets }) {
 /**
  * Configure App rendering middlewares
  * @param {RenderApp} params params
- * @return {function(ctx: object, next: function)[]} Koa middlewares
+ * @returns {function(ctx: object, next: function)[]} Koa middlewares
  */
 export function renderApp({ config, clientApolloSchema, App, webpackAssets }) {
   const { i18n, serverSideRendering, apolloClient } = config;
   const configSchema = { data: { config } };
 
   return [
+    assets({ webpackAssets }),
     apolloClientProvider({
       config: apolloClient,
       clientStates: {
@@ -52,7 +55,7 @@ export function renderApp({ config, clientApolloSchema, App, webpackAssets }) {
       }
     }),
     i18next({ ...i18n }),
-    serverSideRendering ? ssr({ App, webpackAssets }) : appShell({ webpackAssets }),
-    appHtml({ webpackAssets, config })
+    serverSideRendering ? ssr({ App }) : appShell(),
+    appHtml({ config })
   ].filter(x => x);
 }
