@@ -11,24 +11,18 @@ describe('DynamicRouteResolver', () => {
       getFetchUrlPriority(path) {
         return path.startsWith('/blog/') ? ApiUrlPriority.HIGHEST : ApiUrlPriority.LOW;
       }
+
       async fetchUrl(_, { path }) {
-        return {
-          id: 1,
-          path,
-          type: 'foo'
-        };
+        return { id: 1, path, type: 'foo' };
       }
     };
     const Api2 = class extends ApiDataSource {
       getFetchUrlPriority(path) {
         return path.endsWith('.html') ? ApiUrlPriority.HIGH : ApiUrlPriority.NORMAL;
       }
+
       async fetchUrl(_, { path }) {
-        return {
-          id: 2,
-          path,
-          type: 'bar'
-        };
+        return { id: 2, path, type: 'bar' };
       }
     };
 

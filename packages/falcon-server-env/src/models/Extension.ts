@@ -1,18 +1,19 @@
 import { GraphQLResolveInfo, GraphQLSchema, GraphQLObjectType } from 'graphql';
 import { makeExecutableSchema } from 'graphql-tools';
 import { EventEmitter2 } from 'eventemitter2';
-import * as Logger from '@deity/falcon-logger';
-import ApiDataSource from './ApiDataSource';
+import Logger from '@deity/falcon-logger';
+import { ApiDataSource } from './ApiDataSource';
 import {
   ApiUrlPriority,
-  ConfigurableConstructorParams,
+  IConfigurableConstructorParams,
   ExtensionContainer,
   FetchUrlParams,
   FetchUrlResult,
   GraphQLContext
 } from '../types';
 
-export type ConfigurableContainerConstructorParams = ConfigurableConstructorParams & {
+export type ExtensionConstructorParams = IConfigurableConstructorParams & {
+  /** ExtensionContainer instance */
   extensionContainer: ExtensionContainer;
 };
 
@@ -37,22 +38,21 @@ export type GraphQLResolverMap = {
   };
 };
 
-export default abstract class Extension {
+export abstract class Extension {
   public config: ExtensionConfig;
+
   public name: string;
+
   public api?: ApiDataSource;
 
   protected extensionContainer: ExtensionContainer;
+
   protected eventEmitter: EventEmitter2;
 
   /**
-   * @param {ConfigurableContainerConstructorParams} params Constructor params
-   * @param {object} params.config Extension config object
-   * @param {string} params.name Extension short-name
-   * @param {ExtensionContainer} params.extensionContainer ExtensionContainer instance
-   * @param {EventEmitter2} params.eventEmitter EventEmitter2 instance
+   * @param {ExtensionConstructorParams} params Constructor params
    */
-  constructor(params: ConfigurableContainerConstructorParams) {
+  constructor(params: ExtensionConstructorParams) {
     const { config = {}, name, extensionContainer, eventEmitter } = params;
     this.name = name || this.constructor.name;
     this.config = config as ExtensionConfig;
@@ -63,7 +63,7 @@ export default abstract class Extension {
   /**
    * GraphQL configuration getter
    * @param {string|Array<string>} typeDefs Extension's GQL schema type definitions
-   * @return {object} GraphQL configuration object
+   * @returns {Object} GraphQL configuration object
    */
   async getGraphQLConfig(typeDefs: string | Array<string> = ''): Promise<GraphQLConfig> {
     if (!typeDefs) {
@@ -103,7 +103,7 @@ export default abstract class Extension {
   /**
    * Gets API instance from DataSource by assigned API name
    * @param {GraphQLContext} context GraphQL Resolver context object
-   * @return {ApiDataSource<GraphQLContext> | null} API DataSource instance if found
+   * @returns {ApiDataSource<GraphQLContext> | null} API DataSource instance if found
    */
   getApi(context: GraphQLContext): ApiDataSource<GraphQLContext> | null {
     const { dataSources } = context;
@@ -113,7 +113,7 @@ export default abstract class Extension {
   /**
    * Returns a session object from the assigned API Provider
    * @param {GraphQLContext} context GraphQL Resolver context object
-   * @return {object} Session object
+   * @returns {Object} Session object
    */
   getApiSession(context: GraphQLContext): any {
     return this.getApi(context)!.session;
@@ -122,8 +122,8 @@ export default abstract class Extension {
   /**
    * Should be implemented if extension wants to deliver content for dynamic urls. It should return priority value for passed url.
    * @param {GraphQLContext} context GraphQL Resolver context object
-   * @param {string} path - url for which the priority should be returned
-   * @return {number|null} Priority index or ApiUrlPriority.OFF (if "dynamic URL" is not supported)
+   * @param {string} path url for which the priority should be returned
+   * @returns {number|null} Priority index or ApiUrlPriority.OFF (if "dynamic URL" is not supported)
    */
   getFetchUrlPriority(context: GraphQLContext, path: string): number | null {
     const apiDataSource: ApiDataSource<GraphQLContext> | null = this.getApi(context);
@@ -152,7 +152,7 @@ export default abstract class Extension {
   /**
    * Returns a map of fields by GQL type name
    * @param {string|Array<string>} typeDefs Extension GQL schema type definitions
-   * @return {RootFieldTypes} Map of GQL type-fields
+   * @returns {RootFieldTypes} Map of GQL type-fields
    */
   protected getRootTypeFields(typeDefs: string | Array<string>): RootFieldTypes {
     const result: RootFieldTypes = {};

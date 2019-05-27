@@ -159,7 +159,11 @@ module.exports = (target = 'web', options, buildConfig) => {
         // Disable require.ensure as it's not a standard language feature.
         // { parser: { requireEnsure: false } },
         {
-          enforce: 'pre',
+          test: /\.(js|jsx|mjs)$/,
+          use: { loader: require.resolve('source-map-loader') },
+          enforce: 'pre'
+        },
+        {
           test: /\.(js|jsx|mjs)$/,
           include: paths.appSrc,
           use: [
@@ -167,7 +171,8 @@ module.exports = (target = 'web', options, buildConfig) => {
               loader: require.resolve('eslint-loader'),
               options: getEsLintLoaderOptions(paths.appEslintRc, IS_DEV)
             }
-          ]
+          ],
+          enforce: 'pre'
         },
         // Avoid "require is not defined" errors
         {

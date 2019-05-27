@@ -1,16 +1,19 @@
 import { EventEmitter2 } from 'eventemitter2';
 import fetch from 'node-fetch';
-import { ConfigurableConstructorParams, EndpointEntry, UrlConfig } from '../types';
+import { IConfigurableConstructorParams, EndpointEntry, UrlConfig } from '../types';
 import { formatUrl } from '../helpers/url';
 
-export interface EndpointConstructorParams extends ConfigurableConstructorParams<UrlConfig> {
+export interface EndpointConstructorParams extends IConfigurableConstructorParams<UrlConfig> {
   entries?: string[];
 }
 
-export default abstract class EndpointManager {
+export abstract class EndpointManager {
   public config: UrlConfig;
+
   public name: string;
+
   public baseUrl: string;
+
   public entries: string[];
 
   protected fetch = fetch;
@@ -23,14 +26,10 @@ export default abstract class EndpointManager {
     this.eventEmitter = params.eventEmitter;
     this.entries = params.entries || [];
     this.baseUrl = formatUrl(this.config);
-
-    if (!this.baseUrl) {
-      throw new Error('"host" and "protocol" are required!');
-    }
   }
 
   /**
-   * @return {Array<EndpointEntry>} List of supported endpoints
+   * @returns {Array<EndpointEntry>} List of supported endpoints
    */
   getEntries(): Array<EndpointEntry> {
     return [];

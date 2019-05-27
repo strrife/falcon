@@ -2,9 +2,9 @@
 
 const chalk = require('chalk');
 const program = require('commander');
+const { EOL } = require('os');
 const createFalconApp = require('../src');
 const pkg = require('../package.json');
-const { EOL } = require('os');
 
 const availableExamples =
   createFalconApp

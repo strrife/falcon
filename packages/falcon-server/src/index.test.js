@@ -1,5 +1,5 @@
-const FalconServer = require('./');
 const supertest = require('supertest');
+const FalconServer = require('./');
 
 describe('Falcon Server', () => {
   const config = {
@@ -9,7 +9,10 @@ describe('Falcon Server', () => {
     endpoints: {
       'fake-api': {
         package: 'fake-backend-api',
-        config: {}
+        config: {
+          host: 'fake.host.com',
+          protocol: 'http'
+        }
       }
     },
     session: {

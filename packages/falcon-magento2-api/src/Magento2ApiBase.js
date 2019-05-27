@@ -1,15 +1,22 @@
-const Logger = require('@deity/falcon-logger');
-const { ApiDataSource } = require('@deity/falcon-server-env');
-const { AuthenticationError, codes } = require('@deity/falcon-errors');
+const { ApiDataSource, BearerAuth } = require('@deity/falcon-server-env');
 const util = require('util');
-const addMinutes = require('date-fns/add_minutes');
 const _ = require('lodash');
+const addSeconds = require('date-fns/add_seconds');
+const Logger = require('@deity/falcon-logger');
+const { FalconError, AuthenticationError, codes } = require('@deity/falcon-errors');
+const { AuthScope, IntegrationAuthType, setAuthScope, OAuth1Auth } = require('./authorization');
+
+/**
+ * @typedef {object} CustomerToken
+ * @property {string} token authorization bearer
+ * @property {Date} expirationTime expiration date
+ */
 
 /**
  * Base API features (configuration fetching, response parsing, token management etc.) required for communication
  * with Magento2. Extracted to separate class to keep final class clean (only resolvers-related logic should be there).
  */
-module.exports = class Magento2ApiBase extends ApiDataSource {
+class Magento2ApiBase extends ApiDataSource {
   /**
    * Create Magento api wrapper instance
    * @param {Object} params configuration params
@@ -22,6 +29,171 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     this.storeList = [];
     this.storeConfigMap = {};
     this.itemUrlSuffix = this.config.itemUrlSuffix || '.html';
+  }
+
+  /**
+   * Create authorized GET request, for `customer` scope if customer logged in or `integration` otherwise
+   * @param {string} path path
+   * @param {Object} params object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
+  async getAuth(path, params = undefined, init = {}) {
+    return super.get(path, params, setAuthScope(init, !!this.session.customerToken));
+  }
+
+  /**
+   * Create authorized POST request, for `customer` scope if customer logged in or `integration` otherwise
+   * @param {string} path path
+   * @param {Object} body body
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
+  async postAuth(path, body = undefined, init = {}) {
+    return super.post(path, body, setAuthScope(init, !!this.session.customerToken));
+  }
+
+  /**
+   * Create authorized PATCH request, for `customer` scope if customer logged in or `integration` otherwise
+   * @param {string} path path
+   * @param {Object} body body
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
+  async patchAuth(path, body = undefined, init = {}) {
+    return super.patch(path, body, setAuthScope(init, !!this.session.customerToken));
+  }
+
+  /**
+   * Create authorized PUT request, for `customer` scope if customer logged in or `integration` otherwise
+   * @param {string} path path
+   * @param {Object} body body
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
+  async putAuth(path, body = undefined, init = {}) {
+    return super.put(path, body, setAuthScope(init, !!this.session.customerToken));
+  }
+
+  /**
+   * Create authorized DELETE request, for `customer` scope if customer logged in or `integration` otherwise
+   * @param {string} path path
+   * @param {Object} params object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
+  async deleteAuth(path, params = undefined, init = {}) {
+    return super.delete(path, params, setAuthScope(init, !!this.session.customerToken));
+  }
+
+  /**
+   * Create authorized GET request, for `integration` scope
+   * @param {string} path path
+   * @param {Object} params object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
+  async getForIntegration(path, params = undefined, init = {}) {
+    return super.get(path, params, setAuthScope(init, AuthScope.Integration));
+  }
+
+  /**
+   * Create authorized POST request, for `integration` scope
+   * @param {string} path path
+   * @param {Object} body object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
+  async postForIntegration(path, body = undefined, init = {}) {
+    return super.post(path, body, setAuthScope(init, AuthScope.Integration));
+  }
+
+  /**
+   * Create authorized PATCH request, for `integration` scope
+   * @param {string} path path
+   * @param {Object} body object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
+  async patchForIntegration(path, body = undefined, init = {}) {
+    return super.patch(path, body, setAuthScope(init, AuthScope.Integration));
+  }
+
+  /**
+   * Create authorized PUT request, for `integration` scope
+   * @param {string} path path
+   * @param {Object} body object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
+  async putForIntegration(path, body = undefined, init = {}) {
+    return super.put(path, body, setAuthScope(init, AuthScope.Integration));
+  }
+
+  /**
+   * Create authorized DELETE request, for `integration` scope
+   * @param {string} path path
+   * @param {Object} params object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
+  async deleteForIntegration(path, params = undefined, init = {}) {
+    return super.delete(path, params, setAuthScope(init, AuthScope.Integration));
+  }
+
+  /**
+   * Create authorized GET request, for `customer` scope
+   * @param {string} path path
+   * @param {Object} params object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
+  async getForCustomer(path, params = undefined, init = {}) {
+    return super.get(path, params, setAuthScope(init, AuthScope.Customer));
+  }
+
+  /**
+   * Create authorized POST request, for `customer` scope
+   * @param {string} path path
+   * @param {Object} body object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
+  async postForCustomer(path, body = undefined, init = {}) {
+    return super.post(path, body, setAuthScope(init, AuthScope.Customer));
+  }
+
+  /**
+   * Create authorized PATCH request, for `customer` scope
+   * @param {string} path path
+   * @param {Object} body object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
+  async patchForCustomer(path, body = undefined, init = {}) {
+    return super.patch(path, body, setAuthScope(init, AuthScope.Customer));
+  }
+
+  /**
+   * Create authorized PUT request, for `customer` scope
+   * @param {string} path path
+   * @param {Object} body object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
+  async putForCustomer(path, body = undefined, init = {}) {
+    return super.put(path, body, setAuthScope(init, AuthScope.Customer));
+  }
+
+  /**
+   * Create authorized DELETE request, for `customer` scope
+   * @param {string} path path
+   * @param {Object} params object representation of query string
+   * @param {ContextRequestInit} init options
+   * @returns {Promise} response
+   */
+  async deleteForCustomer(path, params = undefined, init = {}) {
+    return super.delete(path, params, setAuthScope(init, AuthScope.Customer));
   }
 
   getStoreCode() {
@@ -37,7 +209,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     const getCachedValue = async url => {
       const value = await this.cache.get([this.name, this.getStoreCode(), url].join(':'), {
         fetchData: async () => {
-          const rawValue = await this.get(url, {}, { context: { useAdminToken: true } });
+          const rawValue = await this.getAuth(url);
+
           return JSON.stringify(rawValue);
         },
         options: {
@@ -150,11 +323,81 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   initialize(config) {
     super.initialize(config);
 
-    const { customerToken } = this.session;
-    if (customerToken && !this.isCustomerTokenValid(customerToken)) {
+    this.integrationScopeAuth = this.setupIntegrationScopeAuth(this.config.auth);
+    this.customerScopeAuth = this.setupCustomerScopeAuth(this.session);
+
+    if (this.isCustomerSessionExpired(this.session)) {
       this.session = {};
       this.context.session.save();
     }
+  }
+
+  /**
+   * Setting up authorization handler for Integration requests
+   * @param {Object} authConfig configuration
+   * @returns {IAuthorizeRequest} authorization handler
+   */
+  setupIntegrationScopeAuth(authConfig) {
+    const { type, ...restAuthConfig } = authConfig || {};
+
+    if (type === IntegrationAuthType.adminToken) {
+      return new BearerAuth(async () => this.getAdminToken());
+    }
+
+    if (type === IntegrationAuthType.integrationToken) {
+      const oAuth1Auth = new OAuth1Auth(
+        {
+          requestTokenUrl: this.baseURL.concat('/oauth/token/request'),
+          accessTokenUrl: this.baseURL.concat('/oauth/token/access'),
+          ...restAuthConfig
+        },
+        { resolveURL: x => this.resolveURL(x) }
+      );
+      oAuth1Auth.initialize();
+
+      return oAuth1Auth;
+    }
+
+    throw new Error(`Unsupported integration authorization type ('auth.type': '${type}')!`);
+  }
+
+  /**
+   * Setting up authorization handler for Customer requests
+   * @param {Object} session session
+   * @param {CustomerToken} session.customerToken customer token
+   * @returns {IAuthorizeRequest} authorization handler
+   */
+  setupCustomerScopeAuth(session) {
+    return new BearerAuth(() => {
+      const { customerToken } = session;
+
+      if (this.isCustomerTokenValid(customerToken)) {
+        return customerToken.token;
+      }
+
+      if (!customerToken) {
+        const unauthorizedError = new AuthenticationError(`Customer unauthorized.`);
+        unauthorizedError.statusCode = 401;
+
+        throw unauthorizedError;
+      }
+
+      const sessionExpiredError = new AuthenticationError(`Customer token has expired.`, codes.CUSTOMER_TOKEN_EXPIRED);
+      sessionExpiredError.statusCode = 401;
+
+      throw sessionExpiredError;
+    });
+  }
+
+  /**
+   * Determines if Customer's session is expired (Customer needs to be signed out)
+   * @param {Object} session the session
+   * @param {CustomerToken} session.customerToken the Customer token
+   * @returns {boolean} `true` if the session is expired, `false` otherwise
+   */
+  isCustomerSessionExpired(session) {
+    const { customerToken } = session;
+    return customerToken && !this.isCustomerTokenValid(customerToken);
   }
 
   /**
@@ -191,12 +434,11 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Resolves url based on passed parameters
-   * @param {Object} req request params
+   * @param {RequestOptions} req request params
    * @returns {Promise<URL>} resolved url object
    */
   async resolveURL(req) {
-    const { path } = req;
-    return super.resolveURL({ path: this.getPathWithPrefix(path) });
+    return super.resolveURL({ ...req, path: this.getPathWithPrefix(req.path) });
   }
 
   getPathWithPrefix(path) {
@@ -205,47 +447,52 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
   }
 
   /**
-   * Authorize all requests, except case when authorization is explicitly disabled via context settings
-   * @param {RequestOptions} req request params
+   * Hook that is going to be executed for every REST request before calling `resolveURL` method
+   * @param {ContextRequestOptions} request request
+   * @returns {Promise<void>} promise
    */
-  async willSendRequest(req) {
-    const { context } = req;
-    context.isAuthRequired = !context.skipAuth;
-    await super.willSendRequest(req);
+  async willSendRequest(request) {
+    request.headers.set('Cookie', this.cookie);
+
+    return super.willSendRequest(request);
   }
 
   /**
-   * Sets authorization headers for the passed request
-   * @param {RequestOptions} req request input
+   * Hook that is going to be executed for every REST request if authorization is required
+   * @param {ContextRequestOptions} request request
+   * @returns {Promise<void>} promise
    */
-  async authorizeRequest(req) {
-    const { useAdminToken } = req.context || {};
-    const { customerToken } = this.session || {};
+  async authorizeRequest(request) {
+    const { auth: authScope } = request.context;
 
-    let token;
-    // FIXME: it looks like `useAdminToken` flag is not used very often and do not cover all api requests
-    // there is an assumption that if customer token is not provided then admin token should be used
-    if (useAdminToken || !customerToken) {
-      token = await this.getAdminToken();
-    } else if (this.isCustomerTokenValid(customerToken)) {
-      // eslint-disable-next-line prefer-destructuring
-      token = customerToken.token;
-    } else {
-      const sessionExpiredError = new AuthenticationError(`Customer token has expired.`);
-      sessionExpiredError.statusCode = 401;
-      sessionExpiredError.code = codes.CUSTOMER_TOKEN_EXPIRED;
-      throw sessionExpiredError;
+    if (!authScope) {
+      throw new Error(`Cannot authorize request because authorization scope is no defined!`);
     }
 
-    req.headers.set('Authorization', `Bearer ${token}`);
-    req.headers.set('Content-Type', 'application/json');
-    req.headers.set('Cookie', this.cookie);
+    const authHandlerName = `${authScope}ScopeAuth`;
+    if (this[authHandlerName]) {
+      return this[authHandlerName].authorize(request);
+    }
+
+    throw new Error(`Attempted to authenticate the request using an unsupported scope: "${authScope}"!`);
   }
 
   /**
-   * Check if authentication token is valid
-   * @param {AuthToken} authToken authentication token
-   * @returns {boolean} - true if token is valid
+   * Determines if Customer is Logged In via checking if its token exists
+   * @returns {boolean} - true if token exists
+   */
+  isCustomerLoggedIn() {
+    const { customerToken } = this.session;
+
+    return customerToken && customerToken.token;
+  }
+
+  /**
+   * Check if Customer authentication token is valid
+   * @param {Object} authToken authentication token
+   * @param {string} authToken.token value
+   * @param {Date} authToken.expirationTime expiration time
+   * @returns {boolean} true if token is valid
    */
   isCustomerTokenValid(authToken) {
     if (!authToken || !authToken.token || !authToken.expirationTime) {
@@ -257,54 +504,40 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
 
   /**
    * Retrieves admin token
+   * @param {{Object}} credentials admin credentials
+   * @param {{string}} credentials.username username
+   * @param {{string}} credentials.password password
    * @returns {{ value: string, options: { ttl: number } }} Result
    */
-  async retrieveAdminToken() {
-    const result = {
-      value: undefined,
-      options: {
-        ttl: undefined
-      }
-    };
+  async fetchAdminToken({ username, password }) {
     Logger.info(`${this.name}: Retrieving admin token.`);
 
-    const token = await this.post(
-      '/integration/admin/token',
-      {
-        username: this.config.username,
-        password: this.config.password
-      },
-      { context: { skipAuth: true } }
-    );
-
-    // todo: validTime should be extracted from the response, but after recent changes Magento doesn't send it
-    // so that should be changed once https://github.com/deity-io/falcon-magento2-development/issues/32 is resolved
-    const validTime = 1;
-
+    const dataNow = Date.now();
+    const token = await this.post('/integration/admin/token', { username, password });
     if (token === undefined) {
-      const noTokenError = new Error(
-        'Magento Admin token not found. Did you install the latest version of the falcon-magento2-module on magento?'
+      const noTokenError = new FalconError(
+        'Magento Admin token not found. Did you install the latest version of the falcon-magento2-module on magento?',
+        codes.CUSTOMER_TOKEN_NOT_FOUND
       );
-
       noTokenError.statusCode = 501;
-      noTokenError.code = codes.CUSTOMER_TOKEN_NOT_FOUND;
+
       throw noTokenError;
-    } else {
-      Logger.info(`${this.name}: Admin token found.`);
     }
 
-    result.value = token;
+    Logger.info(`${this.name}: Admin token found.`);
 
-    if (validTime) {
-      // convert validTime from hours to milliseconds and subtract 5 minutes buffer
-      const tokenTimeInMinutes = validTime * 60 - 5;
-      const tokenExpirationTime = addMinutes(Date.now(), tokenTimeInMinutes);
+    // FIXME: bellow code does not make sense anymore !!!
+    // according to https://github.com/deity-io/falcon-magento2-development/issues/32
+    // admin_token_ttl is returned via `/store/storeConfigs`, so if we want to cache adminToken
+    // we need to do it right after fetching `storeConfig`. Be aware that adminToken is required to fetch storeConfig :)
+    const validTime = 1;
+    const ttl = (validTime * 60 - 5) * 60;
+    Logger.debug(`${this.name}: Admin token valid for ${validTime} hours, till ${addSeconds(dataNow, ttl)}`);
 
-      result.options.ttl = tokenTimeInMinutes * 60;
-      Logger.debug(`${this.name}: Admin token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
-    }
-
-    return result;
+    return {
+      value: token,
+      options: { ttl }
+    };
   }
 
   /**
@@ -313,22 +546,25 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    * @returns {Promise<string>} token value
    */
   async getAdminToken() {
-    if (!this.reqToken) {
-      this.reqToken = this.cache.get([this.name, 'admin_token'].join(':'), {
-        fetchData: async () => this.retrieveAdminToken()
+    /* eslint-disable */
+    if (!this.__adminToken) {
+      this.__adminToken = this.cache.get([this.name, 'admin_token'].join(':'), {
+        fetchData: async () => this.fetchAdminToken(this.config.auth)
       });
     }
-    return this.reqToken;
+    return this.__adminToken;
+    /* eslint-enable */
   }
 
   /**
    * Process received response data
    * @param {Response} response received response from the api
+   * @param {Request} request request
    * @returns {Object} processed response data
    */
-  async didReceiveResponse(response) {
+  async didReceiveResponse(response, request) {
     const cookies = (response.headers.get('set-cookie') || '').split('; ');
-    const data = await super.didReceiveResponse(response);
+    const data = await super.didReceiveResponse(response, request);
     const { pagination: paginationInput } = response.context;
 
     if (cookies.length) {
@@ -359,13 +595,13 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
    * @param {Object} req Request object
    */
   didEncounterError(error, req) {
-    const { extensions } = error;
-    const { response } = extensions || {};
+    const { extensions = {} } = error;
+    const { response } = extensions;
 
     // Re-formatting error message using provided response data from Magento
     if (response) {
-      const { body } = response;
-      const { message, parameters } = body || {};
+      const { body = {} } = response;
+      const { message, parameters } = body;
 
       if (Array.isArray(parameters)) {
         error.message = util.format(message.replace(/(%\d)/g, '%s'), ...parameters);
@@ -396,4 +632,8 @@ module.exports = class Magento2ApiBase extends ApiDataSource {
     delete this.session.cart;
     await this.setShopStore({}, { storeCode: this.storeCode });
   }
+}
+
+module.exports = {
+  Magento2ApiBase
 };

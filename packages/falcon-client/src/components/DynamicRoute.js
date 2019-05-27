@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Query from './Query';
-import { GET_URL } from './../graphql/url.gql';
+import { GET_URL } from '../graphql/url.gql';
 
 const DynamicRoute = ({ components, location, loaderComponent, errorComponent, notFoundComponent }) => {
   const { pathname } = location;
