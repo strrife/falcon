@@ -1,7 +1,7 @@
 const Logger = require('@deity/falcon-logger');
 const chalk = require('chalk');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const rollup = require('rollup');
 const resolve = require('rollup-plugin-node-resolve');
 const re = require('rollup-plugin-re');
@@ -18,19 +18,9 @@ module.exports.build = async () => {
     Logger.log(`Service Worker will pre-cache ${manifestEntries.length} files, totaling ${formatBytes(size)}.\n`);
 
     const inputOptions = {
-      input: paths.resolveOwn('src/serviceWorker/sw.js'),
+      input: fs.existsSync(paths.appSwJs) ? paths.appSwJs : paths.ownSwJs,
       plugins: [
-        re({
-          patterns: [
-            {
-              test: "// import 'app-path/sw.js';",
-              replace: fs.existsSync(path.join(paths.appPath, 'sw.js')) ? "import 'app-path/sw.js';" : ''
-            }
-          ]
-        }),
-        alias({
-          'app-path': paths.appPath
-        }),
+        alias({ 'app-path': paths.appPath }),
         resolve(),
         re({
           patterns: [

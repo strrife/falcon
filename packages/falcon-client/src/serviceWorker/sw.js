@@ -1,3 +1,1 @@
-import './workbox';
-
-// import 'app-path/sw.js';
+import './pre-cache';
