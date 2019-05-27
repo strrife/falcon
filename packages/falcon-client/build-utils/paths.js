@@ -65,6 +65,7 @@ module.exports = {
   ownSrc: resolveOwn('src'),
   ownServerIndexJs: resolveOwn('src/index'),
   ownClientIndexJs: resolveOwn('src/client'),
+  ownSwJs: resolveOwn('sw.js'),
   ownWebmanifest: resolveOwn('src/manifest.webmanifest'),
   ownNodeModules: resolveOwn('node_modules')
 };
