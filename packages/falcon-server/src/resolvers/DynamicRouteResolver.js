@@ -27,9 +27,9 @@ module.exports = class DynamicRouteResolver {
   /**
    * Reorder handlers based on request path to boost performance,
    * for example 99% urls ending with .html are Magento generated
-   * @param {object} context GQL context
-   * @param {String} path - request path
-   * @return {Object[]} list of apis that supports url method
+   * @param {Object} context GQL context
+   * @param {string} path request path
+   * @returns {Object[]} list of apis that supports url method
    */
   getDynamicRouteHandlers(context, path) {
     return this.extensionContainer
@@ -41,11 +41,11 @@ module.exports = class DynamicRouteResolver {
 
   /**
    * Fetches url data from remote API. Signature of the method must match the signature of GraphQL resolvers
-   * @param {Object} obj - result returned from parent query
-   * @param {Object} args - object with arguments passed to the query
-   * @param {Object} context - execution context
-   * @param {Object} info - GraphQL info object
-   * @return {Object} fetched and processed data
+   * @param {Object} obj result returned from parent query
+   * @param {Object} args object with arguments passed to the query
+   * @param {Object} context execution context
+   * @param {Object} info GraphQL info object
+   * @returns {Object} fetched and processed data
    */
   async fetchUrl(obj, args, context, info) {
     const { path } = args;

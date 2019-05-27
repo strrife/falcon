@@ -12,7 +12,7 @@ import { renderAppShell, renderApp } from './middlewares/routes';
 /**
  * Creates an instance of Falcon web server
  * @param {ServerAppConfig} props Application parameters
- * @return {WebServer} Falcon web server
+ * @returns {WebServer} Falcon web server
  */
 export async function Server({ App, clientApolloSchema, bootstrap, webpackAssets }) {
   const { config } = bootstrap;

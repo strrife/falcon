@@ -25,7 +25,7 @@ const DEFAULT_TTL = 10;
 module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
   /**
    * @param {GraphQLType|GraphQLField} field GQL Field
-   * @return {void}
+   * @returns {void}
    */
   visitFieldDefinition(field) {
     const { ttl = DEFAULT_TTL } = this.args;
@@ -51,8 +51,8 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
    * Get a resolver function with caching capabilities (depends on the provided config)
    * @param {Function} resolve Native GQL resolver function
    * @param {GraphQLField} field Field info object
-   * @param {object} defaultCacheConfig Default cache config
-   * @return {Function} Resolver function with caching
+   * @param {Object} defaultCacheConfig Default cache config
+   * @returns {Function} Resolver function with caching
    */
   getResolverWithCache(resolve, field, defaultCacheConfig) {
     const thisDirective = this;
@@ -97,10 +97,10 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
 
   /**
    * Execute the actual GraphQL resolver and generate cache tags
-   * @param {object} result Resolver result
-   * @param {object} parent GraphQL parent object
+   * @param {Object} result Resolver result
+   * @param {Object} parent GraphQL parent object
    * @param {GraphQLResolveInfo} info GraphQL Info object
-   * @return {object} Final resolver result
+   * @returns {Object} Final resolver result
    */
   handleCacheCallbackResponse(result, parent, info) {
     const resolverResult = result && result.value ? result.value : result;
@@ -131,9 +131,9 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
    * - cache config provided in `@cache(...)` directive
    * - cache config for a specific operation via `context.config`
    * @param {GraphQLResolveInfo} info GraphQL Request info object
-   * @param {object} resolversCacheConfig Cache object provided via `context.config`
-   * @param {object} defaultDirectiveValue Default options defined in cache directive for the specific type
-   * @return {object} Final cache options object
+   * @param {Object} resolversCacheConfig Cache object provided via `context.config`
+   * @param {Object} defaultDirectiveValue Default options defined in cache directive for the specific type
+   * @returns {Object} Final cache options object
    */
   getCacheConfigForField(info, resolversCacheConfig, defaultDirectiveValue) {
     const { path: gqlPath, operation } = info;
