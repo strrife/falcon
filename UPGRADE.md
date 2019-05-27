@@ -38,7 +38,7 @@ where `xxxxxx` should be changed to a proper name of the patch.
 
 Next, follow steps 2, 3 and 4 to install required dependencies.
 
-## Falcon 1.0 to next
+## Falcon 1.0 to 1.1
 
 API configuration for falcon server
 
