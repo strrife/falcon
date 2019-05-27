@@ -2,7 +2,7 @@
 import 'jest-extended';
 import { GraphQLResolveInfo } from 'graphql';
 import { Extension } from './Extension';
-import ApiDataSource from './ApiDataSource';
+import { ApiDataSource } from './ApiDataSource';
 import { FetchUrlResult, GraphQLContext } from '../types';
 
 class CustomExtension extends Extension {

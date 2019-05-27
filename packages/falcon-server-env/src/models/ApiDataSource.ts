@@ -12,7 +12,7 @@ import {
   ApiContainer,
   ApiUrlPriority,
   ApiDataSourceConfig,
-  ConfigurableConstructorParams,
+  IConfigurableConstructorParams,
   ContextCacheOptions,
   ContextFetchResponse,
   ContextRequestInit,
@@ -38,22 +38,14 @@ export interface GqlServerConfig<TContext = any> {
   tracing?: boolean;
 }
 
-export type ConfigurableContainerConstructorParams = ConfigurableConstructorParams<ApiDataSourceConfig> & {
+export type ApiDataSourceConstructorParams = IConfigurableConstructorParams<ApiDataSourceConfig> & {
   /** ApiContainer instance */
   apiContainer: ApiContainer;
   /** GqlServerConfig instance */
   gqlServerConfig: GqlServerConfig<any>;
-  /** EventEmitter2 instance */
-  eventEmitter: EventEmitter2;
-  /** API DataSource short-name */
-  name: string;
-  /** API DataSource config */
-  config: ApiDataSourceConfig;
 };
 
-export default abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLContext> extends RESTDataSource<
-  TContext
-> {
+export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLContext> extends RESTDataSource<TContext> {
   public name: string;
 
   public config: ApiDataSourceConfig;
@@ -71,9 +63,9 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = Gr
   protected gqlServerConfig: GqlServerConfig<TContext>;
 
   /**
-   * @param {ConfigurableContainerConstructorParams} params Constructor params
+   * @param {ApiDataSourceConstructorParams} params Constructor params
    */
-  constructor(params: ConfigurableContainerConstructorParams) {
+  constructor(params: ApiDataSourceConstructorParams) {
     super();
 
     this.gqlServerConfig = params.gqlServerConfig;
@@ -120,7 +112,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = Gr
   /**
    * Wrapper-method to set an API-scoped session data
    * @param {any} value Value to be set to the API session
-   * @return {undefined}
+   * @returns {undefined}
    */
   set session(value: any) {
     if (!this.context.session) {
@@ -157,7 +149,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = Gr
   /**
    * Hook that is going to be executed for every REST request before calling `resolveURL` method
    * @param {ContextRequestOptions} request request
-   * @return {Promise<void>} promise
+   * @returns {Promise<void>} promise
    */
   protected async willSendRequest(request: ContextRequestOptions): Promise<void> {
     const { context } = request;
@@ -178,7 +170,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = Gr
    * @param {PaginationValue} totalItems Total amount of entries
    * @param {PaginationValue} [currentPage=null] Current page index
    * @param {PaginationValue} [perPage=null] Limit entries per page
-   * @return {PaginationData} Calculated result
+   * @returns {PaginationData} Calculated result
    */
   protected processPagination(
     totalItems: PaginationValue,
@@ -293,7 +285,7 @@ export default abstract class ApiDataSource<TContext extends GraphQLContext = Gr
   /**
    * Converts params to URLSearchParam if it is a plain object
    * @param {URLSearchParamsInit} params Search params
-   * @return {URLSearchParams} URLSearchParam
+   * @returns {URLSearchParams} URLSearchParam
    */
   private toURLSearchParams(params?: URLSearchParamsInit): URLSearchParams {
     // qs.stringify assures that nested object will be converted correctly to search params

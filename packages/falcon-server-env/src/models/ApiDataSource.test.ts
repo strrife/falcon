@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop, import/no-extraneous-dependencies */
 import 'jest-extended';
-import ApiDataSource from './ApiDataSource';
+import { ApiDataSource } from './ApiDataSource';
 import { ContextRequestOptions, ContextData, ContextFetchRequest, ContextFetchResponse } from '../types';
 
 import nock = require('nock');
