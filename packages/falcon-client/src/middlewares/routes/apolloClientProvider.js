@@ -5,9 +5,10 @@ import { ApolloClient } from '../../service';
 
 /**
  * Apollo Client Provider middleware, sets ApolloClient on ctx.state.client
- * @param {object} config ApolloClient configuration
- * @param {Object.<string, {data, resolvers}>} - dictionary of Apollo States.
- * @return {function(ctx: object, next: function): Promise<void>} Koa middleware function
+ * @param {Object} params params
+ * @param {Object} params.config ApolloClient configuration
+ * @param {Object.<string, {data, resolvers}>} params.clientStates dictionary of Apollo States
+ * @returns {function(ctx: object, next: function): Promise<void>} Koa middleware function
  */
 export default ({ config, clientStates = {} }) => {
   const mergedClientState = Object.keys(clientStates).reduce(

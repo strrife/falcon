@@ -124,7 +124,7 @@ function requireOrExit(id) {
 
 /**
  * Get falcon-client build config
- * @param {string} buildConfigFileName='falcon-client.build.config.js' falcon-client build time config relative path
+ * @param {string} buildConfigFileName `falcon-client.build.config.js` falcon-client build time config relative path
  * @returns {FalconClientBuildConfig} falcon-client build time config
  */
 function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {

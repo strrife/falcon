@@ -16,8 +16,8 @@ import i18nFactory from '../src/i18n/__mocks__/i18nFactory';
 
 /**
  * FalconClientMock wrapper component
- * @property {FalconClientProps} props props
- * @returns {{}} FalconClientMock component
+ * @param {FalconClientProps} props props
+ * @returns {Object} FalconClientMock component
  */
 const FalconClient = ({ apollo, router, i18next, children }) => {
   const extractor = new ChunkExtractor({ stats: { namedChunkGroups: {} } });

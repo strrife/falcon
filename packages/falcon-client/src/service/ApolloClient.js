@@ -23,7 +23,7 @@ import { resolvers } from './resolvers';
 /**
  * Creates an ApolloClient instance with the provided arguments
  * @param {FalconApolloClientConfig} config Falcon configuration for creating ApolloClient instance
- * @return {Apollo} ApolloClient instance
+ * @returns {Apollo} ApolloClient instance
  */
 export function ApolloClient(config = {}) {
   const {

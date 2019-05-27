@@ -1,32 +1,36 @@
+const { codes } = require('@deity/falcon-errors');
+const { Events, Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
+const Logger = require('@deity/falcon-logger');
+const { ApolloServer } = require('apollo-server-koa');
+const { EventEmitter2 } = require('eventemitter2');
+const GraphQLJSON = require('graphql-type-json');
+const cors = require('@koa/cors');
 const Koa = require('koa');
 const Router = require('koa-router');
 const session = require('koa-session');
 const body = require('koa-body');
-const cors = require('@koa/cors');
 const get = require('lodash/get');
 const capitalize = require('lodash/capitalize');
 const trim = require('lodash/trim');
-const { ApolloServer } = require('apollo-server-koa');
-const Logger = require('@deity/falcon-logger');
-const { EventEmitter2 } = require('eventemitter2');
 const { resolve: resolvePath } = require('path');
 const { readFileSync } = require('fs');
-const { codes } = require('@deity/falcon-errors');
-const { Events, Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
-const GraphQLJSON = require('graphql-type-json');
-const EndpointContainer = require('./containers/EndpointContainer');
-const ExtensionContainer = require('./containers/ExtensionContainer');
 const ApiContainer = require('./containers/ApiContainer');
+const ExtensionContainer = require('./containers/ExtensionContainer');
+const EndpointContainer = require('./containers/EndpointContainer');
 const DynamicRouteResolver = require('./resolvers/DynamicRouteResolver');
-const GraphQLCacheDirective = require('./schemaDirectives/GraphQLCacheDirective');
+const cacheInvalidatorMiddleware = require('./middlewares/cacheInvalidatorMiddleware');
+const schemaDirectives = require('./schemaDirectives');
 
 const BaseSchema = readFileSync(resolvePath(__dirname, './schema.graphql'), 'utf8');
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 class FalconServer {
   constructor(config) {
     this.loggableErrorCodes = [codes.INTERNAL_SERVER_ERROR, codes.GRAPHQL_PARSE_FAILED];
     this.config = config;
     this.server = null;
+    this.cache = null;
     this.backendConfig = {};
     const { maxListeners = 20, verboseEvents = false } = this.config;
     if (config.logLevel) {
@@ -68,7 +72,7 @@ class FalconServer {
   }
 
   async getApolloServerConfig() {
-    const cache = new Cache(this.getCacheProvider());
+    this.cache = new Cache(this.getCacheProvider());
     const dynamicRouteResolver = new DynamicRouteResolver(this.extensionContainer);
 
     const apolloServerConfig = await this.extensionContainer.createGraphQLConfig({
@@ -81,18 +85,16 @@ class FalconServer {
         });
         return dataSources;
       },
-      schemaDirectives: {
-        cache: GraphQLCacheDirective
-      },
+      schemaDirectives,
       formatError: error => this.formatGraphqlError(error),
       // inject session and headers into GraphQL context
       context: ({ ctx }) => ({
-        cache,
+        cache: this.cache,
         config: this.config,
         headers: ctx.req.headers,
         session: ctx.req.session
       }),
-      cache,
+      cache: this.cache,
       resolvers: {
         Query: {
           url: async (...params) => dynamicRouteResolver.fetchUrl(...params),
@@ -200,7 +202,7 @@ class FalconServer {
   /**
    * Create instance of cache backend based on configuration ("cache" key from config)
    * @private
-   * @return {KeyValueCache} instance of cache backend
+   * @returns {KeyValueCache} instance of cache backend
    */
   getCacheProvider() {
     const { type, options = {} } = this.config.cache || {};
@@ -222,6 +224,7 @@ class FalconServer {
    */
   async registerEndpoints() {
     const endpoints = [];
+    const { url: cacheUrl } = this.config.cache || {};
     await this.eventEmitter.emitAsync(Events.BEFORE_ENDPOINTS_REGISTERED, this.endpointContainer.entries);
     this.endpointContainer.entries.forEach(({ methods, path: routerPath, handler }) => {
       (Array.isArray(methods) ? methods : [methods]).forEach(method => {
@@ -235,6 +238,14 @@ class FalconServer {
     this.router.get('/config', ctx => {
       ctx.body = { endpoints };
     });
+
+    // Adding a custom route to handle Cache webhooks
+    if (typeof cacheUrl === 'string') {
+      if (cacheUrl === '/cache' && isProduction) {
+        Logger.warn('Consider changing "cache.url" config value with a unique route to secure your Cache endpoint');
+      }
+      this.router.post(cacheUrl, cacheInvalidatorMiddleware(this.cache));
+    }
 
     this.app.use(this.router.routes()).use(this.router.allowedMethods());
     await this.eventEmitter.emitAsync(Events.AFTER_ENDPOINTS_REGISTERED, this.router);

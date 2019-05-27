@@ -4,9 +4,9 @@ const merge = require('deepmerge');
 
 /**
  * Get localizations file paths from specified directory.
- * @param {string} directory - directories to search for locales.
- * @param {string[]} lngFilter - languages which should be returned, if empty no filtration.
- * @param {string[]} nsFilter - namespaces which should be returned, if empty no filtration.
+ * @param {string} directory directories to search for locales.
+ * @param {string[]} lngFilter languages which should be returned, if empty no filtration.
+ * @param {string[]} nsFilter namespaces which should be returned, if empty no filtration.
  * @returns {Object.<string, Object.<string, string[]>>} - language dictionary of namespace dictionary of file paths array.
  */
 function getLocalizationFilePaths(directory, lngFilter = [], nsFilter = []) {
@@ -36,7 +36,7 @@ function getLocalizationFilePaths(directory, lngFilter = [], nsFilter = []) {
 
 /**
  * Produce flat array of {lng, ns, sources}
- * @param {Object.<string, Object.<string, string[]>>} localizations - languages dictionary of namespaces dictionary of file paths array.
+ * @param {Object.<string, Object.<string, string[]>>} localizations languages dictionary of namespaces dictionary of file paths array.
  * @returns {{lng: string, ns: string, sources: string[]}[]} - array of file paths sources for lng and ns.
  */
 function flattenFilePathsDictionaries(localizations) {

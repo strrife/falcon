@@ -7,8 +7,8 @@ import HtmlHead from '../../components/HtmlHead';
 
 /**
  * App shell rendering middleware.
- * @param {{webpackAssets: object}} params webpack assets
- * @return {function(ctx: object, next: function): Promise<void>} Koa middleware
+ * @param {{webpackAssets: Object}} params webpack assets
+ * @returns {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
 export default ({ webpackAssets }) => async (ctx, next) => {
   const { client } = ctx.state;

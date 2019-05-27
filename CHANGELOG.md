@@ -9,6 +9,7 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 ### Falcon Server vNext
 
 - added ability to cache GQL resolvers by tags ([#421](https://github.com/deity-io/falcon/pull/421))
+- added ability to flush the cache via GQL directive ([#440](https://github.com/deity-io/falcon/pull/440))
 - improved logging for falcon-server extensions initialization ([#447](https://github.com/deity-io/falcon/pull/447))
 
 ### Falcon Scripts v0.0.1

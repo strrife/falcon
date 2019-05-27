@@ -98,8 +98,10 @@
     }
   },
   "cache": {
+    "url": "/cache",
     "resolvers": {
       "enabled": true,
+      "invalidation": true,
       "default": {
         "ttl": 10
       },

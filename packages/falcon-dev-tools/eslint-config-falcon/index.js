@@ -1,10 +1,15 @@
 module.exports = {
   parser: 'babel-eslint',
   extends: ['eslint-config-airbnb', 'plugin:prettier/recommended'],
-  plugins: ['react', 'import', 'prettier'],
+  plugins: ['react', 'import', 'prettier', 'jsdoc'],
   settings: {
     'import/parser': 'babel-eslint',
-    'import/resolver': { node: true }
+    'import/resolver': { node: true },
+    jsdoc: {
+      tagNamePreference: {
+        return: 'returns'
+      }
+    }
   },
   env: {
     browser: true,
@@ -59,14 +64,28 @@ module.exports = {
       }
     ],
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.tsx'] }],
+    'react/jsx-one-expression-per-line': 'off',
     'react/no-danger': 'off',
     'react/no-multi-comp': 'off',
     'react/require-default-props': ['off'],
     'react/no-access-state-in-setstate': 'error',
     'react/prop-types': 'off',
     'react/destructuring-assignment': 'off',
-    'react/jsx-one-expression-per-line': 'off',
-    'valid-jsdoc': ['error', { requireReturn: false }]
+    'jsdoc/check-alignment': 1,
+    'jsdoc/check-indentation': 1,
+    'jsdoc/check-param-names': 1,
+    'jsdoc/check-syntax': 1,
+    'jsdoc/check-tag-names': 1,
+    'jsdoc/check-types': 1,
+    'jsdoc/require-hyphen-before-param-description': [1, 'never'],
+    'jsdoc/newline-after-description': [1, 'never'],
+    'jsdoc/require-param': 1,
+    'jsdoc/require-param-description': 1,
+    'jsdoc/require-param-name': 1,
+    'jsdoc/require-param-type': 1,
+    'jsdoc/require-returns-check': 1,
+    'jsdoc/require-returns-description': 1,
+    'jsdoc/require-returns-type': 1
   },
   globals: {
     __DEVELOPMENT__: true,
