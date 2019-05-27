@@ -21,9 +21,10 @@ module.exports = ({ packagePath }) => ({
     'src/**/*.jsx',
     'src/**/*.ts',
     'src/**/*.tsx',
-    '!src/index.ts',
     '!src/index.js',
-    '!src/index.jsx'
+    '!src/index.jsx',
+    '!src/index.ts',
+    '!src/index.tsx'
   ],
   coverageReporters: ['html', 'text', 'text-summary', 'lcov'],
   globals: {

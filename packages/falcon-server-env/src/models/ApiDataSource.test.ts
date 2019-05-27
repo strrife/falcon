@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop, import/no-extraneous-dependencies */
 import 'jest-extended';
-import ApiDataSource from './ApiDataSource';
+import { ApiDataSource } from './ApiDataSource';
 import { ContextRequestOptions, ContextData, ContextFetchRequest, ContextFetchResponse } from '../types';
 
 import nock = require('nock');
@@ -115,7 +115,7 @@ describe('ApiDataSource', () => {
 
     it('Should pass the provided "context" per request', async () => {
       const customApi: CustomApiDataSource = new CustomApiDataSource({
-        config: { host: 'example.com' }
+        config: { protocol: 'http', host: 'example.com' }
       });
       const willSendRequestSpy: jest.SpyInstance = jest.spyOn(customApi, 'willSendRequest');
       const didReceiveResponseSpy: jest.SpyInstance = jest.spyOn(customApi, 'didReceiveResponse');
@@ -171,7 +171,7 @@ describe('ApiDataSource', () => {
         }
       };
       const customApi = new CustomClass({
-        config: { host: 'example.com' }
+        config: { protocol: 'http', host: 'example.com' }
       });
       await customApi.initialize({
         context: {}
@@ -188,7 +188,7 @@ describe('ApiDataSource', () => {
         }
       };
       const customApi = new CustomClass({
-        config: { host: 'example.com' }
+        config: { protocol: 'http', host: 'example.com' }
       });
       const willSendRequestSpy: jest.SpyInstance = jest.spyOn(customApi, 'willSendRequest');
       const didReceiveResponseSpy: jest.SpyInstance = jest.spyOn(customApi, 'didReceiveResponse');
@@ -251,7 +251,7 @@ describe('ApiDataSource', () => {
 
     it('Should skip "memoizedResults" map for GET requests', async () => {
       const customApi: CustomApiDataSource = new CustomApiDataSource({
-        config: { host: 'example.com' }
+        config: { protocol: 'http', host: 'example.com' }
       });
       const didReceiveResponseSpy: jest.SpyInstance = jest.spyOn(customApi, 'didReceiveResponse');
 

@@ -5,20 +5,20 @@ import Html from '../../components/Html';
 
 /**
  * Application html renderer middleware.
- * @param {{webpackAssets: Object}} params webpack assets
+ * @param {Object} params params
+ * @param {Object} params.config configuration
  * @returns {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
-export default ({ webpackAssets, config }) => async ctx => {
-  const { AppMarkup, client, chunkExtractor, helmetContext, serverTiming } = ctx.state;
-  const renderTimer = serverTiming.start('HTML renderToString()');
+export default ({ config }) => async ctx => {
+  const { AppMarkup, client, assets, chunkExtractor, helmetContext, serverTiming } = ctx.state;
+  const { webmanifest } = assets;
 
-  const { publicPath, assets } = webpackAssets;
-  const webmanifest = assets.find(x => x.name.endsWith('webmanifest'));
+  const renderTimer = serverTiming.start('HTML renderToString()');
 
   const htmlDocument = renderToString(
     <Html
       assets={{
-        webmanifest: webmanifest ? `${publicPath}${webmanifest.name}` : undefined
+        webmanifest
       }}
       chunkExtractor={chunkExtractor}
       helmetContext={helmetContext}

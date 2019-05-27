@@ -8,4 +8,4 @@ declare namespace Logger {
   function verbose(...args: any[]): void;
 }
 
-export = Logger;
+export default Logger;
