@@ -26,6 +26,7 @@ export type Products = {
 
 export class ProductListQuery extends Query<Products> {
   static defaultProps = {
-    query: GET_PRODUCT_LIST
+    query: GET_PRODUCT_LIST,
+    fetchPolicy: 'cache-and-network'
   };
 }

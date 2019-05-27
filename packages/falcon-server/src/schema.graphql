@@ -1,4 +1,5 @@
 directive @cache(ttl: Int, idPath: [String]) on FIELD_DEFINITION
+directive @cacheInvalidator(idPath: [IdPathEntryInput]) on FIELD_DEFINITION
 
 schema {
   query: Query
@@ -188,4 +189,9 @@ type AggregationBucket {
   Title
   """
   title: String
+}
+
+input IdPathEntryInput {
+  type: String
+  path: String!
 }
