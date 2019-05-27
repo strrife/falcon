@@ -1,12 +1,12 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'jest-extended';
 import { GraphQLResolveInfo } from 'graphql';
-import Extension from './Extension';
-import ApiDataSource from './ApiDataSource';
-import { FetchUrlResult } from '../types';
+import { Extension } from './Extension';
+import { ApiDataSource } from './ApiDataSource';
+import { FetchUrlResult, GraphQLContext } from '../types';
 
 class CustomExtension extends Extension {
-  getFetchUrlPriority(url: string): number {
+  getFetchUrlPriority(context: GraphQLContext, path: string): number {
     return 0;
   }
 
@@ -23,7 +23,8 @@ describe('Extension', () => {
   beforeEach(() => {
     ext = new CustomExtension({
       config: {},
-      extensionContainer: {}
+      extensionContainer: {},
+      eventEmitter: undefined
     });
   });
 
@@ -49,23 +50,26 @@ describe('Extension', () => {
     expect(Object.keys(resolvers.Query)).toEqual(['foo', 'missingResolver']);
     expect(Object.keys(resolvers.Mutation)).toEqual(['bar']);
 
-    const api: CustomApiDataSource = new CustomApiDataSource({});
-    api.foo = jest.fn(() => 'foo');
-    api.bar = jest.fn(() => 'bar');
-    api.initialize({ context: {} });
-    const context = {
+    const api: CustomApiDataSource = new CustomApiDataSource({} as any);
+    (api as any).foo = jest.fn(() => 'foo');
+    (api as any).bar = jest.fn(() => 'bar');
+    api.initialize({ context: {} } as any);
+
+    const context: GraphQLContext = {
       dataSources: {
         api
-      }
+      },
+      cache: {} as any
     };
+    const info: GraphQLResolveInfo = {} as any;
 
-    const resultFoo: string = await resolvers.Query.foo({}, {}, context);
+    const resultFoo: string = await resolvers.Query.foo({}, {}, context, info);
     expect(resultFoo).toBe('foo');
-    const resultBar: string = await resolvers.Mutation.bar({}, {}, context);
+    const resultBar: string = await resolvers.Mutation.bar({}, {}, context, info);
     expect(resultBar).toBe('bar');
 
     try {
-      await resolvers.Query.missingResolver({}, {}, context);
+      await resolvers.Query.missingResolver({}, {}, context, info);
       expect(false).toBeTruthy();
     } catch (error) {
       expect(error.message).toBe('CustomExtension: api.missingResolver() resolver method is not defined!');

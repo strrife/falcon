@@ -3,7 +3,7 @@ import { CacheOptions, RequestOptions } from 'apollo-datasource-rest/dist/RESTDa
 import { IMiddleware } from 'koa-router';
 import { RequestInit } from 'apollo-server-env';
 import { EventEmitter2 } from 'eventemitter2';
-import ApiDataSource from './models/ApiDataSource';
+import { ApiDataSource } from './models/ApiDataSource';
 import Cache from './cache/Cache';
 
 export interface DataSourceConfig<TContext> {
@@ -30,9 +30,12 @@ export type DataSources = {
   [name: string]: ApiDataSource<GraphQLContext>;
 };
 
-export interface ConfigurableConstructorParams<T = object> {
-  config?: T;
+export interface IConfigurableConstructorParams<T = object> {
+  /** short-name */
   name?: string;
+  /** configuration */
+  config?: T;
+  /** EventEmitter2 instance */
   eventEmitter: EventEmitter2;
 }
 

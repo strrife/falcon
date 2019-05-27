@@ -1,6 +1,6 @@
 import { CachePersistor } from 'apollo-cache-persist';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { ApolloClient } from './';
+import { ApolloClient } from './ApolloClient';
 
 export const apolloClientWeb = ({ initialState, clientApolloSchema, apolloClientConfig }) => {
   const cache = new InMemoryCache();

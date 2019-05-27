@@ -5,7 +5,7 @@ import loadable from '@loadable/component';
 import { FalconClientMock } from '../../test-utils';
 import { wait } from '../../../../test/helpers';
 import DynamicRoute from './DynamicRoute';
-import { GET_URL } from './../graphql/url.gql';
+import { GET_URL } from '../graphql/url.gql';
 
 describe('DynamicRoute', () => {
   it('Should render DynamicRoute content', async () => {
@@ -29,7 +29,7 @@ describe('DynamicRoute', () => {
           <DynamicRoute
             loaderComponent={() => <span>Loading...</span>}
             components={{
-              foo: loadable(() => import('./../__mocks__/pages/Foo'))
+              foo: loadable(() => import('../__mocks__/pages/Foo'))
             }}
           />
         </Switch>

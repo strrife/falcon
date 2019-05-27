@@ -3,7 +3,11 @@ const ApiContainer = require('./ApiContainer');
 
 const apis = {
   'fake-api': {
-    package: 'fake-backend-api'
+    package: 'fake-backend-api',
+    config: {
+      host: 'fake.host.com',
+      protocol: 'http'
+    }
   }
 };
 
