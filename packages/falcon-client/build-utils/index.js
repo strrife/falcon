@@ -1,9 +1,9 @@
-const { startDevServer, build, size } = require('./webpack');
+const app = require('./webpack');
+const serviceWorker = require('./serviceWorker');
 const jest = require('./jest');
 
 module.exports = {
-  start: startDevServer,
-  build,
-  size,
+  app,
+  serviceWorker,
   test: jest
 };
