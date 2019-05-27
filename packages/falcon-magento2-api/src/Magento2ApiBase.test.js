@@ -250,7 +250,7 @@ describe('Magento2ApiBase', () => {
         context: { auth: AuthScope.Customer }
       };
 
-      api.isCustomerSessionExpired = jest.fn(() => false); // we want to initialize api
+      api.isCustomerSessionExpired = jest.fn(() => false);
       api.initialize({
         context: {
           session: {
@@ -286,7 +286,7 @@ describe('Magento2ApiBase', () => {
             'api-magento2': {
               customerToken: {
                 token: 'token#1234567890',
-                expirationTime: addSeconds(Date.now(), 600)
+                expirationTime: addSeconds(Date.now(), 60)
               }
             }
           }
