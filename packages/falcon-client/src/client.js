@@ -11,7 +11,7 @@ import { apolloClientWeb, apolloStateToObject } from './service';
 import HtmlHead from './components/HtmlHead';
 import App, { clientApolloSchema } from './clientApp';
 import i18nFactory from './i18n/i18nClientFactory';
-import { configureServiceWorker } from './serviceWorker';
+import { configureServiceWorker } from './serviceWorker/registration';
 
 // eslint-disable-next-line no-underscore-dangle
 const initialState = window.__APOLLO_STATE__ || {};

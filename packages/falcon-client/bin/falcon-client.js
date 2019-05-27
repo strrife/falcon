@@ -9,7 +9,7 @@ process.on('uncaughtException', ex => {
 process.noDeprecation = true; // turns off that loadQuery clutter.
 
 const Logger = require('@deity/falcon-logger');
-const { start, build, size, test } = require('./../build-utils');
+const { app, serviceWorker, test } = require('../build-utils');
 
 (async () => {
   const script = process.argv[2];
@@ -17,16 +17,17 @@ const { start, build, size, test } = require('./../build-utils');
   try {
     switch (script) {
       case 'start': {
-        await start();
+        await app.start();
         break;
       }
 
       case 'build': {
-        await build();
+        await app.build();
+        await serviceWorker.build();
         break;
       }
       case 'size': {
-        await size();
+        await app.size();
         break;
       }
 

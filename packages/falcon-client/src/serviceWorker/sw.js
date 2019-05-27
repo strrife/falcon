@@ -8,7 +8,9 @@ workbox.skipWaiting();
 workbox.clientsClaim();
 
 workbox.precaching.suppressWarnings();
-workbox.precaching.precacheAndRoute([], {});
+
+const ENTRIES = [];
+workbox.precaching.precacheAndRoute(ENTRIES, {});
 
 workbox.routing.registerRoute(
   ({ event }) => event.request.mode === 'navigate',

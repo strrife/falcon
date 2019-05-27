@@ -5,7 +5,7 @@ const WebpackDevServer = require('webpack-dev-server-speedy');
 const clearConsole = require('react-dev-utils/clearConsole');
 const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react-dev-utils/FileSizeReporter');
 
-const paths = require('./../paths');
+const paths = require('../paths');
 const {
   exitIfBuildingItself,
   exitIfNoRequiredFiles,
@@ -17,7 +17,6 @@ const {
   logDeityGreenInfo
 } = require('./tools');
 const createConfig = require('./config/create');
-const { generateSW } = require('./workbox');
 
 module.exports.startDevServer = async () => {
   exitIfBuildingItself();
@@ -128,8 +127,6 @@ module.exports.build = async () => {
     printFileSizesAfterBuild(stats, previousBuildSizes, paths.appBuild);
 
     Logger.log();
-
-    generateSW();
   } catch (error) {
     Logger.error(`${chalk.red('\nFailed to compile.\n')}`);
     Logger.error(error);
