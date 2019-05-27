@@ -66,7 +66,14 @@ module.exports = class WordpressApi extends ApiDataSource {
   }
 
   async fetchBackendConfig() {
-    const config = await this.get('blog/info');
+    const key = await this.resolveURL({ path: 'blog/info' });
+    const config = await this.context.cache.get(key.href, {
+      fetchData: async () => this.get('blog/info'),
+      options: {
+        ttl: 300
+      }
+    });
+
     const { languages = {} } = config;
     this.languageSupported = !!Object.keys(languages).length;
 
