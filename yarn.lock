@@ -10490,14 +10490,6 @@ koa-helmet@^4.0.0:
   dependencies:
     helmet "^3.15.1"
 
-koa-i18next@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.npmjs.org/koa-i18next/-/koa-i18next-1.1.1.tgz#02f0ea33550835e28116a09d63c504421dc2fe4e"
-  integrity sha512-EyAGBZ2l3OHbzw+vFH3mDOgf99OgJAm6IrVOP2st4flyrhzKSp3C+//EHy8XapRKLyi1buDHMfIghLgz+1Crsw==
-  dependencies:
-    debug "^2.2.0"
-    koa-convert "^1.2.0"
-
 koa-is-json@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/koa-is-json/-/koa-is-json-1.0.0.tgz#273c07edcdcb8df6a2c1ab7d59ee76491451ec14"
