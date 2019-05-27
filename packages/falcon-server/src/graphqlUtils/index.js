@@ -15,7 +15,7 @@ const PARENT_KEYWORD = '$parent';
  * Generates a path-like string for the provided request
  * for `query { foo { bar } }` - it will generate `foo.bar` string
  * @param {ResponsePath} node Operation path object
- * @return {string} Generated operation path string
+ * @returns {string} Generated operation path string
  */
 const getOperationPath = node => {
   const { key, prev } = node;
@@ -29,7 +29,7 @@ const getOperationPath = node => {
 /**
  * Extract "root" type from GQL field by getting "ofType" sub-type until it reaches the root field
  * @param {GraphQLType} type GQL Object type
- * @return {GraphQLType} "root" object type
+ * @returns {GraphQLType} "root" object type
  */
 const getRootType = type => {
   const realType = type.ofType || type;
@@ -38,9 +38,9 @@ const getRootType = type => {
 
 /**
  * Extract a value by `fieldName` from the provided `sourceValue`
- * @param {object|object[]} sourceValue Source object to get a field value from
+ * @param {Object|Array<Object>} sourceValue Source object to get a field value from
  * @param {string} fieldName Name of the field
- * @return {undefined|string|string[]} Value or list of values (in case of `sourceValue` is an array)
+ * @returns {undefined|string|string[]} Value or list of values (in case of `sourceValue` is an array)
  */
 const getFieldValue = (sourceValue, fieldName) => {
   if (typeof sourceValue === 'undefined' || typeof fieldName === 'undefined') {
@@ -56,7 +56,7 @@ const getFieldValue = (sourceValue, fieldName) => {
 /**
  * Find a field name with ID_FIELD_TYPE type
  * @param {GraphQLType} gqlType GQL Object Type
- * @return {string|undefined} Name of the field with
+ * @returns {string|undefined} Name of the field with
  */
 const findIdFieldName = gqlType => {
   const { _fields: fields, name: objectTypeName } = getRootType(gqlType);
@@ -75,7 +75,7 @@ const findIdFieldName = gqlType => {
  * Generate tag names using `entityName` and `entityId`
  * @param {string} entityName Entity Type name (like "Product")
  * @param {string|string[]} entityId Entity ID or list of IDs (like: "1" or ["1", "2"])
- * @return {string[]} List of tag names (example: ["Product:1", "Product:2"])
+ * @returns {string[]} List of tag names (example: ["Product:1", "Product:2"])
  */
 const generateTagNames = (entityName, entityId) => {
   if (!entityId) {
@@ -87,12 +87,12 @@ const generateTagNames = (entityName, entityId) => {
 
 /**
  * Get a list of tags from the provided `sourceValue` using specified `fieldType` and `fieldPathSections` (for nested values)
- * @param {object} sourceValue Source value to get tags from
+ * @param {Object} sourceValue Source value to get tags from
  * @param {GraphQLType} fieldType GraphQL Field Type object
  * @param {string[]} [fieldPathSections=[]] An optional field path sections (example: `["products", "items"]` which are created from a relative `products.items` field path)
  * that are going to be used to get tags from. If not passed or empty - tags will be received from `sourceValue` directly.
  * @param {string|undefined} forceTypeName type name to force as a tag name
- * @return {string[]} List of tag names
+ * @returns {string[]} List of tag names
  */
 const getTagsForField = (sourceValue, fieldType, fieldPathSections = [], forceTypeName = undefined) => {
   if (!fieldPathSections.length) {
@@ -123,11 +123,11 @@ const getTagsForField = (sourceValue, fieldType, fieldPathSections = [], forceTy
 /**
  * Extract cache tags for the provided ID path and return a list of tags
  * @param {string} idPath ID operation path string (like "$parent.items" or "items")
- * @param {object} result Resolver result
+ * @param {Object} result Resolver result
  * @param {GraphQLResolveInfo} info GraphQL info object
- * @param {object} parent GraphQL parent object
+ * @param {Object} parent GraphQL parent object
  * @param {string|undefined} forceTypeName type name to force as a tag name
- * @return {string[]} List of tags
+ * @returns {string[]} List of tags
  */
 const extractTagsForIdPath = (idPath, result, info, parent, forceTypeName = undefined) => {
   const [rootPath, ...fieldPathSections] = idPath.split(PATH_SEPARATOR);

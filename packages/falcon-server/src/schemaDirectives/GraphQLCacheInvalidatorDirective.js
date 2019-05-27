@@ -32,7 +32,7 @@ const { extractTagsForIdPath, getTagsForField } = require('../graphqlUtils');
 module.exports = class GraphQLCacheInvalidatorDirective extends SchemaDirectiveVisitor {
   /**
    * @param {GraphQLType|GraphQLField} field GraphQL Field
-   * @return {void}
+   * @returns {void}
    */
   visitFieldDefinition(field) {
     let { resolve = defaultFieldResolver } = field;
@@ -52,7 +52,7 @@ module.exports = class GraphQLCacheInvalidatorDirective extends SchemaDirectiveV
    * Get a resolver function with cache invalidation capabilities
    * @param {Function} resolve Native GQL resolver function
    * @param {IdPathEntry[]} idPath List of idPath entries to invalidate
-   * @return {Function} Resolver function
+   * @returns {Function} Resolver function
    */
   getResolverWithCacheInvalidator(resolve, idPath = []) {
     const thisDirective = this;
@@ -79,8 +79,8 @@ module.exports = class GraphQLCacheInvalidatorDirective extends SchemaDirectiveV
    * Invalidate cache from the result using the provided idPath entry
    * @param {mixed} result Resolver result
    * @param {IdPathEntry} idPathEntry ID Path entry
-   * @param {object} parent GraphQL Resolver parent value
-   * @param {object} context GraphQL context object
+   * @param {Object} parent GraphQL Resolver parent value
+   * @param {Object} context GraphQL context object
    * @param {GraphQLResolveInfo} info GraphQL Info object
    * @returns {void}
    */

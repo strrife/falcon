@@ -14,7 +14,7 @@ const { generateTagNames } = require('../graphqlUtils');
  * Cache middleware for handling web-hooks to flush the cache by tags
  * @example curl -X POST http://localhost:4000/cache -H 'Content-Type: application/json' -d '[{"id": 1, "type": "Product"}]'
  * @param {Cache} cache Cache component
- * @return {Middleware} Koa middleware callback
+ * @returns {Middleware} Koa middleware callback
  */
 const cacheInvalidatorMiddleware = cache => async ctx => {
   /** @type {Array<CacheTagEntry>} List of posted cache tag entries to invalidate */
