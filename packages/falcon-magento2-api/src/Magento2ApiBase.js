@@ -209,7 +209,7 @@ class Magento2ApiBase extends ApiDataSource {
     const getCachedValue = async url => {
       const value = await this.cache.get([this.name, this.getStoreCode(), url].join(':'), {
         fetchData: async () => {
-          const rawValue = await this.getAuth(url);
+          const rawValue = await this.getForIntegration(url);
 
           return JSON.stringify(rawValue);
         },
