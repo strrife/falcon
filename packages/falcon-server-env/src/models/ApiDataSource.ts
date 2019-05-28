@@ -269,7 +269,7 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
    */
   /* istanbul ignore next Skipping code coverage for "dev" function */
   private async traceLog<TResult>(label: string, fn: () => Promise<TResult>): Promise<TResult> {
-    if (process && process.env && process.env.NODE_ENV === 'development') {
+    if (this.context.config && this.context.config.logLevel === 'debug') {
       const startTime = Date.now();
       try {
         return await fn();
