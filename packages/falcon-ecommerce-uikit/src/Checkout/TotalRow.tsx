@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Text } from '@deity/falcon-ui';
-import { Price } from './../Locale';
+import { Price } from '../Locale';
 
 export type TotalRowProps = {
   title: string;
