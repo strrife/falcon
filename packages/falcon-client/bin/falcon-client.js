@@ -17,7 +17,7 @@ const { app, serviceWorker, test } = require('../build-utils');
   try {
     switch (script) {
       case 'start': {
-        await app.start();
+        await app.startDevServer();
         break;
       }
 
