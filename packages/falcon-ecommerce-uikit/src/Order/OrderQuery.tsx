@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import { Query } from '../Query/Query';
-import { AddressData } from './../Address/AddressQuery';
+import { AddressData } from '../Address/AddressQuery';
 
 export type Order = {
   entityId: number;
@@ -9,7 +9,9 @@ export type Order = {
   customerFirstname?: string;
   customerLastname?: string;
   status?: string; // list of possible statuses?
-  grandTotal?: string;
+  subtotal: number;
+  grandTotal: number;
+  shippingAmount: number;
   orderCurrencyCode?: string;
   items: OrderItem[];
   paymentMethodName: string;

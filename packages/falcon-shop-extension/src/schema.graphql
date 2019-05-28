@@ -240,12 +240,12 @@ type Order {
   customerLastname: String
   status: String
   orderCurrencyCode: String
-  baseGrandTotal: String
-  subtotal: String
-  shippingAmount: String
-  taxAmount: String
-  discountAmount: String
-  grandTotal: String
+  baseGrandTotal: Float!
+  subtotal: Float!
+  shippingAmount: Float!
+  taxAmount: Float!
+  discountAmount: Float!
+  grandTotal: Float!
   items: [OrderItem]
   shippingDescription: String
   paymentMethodName: String
