@@ -50,7 +50,9 @@ const CheckoutConfirmation = loadable(() =>
 );
 const CheckoutFailure = loadable(() => import(/* webpackChunkName: "shop/checkout" */ './pages/shop/CheckoutFailure'));
 const SidebarContents = loadable(() =>
-  import(/* webpackPrefetch: true, webpackChunkName: "shop/SidebarContents" */ './pages/shop/components/Sidebar/SidebarContents')
+  import(
+    /* webpackPrefetch: true, webpackChunkName: "shop/SidebarContents" */ './pages/shop/components/Sidebar/SidebarContents'
+  )
 );
 
 let ThemeEditorComponent;
