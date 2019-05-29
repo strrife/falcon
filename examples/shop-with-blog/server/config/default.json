@@ -28,10 +28,10 @@
         "protocol": "https",
         "auth": {
           "type": "integration-token",
-          "consumerKey": "s7bf113xbmpm19f108qjsogiwva2pcmt",
-          "consumerSecret": "8zh0ilprida8s94a4zcr2djnfs7iejqz",
-          "accessToken": "ieue5bqa1n75pa7dnuxafwwcyd3cib5j",
-          "accessTokenSecret": "ff8vo8t491ovrg1rbsc7vjbjc1utpi3m"
+          "consumerKey": "ck53dt5e5i9mn9qy3r54t4s9ihhcuby5",
+          "consumerSecret": "wdhg6ni0nghlw752z3fgluacoyolz8ni",
+          "accessToken": "m5tz9nm2yfxa44nbgpmniyt03uract6p",
+          "accessTokenSecret": "lhbo8tyc8egqzdzk74cvsoeeccbb1747"
         },
         "payments": {
           "adyen_cc": {
