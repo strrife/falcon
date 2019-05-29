@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon-ui",
   "license": "OSL-3.0",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "homepage": "https://falcon-ui.docs.deity.io/",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-ui",
   "main": "dist/falcon-ui.cjs.js",
@@ -26,8 +26,8 @@
     "size": "size-limit"
   },
   "devDependencies": {
-    "@deity/falcon-scripts": "0.0.1",
-    "@deity/falcon-theme-editor": "^0.1.4",
+    "@deity/falcon-scripts": "^0.0.1",
+    "@deity/falcon-theme-editor": "^0.1.5",
     "@mdx-js/tag": "0.16.1",
     "@types/react": "16.7.20",
     "@types/react-dom": "16.0.11",
