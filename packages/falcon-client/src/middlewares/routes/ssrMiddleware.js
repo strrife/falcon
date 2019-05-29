@@ -13,8 +13,7 @@ import HtmlHead from '../../components/HtmlHead';
  * @returns {function(ctx: object, next: function): Promise<void>} Koa middleware
  */
 export default ({ App }) => async (ctx, next) => {
-  const { client, chunkExtractor, serverTiming } = ctx.state;
-  const { i18next } = ctx;
+  const { client, i18next, chunkExtractor, serverTiming } = ctx.state;
   const routerContext = {};
 
   const markup = (

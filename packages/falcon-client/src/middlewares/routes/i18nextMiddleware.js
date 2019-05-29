@@ -33,7 +33,7 @@ export default async options => {
     const { data } = await client.query({ query: GET_LOCALES });
     await i18next.changeLanguage(data.backendConfig.activeLocale);
 
-    ctx.i18next = i18next;
+    ctx.state.i18next = i18next;
 
     return next();
   };
