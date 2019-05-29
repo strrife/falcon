@@ -32,6 +32,10 @@ export default async options => {
 
     const { data } = await client.query({ query: GET_LOCALES });
     await i18next.changeLanguage(data.backendConfig.activeLocale);
+    if (process.env.NODE_ENV === 'development') {
+      // because of SSR and HMR of translation files
+      await i18next.reloadResources();
+    }
 
     ctx.state.i18next = i18next;
 
