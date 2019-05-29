@@ -5,6 +5,13 @@ import appHtml from './appHtmlMiddleware';
 import i18next from './i18nextMiddleware';
 import assets from './assetsMiddleware';
 
+/** Koa middleware
+ * @callback KoaMiddleware
+ * @param {Object} ctx context
+ * @param {function} next next middleware
+ * @returns {Promise<void>}
+ */
+
 /**
  * @typedef {object} RenderAppShell
  * @property {object} config App configuration
