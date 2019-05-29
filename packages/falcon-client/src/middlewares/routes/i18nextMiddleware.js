@@ -1,27 +1,40 @@
+import gql from 'graphql-tag';
 import i18nFactory from '../../i18n/i18nServerFactory';
-import { GET_BACKEND_CONFIG } from '../../graphql/config.gql';
+
+const GET_LOCALES = gql`
+  query GetLocales {
+    backendConfig {
+      locales
+      activeLocale
+    }
+  }
+`;
 
 /**
- * @typedef {object} Options
+ * @typedef {Object} Options
  * @property {string} lng language
  * @property {string[]} ns namespaces to load
  * @property {string} fallbackLng fallback language
  * @property {string[]} whitelist languages whitelist
- * @property {object} resources Initial internationalization resources
+ * @property {Object} resources Initial internationalization resources
  */
 
 /**
  * i18next instance server side factory
  * @param {Options} options options
- * @returns {function(ctx: object, next: function): Promise<void>} Koa middleware
+ * @returns {Promise<import("./index").KoaMiddleware>} Koa middleware
  */
-export default options => async (ctx, next) => {
-  const { client } = ctx.state;
-  const {
-    data: { backendConfig }
-  } = await client.query({ query: GET_BACKEND_CONFIG });
+export default async options => {
+  const i18next = await i18nFactory({ ...options });
 
-  ctx.i18next = await i18nFactory({ ...options, lng: backendConfig.activeLocale });
+  return async (ctx, next) => {
+    const { client } = ctx.state;
 
-  return next();
+    const { data } = await client.query({ query: GET_LOCALES });
+    await i18next.changeLanguage(data.backendConfig.activeLocale);
+
+    ctx.i18next = i18next;
+
+    return next();
+  };
 };
