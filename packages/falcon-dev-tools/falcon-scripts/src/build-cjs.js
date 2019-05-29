@@ -4,7 +4,6 @@ const rollup = require('rollup');
 const babel = require('rollup-plugin-babel');
 const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
-const Logger = require('@deity/falcon-logger');
 
 const makeExternalPredicate = externalsArr => {
   if (externalsArr.length === 0) {
@@ -15,7 +14,7 @@ const makeExternalPredicate = externalsArr => {
 };
 
 module.exports = async ({ packagePath }) => {
-  Logger.log('building cjs...');
+  console.log('building cjs...');
 
   process.env.ROLLUP = true;
 

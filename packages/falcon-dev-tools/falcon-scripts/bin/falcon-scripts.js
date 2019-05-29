@@ -7,8 +7,6 @@ process.on('uncaughtException', ex => {
   console.log('Uncaught Exception: ', ex);
 });
 
-const Logger = require('@deity/falcon-logger');
-
 (async () => {
   const script = process.argv[2];
   const args = process.argv.slice(3) || [];
@@ -65,8 +63,8 @@ const Logger = require('@deity/falcon-logger');
       }
 
       default:
-        Logger.log(`Unknown script "${script}".`);
-        Logger.log('Perhaps you need to update @deity/falcon-scripts?');
+        console.log(`Unknown script "${script}".`);
+        console.log('Perhaps you need to update @deity/falcon-scripts?');
         process.exit();
 
         break;
@@ -74,7 +72,7 @@ const Logger = require('@deity/falcon-logger');
 
     process.exit(0);
   } catch (error) {
-    Logger.error(error);
+    console.error(error);
     process.exit(1);
   }
 })();
