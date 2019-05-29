@@ -589,6 +589,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       currency,
       name: htmlHelpers.stripHtml(data.name),
       description: customAttributes.description,
+      thumbnail: data.image,
       gallery: resolveGallery(data),
       seo: {
         title: customAttributes.metaTitle,
