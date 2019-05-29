@@ -8,9 +8,20 @@
   "publishConfig": {
     "access": "public"
   },
+  "scripts": {
+    "prepare": "npm run clean && npm run build",
+    "clean": "falcon-scripts clean",
+    "build": "falcon-scripts build",
+    "watch": "falcon-scripts watch",
+    "test": "falcon-scripts test",
+    "test:coverage": "falcon-scripts test:coverage"
+  },
   "dependencies": {
-    "util": "^0.11.0",
-    "winston": "^3.0.0"
+    "pino": "5.12.6"
+  },
+  "devDependencies": {
+    "@deity/falcon-scripts": "^0.0.1",
+    "@types/pino": "5.8.7"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }
