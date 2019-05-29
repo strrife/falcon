@@ -4,28 +4,28 @@
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
 
-## Falcon v1.1 (2019-05-28)
+## Falcon v1.1 (2019-05-29)
 
-### Falcon Client v0.4.2 (2019-05-28)
+### Falcon Client v0.4.2 (2019-05-29)
 
 - fixed issue with lack of third-party packages source-maps ([#455](https://github.com/deity-io/falcon/issues/455))
 - added possibility to customize Service Worker ([#454](https://github.com/deity-io/falcon/pull/454))
 
-### Falcon Server v0.2.2 (2019-05-28)
+### Falcon Server v0.2.2 (2019-05-29)
 
 - added ability to cache GQL resolvers by tags ([#421](https://github.com/deity-io/falcon/pull/421))
 - added ability to flush the cache via GQL directive ([#440](https://github.com/deity-io/falcon/pull/440))
 - improved logging for falcon-server extensions initialization ([#447](https://github.com/deity-io/falcon/pull/447))
 
-### Falcon Scripts v0.0.1 (2019-05-28)
+### Falcon Scripts v0.0.1 (2019-05-29)
 
 - initial release
 
-### Falcon E-commerce UI Kit v0.5.1 (2019-05-28)
+### Falcon E-commerce UI Kit v0.5.1 (2019-05-29)
 
 - feat: (Breaking change) corrected names for collections `[noun]sList` --> `[noun]List` ([#427](https://github.com/deity-io/falcon/pull/427))
 
-### Falcon Magento2 API v0.6.0 (2019-05-28)
+### Falcon Magento2 API v0.6.0 (2019-05-29)
 
 - fixed issue with incomplete product price data which led to incorrect rendering of products ([#417](https://github.com/deity-io/falcon/issues/417))
 - added oAuth authorization type for integration requests ([#424](https://github.com/deity-io/falcon/pull/424))
