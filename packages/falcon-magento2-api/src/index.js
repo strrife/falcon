@@ -589,6 +589,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       currency,
       name: htmlHelpers.stripHtml(data.name),
       description: customAttributes.description,
+      thumbnail: data.image,
       gallery: resolveGallery(data),
       seo: {
         title: customAttributes.metaTitle,
@@ -1150,15 +1151,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
     const query = this.createSearchParams({
       pagination,
-      sort: {
-        field: 'created_at',
-        direction: 'desc'
-      }
+      sort: { field: 'created_at', direction: 'desc' }
     });
 
     const response = await this.getForCustomer('/falcon/orders/mine', query, { context: { pagination } });
+    const result = this.convertKeys(response);
 
-    return this.convertKeys(response);
+    return result;
   }
 
   /**

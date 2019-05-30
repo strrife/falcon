@@ -218,6 +218,25 @@ describe('Magento2Api', () => {
     });
   });
 
+  describe('reduceProduct()', () => {
+    it('should properly resolve thumbnail when only "image" property is passed', async () => {
+      const result = api.reduceProduct({
+        price: {
+          regular_price: 49,
+          special_price: null,
+          min_tier_price: null
+        },
+        sku: 'WSH11',
+        name: 'Ina Compression Short',
+        image: 'path/to/image.jpg',
+        type_id: 'configurable',
+        is_salable: 1,
+        url_path: 'ina-compression-short.html'
+      });
+      expect(result.thumbnail).toEqual('path/to/image.jpg');
+    });
+  });
+
   it('breadcrumbs resolver should call proper endpoint with proper url without leading slash', async () => {
     nock(URL)
       .get(createMagentoUrl('/falcon/breadcrumbs?url=sample-product.html'))

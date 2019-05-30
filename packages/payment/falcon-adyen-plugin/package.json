@@ -1,6 +1,6 @@
 {
   "name": "@deity/falcon-adyen-plugin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "OSL-3.0",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/payment/falcon-adyen-plugin",
   "publishConfig": {
@@ -26,13 +26,13 @@
     "adyen-cse-web": "git+https://github.com/Adyen/adyen-cse-web.git#v0.1.24"
   },
   "devDependencies": {
-    "@deity/falcon-scripts": "0.0.1",
-    "@deity/falcon-payment-plugin": "^0.0.1",
+    "@deity/falcon-payment-plugin": "^0.0.2",
+    "@deity/falcon-scripts": "^0.0.1",
     "@types/react": "16.7.20",
     "react": "^16.6.3"
   },
   "peerDependencies": {
-    "@deity/falcon-payment-plugin": "^0.0.1",
+    "@deity/falcon-payment-plugin": "^0.0.2",
     "react": "^16.6.3"
   }
 }
