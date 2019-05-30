@@ -2,74 +2,103 @@ import React from 'react';
 import { BackendConfigQuery } from '../BackendConfig';
 import { Omit } from '../types';
 
-type LocaleContextType = {
+export type LocaleContextType = {
   locale: string;
   localeFallback: string;
   currency: string;
+  priceFormat: ReturnType<typeof priceFormatFactory>;
 };
 
-const localeDefaults = {
-  locale: 'en',
-  // TODO: get locale fallback from i18n config?
-  localeFallback: 'en',
-  currency: 'EUR'
-};
-const LocaleContext = React.createContext<LocaleContextType>(localeDefaults);
+export type PriceFormatOptions = { locale?: string } & Omit<Intl.NumberFormatOptions, 'style'>;
+
+const LocaleContext = React.createContext<LocaleContextType>({} as any);
 
 export type LocaleProviderProps = {
   currency?: string;
+  priceFormatOptions?: PriceFormatOptions;
 };
-export const LocaleProvider: React.SFC<LocaleProviderProps> = ({ children, ...props }) => (
+export const LocaleProvider: React.SFC<LocaleProviderProps> = ({ children, priceFormatOptions = {}, ...props }) => (
   <BackendConfigQuery>
-    {({
-      backendConfig: {
-        activeLocale: locale,
-        shop: { activeCurrency: currency }
-      }
-    }) => (
-      <LocaleContext.Provider value={{ ...localeDefaults, locale, currency, ...props }}>
-        {children}
-      </LocaleContext.Provider>
-    )}
+    {({ backendConfig }) => {
+      const { activeLocale, shop } = backendConfig;
+
+      const locale = activeLocale || 'en';
+      const localeFallback = 'en';
+      const currency = props.currency || shop.activeCurrency || 'EUR';
+      const priceFormat = priceFormatFactory([priceFormatOptions.locale, locale, localeFallback], {
+        currency,
+        ...priceFormatOptions
+      });
+
+      return (
+        <LocaleContext.Provider
+          value={{
+            locale,
+            localeFallback,
+            currency,
+            priceFormat
+          }}
+        >
+          {children}
+        </LocaleContext.Provider>
+      );
+    }}
   </BackendConfigQuery>
 );
 
+export type LocaleProps = { children: (props: LocaleRenderProps) => any };
 export type LocaleRenderProps = {
   locale: string;
   currency: string;
-  priceFormat: (value: number, options?: PriceFormatOptions) => string;
+  priceFormat: ReturnType<typeof priceFormatFactory>;
   dateTimeFormat: (value: number | string | Date, options?: DateTimeFormatOptions) => string;
 };
-export const Locale: React.SFC<{ children: (props: LocaleRenderProps) => any }> = ({ children }) => (
+export const Locale: React.SFC<LocaleProps> = ({ children }) => (
   <LocaleContext.Consumer>
-    {({ locale, localeFallback, currency }) =>
+    {({ locale, localeFallback, currency, priceFormat }) =>
       children({
         locale,
         currency,
-        priceFormat: priceFormatterFactory([locale, localeFallback], currency),
+        priceFormat,
         dateTimeFormat: dateTimeFormatterFactory([locale, localeFallback])
       })
     }
   </LocaleContext.Consumer>
 );
 
-export type PriceFormatOptions = { locale?: string } & Omit<Intl.NumberFormatOptions, 'style'>;
-export function priceFormatterFactory(localeCodes: string[], currency: string) {
+/**
+ * Price Format function factory based on Intl api
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
+ * @param {string[]} localeCodes localization codes
+ * @param {PriceFormatOptions} opt formatting options
+ * @returns {ReturnType<typeof priceFormatFactory>} price formatter
+ */
+export function priceFormatFactory(localeCodes: string[], opt: PriceFormatOptions) {
+  const getPriceFormatter = (locales: string[], numberFormatOptions: Intl.NumberFormatOptions) =>
+    new Intl.NumberFormat(locales.filter(x => x), { ...numberFormatOptions, style: 'currency' });
+
+  const memoizedFormatter = getPriceFormatter([opt.locale, ...localeCodes], opt);
+
   /**
-   * Price Formatter based on Intl api, see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
+   * Price Format (memoized)
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
    * @param {number} value value to format
-   * @param {PriceFormatOptions} options formatting options
    * @returns {string} formatted value
    */
-  const priceFormat = (value: number, options: PriceFormatOptions = {}) => {
-    const { currency: currencyOption, locale: localeOption, ...restOptions } = options;
-
-    return new Intl.NumberFormat([localeOption, ...localeCodes].filter(x => x), {
-      currency: currencyOption || currency,
-      ...restOptions,
-      style: 'currency'
-    }).format(value);
-  };
+  function priceFormat(value: number): string;
+  /**
+   * Price Format (not memoized, because of custom options, so the performance penalty could be paid)
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
+   * @param {number} value value to format
+   * @param {PriceFormatOptions} overrides `LocaleProvider.priceFormatOptions` options overrides
+   * @returns {string} formatted value
+   */
+  function priceFormat(value: number, overrides: PriceFormatOptions): string;
+  function priceFormat(value: number, overrides?: PriceFormatOptions): string {
+    return overrides
+      ? getPriceFormatter([overrides.locale, opt.locale, ...localeCodes], { ...opt, ...overrides }).format(value)
+      : memoizedFormatter.format(value);
+  }
 
   return priceFormat;
 }

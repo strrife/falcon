@@ -1,33 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { themed, Text, ThemedComponents } from '@deity/falcon-ui';
-import { Locale } from './LocaleContext';
+import { themed, Text } from '@deity/falcon-ui';
+import { Locale, PriceFormatOptions } from './LocaleContext';
 
 export type PriceProps = {
   value: number;
-  currency?: string;
-  locale?: string;
+  /** passing formatting options may not use memoized formatter, so the performance penalty could be paid */
+  formatOptions?: PriceFormatOptions;
 };
-
-const PriceInnerDom: React.SFC<PriceProps> = ({ value, currency, locale, children, ...rest }) => (
+const PriceInnerDom: React.SFC<PriceProps> = ({ value, formatOptions, children, ...rest }) => (
   <Locale>
     {({ priceFormat }) => (
       <Text m="lg" {...rest}>
-        {priceFormat(value, { currency, locale })}
+        {priceFormat(value, formatOptions)}
       </Text>
     )}
   </Locale>
 );
 PriceInnerDom.propTypes = {
-  value: PropTypes.number.isRequired,
-  currency: PropTypes.string,
-  locale: PropTypes.string
+  value: PropTypes.number.isRequired
 };
 
 export const Price = themed({
   tag: PriceInnerDom,
   defaultProps: {
-    ellipsis: false
+    ellipsis: false,
+    formatOptions: undefined
   },
   defaultTheme: {
     price: {
