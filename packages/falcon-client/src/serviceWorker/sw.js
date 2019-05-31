@@ -12,9 +12,6 @@ workbox.precaching.suppressWarnings();
 const ENTRIES = [];
 workbox.precaching.precacheAndRoute(ENTRIES, {});
 
-workbox.routing.registerRoute(
-  ({ event }) => event.request.mode === 'navigate',
-  ({ url }) => fetch(url.href).catch(() => caches.match('/app-shell'))
-);
+workbox.routing.registerRoute(({ event }) => event.request.mode === 'navigate', () => caches.match('/app-shell'));
 
 workbox.routing.registerRoute('/', workbox.strategies.networkFirst(), 'GET');
