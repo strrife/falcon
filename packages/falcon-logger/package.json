@@ -1,13 +1,15 @@
 {
   "name": "@deity/falcon-logger",
   "license": "OSL-3.0",
-  "main": "src/index.js",
   "version": "0.1.2",
   "homepage": "https://falcon.deity.io/docs/miscellaneous/falcon-logger",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-logger",
   "publishConfig": {
     "access": "public"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "source": "src/index.ts",
   "scripts": {
     "prepare": "npm run clean && npm run build",
     "clean": "falcon-scripts clean",
