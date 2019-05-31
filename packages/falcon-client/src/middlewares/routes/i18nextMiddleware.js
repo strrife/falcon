@@ -22,7 +22,7 @@ const GET_LOCALES = gql`
 /**
  * i18next instance server side factory
  * @param {Options} options options
- * @returns {Promise<import("./index").KoaMiddleware>} Koa middleware
+ * @returns {Promise<import('koa').Middleware>} Koa middleware
  */
 export default async options => {
   const i18next = await i18nFactory({ ...options });

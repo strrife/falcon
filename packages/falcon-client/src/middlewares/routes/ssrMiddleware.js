@@ -10,7 +10,7 @@ import HtmlHead from '../../components/HtmlHead';
  * Server Side Rendering middleware.
  * @param {Object} params params
  * @param {{App: React.Component}} params.App React Component to render
- * @returns {function(ctx: object, next: function): Promise<void>} Koa middleware
+ * @returns {import('koa').Middleware} Koa middleware
  */
 export default ({ App }) => async (ctx, next) => {
   const { client, i18next, chunkExtractor, serverTiming } = ctx.state;
