@@ -39,7 +39,7 @@ const randomColors: Chalk[] = [
   ctx.yellow,
   ctx.magenta,
   ctx.hex('00FF00'),
-  ctx.hex('8A2BE2'),
+  ctx.hex('9932CC'),
   ctx.hex('A52A2A'),
   ctx.hex('1E90FF'),
   ctx.hex('ADFF2F'),
