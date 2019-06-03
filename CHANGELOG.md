@@ -4,6 +4,17 @@
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
 
+## Falcon vNext
+
+### Falcon Logger vNext
+
+- changed Logger provider to [Pino](http://getpino.io/) ([#471](https://github.com/deity-io/falcon/pull/471))
+- added `setApp`, `getModule` and `traceTime` API methods ([#471](https://github.com/deity-io/falcon/pull/471))
+
+### Falcon Logger Pretty v0.0.1
+
+- initial release ([#471](https://github.com/deity-io/falcon/pull/471))
+
 ## Falcon v1.1 (2019-05-29)
 
 ### Falcon Client v0.4.2 (2019-05-29)

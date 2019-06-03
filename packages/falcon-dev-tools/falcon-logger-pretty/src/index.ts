@@ -84,7 +84,7 @@ export default (options: object) => {
     const prettifiedMessage = prettifyMessage({ log, messageKey, colorizer });
     const prettifiedMetadata = prettifyMetadata({ log });
     const prettifiedTime = prettifyTime({ log, translateFormat: opts.translateTime, timestampKey });
-    const prettifiedModule = prettifyModule({ log });
+    const prettifiedModule = prettifyModule({ log, colorizer });
 
     let line: string = '';
     if (opts.levelFirst && prettifiedLevel) {
