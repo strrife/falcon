@@ -25,4 +25,4 @@ export const LEVEL_NAMES: { [key: string]: number } = {
   trace: 10
 };
 
-export const LOGGER_KEYS: string[] = ['pid', 'hostname', 'name', 'level', 'time', 'timestamp', 'module', 'v'];
+export const LOGGER_KEYS: string[] = ['pid', 'hostname', 'name', 'level', 'time', 'timestamp', 'module', 'app', 'v'];

@@ -35,8 +35,11 @@ class FalconServer {
     if (config.logLevel) {
       Logger.setLogLevel(config.logLevel);
     }
+    if (config.appName) {
+      Logger.setApp(config.appName);
+    }
 
-    this.logger = Logger.getModule(this.constructor.name);
+    this.logger = Logger;
     this.eventEmitter = new EventEmitter2({
       maxListeners,
       wildcard: true,

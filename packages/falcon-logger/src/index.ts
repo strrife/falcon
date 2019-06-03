@@ -1,7 +1,9 @@
 import pino, { Logger as PinoLogger, Level } from 'pino';
+import { chindingsSym } from 'pino/lib/symbols';
 
 export type Logger = {
   setLogLevel: (level: Level) => void;
+  setApp: (name: string) => void;
   getModule: (moduleName: string) => Logger;
   traceTime: (label: string, fn: () => Promise<any>) => Promise<any>;
 } & PinoLogger;
@@ -13,8 +15,16 @@ const logger: Logger = pino() as Logger;
  * @param {Level} level Required log level
  * @returns {void}
  */
-logger.setLogLevel = (level: Level): void => {
+logger.setLogLevel = level => {
   logger.level = level;
+};
+
+/**
+ * @param {string} name Application name
+ * @returns {void}
+ */
+logger.setApp = name => {
+  logger[chindingsSym] += `,"app":"${name}"`;
 };
 
 /**
@@ -31,7 +41,7 @@ logger.getModule = (moduleName: string): Logger => logger.child({ module: module
  */
 logger.traceTime = async function(label, fn) {
   // using `function()` statement to preserve the context in case of "getModule" call
-  if (this.level !== 'trace') {
+  if (!this.isLevelEnabled('trace')) {
     return fn();
   }
 
