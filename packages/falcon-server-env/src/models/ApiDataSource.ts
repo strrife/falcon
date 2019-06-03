@@ -75,7 +75,7 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
     this.config = params.config || {};
     this.apiContainer = params.apiContainer;
     this.eventEmitter = params.eventEmitter;
-    this.logger = Logger.getModule(this.name);
+    this.logger = Logger.getModule(`${this.name}-api`);
 
     const { host, fetchUrlPriority, perPage } = this.config;
     if (host) {

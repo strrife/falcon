@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo, GraphQLSchema, GraphQLObjectType } from 'graphql';
 import { makeExecutableSchema } from 'graphql-tools';
 import { EventEmitter2 } from 'eventemitter2';
-import Logger from '@deity/falcon-logger';
+import Logger, { Logger as LoggerType } from '@deity/falcon-logger';
 import { ApiDataSource } from './ApiDataSource';
 import {
   ApiUrlPriority,
@@ -49,6 +49,8 @@ export abstract class Extension {
 
   protected eventEmitter: EventEmitter2;
 
+  protected logger: LoggerType;
+
   /**
    * @param {ExtensionConstructorParams} params Constructor params
    */
@@ -58,6 +60,7 @@ export abstract class Extension {
     this.config = config as ExtensionConfig;
     this.extensionContainer = extensionContainer;
     this.eventEmitter = eventEmitter;
+    this.logger = Logger.getModule(`${this.name}-ext`);
   }
 
   /**
@@ -67,7 +70,7 @@ export abstract class Extension {
    */
   async getGraphQLConfig(typeDefs: string | Array<string> = ''): Promise<GraphQLConfig> {
     if (!typeDefs) {
-      Logger.warn(`${this.name}: typeDefs is empty! Make sure you call "super.getGraphQLConfig(typeDefs)" properly`);
+      this.logger.warn(`typeDefs is empty! Make sure you call "super.getGraphQLConfig(typeDefs)" properly`);
     }
     const rootTypes: RootFieldTypes = this.getRootTypeFields(typeDefs);
     const resolvers: GraphQLResolverMap = {};
@@ -75,10 +78,8 @@ export abstract class Extension {
     Object.keys(rootTypes).forEach((typeName: string) => {
       resolvers[typeName] = {};
       rootTypes[typeName].forEach((fieldName: string) => {
-        Logger.debug(
-          `${this.name}: binding "${typeName}.${fieldName} => ${
-            this.config.api
-          }.${fieldName}(obj, args, context, info)" resolver`
+        this.logger.debug(
+          `Binding "${typeName}.${fieldName} => ${this.config.api}.${fieldName}(obj, args, context, info)" resolver`
         );
         resolvers[typeName][fieldName] = async (
           obj: any,

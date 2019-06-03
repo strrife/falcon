@@ -26,6 +26,7 @@ module.exports = class BaseContainer {
    */
   constructor(eventEmitter) {
     this.eventEmitter = eventEmitter;
+    this.logger = Logger.getModule(this.constructor.name);
   }
 
   /**
@@ -35,18 +36,16 @@ module.exports = class BaseContainer {
    * @returns {any} Imported module
    */
   importModule(pathOrPackage) {
-    const prefix = this.constructor.name;
-
     const requiredPackage = tryRequire(pathOrPackage);
     if (requiredPackage.exists) {
       const { module, error } = requiredPackage;
       if (error) {
-        Logger.error(`${prefix}: "${pathOrPackage}" cannot be loaded. - ${error.message}\n${error.stack} `);
+        this.logger.error(`"${pathOrPackage}" cannot be loaded. - ${error.message}\n${error.stack} `);
 
         return undefined;
       }
 
-      Logger.debug(`${prefix}: "${pathOrPackage}" loaded as a package`);
+      this.logger.debug(`"${pathOrPackage}" loaded as a package`);
 
       return module;
     }
@@ -56,18 +55,18 @@ module.exports = class BaseContainer {
     if (requiredModule.exists) {
       const { module, error } = requiredModule;
       if (error) {
-        Logger.error(`${prefix}: "${pathOrPackage}" cannot be loaded. - ${error.message}\n${error.stack}`);
+        this.logger.error(`"${pathOrPackage}" cannot be loaded. - ${error.message}\n${error.stack}`);
 
         return undefined;
       }
 
-      Logger.debug(`${prefix}: "${pathOrPackage}" loaded from '${modulePath}'`);
+      this.logger.debug(`"${pathOrPackage}" loaded from '${modulePath}'`);
 
       return module;
     }
 
-    Logger.error(
-      `${prefix}: Cannot find package '${pathOrPackage}' or module '${modulePath}'. Please check your config ("package" key)`
+    this.logger.error(
+      `Cannot find package '${pathOrPackage}' or module '${modulePath}'. Please check your config ("package" key)`
     );
 
     return undefined;

@@ -2,7 +2,6 @@ const { ApiDataSource, BearerAuth } = require('@deity/falcon-server-env');
 const util = require('util');
 const _ = require('lodash');
 const addSeconds = require('date-fns/add_seconds');
-const Logger = require('@deity/falcon-logger');
 const { FalconError, AuthenticationError, codes } = require('@deity/falcon-errors');
 const { AuthScope, IntegrationAuthType, setAuthScope, OAuth1Auth } = require('./authorization');
 
@@ -510,7 +509,7 @@ class Magento2ApiBase extends ApiDataSource {
    * @returns {{ value: string, options: { ttl: number } }} Result
    */
   async fetchAdminToken({ username, password }) {
-    Logger.info(`${this.name}: Retrieving admin token.`);
+    this.logger.info(`Retrieving admin token.`);
 
     const dataNow = Date.now();
     const token = await this.post('/integration/admin/token', { username, password });
@@ -524,7 +523,7 @@ class Magento2ApiBase extends ApiDataSource {
       throw noTokenError;
     }
 
-    Logger.info(`${this.name}: Admin token found.`);
+    this.logger.info(`Admin token found.`);
 
     // FIXME: bellow code does not make sense anymore !!!
     // according to https://github.com/deity-io/falcon-magento2-development/issues/32
@@ -532,7 +531,7 @@ class Magento2ApiBase extends ApiDataSource {
     // we need to do it right after fetching `storeConfig`. Be aware that adminToken is required to fetch storeConfig :)
     const validTime = 1;
     const ttl = (validTime * 60 - 5) * 60;
-    Logger.debug(`${this.name}: Admin token valid for ${validTime} hours, till ${addSeconds(dataNow, ttl)}`);
+    this.logger.debug(`Admin token valid for ${validTime} hours, till ${addSeconds(dataNow, ttl)}`);
 
     return {
       value: token,
@@ -627,7 +626,7 @@ class Magento2ApiBase extends ApiDataSource {
     }
 
     // Fixing invalid storeCode
-    Logger.debug(`${this.name}: ${storeCode ? 'is invalid' : 'store code is missing'}, removing cart data`);
+    this.logger.debug(`${storeCode ? 'is invalid' : 'store code is missing'}, removing cart data`);
     delete this.session.storeCode;
     delete this.session.cart;
     await this.setShopStore({}, { storeCode: this.storeCode });

@@ -1,5 +1,4 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop, no-underscore-dangle */
-const Logger = require('@deity/falcon-logger');
 const BaseContainer = require('./BaseContainer');
 
 module.exports = class EndpointContainer extends BaseContainer {
@@ -24,7 +23,7 @@ module.exports = class EndpointContainer extends BaseContainer {
 
         const EndpointManagerClass = this.importModule(endpointManagerConfig.package);
         if (!EndpointManagerClass) {
-          Logger.warn(`${this.constructor.name}: Could not load ${endpointManagerConfig.package}`);
+          this.logger.warn(`Could not load ${endpointManagerConfig.package}`);
           return;
         }
         const endpointManager = new EndpointManagerClass({
@@ -33,7 +32,7 @@ module.exports = class EndpointContainer extends BaseContainer {
           eventEmitter: this.eventEmitter
         });
 
-        Logger.debug(`${this.constructor.name}: "${endpointManager.name}" Endpoint Manager has been instantiated`);
+        this.logger.debug(`"${endpointManager.name}" Endpoint Manager has been instantiated`);
         this.entries.push(...endpointManager.getEntries());
       }
     }

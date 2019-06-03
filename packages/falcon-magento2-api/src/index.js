@@ -9,7 +9,6 @@ const isPlainObject = require('lodash/isPlainObject');
 const addMinutes = require('date-fns/add_minutes');
 const { addResolveFunctionsToSchema } = require('graphql-tools');
 const { ApiUrlPriority, htmlHelpers } = require('@deity/falcon-server-env');
-const Logger = require('@deity/falcon-logger');
 const { Magento2ApiBase } = require('./Magento2ApiBase');
 const { tryParseNumber } = require('./utils/number');
 const { typeResolverPathToString } = require('./utils/apollo');
@@ -61,7 +60,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         config: (...args) => this.getPaymentMethodConfig(...args)
       }
     };
-    Logger.debug(`${this.name}: Adding additional resolve functions`);
+    this.logger.debug(`Adding additional resolve functions`);
     addResolveFunctionsToSchema({ schema: this.gqlServerConfig.schema, resolvers });
   }
 
@@ -1006,7 +1005,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       // calculate token expiration date and subtract 1 minute for margin
       const tokenValidationTimeInMinutes = validTime * 60 - 1;
       const tokenExpirationTime = addMinutes(dateNow, tokenValidationTimeInMinutes);
-      Logger.debug(`${this.name}: Customer token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
+      this.logger.debug(`Customer token valid for ${validTime} hours, till ${tokenExpirationTime.toString()}`);
 
       this.session.customerToken = {
         token,
@@ -1171,7 +1170,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { id } = params;
 
     if (!id) {
-      Logger.error(`${this.name}: Trying to fetch customer order info without order id`);
+      this.logger.error(`Trying to fetch customer order info without order id`);
       throw new Error('Failed to load an order.');
     }
 
@@ -1313,7 +1312,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         };
       }
     } else {
-      Logger.warn(`${this.name}: Trying to remove cart item without quoteId`);
+      this.logger.warn(`Trying to remove cart item without quoteId`);
     }
 
     return {};
@@ -1556,7 +1555,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     if (!cart.quoteId) {
       const errorMessage = `Quote id is empty, cannot perform api call for ${path}`;
 
-      Logger.warn(`${this.name} ${errorMessage}`);
+      this.logger.warn(errorMessage);
       throw new Error(errorMessage);
     }
 
@@ -1743,7 +1742,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { orderId } = this.session;
 
     if (!orderId) {
-      Logger.warn(`${this.name} Trying to fetch order info without order id`);
+      this.logger.warn(`Trying to fetch order info without order id`);
       return {};
     }
 
