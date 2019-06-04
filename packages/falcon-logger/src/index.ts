@@ -8,6 +8,7 @@ export type Logger = {
   traceTime: (label: string, fn: () => Promise<any>) => Promise<any>;
 } & PinoLogger;
 
+let isAppSet: boolean = false;
 const logger: Logger = pino() as Logger;
 
 /**
@@ -24,7 +25,11 @@ logger.setLogLevel = level => {
  * @returns {void}
  */
 logger.setApp = name => {
+  if (isAppSet) {
+    return;
+  }
   logger[chindingsSym] += `,"app":"${name}"`;
+  isAppSet = true;
 };
 
 /**

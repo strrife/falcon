@@ -5,9 +5,9 @@
   "version": "0.6.0",
   "repository": "https://github.com/deity-io/falcon/tree/master/examples/shop-with-blog/client",
   "scripts": {
-    "start": "falcon-client start",
-    "start:dbg": "falcon-client start -- --inspect",
-    "start:dbg-brk": "falcon-client start -- --inspect-brk",
+    "start": "falcon-client start | falcon-logger-pretty",
+    "start:dbg": "falcon-client start -- --inspect | falcon-logger-pretty",
+    "start:dbg-brk": "falcon-client start -- --inspect-brk | falcon-logger-pretty",
     "start:prod": "cross-env NODE_ENV=production node build/server.js",
     "build": "falcon-client build",
     "size": "falcon-client size",
@@ -27,6 +27,7 @@
     "@deity/falcon-payment-plugin": "^0.0.2",
     "@deity/falcon-paypal-plugin": "^0.0.2",
     "@deity/falcon-theme-editor": "^0.1.5",
+    "@deity/falcon-logger": "^0.1.2",
     "@deity/falcon-ui": "^0.2.2",
     "@loadable/component": "5.7.0",
     "apollo-client": "2.5.1",
@@ -50,6 +51,7 @@
   "devDependencies": {
     "@deity/eslint-config-falcon": "^0.1.2",
     "@deity/falcon-ecommerce-uikit": "^0.5.0",
+    "@deity/falcon-logger-pretty": "^0.0.1",
     "eject-ts": "^0.1.2",
     "eslint": "5.16.0",
     "full-icu": "^1.2.1",
