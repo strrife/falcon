@@ -7,11 +7,11 @@ async function getManifestEntries() {
       maximumFileSizeToCacheInBytes: 8 * 1024 * 1024, // 8MB
       globDirectory: '.',
       globPatterns: ['build/public/**/*.{js,json,html,css,ico,png,jpg,gif,svg,eot,ttf,woff,woff2}'],
-      modifyUrlPrefix: { 'build/public': '' },
-      templatedUrls: {
+      modifyURLPrefix: { 'build/public': '' },
+      templatedURLs: {
         '/app-shell': ['build/public/static/@(js|css)/@(client|vendor|bundle)*.@(js|css)', 'build/server.js']
       },
-      dontCacheBustUrlsMatching: /\/static\/.*/
+      dontCacheBustURLsMatching: /\/static\/.*/
     };
 
     const { manifestEntries, size, warnings } = await workbox.getManifest(configuration);
