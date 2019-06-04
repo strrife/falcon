@@ -1428,7 +1428,7 @@
   resolved "https://registry.npmjs.org/@emotion/weak-memoize/-/weak-memoize-0.2.2.tgz#63985d3d8b02530e0869962f4da09142ee8e200e"
   integrity sha512-n/VQ4mbfr81aqkx/XmVicOLjviMuy02eenSdJY33SVA7S2J42EU0P1H0mOogfYedb3wXA0d/LVtBrgTSm04WEA==
 
-"@hapi/bourne@1.3.2":
+"@hapi/bourne@1.3.2", "@hapi/bourne@^1.3.2":
   version "1.3.2"
   resolved "https://registry.npmjs.org/@hapi/bourne/-/bourne-1.3.2.tgz#0a7095adea067243ce3283e1b56b8a8f453b242a"
   integrity sha512-1dVNHT76Uu5N3eJNTYcvxee+jzX4Z9lfciqRRHCU27ihbUcYi+iSc2iml5Ke1LXe1SyJCLA0+14Jh4tXJgOppA==
@@ -13196,6 +13196,21 @@ pinkie@^2.0.0:
   resolved "https://registry.npmjs.org/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
   integrity sha1-clVrgM+g1IqXToDnckjoDtT3+HA=
 
+pino-pretty@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/pino-pretty/-/pino-pretty-3.1.0.tgz#8309ea065f40dab8df0c2638b4fbbafd8148d1e7"
+  integrity sha512-/cquelJ9tul0PWDnZMi0PDEmoy9DVjWFdg7euCV6fAFQ5pWBIAayxKSfWimeAArPjXSdLiPKojH5eie3Ch4pbw==
+  dependencies:
+    "@hapi/bourne" "^1.3.2"
+    args "^5.0.1"
+    chalk "^2.4.2"
+    dateformat "^3.0.3"
+    fast-safe-stringify "^2.0.6"
+    jmespath "^0.15.0"
+    pump "^3.0.0"
+    readable-stream "^3.3.0"
+    split2 "^3.1.1"
+
 pino-std-serializers@^2.3.0:
   version "2.4.2"
   resolved "https://registry.npmjs.org/pino-std-serializers/-/pino-std-serializers-2.4.2.tgz#cb5e3e58c358b26f88969d7e619ae54bdfcc1ae1"
@@ -14637,7 +14652,7 @@ read@1, read@~1.0.1:
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
-readable-stream@^3.0.0, readable-stream@^3.4.0:
+readable-stream@^3.0.0, readable-stream@^3.3.0, readable-stream@^3.4.0:
   version "3.4.0"
   resolved "https://registry.npmjs.org/readable-stream/-/readable-stream-3.4.0.tgz#a51c26754658e0a3c21dbf59163bd45ba6f447fc"
   integrity sha512-jItXPLmrSR8jmTRmRWJXCnGJsfy85mB3Wd/uINMXA65yrnFo0cPClFIUWzo2najVNSl+mx7/4W8ttlLWJe99pQ==

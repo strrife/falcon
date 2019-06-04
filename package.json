@@ -60,6 +60,7 @@
     "packages/falcon-dev-tools/falcon-scripts",
     "packages/falcon-dev-tools/normal-module-override-webpack-plugin",
     "packages/falcon-dev-tools/falcon-logger-pretty",
+    "packages/falcon-dev-tools/falcon-logger-minimal",
     "packages/eject-ts",
     "examples/shop-with-blog/client",
     "examples/shop-with-blog/server"
