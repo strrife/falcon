@@ -1,19 +1,18 @@
-/* global workbox, importScripts */
+import { setCacheNameDetails, skipWaiting, clientsClaim } from 'workbox-core';
+import { registerNavigationRoute } from 'workbox-routing';
+import { precacheAndRoute, getCacheKeyForURL } from 'workbox-precaching';
 
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js');
-
-workbox.core.setCacheNameDetails({ prefix: '@deity' });
-
-workbox.core.skipWaiting();
-workbox.core.clientsClaim();
+setCacheNameDetails({ prefix: '@deity' });
+skipWaiting();
+clientsClaim();
 
 const ENTRIES = [];
-workbox.precaching.precacheAndRoute(ENTRIES, {});
+precacheAndRoute(ENTRIES, {});
 
-// workbox.routing.registerRoute(({ event }) => event.request.mode === 'navigate', () => caches.match('/app-shell'));
+// registerRoute(({ event }) => event.request.mode === 'navigate', () => caches.match('/app-shell'));
 // workbox.routing.registerRoute('/', workbox.strategies.networkFirst(), 'GET');
 
-workbox.routing.registerNavigationRoute(workbox.precaching.getCacheKeyForURL('app-shell'));
+registerNavigationRoute(getCacheKeyForURL('app-shell'));
 
 // workbox.routing.setCatchHandler(({ url, event, params }) => {
 //   // In the case of any of routes throwing an error, capture and degrade gracefully

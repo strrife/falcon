@@ -27,6 +27,10 @@ module.exports.build = async () => {
         re({
           patterns: [
             {
+              test: 'process.env.NODE_ENV',
+              replace: JSON.stringify('development' || process.env.NODE_ENV)
+            },
+            {
               test: 'const ENTRIES = [];',
               replace: `const ENTRIES = ${JSON.stringify(manifestEntries, null, 2)};`
             }
