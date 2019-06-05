@@ -3,8 +3,8 @@ function showRefreshUI(registration) {
   // This demo creates and injects a button.
   const button = document.createElement('button');
   button.style.position = 'absolute';
-  button.style.bottom = '24px';
-  button.style.left = '24px';
+  button.style.top = '80px';
+  button.style.left = '20px';
   button.textContent = 'This site has updated. Please click here to see changes.';
   button.addEventListener('click', () => {
     if (!registration.waiting) {
@@ -30,9 +30,9 @@ export function register(swPath = '/sw.js') {
   if (!isHttps && !isLocalHost) {
     return;
   }
+  const scope = '/';
 
   const registerSw = () => {
-    const scope = '/';
     let newSW;
 
     navigator.serviceWorker
@@ -44,7 +44,7 @@ export function register(swPath = '/sw.js') {
 
         // Track updates to the Service Worker.
         if (!navigator.serviceWorker.controller) {
-          console.log(`The window client is not currently controlled 
+          console.log(`The window client is not currently controlled
             so it is a new service worker that will activate immediately`);
 
           // return;
@@ -105,27 +105,30 @@ export function register(swPath = '/sw.js') {
       });
 
     // let refreshing = false;
-    navigator.serviceWorker.addEventListener(
-      'controllerchange',
-      () => {
-        if (newSW === navigator.serviceWorker.controller) {
-          console.log('Controller loaded');
-          return window.location.reload();
-        }
+    navigator.serviceWorker.addEventListener('controllerchange', e => {
+      console.log(e);
+      console.log(`1 Controller loaded ${newSW === navigator.serviceWorker.controller}`);
+      console.log(`e.currentTarget === newSW ${e.currentTarget === newSW}`);
+      console.log(
+        `e.currentTarget === navigator.serviceWorker.controller ${e.currentTarget ===
+          navigator.serviceWorker.controller}`
+      );
 
-        // if (refreshing) {
-        //   return;
-        // }
-        // refreshing = true;
-        // return window.location.reload();
-
-        // This fires when the service worker controlling this page
-        // changes, eg a new worker has skipped waiting and become
-        // the new active worker.
+      if (e.currentTarget !== navigator.serviceWorker.controller) {
+        console.log('return window.location.reload();');
+        return window.location.reload();
       }
-      // ,
-      // { once: true }
-    );
+
+      // if (refreshing) {
+      //   return;
+      // }
+      // refreshing = true;
+      // return window.location.reload();
+
+      // This fires when the service worker controlling this page
+      // changes, eg a new worker has skipped waiting and become
+      // the new active worker.
+    });
   };
 
   // if 'load' event has already been called then document.readyState is set to 'complete'
