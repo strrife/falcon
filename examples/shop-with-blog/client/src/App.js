@@ -1,8 +1,9 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
-import { ThemeProvider } from '@deity/falcon-ui';
+import { ThemeProvider, Button } from '@deity/falcon-ui';
 import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
+import { ServiceWorker } from '@deity/falcon-client/src/serviceWorker/index';
 import {
   AppLayout,
   Header,
@@ -73,6 +74,15 @@ const App = () => (
             <HeadMetaTags />
             <AppLayout>
               <Header />
+              <ServiceWorker>
+                {({ isWaiting, skipWaiting }) =>
+                  isWaiting ? (
+                    <Button onClick={() => skipWaiting()}>
+                      This site has updated. Please click here to see changes.
+                    </Button>
+                  ) : null
+                }
+              </ServiceWorker>
               <OnlineStatus>{({ isOnline }) => !isOnline && <p>you are offline.</p>}</OnlineStatus>
               <ErrorBoundary>
                 <Switch>

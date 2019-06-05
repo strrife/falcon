@@ -11,7 +11,8 @@ import { apolloClientWeb, apolloStateToObject } from './service';
 import HtmlHead from './components/HtmlHead';
 import App, { clientApolloSchema } from './clientApp';
 import i18nFactory from './i18n/i18nClientFactory';
-import { configureServiceWorker } from './serviceWorker/registration';
+// import { configureServiceWorker } from './serviceWorker/registration';
+import { ServiceWorkerRegistrar } from './serviceWorker/index';
 
 // eslint-disable-next-line no-underscore-dangle
 const initialState = window.__APOLLO_STATE__ || {};
@@ -28,19 +29,21 @@ loadableReady()
     const markup = (
       <ApolloProvider client={apolloClient}>
         <I18nProvider i18n={i18next}>
-          <BrowserRouter>
-            <React.Fragment>
-              <HtmlHead htmlLang={i18nConfig.lng} />
-              <App />
-            </React.Fragment>
-          </BrowserRouter>
+          <ServiceWorkerRegistrar scriptUrl="/sw.js">
+            <BrowserRouter>
+              <React.Fragment>
+                <HtmlHead htmlLang={i18nConfig.lng} />
+                <App />
+              </React.Fragment>
+            </BrowserRouter>
+          </ServiceWorkerRegistrar>
         </I18nProvider>
       </ApolloProvider>
     );
 
     renderApp(markup, document.getElementById('root'));
-  })
-  .then(() => configureServiceWorker());
+  });
+// .then(() => configureServiceWorker());
 
 if (module.hot) {
   module.hot.accept();
