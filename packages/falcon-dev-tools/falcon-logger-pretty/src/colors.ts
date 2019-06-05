@@ -12,6 +12,7 @@ export type ColorizerMap = {
   10: Colorizer;
   message: Colorizer;
   random: Colorizer;
+  error: Colorizer;
 };
 
 declare type RandomColorDictionary = {
@@ -28,7 +29,8 @@ const plain: ColorizerMap = {
   20: nocolor,
   10: nocolor,
   message: nocolor,
-  random: nocolor
+  random: nocolor,
+  error: nocolor
 };
 
 const ctx: Chalk = new chalk.constructor({ enabled: true, level: 3 });
@@ -64,7 +66,8 @@ const colored: ColorizerMap = {
   20: ctx.blue,
   10: ctx.grey,
   message: ctx.cyan,
-  random: randomColor
+  random: randomColor,
+  error: ctx.red
 };
 
 const colorizeLevel = (level: string, colorizer: ColorizerMap): string => {
@@ -81,6 +84,7 @@ const plainColorizer = (level: string): string => {
 plainColorizer.message = plain.message;
 plainColorizer.default = plain.default;
 plainColorizer.random = plain.random;
+plainColorizer.error = plain.error;
 
 const coloredColorizer = (level: string): string => {
   return colorizeLevel(level, colored);
@@ -88,6 +92,7 @@ const coloredColorizer = (level: string): string => {
 coloredColorizer.message = colored.message;
 coloredColorizer.default = colored.default;
 coloredColorizer.random = colored.random;
+coloredColorizer.error = colored.error;
 
 /**
  * Factory function get a function to colorized levels. The returned function

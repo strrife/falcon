@@ -2810,6 +2810,11 @@
   resolved "https://registry.npmjs.org/@types/node/-/node-10.12.30.tgz#4c2b4f0015f214f8158a347350481322b3b29b2f"
   integrity sha512-nsqTN6zUcm9xtdJiM9OvOJ5EF0kOI8f1Zuug27O/rgtxCRJHGqncSWfCMZUP852dCKPsDsYXGvBhxfRjDBkF5Q==
 
+"@types/node@^8.0.7":
+  version "8.10.49"
+  resolved "https://registry.npmjs.org/@types/node/-/node-8.10.49.tgz#f331afc5efed0796798e5591d6e0ece636969b7b"
+  integrity sha512-YX30JVx0PvSmJ3Eqr74fYLGeBxD+C7vIL20ek+GGGLJeUbVYRUW3EzyAXpIRA0K8c8o0UWqR/GwEFYiFoz1T8w==
+
 "@types/pino@5.8.7":
   version "5.8.7"
   resolved "https://registry.npmjs.org/@types/pino/-/pino-5.8.7.tgz#92064264a181a7fe1aa5b8d880d2f9195751ee29"
@@ -6205,6 +6210,13 @@ dasherize@2.0.0:
   resolved "https://registry.npmjs.org/dasherize/-/dasherize-2.0.0.tgz#6d809c9cd0cf7bb8952d80fc84fa13d47ddb1308"
   integrity sha1-bYCcnNDPe7iVLYD8hPoT1H3bEwg=
 
+data-uri-to-buffer@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.npmjs.org/data-uri-to-buffer/-/data-uri-to-buffer-2.0.1.tgz#ca8f56fe38b1fd329473e9d1b4a9afcd8ce1c045"
+  integrity sha512-OkVVLrerfAKZlW2ZZ3Ve2y65jgiWqBKsTfUIAFbn8nVbPcCZg6l6gikKlEYv0kXcmzqGm6mFq/Jf2vriuEkv8A==
+  dependencies:
+    "@types/node" "^8.0.7"
+
 data-urls@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/data-urls/-/data-urls-1.1.0.tgz#15ee0582baa5e22bb59c77140da8f9c76963bbfe"
@@ -8280,6 +8292,14 @@ get-port@^3.2.0:
   version "3.2.0"
   resolved "https://registry.npmjs.org/get-port/-/get-port-3.2.0.tgz#dd7ce7de187c06c8bf353796ac71e099f0980ebc"
   integrity sha1-3Xzn3hh8Bsi/NTeWrHHgmfCYDrw=
+
+get-source@1.0.37:
+  version "1.0.37"
+  resolved "https://registry.npmjs.org/get-source/-/get-source-1.0.37.tgz#f1f3f799abd2a196de73ba8b853c38cd76c04583"
+  integrity sha512-Q0YbhnCgvqFe3OTuxkNvWCM+22O4hkx7D0g8em7iFW4vmw/TiX8dhsFIaP6yRkyN9ETHgzU190L3keCg2MADtg==
+  dependencies:
+    data-uri-to-buffer "^2.0.0"
+    source-map "^0.6.1"
 
 get-stdin@^4.0.1:
   version "4.0.1"

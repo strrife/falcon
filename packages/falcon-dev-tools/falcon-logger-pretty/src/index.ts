@@ -6,6 +6,7 @@ import colors from './colors';
 import {
   isObject,
   prettifyErrorLog,
+  prettifyGraphQLErrorLog,
   prettifyLevel,
   prettifyMessage,
   prettifyMetadata,
@@ -125,14 +126,25 @@ export default (options: object) => {
       line += EOL;
     }
 
-    if (log.type === 'Error' && log.stack) {
-      const prettifiedErrorLog = prettifyErrorLog({
-        log,
-        errorLikeKeys: errorLikeObjectKeys,
-        errorProperties: errorProps,
-        ident: IDENT,
-        eol: EOL
-      });
+    if (log.type === 'Error' && (log.stack || log.extensions)) {
+      let prettifiedErrorLog: string = '';
+      if (log.stack) {
+        prettifiedErrorLog = prettifyErrorLog({
+          log,
+          colorizer,
+          errorLikeKeys: errorLikeObjectKeys,
+          errorProperties: errorProps,
+          ident: IDENT,
+          eol: EOL
+        });
+      } else if (log.extensions) {
+        prettifiedErrorLog = prettifyGraphQLErrorLog({
+          log,
+          colorizer,
+          ident: IDENT,
+          eol: EOL
+        });
+      }
       line += prettifiedErrorLog;
     } else {
       const skipKeys = typeof log[messageKey] === 'string' ? [messageKey] : undefined;
