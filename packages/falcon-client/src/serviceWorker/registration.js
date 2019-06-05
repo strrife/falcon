@@ -130,16 +130,19 @@ export function register(swPath = '/sw.js') {
 
 /**
  * Unregister all registered service workers
+ * @param {string} scope scope
  * @returns {void}
  */
-export function unregisterAll() {
+export function unregisterAll(scope = '/') {
   navigator.serviceWorker.getRegistrations().then(swRegistrations => {
-    swRegistrations.forEach(registration =>
-      registration
-        .unregister()
-        .then(console.log(`SW unregistered for '${registration.scope}'.`))
-        .catch(x => console.warn(`SW unregistration for '${registration.scope}' failed.`, x))
-    );
+    swRegistrations
+      .filter(registration => registration.scope.match(`${window.location}${scope}`))
+      .forEach(registration =>
+        registration
+          .unregister()
+          .then(console.log(`SW unregistered for '${registration.scope}'.`))
+          .catch(x => console.warn(`SW unregistration for '${registration.scope}' failed.`, x))
+      );
   });
 }
 
