@@ -33,8 +33,6 @@ export function register(swPath = '/sw.js') {
   const scope = '/';
 
   const registerSw = () => {
-    let newSW;
-
     navigator.serviceWorker
       .register(swPath, { scope })
       .then(registration => {
@@ -53,7 +51,6 @@ export function register(swPath = '/sw.js') {
 
         if (registration.waiting && registration.active) {
           console.log('1 Please close all tabs to get updates. registration.waiting && registration.active');
-          newSW = registration.waiting;
           showRefreshUI(registration);
         } else {
           // updatefound is also fired for the very first install. ¯\_(ツ)_/¯
@@ -65,8 +62,7 @@ export function register(swPath = '/sw.js') {
                   // called in the SW, then the user needs to close all their
                   // tabs before they'll get updates.
                   console.log('2 Please close all tabs to get updates. statechange');
-                  // skipWaiting();
-                  newSW = registration.active;
+
                   showRefreshUI(registration);
                 } else {
                   // Otherwise, this newly installed SW will soon become the
@@ -106,14 +102,6 @@ export function register(swPath = '/sw.js') {
 
     // let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', e => {
-      console.log(e);
-      console.log(`1 Controller loaded ${newSW === navigator.serviceWorker.controller}`);
-      console.log(`e.currentTarget === newSW ${e.currentTarget === newSW}`);
-      console.log(
-        `e.currentTarget === navigator.serviceWorker.controller ${e.currentTarget ===
-          navigator.serviceWorker.controller}`
-      );
-
       if (e.currentTarget !== navigator.serviceWorker.controller) {
         console.log('return window.location.reload();');
         return window.location.reload();
