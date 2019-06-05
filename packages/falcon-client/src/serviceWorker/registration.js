@@ -1,3 +1,23 @@
+function showRefreshUI(registration) {
+  // TODO: Display a toast or refresh UI.
+  // This demo creates and injects a button.
+  const button = document.createElement('button');
+  button.style.position = 'absolute';
+  button.style.bottom = '24px';
+  button.style.left = '24px';
+  button.textContent = 'This site has updated. Please click here to see changes.';
+  button.addEventListener('click', () => {
+    if (!registration.waiting) {
+      // Just to ensure registration.waiting is available before
+      // calling postMessage()
+      return;
+    }
+    button.disabled = true;
+    registration.waiting.postMessage({ type: 'SKIP_WAITING', payload: undefined });
+  });
+  document.body.appendChild(button);
+}
+
 /**
  * Register Service Worker
  * @param {string} swPath public path to service worker
@@ -13,6 +33,7 @@ export function register(swPath = '/sw.js') {
 
   const registerSw = () => {
     const scope = '/';
+    let newSW;
 
     navigator.serviceWorker
       .register(swPath, { scope })
@@ -20,10 +41,91 @@ export function register(swPath = '/sw.js') {
         if (isLocalHost) {
           console.log(`SW registered for '${scope}'.`, registration);
         }
+
+        // Track updates to the Service Worker.
+        if (!navigator.serviceWorker.controller) {
+          console.log(`The window client is not currently controlled 
+            so it is a new service worker that will activate immediately`);
+
+          // return;
+        }
+        // registration.update();
+
+        if (registration.waiting && registration.active) {
+          console.log('1 Please close all tabs to get updates. registration.waiting && registration.active');
+          newSW = registration.waiting;
+          showRefreshUI(registration);
+        } else {
+          // updatefound is also fired for the very first install. ¯\_(ツ)_/¯
+          registration.addEventListener('updatefound', () => {
+            registration.installing.addEventListener('statechange', event => {
+              if (event.target.state === 'installed') {
+                if (registration.active) {
+                  // If there's already an active SW, and skipWaiting() is not
+                  // called in the SW, then the user needs to close all their
+                  // tabs before they'll get updates.
+                  console.log('2 Please close all tabs to get updates. statechange');
+                  // skipWaiting();
+                  newSW = registration.active;
+                  showRefreshUI(registration);
+                } else {
+                  // Otherwise, this newly installed SW will soon become the
+                  // active SW. Rather than explicitly wait for that to happen,
+                  // just show the initial "content is cached" message.
+                  console.log('Content is cached for the first time!');
+                }
+              }
+            });
+          });
+        }
+
+        // registration.installing.addEventListener(); // the installing worker, or undefined
+        // registration.waiting; // the waiting worker, or undefined
+        // registration.active; // the active worker, or undefined
+
+        // registration.addEventListener('updatefound', () => {
+        //   // A wild service worker has appeared in reg.installing!
+        //   const newWorker = registration.installing;
+
+        //   newWorker.state;
+        //   // "installing" - the install event has fired, but not yet complete
+        //   // "installed"  - install complete
+        //   // "activating" - the activate event has fired, but not yet complete
+        //   // "activated"  - fully active
+        //   // "redundant"  - discarded. Either failed install, or it's been
+        //   //                replaced by a newer version
+
+        //   newWorker.addEventListener('statechange', () => {
+        //     // newWorker.state has changed
+        //   });
+        // });
       })
       .catch(registrationError => {
         console.warn(`SW registration for '${scope}' failed.`, registrationError);
       });
+
+    // let refreshing = false;
+    navigator.serviceWorker.addEventListener(
+      'controllerchange',
+      () => {
+        if (newSW === navigator.serviceWorker.controller) {
+          console.log('Controller loaded');
+          return window.location.reload();
+        }
+
+        // if (refreshing) {
+        //   return;
+        // }
+        // refreshing = true;
+        // return window.location.reload();
+
+        // This fires when the service worker controlling this page
+        // changes, eg a new worker has skipped waiting and become
+        // the new active worker.
+      }
+      // ,
+      // { once: true }
+    );
   };
 
   // if 'load' event has already been called then document.readyState is set to 'complete'
