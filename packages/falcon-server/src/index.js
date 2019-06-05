@@ -11,7 +11,6 @@ const session = require('koa-session');
 const body = require('koa-body');
 const get = require('lodash/get');
 const capitalize = require('lodash/capitalize');
-const trim = require('lodash/trim');
 const { resolve: resolvePath } = require('path');
 const { readFileSync } = require('fs');
 const ApiContainer = require('./containers/ApiContainer');
@@ -47,15 +46,7 @@ class FalconServer {
     });
 
     this.eventEmitter.on(Events.ERROR, async error => {
-      const stacktrace = get(error, 'extensions.exception.stacktrace', []);
-      let { message } = error;
-      if (stacktrace.length > 0) {
-        message = stacktrace[0];
-        if (stacktrace[1]) {
-          message += ` ${trim(stacktrace[1])}`;
-        }
-      }
-      this.logger.error(`${message}`, error);
+      this.logger.error(error);
     });
 
     if (verboseEvents) {
@@ -218,6 +209,7 @@ class FalconServer {
       this.logger.error(
         `Cannot initialize cache backend using "${packageName}" package, GraphQL server will operate without cache`
       );
+      this.logger.error(ex);
     }
   }
 
@@ -290,7 +282,6 @@ class FalconServer {
     const handleStartupError = err => {
       this.eventEmitter.emitAsync(Events.ERROR, err).then(() => {
         this.logger.error('Initialization error - cannot start the server');
-        this.logger.error(err.stack);
         process.exit(2);
       });
     };

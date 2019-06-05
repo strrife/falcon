@@ -3,7 +3,6 @@ import serve from 'koa-static';
 import helmet from 'koa-helmet';
 import Router from 'koa-router';
 import compress from 'koa-compress';
-import Logger from '@deity/falcon-logger';
 import error500 from './middlewares/error500Middleware';
 import serverTiming from './middlewares/serverTimingMiddleware';
 import graphqlProxy from './middlewares/graphqlProxyMiddleware';
@@ -16,8 +15,6 @@ import { renderAppShell, renderApp } from './middlewares/routes';
  */
 export async function Server({ App, clientApolloSchema, bootstrap, webpackAssets }) {
   const { config } = bootstrap;
-  Logger.setLogLevel(config.logLevel);
-
   const instance = new Koa();
   if (bootstrap.onServerCreated) {
     await bootstrap.onServerCreated(instance);

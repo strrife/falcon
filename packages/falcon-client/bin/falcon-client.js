@@ -37,8 +37,8 @@ const { app, serviceWorker, test } = require('../build-utils');
       }
 
       default:
-        Logger.log(`Unknown script "${script}".`);
-        Logger.log('Perhaps you need to update @deity/falcon-client?');
+        Logger.warn(`Unknown script "${script}".`);
+        Logger.warn('Perhaps you need to update @deity/falcon-client?');
         process.exit();
 
         break;
