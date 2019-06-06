@@ -15,6 +15,12 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 - initial release ([#471](https://github.com/deity-io/falcon/pull/471))
 
+### Falcon Logger Minimal v0.0.1
+
+- initial release ([#471](https://github.com/deity-io/falcon/pull/471))
+
+---
+
 ## Falcon v1.1 (2019-05-29)
 
 ### Falcon Client v0.4.2 (2019-05-29)
