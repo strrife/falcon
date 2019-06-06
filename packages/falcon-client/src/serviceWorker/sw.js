@@ -41,15 +41,23 @@ self.addEventListener('fetch', event => {
   }
 });
 
+/**
+ * Check if Service Worker is waiting for activation, but there is only one client
+ * @returns {boolean} boolean
+ */
+async function isWaitingWithOneClient() {
+  const clients = await self.clients.matchAll();
+
+  return self.registration.waiting && clients.length <= 1;
+}
+
 router.registerRoute(
   new NavigationRoute(async () => {
-    // check if SW is waiting and try to activate it if only one client
-    const clients = await self.clients.matchAll();
-    if (self.registration.waiting && clients.length <= 1) {
+    if (await isWaitingWithOneClient()) {
       self.registration.waiting.postMessage({ type: 'SKIP_WAITING', payload: undefined });
+      const response = new Response('', { headers: { Refresh: '0' } }); // refresh the tab by returning a blank response
 
-      // refresh the tab by returning a blank response
-      return new Response('', { headers: { Refresh: '0' } });
+      return response;
     }
 
     const cachedAssetUrl = getCacheKeyForURL('app-shell');
