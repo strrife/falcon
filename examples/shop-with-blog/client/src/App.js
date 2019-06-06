@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { ThemeProvider, Button } from '@deity/falcon-ui';
 import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
-import { ServiceWorker } from '@deity/falcon-client/src/serviceWorker/index';
+import { ServiceWorkerRegistrar, ServiceWorker } from '@deity/falcon-client/src/serviceWorker/index';
 import {
   AppLayout,
   Header,
@@ -65,54 +65,56 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const App = () => (
-  <LocaleProvider>
-    <ScrollToTop />
-    <ThemeEditorState initial={deityGreenTheme}>
-      {props => (
-        <SearchProvider>
-          <ThemeProvider theme={props.theme} globalCss={globalCss}>
-            <HeadMetaTags />
-            <AppLayout>
-              <Header />
-              <ServiceWorker>
-                {({ isWaiting, skipWaiting }) =>
-                  isWaiting ? (
-                    <Button onClick={() => skipWaiting()}>
-                      This site has updated. Please click here to see changes.
-                    </Button>
-                  ) : null
-                }
-              </ServiceWorker>
-              <OnlineStatus>{({ isOnline }) => !isOnline && <p>you are offline.</p>}</OnlineStatus>
-              <ErrorBoundary>
-                <Switch>
-                  <Route exact path="/" component={Home} />
-                  <Route exact path="/blog/:page?" component={Blog} />
-                  <Route exact path="/cart" component={Cart} />
-                  <Route exact path="/checkout" component={Checkout} />
-                  <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
-                  <Route exact path="/checkout/failure" component={CheckoutFailure} />
-                  <ProtectedRoute path="/account" component={Account} />
-                  <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
-                  <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
-                  <DynamicRoute />
-                </Switch>
-                <Footer />
-                <SidebarContainer>
-                  {sidebarProps => (
-                    <Sidebar {...sidebarProps}>
-                      <SidebarContents contentType={sidebarProps.contentType} />
-                    </Sidebar>
-                  )}
-                </SidebarContainer>
-              </ErrorBoundary>
-            </AppLayout>
-          </ThemeProvider>
-          {ThemeEditorComponent && <ThemeEditorComponent {...props} side="left" />}
-        </SearchProvider>
-      )}
-    </ThemeEditorState>
-  </LocaleProvider>
+  <ServiceWorkerRegistrar scriptUrl="/sw.js">
+    <LocaleProvider>
+      <ScrollToTop />
+      <ThemeEditorState initial={deityGreenTheme}>
+        {props => (
+          <SearchProvider>
+            <ThemeProvider theme={props.theme} globalCss={globalCss}>
+              <HeadMetaTags />
+              <AppLayout>
+                <Header />
+                <ServiceWorker>
+                  {({ isWaiting, skipWaiting }) =>
+                    isWaiting ? (
+                      <Button onClick={() => skipWaiting()}>
+                        This site has updated. Please click here to see changes.
+                      </Button>
+                    ) : null
+                  }
+                </ServiceWorker>
+                <OnlineStatus>{({ isOnline }) => !isOnline && <p>you are offline.</p>}</OnlineStatus>
+                <ErrorBoundary>
+                  <Switch>
+                    <Route exact path="/" component={Home} />
+                    <Route exact path="/blog/:page?" component={Blog} />
+                    <Route exact path="/cart" component={Cart} />
+                    <Route exact path="/checkout" component={Checkout} />
+                    <Route exact path="/checkout/confirmation" component={CheckoutConfirmation} />
+                    <Route exact path="/checkout/failure" component={CheckoutFailure} />
+                    <ProtectedRoute path="/account" component={Account} />
+                    <OnlyUnauthenticatedRoute exact path="/sign-in" component={SignIn} />
+                    <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
+                    <DynamicRoute />
+                  </Switch>
+                  <Footer />
+                  <SidebarContainer>
+                    {sidebarProps => (
+                      <Sidebar {...sidebarProps}>
+                        <SidebarContents contentType={sidebarProps.contentType} />
+                      </Sidebar>
+                    )}
+                  </SidebarContainer>
+                </ErrorBoundary>
+              </AppLayout>
+            </ThemeProvider>
+            {ThemeEditorComponent && <ThemeEditorComponent {...props} side="left" />}
+          </SearchProvider>
+        )}
+      </ThemeEditorState>
+    </LocaleProvider>
+  </ServiceWorkerRegistrar>
 );
 
 export default App;
