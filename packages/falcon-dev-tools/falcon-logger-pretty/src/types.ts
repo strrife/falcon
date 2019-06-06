@@ -31,9 +31,24 @@ export type PrettifyGraphQLErrorLogInput = {
   eol: string;
 } & PrettifyModuleInput;
 
+export type PrettifyErrorLogInput = {
+  messageKey?: string;
+  errorLikeKeys?: string[];
+  errorProperties?: string[];
+} & PrettifyGraphQLErrorLogInput;
+
 export type ReadSourceInput = {
   colorizer: Colorizer;
   stack: string[];
   setLineNumber?: boolean;
   paddingLines?: number;
+};
+
+export type PrettifyObjectInput = {
+  log: any;
+  ident?: string;
+  eol?: string;
+  skipKeys?: string[];
+  errorLikeKeys?: string[];
+  excludeLoggerKeys?: boolean;
 };

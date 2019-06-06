@@ -1,3 +1,4 @@
+import bourne from '@hapi/bourne';
 import getSource from 'get-source';
 import { internals, isObject, prettifyObject as prettifyObjectOriginal } from 'pino-pretty/lib/utils';
 import colors from './colors';
@@ -7,6 +8,8 @@ import {
   MaybeString,
   ReadSourceInput,
   PrettifyModuleInput,
+  PrettifyErrorLogInput,
+  PrettifyObjectInput,
   PrettifyGraphQLErrorLogInput
 } from './types';
 
@@ -23,7 +26,17 @@ const defaultColorizer = colors();
 
 export type PrettifyModuleFn = (input: PrettifyModuleInput) => MaybeString;
 export type PrettifyGraphQLErrorLogFn = (input: PrettifyGraphQLErrorLogInput) => MaybeString;
+export type PrettifyErrorLogFn = (input: PrettifyErrorLogInput) => MaybeString;
+export type PrettifyObjectFn = (input: PrettifyObjectInput) => MaybeString;
 export type ReadSourceFn = (input: ReadSourceInput) => string[];
+
+export const jsonParser: (input: string) => { value?: any; err?: any } = input => {
+  try {
+    return { value: bourne.parse(input, { protoAction: 'remove' }) };
+  } catch (err) {
+    return { err };
+  }
+};
 
 export const prettifyModule: PrettifyModuleFn = ({ log, colorizer = defaultColorizer }) => {
   if (log.module) {
@@ -81,8 +94,8 @@ export const prettifyGraphQLErrorLog: PrettifyGraphQLErrorLogFn = ({
   return `${result}${eol}`;
 };
 
-export const prettifyObject = ({
-  input,
+export const prettifyObject: PrettifyObjectFn = ({
+  log,
   ident = '    ',
   eol = '\n',
   skipKeys = [],
@@ -90,7 +103,7 @@ export const prettifyObject = ({
   excludeLoggerKeys = true
 }) =>
   prettifyObjectOriginal({
-    input,
+    input: log,
     ident,
     eol,
     skipKeys: [...LOGGER_KEYS, ...skipKeys],
@@ -98,7 +111,7 @@ export const prettifyObject = ({
     excludeLoggerKeys
   });
 
-export const prettifyErrorLog = ({
+export const prettifyErrorLog: PrettifyErrorLogFn = ({
   log,
   messageKey = MESSAGE_KEY,
   colorizer,
@@ -144,7 +157,7 @@ export const prettifyErrorLog = ({
         // at the root level of the object being processed, we want to print them.
         // Thus, we invoke with `excludeLoggerKeys: false`.
         const prettifiedObject = prettifyObject({
-          input: log[key],
+          log: log[key],
           errorLikeKeys,
           excludeLoggerKeys: false,
           eol,

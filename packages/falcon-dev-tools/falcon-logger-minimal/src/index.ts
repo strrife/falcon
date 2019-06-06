@@ -1,17 +1,16 @@
-import bourne from '@hapi/bourne';
-import { MESSAGE_KEY, ERROR_LIKE_KEYS } from 'pino-pretty/lib/constants';
-import { isObject, prettifyErrorLog, prettifyObject } from 'pino-pretty/lib/utils';
+import {
+  CONSTANTS,
+  colors,
+  isObject,
+  jsonParser,
+  prettifyObject,
+  prettifyGraphQLErrorLog,
+  prettifyErrorLog
+} from '@deity/falcon-logger-pretty';
 
-const jsonParser: (input: string) => { value?: any; err?: any } = input => {
-  try {
-    return { value: bourne.parse(input, { protoAction: 'remove' }) };
-  } catch (err) {
-    return { err };
-  }
-};
-
-const messageKey = MESSAGE_KEY;
-const errorLikeObjectKeys = ERROR_LIKE_KEYS;
+const colorizer = colors(true);
+const messageKey = CONSTANTS.MESSAGE_KEY;
+const errorLikeObjectKeys = CONSTANTS.ERROR_LIKE_KEYS;
 const EOL = '\r\n';
 const IDENT = '    ';
 
@@ -39,19 +38,31 @@ export default () => inputData => {
 
   line += log[messageKey] + EOL;
 
-  if (log.type === 'Error' && log.stack) {
-    const prettifiedErrorLog = prettifyErrorLog({
-      log,
-      errorLikeKeys: errorLikeObjectKeys,
-      errorProperties: [],
-      ident: IDENT,
-      eol: EOL
-    });
+  if (log.type === 'Error' && (log.stack || log.extensions)) {
+    let prettifiedErrorLog: string = '';
+    if (log.stack) {
+      prettifiedErrorLog = prettifyErrorLog({
+        log,
+        messageKey,
+        colorizer,
+        errorLikeKeys: errorLikeObjectKeys,
+        errorProperties: [],
+        ident: IDENT,
+        eol: EOL
+      });
+    } else if (log.extensions) {
+      prettifiedErrorLog = prettifyGraphQLErrorLog({
+        log,
+        colorizer,
+        ident: IDENT,
+        eol: EOL
+      });
+    }
     line += prettifiedErrorLog;
   } else {
     const skipKeys = typeof log[messageKey] === 'string' ? [messageKey] : undefined;
     const prettifiedObject = prettifyObject({
-      input: log,
+      log,
       skipKeys,
       errorLikeKeys: errorLikeObjectKeys,
       eol: EOL,

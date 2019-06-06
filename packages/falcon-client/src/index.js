@@ -11,7 +11,9 @@ async function falconWebServer() {
   if (config.appName) {
     Logger.setApp(config.appName);
   }
-  Logger.setLogLevel(config.logLevel);
+  if (config.logLevel) {
+    Logger.setLogLevel(config.logLevel);
+  }
 
   /* eslint-disable */
   const webpackAssets =

@@ -1,10 +1,10 @@
-import bourne from '@hapi/bourne';
 import chalk from 'chalk';
 import jmespath from 'jmespath';
 import * as CONSTANTS from './constants';
 import colors from './colors';
 import {
   isObject,
+  jsonParser,
   prettifyErrorLog,
   prettifyGraphQLErrorLog,
   prettifyLevel,
@@ -14,14 +14,6 @@ import {
   prettifyModule,
   prettifyTime
 } from './utils';
-
-const jsonParser: (input: string) => { value?: any; err?: any } = input => {
-  try {
-    return { value: bourne.parse(input, { protoAction: 'remove' }) };
-  } catch (err) {
-    return { err };
-  }
-};
 
 const defaultOptions: { [key: string]: any } = {
   colorize: chalk.supportsColor,
@@ -36,7 +28,20 @@ const defaultOptions: { [key: string]: any } = {
   outputStream: process.stdout
 };
 
-export { CONSTANTS };
+export {
+  CONSTANTS,
+  colors,
+  isObject,
+  jsonParser,
+  prettifyErrorLog,
+  prettifyGraphQLErrorLog,
+  prettifyLevel,
+  prettifyMessage,
+  prettifyMetadata,
+  prettifyObject,
+  prettifyModule,
+  prettifyTime
+};
 
 export default (options: object) => {
   const opts = Object.assign({}, defaultOptions, options);
@@ -131,6 +136,7 @@ export default (options: object) => {
       if (log.stack) {
         prettifiedErrorLog = prettifyErrorLog({
           log,
+          messageKey,
           colorizer,
           errorLikeKeys: errorLikeObjectKeys,
           errorProperties: errorProps,
@@ -149,7 +155,7 @@ export default (options: object) => {
     } else {
       const skipKeys = typeof log[messageKey] === 'string' ? [messageKey] : undefined;
       const prettifiedObject = prettifyObject({
-        input: log,
+        log,
         skipKeys,
         errorLikeKeys: errorLikeObjectKeys,
         eol: EOL,
