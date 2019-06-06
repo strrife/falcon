@@ -1326,7 +1326,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @returns {Promise<Customer>} updated customer data
    */
   async editCustomer(obj, { input }) {
-    const response = await this.putAuth('/falcon/customers/me', { customer: { ...input } });
+    const response = await this.putAuth('/customers/me', { customer: { ...input } });
 
     return this.convertKeys(response);
   }
