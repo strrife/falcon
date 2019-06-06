@@ -14564,7 +14564,7 @@ react-test-renderer@^16.0.0-0, react-test-renderer@^16.4.2, react-test-renderer@
     react-is "^16.8.4"
     scheduler "^0.13.4"
 
-react@^16.3.2, react@^16.6.3, react@^16.7.0:
+react@16.8.2, react@^16.3.2, react@^16.6.3, react@^16.7.0:
   version "16.8.2"
   resolved "https://registry.npmjs.org/react/-/react-16.8.2.tgz#83064596feaa98d9c2857c4deae1848b542c9c0c"
   integrity sha512-aB2ctx9uQ9vo09HVknqv3DGRpI7OIGJhCx3Bt0QqoRluEjHSaObJl+nG12GDdYH6sTgE7YiPJ6ZUyMx9kICdXw==
