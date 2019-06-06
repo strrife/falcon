@@ -22,7 +22,7 @@ module.exports = class DynamicRouteResolver {
    */
   constructor(extensionContainer) {
     this.extensionContainer = extensionContainer;
-    this.logger = Logger.getModule(this.constructor.name);
+    this.logger = Logger.getFor(this.constructor.name);
   }
 
   /**

@@ -26,7 +26,7 @@ module.exports = class BaseContainer {
    */
   constructor(eventEmitter) {
     this.eventEmitter = eventEmitter;
-    this.logger = Logger.getModule(this.constructor.name);
+    this.logger = Logger.getFor(this.constructor.name);
   }
 
   /**

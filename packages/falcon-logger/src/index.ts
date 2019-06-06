@@ -4,7 +4,7 @@ import { chindingsSym } from 'pino/lib/symbols';
 export type Logger = {
   setLogLevel: (level: Level) => void;
   setApp: (name: string) => void;
-  getModule: (moduleName: string) => Logger;
+  getFor: (moduleName: string) => Logger;
   traceTime: (label: string, fn: () => Promise<any>) => Promise<any>;
 } & PinoLogger;
 
@@ -37,7 +37,7 @@ logger.setApp = name => {
  * @param {string} moduleName Module name
  * @returns {Logger} Module-specific Logger instance
  */
-logger.getModule = (moduleName: string): Logger => logger.child({ module: moduleName }) as Logger;
+logger.getFor = (moduleName: string): Logger => logger.child({ module: moduleName }) as Logger;
 
 /**
  * @param {string} label Log label
@@ -45,7 +45,7 @@ logger.getModule = (moduleName: string): Logger => logger.child({ module: module
  * @returns {Promise<any>} fn result
  */
 logger.traceTime = async function(label, fn) {
-  // using `function()` statement to preserve the context in case of "getModule" call
+  // using `function()` statement to preserve the context in case of "getFor" call
   if (!this.isLevelEnabled('trace')) {
     return fn();
   }

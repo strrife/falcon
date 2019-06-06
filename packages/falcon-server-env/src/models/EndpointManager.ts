@@ -29,7 +29,7 @@ export abstract class EndpointManager {
     this.eventEmitter = params.eventEmitter;
     this.entries = params.entries || [];
     this.baseUrl = formatUrl(this.config);
-    this.logger = Logger.getModule(`${this.name}-endpointManager`);
+    this.logger = Logger.getFor(`${this.name}-endpointManager`);
   }
 
   /**
