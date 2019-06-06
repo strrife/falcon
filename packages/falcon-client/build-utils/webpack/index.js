@@ -117,20 +117,20 @@ module.exports.build = async () => {
     if (warnings.length) {
       Logger.warn(chalk.yellow('\nCompiled with warnings.\n'));
       Logger.warn(warnings.join('\n\n'));
-      Logger.log();
+      Logger.info();
     } else {
-      Logger.log(chalk.green('\nCompiled successfully.\n'));
+      Logger.info(chalk.green('\nCompiled successfully.\n'));
     }
 
-    Logger.log('File sizes after gzip:\n');
+    Logger.info('File sizes after gzip:\n');
     const { stats } = clientCompilation;
     printFileSizesAfterBuild(stats, previousBuildSizes, paths.appBuild);
 
-    Logger.log();
+    Logger.info();
   } catch (error) {
-    Logger.error(`${chalk.red('\nFailed to compile.\n')}`);
+    Logger.error(chalk.red('\nFailed to compile.\n'));
     Logger.error(error);
-    Logger.log();
+    Logger.info();
 
     process.exit(1);
   }
@@ -160,23 +160,23 @@ module.exports.size = async () => {
     fs.emptyDirSync(paths.appBuild);
     fs.copySync(paths.appPublic, paths.appBuildPublic, { dereference: true });
 
-    Logger.log('Compiling client...');
+    Logger.info('Compiling client...');
     const clientConfig = createConfig('web', options, falconConfig);
     const { warnings } = await webpackCompileAsync(clientConfig);
 
     if (warnings.length) {
       Logger.warn(chalk.yellow('\nCompiled client with warnings.\n'));
       Logger.warn(warnings.join('\n\n'));
-      Logger.log();
+      Logger.info();
     } else {
-      Logger.log(chalk.green('\nCompiled client successfully.\n'));
+      Logger.info(chalk.green('\nCompiled client successfully.\n'));
     }
 
-    Logger.log();
+    Logger.info();
   } catch (error) {
     Logger.error(`${chalk.red('\nFailed to compile client.\n')}`);
     Logger.error(error);
-    Logger.log();
+    Logger.info();
 
     process.exit(1);
   }

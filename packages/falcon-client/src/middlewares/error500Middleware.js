@@ -24,7 +24,8 @@ export default () => async (ctx, next) => {
     }
 
     if (networkError || code !== codes.NOT_FOUND) {
-      Logger.error(`Internal Server Error!\n request: ${request.url}\n`, errorToLog);
+      Logger.error(`Internal Server Error! Request: ${request.url}`);
+      Logger.error(errorToLog);
     }
 
     let viewsDir = resolvePath(__dirname, './../../', 'views');

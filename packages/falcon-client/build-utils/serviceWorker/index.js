@@ -11,7 +11,7 @@ const { getManifestEntries } = require('./workbox');
 const { formatBytes } = require('../webpack/tools');
 
 module.exports.build = async () => {
-  Logger.log('Compiling Service Worker...');
+  Logger.info('Compiling Service Worker...');
 
   const isProductionBuild = process.env.NODE_ENV === 'production';
   const input = fs.existsSync(paths.appSwJs) ? paths.appSwJs : paths.ownSwJs;
@@ -45,12 +45,12 @@ module.exports.build = async () => {
     const bundle = await rollup.rollup(inputOptions);
     await bundle.write(outputOptions);
 
-    Logger.log(`pre-caching ${manifestEntries.length} files, totaling ${formatBytes(size)}.`);
-    Logger.log('Service Worker compiled.\n');
+    Logger.info(`pre-caching ${manifestEntries.length} files, totaling ${formatBytes(size)}.`);
+    Logger.info('Service Worker compiled.\n');
   } catch (error) {
     Logger.error(chalk.red(`Failed to compile Service Worker\n${input}`));
     Logger.error(error);
-    Logger.log();
+    Logger.info();
 
     process.exit(1);
   }

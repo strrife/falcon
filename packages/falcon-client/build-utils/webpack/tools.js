@@ -105,7 +105,8 @@ function requireOrExit(id) {
     return require(id);
   } catch (e) {
     clearConsole();
-    Logger.error(`File ${path.basename(id)} is invalid (${id}).`, e);
+    Logger.error(`File ${path.basename(id)} is invalid (${id}).`);
+    Logger.error(e);
     process.exit(1);
   }
 }

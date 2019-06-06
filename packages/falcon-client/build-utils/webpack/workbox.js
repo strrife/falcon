@@ -24,7 +24,7 @@ module.exports.generateSW = async () => {
     };
 
     const { count, size, warnings } = await workbox.injectManifest(configuration);
-    Logger.log(
+    Logger.info(
       `Generated Service Worker ${swLocation} which will precache ${count} files, totaling ${formatBytes(size)}.\n`
     );
     if (warnings.length) {
