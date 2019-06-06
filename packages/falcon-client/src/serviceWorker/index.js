@@ -7,6 +7,7 @@ export class ServiceWorkerRegistrar extends React.Component {
     super(props);
 
     this.state = {
+      isSupported: false,
       registration: undefined
     };
   }
@@ -16,24 +17,22 @@ export class ServiceWorkerRegistrar extends React.Component {
       return;
     }
 
-    if (!this.isHttps && !this.isLocalHost) {
-      return;
-    }
-
     this.whenReady(() => {
       const { scriptUrl, options } = this.props;
 
       navigator.serviceWorker
         .register(scriptUrl, options)
         .then(registration => {
-          this.setState(state => ({ ...state, registration }));
+          this.setState(state => ({
+            ...state,
+            isSupported: true,
+            registration
+          }));
           navigator.serviceWorker.addEventListener('controllerchange', this.onControllerChange);
 
           console.log(`Service Worker '${scriptUrl}' registered in '${registration.scope}' scope.`);
         })
         .catch(error => {
-          this.setState(state => ({ ...state, registration: undefined }));
-
           console.warn(`Service Worker '${scriptUrl}' registration failed.`, error);
         });
     });
@@ -65,15 +64,12 @@ export class ServiceWorkerRegistrar extends React.Component {
   }
 
   get isSupported() {
-    return window.navigator && 'serviceWorker' in navigator;
-  }
+    const { navigator, location } = window;
+    const isApiAvailable = navigator && 'serviceWorker' in navigator;
+    const isHttps = location.protocol === 'https:';
+    const isLocalHost = location.host.match(/(localhost|127.0.0.1)/);
 
-  get isHttps() {
-    return window.location.protocol === 'https:';
-  }
-
-  get isLocalHost() {
-    return window.location.host.match(/(localhost|127.0.0.1)/);
+    return isApiAvailable && (isHttps || isLocalHost);
   }
 
   /**
@@ -90,11 +86,12 @@ export class ServiceWorkerRegistrar extends React.Component {
 
   render() {
     const { children, ...props } = this.props;
-    const { registration } = this.state;
+    const { isSupported, registration } = this.state;
 
     return (
       <ServiceWorkerContext.Provider
         value={{
+          isSupported,
           registration,
           scriptUrl: props.scriptUrl,
           options: props.options
@@ -108,11 +105,12 @@ export class ServiceWorkerRegistrar extends React.Component {
 
 export const ServiceWorker = ({ children }) => (
   <ServiceWorkerContext.Consumer>
-    {({ registration }) =>
+    {({ isSupported, registration }) =>
       registration ? (
         <ServiceWorkerInner registration={registration}>
           {({ isWaiting, skipWaiting }) =>
             children({
+              isSupported,
               registration,
               isWaiting,
               skipWaiting
