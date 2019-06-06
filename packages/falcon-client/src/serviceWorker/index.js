@@ -12,6 +12,10 @@ export class ServiceWorkerRegistrar extends React.Component {
   }
 
   componentDidMount() {
+    if (!this.isSupported) {
+      return;
+    }
+
     if (!this.isHttps && !this.isLocalHost) {
       return;
     }
@@ -23,18 +27,23 @@ export class ServiceWorkerRegistrar extends React.Component {
         .register(scriptUrl, options)
         .then(registration => {
           this.setState(state => ({ ...state, registration }));
+          navigator.serviceWorker.addEventListener('controllerchange', this.onControllerChange);
+
           console.log(`Service Worker '${scriptUrl}' registered in '${registration.scope}' scope.`);
         })
-        .catch(registrationError => {
+        .catch(error => {
           this.setState(state => ({ ...state, registration: undefined }));
-          console.warn(`Service Worker '${scriptUrl}' registration failed.`, registrationError);
-        });
 
-      navigator.serviceWorker.addEventListener('controllerchange', this.onControllerChange);
+          console.warn(`Service Worker '${scriptUrl}' registration failed.`, error);
+        });
     });
   }
 
   componentWillUnmount() {
+    if (!this.isSupported) {
+      return;
+    }
+
     navigator.serviceWorker.removeEventListener('controllerchange', this.onControllerChange);
   }
 
@@ -55,6 +64,10 @@ export class ServiceWorkerRegistrar extends React.Component {
     // the new active worker.
   }
 
+  get isSupported() {
+    return window.navigator && 'serviceWorker' in navigator;
+  }
+
   get isHttps() {
     return window.location.protocol === 'https:';
   }
@@ -64,8 +77,7 @@ export class ServiceWorkerRegistrar extends React.Component {
   }
 
   /**
-   * if `document.readyState` is `complete` invoke `callback` immediately,
-   * otherwise delay it until `load` event is fired
+   * if `document.readyState` is `complete` invoke `callback` immediately, otherwise delay it until `load` event is fired
    * @param {Function} callback function
    */
   whenReady(callback) {
