@@ -48,7 +48,7 @@ module.exports = class BaseContainer {
 
       Logger.debug(`${prefix}: "${pathOrPackage}" loaded as a package`);
 
-      return module;
+      return typeof module.default === 'function' ? module.default : module;
     }
 
     const modulePath = resolve(process.cwd(), pathOrPackage);

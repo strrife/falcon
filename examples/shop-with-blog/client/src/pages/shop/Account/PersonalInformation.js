@@ -7,11 +7,10 @@ import {
   FormField,
   Form,
   FormErrorSummary,
-  CustomerQuery,
-  EditCustomerMutation,
   TwoColumnsLayout,
   TwoColumnsLayoutArea
 } from '@deity/falcon-ecommerce-uikit';
+import { CustomerQuery, EditCustomerMutation } from '@deity/falcon-shop-data';
 
 const PersonalInformation = () => (
   <GridLayout mb="md" gridGap="md">

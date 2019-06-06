@@ -19,7 +19,7 @@ module.exports = async ({ packagePath }) => {
 
   process.env.ROLLUP = true;
 
-  const inputFiles = glob.sync(`${path.join(packagePath, 'src', 'index')}@(*.js|*.jsx|*.ts|*.tsx)`);
+  const inputFiles = glob.sync(`${path.join(packagePath, 'src', 'index')}@(.js|.jsx|.ts|.tsx)`);
   if (inputFiles.length !== 1) {
     throw new Error('Directory "/src" should contain single "index" file!');
   }

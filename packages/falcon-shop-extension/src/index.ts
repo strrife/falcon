@@ -1,11 +1,13 @@
 const { Extension } = require('@deity/falcon-server-env');
 const { resolve } = require('path');
-const typeDefs = require('fs').readFileSync(resolve(__dirname, 'schema.graphql'), 'utf8');
+const typeDefs = require('fs').readFileSync(resolve(__dirname, '../src/schema.graphql'), 'utf8');
+
+export * from './types';
 
 /**
  * Extension that implements shop features
  */
-class Shop extends Extension {
+export default class Shop extends Extension {
   async getGraphQLConfig() {
     const gqlConfig = await super.getGraphQLConfig(typeDefs);
 
@@ -26,6 +28,3 @@ class Shop extends Extension {
     return gqlConfig;
   }
 }
-
-module.exports = Shop;
-module.exports.Schema = typeDefs;

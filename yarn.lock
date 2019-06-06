@@ -1327,6 +1327,25 @@
   resolved "https://registry.npmjs.org/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
+"@deity/eslint-config-falcon@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.npmjs.org/@deity/eslint-config-falcon/-/eslint-config-falcon-0.1.2.tgz#b5de3c44b05b91337915333518e69c3d3d9dc74a"
+  integrity sha512-9Yq2x3HPDY7QA3i20bYeSxpiEdZu9fFk2+e8JEmWCUr2+uBQ1fC2VSGPsroP5FcqJ8Bh30v9fiTUYqsOyBohsQ==
+  dependencies:
+    "@typescript-eslint/eslint-plugin" "1.9.0"
+    "@typescript-eslint/parser" "1.9.0"
+    babel-eslint "10.0.1"
+    eslint-config-airbnb "17.1.0"
+    eslint-config-prettier "4.2.0"
+    eslint-plugin-import "2.17.2"
+    eslint-plugin-jsdoc "5.0.2"
+    eslint-plugin-jsx-a11y "6.2.1"
+    eslint-plugin-prettier "3.1.0"
+    eslint-plugin-react "7.13.0"
+    eslint-plugin-typescript "^0.14.0"
+    prettier "1.17.1"
+    typescript "3.4.5"
+
 "@emotion/cache@^10.0.0", "@emotion/cache@^10.0.9":
   version "10.0.9"
   resolved "https://registry.npmjs.org/@emotion/cache/-/cache-10.0.9.tgz#e0c7b7a289f7530edcfad4dcf3858bd2e5700a6f"
@@ -3513,6 +3532,14 @@ apollo-cache@1.2.1, apollo-cache@^1.2.1:
     apollo-utilities "^1.2.1"
     tslib "^1.9.3"
 
+apollo-cache@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.npmjs.org/apollo-cache/-/apollo-cache-1.3.1.tgz#c015f93a9a7f32b3eeea0c471addd6e854da754c"
+  integrity sha512-BJ/Mehr3u6XCaHYSmgZ6DM71Fh30OkW6aEr828WjHvs+7i0RUuP51/PM7K6T0jPXtuw7UbArFFPZZsNgXnyyJA==
+  dependencies:
+    apollo-utilities "^1.3.1"
+    tslib "^1.9.3"
+
 apollo-client@2.5.1:
   version "2.5.1"
   resolved "https://registry.npmjs.org/apollo-client/-/apollo-client-2.5.1.tgz#36126ed1d32edd79c3713c6684546a3bea80e6d1"
@@ -3525,6 +3552,20 @@ apollo-client@2.5.1:
     apollo-utilities "1.2.1"
     symbol-observable "^1.0.2"
     ts-invariant "^0.2.1"
+    tslib "^1.9.3"
+    zen-observable "^0.8.0"
+
+apollo-client@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.npmjs.org/apollo-client/-/apollo-client-2.6.1.tgz#fcf328618d6ad82b750a988bec113fe6edc8ba94"
+  integrity sha512-Tb6ZthPZUHlGqeoH1WC8Qg/tLnkk9H5+xj4e5nzOAC6dCOW3pVU9tYXscrWdmZ65UDUg1khvTNjrQgPhdf4aTQ==
+  dependencies:
+    "@types/zen-observable" "^0.8.0"
+    apollo-cache "1.3.1"
+    apollo-link "^1.0.0"
+    apollo-utilities "1.3.1"
+    symbol-observable "^1.0.2"
+    ts-invariant "^0.4.0"
     tslib "^1.9.3"
     zen-observable "^0.8.0"
 
@@ -3751,6 +3792,16 @@ apollo-utilities@1.2.1, apollo-utilities@^1.0.1, apollo-utilities@^1.0.8, apollo
   dependencies:
     fast-json-stable-stringify "^2.0.0"
     ts-invariant "^0.2.1"
+    tslib "^1.9.3"
+
+apollo-utilities@1.3.1, apollo-utilities@^1.3.0, apollo-utilities@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.npmjs.org/apollo-utilities/-/apollo-utilities-1.3.1.tgz#4c45f9b52783c324e2beef822700bdea374f82d1"
+  integrity sha512-P5cJ75rvhm9hcx9V/xCW0vlHhRd0S2icEcYPoRYNTc5djbynpuO+mQuJ4zMHgjNDpvvDxDfZxXTJ6ZUuJZodiQ==
+  dependencies:
+    fast-json-stable-stringify "^2.0.0"
+    lodash.isequal "^4.5.0"
+    ts-invariant "^0.4.0"
     tslib "^1.9.3"
 
 app-manifest-loader@2.2.3:
@@ -14190,6 +14241,18 @@ react-apollo@2.5.1:
     ts-invariant "^0.2.1"
     tslib "^1.9.3"
 
+react-apollo@^2.5.6:
+  version "2.5.6"
+  resolved "https://registry.npmjs.org/react-apollo/-/react-apollo-2.5.6.tgz#98a59d0eea31432ed001e6a033e11a58139ffc31"
+  integrity sha512-WWX5UykTtmW6+awjqEsSWSdvVyZv/vsavUgpdI4ddn4CBdz47INC+iTdJBnYaUFMB24GmqjFFSoSd98gu1xqKA==
+  dependencies:
+    apollo-utilities "^1.3.0"
+    hoist-non-react-statics "^3.3.0"
+    lodash.isequal "^4.5.0"
+    prop-types "^15.7.2"
+    ts-invariant "^0.4.2"
+    tslib "^1.9.3"
+
 react-codemirror2@^5.1.0:
   version "5.1.0"
   resolved "https://registry.npmjs.org/react-codemirror2/-/react-codemirror2-5.1.0.tgz#62de4460178adea40eb52eabf7491669bf3794b8"
@@ -14501,7 +14564,7 @@ react-test-renderer@^16.0.0-0, react-test-renderer@^16.4.2, react-test-renderer@
     react-is "^16.8.4"
     scheduler "^0.13.4"
 
-react@16.8.2, react@^16.3.2, react@^16.6.3, react@^16.7.0:
+react@^16.3.2, react@^16.6.3, react@^16.7.0:
   version "16.8.2"
   resolved "https://registry.npmjs.org/react/-/react-16.8.2.tgz#83064596feaa98d9c2857c4deae1848b542c9c0c"
   integrity sha512-aB2ctx9uQ9vo09HVknqv3DGRpI7OIGJhCx3Bt0QqoRluEjHSaObJl+nG12GDdYH6sTgE7YiPJ6ZUyMx9kICdXw==
@@ -16835,6 +16898,13 @@ ts-invariant@^0.3.2:
   version "0.3.2"
   resolved "https://registry.npmjs.org/ts-invariant/-/ts-invariant-0.3.2.tgz#89a2ffeb70879b777258df1df1c59383c35209b0"
   integrity sha512-QsY8BCaRnHiB5T6iE4DPlJMAKEG3gzMiUco9FEt1jUXQf0XP6zi0idT0i0rMTu8A326JqNSDsmlkA9dRSh1TRg==
+  dependencies:
+    tslib "^1.9.3"
+
+ts-invariant@^0.4.0, ts-invariant@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.npmjs.org/ts-invariant/-/ts-invariant-0.4.2.tgz#8685131b8083e67c66d602540e78763408be9113"
+  integrity sha512-PTAAn8lJPEdRBJJEs4ig6MVZWfO12yrFzV7YaPslmyhG7+4MA279y4BXT3f72gXeVl0mC1aAWq2rMX4eKTWU/Q==
   dependencies:
     tslib "^1.9.3"
 

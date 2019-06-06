@@ -18,7 +18,6 @@ export * from './OrderList';
 export * from './SignIn';
 export * from './SignOut';
 export * from './SignUp';
-export * from './Customer';
 export * from './Address';
 export * from './Countries';
 export * from './Blog';

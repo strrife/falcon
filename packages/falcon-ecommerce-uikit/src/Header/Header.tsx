@@ -2,10 +2,11 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link, Icon, DefaultThemeProps, Box } from '@deity/falcon-ui';
 
+import { CustomerQuery } from '@deity/falcon-shop-data';
+
 import { toGridTemplate } from '../helpers';
 import { MiniCartIcon } from '../MiniCart';
 import { CartQuery, CartData } from '../Cart';
-import { CustomerQuery } from '../Customer';
 import { AccountIcon } from '../MiniAccount';
 import { SignInIcon } from '../SignIn';
 import { MenuQuery, MenuNavbar } from '../Menu';
