@@ -6,7 +6,7 @@ const rollup = require('rollup');
 const resolve = require('rollup-plugin-node-resolve');
 const re = require('rollup-plugin-re');
 const alias = require('rollup-plugin-alias');
-const paths = require('./../paths');
+const paths = require('../paths');
 const { getManifestEntries } = require('./workbox');
 
 /**
@@ -17,6 +17,7 @@ module.exports.build = async buildConfig => {
 
   const { NODE_ENV } = process.env;
   const IS_PROD = NODE_ENV === 'production';
+  const SW_DIR = IS_PROD ? paths.appBuildPublic : paths.appBuild;
 
   const input = fs.existsSync(paths.appSwJs) ? paths.appSwJs : paths.ownSwJs;
 
@@ -38,7 +39,7 @@ module.exports.build = async buildConfig => {
     };
 
     const outputOptions = {
-      file: path.join(paths.appPath, path.join('build', 'public', 'sw.js')),
+      file: path.join(SW_DIR, 'sw.js'),
       format: 'iife',
       sourcemap: !IS_PROD,
       compact: IS_PROD

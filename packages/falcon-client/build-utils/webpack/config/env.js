@@ -17,7 +17,8 @@ function getClientEnv(target, env, publicPath, devServerPort, envToBuildIn) {
         PUBLIC_PATH: env === 'production' ? publicPath : undefined,
         WEBPACK_ASSETS: paths.appWebpackAssets,
         OUTPUT_DIR: path.relative(paths.appPath, paths.appBuildPublic),
-        PUBLIC_DIR: path.relative(paths.appPath, env === 'production' ? paths.appBuildPublic : paths.appPublic)
+        PUBLIC_DIR: path.relative(paths.appPath, env === 'production' ? paths.appBuildPublic : paths.appPublic),
+        SW_DIR: path.relative(paths.appPath, env === 'production' ? paths.appBuildPublic : paths.appBuild)
       }
     );
 
