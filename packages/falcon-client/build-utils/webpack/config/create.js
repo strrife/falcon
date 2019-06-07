@@ -19,10 +19,6 @@ const runPlugin = require('./runPlugin');
 const falconClientPolyfills = require.resolve('./../../polyfills');
 
 /**
- *  @typedef {import('../tools').FalconClientBuildConfig} FalconClientBuildConfig
- */
-
-/**
  * Create RegExp filter based on provided modules names
  * @param {string[]} modules module names to filter on
  * @returns {RegExp} RegExp filter
@@ -112,23 +108,28 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
 }
 
 /**
+ * @typedef {Object} CreateWebpackOptions
+ * @property {string} inspect
+ * @property {string} publicPath
+ * @property {boolean} startDevServer depends on `env` which needs to be `development`
+ */
+
+/**
  * Webpack configuration factory. It's the juice!
  * @param {'web' | 'node' } target target
- * @param {{ env: ('development' | 'production'), inspect: string, publicPath: string }} options environment
- * @param {FalconClientBuildConfig} buildConfig config
- * @returns {Object} webpack config
+ * @param {CreateWebpackOptions} options
+ * @param {import('../tools').FalconClientBuildConfig} buildConfig
+ * @returns {Object} webpack configuration
  */
 module.exports = (target = 'web', options, buildConfig) => {
-  const { env, paths } = options;
-  const { devServerPort, useWebmanifest, plugins, modify, i18n, moduleOverride } = buildConfig;
-
-  // Define some useful shorthands.
+  const { NODE_ENV } = process.env;
   const IS_NODE = target === 'node';
   const IS_WEB = target === 'web';
-  const IS_PROD = env === 'production';
-  const IS_DEV = env === 'development';
+  const IS_PROD = NODE_ENV === 'production';
+  const IS_DEV = NODE_ENV === 'development';
 
-  process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
+  const { paths } = options;
+  const { devServerPort, useWebmanifest, plugins, modify, i18n, moduleOverride } = buildConfig;
 
   const devtool = 'cheap-module-source-map';
   const devServerUrl = `http://localhost:${devServerPort}/`;
@@ -231,7 +232,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         {
           test: /\.css$/,
           exclude: [paths.appBuild, /\.module\.css$/],
-          use: getStyleLoaders(target, env, {
+          use: getStyleLoaders(target, NODE_ENV, {
             importLoaders: 1,
             modules: false,
             minimize: IS_PROD,
@@ -242,7 +243,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         {
           test: /\.module\.css$/,
           exclude: [paths.appBuild],
-          use: getStyleLoaders(target, env, {
+          use: getStyleLoaders(target, NODE_ENV, {
             importLoaders: 1,
             modules: true,
             minimize: IS_PROD,
@@ -255,7 +256,7 @@ module.exports = (target = 'web', options, buildConfig) => {
           test: /\.(scss|sass)$/,
           exclude: /\.module\.(scss|sass)$/,
           use: [
-            ...getStyleLoaders(target, env, {
+            ...getStyleLoaders(target, NODE_ENV, {
               importLoaders: 2,
               modules: false,
               minimize: IS_PROD,
@@ -268,7 +269,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         {
           test: /\.module\.(scss|sass)$/,
           use: [
-            ...getStyleLoaders(target, env, {
+            ...getStyleLoaders(target, NODE_ENV, {
               importLoaders: 2,
               modules: true,
               minimize: IS_PROD,

@@ -28,7 +28,14 @@ module.exports.startDevServer = async () => {
   }
   logDeityGreenInfo('Starting development server...');
 
-  process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+  if (process.env.NODE_ENV !== 'development') {
+    Logger.warn(
+      `Development Server cannot be started with 'process.env.NODE_ENV=${
+        process.env.NODE_ENV
+      }' setting, only 'development' is supported, it will be ignored.`
+    );
+    process.env.NODE_ENV = 'development';
+  }
   process.env.BABEL_ENV = process.env.NODE_ENV;
 
   const fullIcuPath = getFullIcuPath();
@@ -40,7 +47,6 @@ module.exports.startDevServer = async () => {
     removePreviousBuildAssets(paths.appBuild, paths.appBuildPublic);
 
     const options = {
-      env: process.env.NODE_ENV,
       inspect: process.argv.find(x => x.match(/--inspect-brk(=|$)/) || x.match(/--inspect(=|$)/)) || undefined,
       paths
     };
@@ -86,14 +92,17 @@ module.exports.build = async () => {
   if (falconConfig.clearConsole) {
     clearConsole();
   }
-  logDeityGreenInfo('Creating an optimized production build...');
 
-  process.env.NODE_ENV = 'production';
-  process.env.BABEL_ENV = process.env.NODE_ENV;
+  if (!process.env.NODE_ENV) {
+    // default! - needs to be `development`
+    process.env.NODE_ENV = 'production';
+    process.env.BABEL_ENV = process.env.NODE_ENV;
+  }
+
+  logDeityGreenInfo(`Creating an ${process.env.NODE_ENV.toUpperCase()} build...`);
 
   try {
     const options = {
-      env: process.env.NODE_ENV,
       publicPath: process.env.PUBLIC_PATH || '/',
       paths
     };
@@ -151,7 +160,6 @@ module.exports.size = async () => {
 
   try {
     const options = {
-      env: process.env.NODE_ENV,
       publicPath: process.env.PUBLIC_PATH || '/',
       paths,
       analyze: true
