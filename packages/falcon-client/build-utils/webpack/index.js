@@ -2,14 +2,9 @@ const fs = require('fs-extra');
 const chalk = require('chalk');
 const Logger = require('@deity/falcon-logger');
 const WebpackDevServer = require('webpack-dev-server-speedy');
-const clearConsole = require('react-dev-utils/clearConsole');
 const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react-dev-utils/FileSizeReporter');
-
 const paths = require('../paths');
 const {
-  exitIfBuildingItself,
-  exitIfNoRequiredFiles,
-  getBuildConfig,
   getFullIcuPath,
   removePreviousBuildAssets,
   webpackCompiler,
@@ -18,27 +13,10 @@ const {
 } = require('./tools');
 const createConfig = require('./config/create');
 
-module.exports.startDevServer = async () => {
-  exitIfBuildingItself();
-  const buildConfig = getBuildConfig();
-  exitIfNoRequiredFiles(buildConfig);
-
-  if (buildConfig.clearConsole) {
-    clearConsole();
-  }
-  if (process.env.NODE_ENV !== 'development') {
-    if (process.env.NODE_ENV !== undefined) {
-      Logger.warn(
-        `Development Server cannot be started with 'process.env.NODE_ENV=${
-          process.env.NODE_ENV
-        }' setting, only 'development' is supported, it will be ignored.`
-      );
-    }
-    process.env.NODE_ENV = 'development';
-  }
-  process.env.BABEL_ENV = process.env.NODE_ENV;
-
+module.exports.startDevServer = async buildConfig => {
   logDeityGreenInfo('Starting development server...');
+
+  process.env.BABEL_ENV = process.env.NODE_ENV;
   const fullIcuPath = getFullIcuPath();
   if (fullIcuPath) {
     process.env.NODE_ICU_DATA = fullIcuPath;
@@ -57,14 +35,7 @@ module.exports.startDevServer = async () => {
 
     // Start our server webpack instance in watch mode after assets compile
     clientCompiler.plugin('done', () => {
-      serverCompiler.watch(
-        {
-          quiet: true,
-          stats: 'none'
-        },
-        /* eslint-disable no-unused-vars */
-        stats => {}
-      );
+      serverCompiler.watch({ quiet: true, stats: 'none' }, () => {});
     });
 
     // Create a new instance of Webpack-dev-server for our client assets.
@@ -81,23 +52,9 @@ module.exports.startDevServer = async () => {
   }
 };
 
-module.exports.build = async () => {
-  exitIfBuildingItself();
-  const buildConfig = getBuildConfig();
-  exitIfNoRequiredFiles(buildConfig);
-
-  if (buildConfig.clearConsole) {
-    clearConsole();
-  }
-
-  if (!process.env.NODE_ENV) {
-    // default! - needs to be `development`
-    process.env.NODE_ENV = 'production';
-    process.env.BABEL_ENV = process.env.NODE_ENV;
-  }
+module.exports.build = async buildConfig => {
   const { NODE_ENV, PUBLIC_PATH } = process.env;
-
-  logDeityGreenInfo(`Creating an ${NODE_ENV.toUpperCase()} build...`);
+  process.env.BABEL_ENV = NODE_ENV;
 
   try {
     const previousBuildSizes = await measureFileSizesBeforeBuild(paths.appBuildPublic);
@@ -127,7 +84,6 @@ module.exports.build = async () => {
     Logger.log('File sizes after gzip:\n');
     const { stats } = clientCompilation;
     printFileSizesAfterBuild(stats, previousBuildSizes, paths.appBuild);
-
     Logger.log();
   } catch (error) {
     Logger.error(`${chalk.red('\nFailed to compile.\n')}`);
@@ -138,19 +94,9 @@ module.exports.build = async () => {
   }
 };
 
-module.exports.size = async () => {
-  exitIfBuildingItself();
-  const buildConfig = getBuildConfig();
-  exitIfNoRequiredFiles(buildConfig);
-
-  if (buildConfig.clearConsole) {
-    clearConsole();
-  }
-  logDeityGreenInfo('Creating an optimized production build...');
-
-  process.env.NODE_ENV = 'production';
-  process.env.BABEL_ENV = process.env.NODE_ENV;
-  const { PUBLIC_PATH } = process.env;
+module.exports.size = async buildConfig => {
+  const { NODE_ENV, PUBLIC_PATH } = process.env;
+  process.env.BABEL_ENV = NODE_ENV;
 
   try {
     fs.emptyDirSync(paths.appBuild);
