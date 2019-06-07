@@ -28,8 +28,12 @@
     "test": "falcon-scripts test",
     "test:coverage": "falcon-scripts test:coverage"
   },
-  "dependencies": {},
   "devDependencies": {
-    "@deity/falcon-scripts": "^0.0.1"
+    "@deity/falcon-scripts": "^0.0.1",
+    "@deity/falcon-shop-extension": "^0.4.2"
+  },
+  "peerDependencies": {
+    "@deity/falcon-ui": "^0.2.2",
+    "react": "^16.6.3"
   }
 }

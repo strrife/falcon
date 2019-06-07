@@ -1,3 +1,1 @@
-// asdf
-
-console.log('foo bar baz');
+export * from './Address';

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
+import { Address } from '@deity/falcon-shop-extension';
 import { Query } from '../Query/Query';
-import { AddressData } from '../Address/AddressQuery';
 
 export type Order = {
   entityId: number;
@@ -15,9 +15,9 @@ export type Order = {
   orderCurrencyCode?: string;
   items: OrderItem[];
   paymentMethodName: string;
-  billingAddress: AddressData;
+  billingAddress: Address;
   shippingDescription: string;
-  shippingAddress: AddressData;
+  shippingAddress: Address;
 };
 
 export type OrderItem = {

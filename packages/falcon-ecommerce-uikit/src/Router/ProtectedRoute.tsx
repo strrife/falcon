@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Redirect, RouteProps, RouteComponentProps } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { IsAuthenticatedQuery } from './../Customer/IsAuthenticatedQuery';
+import { IsAuthenticatedQuery } from '@deity/falcon-shop-data';
 
 type ProtectedRouteProps = RouteProps & {
   redirectTo: string;

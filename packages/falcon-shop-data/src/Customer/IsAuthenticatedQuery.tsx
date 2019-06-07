@@ -9,11 +9,11 @@ export const GET_IS_AUTHENTICATED = gql`
   }
 `;
 
-export type IsAuthenticatedQueryData = {
+export type IsAuthenticatedQueryResponse = {
   customer: { id: number };
 };
 
-export class IsAuthenticatedQuery extends Query<IsAuthenticatedQueryData> {
+export class IsAuthenticatedQuery extends Query<IsAuthenticatedQueryResponse> {
   static defaultProps = {
     query: GET_IS_AUTHENTICATED
   };

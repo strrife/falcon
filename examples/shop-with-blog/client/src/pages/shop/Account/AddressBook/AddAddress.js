@@ -10,10 +10,10 @@ import {
   FormErrorSummary,
   TwoColumnsLayout,
   TwoColumnsLayoutArea,
-  AddAddressMutation,
   CountriesQuery,
   CountrySelector
 } from '@deity/falcon-ecommerce-uikit';
+import { AddAddressMutation } from '@deity/falcon-shop-data';
 
 const AddAddress = ({ history }) => (
   <GridLayout mb="md" gridGap="md">
