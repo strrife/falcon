@@ -26,18 +26,19 @@ module.exports.startDevServer = async () => {
   if (buildConfig.clearConsole) {
     clearConsole();
   }
-  logDeityGreenInfo('Starting development server...');
-
   if (process.env.NODE_ENV !== 'development') {
-    Logger.warn(
-      `Development Server cannot be started with 'process.env.NODE_ENV=${
-        process.env.NODE_ENV
-      }' setting, only 'development' is supported, it will be ignored.`
-    );
+    if (process.env.NODE_ENV !== undefined) {
+      Logger.warn(
+        `Development Server cannot be started with 'process.env.NODE_ENV=${
+          process.env.NODE_ENV
+        }' setting, only 'development' is supported, it will be ignored.`
+      );
+    }
     process.env.NODE_ENV = 'development';
   }
   process.env.BABEL_ENV = process.env.NODE_ENV;
 
+  logDeityGreenInfo('Starting development server...');
   const fullIcuPath = getFullIcuPath();
   if (fullIcuPath) {
     process.env.NODE_ICU_DATA = fullIcuPath;
@@ -45,16 +46,10 @@ module.exports.startDevServer = async () => {
 
   try {
     removePreviousBuildAssets(paths.appBuild, paths.appBuildPublic);
+    const inspect = process.argv.find(x => x.match(/--inspect-brk(=|$)/) || x.match(/--inspect(=|$)/)) || undefined;
 
-    const options = {
-      startDevServer: true,
-      inspect: process.argv.find(x => x.match(/--inspect-brk(=|$)/) || x.match(/--inspect(=|$)/)) || undefined,
-      paths,
-      buildConfig
-    };
-
-    const clientConfig = createConfig('web', options);
-    const serverConfig = createConfig('node', options);
+    const clientConfig = createConfig('web', { startDevServer: true, inspect, paths, buildConfig });
+    const serverConfig = createConfig('node', { startDevServer: true, inspect, paths, buildConfig });
 
     // Compile our assets with webpack
     const clientCompiler = webpackCompiler(clientConfig);
@@ -100,16 +95,11 @@ module.exports.build = async () => {
     process.env.NODE_ENV = 'production';
     process.env.BABEL_ENV = process.env.NODE_ENV;
   }
+  const { NODE_ENV, PUBLIC_PATH } = process.env;
 
-  logDeityGreenInfo(`Creating an ${process.env.NODE_ENV.toUpperCase()} build...`);
+  logDeityGreenInfo(`Creating an ${NODE_ENV.toUpperCase()} build...`);
 
   try {
-    const options = {
-      publicPath: process.env.PUBLIC_PATH || '/',
-      paths,
-      buildConfig
-    };
-
     const previousBuildSizes = await measureFileSizesBeforeBuild(paths.appBuildPublic);
     fs.emptyDirSync(paths.appBuild);
     fs.copySync(paths.appPublic, paths.appBuildPublic, { dereference: true });
@@ -117,10 +107,10 @@ module.exports.build = async () => {
     // First compile the client. We need it to properly output assets.json
     // (asset manifest file with the correct hashes on file names BEFORE we can start the server compiler).
 
-    const clientConfig = createConfig('web', options);
+    const clientConfig = createConfig('web', { publicPath: PUBLIC_PATH, paths, buildConfig });
     const clientCompilation = await webpackCompileAsync(clientConfig, buildConfig.CI);
 
-    const serverConfig = createConfig('node', options);
+    const serverConfig = createConfig('node', { publicPath: PUBLIC_PATH, paths, buildConfig });
     // ContextReplacementPlugin https://webpack.js.org/plugins/context-replacement-plugin/
     /* const serverCompilation = */ await webpackCompileAsync(serverConfig, buildConfig.CI);
 
@@ -160,20 +150,14 @@ module.exports.size = async () => {
 
   process.env.NODE_ENV = 'production';
   process.env.BABEL_ENV = process.env.NODE_ENV;
+  const { PUBLIC_PATH } = process.env;
 
   try {
-    const options = {
-      publicPath: process.env.PUBLIC_PATH || '/',
-      paths,
-      analyze: true,
-      buildConfig
-    };
-
     fs.emptyDirSync(paths.appBuild);
     fs.copySync(paths.appPublic, paths.appBuildPublic, { dereference: true });
 
     Logger.log('Compiling client...');
-    const clientConfig = createConfig('web', options);
+    const clientConfig = createConfig('web', { publicPath: PUBLIC_PATH, analyze: true, paths, buildConfig });
     const { warnings } = await webpackCompileAsync(clientConfig);
 
     if (warnings.length) {
