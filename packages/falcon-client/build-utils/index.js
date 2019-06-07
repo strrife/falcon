@@ -26,7 +26,7 @@ const startDevServer = async () => {
   }
 
   await application.startDevServer(buildConfig);
-  // TODO: watch serviceWorker;
+  await serviceWorker.build(buildConfig.serviceWorker); // TODO: watch instead
 };
 
 const build = async () => {
