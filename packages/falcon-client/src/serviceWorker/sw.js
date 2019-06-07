@@ -74,15 +74,18 @@ async function getFromCacheOrNetwork(request) {
 }
 
 router.registerRoute(
-  new NavigationRoute(async () => {
+  new NavigationRoute(async ({ url }) => {
     if (await isWaitingWithOneClient()) {
       self.registration.waiting.postMessage({ type: 'SKIP_WAITING', payload: undefined });
-      const response = new Response('', { headers: { Refresh: '0' } }); // refresh the tab by returning a blank response
 
-      return response;
+      return new Response('', { headers: { Refresh: '0' } }); // refresh the tab by returning a blank response
     }
 
     const cachedUrlKey = getCacheKeyForURL('app-shell');
+    if (!cachedUrlKey) {
+      return fetch(url.href);
+    }
+
     return getFromCacheOrNetwork(cachedUrlKey);
   })
 );
