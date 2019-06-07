@@ -1,7 +1,9 @@
 const fs = require('fs-extra');
 const path = require('path');
 const deepMerge = require('deepmerge');
+const chalk = require('chalk');
 const clearConsole = require('react-dev-utils/clearConsole');
+const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const Logger = require('@deity/falcon-logger');
 const paths = require('../paths');
 
@@ -62,6 +64,38 @@ function getBuildConfig(buildConfigFileName = 'falcon-client.build.config.js') {
   return config;
 }
 
+function exitIfBuildingItself() {
+  if (paths.ownPath === paths.appPath) {
+    Logger.error(
+      chalk.red(
+        'Error: falcon-client is not intended to starting or building itself. It hosts your application instead!\n'
+      )
+    );
+    Logger.info(
+      "If you don't known how to start see this: https://github.com/deity-io/falcon/tree/master/packages/create-falcon-app"
+    );
+    Logger.info(
+      'If you want more information about falcon-client see this: https://github.com/deity-io/falcon/tree/master/packages/falcon-client'
+    );
+
+    process.exit(1);
+  }
+}
+
+/**
+ * Exit if required files does no exist
+ * @param {FalconClientBuildConfig} config falcon-client build config
+ * @returns {void}
+ */
+function exitIfNoRequiredFiles(config) {
+  const filesToCheck = [paths.appIndexJs, config.useWebmanifest && paths.appWebmanifest].filter(x => x);
+  if (!checkRequiredFiles(filesToCheck)) {
+    process.exit(1);
+  }
+}
+
 module.exports = {
-  getBuildConfig
+  getBuildConfig,
+  exitIfBuildingItself,
+  exitIfNoRequiredFiles
 };

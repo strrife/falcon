@@ -4,7 +4,6 @@ const chalk = require('chalk');
 const webpack = require('webpack');
 const Logger = require('@deity/falcon-logger');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const paths = require('./../paths');
 
 const colors = {
@@ -13,36 +12,6 @@ const colors = {
 
 function logDeityGreenInfo(x) {
   Logger.info(chalk.hex(colors.deityGreen)(x));
-}
-
-function exitIfBuildingItself() {
-  if (paths.ownPath === paths.appPath) {
-    Logger.error(
-      chalk.red(
-        'Error: falcon-client is not intended to starting or building itself. It hosts your application instead!\n'
-      )
-    );
-    Logger.info(
-      "If you don't known how to start see this: https://github.com/deity-io/falcon/tree/master/packages/create-falcon-app"
-    );
-    Logger.info(
-      'If you want more information about falcon-client see this: https://github.com/deity-io/falcon/tree/master/packages/falcon-client'
-    );
-
-    process.exit(1);
-  }
-}
-
-/**
- * Exit if required files does no exist
- * @param {FalconClientBuildConfig} config falcon-client build config
- * @returns {void}
- */
-function exitIfNoRequiredFiles(config) {
-  const filesToCheck = [paths.appIndexJs, config.useWebmanifest && paths.appWebmanifest].filter(x => x);
-  if (!checkRequiredFiles(filesToCheck)) {
-    process.exit(1);
-  }
 }
 
 function webpackCompiler(config) {
@@ -116,8 +85,6 @@ function formatBytes(bytes) {
 module.exports = {
   colors,
   logDeityGreenInfo,
-  exitIfBuildingItself,
-  exitIfNoRequiredFiles,
   getFullIcuPath,
   removePreviousBuildAssets,
   webpackCompiler,
