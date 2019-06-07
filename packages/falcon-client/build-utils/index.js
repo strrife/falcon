@@ -1,6 +1,7 @@
 const clearConsole = require('react-dev-utils/clearConsole');
 const Logger = require('@deity/falcon-logger');
-const { exitIfBuildingItself, exitIfNoRequiredFiles, getBuildConfig, logDeityGreenInfo } = require('./webpack/tools');
+const { exitIfBuildingItself, exitIfNoRequiredFiles, logDeityGreenInfo } = require('./webpack/tools');
+const { getBuildConfig } = require('./tools');
 const application = require('./webpack');
 const serviceWorker = require('./serviceWorker');
 const jest = require('./jest');
