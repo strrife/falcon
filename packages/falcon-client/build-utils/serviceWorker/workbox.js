@@ -1,6 +1,11 @@
 const workbox = require('workbox-build');
 const Logger = require('@deity/falcon-logger');
+const { formatBytes } = require('../webpack/tools');
 
+/**
+ * Generates Workbox precache manifest
+ * @returns {Object[]} entries
+ */
 async function getManifestEntries() {
   try {
     const configuration = {
@@ -20,9 +25,11 @@ async function getManifestEntries() {
       Logger.warn(warnings.join('\n'));
     }
 
-    return { manifestEntries, size };
+    Logger.log(`Precaching ${manifestEntries.length} files, in total ${formatBytes(size)}.`);
+
+    return manifestEntries;
   } catch (error) {
-    Logger.error('Service Worker pre-cache entries generation failed!');
+    Logger.error('Precache entries generation failed!');
 
     throw error;
   }

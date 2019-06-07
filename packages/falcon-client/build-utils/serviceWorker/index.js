@@ -8,16 +8,20 @@ const re = require('rollup-plugin-re');
 const alias = require('rollup-plugin-alias');
 const paths = require('./../paths');
 const { getManifestEntries } = require('./workbox');
-const { formatBytes } = require('../webpack/tools');
 
-module.exports.build = async () => {
+/**
+ * @param {import('../webpack/tools').FalconSWBuildConfig} buildConfig
+ */
+module.exports.build = async buildConfig => {
   Logger.log('Compiling Service Worker...');
 
-  const isProductionBuild = process.env.NODE_ENV === 'production';
+  const { NODE_ENV } = process.env;
+  const IS_PROD = NODE_ENV === 'production';
+
   const input = fs.existsSync(paths.appSwJs) ? paths.appSwJs : paths.ownSwJs;
 
   try {
-    const { manifestEntries, size } = await getManifestEntries();
+    const manifestEntries = buildConfig.precache ? await getManifestEntries() : [];
 
     const inputOptions = {
       input,
@@ -26,14 +30,8 @@ module.exports.build = async () => {
         resolve(),
         re({
           patterns: [
-            {
-              test: 'process.env.NODE_ENV',
-              replace: JSON.stringify('development' || process.env.NODE_ENV)
-            },
-            {
-              test: 'const ENTRIES = [];',
-              replace: `const ENTRIES = ${JSON.stringify(manifestEntries, null, 2)};`
-            }
+            { test: 'process.env.NODE_ENV', replace: JSON.stringify('development' || NODE_ENV) },
+            { test: 'const ENTRIES = [];', replace: `const ENTRIES = ${JSON.stringify(manifestEntries, null, 2)};` }
           ]
         })
       ].map(x => x)
@@ -42,14 +40,13 @@ module.exports.build = async () => {
     const outputOptions = {
       file: path.join(paths.appPath, path.join('build', 'public', 'sw.js')),
       format: 'iife',
-      sourcemap: !isProductionBuild,
-      compact: isProductionBuild
+      sourcemap: !IS_PROD,
+      compact: IS_PROD
     };
 
     const bundle = await rollup.rollup(inputOptions);
     await bundle.write(outputOptions);
 
-    Logger.log(`pre-caching ${manifestEntries.length} files, totaling ${formatBytes(size)}.`);
     Logger.log('Service Worker compiled.\n');
   } catch (error) {
     Logger.error(chalk.red(`Failed to compile Service Worker\n${input}`));
