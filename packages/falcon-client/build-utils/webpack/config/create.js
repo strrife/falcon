@@ -363,6 +363,9 @@ module.exports = (target = 'web', options) => {
         writeToDisk: { filename: path.dirname(paths.appWebpackAssets) }
       })
     ];
+    if (options.analyze) {
+      config.plugins.push(new BundleAnalyzerPlugin());
+    }
 
     if (IS_DEV) {
       config.output = {
@@ -425,10 +428,6 @@ module.exports = (target = 'web', options) => {
         new webpack.HashedModuleIdsPlugin(),
         new webpack.optimize.AggressiveMergingPlugin()
       ];
-
-      if (options.analyze) {
-        config.plugins.push(new BundleAnalyzerPlugin());
-      }
 
       config.optimization = {
         minimize: true,
