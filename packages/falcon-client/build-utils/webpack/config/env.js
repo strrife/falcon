@@ -1,9 +1,7 @@
 const path = require('path');
 const paths = require('./../../paths');
 
-function getClientEnv(target, options, envToBuildIn) {
-  const { env, devServerPort, publicPath } = options;
-
+function getClientEnv(target, env, publicPath, devServerPort, envToBuildIn) {
   const raw = Object.keys(process.env)
     .filter(x => envToBuildIn.find(e => e === x))
     .reduce(

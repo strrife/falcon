@@ -110,32 +110,33 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
 /**
  * @typedef {Object} CreateWebpackOptions
  * @property {string} inspect
+ * @property {boolean} analyze
+ * @property {import('../../paths')} paths
  * @property {string} publicPath
  * @property {boolean} startDevServer has effect only when `process.env.NODE_ENV === 'development'`
+ * @property {import('../tools').FalconClientBuildConfig} buildConfig
  */
 
 /**
  * Webpack configuration factory. It's the juice!
  * @param {'web' | 'node' } target target
  * @param {CreateWebpackOptions} options
- * @param {import('../tools').FalconClientBuildConfig} buildConfig
  * @returns {Object} webpack configuration
  */
-module.exports = (target = 'web', options, buildConfig) => {
+module.exports = (target = 'web', options) => {
   const { NODE_ENV } = process.env;
   const IS_NODE = target === 'node';
   const IS_WEB = target === 'web';
   const IS_PROD = NODE_ENV === 'production';
   const IS_DEV = NODE_ENV === 'development';
 
-  const { paths } = options;
-  const START_DEV_SERVER = IS_DEV ? options.startDevServer : false;
+  const { paths, publicPath, startDevServer, buildConfig } = options;
+  const START_DEV_SERVER = IS_DEV ? startDevServer : false;
   const { devServerPort, useWebmanifest, plugins, modify, i18n, moduleOverride } = buildConfig;
 
   const devtool = 'cheap-module-source-map';
   const devServerUrl = `http://localhost:${devServerPort}/`;
-  console.log(devServerUrl);
-  const clientEnv = getClientEnv(target, { ...options, devServerPort }, buildConfig.envToBuildIn);
+  const clientEnv = getClientEnv(target, NODE_ENV, publicPath, devServerPort, buildConfig.envToBuildIn);
 
   let config = {
     mode: IS_DEV ? 'development' : 'production',

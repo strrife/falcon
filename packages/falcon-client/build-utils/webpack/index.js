@@ -20,10 +20,10 @@ const createConfig = require('./config/create');
 
 module.exports.startDevServer = async () => {
   exitIfBuildingItself();
-  const falconConfig = getBuildConfig();
-  exitIfNoRequiredFiles(falconConfig);
+  const buildConfig = getBuildConfig();
+  exitIfNoRequiredFiles(buildConfig);
 
-  if (falconConfig.clearConsole) {
+  if (buildConfig.clearConsole) {
     clearConsole();
   }
   logDeityGreenInfo('Starting development server...');
@@ -49,11 +49,12 @@ module.exports.startDevServer = async () => {
     const options = {
       startDevServer: true,
       inspect: process.argv.find(x => x.match(/--inspect-brk(=|$)/) || x.match(/--inspect(=|$)/)) || undefined,
-      paths
+      paths,
+      buildConfig
     };
 
-    const clientConfig = createConfig('web', options, falconConfig);
-    const serverConfig = createConfig('node', options, falconConfig);
+    const clientConfig = createConfig('web', options);
+    const serverConfig = createConfig('node', options);
 
     // Compile our assets with webpack
     const clientCompiler = webpackCompiler(clientConfig);
@@ -73,7 +74,7 @@ module.exports.startDevServer = async () => {
 
     // Create a new instance of Webpack-dev-server for our client assets.
     const clientDevServer = new WebpackDevServer(clientCompiler, clientConfig.devServer);
-    clientDevServer.listen(falconConfig.devServerPort, error => {
+    clientDevServer.listen(buildConfig.devServerPort, error => {
       if (error) {
         Logger.error(error);
       }
@@ -87,10 +88,10 @@ module.exports.startDevServer = async () => {
 
 module.exports.build = async () => {
   exitIfBuildingItself();
-  const falconConfig = getBuildConfig();
-  exitIfNoRequiredFiles(falconConfig);
+  const buildConfig = getBuildConfig();
+  exitIfNoRequiredFiles(buildConfig);
 
-  if (falconConfig.clearConsole) {
+  if (buildConfig.clearConsole) {
     clearConsole();
   }
 
@@ -105,7 +106,8 @@ module.exports.build = async () => {
   try {
     const options = {
       publicPath: process.env.PUBLIC_PATH || '/',
-      paths
+      paths,
+      buildConfig
     };
 
     const previousBuildSizes = await measureFileSizesBeforeBuild(paths.appBuildPublic);
@@ -115,12 +117,12 @@ module.exports.build = async () => {
     // First compile the client. We need it to properly output assets.json
     // (asset manifest file with the correct hashes on file names BEFORE we can start the server compiler).
 
-    const clientConfig = createConfig('web', options, falconConfig);
-    const clientCompilation = await webpackCompileAsync(clientConfig, falconConfig.CI);
+    const clientConfig = createConfig('web', options);
+    const clientCompilation = await webpackCompileAsync(clientConfig, buildConfig.CI);
 
-    const serverConfig = createConfig('node', options, falconConfig);
+    const serverConfig = createConfig('node', options);
     // ContextReplacementPlugin https://webpack.js.org/plugins/context-replacement-plugin/
-    /* const serverCompilation = */ await webpackCompileAsync(serverConfig, falconConfig.CI);
+    /* const serverCompilation = */ await webpackCompileAsync(serverConfig, buildConfig.CI);
 
     const warnings = [...clientCompilation.warnings]; // , ...serverCompilation.warnings]
 
@@ -148,10 +150,10 @@ module.exports.build = async () => {
 
 module.exports.size = async () => {
   exitIfBuildingItself();
-  const falconConfig = getBuildConfig();
-  exitIfNoRequiredFiles(falconConfig);
+  const buildConfig = getBuildConfig();
+  exitIfNoRequiredFiles(buildConfig);
 
-  if (falconConfig.clearConsole) {
+  if (buildConfig.clearConsole) {
     clearConsole();
   }
   logDeityGreenInfo('Creating an optimized production build...');
@@ -163,14 +165,15 @@ module.exports.size = async () => {
     const options = {
       publicPath: process.env.PUBLIC_PATH || '/',
       paths,
-      analyze: true
+      analyze: true,
+      buildConfig
     };
 
     fs.emptyDirSync(paths.appBuild);
     fs.copySync(paths.appPublic, paths.appBuildPublic, { dereference: true });
 
     Logger.log('Compiling client...');
-    const clientConfig = createConfig('web', options, falconConfig);
+    const clientConfig = createConfig('web', options);
     const { warnings } = await webpackCompileAsync(clientConfig);
 
     if (warnings.length) {
