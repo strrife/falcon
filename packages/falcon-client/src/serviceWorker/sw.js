@@ -51,6 +51,28 @@ async function isWaitingWithOneClient() {
   return self.registration.waiting && clients.length <= 1;
 }
 
+async function getFromCacheOrNetwork(request) {
+  try {
+    const response = await caches.match(request, { cacheName: cacheNames.precache });
+
+    if (response) {
+      return response;
+    }
+
+    // This shouldn't normally happen, but there are edge cases: https://github.com/GoogleChrome/workbox/issues/1441
+    throw new Error(`The cache ${cacheNames.precache} did not have an entry for ${request}.`);
+  } catch (error) {
+    // If there's either a cache miss, or the caches.match() call threw
+    // an exception, then attempt to fulfill the navigation request with
+    // a response from the network rather than leaving the user with a
+    // failed navigation.
+    console.log(`Unable to respond to navigation request with cached response. Falling back to network.`, error);
+
+    // This might still fail if the browser is offline...
+    return fetch(request);
+  }
+}
+
 router.registerRoute(
   new NavigationRoute(async () => {
     if (await isWaitingWithOneClient()) {
@@ -60,25 +82,7 @@ router.registerRoute(
       return response;
     }
 
-    const cachedAssetUrl = getCacheKeyForURL('app-shell');
-    try {
-      const response = await caches.match(cachedAssetUrl, { cacheName: cacheNames.precache });
-
-      if (response) {
-        return response;
-      }
-
-      // This shouldn't normally happen, but there are edge cases: https://github.com/GoogleChrome/workbox/issues/1441
-      throw new Error(`The cache ${cacheNames.precache} did not have an entry for ${cachedAssetUrl}.`);
-    } catch (error) {
-      // If there's either a cache miss, or the caches.match() call threw
-      // an exception, then attempt to fulfill the navigation request with
-      // a response from the network rather than leaving the user with a
-      // failed navigation.
-      console.log(`Unable to respond to navigation request with cached response. Falling back to network.`, error);
-
-      // This might still fail if the browser is offline...
-      return fetch(cachedAssetUrl);
-    }
+    const cachedUrlKey = getCacheKeyForURL('app-shell');
+    return getFromCacheOrNetwork(cachedUrlKey);
   })
 );
