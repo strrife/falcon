@@ -112,7 +112,7 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
  * @property {string} inspect
  * @property {boolean} analyze
  * @property {import('../../paths')} paths
- * @property {string} publicPath
+ * @property {string} publicPath default is `/`
  * @property {boolean} startDevServer has effect only when `process.env.NODE_ENV === 'development'`
  * @property {import('../tools').FalconClientBuildConfig} buildConfig
  */
@@ -130,7 +130,7 @@ module.exports = (target = 'web', options) => {
   const IS_PROD = NODE_ENV === 'production';
   const IS_DEV = NODE_ENV === 'development';
 
-  const { paths, publicPath, startDevServer, buildConfig } = options;
+  const { paths, publicPath = '/', startDevServer, buildConfig } = options;
   const START_DEV_SERVER = IS_DEV ? startDevServer : false;
   const { devServerPort, useWebmanifest, plugins, modify, i18n, moduleOverride } = buildConfig;
 
