@@ -47,6 +47,7 @@ module.exports.startDevServer = async () => {
     removePreviousBuildAssets(paths.appBuild, paths.appBuildPublic);
 
     const options = {
+      startDevServer: true,
       inspect: process.argv.find(x => x.match(/--inspect-brk(=|$)/) || x.match(/--inspect(=|$)/)) || undefined,
       paths
     };
