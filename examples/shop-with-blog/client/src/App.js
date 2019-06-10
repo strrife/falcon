@@ -78,7 +78,7 @@ const App = () => (
                   {({ isWaiting, skipWaiting }) =>
                     isWaiting ? (
                       <Box>
-                        Site has update. To see changes close other tabs or
+                        Site has updated. To see changes close other tabs or
                         <Button size="ms" p="xs" m="sm" onClick={() => skipWaiting()}>
                           click here
                         </Button>
