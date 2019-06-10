@@ -82,36 +82,12 @@ class ServiceWorkerInner extends React.Component<ServiceWorkerInnerProps, Servic
                 skipWaiting: () => registration.waiting.postMessage({ type: 'SKIP_WAITING', payload: undefined })
               }));
             } else {
-              // Otherwise, this newly installed SW will soon become the
-              // active SW. Rather than explicitly wait for that to happen,
-              // just show the initial "content is cached" message.
-              console.log('Content is cached for the first time!');
+              // this newly installed SW will soon become the active SW.
             }
           }
         });
       });
     }
-
-    // registration.installing.addEventListener(); // the installing worker, or undefined
-    // registration.waiting; // the waiting worker, or undefined
-    // registration.active; // the active worker, or undefined
-
-    // registration.addEventListener('updatefound', () => {
-    //   // A wild service worker has appeared in reg.installing!
-    //   const newWorker = registration.installing;
-
-    //   newWorker.state;
-    //   // "installing" - the install event has fired, but not yet complete
-    //   // "installed"  - install complete
-    //   // "activating" - the activate event has fired, but not yet complete
-    //   // "activated"  - fully active
-    //   // "redundant"  - discarded. Either failed install, or it's been
-    //   //                replaced by a newer version
-
-    //   newWorker.addEventListener('statechange', () => {
-    //     // newWorker.state has changed
-    //   });
-    // });
   }
 
   componentWillUnmount() {}

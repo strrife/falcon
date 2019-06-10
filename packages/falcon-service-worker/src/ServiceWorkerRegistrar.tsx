@@ -13,6 +13,8 @@ export class ServiceWorkerRegistrar extends React.Component<ServiceWorkerRegistr
   constructor(props) {
     super(props);
 
+    this.onControllerChange = this.onControllerChange.bind(this);
+
     this.state = {
       isSupported: false,
       registration: undefined
