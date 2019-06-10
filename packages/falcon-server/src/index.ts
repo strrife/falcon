@@ -20,6 +20,7 @@ import EndpointContainer from './containers/EndpointContainer';
 import DynamicRouteResolver from './resolvers/DynamicRouteResolver';
 import cacheInvalidatorMiddleware from './middlewares/cacheInvalidatorMiddleware';
 import schemaDirectives from './schemaDirectives';
+import { Config } from './types';
 
 const BaseSchema: string = readFileSync(resolvePath(__dirname, './../schema.graphql'), 'utf8');
 const isProduction: boolean = process.env.NODE_ENV === 'production';
@@ -37,7 +38,9 @@ export class FalconServer {
 
   protected server?: ApolloServer;
 
-  constructor(protected config: object) {
+  protected app?: Koa;
+
+  constructor(protected config: Config) {
     this.loggableErrorCodes = [codes.INTERNAL_SERVER_ERROR, codes.GRAPHQL_PARSE_FAILED];
     const { maxListeners = 20, verboseEvents = false } = this.config;
     if (config.logLevel) {

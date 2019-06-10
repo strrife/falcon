@@ -26,10 +26,6 @@ export interface ExtensionConfig {
   api?: string;
 }
 
-export interface RootFieldTypes {
-  [name: string]: Array<string>;
-}
-
 export type GraphQLFieldResolver = (obj: any, args: any, context: GraphQLContext, info: GraphQLResolveInfo) => any;
 
 export type GraphQLResolverMap = {
