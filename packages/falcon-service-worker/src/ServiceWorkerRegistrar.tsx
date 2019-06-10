@@ -55,19 +55,8 @@ export class ServiceWorkerRegistrar extends React.Component<ServiceWorkerRegistr
 
   onControllerChange(event) {
     if (event.currentTarget !== navigator.serviceWorker.controller) {
-      console.log('return window.location.reload();');
       return window.location.reload();
     }
-
-    // if (refreshing) {
-    //   return;
-    // }
-    // refreshing = true;
-    // return window.location.reload();
-
-    // This fires when the service worker controlling this page
-    // changes, eg a new worker has skipped waiting and become
-    // the new active worker.
   }
 
   get isSupported() {
@@ -87,7 +76,7 @@ export class ServiceWorkerRegistrar extends React.Component<ServiceWorkerRegistr
     if (document.readyState === 'complete') {
       callback();
     } else {
-      window.addEventListener('load', () => callback());
+      window.addEventListener('load', callback);
     }
   }
 
