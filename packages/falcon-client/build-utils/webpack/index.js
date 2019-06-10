@@ -13,44 +13,54 @@ const {
 } = require('./tools');
 const createConfig = require('./config/create');
 
-module.exports.startDevServer = async buildConfig => {
-  logDeityGreenInfo('Starting DEVELOPMENT SERVER...');
+module.exports.startDevServer = async buildConfig =>
+  new Promise((resolve, reject) => {
+    logDeityGreenInfo('Starting DEVELOPMENT SERVER...');
 
-  process.env.BABEL_ENV = process.env.NODE_ENV;
-  const fullIcuPath = getFullIcuPath();
-  if (fullIcuPath) {
-    process.env.NODE_ICU_DATA = fullIcuPath;
-  }
+    process.env.BABEL_ENV = process.env.NODE_ENV;
+    const fullIcuPath = getFullIcuPath();
+    if (fullIcuPath) {
+      process.env.NODE_ICU_DATA = fullIcuPath;
+    }
 
-  try {
-    removePreviousBuildAssets(paths.appBuild, paths.appBuildPublic);
-    const inspect = process.argv.find(x => x.match(/--inspect-brk(=|$)/) || x.match(/--inspect(=|$)/)) || undefined;
+    try {
+      removePreviousBuildAssets(paths.appBuild, paths.appBuildPublic);
+      const inspect = process.argv.find(x => x.match(/--inspect-brk(=|$)/) || x.match(/--inspect(=|$)/)) || undefined;
 
-    const clientConfig = createConfig('web', { startDevServer: true, inspect, paths, buildConfig });
-    const serverConfig = createConfig('node', { startDevServer: true, inspect, paths, buildConfig });
+      const clientConfig = createConfig('web', { startDevServer: true, inspect, paths, buildConfig });
+      const serverConfig = createConfig('node', { startDevServer: true, inspect, paths, buildConfig });
 
-    // Compile our assets with webpack
-    const clientCompiler = webpackCompiler(clientConfig);
-    const serverCompiler = webpackCompiler(serverConfig);
+      // Compile our assets with webpack
+      const clientCompiler = webpackCompiler(clientConfig);
+      const serverCompiler = webpackCompiler(serverConfig);
 
-    // Start our server webpack instance in watch mode after assets compile
-    clientCompiler.plugin('done', () => {
-      serverCompiler.watch({ quiet: true, stats: 'none' }, () => {});
-    });
+      // Start our server webpack instance in watch mode after assets compile
+      clientCompiler.plugin('done', () => {
+        serverCompiler.watch({ quiet: true, stats: 'none' }, () => {});
+      });
 
-    // Create a new instance of Webpack-dev-server for our client assets.
-    const clientDevServer = new WebpackDevServer(clientCompiler, clientConfig.devServer);
-    clientDevServer.listen(buildConfig.devServerPort, error => {
-      if (error) {
-        Logger.error(error);
-      }
-    });
-  } catch (error) {
-    Logger.error('Compilation failed!');
+      let alreadyDone = false;
+      serverCompiler.plugin('done', () => {
+        if (!alreadyDone) {
+          resolve();
+          alreadyDone = true;
+        }
+      });
 
-    throw error;
-  }
-};
+      // Create a new instance of Webpack-dev-server for our client assets.
+      const clientDevServer = new WebpackDevServer(clientCompiler, clientConfig.devServer);
+      clientDevServer.listen(buildConfig.devServerPort, error => {
+        if (error) {
+          Logger.error(error);
+        }
+      });
+    } catch (error) {
+      Logger.error('Compilation failed!');
+      reject(error);
+
+      throw error;
+    }
+  });
 
 module.exports.build = async buildConfig => {
   const { NODE_ENV, PUBLIC_PATH } = process.env;

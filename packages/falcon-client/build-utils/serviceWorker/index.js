@@ -106,10 +106,28 @@ module.exports.watch = async buildConfig => {
       compact: IS_PROD
     };
 
-    const bundle = await rollup.rollup(inputOptions);
-    await bundle.write(outputOptions);
+    const watcher = rollup.watch({
+      ...inputOptions,
+      output: outputOptions,
+      watch: {}
+    });
 
-    Logger.log('Service Worker compiled.\n');
+    watcher.on('event', event => {
+      switch (event.code) {
+        case 'BUNDLE_END':
+          console.log(`Service Worker compiled in ${event.duration / 1000}s.`);
+          break;
+
+        case 'FATAL':
+        case 'ERROR':
+          console.error(`Service Worker build error.`);
+          console.error(event.error);
+          break;
+
+        default:
+          break;
+      }
+    });
   } catch (error) {
     Logger.error(chalk.red(`Failed to compile Service Worker\n${input}`));
     Logger.error(error);

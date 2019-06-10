@@ -27,7 +27,7 @@ const startDevServer = async () => {
   }
 
   await application.startDevServer(buildConfig);
-  await serviceWorker.watch(buildConfig.serviceWorker);
+  serviceWorker.watch(buildConfig.serviceWorker);
 };
 
 const build = async () => {
