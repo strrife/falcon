@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
 import { themed, Image, Text, FlexLayout } from '@deity/falcon-ui';
 import { Price } from '../Locale';
-import { Product } from './ProductsListQuery';
+import { Product } from '../Product/ProductQuery';
 
 export const ProductCardLayout = themed({
   tag: Link,
@@ -40,11 +40,11 @@ export const ProductCard: React.SFC<ProductCardProps> = ({ product }) => {
       <FlexLayout>
         {price.special ? (
           <React.Fragment>
-            <Price fontSize="md" variant="old" mr="xs" value={price.regular} />
-            <Price fontSize="md" variant="special" value={price.special} />
+            <Price value={price.regular} fontSize="md" variant="old" mr="xs" />
+            <Price value={price.special} fontSize="md" variant="special" />
           </React.Fragment>
         ) : (
-          <Price fontSize="md" value={price.regular} />
+          <Price value={price.regular} fontSize="md" />
         )}
       </FlexLayout>
     </ProductCardLayout>
