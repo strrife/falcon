@@ -118,10 +118,19 @@ export class ServiceWorkerRegistrar extends React.Component<ServiceWorkerRegistr
   }
 }
 
-export const ServiceWorker = ({ children }) => (
+export type ServiceWorkerRenderProps = {
+  isSupported: boolean;
+  registration?: ServiceWorkerRegistration;
+  isWaiting: boolean;
+  skipWaiting: Function;
+};
+export type ServiceWorkerProps = {
+  children: (renderProps: ServiceWorkerRenderProps) => React.ReactNode;
+};
+export const ServiceWorker: React.SFC<ServiceWorkerProps> = ({ children }) => (
   <ServiceWorkerContext.Consumer>
     {({ isSupported, registration }) =>
-      registration ? (
+      isSupported && registration ? (
         <ServiceWorkerInner registration={registration}>
           {({ isWaiting, skipWaiting }) =>
             children({
@@ -134,6 +143,7 @@ export const ServiceWorker = ({ children }) => (
         </ServiceWorkerInner>
       ) : (
         children({
+          isSupported,
           isWaiting: false,
           skipWaiting: () => {}
         })
