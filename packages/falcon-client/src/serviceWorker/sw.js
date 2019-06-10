@@ -5,6 +5,15 @@ import { Router, NavigationRoute } from 'workbox-routing';
 import { precacheAndRoute, getCacheKeyForURL } from 'workbox-precaching';
 
 /**
+ * @typedef {Object} FalconSWBuildConfig
+ * @property {boolean} precache if Workbox precache
+ */
+/** @type {FalconSWBuildConfig} */
+const CONFIG = {};
+
+const ENTRIES = [];
+
+/**
  * `message` event handler
  * @param {Event} event event
  */
@@ -26,9 +35,9 @@ function onMessage(event) {
 self.addEventListener('message', onMessage);
 
 setCacheNameDetails({ prefix: '@deity' });
-
-const ENTRIES = [];
-precacheAndRoute(ENTRIES, {});
+if (CONFIG.precache) {
+  precacheAndRoute(ENTRIES, {});
+}
 
 const router = new Router();
 self.addEventListener('fetch', event => {
