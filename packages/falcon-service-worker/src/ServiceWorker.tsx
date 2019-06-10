@@ -2,11 +2,15 @@ import React from 'react';
 import { ServiceWorkerContext } from './ServiceWorkerContext';
 
 export type ServiceWorkerRenderProps = {
+  /** Determines if Service Worker API is supported by the Web Browser */
   isSupported: boolean;
   registration?: ServiceWorkerRegistration;
+  /** If there's already an active Service Worker, then the user needs to close all their tabs before they'll get updates */
   isWaiting: boolean;
+  /** Force update (auto reload in each open tab). */
   skipWaiting: Function;
 };
+
 export type ServiceWorkerProps = {
   children: (renderProps: ServiceWorkerRenderProps) => React.ReactNode;
 };
@@ -39,10 +43,7 @@ type ServiceWorkerInnerProps = {
   registration: ServiceWorkerRegistration;
   children: (renderProps: { isWaiting: boolean; skipWaiting: Function }) => React.ReactNode;
 };
-type ServiceWorkerInnerState = {
-  isWaiting: boolean;
-  skipWaiting: Function;
-};
+type ServiceWorkerInnerState = {} & Pick<ServiceWorkerRenderProps, 'isWaiting' | 'skipWaiting'>;
 class ServiceWorkerInner extends React.Component<ServiceWorkerInnerProps, ServiceWorkerInnerState> {
   constructor(props) {
     super(props);
@@ -56,33 +57,25 @@ class ServiceWorkerInner extends React.Component<ServiceWorkerInnerProps, Servic
   componentDidMount() {
     const { registration } = this.props;
 
-    // Track updates to the Service Worker.
     if (!navigator.serviceWorker.controller) {
-      console.log(`The window client is not currently controlled
-            so it is a new service worker that will activate immediately`);
-
-      // return;
+      // The window client is not controlled, a new Service Worker will activate immediately
+      return;
     }
-    // registration.update();
 
     if (registration.waiting && registration.active) {
-      console.log('1 Please close all tabs to get updates. registration.waiting && registration.active');
       this.setState(state => ({
         ...state,
         isWaiting: true,
         skipWaiting: () => registration.waiting.postMessage({ type: 'SKIP_WAITING', payload: undefined })
       }));
     } else {
-      // updatefound is also fired for the very first install. ¯\_(ツ)_/¯
       registration.addEventListener('updatefound', () => {
-        registration.installing.addEventListener('statechange', event => {
+        // updatefound is also fired for the very first install. ¯\_(ツ)_/¯
+        const newServiceWorker = registration.installing;
+
+        newServiceWorker.addEventListener('statechange', event => {
           if (event.target.state === 'installed') {
             if (registration.active) {
-              // If there's already an active SW, and skipWaiting() is not
-              // called in the SW, then the user needs to close all their
-              // tabs before they'll get updates.
-              console.log('2 Please close all tabs to get updates. statechange');
-
               this.setState(state => ({
                 ...state,
                 isWaiting: true,
