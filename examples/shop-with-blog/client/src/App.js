@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { ThemeProvider, Button } from '@deity/falcon-ui';
 import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
-import { ServiceWorkerRegistrar, ServiceWorker } from '@deity/falcon-client/src/serviceWorker/index';
+import { ServiceWorkerRegistrar, ServiceWorker } from '@deity/falcon-service-worker';
 import {
   AppLayout,
   Header,
