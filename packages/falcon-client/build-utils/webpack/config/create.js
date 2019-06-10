@@ -136,7 +136,14 @@ module.exports = (target = 'web', options) => {
 
   const devtool = 'cheap-module-source-map';
   const devServerUrl = `http://localhost:${devServerPort}/`;
-  const clientEnv = getClientEnv(target, NODE_ENV, publicPath, devServerPort, buildConfig.envToBuildIn);
+  const clientEnv = getClientEnv(
+    target,
+    NODE_ENV,
+    START_DEV_SERVER,
+    publicPath,
+    devServerPort,
+    buildConfig.envToBuildIn
+  );
 
   let config = {
     mode: IS_DEV ? 'development' : 'production',

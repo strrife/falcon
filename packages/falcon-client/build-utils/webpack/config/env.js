@@ -1,7 +1,7 @@
 const path = require('path');
 const paths = require('./../../paths');
 
-function getClientEnv(target, env, publicPath, devServerPort, envToBuildIn) {
+function getClientEnv(target, env, startDevServer, publicPath, devServerPort, envToBuildIn) {
   const raw = Object.keys(process.env)
     .filter(x => envToBuildIn.find(e => e === x))
     .reduce(
@@ -17,7 +17,7 @@ function getClientEnv(target, env, publicPath, devServerPort, envToBuildIn) {
         PUBLIC_PATH: env === 'production' ? publicPath : undefined,
         WEBPACK_ASSETS: paths.appWebpackAssets,
         OUTPUT_DIR: path.relative(paths.appPath, paths.appBuildPublic),
-        PUBLIC_DIR: path.relative(paths.appPath, env === 'production' ? paths.appBuildPublic : paths.appPublic),
+        PUBLIC_DIR: path.relative(paths.appPath, !startDevServer ? paths.appBuildPublic : paths.appPublic),
         SW_DIR: path.relative(paths.appPath, env === 'production' ? paths.appBuildPublic : paths.appBuild)
       }
     );
