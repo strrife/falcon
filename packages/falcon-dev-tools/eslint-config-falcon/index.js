@@ -80,11 +80,9 @@ module.exports = {
     'jsdoc/require-hyphen-before-param-description': [1, 'never'],
     'jsdoc/newline-after-description': [1, 'never'],
     'jsdoc/require-param': 1,
-    'jsdoc/require-param-description': 1,
     'jsdoc/require-param-name': 1,
     'jsdoc/require-param-type': 1,
     'jsdoc/require-returns-check': 1,
-    'jsdoc/require-returns-description': 1,
     'jsdoc/require-returns-type': 1
   },
   globals: {
