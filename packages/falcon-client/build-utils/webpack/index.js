@@ -14,7 +14,7 @@ const {
 const createConfig = require('./config/create');
 
 module.exports.startDevServer = async buildConfig => {
-  logDeityGreenInfo('Starting development server...');
+  logDeityGreenInfo('Starting DEVELOPMENT SERVER...');
 
   process.env.BABEL_ENV = process.env.NODE_ENV;
   const fullIcuPath = getFullIcuPath();

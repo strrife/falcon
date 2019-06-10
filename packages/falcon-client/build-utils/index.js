@@ -18,7 +18,7 @@ const startDevServer = async () => {
   if (process.env.NODE_ENV !== 'development') {
     if (process.env.NODE_ENV !== undefined) {
       Logger.warn(
-        `Development Server cannot be started with 'process.env.NODE_ENV=${
+        `DEVELOPMENT SERVER cannot be started with 'process.env.NODE_ENV=${
           process.env.NODE_ENV
         }' setting, only 'development' is supported, it will be ignored.`
       );
@@ -27,7 +27,7 @@ const startDevServer = async () => {
   }
 
   await application.startDevServer(buildConfig);
-  await serviceWorker.build(buildConfig.serviceWorker); // TODO: watch instead
+  await serviceWorker.watch(buildConfig.serviceWorker);
 };
 
 const build = async () => {
