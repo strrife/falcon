@@ -4,6 +4,8 @@ const path = require('path');
 const fs = require('fs-extra');
 const rollup = require('rollup');
 const resolve = require('rollup-plugin-node-resolve');
+const { terser } = require('rollup-plugin-terser');
+
 const re = require('rollup-plugin-re');
 const alias = require('rollup-plugin-alias');
 const paths = require('../paths');
@@ -35,7 +37,8 @@ module.exports.build = async buildConfig => {
             { test: 'const CONFIG = {};', replace: `const CONFIG = ${JSON.stringify(buildConfig, null, 2)};` },
             { test: 'const ENTRIES = [];', replace: `const ENTRIES = ${JSON.stringify(manifestEntries, null, 2)};` }
           ]
-        })
+        }),
+        IS_PROD && terser()
       ].map(x => x),
       treeshake: IS_PROD
     };
@@ -43,7 +46,7 @@ module.exports.build = async buildConfig => {
     const outputOptions = {
       file: path.join(SW_DIR, 'sw.js'),
       format: 'iife',
-      sourcemap: !IS_PROD,
+      sourcemap: IS_PROD ? true : 'inline',
       compact: IS_PROD
     };
 
