@@ -27,12 +27,18 @@ const isProduction: boolean = process.env.NODE_ENV === 'production';
 export { BaseSchema, Events };
 
 export class FalconServer {
-  constructor(config) {
+  protected cache?: Cache;
+
+  protected loggableErrorCodes: string[];
+
+  protected backendConfig: object = {};
+
+  protected eventEmitter: EventEmitter2;
+
+  protected server?: ApolloServer;
+
+  constructor(protected config: object) {
     this.loggableErrorCodes = [codes.INTERNAL_SERVER_ERROR, codes.GRAPHQL_PARSE_FAILED];
-    this.config = config;
-    this.server = null;
-    this.cache = null;
-    this.backendConfig = {};
     const { maxListeners = 20, verboseEvents = false } = this.config;
     if (config.logLevel) {
       Logger.setLogLevel(config.logLevel);
