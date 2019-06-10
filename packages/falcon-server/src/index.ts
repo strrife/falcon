@@ -1,31 +1,32 @@
-const { codes } = require('@deity/falcon-errors');
-const { Events, Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
-const Logger = require('@deity/falcon-logger');
-const { ApolloServer } = require('apollo-server-koa');
-const { EventEmitter2 } = require('eventemitter2');
-const GraphQLJSON = require('graphql-type-json');
-const cors = require('@koa/cors');
-const Koa = require('koa');
-const Router = require('koa-router');
-const session = require('koa-session');
-const body = require('koa-body');
-const get = require('lodash/get');
-const capitalize = require('lodash/capitalize');
-const trim = require('lodash/trim');
-const { resolve: resolvePath } = require('path');
-const { readFileSync } = require('fs');
-const ApiContainer = require('./containers/ApiContainer');
-const ExtensionContainer = require('./containers/ExtensionContainer');
-const EndpointContainer = require('./containers/EndpointContainer');
-const DynamicRouteResolver = require('./resolvers/DynamicRouteResolver');
-const cacheInvalidatorMiddleware = require('./middlewares/cacheInvalidatorMiddleware');
-const schemaDirectives = require('./schemaDirectives');
+import { codes } from '@deity/falcon-errors';
+import { Events, Cache, InMemoryLRUCache } from '@deity/falcon-server-env';
+import Logger from '@deity/falcon-logger';
+import { ApolloServer } from 'apollo-server-koa';
+import { EventEmitter2 } from 'eventemitter2';
+import GraphQLJSON from 'graphql-type-json';
+import cors from '@koa/cors';
+import Koa from 'koa';
+import Router from 'koa-router';
+import session from 'koa-session';
+import body from 'koa-body';
+import get from 'lodash/get';
+import capitalize from 'lodash/capitalize';
+import trim from 'lodash/trim';
+import { resolve as resolvePath } from 'path';
+import { readFileSync } from 'fs';
+import ApiContainer from './containers/ApiContainer';
+import ExtensionContainer from './containers/ExtensionContainer';
+import EndpointContainer from './containers/EndpointContainer';
+import DynamicRouteResolver from './resolvers/DynamicRouteResolver';
+import cacheInvalidatorMiddleware from './middlewares/cacheInvalidatorMiddleware';
+import schemaDirectives from './schemaDirectives';
 
-const BaseSchema = readFileSync(resolvePath(__dirname, './schema.graphql'), 'utf8');
+const BaseSchema: string = readFileSync(resolvePath(__dirname, './../schema.graphql'), 'utf8');
+const isProduction: boolean = process.env.NODE_ENV === 'production';
 
-const isProduction = process.env.NODE_ENV === 'production';
+export { BaseSchema, Events };
 
-class FalconServer {
+export class FalconServer {
   constructor(config) {
     this.loggableErrorCodes = [codes.INTERNAL_SERVER_ERROR, codes.GRAPHQL_PARSE_FAILED];
     this.config = config;
@@ -310,7 +311,3 @@ class FalconServer {
       .catch(handleStartupError);
   }
 }
-
-module.exports = FalconServer;
-module.exports.Events = Events;
-module.exports.BaseSchema = BaseSchema;

@@ -1,5 +1,5 @@
-const supertest = require('supertest');
-const FalconServer = require('./');
+import supertest from 'supertest';
+import { FalconServer } from '.';
 
 describe('Falcon Server', () => {
   const config = {

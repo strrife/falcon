@@ -1,15 +1,11 @@
-const { isScalarType } = require('graphql');
+import { GraphQLType, ResponsePath, GraphQLResolveInfo, isScalarType } from 'graphql';
 
-/**
- * @typedef {import('graphql').GraphQLType} GraphQLType
- * @typedef {import('graphql').ResponsePath} ResponsePath
- * @typedef {import('graphql').GraphQLResolveInfo} GraphQLResolveInfo
- */
+export * from './schema';
 
-const PATH_SEPARATOR = '.';
-const ID_FIELD_TYPE = 'ID';
-const TAG_SEPARATOR = ':';
-const PARENT_KEYWORD = '$parent';
+export const PATH_SEPARATOR: string = '.';
+export const ID_FIELD_TYPE: string = 'ID';
+export const TAG_SEPARATOR: string = ':';
+export const PARENT_KEYWORD: string = '$parent';
 
 /**
  * Generates a path-like string for the provided request
@@ -17,7 +13,7 @@ const PARENT_KEYWORD = '$parent';
  * @param {ResponsePath} node Operation path object
  * @returns {string} Generated operation path string
  */
-const getOperationPath = node => {
+export const getOperationPath = (node: ResponsePath): string => {
   const { key, prev } = node;
   const keys = [key];
   if (prev) {
@@ -31,7 +27,7 @@ const getOperationPath = node => {
  * @param {GraphQLType} type GQL Object type
  * @returns {GraphQLType} "root" object type
  */
-const getRootType = type => {
+export const getRootType = (type: GraphQLType): GraphQLType => {
   const realType = type.ofType || type;
   return realType.ofType ? getRootType(realType) : realType;
 };
@@ -42,7 +38,7 @@ const getRootType = type => {
  * @param {string} fieldName Name of the field
  * @returns {undefined|string|string[]} Value or list of values (in case of `sourceValue` is an array)
  */
-const getFieldValue = (sourceValue, fieldName) => {
+export const getFieldValue = (sourceValue: object | object[], fieldName: string): undefined | string | string[] => {
   if (typeof sourceValue === 'undefined' || typeof fieldName === 'undefined') {
     return undefined;
   }
@@ -58,7 +54,7 @@ const getFieldValue = (sourceValue, fieldName) => {
  * @param {GraphQLType} gqlType GQL Object Type
  * @returns {string|undefined} Name of the field with
  */
-const findIdFieldName = gqlType => {
+export const findIdFieldName = (gqlType: GraphQLType): string | undefined => {
   const { _fields: fields, name: objectTypeName } = getRootType(gqlType);
   if (isScalarType(gqlType)) {
     throw new Error(`Caching for "${objectTypeName}" scalar type is not supported yet`);
@@ -77,7 +73,7 @@ const findIdFieldName = gqlType => {
  * @param {string|string[]} entityId Entity ID or list of IDs (like: "1" or ["1", "2"])
  * @returns {string[]} List of tag names (example: ["Product:1", "Product:2"])
  */
-const generateTagNames = (entityName, entityId) => {
+export const generateTagNames = (entityName: string, entityId: string | string[]): string[] => {
   if (!entityId) {
     return [];
   }
@@ -94,7 +90,12 @@ const generateTagNames = (entityName, entityId) => {
  * @param {string|undefined} forceTypeName type name to force as a tag name
  * @returns {string[]} List of tag names
  */
-const getTagsForField = (sourceValue, fieldType, fieldPathSections = [], forceTypeName = undefined) => {
+export const getTagsForField = (
+  sourceValue: object,
+  fieldType: GraphQLType,
+  fieldPathSections: string[] = [],
+  forceTypeName?: string
+): string[] => {
   if (!fieldPathSections.length) {
     const { name: typeName } = getRootType(fieldType);
     return generateTagNames(forceTypeName || typeName, getFieldValue(sourceValue, findIdFieldName(fieldType)));
@@ -129,7 +130,13 @@ const getTagsForField = (sourceValue, fieldType, fieldPathSections = [], forceTy
  * @param {string|undefined} forceTypeName type name to force as a tag name
  * @returns {string[]} List of tags
  */
-const extractTagsForIdPath = (idPath, result, info, parent, forceTypeName = undefined) => {
+export const extractTagsForIdPath = (
+  idPath: string,
+  result: object,
+  info: GraphQLResolveInfo,
+  parent: object,
+  forceTypeName?: string
+): string[] => {
   const [rootPath, ...fieldPathSections] = idPath.split(PATH_SEPARATOR);
   const valueToCheck = rootPath === PARENT_KEYWORD ? parent : result;
   const typeToCheck = getRootType(rootPath === PARENT_KEYWORD ? info.parentType : info.returnType);
@@ -139,17 +146,4 @@ const extractTagsForIdPath = (idPath, result, info, parent, forceTypeName = unde
   }
 
   return getTagsForField(valueToCheck, typeToCheck, fieldPathSections, forceTypeName);
-};
-
-module.exports = {
-  PATH_SEPARATOR,
-  ID_FIELD_TYPE,
-  PARENT_KEYWORD,
-  getRootType,
-  getOperationPath,
-  getFieldValue,
-  getTagsForField,
-  generateTagNames,
-  extractTagsForIdPath,
-  findIdFieldName
 };
