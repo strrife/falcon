@@ -31,12 +31,13 @@ module.exports.build = async buildConfig => {
         resolve(),
         re({
           patterns: [
-            { test: 'process.env.NODE_ENV', replace: JSON.stringify('development' || NODE_ENV) },
+            { test: 'process.env.NODE_ENV', replace: JSON.stringify(NODE_ENV) },
             { test: 'const CONFIG = {};', replace: `const CONFIG = ${JSON.stringify(buildConfig, null, 2)};` },
             { test: 'const ENTRIES = [];', replace: `const ENTRIES = ${JSON.stringify(manifestEntries, null, 2)};` }
           ]
         })
-      ].map(x => x)
+      ].map(x => x),
+      treeshake: IS_PROD
     };
 
     const outputOptions = {
@@ -87,7 +88,7 @@ module.exports.watch = async buildConfig => {
         resolve(),
         re({
           patterns: [
-            { test: 'process.env.NODE_ENV', replace: JSON.stringify('development' || NODE_ENV) },
+            { test: 'process.env.NODE_ENV', replace: JSON.stringify(NODE_ENV) },
             { test: 'const CONFIG = {};', replace: `const CONFIG = ${JSON.stringify(buildConfig, null, 2)};` },
             { test: 'const ENTRIES = [];', replace: `const ENTRIES = ${JSON.stringify(manifestEntries, null, 2)};` }
           ]
