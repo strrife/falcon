@@ -97,18 +97,11 @@ export class ServiceWorkerRegistrar extends React.Component<ServiceWorkerRegistr
   }
 
   render() {
-    const { children, ...props } = this.props;
+    const { children, scriptUrl, options } = this.props;
     const { isSupported, registration } = this.state;
 
     return (
-      <ServiceWorkerContext.Provider
-        value={{
-          isSupported,
-          registration,
-          scriptUrl: props.scriptUrl,
-          options: props.options
-        }}
-      >
+      <ServiceWorkerContext.Provider value={{ isSupported, registration, scriptUrl, options }}>
         {children}
       </ServiceWorkerContext.Provider>
     );
