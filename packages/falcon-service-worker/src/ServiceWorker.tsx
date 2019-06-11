@@ -90,7 +90,6 @@ class ServiceWorkerInner extends React.Component<ServiceWorkerInnerProps, Servic
     }
   }
 
-  componentWillUnmount() {}
 
   render() {
     const { children } = this.props;
