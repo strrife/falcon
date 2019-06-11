@@ -1,7 +1,14 @@
-const { resolve } = require('path');
-const Logger = require('@deity/falcon-logger');
+import Logger from '@deity/falcon-logger';
+import { EventEmitter2 } from 'eventemitter2';
+import { resolve } from 'path';
 
-const tryRequire = moduleName => {
+declare type TryRequireResult<T> = {
+  module?: T;
+  exists: boolean;
+  error?: Error;
+};
+
+const tryRequire = <T>(moduleName: string): TryRequireResult<T> => {
   try {
     return {
       module: require(moduleName), // eslint-disable-line import/no-dynamic-require,
@@ -19,14 +26,8 @@ const tryRequire = moduleName => {
   }
 };
 
-module.exports = class BaseContainer {
-  /**
-   * Base Container constructor
-   * @param {EventEmitter2} eventEmitter EventEmitter
-   */
-  constructor(eventEmitter) {
-    this.eventEmitter = eventEmitter;
-  }
+export class BaseContainer {
+  constructor(protected eventEmitter: EventEmitter2) {}
 
   /**
    * Imports the specified module (via "require()") by checking installed NPM package
@@ -34,12 +35,12 @@ module.exports = class BaseContainer {
    * @param {string} pathOrPackage Local path or package name of the module
    * @returns {any} Imported module
    */
-  importModule(pathOrPackage) {
-    const prefix = this.constructor.name;
+  importModule<T>(pathOrPackage: string): T | undefined {
+    const prefix: string = this.constructor.name;
 
-    const requiredPackage = tryRequire(pathOrPackage);
+    const requiredPackage = tryRequire<T>(pathOrPackage);
     if (requiredPackage.exists) {
-      const { module, error } = requiredPackage;
+      const { module: mdl, error } = requiredPackage;
       if (error) {
         Logger.error(`${prefix}: "${pathOrPackage}" cannot be loaded. - ${error.message}\n${error.stack} `);
 
@@ -48,13 +49,13 @@ module.exports = class BaseContainer {
 
       Logger.debug(`${prefix}: "${pathOrPackage}" loaded as a package`);
 
-      return module;
+      return mdl;
     }
 
-    const modulePath = resolve(process.cwd(), pathOrPackage);
-    const requiredModule = tryRequire(modulePath);
+    const modulePath: string = resolve(process.cwd(), pathOrPackage);
+    const requiredModule = tryRequire<T>(modulePath);
     if (requiredModule.exists) {
-      const { module, error } = requiredModule;
+      const { module: mdl, error } = requiredModule;
       if (error) {
         Logger.error(`${prefix}: "${pathOrPackage}" cannot be loaded. - ${error.message}\n${error.stack}`);
 
@@ -63,7 +64,7 @@ module.exports = class BaseContainer {
 
       Logger.debug(`${prefix}: "${pathOrPackage}" loaded from '${modulePath}'`);
 
-      return module;
+      return mdl;
     }
 
     Logger.error(
@@ -72,4 +73,4 @@ module.exports = class BaseContainer {
 
     return undefined;
   }
-};
+}

@@ -109,6 +109,8 @@ module.exports = {
         'dot-notation': 'off',
         'react/prop-types': 'off',
         'import/prefer-default-export': 'off',
+        'no-useless-constructor': 'off',
+        'no-empty-function': 'off',
         'import-name': [true, { react: 'React' }]
       }
     }
