@@ -43,14 +43,15 @@ type ServiceWorkerInnerProps = {
   registration: ServiceWorkerRegistration;
   children: (renderProps: { isWaiting: boolean; skipWaiting: Function }) => React.ReactNode;
 };
-type ServiceWorkerInnerState = {} & Pick<ServiceWorkerRenderProps, 'isWaiting' | 'skipWaiting'>;
+type ServiceWorkerInnerState = {} & Pick<ServiceWorkerRenderProps, 'isWaiting'>;
 class ServiceWorkerInner extends React.Component<ServiceWorkerInnerProps, ServiceWorkerInnerState> {
   constructor(props) {
     super(props);
 
+    this.skipWaiting = this.skipWaiting.bind(this);
+
     this.state = {
-      isWaiting: false,
-      skipWaiting: () => {}
+      isWaiting: false
     };
   }
 
@@ -63,24 +64,15 @@ class ServiceWorkerInner extends React.Component<ServiceWorkerInnerProps, Servic
     }
 
     if (registration.waiting && registration.active) {
-      this.setState(state => ({
-        ...state,
-        isWaiting: true,
-        skipWaiting: () => registration.waiting.postMessage({ type: 'SKIP_WAITING', payload: undefined })
-      }));
+      this.setState(state => ({ ...state, isWaiting: true }));
     } else {
       registration.addEventListener('updatefound', () => {
         // updatefound is also fired for the very first install. ¯\_(ツ)_/¯
         const newServiceWorker = registration.installing;
-
         newServiceWorker.addEventListener('statechange', event => {
           if (event.target.state === 'installed') {
             if (registration.active) {
-              this.setState(state => ({
-                ...state,
-                isWaiting: true,
-                skipWaiting: () => registration.waiting.postMessage({ type: 'SKIP_WAITING', payload: undefined })
-              }));
+              this.setState(state => ({ ...state, isWaiting: true }));
             }
           }
         });
@@ -88,10 +80,21 @@ class ServiceWorkerInner extends React.Component<ServiceWorkerInnerProps, Servic
     }
   }
 
+  skipWaiting() {
+    const { registration } = this.props;
+
+    return registration.waiting
+      ? registration.waiting.postMessage({ type: 'SKIP_WAITING', payload: undefined })
+      : () => {};
+  }
+
   render() {
     const { children } = this.props;
-    const { isWaiting, skipWaiting } = this.state;
+    const { isWaiting } = this.state;
 
-    return children({ isWaiting, skipWaiting });
+    return children({
+      isWaiting,
+      skipWaiting: this.skipWaiting
+    });
   }
 }
