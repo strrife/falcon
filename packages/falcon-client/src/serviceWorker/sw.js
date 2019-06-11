@@ -43,10 +43,7 @@ const router = new Router();
 self.addEventListener('fetch', event => {
   const responsePromise = router.handleRequest(event);
   if (responsePromise) {
-    // Router found a route to handle the request
     event.respondWith(responsePromise);
-  } else {
-    // No route found to handle the request
   }
 });
 
@@ -88,6 +85,10 @@ router.registerRoute(
       self.registration.waiting.postMessage({ type: 'SKIP_WAITING', payload: undefined });
 
       return new Response('', { headers: { Refresh: '0' } }); // refresh the tab by returning a blank response
+    }
+
+    if (!CONFIG.precache) {
+      return fetch(url.href);
     }
 
     const cachedUrlKey = getCacheKeyForURL('app-shell');
