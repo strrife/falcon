@@ -81,15 +81,12 @@ class ServiceWorkerInner extends React.Component<ServiceWorkerInnerProps, Servic
                 isWaiting: true,
                 skipWaiting: () => registration.waiting.postMessage({ type: 'SKIP_WAITING', payload: undefined })
               }));
-            } else {
-              // this newly installed SW will soon become the active SW.
             }
           }
         });
       });
     }
   }
-
 
   render() {
     const { children } = this.props;
