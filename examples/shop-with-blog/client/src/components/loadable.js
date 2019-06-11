@@ -8,7 +8,6 @@ import { Loader } from '@deity/falcon-ecommerce-uikit';
  * @param {() => Promise<any>} component module which should be lazy imported
  * @returns {any} content of lazy imported module
  */
-
 export default component =>
   loadable(component, {
     fallback: <Loader />
