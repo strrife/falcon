@@ -1,5 +1,5 @@
-const { EventEmitter2 } = require('eventemitter2');
-const ApiContainer = require('./ApiContainer');
+import { EventEmitter2 } from 'eventemitter2';
+import { ApiContainer } from './ApiContainer';
 
 const apis = {
   'fake-api': {

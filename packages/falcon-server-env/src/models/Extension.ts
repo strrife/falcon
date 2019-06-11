@@ -34,6 +34,10 @@ export type GraphQLResolverMap = {
   };
 };
 
+export interface ExtensionConstructor<T extends Extension = Extension> {
+  new (params: ExtensionConstructorParams): T;
+}
+
 export abstract class Extension {
   public config: ExtensionConfig;
 

@@ -45,6 +45,10 @@ export type ApiDataSourceConstructorParams = IConfigurableConstructorParams<ApiD
   gqlServerConfig: GqlServerConfig<any>;
 };
 
+export interface ApiDataSourceConstructor<T extends ApiDataSource = ApiDataSource> {
+  new (params: ApiDataSourceConstructorParams): T;
+}
+
 export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLContext> extends RESTDataSource<TContext> {
   public name: string;
 
@@ -62,9 +66,6 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
 
   protected gqlServerConfig: GqlServerConfig<TContext>;
 
-  /**
-   * @param {ApiDataSourceConstructorParams} params Constructor params
-   */
   constructor(params: ApiDataSourceConstructorParams) {
     super();
 

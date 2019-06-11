@@ -33,7 +33,7 @@ export class BaseContainer {
    * Imports the specified module (via "require()") by checking installed NPM package
    * (by package name) and your local project folder.
    * @param {string} pathOrPackage Local path or package name of the module
-   * @returns {any} Imported module
+   * @returns {T|undefined} Imported module
    */
   importModule<T>(pathOrPackage: string): T | undefined {
     const prefix: string = this.constructor.name;

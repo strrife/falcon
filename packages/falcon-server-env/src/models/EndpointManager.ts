@@ -7,6 +7,10 @@ export interface EndpointConstructorParams extends IConfigurableConstructorParam
   entries?: string[];
 }
 
+export interface EndpointConstructor<T extends EndpointManager = EndpointManager> {
+  new (params: EndpointConstructorParams): T;
+}
+
 export abstract class EndpointManager {
   public config: UrlConfig;
 
