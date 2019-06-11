@@ -25,7 +25,7 @@ async function getManifestEntries() {
       Logger.warn(warnings.join('\n'));
     }
 
-    Logger.log(`Precaching ${manifestEntries.length} files, in total ${formatBytes(size)}.`);
+    Logger.info(`Precaching ${manifestEntries.length} files, in total ${formatBytes(size)}.`);
 
     return manifestEntries;
   } catch (error) {

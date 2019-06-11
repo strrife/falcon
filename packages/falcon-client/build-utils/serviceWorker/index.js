@@ -15,7 +15,7 @@ const { getManifestEntries } = require('./workbox');
  * @param {import('../webpack/tools').FalconSWBuildConfig} buildConfig
  */
 module.exports.build = async buildConfig => {
-  Logger.log('Compiling Service Worker...');
+  Logger.info('Compiling Service Worker...');
 
   const { NODE_ENV } = process.env;
   const IS_PROD = NODE_ENV === 'production';
@@ -53,11 +53,11 @@ module.exports.build = async buildConfig => {
     const bundle = await rollup.rollup(inputOptions);
     await bundle.write(outputOptions);
 
-    Logger.log('Service Worker compiled.\n');
+    Logger.info('Service Worker compiled.\n');
   } catch (error) {
     Logger.error(chalk.red(`Failed to compile Service Worker\n${input}`));
     Logger.error(error);
-    Logger.log();
+    Logger.info();
 
     process.exit(1);
   }
@@ -68,7 +68,7 @@ module.exports.build = async buildConfig => {
  * @param {import('../webpack/tools').FalconSWBuildConfig} buildConfig
  */
 module.exports.watch = async buildConfig => {
-  Logger.log('Compiling Service Worker...');
+  Logger.info('Compiling Service Worker...');
 
   const { NODE_ENV } = process.env;
   const IS_PROD = NODE_ENV === 'production';
@@ -115,13 +115,13 @@ module.exports.watch = async buildConfig => {
     watcher.on('event', event => {
       switch (event.code) {
         case 'BUNDLE_END':
-          console.log(`Service Worker compiled in ${event.duration / 1000}s.`);
+          Logger.info(`Service Worker compiled in ${event.duration / 1000}s.`);
           break;
 
         case 'FATAL':
         case 'ERROR':
-          console.error(`Service Worker build error.`);
-          console.error(event.error);
+          Logger.error(`Service Worker build error.`);
+          Logger.error(event.error);
           break;
 
         default:
@@ -131,7 +131,7 @@ module.exports.watch = async buildConfig => {
   } catch (error) {
     Logger.error(chalk.red(`Failed to compile Service Worker\n${input}`));
     Logger.error(error);
-    Logger.log();
+    Logger.info();
 
     process.exit(1);
   }
