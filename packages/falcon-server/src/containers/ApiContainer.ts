@@ -1,10 +1,10 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
 import Logger from '@deity/falcon-logger';
-import { ApiDataSource, ApiDataSourceConstructor, Events } from '@deity/falcon-server-env';
+import { ApiDataSource, ApiDataSourceConstructor, GqlServerConfig, Events } from '@deity/falcon-server-env';
 import { BaseContainer } from './BaseContainer';
-import { ApiEntryMap, ApolloServerConfig } from '../types';
+import { ApiEntryMap } from '../types';
 
-export type ApiDataSourceInitializer = (apolloServerConfig: ApolloServerConfig) => ApiDataSource;
+export type ApiDataSourceInitializer = (apolloServerConfig: GqlServerConfig) => ApiDataSource;
 
 /**
  * Api Engine acts as a container for API instances:

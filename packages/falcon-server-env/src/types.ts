@@ -2,6 +2,8 @@ import { Response, Request } from 'apollo-server-env';
 import { CacheOptions, RequestOptions } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { IMiddleware } from 'koa-router';
 import { RequestInit } from 'apollo-server-env';
+import { KeyValueCache } from 'apollo-server-caching';
+import { GraphQLSchema } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
 import { ApiDataSource } from './models/ApiDataSource';
 import Cache from './cache/Cache';
@@ -120,4 +122,15 @@ export enum RequestMethod {
   DELETE = 'delete',
   PATCH = 'patch',
   ALL = 'all'
+}
+
+export interface GqlServerConfig<TContext = any> {
+  schema: GraphQLSchema;
+  formatError?: Function;
+  context?: TContext;
+  formatResponse?: Function;
+  dataSources?: () => DataSources;
+  cache?: KeyValueCache;
+  debug?: boolean;
+  tracing?: boolean;
 }

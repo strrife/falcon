@@ -1,8 +1,7 @@
 import Logger from '@deity/falcon-logger';
 import { Body, Request, RESTDataSource } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
-import { KeyValueCache } from 'apollo-server-caching';
-import { GraphQLResolveInfo, GraphQLSchema } from 'graphql';
+import { GraphQLResolveInfo } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
 import { stringify } from 'qs';
 import Cache from '../cache/Cache';
@@ -22,21 +21,10 @@ import {
   FetchUrlParams,
   FetchUrlResult,
   PaginationData,
-  DataSources
+  GqlServerConfig
 } from '../types';
 
 export type PaginationValue = number | string | null;
-
-export interface GqlServerConfig<TContext = any> {
-  schema: GraphQLSchema;
-  formatError?: Function;
-  context?: TContext;
-  formatResponse?: Function;
-  dataSources?: () => DataSources;
-  cache?: KeyValueCache;
-  debug?: boolean;
-  tracing?: boolean;
-}
 
 export type ApiDataSourceConstructorParams = IConfigurableConstructorParams<ApiDataSourceConfig> & {
   /** ApiContainer instance */
