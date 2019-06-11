@@ -318,7 +318,7 @@ module.exports = (target = 'web', options) => {
 
     if (IS_DEV) {
       config.entry = [
-        require.resolve('./../prettyNodeErrors'),
+        require.resolve('../prettyNodeErrors'),
         START_DEV_SERVER && 'webpack/hot/poll?300',
         ...config.entry
       ].filter(x => x);
