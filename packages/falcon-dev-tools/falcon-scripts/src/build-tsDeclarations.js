@@ -12,7 +12,12 @@ function tsc(fileNames, options) {
 module.exports = ({ packagePath }) => {
   Logger.log(`building ts declarations...`);
 
-  const files = glob.sync(`${path.join(packagePath, 'src')}/*(*.ts|*.tsx)`);
+  const files = glob.sync(`${path.join(packagePath, 'src')}/*(*.ts|*.tsx)`, {
+    ignore: [
+      // Skipping test files
+      `${path.join(packagePath, 'src')}/*(*.test.ts|*.test.tsx)`
+    ]
+  });
 
   tsc(files, {
     outDir: 'dist',
