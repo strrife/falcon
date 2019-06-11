@@ -65,7 +65,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const App = () => (
-  <ServiceWorkerRegistrar scriptUrl="/sw.js">
+  <ServiceWorkerRegistrar>
     <LocaleProvider>
       <ScrollToTop />
       <ThemeEditorState initial={deityGreenTheme}>

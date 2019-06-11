@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ServiceWorkerContext } from './ServiceWorkerContext';
 
 export type ServiceWorkerRegistrarProps = {
-  scriptUrl: string;
+  scriptUrl?: string;
   options?: RegistrationOptions;
 };
 export type ServiceWorkerRegistrarState = {
@@ -10,6 +11,19 @@ export type ServiceWorkerRegistrarState = {
   registration?: ServiceWorkerRegistration;
 };
 export class ServiceWorkerRegistrar extends React.Component<ServiceWorkerRegistrarProps, ServiceWorkerRegistrarState> {
+  static defaultProps = {
+    scriptUrl: '/sw.js'
+  };
+
+  static propTypes = {
+    scriptUrl: PropTypes.string,
+    options: PropTypes.shape({
+      scope: PropTypes.string,
+      type: PropTypes.oneOf(['classic', 'module']),
+      updateViaCache: PropTypes.oneOf(['imports', 'all', 'none'])
+    })
+  };
+
   constructor(props) {
     super(props);
 
