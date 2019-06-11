@@ -49,6 +49,7 @@ class ServiceWorkerInner extends React.Component<ServiceWorkerInnerProps, Servic
     super(props);
 
     this.skipWaiting = this.skipWaiting.bind(this);
+    this.onUpdateFound = this.onUpdateFound.bind(this);
 
     this.state = {
       isWaiting: false
@@ -59,7 +60,6 @@ class ServiceWorkerInner extends React.Component<ServiceWorkerInnerProps, Servic
     const { registration } = this.props;
 
     if (!navigator.serviceWorker.controller) {
-      // The window client is not controlled, a new Service Worker will activate immediately
       return;
     }
 
@@ -69,17 +69,29 @@ class ServiceWorkerInner extends React.Component<ServiceWorkerInnerProps, Servic
       return;
     }
 
-    registration.addEventListener('updatefound', () => {
-      // updatefound is also fired for the very first install. ¯\_(ツ)_/¯
-      const newServiceWorker = registration.installing;
-      newServiceWorker.addEventListener('statechange', event => {
-        if (event.target.state === 'installed') {
-          if (registration.active) {
-            this.setState(state => ({ ...state, isWaiting: true }));
-          }
+    if (registration.installing) {
+      return this.onUpdateFound();
+    }
+
+    registration.addEventListener('updatefound', this.onUpdateFound);
+  }
+
+  componentWillUnmount() {
+    const { registration } = this.props;
+
+    registration.removeEventListener('updatefound', this.onUpdateFound);
+  }
+
+  onUpdateFound() {
+    const { registration } = this.props;
+
+    if (registration.installing) {
+      registration.installing.addEventListener('statechange', event => {
+        if ((event.target as any).state === 'installed') {
+          this.setState(state => ({ ...state, isWaiting: true }));
         }
       });
-    });
+    }
   }
 
   skipWaiting() {
