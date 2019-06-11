@@ -20,7 +20,7 @@ const startDevServer = async () => {
       Logger.warn(
         `DEVELOPMENT SERVER cannot be started with 'process.env.NODE_ENV=${
           process.env.NODE_ENV
-        }' setting, only 'development' is supported, it will be ignored.`
+        }' setting, only 'development' is supported, so '${process.env.NODE_ENV}' will be ignored.`
       );
     }
     process.env.NODE_ENV = 'development';
