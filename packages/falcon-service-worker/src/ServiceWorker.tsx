@@ -63,21 +63,23 @@ class ServiceWorkerInner extends React.Component<ServiceWorkerInnerProps, Servic
       return;
     }
 
-    if (registration.waiting && registration.active) {
+    if (registration.active && registration.waiting) {
       this.setState(state => ({ ...state, isWaiting: true }));
-    } else {
-      registration.addEventListener('updatefound', () => {
-        // updatefound is also fired for the very first install. ¯\_(ツ)_/¯
-        const newServiceWorker = registration.installing;
-        newServiceWorker.addEventListener('statechange', event => {
-          if (event.target.state === 'installed') {
-            if (registration.active) {
-              this.setState(state => ({ ...state, isWaiting: true }));
-            }
-          }
-        });
-      });
+
+      return;
     }
+
+    registration.addEventListener('updatefound', () => {
+      // updatefound is also fired for the very first install. ¯\_(ツ)_/¯
+      const newServiceWorker = registration.installing;
+      newServiceWorker.addEventListener('statechange', event => {
+        if (event.target.state === 'installed') {
+          if (registration.active) {
+            this.setState(state => ({ ...state, isWaiting: true }));
+          }
+        }
+      });
+    });
   }
 
   skipWaiting() {
