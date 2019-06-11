@@ -3,7 +3,7 @@ global.__SERVER__ = true; // eslint-disable-line no-underscore-dangle
 const { BaseSchema } = require('@deity/falcon-server');
 const { ApiDataSource } = require('@deity/falcon-server-env');
 const { mockServer } = require('graphql-tools');
-const Shop = require('.');
+const Shop = require('.').default;
 
 class CustomApi extends ApiDataSource {
   async getPosts() {
