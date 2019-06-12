@@ -504,8 +504,7 @@
 
 ---
 
-- Responsive
-
+> - ~~Responsive~~ - moved to @deity/falcon-uikit/src/AddressListLayout.tsx
 ---
 
 - Sidebar
