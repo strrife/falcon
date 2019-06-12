@@ -5,7 +5,7 @@ import { withTheme, PropsWithTheme, ThemeBreakpoints } from '@deity/falcon-ui';
 type ResponsiveProps = {
   width?: keyof ThemeBreakpoints | number;
   height?: keyof ThemeBreakpoints | number;
-  children: Function;
+  children: React.ReactNode;
 };
 
 const ResponsiveImpl: React.SFC<ResponsiveProps & PropsWithTheme> = props => {
@@ -30,4 +30,4 @@ const ResponsiveImpl: React.SFC<ResponsiveProps & PropsWithTheme> = props => {
   return <MediaQuery {...responsiveProps} {...rest} />;
 };
 
-export const Responsive = withTheme(ResponsiveImpl) as React.SFC<ResponsiveProps>;
+export const Responsive: React.SFC<ResponsiveProps> = withTheme(ResponsiveImpl) as React.SFC<ResponsiveProps>;
