@@ -2,12 +2,11 @@ import React from 'react';
 import MediaQuery from 'react-responsive';
 import { withTheme, PropsWithTheme, ThemeBreakpoints } from '@deity/falcon-ui';
 
-type ResponsiveProps = {
+export type ResponsiveProps = {
   width?: keyof ThemeBreakpoints | number;
   height?: keyof ThemeBreakpoints | number;
   children: React.ReactNode;
 };
-
 const ResponsiveImpl: React.SFC<ResponsiveProps & PropsWithTheme> = props => {
   const { theme, width, height, ...rest } = props;
 
