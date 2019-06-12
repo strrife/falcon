@@ -15,11 +15,6 @@
     "dist",
     "src"
   ],
-  "jest": {
-    "setupFilesAfterEnv": [
-      "../../test/setupTests.js"
-    ]
-  },
   "scripts": {
     "prepare": "npm run clean && npm run build",
     "clean": "falcon-scripts clean",
