@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import { Button, FlexLayout } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 
-import { FormField, Form, PasswordRevealInput, FormErrorSummary } from '../Forms';
+import { FormField, Form, PasswordRevealInput, FormErrorSummary } from '@deity/falcon-uikit';
 import { SignInMutation } from './SignInMutation';
 import { ForgotPasswordTrigger } from './ForgotPasswordTrigger';
 
@@ -25,7 +25,7 @@ export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted, id }) => (
         {() => (
           <Form id={id} i18nId="signIn">
             <FormField name="email" type="email" required autoComplete="email" />
-            <FormField
+            {/* <FormField
               name="password"
               type="password"
               // pass empty array, so default password strength validator does not get triggered
@@ -34,15 +34,15 @@ export const SignInForm: React.SFC<SignInFormProps> = ({ onCompleted, id }) => (
               autoComplete="current-password"
             >
               {({ field }) => <PasswordRevealInput {...field} />}
-            </FormField>
-            <FlexLayout justifyContent="space-between" alignItems="center" mt="md">
+            </FormField> */}
+            {/* <FlexLayout justifyContent="space-between" alignItems="center" mt="md">
               <ForgotPasswordTrigger />
               <Button type="submit" variant={loading ? 'loader' : undefined}>
                 <T id="signIn.button" />
               </Button>
-            </FlexLayout>
+            </FlexLayout> */}
 
-            <FormErrorSummary errors={error && [error.message]} />
+            {/* <FormErrorSummary errors={error && [error.message]} /> */}
           </Form>
         )}
       </Formik>

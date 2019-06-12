@@ -11,8 +11,8 @@ import {
   ThemedComponentProps,
   themed
 } from '@deity/falcon-ui';
-import { Field } from './Field';
 import { toGridTemplate } from '../helpers';
+import { Field } from './Field';
 import { Validator, requiredValidator, getDefaultInputTypeValidator } from './validators';
 
 export const FormFieldArea = {

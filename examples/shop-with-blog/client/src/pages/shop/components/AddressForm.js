@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, FormField, CountrySelector, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
+import { CountrySelector } from '@deity/falcon-ecommerce-uikit';
+import { toGridTemplate, Form, FormField } from '@deity/falcon-uikit';
 import { Box, Button } from '@deity/falcon-ui';
 
 const AddressFormArea = {

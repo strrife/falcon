@@ -2,9 +2,9 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { Box, H3, Text, Image, DefaultThemeProps, Link } from '@deity/falcon-ui';
+import { toGridTemplate } from '@deity/falcon-uikit';
 import { BlogPostExcerptType } from './BlogPostsQuery';
 import { DateFormat } from '../Locale';
-import { toGridTemplate } from '../helpers';
 
 const BlogPostEcerptArea = {
   image: 'image',

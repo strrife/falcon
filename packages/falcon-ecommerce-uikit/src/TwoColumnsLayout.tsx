@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, themed } from '@deity/falcon-ui';
-import { toGridTemplate } from './helpers';
+import { toGridTemplate } from '@deity/falcon-uikit';
 
 export const TwoColumnsLayoutArea = {
   left: 'left',

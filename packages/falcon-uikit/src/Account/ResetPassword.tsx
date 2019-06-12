@@ -2,11 +2,15 @@ import React from 'react';
 import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
 import { Text, Button, GridLayout, H1, Box } from '@deity/falcon-ui';
-import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '../Forms';
-import { ResetCustomerPasswordMutation, ResetCustomerPasswordVariables } from './AccountRecoveryMutations';
-import { ValidatePasswordTokenQuery } from './AccountRecoveryQueries';
+import {
+  ResetCustomerPasswordMutation,
+  ResetCustomerPasswordVariables,
+  ValidatePasswordTokenQuery
+} from '@deity/falcon-shop-data';
 import { OpenSidebarMutation } from '../Sidebar';
-import { MiniFormLayout } from '../MiniAccount';
+import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '../Forms';
+// import { MiniFormLayout } from '../MiniAccount';
+const MiniFormLayout = ({ children }) => <div>{children}</div>;
 
 type ResetPasswordProps = {
   resetToken: string;

@@ -1,10 +1,9 @@
 import React from 'react';
 import { Divider, H4, Text, List, ListItem, Icon, Button, GridLayout } from '@deity/falcon-ui';
+import { OpenSidebarMutation, CloseSidebarMutation } from '@deity/falcon-uikit';
 import { I18n, T } from '@deity/falcon-i18n';
-import { CloseSidebarMutation } from './../Sidebar/SidebarMutations';
 import { SignInForm } from '../SignIn';
 import { MiniFormLayout } from './MiniFormLayout';
-import { OpenSidebarMutation } from '../Sidebar';
 
 export const SignIn = () => (
   <I18n>

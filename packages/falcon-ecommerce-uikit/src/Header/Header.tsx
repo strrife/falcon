@@ -3,14 +3,12 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Link, Icon, DefaultThemeProps, Box } from '@deity/falcon-ui';
 
 import { CustomerQuery } from '@deity/falcon-shop-data';
-
-import { toGridTemplate } from '../helpers';
+import { toGridTemplate, OpenSidebarMutation } from '@deity/falcon-uikit';
 import { MiniCartIcon } from '../MiniCart';
 import { CartQuery, CartData } from '../Cart';
 import { AccountIcon } from '../MiniAccount';
 import { SignInIcon } from '../SignIn';
 import { MenuQuery, MenuNavbar } from '../Menu';
-import { OpenSidebarMutation } from '../Sidebar';
 import { Banner } from './Banner';
 
 export const SearchBarArea = {

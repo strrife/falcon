@@ -2,17 +2,18 @@
 
 ### Existing Queries and Mutation classes:
 
-- RequestPasswordResetMutation
-- ResetCustomerPasswordMutation
+> - ~~RequestPasswordResetMutation~~ - moved to @deity/falcon-shop-data
+> - ~~ResetCustomerPasswordMutation~~ - moved to @deity/falcon-shop-data
+
 - ValidatePasswordTokenQuery
 
 ---
 
-> - ~~EditAddressMutation~~ - moved to @deity/falcon-shop
-> - ~~AddAddressMutation~~ - moved to @deity/falcon-shop
-> - ~~RemoveAddressMutation~~ - moved to @deity/falcon-shop
-> - ~~AddressQuery~~ - moved to @deity/falcon-shop
-> - ~~AddressListQuery~~ - moved to @deity/falcon-shop
+> - ~~EditAddressMutation~~ - moved to @deity/falcon-shop-data
+> - ~~AddAddressMutation~~ - moved to @deity/falcon-shop-data
+> - ~~RemoveAddressMutation~~ - moved to @deity/falcon-shop-data
+> - ~~AddressQuery~~ - moved to @deity/falcon-shop-data
+> - ~~AddressListQuery~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -51,9 +52,9 @@
 
 ---
 
-> - ~~EditCustomerMutation~~ - moved to @deity/falcon-shop
-> - ~~CustomerQuery~~ - moved to @deity/falcon-shop
-> - ~~IsAuthenticatedQuery~~ - moved to @deity/falcon-shop
+> - ~~EditCustomerMutation~~ - moved to @deity/falcon-shop-data
+> - ~~CustomerQuery~~ - moved to @deity/falcon-shop-data
+> - ~~IsAuthenticatedQuery~~ - moved to @deity/falcon-shop-data
 
 ---
 

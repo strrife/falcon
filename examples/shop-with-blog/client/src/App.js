@@ -10,9 +10,9 @@ import {
   OnlyUnauthenticatedRoute,
   OnlineStatus,
   LocaleProvider,
-  SearchProvider,
-  Sidebar
+  SearchProvider
 } from '@deity/falcon-ecommerce-uikit';
+import { Sidebar } from '@deity/falcon-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
 import { ErrorBoundary } from 'src/components/ErrorBoundary';

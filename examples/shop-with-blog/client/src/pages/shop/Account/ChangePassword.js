@@ -4,14 +4,12 @@ import { NavLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { H1, FlexLayout, GridLayout, Button } from '@deity/falcon-ui';
 import {
-  FormField,
-  Form,
-  FormErrorSummary,
   ChangePasswordMutation,
   TwoColumnsLayout,
   TwoColumnsLayoutArea,
   PasswordRevealInput
 } from '@deity/falcon-ecommerce-uikit';
+import { FormField, Form, FormErrorSummary } from '@deity/falcon-uikit';
 
 const ChangePassword = ({ history }) => (
   <GridLayout mb="md" gridGap="md">

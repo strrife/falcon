@@ -3,13 +3,13 @@ import { H1, Text, Divider, Box, FlexLayout, GridLayout } from '@deity/falcon-ui
 import { I18n, T } from '@deity/falcon-i18n';
 import {
   GetOrderQuery,
-  toGridTemplate,
   AddressDetails,
   DateFormat,
   TotalRow,
   LocaleProvider,
   OrderItemSummary
 } from '@deity/falcon-ecommerce-uikit';
+import { toGridTemplate } from '@deity/falcon-uikit';
 
 const orderLayoutArea = {
   items: 'checkout',
