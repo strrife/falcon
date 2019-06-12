@@ -3,7 +3,7 @@ import { CacheOptions, RequestOptions } from 'apollo-datasource-rest/dist/RESTDa
 import { IMiddleware } from 'koa-router';
 import { RequestInit } from 'apollo-server-env';
 import { KeyValueCache } from 'apollo-server-caching';
-import { GraphQLSchema } from 'graphql';
+import { GraphQLSchema, GraphQLResolveInfo } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
 import { ApiDataSource } from './models/ApiDataSource';
 import Cache from './cache/Cache';
@@ -122,6 +122,10 @@ export enum RequestMethod {
   DELETE = 'delete',
   PATCH = 'patch',
   ALL = 'all'
+}
+
+export interface GraphQLResolver<T, O = any, P = any, C extends GraphQLContext = GraphQLContext> {
+  (obj: O, params: P, context: C, info: GraphQLResolveInfo): Promise<T>;
 }
 
 export interface GqlServerConfig<TContext = any> {

@@ -1,7 +1,6 @@
 import Logger from '@deity/falcon-logger';
 import { Body, Request, RESTDataSource } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
-import { GraphQLResolveInfo } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
 import { stringify } from 'qs';
 import Cache from '../cache/Cache';
@@ -18,6 +17,7 @@ import {
   ContextRequestOptions,
   DataSourceConfig,
   GraphQLContext,
+  GraphQLResolver,
   FetchUrlParams,
   FetchUrlResult,
   PaginationData,
@@ -119,12 +119,7 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
    */
   getFetchUrlPriority?: (url: string) => number;
 
-  fetchUrl?: (
-    obj: object,
-    args: FetchUrlParams,
-    context: TContext,
-    info: GraphQLResolveInfo
-  ) => Promise<FetchUrlResult>;
+  fetchUrl?: GraphQLResolver<FetchUrlResult, any, FetchUrlParams, TContext>;
 
   /**
    * Optional method to get a cache context object which should contain a distinguish data
@@ -133,7 +128,7 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
    */
   getCacheContext?: () => Record<string, any>;
 
-  fetchBackendConfig?: (obj: object, args: object, context: TContext, info: GraphQLResolveInfo) => Promise<object>;
+  fetchBackendConfig?: GraphQLResolver<object, any, any, TContext>;
 
   /**
    * Hook that is going to be executed for every REST request before calling `resolveURL` method
