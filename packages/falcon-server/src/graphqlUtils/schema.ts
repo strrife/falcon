@@ -1,11 +1,14 @@
 import { GraphQLSchema, GraphQLObjectType } from 'graphql';
 import { makeExecutableSchema } from 'graphql-tools';
 
-export interface RootFieldTypes {
-  [name: string]: string[];
+export type RootFieldTypes = Record<string, string[]>;
+
+export interface RootTypeFieldsFn {
+  (typeDefs: string): RootFieldTypes;
+  (typeDefs: Array<string>): RootFieldTypes;
 }
 
-export const getRootTypeFields = (typeDefs: string | Array<string>): RootFieldTypes => {
+export const getRootTypeFields: RootTypeFieldsFn = (typeDefs: string | Array<string>): RootFieldTypes => {
   const result: RootFieldTypes = {};
   if (!typeDefs) {
     return result;
