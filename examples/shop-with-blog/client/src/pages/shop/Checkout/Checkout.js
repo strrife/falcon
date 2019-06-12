@@ -1,15 +1,8 @@
 import React from 'react';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { Box, H2, H4, Button, Divider } from '@deity/falcon-ui';
-import {
-  CheckoutLogic,
-  CartQuery,
-  CountriesQuery,
-  CustomerQuery,
-  GET_CUSTOMER_WITH_ADDRESSES,
-  toGridTemplate,
-  Loader
-} from '@deity/falcon-ecommerce-uikit';
+import { CheckoutLogic, CartQuery, CountriesQuery, toGridTemplate, Loader } from '@deity/falcon-ecommerce-uikit';
+import { CustomerQuery, GET_CUSTOMER_WITH_ADDRESSES } from '@deity/falcon-shop-data';
 import { Test3dSecure } from '@deity/falcon-payment-plugin';
 import CheckoutCartSummary from './CheckoutCartSummary';
 import CustomerSelector from './CustomerSelector';

@@ -8,11 +8,11 @@
 
 ---
 
-- EditAddressMutation
-- AddAddressMutation
-- RemoveAddressMutation
-- AddressQuery
-- AddressListQuery
+> - ~~EditAddressMutation~~ - moved to @deity/falcon-shop
+> - ~~AddAddressMutation~~ - moved to @deity/falcon-shop
+> - ~~RemoveAddressMutation~~ - moved to @deity/falcon-shop
+> - ~~AddressQuery~~ - moved to @deity/falcon-shop
+> - ~~AddressListQuery~~ - moved to @deity/falcon-shop
 
 ---
 
@@ -51,9 +51,9 @@
 
 ---
 
-- EditCustomerMutation
-- CustomerQuery
-- IsAuthenticatedQuery
+> - ~~EditCustomerMutation~~ - moved to @deity/falcon-shop
+> - ~~CustomerQuery~~ - moved to @deity/falcon-shop
+> - ~~IsAuthenticatedQuery~~ - moved to @deity/falcon-shop
 
 ---
 
@@ -105,11 +105,11 @@
 
 ---
 
-- EDIT_ADDRESS
-- ADD_ADDRESS
-- REMOVE_ADDRESS
-- GET_ADDRESS
-- GET_ADDRESSES_LIST
+> - ~~EDIT_ADDRESS~~ - moved to @deity/falcon-shop
+> - ~~ADD_ADDRESS~~ - moved to @deity/falcon-shop
+> - ~~REMOVE_ADDRESS~~ - moved to @deity/falcon-shop
+> - ~~GET_ADDRESS~~ - moved to @deity/falcon-shop
+> - ~~GET_ADDRESSES_LIST~~ - moved to @deity/falcon-shop
 
 ---
 
@@ -150,11 +150,11 @@
 
 ---
 
-- CHANGE_PASSWORD
-- EDIT_CUSTOMER
-- GET_CUSTOMER
-- GET_CUSTOMER_WITH_ADDRESSES
-- GET_IS_AUTHENTICATED
+> - ~~CHANGE_PASSWORD~~ - moved to @deity/falcon-shop
+> - ~~EDIT_CUSTOMER~~ - moved to @deity/falcon-shop
+> - ~~GET_CUSTOMER~~ - moved to @deity/falcon-shop
+> - ~~GET_CUSTOMER_WITH_ADDRESSES~~ - moved to @deity/falcon-shop
+> - ~~GET_IS_AUTHENTICATED~~ - moved to @deity/falcon-shop
 
 ---
 
@@ -206,9 +206,8 @@
 
 ---
 
-- AddressType
-- AddressData
-- AddressListData
+> - ~~AddressType~~ - changed to `Address` and moved to @deity/falcon-shop-extension
+> - ~~AddressListData~~ - changed to `AddressListResponse` and moved to @deity/falcon-shop-data
 
 ---
 
@@ -258,9 +257,9 @@
 
 ---
 
-- Customer
-- CustomerQueryData
-- IsAuthenticatedQueryData
+> - ~~Customer~~ - moved to @deity/falcon-shop-extension
+> - ~~CustomerQueryData~~ - changed to `CustomerQueryResponse` and moved to @deity/falcon-shop-data
+> - ~~IsAuthenticatedQueryData~~ - changed to `IsAuthenticatedQueryResponse` and moved to @deity/falcon-shop-data
 
 ---
 
@@ -357,10 +356,10 @@
 
 ---
 
-- AddressDetails
-- AddressCardLayout
-- AddressCard
-- AddressListLayout
+> - ~~AddressDetails~~ - moved to @deity/falcon-uikit/src/Address/AddressDetails.tsx
+> - ~~AddressCardLayout~~ - moved to @deity/falcon-uikit/src/Address/AddressCard.tsx
+> - ~~AddressCard~~ - moved to @deity/falcon-uikit/src/Address/AddressCard.tsx
+> - ~~AddressListLayout~~ - moved to @deity/falcon-uikit/src/AddressListLayout.tsx
 
 ---
 

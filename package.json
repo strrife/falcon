@@ -61,7 +61,10 @@
     "packages/falcon-dev-tools/normal-module-override-webpack-plugin",
     "packages/eject-ts",
     "examples/shop-with-blog/client",
-    "examples/shop-with-blog/server"
+    "examples/shop-with-blog/server",
+    "packages/falcon-shop-data",
+    "packages/falcon-blog-data",
+    "packages/falcon-uikit"
   ],
   "husky": {
     "hooks": {

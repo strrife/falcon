@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { Query } from '../Query/Query';
+import { Query } from '../Query';
 
 export const GET_IS_AUTHENTICATED = gql`
   query IsAuthenticated {
@@ -9,14 +9,15 @@ export const GET_IS_AUTHENTICATED = gql`
   }
 `;
 
-export type IsAuthenticatedQueryData = {
+export type IsAuthenticatedResponse = {
   customer: { id: number };
 };
 
-export class IsAuthenticatedQuery extends Query<IsAuthenticatedQueryData> {
+export class IsAuthenticatedQuery extends Query<IsAuthenticatedQueryResponse> {
   static defaultProps = {
     query: GET_IS_AUTHENTICATED
   };
+
   static propTypes = {
     ...Query.propTypes
   };

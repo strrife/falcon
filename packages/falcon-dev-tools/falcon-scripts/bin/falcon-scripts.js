@@ -14,20 +14,24 @@ const Logger = require('@deity/falcon-logger');
   const args = process.argv.slice(3) || [];
   const packagePath = process.cwd();
 
+  const target =
+    (args.find(x => x.startsWith('--target=')) || '')
+      .split('=')
+      .pop()
+      .toUpperCase() || undefined;
+
+  if (target) {
+    process.env.TARGET = target;
+  }
+
   try {
     switch (script) {
       case 'build': {
-        const target =
-          (args.find(x => x.startsWith('--target=')) || '')
-            .split('=')
-            .pop()
-            .toUpperCase() || undefined;
-
         const buildEsm = require('../src/build-esm');
         const buildTsDeclarations = require('../src/build-tsDeclarations');
         const buildCjs = require('../src/build-cjs');
 
-        buildEsm({ packagePath, target });
+        buildEsm();
         buildTsDeclarations({ packagePath });
         if (target !== 'NODE') {
           await buildCjs({ packagePath, target });
