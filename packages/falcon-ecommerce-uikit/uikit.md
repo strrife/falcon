@@ -518,9 +518,9 @@
 
 ---
 
- -  ~~AppLayout~~ -moved to `@deity/falcon-uikit/src/Layouts/AppLayout.tsx`
+-  ~~AppLayout~~ -moved to `@deity/falcon-uikit/src/Layouts/AppLayout.tsx`
 - Breadcrumbs
-- FixCenteredLayout
+- ~~FixCenteredLayout~~ moved to `@deity/falcon-uikit/src/Layouts/FixCenteredLayout.tsx`
 - TwoColumnsLayout
 - TwoStepWizard
 

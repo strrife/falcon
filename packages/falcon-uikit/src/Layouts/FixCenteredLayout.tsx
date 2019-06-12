@@ -1,7 +1,10 @@
-import React, { ReactNode } from 'react';
 import { Box, themed } from '@deity/falcon-ui';
 
-export const FixCenteredLayout = themed<{ maxWidth?: string | number; children?: ReactNode }, {}>({
+export type FixCenteredLayoutProps = {
+  maxWidth?: string | number;
+};
+
+export const FixCenteredLayout = themed<FixCenteredLayoutProps, {}>({
   tag: Box,
   defaultProps: {
     maxWidth: '70%'
