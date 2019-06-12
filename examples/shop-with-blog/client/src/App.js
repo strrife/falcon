@@ -3,8 +3,8 @@ import { Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { ThemeProvider } from '@deity/falcon-ui';
 import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
+import { AppLayout } from '@deity/falcon-uikit';
 import {
-  AppLayout,
   Header,
   ProtectedRoute,
   OnlyUnauthenticatedRoute,

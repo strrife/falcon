@@ -504,7 +504,7 @@
 
 ---
 
-> - ~~Responsive~~ - moved to @deity/falcon-uikit/src/AddressListLayout.tsx
+> - ~~Responsive~~ - moved to `@deity/falcon-uikit/src/AddressListLayout.tsx`
 ---
 
 - Sidebar
@@ -518,7 +518,7 @@
 
 ---
 
-- AppLayout
+ -  ~~AppLayout~~ -moved to `@deity/falcon-uikit/src/Layouts/AppLayout.tsx`
 - Breadcrumbs
 - FixCenteredLayout
 - TwoColumnsLayout

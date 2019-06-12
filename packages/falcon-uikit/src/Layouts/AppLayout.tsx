@@ -1,8 +1,8 @@
 import React from 'react';
-import { themed } from '@deity/falcon-ui';
+import { Box, themed } from '@deity/falcon-ui';
 
 export const AppLayout = themed({
-  tag: 'div',
+  tag: Box,
 
   defaultTheme: {
     appLayout: {
@@ -11,8 +11,8 @@ export const AppLayout = themed({
         md: 'md'
       },
       css: {
-        margin: '0 auto',
-        maxWidth: 1480
+        maxWidth: 1480,
+        margin: '0 auto'
       }
     }
   }
