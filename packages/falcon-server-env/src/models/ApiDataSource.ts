@@ -117,23 +117,23 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
    * @param url - url for which the priority should be returned
    * @return {number} Priority index
    */
-  getFetchUrlPriority?(url: string): number;
+  getFetchUrlPriority?: (url: string) => number;
 
-  async fetchUrl?(
+  fetchUrl?: (
     obj: object,
     args: FetchUrlParams,
     context: TContext,
     info: GraphQLResolveInfo
-  ): Promise<FetchUrlResult>;
+  ) => Promise<FetchUrlResult>;
 
   /**
    * Optional method to get a cache context object which should contain a distinguish data
    * that must be taken into account while calculating the cache key for this specific DataSource
    * It could be a storeCode, selected locale etc.
    */
-  getCacheContext?(): object;
+  getCacheContext?: () => Record<string, any>;
 
-  async fetchBackendConfig?(obj: object, args: object, context: TContext, info: GraphQLResolveInfo): Promise<object>;
+  fetchBackendConfig?: (obj: object, args: object, context: TContext, info: GraphQLResolveInfo) => Promise<object>;
 
   /**
    * Hook that is going to be executed for every REST request before calling `resolveURL` method
@@ -152,7 +152,7 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
    * @param {ContextRequestOptions} request request
    * @return {Promise<void>} promise
    */
-  async authorizeRequest?(req: ContextRequestOptions): Promise<void>;
+  authorizeRequest?: (req: ContextRequestOptions) => Promise<void>;
 
   /**
    * Calculates "pagination" data
