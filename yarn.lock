@@ -1327,25 +1327,6 @@
   resolved "https://registry.npmjs.org/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@deity/eslint-config-falcon@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.npmjs.org/@deity/eslint-config-falcon/-/eslint-config-falcon-0.1.2.tgz#b5de3c44b05b91337915333518e69c3d3d9dc74a"
-  integrity sha512-9Yq2x3HPDY7QA3i20bYeSxpiEdZu9fFk2+e8JEmWCUr2+uBQ1fC2VSGPsroP5FcqJ8Bh30v9fiTUYqsOyBohsQ==
-  dependencies:
-    "@typescript-eslint/eslint-plugin" "1.9.0"
-    "@typescript-eslint/parser" "1.9.0"
-    babel-eslint "10.0.1"
-    eslint-config-airbnb "17.1.0"
-    eslint-config-prettier "4.2.0"
-    eslint-plugin-import "2.17.2"
-    eslint-plugin-jsdoc "5.0.2"
-    eslint-plugin-jsx-a11y "6.2.1"
-    eslint-plugin-prettier "3.1.0"
-    eslint-plugin-react "7.13.0"
-    eslint-plugin-typescript "^0.14.0"
-    prettier "1.17.1"
-    typescript "3.4.5"
-
 "@emotion/cache@^10.0.0", "@emotion/cache@^10.0.9":
   version "10.0.9"
   resolved "https://registry.npmjs.org/@emotion/cache/-/cache-10.0.9.tgz#e0c7b7a289f7530edcfad4dcf3858bd2e5700a6f"
@@ -8101,21 +8082,6 @@ formidable@^1.1.1, formidable@^1.2.0:
   resolved "https://registry.npmjs.org/formidable/-/formidable-1.2.1.tgz#70fb7ca0290ee6ff961090415f4b3df3d2082659"
   integrity sha512-Fs9VRguL0gqGHkXS5GQiMCr1VhZBxz0JnJs4JmMp/2jL18Fmbzvv7vOFRU+U8TBkHEE/CX1qDXzJplVULgsLeg==
 
-formik@1.3.1:
-  version "1.3.1"
-  resolved "https://registry.npmjs.org/formik/-/formik-1.3.1.tgz#ff2bb4c0144585297cf9a371081326e8d816fe6f"
-  integrity sha512-cOTpwP4vy8bj7HhEGC2IWFFhsztBlZOJoTRgGa64NxcM30rV15ub5nTliQA3Vs8vqWSlGEc6k67SR8YZIV7pew==
-  dependencies:
-    create-react-context "^0.2.2"
-    deepmerge "^2.1.1"
-    hoist-non-react-statics "^2.5.5"
-    lodash.clonedeep "^4.5.0"
-    lodash.topath "4.5.2"
-    prop-types "^15.6.1"
-    react-fast-compare "^1.0.0"
-    tslib "^1.9.3"
-    warning "^3.0.0"
-
 formik@^1.3.1:
   version "1.5.1"
   resolved "https://registry.npmjs.org/formik/-/formik-1.5.1.tgz#ef5687e1ade5b1fe5f1d51435b422238aad107e9"
@@ -11373,11 +11339,6 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.npmjs.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
 
-lodash.topath@4.5.2:
-  version "4.5.2"
-  resolved "https://registry.npmjs.org/lodash.topath/-/lodash.topath-4.5.2.tgz#3616351f3bba61994a0931989660bd03254fd009"
-  integrity sha1-NhY1Hzu6YZlKCTGYlmC9AyVP0Ak=
-
 lodash.unescape@4.0.1:
   version "4.0.1"
   resolved "https://registry.npmjs.org/lodash.unescape/-/lodash.unescape-4.0.1.tgz#bf2249886ce514cda112fae9218cdc065211fc9c"
@@ -14393,11 +14354,6 @@ react-error-overlay@5.1.4, react-error-overlay@^5.1.4:
   version "5.1.4"
   resolved "https://registry.npmjs.org/react-error-overlay/-/react-error-overlay-5.1.4.tgz#88dfb88857c18ceb3b9f95076f850d7121776991"
   integrity sha512-fp+U98OMZcnduQ+NSEiQa4s/XMsbp+5KlydmkbESOw4P69iWZ68ZMFM5a2BuE0FgqPBKApJyRuYHR95jM8lAmg==
-
-react-fast-compare@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-1.0.0.tgz#813a039155e49b43ceffe99528fe5e9d97a6c938"
-  integrity sha512-dcQpdWr62flXQJuM8/bVEY5/10ad2SYBUafp8H4q4WHR3fTA/MMlp8mpzX12I0CCoEJc1P6QdiMg7U+7lFS6Rw==
 
 react-fast-compare@^2.0.1:
   version "2.0.4"
