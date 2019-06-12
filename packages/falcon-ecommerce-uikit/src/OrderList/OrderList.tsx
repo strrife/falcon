@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { themed, Box, Text, DefaultThemeProps, Link, List, ListItem } from '@deity/falcon-ui';
 import { Price, DateFormat } from '../Locale';
-import { toGridTemplate } from './../helpers';
+import { toGridTemplate } from '../helpers';
 import { Order } from '../Order/OrderQuery';
 
 const OrderListItemArea = {
@@ -90,7 +90,7 @@ export const OrderListItem: React.SFC<Order> = props => (
       <CellLabel>
         <T id="orderList.grandTotalLabel" />
       </CellLabel>
-      <Price value={props.grandTotal} currency={props.orderCurrencyCode} display="flex" />
+      <Price value={props.grandTotal} formatOptions={{ currency: props.orderCurrencyCode }} display="flex" />
     </Box>
     <Box gridArea={OrderListItemArea.status} display="flex" alignContent="flex-start">
       <CellLabel>

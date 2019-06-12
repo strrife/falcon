@@ -36,7 +36,7 @@ export async function Server({ App, clientApolloSchema, bootstrap, webpackAssets
   router.get('/static/*', serve(publicDir, { maxage: process.env.NODE_ENV === 'production' ? 31536000000 : 0 }));
   router.get('/*', serve(publicDir));
   router.get('/app-shell', ...renderAppShell({ config, webpackAssets }));
-  router.get('/*', ...renderApp({ App, clientApolloSchema, config, webpackAssets }));
+  router.get('/*', ...(await renderApp({ App, clientApolloSchema, config, webpackAssets })));
   if (bootstrap.onRouterInitialized) {
     await bootstrap.onRouterInitialized(router);
   }
