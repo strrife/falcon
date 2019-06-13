@@ -16,10 +16,9 @@ export class ApiContainer extends BaseContainer {
 
   /**
    * Instantiates apis based on passed configuration
-   * @param {ApiEntryMap} apis Key-value list of APIs configuration
-   * @returns {undefined}
+   * @param apis Key-value list of APIs configuration
    */
-  async registerApis(apis: ApiEntryMap = {}) {
+  async registerApis(apis: ApiEntryMap = {}): Promise<void> {
     for (const apiKey in apis) {
       if (Object.prototype.hasOwnProperty.call(apis, apiKey)) {
         const api = apis[apiKey];
