@@ -27,8 +27,8 @@ const Logger = require('@deity/falcon-logger');
         const buildTsDeclarations = require('../src/build-tsDeclarations');
         const buildCjs = require('../src/build-cjs');
 
-        buildEsm({ packagePath, target });
         buildTsDeclarations({ packagePath });
+        buildEsm({ packagePath, target });
         if (target !== 'NODE') {
           await buildCjs({ packagePath, target });
         }
