@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import { adopt } from 'react-adopt';
 import { ApplyCouponMutation, CancelCouponMutation } from '@deity/falcon-ecommerce-uikit';
-import { toGridTemplate } from '@deity/falcon-uikit';
+import { toGridTemplate } from '@deity/falcon-ui-kit';
 import { Box, Input, Button, Text, Icon } from '@deity/falcon-ui';
 import { I18n } from '@deity/falcon-i18n';
 import CartTotals from '../../components/CartTotals';

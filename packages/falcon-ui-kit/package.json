@@ -1,12 +1,12 @@
 {
-  "name": "@deity/falcon-uikit",
+  "name": "@deity/falcon-ui-kit",
   "license": "OSL-3.0",
   "version": "0.0.1",
-  "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-uikit",
+  "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-ui-kit",
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/falcon-uikit.cjs.js",
+  "main": "dist/falcon-ui-kit.cjs.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",

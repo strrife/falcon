@@ -9,7 +9,7 @@ import {
   TwoColumnsLayoutArea,
   PasswordRevealInput
 } from '@deity/falcon-ecommerce-uikit';
-import { FormField, Form, FormErrorSummary } from '@deity/falcon-uikit';
+import { FormField, Form, FormErrorSummary } from '@deity/falcon-ui-kit';
 
 const ChangePassword = ({ history }) => (
   <GridLayout mb="md" gridGap="md">

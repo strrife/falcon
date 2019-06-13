@@ -9,7 +9,7 @@ import {
   LocaleProvider,
   OrderItemSummary
 } from '@deity/falcon-ecommerce-uikit';
-import { toGridTemplate } from '@deity/falcon-uikit';
+import { toGridTemplate } from '@deity/falcon-ui-kit';
 
 const orderLayoutArea = {
   items: 'checkout',

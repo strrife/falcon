@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Image, Text, DefaultThemeProps } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
-import { toGridTemplate } from '@deity/falcon-uikit';
+import { toGridTemplate } from '@deity/falcon-ui-kit';
 import { Price } from '../Locale';
 import { OrderItem } from './OrderQuery';
 

@@ -4,7 +4,7 @@ import { Link as RouterLink, Switch, Route } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { Box, Link, Menu, MenuItem } from '@deity/falcon-ui';
 import { SignOutLogic, NotFound } from '@deity/falcon-ecommerce-uikit';
-import { toGridTemplate } from '@deity/falcon-uikit';
+import { toGridTemplate } from '@deity/falcon-ui-kit';
 import AccountDashboard from './Dashboard';
 import PersonalInformation from './PersonalInformation';
 import ChangePassword from './ChangePassword';

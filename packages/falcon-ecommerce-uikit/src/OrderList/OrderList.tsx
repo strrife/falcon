@@ -2,7 +2,7 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { themed, Box, Text, DefaultThemeProps, Link, List, ListItem } from '@deity/falcon-ui';
-import { toGridTemplate } from '@deity/falcon-uikit';
+import { toGridTemplate } from '@deity/falcon-ui-kit';
 import { Price, DateFormat } from '../Locale';
 import { Order } from '../Order/OrderQuery';
 

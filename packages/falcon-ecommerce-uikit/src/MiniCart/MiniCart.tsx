@@ -16,7 +16,7 @@ import {
   NumberInput,
   FlexLayout
 } from '@deity/falcon-ui';
-import { toGridTemplate, prettyScrollbars, CloseSidebarMutation } from '@deity/falcon-uikit';
+import { toGridTemplate, prettyScrollbars, CloseSidebarMutation } from '@deity/falcon-ui-kit';
 import { I18n, T } from '@deity/falcon-i18n';
 import { MiniCartData } from './MiniCartQuery';
 import { RemoveCartItemMutation, UpdateCartItemMutation } from '../Cart/CartMutation';

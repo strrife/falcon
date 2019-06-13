@@ -1,6 +1,6 @@
 import React from 'react';
 import { Formik } from 'formik';
-import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '@deity/falcon-uikit';
+import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '@deity/falcon-ui-kit';
 import { SignUpMutation, SignUpVariables } from './SignUpMutation';
 
 type SignUpFormProps = {

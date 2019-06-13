@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Link, Icon, DefaultThemeProps, Box } from '@deity/falcon-ui';
 
 import { CustomerQuery } from '@deity/falcon-shop-data';
-import { toGridTemplate, OpenSidebarMutation } from '@deity/falcon-uikit';
+import { toGridTemplate, OpenSidebarMutation } from '@deity/falcon-ui-kit';
 import { MiniCartIcon } from '../MiniCart';
 import { CartQuery, CartData } from '../Cart';
 import { AccountIcon } from '../MiniAccount';

@@ -12,7 +12,7 @@ import {
   LocaleProvider,
   SearchProvider
 } from '@deity/falcon-ecommerce-uikit';
-import { Sidebar } from '@deity/falcon-uikit';
+import { Sidebar } from '@deity/falcon-ui-kit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
 import { ErrorBoundary } from 'src/components/ErrorBoundary';
