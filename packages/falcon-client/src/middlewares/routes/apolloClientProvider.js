@@ -8,7 +8,7 @@ import { ApolloClient } from '../../service';
  * @param {Object} params params
  * @param {Object} params.config ApolloClient configuration
  * @param {Object.<string, {data, resolvers}>} params.clientStates dictionary of Apollo States
- * @returns {function(ctx: object, next: function): Promise<void>} Koa middleware function
+ * @returns {import('koa').Middleware} Koa middleware function
  */
 export default ({ config, clientStates = {} }) => {
   const mergedClientState = Object.keys(clientStates).reduce(
