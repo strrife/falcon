@@ -26,3 +26,8 @@ export type Customer = {
   lastname?: string;
   newsletterSubscriber?: boolean;
 };
+
+export type ResetCustomerPasswordInput = {
+  resetToken: string;
+  password: string;
+};
