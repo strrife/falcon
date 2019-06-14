@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
 import { themed, Image, Text, FlexLayout } from '@deity/falcon-ui';
 import { Price } from '../Locale';
-import { Product } from '../Product/ProductQuery';
+import { ProductData } from '../Product/ProductQuery';
 
 export const ProductCardLayout = themed({
   tag: Link,
@@ -25,7 +25,7 @@ export const ProductCardLayout = themed({
 });
 
 export type ProductCardProps = {
-  product: Product;
+  product: ProductData;
 };
 export const ProductCard: React.SFC<ProductCardProps> = ({ product }) => {
   const { price } = product;
