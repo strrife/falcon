@@ -21,12 +21,12 @@ process.on('uncaughtException', ex => {
             .pop()
             .toUpperCase() || undefined;
 
+        const buildDts = require('../src/build-dts');
         const buildEsm = require('../src/build-esm');
-        const buildTsDeclarations = require('../src/build-tsDeclarations');
         const buildCjs = require('../src/build-cjs');
 
+        buildDts({ packagePath });
         buildEsm({ packagePath, target });
-        buildTsDeclarations({ packagePath });
         if (target !== 'NODE') {
           await buildCjs({ packagePath, target });
         }

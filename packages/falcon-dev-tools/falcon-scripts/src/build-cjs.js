@@ -31,6 +31,7 @@ module.exports = async ({ packagePath }) => {
   ];
   const extensions = ['.ts', '.tsx', '.js', '.jsx'];
 
+  const format = 'cjs';
   const inputOptions = {
     input: inputFiles[0],
     external: makeExternalPredicate(externals),
@@ -46,7 +47,7 @@ module.exports = async ({ packagePath }) => {
       commonjs()
     ]
   };
-  const outputOptions = { file: packageJson.main, format: 'cjs', sourcemap: 'inline' };
+  const outputOptions = { file: packageJson.main, format, sourcemap: true };
 
   const bundle = await rollup.rollup(inputOptions);
   await bundle.write(outputOptions);
