@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import jmespath from 'jmespath';
 import * as CONSTANTS from './constants';
 import colors from './colors';
+import minimal from './minimal';
 import {
   isObject,
   jsonParser,
@@ -54,6 +55,10 @@ export default (options: object) => {
   const ignoreKeys = opts.ignore ? new Set(opts.ignore.split(',')) : undefined;
   const colorizer = colors(opts.colorize);
   const { search } = opts;
+
+  if (opts.minimal) {
+    return minimal({ IDENT, EOL });
+  }
 
   return inputData => {
     let log;
