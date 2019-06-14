@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import { Query } from '../Query';
-import { Product } from '../Product/ProductQuery';
+import { ProductData } from '../Product/ProductQuery';
 
 export const GET_PRODUCT_LIST = gql`
   query Products {
@@ -21,7 +21,7 @@ export const GET_PRODUCT_LIST = gql`
 `;
 
 export type Products = {
-  items: Product[];
+  items: ProductData[];
 };
 
 export class ProductListQuery extends Query<Products> {
