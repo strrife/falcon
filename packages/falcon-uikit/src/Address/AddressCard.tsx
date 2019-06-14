@@ -6,7 +6,7 @@ import { AddressDetails } from './AddressDetails';
 export const AddressCardLayout = themed({
   tag: 'li',
   defaultTheme: {
-    addressCard: {
+    addressCardLayout: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'flex-start'

@@ -8,6 +8,7 @@ module.exports = () => {
   process.env.BUILD_TARGET = process.env.BUILD_TARGET || '';
   process.env.WEBPACK_ASSETS = process.env.WEBPACK_ASSETS || 'assets/manifest.json';
   process.env.PUBLIC_DIR = process.env.PUBLIC_DIR || 'public/dir';
+  process.env.SW_DIR = process.env.SW_DIR || 'sw/dir';
 
   const paths = require('./../paths');
   const createConfig = require('./config/create');

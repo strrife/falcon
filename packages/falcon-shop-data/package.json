@@ -15,18 +15,11 @@
     "dist",
     "src"
   ],
-  "jest": {
-    "setupFilesAfterEnv": [
-      "../../test/setupTests.js"
-    ]
-  },
   "scripts": {
     "prepare": "npm run clean && npm run build",
     "clean": "falcon-scripts clean",
     "build": "falcon-scripts build",
-    "watch": "falcon-scripts watch",
-    "test": "falcon-scripts test",
-    "test:coverage": "falcon-scripts test:coverage"
+    "watch": "falcon-scripts watch"
   },
   "devDependencies": {
     "@deity/falcon-scripts": "^0.0.1",
