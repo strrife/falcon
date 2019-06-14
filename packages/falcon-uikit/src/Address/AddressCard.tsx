@@ -1,10 +1,10 @@
 import React from 'react';
-import { themed } from '@deity/falcon-ui';
+import { themed, ListItem } from '@deity/falcon-ui';
 import { Address } from '@deity/falcon-shop-extension';
 import { AddressDetails } from './AddressDetails';
 
 export const AddressCardLayout = themed({
-  tag: 'li',
+  tag: ListItem,
   defaultTheme: {
     addressCardLayout: {
       display: 'flex',

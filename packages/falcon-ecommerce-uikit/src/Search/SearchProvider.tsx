@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 // eslint-disable-next-line
 import { Location } from 'history';
-import { PaginationInput } from './../types';
+import { PaginationInput } from '../types';
 import { FilterOperator } from './types';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
@@ -97,11 +97,6 @@ export class SearchProviderImpl extends React.Component<SearchProviderImplProps,
     return stateToSerialize;
   };
 
-  private updateURL(state: SearchState) {
-    const queryString = this.props.searchStateToURL!(state);
-    this.props.history.push(`${this.props.location.pathname}?${queryString}`);
-  }
-
   private restoreStateFromURL = (location: any) => {
     const state = this.getStateFromURL(location);
     // state created from URL might be empty so we have to make sure that all the items are correctly
@@ -116,6 +111,11 @@ export class SearchProviderImpl extends React.Component<SearchProviderImplProps,
   };
 
   private historyUnlisten = () => {};
+
+  private updateURL(state: SearchState) {
+    const queryString = this.props.searchStateToURL!(state);
+    this.props.history.push(`${this.props.location.pathname}?${queryString}`);
+  }
 
   render() {
     return (

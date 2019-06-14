@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { Query } from '../Query';
 
-export type Product = {
+export type ProductData = {
   id: string;
   sku: string;
   name: string;
@@ -101,7 +101,7 @@ export const GET_PRODUCT = gql`
   }
 `;
 
-export class ProductQuery extends Query<{ product: Product }> {
+export class ProductQuery extends Query<{ product: ProductData }> {
   static defaultProps = {
     query: GET_PRODUCT,
     fetchPolicy: 'cache-and-network'
