@@ -34,12 +34,15 @@ export async function Server({ App, clientApolloSchema, bootstrap, webpackAssets
     router.all(graphqlUri, graphqlProxy(config.graphqlUrl));
   }
 
+  const nodeEnv = process.env.NODE_ENV;
   const publicDir = process.env.PUBLIC_DIR;
-  router.get('/sw.js', serve(publicDir, { maxage: 0 }));
-  router.get('/static/*', serve(publicDir, { maxage: process.env.NODE_ENV === 'production' ? 31536000000 : 0 }));
+  const swDir = process.env.SW_DIR;
+
+  router.get('/sw.js', serve(swDir, { maxage: 0 }));
+  router.get('/static/*', serve(publicDir, { maxage: nodeEnv === 'production' ? 31536000000 : 0 }));
   router.get('/*', serve(publicDir));
   router.get('/app-shell', ...renderAppShell({ config, webpackAssets }));
-  router.get('/*', ...renderApp({ App, clientApolloSchema, config, webpackAssets }));
+  router.get('/*', ...(await renderApp({ App, clientApolloSchema, config, webpackAssets })));
   if (bootstrap.onRouterInitialized) {
     await bootstrap.onRouterInitialized(router);
   }
