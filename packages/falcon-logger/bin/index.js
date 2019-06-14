@@ -5,11 +5,12 @@ const args = require('args');
 const { Transform } = require('readable-stream');
 const split = require('split2');
 const pump = require('pump');
-const falconPrettyFactory = require('../');
+const falconPrettyFactory = require('../dist/format');
 
 args
   .option(['c', 'colorize'], 'Force adding color sequences to the output')
   .option(['f', 'crlf'], 'Append CRLF instead of LF to formatted lines')
+  .option('minimal', 'Use "minimal"')
   .option(
     ['e', 'errorProps'],
     'Comma separated list of properties on error objects to show (`*` for all properties)',
@@ -35,20 +36,20 @@ args
   .option(['i', 'ignore'], 'Ignore one or several keys: (`-i time,hostname`)');
 
 args
-  .example('cat log | falcon-logger-pretty', 'To prettify logs, simply pipe a log file through')
-  .example('cat log | falcon-logger-pretty -m fooMessage', "To highlight a string at a key other than 'msg', use")
-  .example('cat log | falcon-logger-pretty -a fooTimestamp', "To display timestamp from a key other than 'time', use")
-  .example('cat log | falcon-logger-pretty -t', 'To convert Epoch timestamps to ISO timestamps use the -t option')
+  .example('cat log | logger-pretty', 'To prettify logs, simply pipe a log file through')
+  .example('cat log | logger-pretty -m fooMessage', "To highlight a string at a key other than 'msg', use")
+  .example('cat log | logger-pretty -a fooTimestamp', "To display timestamp from a key other than 'time', use")
+  .example('cat log | logger-pretty -t', 'To convert Epoch timestamps to ISO timestamps use the -t option')
   .example(
-    'cat log | falcon-logger-pretty -t "SYS:yyyy-mm-dd HH:MM:ss"',
+    'cat log | logger-pretty -t "SYS:yyyy-mm-dd HH:MM:ss"',
     'To convert Epoch timestamps to local timezone format use the -t option with "SYS:" prefixed format string'
   )
-  .example('cat log | falcon-logger-pretty -l', 'To flip level and time/date in standard output use the -l option')
+  .example('cat log | logger-pretty -l', 'To flip level and time/date in standard output use the -l option')
   .example(
-    'cat log | falcon-logger-pretty -s "msg == \'hello world\'"',
+    'cat log | logger-pretty -s "msg == \'hello world\'"',
     "Only prints messages with msg equals to 'hello world'"
   )
-  .example('cat log | falcon-logger-pretty -i pid,hostname', "Prettify logs but don't print pid and hostname");
+  .example('cat log | logger-pretty -i pid,hostname', "Prettify logs but don't print pid and hostname");
 
 const opts = args.parse(process.argv);
 const pretty = falconPrettyFactory.default(opts);

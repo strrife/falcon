@@ -2,6 +2,15 @@ import chalk, { Chalk } from 'chalk';
 import { LEVELS, LEVEL_NAMES } from './constants';
 
 export type Colorizer = (input: string) => string;
+
+export interface ColorizerFn {
+  (input: string): string;
+  message: Colorizer;
+  default: Colorizer;
+  random: Colorizer;
+  error: Colorizer;
+}
+
 export type ColorizerMap = {
   default: Colorizer;
   60: Colorizer;
@@ -107,4 +116,4 @@ coloredColorizer.error = colored.error;
  * colors as the integer `level` and will also default to `USERLVL` if the given
  * string is not a recognized level name.
  */
-export default (useColors: boolean = false) => (useColors ? coloredColorizer : plainColorizer);
+export default (useColors: boolean = false): ColorizerFn => (useColors ? coloredColorizer : plainColorizer);

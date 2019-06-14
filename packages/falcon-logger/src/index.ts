@@ -28,6 +28,7 @@ logger.setApp = name => {
   if (isAppSet) {
     return;
   }
+  // @ts-ignore: Tweaking internal Pino settings
   logger[chindingsSym] += `,"app":"${name}"`;
   isAppSet = true;
 };

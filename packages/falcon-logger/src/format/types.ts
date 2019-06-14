@@ -1,4 +1,4 @@
-import { Colorizer } from './colors';
+import { ColorizerFn } from './colors';
 
 export type GetSourceFileResolveInput = {
   line: number;
@@ -23,7 +23,7 @@ export type MaybeString = undefined | string;
 
 export type PrettifyModuleInput = {
   log: any;
-  colorizer: Colorizer;
+  colorizer: ColorizerFn;
 };
 
 export type PrettifyGraphQLErrorLogInput = {
@@ -38,7 +38,7 @@ export type PrettifyErrorLogInput = {
 } & PrettifyGraphQLErrorLogInput;
 
 export type ReadSourceInput = {
-  colorizer: Colorizer;
+  colorizer: ColorizerFn;
   stack: string[];
   setLineNumber?: boolean;
   paddingLines?: number;
