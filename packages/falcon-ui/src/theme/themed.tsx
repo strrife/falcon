@@ -294,7 +294,7 @@ export type BaseProps<TTag extends HtmlTag> = {
   (TTag extends keyof JSX.IntrinsicElements ? JSX.IntrinsicElements[TTag] : {}) &
   (TTag extends React.ComponentType<infer TExtendProps> ? Partial<TExtendProps> : {});
 
-type DefaultProps<TTag extends HtmlTag> = (TTag extends keyof JSX.IntrinsicElements
+type ThemedDefaultProps<TTag extends HtmlTag> = (TTag extends keyof JSX.IntrinsicElements
   ? JSX.IntrinsicElements[TTag]
   : {}) &
   (TTag extends React.ComponentType<infer TExtendProps> ? Partial<TExtendProps> : {});
@@ -302,7 +302,7 @@ type DefaultProps<TTag extends HtmlTag> = (TTag extends keyof JSX.IntrinsicEleme
 type ThemedOptions<TTag extends HtmlTag, TProps> = {
   tag?: TTag;
   defaultTheme?: { [name: string]: ThemedComponentPropsWithVariants<TProps> };
-  defaultProps?: DefaultProps<TTag> & TProps;
+  defaultProps?: ThemedDefaultProps<TTag> & TProps;
 };
 
 export type DefaultThemeProps = { [name: string]: ThemedComponentPropsWithVariants };
