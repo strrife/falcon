@@ -90,7 +90,7 @@ export const OrderListItem: React.SFC<Order> = props => (
       <CellLabel>
         <T id="orderList.grandTotalLabel" />
       </CellLabel>
-      <Price value={props.grandTotal} currency={props.orderCurrencyCode} display="flex" />
+      <Price value={props.grandTotal} formatOptions={{ currency: props.orderCurrencyCode }} display="flex" />
     </Box>
     <Box gridArea={OrderListItemArea.status} display="flex" alignContent="flex-start">
       <CellLabel>

@@ -19,10 +19,6 @@ const runPlugin = require('./runPlugin');
 const falconClientPolyfills = require.resolve('./../../polyfills');
 
 /**
- *  @typedef {import('../tools').FalconClientBuildConfig} FalconClientBuildConfig
- */
-
-/**
  * Create RegExp filter based on provided modules names
  * @param {string[]} modules module names to filter on
  * @returns {RegExp} RegExp filter
@@ -112,27 +108,42 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
 }
 
 /**
+ * @typedef {Object} CreateWebpackOptions
+ * @property {string} inspect
+ * @property {boolean} analyze
+ * @property {import('../../paths')} paths
+ * @property {string} publicPath default is `/`
+ * @property {boolean} startDevServer has effect only when `process.env.NODE_ENV === 'development'`
+ * @property {import('../tools').FalconClientBuildConfig} buildConfig
+ */
+
+/**
  * Webpack configuration factory. It's the juice!
  * @param {'web' | 'node' } target target
- * @param {{ env: ('development' | 'production'), inspect: string, publicPath: string }} options environment
- * @param {FalconClientBuildConfig} buildConfig config
- * @returns {Object} webpack config
+ * @param {CreateWebpackOptions} options
+ * @returns {Object} webpack configuration
  */
-module.exports = (target = 'web', options, buildConfig) => {
-  const { env, paths } = options;
-  const { devServerPort, useWebmanifest, plugins, modify, i18n, moduleOverride } = buildConfig;
-
-  // Define some useful shorthands.
+module.exports = (target = 'web', options) => {
+  const { NODE_ENV } = process.env;
   const IS_NODE = target === 'node';
   const IS_WEB = target === 'web';
-  const IS_PROD = env === 'production';
-  const IS_DEV = env === 'development';
+  const IS_PROD = NODE_ENV === 'production';
+  const IS_DEV = NODE_ENV === 'development';
 
-  process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
+  const { paths, publicPath = '/', startDevServer, buildConfig } = options;
+  const START_DEV_SERVER = IS_DEV ? startDevServer : false;
+  const { devServerPort, useWebmanifest, plugins, modify, i18n, moduleOverride } = buildConfig;
 
   const devtool = 'cheap-module-source-map';
   const devServerUrl = `http://localhost:${devServerPort}/`;
-  const clientEnv = getClientEnv(target, { ...options, devServerPort }, buildConfig.envToBuildIn);
+  const clientEnv = getClientEnv(
+    target,
+    NODE_ENV,
+    START_DEV_SERVER,
+    publicPath,
+    devServerPort,
+    buildConfig.envToBuildIn
+  );
 
   let config = {
     mode: IS_DEV ? 'development' : 'production',
@@ -231,7 +242,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         {
           test: /\.css$/,
           exclude: [paths.appBuild, /\.module\.css$/],
-          use: getStyleLoaders(target, env, {
+          use: getStyleLoaders(target, NODE_ENV, {
             importLoaders: 1,
             modules: false,
             minimize: IS_PROD,
@@ -242,7 +253,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         {
           test: /\.module\.css$/,
           exclude: [paths.appBuild],
-          use: getStyleLoaders(target, env, {
+          use: getStyleLoaders(target, NODE_ENV, {
             importLoaders: 1,
             modules: true,
             minimize: IS_PROD,
@@ -255,7 +266,7 @@ module.exports = (target = 'web', options, buildConfig) => {
           test: /\.(scss|sass)$/,
           exclude: /\.module\.(scss|sass)$/,
           use: [
-            ...getStyleLoaders(target, env, {
+            ...getStyleLoaders(target, NODE_ENV, {
               importLoaders: 2,
               modules: false,
               minimize: IS_PROD,
@@ -268,7 +279,7 @@ module.exports = (target = 'web', options, buildConfig) => {
         {
           test: /\.module\.(scss|sass)$/,
           use: [
-            ...getStyleLoaders(target, env, {
+            ...getStyleLoaders(target, NODE_ENV, {
               importLoaders: 2,
               modules: true,
               minimize: IS_PROD,
@@ -293,7 +304,7 @@ module.exports = (target = 'web', options, buildConfig) => {
 
     config.output = {
       path: paths.appBuild,
-      publicPath: IS_DEV ? devServerUrl : '/',
+      publicPath: START_DEV_SERVER ? devServerUrl : '/',
       filename: 'server.js',
       libraryTarget: 'commonjs2'
     };
@@ -306,30 +317,41 @@ module.exports = (target = 'web', options, buildConfig) => {
     config.entry = [paths.ownServerIndexJs];
 
     if (IS_DEV) {
-      config.watch = true;
+      config.entry = [
+        require.resolve('../prettyNodeErrors'),
+        START_DEV_SERVER && 'webpack/hot/poll?300',
+        ...config.entry
+      ].filter(x => x);
 
-      config.entry.unshift('webpack/hot/poll?300');
-      config.entry.unshift(require.resolve('./../prettyNodeErrors')); // Pretty format server errors
+      if (START_DEV_SERVER) {
+        config.watch = true;
 
-      config.plugins = [
-        ...config.plugins,
-        new webpack.HotModuleReplacementPlugin(),
-        new StartServerPlugin({
-          name: 'server.js',
-          nodeArgs: ['-r', 'source-map-support/register', options.inspect].filter(x => x)
-        }),
-        new webpack.WatchIgnorePlugin([paths.appWebpackAssets])
-      ];
+        config.plugins = [
+          ...config.plugins,
+          new webpack.HotModuleReplacementPlugin(),
+          new StartServerPlugin({
+            name: 'server.js',
+            nodeArgs: ['-r', 'source-map-support/register', options.inspect].filter(x => x)
+          }),
+          new webpack.WatchIgnorePlugin([paths.appWebpackAssets])
+        ];
+      }
     }
   }
 
   if (IS_WEB) {
     config.entry = {
-      client: [falconClientPolyfills, require.resolve('pwacompat'), paths.ownClientIndexJs]
+      client: [
+        falconClientPolyfills,
+        require.resolve('pwacompat'),
+        paths.ownClientIndexJs,
+        START_DEV_SERVER && require.resolve('./../webpackHotDevClient')
+      ].filter(x => x)
     };
 
     config.output = {
       path: paths.appBuildPublic,
+      publicPath: START_DEV_SERVER ? devServerUrl : options.publicPath,
       libraryTarget: 'var'
     };
 
@@ -348,55 +370,56 @@ module.exports = (target = 'web', options, buildConfig) => {
         writeToDisk: { filename: path.dirname(paths.appWebpackAssets) }
       })
     ];
+    if (options.analyze) {
+      config.plugins.push(new BundleAnalyzerPlugin());
+    }
 
     if (IS_DEV) {
-      config.entry.client.push(require.resolve('./../webpackHotDevClient'));
-
       config.output = {
         ...config.output,
-        publicPath: devServerUrl, // should point to webpack-dev-server
         filename: 'static/js/[name].js',
         chunkFilename: 'static/js/[name].chunk.js',
         pathinfo: true,
         devtoolModuleFilenameTemplate: info => path.resolve(info.resourcePath).replace(/\\/g, '/')
       };
 
-      // configure webpack-dev-server to serve client-side bundle from http://localhost:${devServerPort}
-      config.devServer = {
-        disableHostCheck: true,
-        clientLogLevel: 'none',
-        compress: true, // enable gzip compression of generated files
-        // watchContentBase: true,
-        headers: { 'Access-Control-Allow-Origin': '*' },
-        historyApiFallback: {
-          // Paths with dots should still use the history fallback. See https://github.com/facebookincubator/create-react-app/issues/387.
-          disableDotRule: true
-        },
-        host: 'localhost',
-        port: devServerPort,
-        hot: true,
-        noInfo: true,
-        overlay: false,
-        quiet: true,
-        // By default files from `contentBase` will not trigger a page reload.
-        // Reportedly, this avoids CPU overload on some systems. https://github.com/facebookincubator/create-react-app/issues/293
-        watchOptions: {
-          ignored: /node_modules/
-        },
-        before(app) {
-          app.use(errorOverlayMiddleware()); // this lets us open files from the runtime error overlay.
-        }
-      };
-      // Add client-only development plugins
+      if (START_DEV_SERVER) {
+        // configure webpack-dev-server to serve client-side bundle from http://localhost:${devServerPort}
+        config.devServer = {
+          disableHostCheck: true,
+          clientLogLevel: 'none',
+          compress: true, // enable gzip compression of generated files
+          // watchContentBase: true,
+          headers: { 'Access-Control-Allow-Origin': '*' },
+          historyApiFallback: {
+            // Paths with dots should still use the history fallback. See https://github.com/facebookincubator/create-react-app/issues/387.
+            disableDotRule: true
+          },
+          host: 'localhost',
+          port: devServerPort,
+          hot: true,
+          noInfo: true,
+          overlay: false,
+          quiet: true,
+          // By default files from `contentBase` will not trigger a page reload.
+          // Reportedly, this avoids CPU overload on some systems. https://github.com/facebookincubator/create-react-app/issues/293
+          watchOptions: {
+            ignored: /node_modules/
+          },
+          before(app) {
+            app.use(errorOverlayMiddleware()); // this lets us open files from the runtime error overlay.
+          }
+        };
+      }
+
       config.plugins = [
         ...config.plugins,
-        new webpack.HotModuleReplacementPlugin({ multiStep: true }),
+        START_DEV_SERVER && new webpack.HotModuleReplacementPlugin({ multiStep: true }),
         new webpack.DefinePlugin(clientEnv.stringified)
-      ];
+      ].filter(x => x);
     } else {
       config.output = {
         ...config.output,
-        publicPath: options.publicPath,
         filename: 'static/js/[name].[hash:8].js',
         chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js'
       };
@@ -412,10 +435,6 @@ module.exports = (target = 'web', options, buildConfig) => {
         new webpack.HashedModuleIdsPlugin(),
         new webpack.optimize.AggressiveMergingPlugin()
       ];
-
-      if (options.analyze) {
-        config.plugins.push(new BundleAnalyzerPlugin());
-      }
 
       config.optimization = {
         minimize: true,

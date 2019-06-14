@@ -27,12 +27,12 @@ const Logger = require('@deity/falcon-logger');
   try {
     switch (script) {
       case 'build': {
+        const buildDts = require('../src/build-dts');
         const buildEsm = require('../src/build-esm');
-        const buildTsDeclarations = require('../src/build-tsDeclarations');
         const buildCjs = require('../src/build-cjs');
 
+        buildDts({ packagePath });
         buildEsm();
-        buildTsDeclarations({ packagePath });
         if (target !== 'NODE') {
           await buildCjs({ packagePath, target });
         }

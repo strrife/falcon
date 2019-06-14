@@ -10,7 +10,6 @@ import i18nFactory from '../src/i18n/__mocks__/i18nFactory';
  * @typedef {Object} FalconClientProps
  * @property {Object} apollo react-apollo MockProvider props
  * @property {Object} router react-router-dom MemoryRouter props
-
  * @property {Object} i18next i18next options
  */
 

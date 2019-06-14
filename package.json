@@ -30,7 +30,7 @@
     "lerna": "3.4.3",
     "lint-staged": "7.3.0",
     "rimraf": "2.6.2",
-    "typescript": "3.4.5"
+    "typescript": "3.5.1"
   },
   "engines": {
     "node": ">=8.10",
@@ -41,6 +41,7 @@
     "packages/falcon-client",
     "packages/falcon-server",
     "packages/falcon-server-env",
+    "packages/falcon-service-worker",
     "packages/falcon-ui",
     "packages/falcon-theme-editor",
     "packages/falcon-ecommerce-uikit",

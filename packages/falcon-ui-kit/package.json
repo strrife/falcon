@@ -32,6 +32,12 @@
   },
   "devDependencies": {
     "@deity/falcon-scripts": "^0.0.1",
-    "@deity/falcon-shop-extension": "^0.4.2"
+    "@deity/falcon-shop-extension": "^0.4.2",
+    "@types/react": "16.7.20",
+    "@types/react-dom": "16.0.11"
+  },
+  "peerDependencies": {
+    "@deity/falcon-ui": "^0.2.2",
+    "react": "^16.6.3"
   }
 }

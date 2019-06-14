@@ -1,8 +1,10 @@
 import { Theme, CSSObject } from '@deity/falcon-ui';
 
-export const toGridTemplate = (items: string[][]) => {
+export const toGridTemplate = (items: string[][]): string => {
   const columnTemplate = items.shift();
-  if (!columnTemplate) return;
+  if (!columnTemplate) {
+    return '';
+  }
 
   const gridAreas = items
     .map(item => {

@@ -260,7 +260,7 @@
 
 > - ~~Customer~~ - moved to @deity/falcon-shop-extension
 > - ~~CustomerQueryData~~ - changed to `CustomerQueryResponse` and moved to @deity/falcon-shop-data
-> - ~~IsAuthenticatedQueryData~~ - changed to `IsAuthenticatedQueryResponse` and moved to @deity/falcon-shop-data
+> - ~~IsAuthenticatedQueryData~~ - changed to `IsAuthenticatedResponse` and moved to @deity/falcon-shop-data
 
 ---
 

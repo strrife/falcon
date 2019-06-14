@@ -16,11 +16,11 @@ import {
   NumberInput,
   FlexLayout
 } from '@deity/falcon-ui';
-import { toGridTemplate, prettyScrollbars, CloseSidebarMutation } from '@deity/falcon-ui-kit';
+import { toGridTemplate, CloseSidebarMutation, prettyScrollbars } from '@deity/falcon-ui-kit';
 import { I18n, T } from '@deity/falcon-i18n';
 import { MiniCartData } from './MiniCartQuery';
 import { RemoveCartItemMutation, UpdateCartItemMutation } from '../Cart/CartMutation';
-import { Price } from '../Locale';
+import { LocaleProvider, Price } from '../Locale';
 
 export const MiniCartProductArea = {
   empty: '.',
@@ -70,17 +70,11 @@ const miniCartLayout: DefaultThemeProps = {
   }
 };
 
-const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
+const MiniCartProduct: React.SFC<any> = ({ product }) => (
   <Box defaultTheme={miniCartProductTheme}>
     <Image gridArea={MiniCartProductArea.thumb} src={product.thumbnailUrl} />
     <H4 gridArea={MiniCartProductArea.productName}>{product.name}</H4>
-    <Price
-      fontSize="md"
-      fontWeight="bold"
-      gridArea={MiniCartProductArea.price}
-      currency={currency}
-      value={product.price}
-    />
+    <Price gridArea={MiniCartProductArea.price} value={product.price} fontSize="md" fontWeight="bold" />
     <RemoveCartItemMutation>
       {removeCartItem => (
         <Link
@@ -137,11 +131,11 @@ const MiniCartProduct: React.SFC<any> = ({ product, currency }) => (
   </Box>
 );
 
-const MiniCartProducts: React.SFC<any> = ({ products, currency }) => (
+const MiniCartProducts: React.SFC<any> = ({ products }) => (
   <List>
     {products.map((product: any, index: number) => (
       <ListItem pb="none" key={product.sku}>
-        <MiniCartProduct product={product} currency={currency} />
+        <MiniCartProduct product={product} />
         {index < products.length - 1 && <Divider my="md" />}
       </ListItem>
     ))}
@@ -151,34 +145,36 @@ const MiniCartProducts: React.SFC<any> = ({ products, currency }) => (
 export const MiniCart: React.SFC<MiniCartData> = ({ cart: { quoteCurrency, items } }) => (
   <CloseSidebarMutation>
     {closeSidebar => (
-      <Box defaultTheme={miniCartLayout}>
-        <H3 gridArea={MiniCartLayoutArea.title}>
-          <T id="miniCart.title" />
-        </H3>
+      <LocaleProvider currency={quoteCurrency}>
+        <Box defaultTheme={miniCartLayout}>
+          <H3 gridArea={MiniCartLayoutArea.title}>
+            <T id="miniCart.title" />
+          </H3>
 
-        <Box gridArea={MiniCartLayoutArea.items} css={props => ({ ...prettyScrollbars(props.theme) })}>
-          <MiniCartProducts products={items} currency={quoteCurrency} />
-          {!items.length && (
-            <FlexLayout alignItems="center" flexDirection="column">
-              <Text fontSize="md">
-                <T id="miniCart.empty" />
-              </Text>
-              <Button onClick={() => closeSidebar()} mt="lg">
-                <T id="miniCart.goShoppingButton" />
+          <Box gridArea={MiniCartLayoutArea.items} css={props => ({ ...prettyScrollbars(props.theme) })}>
+            <MiniCartProducts products={items} />
+            {!items.length && (
+              <FlexLayout alignItems="center" flexDirection="column">
+                <Text fontSize="md">
+                  <T id="miniCart.empty" />
+                </Text>
+                <Button onClick={() => closeSidebar()} mt="lg">
+                  <T id="miniCart.goShoppingButton" />
+                </Button>
+              </FlexLayout>
+            )}
+          </Box>
+
+          {items.length > 0 && (
+            <Box gridArea={MiniCartLayoutArea.cta} py="sm" bgFullWidth="secondaryLight">
+              <Button as={RouterLink} to="/cart" onClick={() => closeSidebar()} css={{ width: '100%' }} height="xl">
+                <Icon stroke="white" size="md" mr="xs" src="lock" />
+                <T id="miniCart.checkout" />
               </Button>
-            </FlexLayout>
+            </Box>
           )}
         </Box>
-
-        {items.length > 0 && (
-          <Box gridArea={MiniCartLayoutArea.cta} py="sm" bgFullWidth="secondaryLight">
-            <Button as={RouterLink} to="/cart" onClick={() => closeSidebar()} css={{ width: '100%' }} height="xl">
-              <Icon stroke="white" size="md" mr="xs" src="lock" />
-              <T id="miniCart.checkout" />
-            </Button>
-          </Box>
-        )}
-      </Box>
+      </LocaleProvider>
     )}
   </CloseSidebarMutation>
 );

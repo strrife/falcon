@@ -5,6 +5,9 @@ module.exports = {
   CI: process.env.CI && (typeof process.env.CI !== 'string' || process.env.CI.toLowerCase() !== 'false'),
   clearConsole: false,
   useWebmanifest: true,
+  serviceWorker: {
+    precache: process.env.NODE_ENV === 'production'
+  },
   i18n: {
     resourcePackages: ['@deity/falcon-i18n']
   },

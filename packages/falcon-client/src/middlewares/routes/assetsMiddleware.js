@@ -3,7 +3,7 @@ import { ChunkExtractor } from '@loadable/server';
 /**
  * Assets middleware
  * @param {{webpackAssets: Object}} params webpack assets
- * @returns {function(ctx: object, next: function): Promise<void>} Koa middleware
+ * @returns {import('koa').Middleware} Koa middleware
  */
 export default ({ webpackAssets }) => {
   const chunkExtractor = new ChunkExtractor({
