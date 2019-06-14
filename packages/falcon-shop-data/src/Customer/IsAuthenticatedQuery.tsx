@@ -13,7 +13,7 @@ export type IsAuthenticatedResponse = {
   customer: { id: number };
 };
 
-export class IsAuthenticatedQuery extends Query<IsAuthenticatedQueryResponse> {
+export class IsAuthenticatedQuery extends Query<IsAuthenticatedResponse> {
   static defaultProps = {
     query: GET_IS_AUTHENTICATED
   };

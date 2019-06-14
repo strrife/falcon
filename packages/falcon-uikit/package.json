@@ -27,6 +27,8 @@
   "devDependencies": {
     "@deity/falcon-scripts": "^0.0.1",
     "@deity/falcon-shop-extension": "^0.4.2",
+    "@types/react": "16.7.20",
+    "@types/react-dom": "16.0.11",
     "@types/react-responsive": "3.0.3"
   },
   "peerDependencies": {

@@ -8,9 +8,9 @@
     "access": "public"
   },
   "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/types.d.ts",
   "source": "src/index.ts",
-  "module": "dist/index.js",
   "files": [
     "dist",
     "src"
