@@ -11,6 +11,7 @@ export const AppLayout = themed({
       },
       css: {
         maxWidth: 1480,
+        width: '100%',
         margin: '0 auto'
       }
     }
