@@ -41,6 +41,7 @@
     "packages/falcon-client",
     "packages/falcon-server",
     "packages/falcon-server-env",
+    "packages/falcon-service-worker",
     "packages/falcon-ui",
     "packages/falcon-theme-editor",
     "packages/falcon-ecommerce-uikit",
