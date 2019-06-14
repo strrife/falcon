@@ -9,7 +9,7 @@ export const GET_IS_AUTHENTICATED = gql`
   }
 `;
 
-export type IsAuthenticatedQueryResponse = {
+export type IsAuthenticatedResponse = {
   customer: { id: number };
 };
 

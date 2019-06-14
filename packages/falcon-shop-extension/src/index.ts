@@ -3,6 +3,7 @@ const { resolve } = require('path');
 const typeDefs = require('fs').readFileSync(resolve(__dirname, '../src/schema.graphql'), 'utf8');
 
 export * from './types';
+export const Schema = typeDefs;
 
 /**
  * Extension that implements shop features

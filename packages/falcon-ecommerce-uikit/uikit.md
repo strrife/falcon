@@ -356,10 +356,10 @@
 
 ---
 
-> - ~~AddressDetails~~ - moved to @deity/falcon-widgets/src/Address/AddressDetails.tsx
-> - ~~AddressCardLayout~~ - moved to @deity/falcon-widgets/src/Address/AddressCard.tsx
-> - ~~AddressCard~~ - moved to @deity/falcon-widgets/src/Address/AddressCard.tsx
-> - ~~AddressListLayout~~ - moved to @deity/falcon-widgets/src/AddressListLayout.tsx
+> - ~~AddressDetails~~ - moved to @deity/falcon-uikit/src/Address/AddressDetails.tsx
+> - ~~AddressCardLayout~~ - moved to @deity/falcon-uikit/src/Address/AddressCard.tsx
+> - ~~AddressCard~~ - moved to @deity/falcon-uikit/src/Address/AddressCard.tsx
+> - ~~AddressListLayout~~ - moved to @deity/falcon-uikit/src/AddressListLayout.tsx
 
 ---
 
