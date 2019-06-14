@@ -1,6 +1,8 @@
-const { Extension } = require('@deity/falcon-server-env');
-const { resolve } = require('path');
-const typeDefs = require('fs').readFileSync(resolve(__dirname, '../src/schema.graphql'), 'utf8');
+import fs from 'fs';
+import path from 'path';
+import { Extension } from '@deity/falcon-server-env';
+
+const typeDefs = fs.readFileSync(path.resolve(__dirname, '../src/schema.graphql'), 'utf8');
 
 export * from './types';
 export const Schema = typeDefs;
