@@ -61,3 +61,4 @@ logger.traceTime = async function(label, fn) {
 };
 
 export default logger;
+module.exports = logger;
