@@ -42,7 +42,7 @@ extend type Mutation {
   removeCustomerAddress(id: Int!): Boolean
   requestCustomerPasswordResetToken(input: EmailInput!): Boolean
   changeCustomerPassword(input: CustomerPasswordInput!): Boolean
-  resetCustomerPassword(input: CustomerPasswordResetInput!): Boolean
+  resetCustomerPassword(input: ResetCustomerPasswordInput!): Boolean
   # set current customer order shipping information
   setShipping(input: ShippingInput): ShippingInformation
   placeOrder(input: PlaceOrderInput!): PlaceOrderResult
@@ -222,7 +222,7 @@ input CustomerPasswordInput {
   password: String!
 }
 
-input CustomerPasswordResetInput {
+input ResetCustomerPasswordInput {
   resetToken: String!
   password: String!
 }

@@ -2,13 +2,12 @@ import React from 'react';
 import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
 import { Text, Button, GridLayout, H1, Box } from '@deity/falcon-ui';
-import {
-  ResetCustomerPasswordMutation,
-  ResetCustomerPasswordVariables,
-  ValidatePasswordTokenQuery
-} from '@deity/falcon-shop-data';
+import { ResetCustomerPasswordMutation, ValidatePasswordTokenQuery } from '@deity/falcon-shop-data';
+import { ResetCustomerPasswordInput } from '@deity/falcon-shop-extension';
 import { OpenSidebarMutation } from '../Sidebar';
 import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '../Forms';
+
+// todo (uikit): re-work that once we have MiniAccount and "MiniLayouts" moved to falcon-ui-kit
 // import { MiniFormLayout } from '../MiniAccount';
 const MiniFormLayout = ({ children }) => <div>{children}</div>;
 
@@ -60,7 +59,7 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken })
 
       return (
         <Formik
-          initialValues={{ resetToken, password: '' } as ResetCustomerPasswordVariables}
+          initialValues={{ resetToken, password: '' } as ResetCustomerPasswordInput}
           onSubmit={values => resetCustomerPassword({ variables: { input: values } })}
         >
           {() => (

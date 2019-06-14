@@ -8,11 +8,11 @@ export const REQUEST_CUSTOMER_PASSWORD_RESET_TOKEN_MUTATION = gql`
   }
 `;
 
-type RequestPasswordResetMutationVariables = {
+export type RequestPasswordResetVariables = {
   input: EmailInput;
 };
 
-export class RequestPasswordResetMutation extends Mutation<boolean, RequestPasswordResetMutationVariables> {
+export class RequestPasswordResetMutation extends Mutation<boolean, RequestPasswordResetVariables> {
   static defaultProps = {
     mutation: REQUEST_CUSTOMER_PASSWORD_RESET_TOKEN_MUTATION
   };

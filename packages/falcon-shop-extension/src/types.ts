@@ -31,7 +31,7 @@ export type EmailInput = {
   email: string;
 };
 
-export type CustomerPasswordResetInput = {
+export type ResetCustomerPasswordInput = {
   resetToken: string;
   password: string;
 };

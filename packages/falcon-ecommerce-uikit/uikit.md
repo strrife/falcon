@@ -5,7 +5,7 @@
 > - ~~RequestPasswordResetMutation~~ - moved to @deity/falcon-shop-data
 > - ~~ResetCustomerPasswordMutation~~ - moved to @deity/falcon-shop-data
 
-- ValidatePasswordTokenQuery
+> - ~~ValidatePasswordTokenQuery~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -203,7 +203,7 @@
 
 - RequestPasswordResetVariables
 - RequestPasswordResetMutationVariables
-- ResetCustomerPasswordVariables
+  > - ~~ResetCustomerPasswordVariables~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -286,13 +286,13 @@
 
 ---
 
-- FieldRenderProps
-- FieldProps
-- FormContextValue
-- FormContext
-- FormProps
-- FormFieldRenderProps
-- FormFieldProps
+> - ~~FieldRenderProps~~ - moved to @deity/falcon-ui-kit
+> - ~~FieldProps~~ - moved to @deity/falcon-ui-kit
+> - ~~FormContextValue~~ - moved to @deity/falcon-ui-kit
+> - ~~FormContext~~ - moved to @deity/falcon-ui-kit
+> - ~~FormProps~~ - moved to @deity/falcon-ui-kit
+> - ~~FormFieldRenderProps~~ - moved to @deity/falcon-ui-kit
+> - ~~FormFieldProps~~ - moved to @deity/falcon-ui-kit
 
 ---
 
@@ -428,17 +428,17 @@
 
 ---
 
-- FormErrorSummary
-- FormFieldLayout
-- FormFieldLabel
-- FormFieldError
-- FormField
-- CheckboxFormFieldLayout
-- CheckboxFormField
-- RadioFormFieldLayout
-- RadioFormField
-- FormSubmit
-- PasswordRevealInput
+> - ~~FormErrorSummary~~ - moved to @deity/falcon-ui-kit
+> - ~~FormFieldLayout~~ - moved to @deity/falcon-ui-kit
+> - ~~FormFieldLabel~~ - moved to @deity/falcon-ui-kit
+> - ~~FormFieldError~~ - moved to @deity/falcon-ui-kit
+> - ~~FormField~~ - moved to @deity/falcon-ui-kit
+> - ~~CheckboxFormFieldLayout~~ - moved to @deity/falcon-ui-kit
+> - ~~CheckboxFormField~~ - moved to @deity/falcon-ui-kit
+> - ~~RadioFormFieldLayout~~ - moved to @deity/falcon-ui-kit
+> - ~~RadioFormField~~ - moved to @deity/falcon-ui-kit
+> - ~~FormSubmit~~ - moved to @deity/falcon-ui-kit
+> - ~~PasswordRevealInput~~ - moved to @deity/falcon-ui-kit
 
 ---
 
