@@ -12,19 +12,20 @@ let isAppSet: boolean = false;
 const logger: Logger = pino() as Logger;
 
 /**
- * Set global log level
- * @param {Level} level Required log level
+ * Sets the log level for the logger instance
+ * @param level Required log level
  * @returns {void}
  */
-logger.setLogLevel = level => {
+logger.setLogLevel = (level: Level): void => {
   logger.level = level;
 };
 
 /**
- * @param {string} name Application name
+ * Sets the "app" key to every log message via the root logger instance
+ * @param name Application name
  * @returns {void}
  */
-logger.setApp = name => {
+logger.setApp = (name: string): void => {
   if (isAppSet) {
     return;
   }
@@ -34,18 +35,26 @@ logger.setApp = name => {
 };
 
 /**
- *
- * @param {string} moduleName Module name
- * @returns {Logger} Module-specific Logger instance
+ * Initializes an extra sub-logger instance for the provided module name
+ * and adds "module" key to every log message automatically.
+ * Handy for defining sub-loggers for your nested modules.
+ * In conjunction with `falcon-pretty` formatter - it will render an additional "[my-module]" section in the log message output.
+ * @example
+ * logger.getFor("my-module").info("Calling my-module...");
+ * @param moduleName Module name
+ * @returns Module-specific Logger instance
  */
 logger.getFor = (moduleName: string): Logger => logger.child({ module: moduleName }) as Logger;
 
 /**
- * @param {string} label Log label
- * @param {() => Promise<any>} fn Function to trace the execution time of
- * @returns {Promise<any>} fn result
+ * Measures the timing for the provided callback.
+ * If your log level is set to trace - Logger will produce the following log message:
+ * "TRACE: My time (XX ms)"
+ * @param label Log label
+ * @param fn Function to trace the execution time of
+ * @returns `fn` result
  */
-logger.traceTime = async function(label, fn) {
+logger.traceTime = async function<T = any>(label: string, fn: () => Promise<T>): Promise<T> {
   // using `function()` statement to preserve the context in case of "getFor" call
   if (!this.isLevelEnabled('trace')) {
     return fn();
