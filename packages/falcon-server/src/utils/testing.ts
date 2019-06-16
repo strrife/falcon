@@ -26,8 +26,4 @@ const buildSchemaAndRunQuery = async (
   schemaDirectives: SchemaDirectives
 ) => runQuery(buildSchema(typeDefs, resolvers, schemaDirectives), query, context);
 
-module.exports = {
-  runQuery,
-  buildSchema,
-  buildSchemaAndRunQuery
-};
+export { runQuery, buildSchema, buildSchemaAndRunQuery };

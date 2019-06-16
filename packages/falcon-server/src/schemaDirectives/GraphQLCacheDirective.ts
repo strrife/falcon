@@ -14,8 +14,8 @@ import { CacheResolversConfig } from '../types';
 // Default cache TTL (10 minutes)
 const DEFAULT_TTL = 10;
 
-declare type FieldType = GraphQLField<any, any>;
-declare type FieldTypeResolver = FieldType['resolve'];
+export type FieldType = GraphQLField<any, any>;
+export type FieldTypeResolver = FieldType['resolve'];
 
 export type GraphQLCacheDirectiveParams = {
   ttl?: number;
