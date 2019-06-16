@@ -10,7 +10,7 @@ const falconPrettyFactory = require('../dist/format');
 args
   .option(['c', 'colorize'], 'Force adding color sequences to the output')
   .option(['f', 'crlf'], 'Append CRLF instead of LF to formatted lines')
-  .option('minimal', 'Use "minimal"')
+  .option(['m', 'minimal'], 'Use "minimal"')
   .option(
     ['e', 'errorProps'],
     'Comma separated list of properties on error objects to show (`*` for all properties)',
@@ -18,11 +18,7 @@ args
   )
   .option(['l', 'levelFirst'], 'Display the log level as the first output field')
   .option(['k', 'errorLikeObjectKeys'], 'Define which keys contain error objects (`-k err,error`)', 'err,error')
-  .option(
-    ['m', 'messageKey'],
-    'Highlight the message under the specified key',
-    falconPrettyFactory.CONSTANTS.MESSAGE_KEY
-  )
+  .option('messageKey', 'Highlight the message under the specified key', falconPrettyFactory.CONSTANTS.MESSAGE_KEY)
   .option(
     ['a', 'timestampKey'],
     'Display the timestamp from the specified key',
@@ -37,7 +33,7 @@ args
 
 args
   .example('cat log | logger-pretty', 'To prettify logs, simply pipe a log file through')
-  .example('cat log | logger-pretty -m fooMessage', "To highlight a string at a key other than 'msg', use")
+  .example('cat log | logger-pretty --messageKey fooMessage', "To highlight a string at a key other than 'msg', use")
   .example('cat log | logger-pretty -a fooTimestamp', "To display timestamp from a key other than 'time', use")
   .example('cat log | logger-pretty -t', 'To convert Epoch timestamps to ISO timestamps use the -t option')
   .example(

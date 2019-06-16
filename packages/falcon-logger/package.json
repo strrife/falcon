@@ -7,7 +7,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "main": "dist/falcon-logger.cjs.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "bin": {
@@ -16,7 +17,7 @@
   "scripts": {
     "prepare": "npm run clean && npm run build",
     "clean": "falcon-scripts clean",
-    "build": "falcon-scripts build --target=NODE",
+    "build": "falcon-scripts build",
     "watch": "falcon-scripts watch"
   },
   "dependencies": {
