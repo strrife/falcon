@@ -60,7 +60,7 @@ export abstract class Extension {
     this.config = config as ExtensionConfig;
     this.extensionContainer = extensionContainer;
     this.eventEmitter = eventEmitter;
-    this.logger = Logger.getFor(`${this.name}-ext`);
+    this.logger = Logger.getFor(this.name);
   }
 
   /**
