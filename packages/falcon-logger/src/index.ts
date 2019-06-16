@@ -21,7 +21,8 @@ logger.setLogLevel = (level: Level): void => {
 };
 
 /**
- * Sets the "app" key to every log message via the root logger instance
+ * Sets the "app" key to every log message via the root logger instance.
+ * It can be called only once, preferably at the very beginning of your application.
  * @param name Application name
  * @returns {void}
  */
