@@ -27,6 +27,7 @@ logger.setLogLevel = (level: Level): void => {
  */
 logger.setApp = (name: string): void => {
   if (isAppSet) {
+    logger.warn('logger.setApp() can be called only once.');
     return;
   }
   // @ts-ignore: Tweaking internal Pino settings
