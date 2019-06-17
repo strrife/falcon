@@ -6,7 +6,7 @@ import { KeyValueCache } from 'apollo-server-caching';
 import { GraphQLSchema, GraphQLResolveInfo } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
 import { ApiDataSource } from './models/ApiDataSource';
-import Cache from './cache/Cache';
+import { Cache } from './cache/Cache';
 
 export interface DataSourceConfig<TContext> {
   context: TContext;
@@ -17,6 +17,7 @@ export interface FetchUrlResult {
   id: string | number;
   type: string;
   path: string;
+  redirect?: boolean;
 }
 
 export enum ApiUrlPriority {
@@ -68,8 +69,11 @@ export interface ApiDataSourceConfig extends UrlConfig {
   [propName: string]: any;
 }
 
+export type RemoteBackendConfig = {
+  locales?: string[];
+};
+
 // todo: this is a temporary type just to have proper type checking in the Extension class. It needs to be improved.
-export type ExtensionContainer = object;
 export type ApiContainer = object;
 
 export interface ContextData {
@@ -77,12 +81,8 @@ export interface ContextData {
 }
 
 export interface GraphQLContext {
-  session?: {
-    [propName: string]: any;
-  };
-  headers?: {
-    [propName: string]: string;
-  };
+  session?: Record<string, any>;
+  headers?: Record<string, string>;
   cache: Cache;
   dataSources: DataSources;
   [propName: string]: any;
@@ -104,6 +104,19 @@ export type ContextFetchOptions = {
 export type ContextFetchRequest = Request & ContextData;
 
 export type ContextFetchResponse = Response & ContextData;
+
+export interface ExtensionConfig {
+  api?: string;
+}
+
+export interface ExtensionInitializer {
+  (): ExtensionInstance;
+  (config: ExtensionConfig): ExtensionInstance;
+}
+
+export interface ExtensionInstance {
+  resolvers?: Record<string, any>;
+}
 
 export type FetchUrlParams = {
   path: string;

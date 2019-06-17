@@ -61,7 +61,7 @@ export type ExtensionEntryMap = ModuleDefinition<ExtensionConfig>;
 
 export type SessionConfig = {
   keys: string[];
-  options: SessionOptions;
+  options?: SessionOptions;
 };
 
 export type SessionOptions = {
@@ -72,4 +72,10 @@ export type SessionOptions = {
   signed?: boolean;
   rolling?: boolean;
   renew?: boolean;
+};
+
+// Data types
+
+export type BackendConfig = {
+  locales: string[];
 };
