@@ -26,8 +26,7 @@ export type Customer = {
   lastname?: string;
   newsletterSubscriber?: boolean;
 };
-
-export type EmailInput = {
+export type RequestCustomerPasswordResetTokenInput = {
   email: string;
 };
 

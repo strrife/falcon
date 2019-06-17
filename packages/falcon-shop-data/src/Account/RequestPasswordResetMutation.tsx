@@ -1,18 +1,18 @@
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import { EmailInput } from '@deity/falcon-shop-extension';
+import { RequestCustomerPasswordResetTokenInput } from '@deity/falcon-shop-extension';
 
 export const REQUEST_CUSTOMER_PASSWORD_RESET_TOKEN_MUTATION = gql`
-  mutation RequestCustomerPasswordResetToken($input: EmailInput!) {
+  mutation RequestCustomerPasswordResetToken($input: RequestCustomerPasswordResetTokenInput!) {
     requestCustomerPasswordResetToken(input: $input)
   }
 `;
 
-export type RequestPasswordResetVariables = {
-  input: EmailInput;
+export type RequestPasswordResetTokenVariables = {
+  input: RequestCustomerPasswordResetTokenInput;
 };
 
-export class RequestPasswordResetMutation extends Mutation<boolean, RequestPasswordResetVariables> {
+export class RequestPasswordResetMutation extends Mutation<boolean, RequestPasswordResetTokenVariables> {
   static defaultProps = {
     mutation: REQUEST_CUSTOMER_PASSWORD_RESET_TOKEN_MUTATION
   };

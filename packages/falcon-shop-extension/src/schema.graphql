@@ -40,7 +40,7 @@ extend type Mutation {
   addAddress(input: AddAddressInput!): Address
   estimateShippingMethods(input: EstimateShippingInput!): [ShippingMethod]
   removeCustomerAddress(id: Int!): Boolean
-  requestCustomerPasswordResetToken(input: EmailInput!): Boolean
+  requestCustomerPasswordResetToken(input: RequestCustomerPasswordResetTokenInput!): Boolean
   changeCustomerPassword(input: CustomerPasswordInput!): Boolean
   resetCustomerPassword(input: ResetCustomerPasswordInput!): Boolean
   # set current customer order shipping information
@@ -67,7 +67,7 @@ type ShopStoreEntry {
   code: String
 }
 
-input EmailInput {
+input RequestCustomerPasswordResetTokenInput {
   email: String!
 }
 

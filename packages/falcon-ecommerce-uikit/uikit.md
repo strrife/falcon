@@ -201,9 +201,8 @@
 
 ### Existing TypeScript types and interfaces (without component props definitions):
 
-- RequestPasswordResetVariables
-- RequestPasswordResetMutationVariables
-  > - ~~ResetCustomerPasswordVariables~~ - moved to @deity/falcon-shop-data
+> - ~~RequestPasswordResetVariables~~ - renamed to RequestPasswordResetTokenVariables and moved to @deity/falcon-shop-data
+> - ~~ResetCustomerPasswordVariables~~ - moved to @deity/falcon-shop-data
 
 ---
 
