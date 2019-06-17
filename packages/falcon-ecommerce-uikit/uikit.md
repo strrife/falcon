@@ -542,7 +542,9 @@
 - ProductForm (it's not exported outside)
 - ProductConfigurator
 - Query
-- OnlyUnauthenticatedRoute
+
+> - ~~OnlyUnauthenticatedRoute~~ moved to @deity/falcon-front-kit
+
 - ProtectedRoute
 
 > - ~~Router~~ moved to @deity/falcon-front-kit
