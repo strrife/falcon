@@ -117,7 +117,7 @@
     "react": "^16.6.3",
     "react-apollo": "2.5.1",
     "react-dom": "^16.6.3",
-    "react-router-dom": "5.0.0"
+    "react-router-dom": "5.0.1"
   },
   "peerDependencies": {
     "@loadable/component": "^5.7.0",
@@ -128,7 +128,7 @@
     "react": "^16.6.3",
     "react-apollo": "2.5.1",
     "react-dom": "^16.6.3",
-    "react-router-dom": "^5.0.0"
+    "react-router-dom": "^5.0.1"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }
