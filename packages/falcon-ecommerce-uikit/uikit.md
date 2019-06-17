@@ -461,7 +461,7 @@
 - AccountIcon
 - ForgotPassword
 - MiniAccount
-- MiniFormLayout
+  > - ~~MiniFormLayout~~ - renamed to SidebarLayout and moved to @deity/falcon-ui-kit
 - SignIn
 - SignUp
 

@@ -6,10 +6,7 @@ import { ResetCustomerPasswordMutation, ValidatePasswordTokenQuery } from '@deit
 import { ResetCustomerPasswordInput } from '@deity/falcon-shop-extension';
 import { OpenSidebarMutation } from '../Sidebar';
 import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '../Forms';
-
-// todo (uikit): re-work that once we have MiniAccount and "MiniLayouts" moved to falcon-ui-kit
-// import { MiniFormLayout } from '../MiniAccount';
-const MiniFormLayout = ({ children }) => <div>{children}</div>;
+import { SidebarLayout } from '../Layouts';
 
 type ResetPasswordProps = {
   resetToken: string;
@@ -63,7 +60,7 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken })
           onSubmit={values => resetCustomerPassword({ variables: { input: values } })}
         >
           {() => (
-            <MiniFormLayout>
+            <SidebarLayout>
               <Form id="reset-password" i18nId="resetPassword">
                 <FormField name="password" required type="password" autoComplete="new-password">
                   {({ field }) => <PasswordRevealInput {...field} />}
@@ -71,7 +68,7 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken })
                 <FormSubmit justifySelf="center" submitting={loading} value="Reset my password" />
                 <FormErrorSummary errors={error && [error.message]} />
               </Form>
-            </MiniFormLayout>
+            </SidebarLayout>
           )}
         </Formik>
       );
