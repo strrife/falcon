@@ -134,7 +134,7 @@ module.exports = (target = 'web', options) => {
   const START_DEV_SERVER = IS_DEV ? startDevServer : false;
   const { devServerPort, useWebmanifest, plugins, modify, i18n, moduleOverride } = buildConfig;
 
-  const devtool = 'cheap-module-source-map';
+  const devtool = 'source-map';
   const devServerUrl = `http://localhost:${devServerPort}/`;
   const clientEnv = getClientEnv(
     target,
@@ -331,7 +331,7 @@ module.exports = (target = 'web', options) => {
           new webpack.HotModuleReplacementPlugin(),
           new StartServerPlugin({
             name: 'server.js',
-            nodeArgs: ['-r', 'source-map-support/register', options.inspect].filter(x => x)
+            nodeArgs: [options.inspect].filter(x => x)
           }),
           new webpack.WatchIgnorePlugin([paths.appWebpackAssets])
         ];

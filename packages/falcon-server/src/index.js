@@ -1,3 +1,4 @@
+require('source-map-support').install();
 const { codes } = require('@deity/falcon-errors');
 const { Events, Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
