@@ -26,9 +26,12 @@
   },
   "devDependencies": {
     "@deity/falcon-scripts": "^0.0.1",
-    "graphql-tag": "2.10.1"
+    "graphql-tag": "2.10.1",
+    "prop-types": "15.7.2"
   },
   "peerDependencies": {
-    "graphql-tag": "^2.10.1"
+    "graphql-tag": "^2.10.1",
+    "react": "^16.6.3",
+    "prop-types": "^15.7.2"
   }
 }
