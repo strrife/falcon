@@ -47,7 +47,8 @@
     "koa-body": "4.0.8",
     "koa-router": "7.4.0",
     "koa-session": "5.10.1",
-    "lodash": "4.17.11"
+    "lodash": "4.17.11",
+    "source-map-support": "0.5.12"
   },
   "devDependencies": {
     "supertest": "3.4.2"
