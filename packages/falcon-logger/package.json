@@ -11,6 +11,12 @@
   "main": "dist/falcon-logger.cjs.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
+  "files": [
+    "bin",
+    "dist",
+    "src",
+    "README.md"
+  ],
   "bin": {
     "logger-pretty": "bin/index.js"
   },
