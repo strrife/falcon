@@ -1,6 +1,6 @@
+import url from 'url';
 import Logger from '@deity/falcon-logger';
 import fetch from 'node-fetch';
-import url from 'url';
 import { ProxyRequest } from '../service/ProxyRequest';
 
 /**
