@@ -1,8 +1,8 @@
 import React from 'react';
 import { Formik } from 'formik';
 import { Text } from '@deity/falcon-ui';
+import { RequestPasswordResetMutation } from '@deity/falcon-shop-data';
 import { FormField, Form, FormSubmit, FormErrorSummary } from '../Forms';
-import { RequestPasswordResetMutation } from './AccountRecoveryMutations';
 
 type ForgotPasswordProps = {
   onCompleted?: () => void;

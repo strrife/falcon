@@ -1,6 +1,6 @@
 import React from 'react';
 import { DefaultThemeProps, Box, H3 } from '@deity/falcon-ui';
-import { FixCenteredLayout } from '@deity/falcon-uikit';
+import { FixCenteredLayout } from '@deity/falcon-ui-kit';
 
 const miniFormLayout: DefaultThemeProps = {
   miniFormLayout: {

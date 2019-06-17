@@ -2,17 +2,18 @@
 
 ### Existing Queries and Mutation classes:
 
-- RequestPasswordResetMutation
-- ResetCustomerPasswordMutation
-- ValidatePasswordTokenQuery
+> - ~~RequestPasswordResetMutation~~ - moved to @deity/falcon-shop-data
+> - ~~ResetCustomerPasswordMutation~~ - moved to @deity/falcon-shop-data
+
+> - ~~ValidatePasswordTokenQuery~~ - moved to @deity/falcon-shop-data
 
 ---
 
-> - ~~EditAddressMutation~~ - moved to @deity/falcon-shop
-> - ~~AddAddressMutation~~ - moved to @deity/falcon-shop
-> - ~~RemoveAddressMutation~~ - moved to @deity/falcon-shop
-> - ~~AddressQuery~~ - moved to @deity/falcon-shop
-> - ~~AddressListQuery~~ - moved to @deity/falcon-shop
+> - ~~EditAddressMutation~~ - moved to @deity/falcon-shop-data
+> - ~~AddAddressMutation~~ - moved to @deity/falcon-shop-data
+> - ~~RemoveAddressMutation~~ - moved to @deity/falcon-shop-data
+> - ~~AddressQuery~~ - moved to @deity/falcon-shop-data
+> - ~~AddressListQuery~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -51,9 +52,9 @@
 
 ---
 
-> - ~~EditCustomerMutation~~ - moved to @deity/falcon-shop
-> - ~~CustomerQuery~~ - moved to @deity/falcon-shop
-> - ~~IsAuthenticatedQuery~~ - moved to @deity/falcon-shop
+> - ~~EditCustomerMutation~~ - moved to @deity/falcon-shop-data
+> - ~~CustomerQuery~~ - moved to @deity/falcon-shop-data
+> - ~~IsAuthenticatedQuery~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -202,7 +203,7 @@
 
 - RequestPasswordResetVariables
 - RequestPasswordResetMutationVariables
-- ResetCustomerPasswordVariables
+  > - ~~ResetCustomerPasswordVariables~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -285,13 +286,13 @@
 
 ---
 
-- FieldRenderProps
-- FieldProps
-- FormContextValue
-- FormContext
-- FormProps
-- FormFieldRenderProps
-- FormFieldProps
+> - ~~FieldRenderProps~~ - moved to @deity/falcon-ui-kit
+> - ~~FieldProps~~ - moved to @deity/falcon-ui-kit
+> - ~~FormContextValue~~ - moved to @deity/falcon-ui-kit
+> - ~~FormContext~~ - moved to @deity/falcon-ui-kit
+> - ~~FormProps~~ - moved to @deity/falcon-ui-kit
+> - ~~FormFieldRenderProps~~ - moved to @deity/falcon-ui-kit
+> - ~~FormFieldProps~~ - moved to @deity/falcon-ui-kit
 
 ---
 
@@ -356,10 +357,10 @@
 
 ---
 
-> - ~~AddressDetails~~ - moved to @deity/falcon-uikit/src/Address/AddressDetails.tsx
-> - ~~AddressCardLayout~~ - moved to @deity/falcon-uikit/src/Address/AddressCard.tsx
-> - ~~AddressCard~~ - moved to @deity/falcon-uikit/src/Address/AddressCard.tsx
-> - ~~AddressListLayout~~ - moved to @deity/falcon-uikit/src/AddressListLayout.tsx
+> - ~~AddressDetails~~ - moved to @deity/falcon-ui-kit/src/Address/AddressDetails.tsx
+> - ~~AddressCardLayout~~ - moved to @deity/falcon-ui-kit/src/Address/AddressCard.tsx
+> - ~~AddressCard~~ - moved to @deity/falcon-ui-kit/src/Address/AddressCard.tsx
+> - ~~AddressListLayout~~ - moved to @deity/falcon-ui-kit/src/AddressListLayout.tsx
 
 ---
 
@@ -427,17 +428,17 @@
 
 ---
 
-- FormErrorSummary
-- FormFieldLayout
-- FormFieldLabel
-- FormFieldError
-- FormField
-- CheckboxFormFieldLayout
-- CheckboxFormField
-- RadioFormFieldLayout
-- RadioFormField
-- FormSubmit
-- PasswordRevealInput
+> - ~~FormErrorSummary~~ - moved to @deity/falcon-ui-kit
+> - ~~FormFieldLayout~~ - moved to @deity/falcon-ui-kit
+> - ~~FormFieldLabel~~ - moved to @deity/falcon-ui-kit
+> - ~~FormFieldError~~ - moved to @deity/falcon-ui-kit
+> - ~~FormField~~ - moved to @deity/falcon-ui-kit
+> - ~~CheckboxFormFieldLayout~~ - moved to @deity/falcon-ui-kit
+> - ~~CheckboxFormField~~ - moved to @deity/falcon-ui-kit
+> - ~~RadioFormFieldLayout~~ - moved to @deity/falcon-ui-kit
+> - ~~RadioFormField~~ - moved to @deity/falcon-ui-kit
+> - ~~FormSubmit~~ - moved to @deity/falcon-ui-kit
+> - ~~PasswordRevealInput~~ - moved to @deity/falcon-ui-kit
 
 ---
 
@@ -504,7 +505,7 @@
 
 ---
 
-> - ~~Responsive~~ - moved to @deity/falcon-uikit/src/Responsive/Responsive.tsx
+> - ~~Responsive~~ - moved to @deity/falcon-ui-kit/src/Responsive/Responsive.tsx
 
 ---
 
@@ -519,9 +520,9 @@
 
 ---
 
--  ~~AppLayout~~ -moved to `@deity/falcon-uikit/src/Layouts/AppLayout.tsx`
+- ~~AppLayout~~ -moved to `@deity/falcon-ui-kit/src/Layouts/AppLayout.tsx`
 - Breadcrumbs
-- ~~FixCenteredLayout~~ moved to `@deity/falcon-uikit/src/Layouts/FixCenteredLayout.tsx`
+- ~~FixCenteredLayout~~ moved to `@deity/falcon-ui-kit/src/Layouts/FixCenteredLayout.tsx`
 - TwoColumnsLayout
 - TwoStepWizard
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { themed } from '@deity/falcon-ui';
-import { toGridTemplate } from '../helpers';
+import { toGridTemplate } from '@deity/falcon-ui-kit';
 
 export const CategoryArea = {
   heading: 'heading',

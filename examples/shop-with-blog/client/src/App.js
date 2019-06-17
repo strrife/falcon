@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { ThemeProvider, Box, Button } from '@deity/falcon-ui';
 import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
-import { AppLayout } from '@deity/falcon-uikit';
+import { AppLayout } from '@deity/falcon-ui-kit';
 import { ServiceWorkerRegistrar, ServiceWorker } from '@deity/falcon-service-worker';
 import {
   Header,
@@ -11,9 +11,9 @@ import {
   OnlyUnauthenticatedRoute,
   OnlineStatus,
   LocaleProvider,
-  SearchProvider,
-  Sidebar
+  SearchProvider
 } from '@deity/falcon-ecommerce-uikit';
+import { Sidebar } from '@deity/falcon-ui-kit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
 import { ErrorBoundary } from 'src/components/ErrorBoundary';

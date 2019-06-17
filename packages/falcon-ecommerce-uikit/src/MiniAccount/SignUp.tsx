@@ -1,6 +1,6 @@
 import React from 'react';
 import { I18n } from '@deity/falcon-i18n';
-import { OpenSidebarMutation } from '../Sidebar';
+import { OpenSidebarMutation } from '@deity/falcon-ui-kit';
 import { SignUpForm } from '../SignUp';
 import { MiniFormLayout } from './MiniFormLayout';
 
