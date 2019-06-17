@@ -25,6 +25,10 @@
     "react-apollo": "2.5.6"
   },
   "devDependencies": {
-    "@deity/falcon-scripts": "^0.0.1"
+    "@deity/falcon-scripts": "^0.0.1",
+    "graphql-tag": "2.10.1"
+  },
+  "peerDependencies": {
+    "graphql-tag": "^2.10.1"
   }
 }
