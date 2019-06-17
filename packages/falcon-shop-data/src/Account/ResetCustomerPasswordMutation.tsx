@@ -8,11 +8,18 @@ export const RESET_CUSTOMER_PASSWORD_MUTATION = gql`
   }
 `;
 
+export type ResetCustomerPasswordResponse = {
+  resetCustomerPassword: boolean;
+};
+
 export type ResetCustomerPasswordVariables = {
   input: ResetCustomerPasswordInput;
 };
 
-export class ResetCustomerPasswordMutation extends Mutation<boolean, ResetCustomerPasswordVariables> {
+export class ResetCustomerPasswordMutation extends Mutation<
+  ResetCustomerPasswordResponse,
+  ResetCustomerPasswordVariables
+> {
   static defaultProps = {
     mutation: RESET_CUSTOMER_PASSWORD_MUTATION
   };

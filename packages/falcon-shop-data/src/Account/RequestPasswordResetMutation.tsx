@@ -12,7 +12,14 @@ export type RequestPasswordResetTokenVariables = {
   input: RequestCustomerPasswordResetTokenInput;
 };
 
-export class RequestPasswordResetMutation extends Mutation<boolean, RequestPasswordResetTokenVariables> {
+export type RequestPasswordResetResponse = {
+  requestCustomerPasswordResetToken: boolean;
+};
+
+export class RequestPasswordResetMutation extends Mutation<
+  RequestPasswordResetResponse,
+  RequestPasswordResetTokenVariables
+> {
   static defaultProps = {
     mutation: REQUEST_CUSTOMER_PASSWORD_RESET_TOKEN_MUTATION
   };
