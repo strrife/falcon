@@ -44,7 +44,7 @@ export {
   prettifyTime
 };
 
-export default (options: object) => {
+export function falconPrettyFactory(options: object) {
   const opts = Object.assign({}, defaultOptions, options);
   const EOL = opts.crlf ? '\r\n' : '\n';
   const IDENT = '    ';
@@ -171,4 +171,4 @@ export default (options: object) => {
 
     return line;
   };
-};
+}
