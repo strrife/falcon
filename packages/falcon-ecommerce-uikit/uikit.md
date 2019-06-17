@@ -530,7 +530,9 @@
 
 - CheckoutLogic
 - DynamicRoute
-- EnsureTTI
+
+> - ~~EnsureTTI~~ moved to @deity/falcon-front-kit
+
 - FiltersDataProvider
 - LocaleSwitcher
 - Field
