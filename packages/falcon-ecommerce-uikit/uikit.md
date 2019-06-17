@@ -470,12 +470,6 @@
 - MiniCart
 - MiniCartIcon
 
----
-
-- OnlineStatus
-
----
-
 - OrderItemSummary
 
 ---
@@ -550,3 +544,4 @@
 - SearchProvider
 - SignOutLogic
 - SortOrdersProvider
+> - ~~OnlineStatus~~ moved to @deity/falcon-front-kit/src/NetworkStatus/NetworkStatus.tsx
