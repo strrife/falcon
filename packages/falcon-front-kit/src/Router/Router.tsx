@@ -3,7 +3,7 @@ import ReactRouterDom, { withRouter, RouteComponentProps } from 'react-router-do
 // eslint-disable-next-line
 import { History, Location } from 'history';
 
-export type IRenderRouterProps = {
+export type RouterRenderProps = {
   children: (props: ReactRouterRenderProps) => any;
 } & RouteComponentProps;
 
@@ -13,10 +13,10 @@ export type ReactRouterRenderProps = {
   history: History;
 };
 
-const RenderRouterProps: React.SFC<IRenderRouterProps> = props => {
+const RenderRouterProps: React.SFC<RouterRenderProps> = props => {
   const { match, location, history, children } = props;
 
-  return (children as Function)({ match, location, history });
+  return children({ match, location, history });
 };
 
 export const Router = withRouter(RenderRouterProps);
