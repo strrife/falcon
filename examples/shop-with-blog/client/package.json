@@ -25,6 +25,7 @@
     "@deity/falcon-adyen-plugin": "^0.0.2",
     "@deity/falcon-client": "^0.4.2",
     "@deity/falcon-errors": "^0.1.2",
+    "@deity/falcon-front-kit": "^0.0.1",
     "@deity/falcon-i18n": "^0.2.5",
     "@deity/falcon-payment-plugin": "^0.0.2",
     "@deity/falcon-paypal-plugin": "^0.0.2",
