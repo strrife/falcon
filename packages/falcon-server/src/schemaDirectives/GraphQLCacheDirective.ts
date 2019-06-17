@@ -63,9 +63,9 @@ export class GraphQLCacheDirective extends SchemaDirectiveVisitor {
     resolve: FieldTypeResolver,
     field: FieldType,
     defaultCacheConfig: GraphQLCacheDirectiveParams
-  ): Function {
+  ): FieldTypeResolver {
     const thisDirective = this;
-    return async function fieldResolver(parent: any, params: any, context, info) {
+    return async function fieldResolver(parent, params, context, info) {
       const resolver = async () => resolve.call(this, parent, params, context, info);
       const { config: { cache: { resolvers: resolversCacheConfig = {} } = {} } = {} } = context;
 
