@@ -535,8 +535,8 @@
 - LocaleProvider
 - ProductForm (it's not exported outside)
 - ProductConfigurator
-- Query
 
+> - ~~Query~~ movet to @deity/falcon-data
 > - ~~OnlyUnauthenticatedRoute~~ moved to @deity/falcon-front-kit
 > - ~~ProtectedRoute~~ moved to @deity/falcon-front-kit
 > - ~~Router~~ moved to @deity/falcon-front-kit
