@@ -2,16 +2,9 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { ThemeProvider, Box, Button } from '@deity/falcon-ui';
-import { ScrollToTop, OnlyUnauthenticatedRoute } from '@deity/falcon-front-kit';
+import { NetworkStatus, ScrollToTop, OnlyUnauthenticatedRoute, ProtectedRoute } from '@deity/falcon-front-kit';
 import { ServiceWorkerRegistrar, ServiceWorker } from '@deity/falcon-service-worker';
-import {
-  AppLayout,
-  Header,
-  ProtectedRoute,
-  OnlineStatus,
-  LocaleProvider,
-  SearchProvider
-} from '@deity/falcon-ecommerce-uikit';
+import { AppLayout, Header, LocaleProvider, SearchProvider } from '@deity/falcon-ecommerce-uikit';
 import { Sidebar } from '@deity/falcon-ui-kit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
@@ -86,7 +79,7 @@ const App = () => (
                   }
                 </ServiceWorker>
                 <Header />
-                <OnlineStatus>{({ isOnline }) => !isOnline && <p>you are offline.</p>}</OnlineStatus>
+                <NetworkStatus>{({ isOnline }) => !isOnline && <p>you are offline.</p>}</NetworkStatus>
                 <ErrorBoundary>
                   <Switch>
                     <Route exact path="/" component={Home} />

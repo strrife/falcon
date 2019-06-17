@@ -544,9 +544,7 @@
 - Query
 
 > - ~~OnlyUnauthenticatedRoute~~ moved to @deity/falcon-front-kit
-
-- ProtectedRoute
-
+> - ~~ProtectedRoute~~ moved to @deity/falcon-front-kit
 > - ~~Router~~ moved to @deity/falcon-front-kit
 
 - SearchProvider
