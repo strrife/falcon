@@ -331,7 +331,7 @@ module.exports = (target = 'web', options) => {
           new webpack.HotModuleReplacementPlugin(),
           new StartServerPlugin({
             name: 'server.js',
-            nodeArgs: ['-r', 'source-map-support/register', options.inspect].filter(x => x)
+            nodeArgs: [options.inspect].filter(x => x)
           }),
           new webpack.WatchIgnorePlugin([paths.appWebpackAssets])
         ];
