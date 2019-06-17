@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { Query } from '../Query';
+import { Query } from '@deity/falcon-data';
 import { CustomerQueryResponse } from './types';
 
 export const GET_CUSTOMER = gql`

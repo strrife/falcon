@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
+import { Query } from '@deity/falcon-data';
 import { Address } from '@deity/falcon-shop-extension';
-import { Query } from '../Query';
 
 export type AddressListResponse = {
   addresses: {

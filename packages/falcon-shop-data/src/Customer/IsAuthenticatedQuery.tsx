@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { Query } from '../Query';
+import { Query } from '@deity/falcon-data';
 
 export const GET_IS_AUTHENTICATED = gql`
   query IsAuthenticated {
