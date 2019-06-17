@@ -44,7 +44,7 @@ export {
   prettifyTime
 };
 
-export function falconPrettyFactory(options: object) {
+export const falconPrettyFactory = (options: object) => {
   const opts = Object.assign({}, defaultOptions, options);
   const EOL = opts.crlf ? '\r\n' : '\n';
   const IDENT = '    ';
@@ -60,10 +60,10 @@ export function falconPrettyFactory(options: object) {
     return minimal({ IDENT, EOL });
   }
 
-  return inputData => {
+  return (inputData: string | object): string => {
     let log;
     if (!isObject(inputData)) {
-      const parsed = jsonParser(inputData);
+      const parsed = jsonParser(inputData as string);
       log = parsed.value;
       if (parsed.err) {
         // pass through
@@ -171,4 +171,4 @@ export function falconPrettyFactory(options: object) {
 
     return line;
   };
-}
+};
