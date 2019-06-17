@@ -532,6 +532,7 @@
 - DynamicRoute
 
 > - ~~EnsureTTI~~ moved to @deity/falcon-front-kit
+> - ~~ScrollToTop~~ moved to @deity/falcon-front-kit
 
 - FiltersDataProvider
 - LocaleSwitcher
@@ -543,7 +544,9 @@
 - Query
 - OnlyUnauthenticatedRoute
 - ProtectedRoute
-- Router
+
+> - ~~Router~~ moved to @deity/falcon-front-kit
+
 - SearchProvider
 - SignOutLogic
 - SortOrdersProvider
