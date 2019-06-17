@@ -3,8 +3,8 @@ import { Redirect } from 'react-router-dom';
 // eslint-disable-next-line
 import { Location } from 'history';
 import { Text } from '@deity/falcon-ui';
-import { Router } from './../Router';
-import { UrlQuery } from './GetUrlQuery';
+import { Router } from '@deity/falcon-front-kit';
+import { UrlQuery } from '@deity/falcon-data';
 
 // export type contentType = 'shop-page' | 'shop-product' | 'shop-category';
 

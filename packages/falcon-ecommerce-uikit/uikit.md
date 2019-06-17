@@ -58,7 +58,7 @@
 
 ---
 
-- UrlQuery
+> - ~~UrlQuery~~ - moved to @deity/falcon-data
 
 ---
 
@@ -159,7 +159,7 @@
 
 ---
 
-- GET_URL
+> - ~~GET_URL~~ - moved to @deity/falcon-data
 
 ---
 

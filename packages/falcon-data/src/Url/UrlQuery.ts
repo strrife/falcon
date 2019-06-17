@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import PropTypes from 'prop-types';
 import { Query } from '../Query/Query';
 
 export const GET_URL = gql`
@@ -12,20 +13,27 @@ export const GET_URL = gql`
   }
 `;
 
-export type DynamicUrl = {
+export type ResourceUrl = {
   type: string;
   redirect?: boolean;
   id: string;
   path: string;
 };
 
-export type UrlQueryVariables = { path: string };
-export type UrlQueryData = { url: DynamicUrl };
-export class UrlQuery extends Query<UrlQueryData, UrlQueryVariables> {
+export type UrlQueryVariables = {
+  path: string;
+};
+export type UrlQueryResponse = {
+  url: ResourceUrl;
+};
+
+export class UrlQuery extends Query<UrlQueryResponse, UrlQueryVariables> {
   static defaultProps = {
     query: GET_URL
   };
+
   static propTypes = {
-    ...Query.propTypes
+    ...Query.propTypes,
+    path: PropTypes.string.isRequired
   };
 }
