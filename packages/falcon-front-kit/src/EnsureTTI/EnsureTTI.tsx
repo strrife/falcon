@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 type EnsureTTIState = {
   isReady: boolean;
-  setTimeoutHandlerId: any;
-  requestIdleHandlerId: any;
+  setTimeoutHandlerId?: any;
+  requestIdleHandlerId?: any;
 };
 
 export type EnsureTTIRenderProps = {
@@ -12,15 +12,15 @@ export type EnsureTTIRenderProps = {
   forceReady: () => void;
 };
 export type EnsureTTIProps = {
+  /** Default timeout is `6000`ms and based on the assumption how the Lighthouse measures time to interactive to improve perceived performance
+   * @see https://developers.google.com/web/updates/2018/05/first-input-delay
+   */
   timeout?: number;
-  children: (props: EnsureTTIRenderProps) => any;
+  children: (props: EnsureTTIRenderProps) => React.ReactNode;
 };
 
 /**
- * TTI measures the time from Navigation Start until the page's resources are loaded
- * and the main thread is idle (for at least 5 seconds), ref: https://developers.google.com/web/updates/2018/05/first-input-delay
- *
- * Default timeout is 6000 and based on the assumption how lighthouse measures time to interactive to improve perceived performance
+ * TTI measures the time from Navigation Start until the page's resources are loaded and the main thread is idle for at least 5 seconds
  */
 export class EnsureTTI extends React.Component<EnsureTTIProps, EnsureTTIState> {
   static propTypes = {
@@ -52,7 +52,7 @@ export class EnsureTTI extends React.Component<EnsureTTIProps, EnsureTTIState> {
       }
 
       if ('requestIdleCallback' in window) {
-        const requestIdleHandlerId = (window as any).requestIdleCallback(this.forceReady);
+        const requestIdleHandlerId = window.requestIdleCallback(this.forceReady);
 
         return this.setState(x => ({ ...x, requestIdleHandlerId }));
       }
@@ -69,17 +69,14 @@ export class EnsureTTI extends React.Component<EnsureTTIProps, EnsureTTIState> {
 
     window.clearTimeout(setTimeoutHandlerId);
     if ('requestIdleCallback' in window && requestIdleHandlerId !== undefined) {
-      (window as any).cancelIdleCallback(requestIdleHandlerId);
+      window.cancelIdleCallback(requestIdleHandlerId);
     }
   }
 
-  /** Sets isReady even before timeout */
+  /** Sets isReady even before `timeout` */
   forceReady = () => {
     if (!this.state.isReady) {
-      this.setState(x => ({
-        ...x,
-        isReady: true
-      }));
+      this.setState(x => ({ ...x, isReady: true }));
     }
   };
 
