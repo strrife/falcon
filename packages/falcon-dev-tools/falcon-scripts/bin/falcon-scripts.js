@@ -11,27 +11,19 @@ const Logger = require('@deity/falcon-logger');
 
 (async () => {
   const script = process.argv[2];
-  const args = process.argv.slice(3) || [];
   const packagePath = process.cwd();
 
   try {
     switch (script) {
       case 'build': {
-        const target =
-          (args.find(x => x.startsWith('--target=')) || '')
-            .split('=')
-            .pop()
-            .toUpperCase() || undefined;
-
         const buildDts = require('../src/build-dts');
         const buildEsm = require('../src/build-esm');
         const buildCjs = require('../src/build-cjs');
 
         buildDts({ packagePath });
-        buildEsm({ packagePath, target });
-        if (target !== 'NODE') {
-          await buildCjs({ packagePath, target });
-        }
+        buildEsm({ packagePath });
+        await buildCjs.pkg({ packagePath });
+        await buildCjs.cli({ packagePath });
 
         break;
       }
