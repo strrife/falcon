@@ -45,7 +45,7 @@ describe('DynamicRouteResolver', () => {
     const dynamicResolver = new DynamicRouteResolver(extensionContainer);
 
     const result = await dynamicResolver.fetchUrl({}, { path: 'foo.html' }, { dataSources });
-    expect(result).toEqual({ id: 2, path: 'foo.html', type: 'bar' });
+    expect(result).toEqual({ id: 2, path: 'foo.html', type: 'bar', redirect: false });
     expect(spyExt2).toHaveBeenCalled();
     expect(spyExt1).not.toHaveBeenCalled();
 
@@ -53,7 +53,7 @@ describe('DynamicRouteResolver', () => {
     spyExt2.mockClear();
 
     const result2 = await dynamicResolver.fetchUrl({}, { path: '/blog/bar/page' }, { dataSources });
-    expect(result2).toEqual({ id: 1, path: '/blog/bar/page', type: 'foo' });
+    expect(result2).toEqual({ id: 1, path: '/blog/bar/page', type: 'foo', redirect: false });
     expect(spyExt1).toHaveBeenCalled();
     expect(spyExt2).not.toHaveBeenCalled();
 

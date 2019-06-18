@@ -264,13 +264,13 @@
 
 ---
 
-- DynamicUrl
-- UrlQueryVariables
-- UrlQueryData
+> - ~~DynamicUrl~~ moved to @deity/falcon-data
+> - ~~UrlQueryVariables~~ moved to @deity/falcon-data
+> - ~~UrlQueryData~~ moved to @deity/falcon-data/dist/Url/UrlQuery `UrlQueryResponse`
 
 ---
 
-- EnsureTTIRenderProps
+> - ~~EnsureTTIRenderProps~~ moved to @deity/falcon-front-kit
 
 ---
 
@@ -523,8 +523,8 @@
 ### Existing "business level" components:
 
 - CheckoutLogic
-- DynamicRoute
 
+> - ~~DynamicRoute~~ moved to @deity/falcon-front-kit
 > - ~~EnsureTTI~~ moved to @deity/falcon-front-kit
 > - ~~ScrollToTop~~ moved to @deity/falcon-front-kit
 

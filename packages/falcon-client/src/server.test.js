@@ -8,8 +8,8 @@ import Koa from 'koa';
 import supertest from 'supertest';
 import { BaseSchema } from '@deity/falcon-server';
 import { T } from '@deity/falcon-i18n';
+import { DynamicRoute } from '@deity/falcon-front-kit';
 import { Server } from './server';
-import DynamicRoute from './components/DynamicRoute';
 import defaultConfiguration from './clientApp/defaultConfiguration';
 
 describe('Server', () => {

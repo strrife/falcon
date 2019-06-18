@@ -3,21 +3,19 @@ import { Redirect } from 'react-router-dom';
 // eslint-disable-next-line
 import { Location } from 'history';
 import { Text } from '@deity/falcon-ui';
-import { UrlQuery } from '@deity/falcon-data';
+import { UrlQuery, ResourceMeta, ResourceType } from '@deity/falcon-data';
 import { Router } from '../Router';
 
-// export type contentType = 'shop-page' | 'shop-product' | 'shop-category';
+export type DynamicRouteComponentProps = Pick<ResourceMeta, 'id' | 'path'>;
+
+export type ComponentsMap = { [key in ResourceType]: React.ComponentType<DynamicRouteComponentProps> };
 
 export type DynamicRouteProps = {
   location?: Location;
-  components: {
-    /**
-     * components map, where key is content Type e.g. `shop-page`, `shop-product`, `shop-category`, `blog-post`
-     */
-    [id: string]: React.ComponentType<{ path: string; id: string }>;
-  };
+  components: ComponentsMap;
   notFound: React.ComponentType<{ location: Location }>;
 };
+
 export const DynamicRoute: React.SFC<DynamicRouteProps> = props => {
   const { components, notFound } = props;
 
