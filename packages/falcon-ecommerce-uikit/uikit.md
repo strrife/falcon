@@ -201,7 +201,7 @@
 
 ### Existing TypeScript types and interfaces (without component props definitions):
 
-> - ~~RequestPasswordResetVariables~~ - renamed to RequestPasswordResetTokenVariables and moved to @deity/falcon-shop-data
+> - ~~RequestPasswordResetVariables~~ - renamed to RequestPasswordResetVariables and moved to @deity/falcon-shop-data
 > - ~~ResetCustomerPasswordVariables~~ - moved to @deity/falcon-shop-data
 
 ---
@@ -505,6 +505,7 @@
 ---
 
 > - ~~Responsive~~ - moved to @deity/falcon-uikit/src/Responsive/Responsive.tsx
+
 ---
 
 - Sidebar

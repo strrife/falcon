@@ -1418,7 +1418,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {string} input.email user email
    * @returns {Promise<boolean>} always true to avoid spying for registered emails
    */
-  async requestCustomerPasswordResetToken(obj, { input }) {
+  async requestPasswordReset(obj, { input }) {
     const { email } = input;
     await this.putAuth('/customers/password', { email, template: 'email_reset' });
     return true;

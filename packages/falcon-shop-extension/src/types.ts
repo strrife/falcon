@@ -27,7 +27,7 @@ export type Customer = {
   newsletterSubscriber?: boolean;
 };
 
-export type RequestCustomerPasswordResetTokenInput = {
+export type RequestPasswordResetInput = {
   email: string;
 };
 
