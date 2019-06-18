@@ -1,6 +1,6 @@
-const { Extension } = require('@deity/falcon-server-env');
 const { resolve } = require('path');
 const typeDefs = require('fs').readFileSync(resolve(__dirname, 'schema.graphql'), 'utf8');
+const { Extension } = require('@deity/falcon-server-env');
 
 /**
  * Extension that implements shop features
