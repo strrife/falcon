@@ -35,3 +35,8 @@ export type ResetCustomerPasswordInput = {
   resetToken: string;
   password: string;
 };
+
+export type ChangePasswordInput = {
+  currentPassword: string;
+  password: string;
+};
