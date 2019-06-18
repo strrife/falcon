@@ -1,6 +1,6 @@
 export type Address = {
   id: number;
-  firstname: String;
+  firstname: string;
   lastname: string;
   street: string[];
   city: string;
@@ -13,6 +13,20 @@ export type Address = {
   fax?: string;
   defaultBilling: boolean;
   defaultShipping: boolean;
+};
+
+type AddAddressInput = {
+  company?: string;
+  firstname: string;
+  lastname: string;
+  telephone: string;
+  street: string[];
+  postcode: string;
+  city: string;
+  countryId: string;
+  defaultBilling?: boolean;
+  defaultShipping?: boolean;
+  regionId?: number;
 };
 
 export type Customer = {

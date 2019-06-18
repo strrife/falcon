@@ -26,7 +26,6 @@ extend type Query {
 extend type Mutation {
   setShopCurrency(currency: String!): BackendConfig
   setShopStore(storeCode: String!): BackendConfig
-
   addToCart(input: AddToCartInput!): CartItemPayload
   updateCartItem(input: UpdateCartItemInput!): CartItemPayload
   removeCartItem(input: RemoveCartItemInput!): RemoveCartItemResponse
