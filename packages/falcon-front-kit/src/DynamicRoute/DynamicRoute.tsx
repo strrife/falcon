@@ -31,7 +31,7 @@ export const DynamicRoute: React.SFC<DynamicRouteProps> = props => {
         return (
           <UrlQuery variables={{ path }}>
             {({ url }) => {
-              if (url === null) {
+              if (!url) {
                 const NotFound = notFound;
 
                 return <NotFound location={location} />;
