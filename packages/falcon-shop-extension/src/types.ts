@@ -15,12 +15,27 @@ export type Address = {
   defaultShipping: boolean;
 };
 
-type AddAddressInput = {
+export type AddAddressInput = {
   company?: string;
   firstname: string;
   lastname: string;
   telephone: string;
   street: string[];
+  postcode: string;
+  city: string;
+  countryId: string;
+  defaultBilling?: boolean;
+  defaultShipping?: boolean;
+  regionId?: number;
+};
+
+export type EditAddressInput = {
+  id: number;
+  company?: string;
+  firstname: string;
+  lastname: string;
+  telephone?: string;
+  street: string;
   postcode: string;
   city: string;
   countryId: string;
