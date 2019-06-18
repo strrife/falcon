@@ -29,15 +29,15 @@ type Query {
   """
   backendConfig: BackendConfig
   """
-  URL-resolve query
+  Resolves dynamic resource metada
   """
-  url(path: String!): Url @cache
+  url(path: String!): ResourceMeta @cache
 }
 
 """
-Dynamic URL type
+Metadata of Dynamic Resource
 """
-type Url {
+type ResourceMeta {
   """
   Entity ID
   """
@@ -53,7 +53,7 @@ type Url {
   """
   Redirect flag if the given URL must be redirected to the specified "path" URL
   """
-  redirect: Boolean
+  redirect: Boolean!
 }
 
 """
