@@ -15,10 +15,9 @@ import {
   FiltersSummary,
   ProductList,
   ShowMore,
-  Responsive,
   Loader
 } from '@deity/falcon-ecommerce-uikit';
-import { Sidebar } from '@deity/falcon-ui-kit';
+import { Responsive, Sidebar } from '@deity/falcon-uikit';
 import { Filters } from './Filters';
 
 const copy = item => item && JSON.parse(JSON.stringify(item));

@@ -26,6 +26,5 @@ export * from './Errors';
 export * from './Search';
 export * from './BackendConfig';
 export * from './Filters';
-export * from './Responsive';
 export * from './TwoStepWizard';
 export * from './SortOrders';

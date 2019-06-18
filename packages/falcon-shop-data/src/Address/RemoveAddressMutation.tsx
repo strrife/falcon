@@ -3,10 +3,19 @@ import { Mutation } from 'react-apollo';
 
 export const REMOVE_ADDRESS = gql`
   mutation RemoveAddress($id: Int!) {
-    removeCustomerAddress(id: $id)
+    removeAddress(id: $id)
   }
 `;
-export class RemoveAddressMutation extends Mutation {
+
+export type RemoveAddressResponse = {
+  removeAddress: boolean;
+};
+
+export type RemoveAddressVariables = {
+  id: number;
+};
+
+export class RemoveAddressMutation extends Mutation<RemoveAddressResponse, RemoveAddressVariables> {
   static defaultProps = {
     mutation: REMOVE_ADDRESS,
     awaitRefetchQueries: true,

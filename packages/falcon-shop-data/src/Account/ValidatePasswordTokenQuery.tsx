@@ -7,7 +7,15 @@ export const VALIDATE_PASSWORD_TOKEN_QUERY = gql`
   }
 `;
 
-export class ValidatePasswordTokenQuery extends Query<{ validatePasswordToken: boolean }, { token: string }> {
+export type ValidatePasswordTokenResponse = {
+  validatePasswordToken: boolean;
+};
+
+export type ValidatePasswordTokenVariables = {
+  token: string;
+};
+
+export class ValidatePasswordTokenQuery extends Query<ValidatePasswordTokenResponse, ValidatePasswordTokenVariables> {
   static defaultProps = {
     query: VALIDATE_PASSWORD_TOKEN_QUERY
   };
