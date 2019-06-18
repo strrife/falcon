@@ -1386,7 +1386,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {number} params.id address id
    * @returns {boolean} true when removed successfully
    */
-  async removeCustomerAddress(obj, { id }) {
+  async removeAddress(obj, { id }) {
     return this.deleteForCustomer(`/falcon/customers/me/address/${id}`);
   }
 
@@ -1418,7 +1418,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {string} input.email user email
    * @returns {Promise<boolean>} always true to avoid spying for registered emails
    */
-  async requestCustomerPasswordResetToken(obj, { input }) {
+  async requestPasswordReset(obj, { input }) {
     const { email } = input;
     await this.putAuth('/customers/password', { email, template: 'email_reset' });
     return true;
@@ -1433,7 +1433,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {string} input.password new password to set
    * @returns {Promise<boolean>} true on success
    */
-  async resetCustomerPassword(obj, { input }) {
+  async resetPassword(obj, { input }) {
     const { resetToken, password: newPassword } = input;
     return this.putAuth('/falcon/customers/password/reset', { email: '', resetToken, newPassword });
   }
