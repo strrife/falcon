@@ -56,6 +56,15 @@ export type Customer = {
   newsletterSubscriber?: boolean;
 };
 
+export type EditCustomerInput = {
+  websiteId: number;
+  firstname?: string;
+  lastname?: string;
+  email?: string;
+  defaultBilling?: boolean;
+  defaultShipping?: boolean;
+};
+
 export type RequestPasswordResetInput = {
   email: string;
 };
