@@ -3,7 +3,7 @@
 ### Existing Queries and Mutation classes:
 
 > - ~~RequestPasswordResetMutation~~ - moved to @deity/falcon-shop-data
-> - ~~ResetCustomerPasswordMutation~~ - moved to @deity/falcon-shop-data
+> - ~~ResetCustomerPasswordMutation~~ - renamed to ResetPasswordMutation and moved to @deity/falcon-shop-data
 
 > - ~~ValidatePasswordTokenQuery~~ - moved to @deity/falcon-shop-data
 

@@ -2,8 +2,8 @@ import React from 'react';
 import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
 import { Text, Button, GridLayout, H1, Box } from '@deity/falcon-ui';
-import { ResetCustomerPasswordMutation, ValidatePasswordTokenQuery } from '@deity/falcon-shop-data';
-import { ResetCustomerPasswordInput } from '@deity/falcon-shop-extension';
+import { ResetPasswordMutation, ValidatePasswordTokenQuery } from '@deity/falcon-shop-data';
+import { ResetPasswordInput } from '@deity/falcon-shop-extension';
 import { OpenSidebarMutation } from '../Sidebar';
 import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '../Forms';
 
@@ -50,7 +50,7 @@ export const InvalidToken: React.SFC = () => (
 );
 
 export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken }) => (
-  <ResetCustomerPasswordMutation>
+  <ResetPasswordMutation>
     {(resetPassword, { loading, error, called }) => {
       const submitSucceed = called && !loading && !error;
       if (submitSucceed) {
@@ -59,7 +59,7 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken })
 
       return (
         <Formik
-          initialValues={{ resetToken, password: '' } as ResetCustomerPasswordInput}
+          initialValues={{ resetToken, password: '' } as ResetPasswordInput}
           onSubmit={values => resetPassword({ variables: { input: values } })}
         >
           {() => (
@@ -76,7 +76,7 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken })
         </Formik>
       );
     }}
-  </ResetCustomerPasswordMutation>
+  </ResetPasswordMutation>
 );
 
 const ResetPasswordSuccess: React.SFC = () => (
