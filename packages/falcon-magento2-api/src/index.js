@@ -1386,7 +1386,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {number} params.id address id
    * @returns {boolean} true when removed successfully
    */
-  async removeCustomerAddress(obj, { id }) {
+  async removeAddress(obj, { id }) {
     return this.deleteForCustomer(`/falcon/customers/me/address/${id}`);
   }
 
