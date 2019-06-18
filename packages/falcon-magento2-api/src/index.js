@@ -1433,7 +1433,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {string} input.password new password to set
    * @returns {Promise<boolean>} true on success
    */
-  async resetCustomerPassword(obj, { input }) {
+  async resetPassword(obj, { input }) {
     const { resetToken, password: newPassword } = input;
     return this.putAuth('/falcon/customers/password/reset', { email: '', resetToken, newPassword });
   }

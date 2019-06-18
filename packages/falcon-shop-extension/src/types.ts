@@ -40,3 +40,8 @@ export type ChangePasswordInput = {
   currentPassword: string;
   password: string;
 };
+
+export type ResetPasswordInput = {
+  resetToken: string;
+  password: string;
+};

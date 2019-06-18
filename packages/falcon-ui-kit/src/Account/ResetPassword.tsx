@@ -51,7 +51,7 @@ export const InvalidToken: React.SFC = () => (
 
 export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken }) => (
   <ResetCustomerPasswordMutation>
-    {(resetCustomerPassword, { loading, error, called }) => {
+    {(resetPassword, { loading, error, called }) => {
       const submitSucceed = called && !loading && !error;
       if (submitSucceed) {
         return <ResetPasswordSuccess />;
@@ -60,7 +60,7 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken })
       return (
         <Formik
           initialValues={{ resetToken, password: '' } as ResetCustomerPasswordInput}
-          onSubmit={values => resetCustomerPassword({ variables: { input: values } })}
+          onSubmit={values => resetPassword({ variables: { input: values } })}
         >
           {() => (
             <MiniFormLayout>
