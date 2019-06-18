@@ -13,9 +13,9 @@ export const GET_URL = gql`
   }
 `;
 
-export type ResourceUrl = {
+export type ResourceMeta = {
   type: string;
-  redirect?: boolean;
+  redirect: boolean;
   id: string;
   path: string;
 };
@@ -24,7 +24,7 @@ export type UrlQueryVariables = {
   path: string;
 };
 export type UrlQueryResponse = {
-  url: ResourceUrl;
+  url: ResourceMeta;
 };
 
 export class UrlQuery extends Query<UrlQueryResponse, UrlQueryVariables> {
