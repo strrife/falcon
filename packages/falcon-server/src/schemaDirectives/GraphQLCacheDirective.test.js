@@ -1,7 +1,7 @@
 const { Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
 const { addResolveFunctionsToSchema } = require('graphql-tools');
-const GraphQLCacheDirective = require('./GraphQLCacheDirective');
 const { runQuery, buildSchema, buildSchemaAndRunQuery } = require('../utils/testing');
+const GraphQLCacheDirective = require('./GraphQLCacheDirective');
 
 const directiveDefinition = `directive @cache(ttl: Int, idPath: [String]) on FIELD_DEFINITION`;
 

@@ -1,7 +1,7 @@
 const { mockServer } = require('graphql-tools');
 const { EventEmitter2 } = require('eventemitter2');
-const ExtensionContainer = require('./ExtensionContainer');
 const { BaseSchema } = require('../index');
+const ExtensionContainer = require('./ExtensionContainer');
 
 const extensions = {
   shop: {
