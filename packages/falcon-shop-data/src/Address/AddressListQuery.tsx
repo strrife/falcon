@@ -3,7 +3,7 @@ import { Address } from '@deity/falcon-shop-extension';
 import { Query } from '../Query';
 
 export const GET_ADDRESS_LIST = gql`
-  query Addresses {
+  query AddressList {
     addresses {
       items {
         id
