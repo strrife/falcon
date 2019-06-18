@@ -1,4 +1,7 @@
 require('source-map-support').install();
+
+const { readFileSync } = require('fs');
+const { resolve: resolvePath } = require('path');
 const { codes } = require('@deity/falcon-errors');
 const { Events, Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
 const Logger = require('@deity/falcon-logger');
@@ -12,8 +15,6 @@ const session = require('koa-session');
 const body = require('koa-body');
 const get = require('lodash/get');
 const capitalize = require('lodash/capitalize');
-const { resolve: resolvePath } = require('path');
-const { readFileSync } = require('fs');
 const ApiContainer = require('./containers/ApiContainer');
 const ExtensionContainer = require('./containers/ExtensionContainer');
 const EndpointContainer = require('./containers/EndpointContainer');

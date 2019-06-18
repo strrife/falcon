@@ -1,11 +1,10 @@
+const path = require('path');
 const Logger = require('@deity/falcon-logger');
 const chalk = require('chalk');
-const path = require('path');
 const fs = require('fs-extra');
 const rollup = require('rollup');
 const resolve = require('rollup-plugin-node-resolve');
 const { terser } = require('rollup-plugin-terser');
-
 const re = require('rollup-plugin-re');
 const alias = require('rollup-plugin-alias');
 const paths = require('../paths');

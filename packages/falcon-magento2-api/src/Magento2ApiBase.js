@@ -1,5 +1,5 @@
-const { ApiDataSource, BearerAuth } = require('@deity/falcon-server-env');
 const util = require('util');
+const { ApiDataSource, BearerAuth } = require('@deity/falcon-server-env');
 const _ = require('lodash');
 const addSeconds = require('date-fns/add_seconds');
 const { FalconError, AuthenticationError, codes } = require('@deity/falcon-errors');

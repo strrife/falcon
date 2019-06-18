@@ -1,5 +1,5 @@
-const qs = require('qs');
 const url = require('url');
+const qs = require('qs');
 const urlJoin = require('proper-url-join');
 const isEmpty = require('lodash/isEmpty');
 const pick = require('lodash/pick');

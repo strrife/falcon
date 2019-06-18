@@ -4,8 +4,8 @@ import { Switch } from 'react-router-dom';
 import loadable from '@loadable/component';
 import { FalconClientMock } from '../../test-utils';
 import { wait } from '../../../../test/helpers';
-import DynamicRoute from './DynamicRoute';
 import { GET_URL } from '../graphql/url.gql';
+import DynamicRoute from './DynamicRoute';
 
 describe('DynamicRoute', () => {
   it('Should render DynamicRoute content', async () => {
