@@ -34,6 +34,8 @@ export class UrlQuery extends Query<UrlQueryResponse, UrlQueryVariables> {
 
   static propTypes = {
     ...Query.propTypes,
-    path: PropTypes.string.isRequired
+    variables: PropTypes.shape({
+      path: PropTypes.string.isRequired
+    })
   };
 }
