@@ -1,7 +1,7 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
 import { Link } from '@deity/falcon-ui';
-import { OpenSidebarMutation } from '../Sidebar';
+import { OpenSidebarMutation } from '@deity/falcon-ui-kit';
 
 export const ForgotPasswordTrigger: React.SFC = () => (
   <OpenSidebarMutation>

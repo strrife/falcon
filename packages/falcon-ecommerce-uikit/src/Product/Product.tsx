@@ -3,15 +3,15 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
 import { I18n } from '@deity/falcon-i18n';
 import { themed, Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
+import { OpenSidebarMutation } from '@deity/falcon-ui-kit';
+import { toGridTemplate } from '@deity/falcon-ui-kit';
 import { Locale } from '../Locale';
 import { Breadcrumbs } from '../Breadcrumbs';
 import { ProductGallery } from './ProductGallery';
 import { ProductConfigurableOptions } from './ConfigurableOptions';
 import { AddToCartMutation } from '../Cart';
-import { OpenSidebarMutation } from '../Sidebar';
 import { ProductConfigurator } from './ProductConfigurator';
 import { Price } from '../Locale';
-import { toGridTemplate } from '../helpers';
 import { ProductData } from './ProductQuery';
 
 export const ProductLayout = themed({

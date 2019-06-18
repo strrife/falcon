@@ -27,7 +27,21 @@ export type Customer = {
   newsletterSubscriber?: boolean;
 };
 
+export type RequestPasswordResetInput = {
+  email: string;
+};
+
 export type ResetCustomerPasswordInput = {
+  resetToken: string;
+  password: string;
+};
+
+export type ChangePasswordInput = {
+  currentPassword: string;
+  password: string;
+};
+
+export type ResetPasswordInput = {
   resetToken: string;
   password: string;
 };

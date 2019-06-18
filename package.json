@@ -65,7 +65,9 @@
     "examples/shop-with-blog/server",
     "packages/falcon-shop-data",
     "packages/falcon-blog-data",
-    "packages/falcon-uikit"
+    "packages/falcon-ui-kit",
+    "packages/falcon-front-kit",
+    "packages/falcon-data"
   ],
   "husky": {
     "hooks": {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik } from 'formik';
+import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '@deity/falcon-ui-kit';
 import { SignUpMutation, SignUpVariables } from './SignUpMutation';
-import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '../Forms';
 
 type SignUpFormProps = {
   onCompleted?: () => void;

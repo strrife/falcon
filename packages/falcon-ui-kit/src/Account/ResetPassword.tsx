@@ -2,11 +2,14 @@ import React from 'react';
 import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
 import { Text, Button, GridLayout, H1, Box } from '@deity/falcon-ui';
-import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '../Forms';
-import { ResetCustomerPasswordMutation, ResetCustomerPasswordVariables } from './AccountRecoveryMutations';
-import { ValidatePasswordTokenQuery } from './AccountRecoveryQueries';
+import { ResetPasswordMutation, ValidatePasswordTokenQuery } from '@deity/falcon-shop-data';
+import { ResetPasswordInput } from '@deity/falcon-shop-extension';
 import { OpenSidebarMutation } from '../Sidebar';
-import { MiniFormLayout } from '../MiniAccount';
+import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '../Forms';
+
+// todo (uikit): re-work that once we have MiniAccount and "MiniLayouts" moved to falcon-ui-kit
+// import { MiniFormLayout } from '../MiniAccount';
+const MiniFormLayout = ({ children }) => <div>{children}</div>;
 
 type ResetPasswordProps = {
   resetToken: string;
@@ -47,8 +50,8 @@ export const InvalidToken: React.SFC = () => (
 );
 
 export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken }) => (
-  <ResetCustomerPasswordMutation>
-    {(resetCustomerPassword, { loading, error, called }) => {
+  <ResetPasswordMutation>
+    {(resetPassword, { loading, error, called }) => {
       const submitSucceed = called && !loading && !error;
       if (submitSucceed) {
         return <ResetPasswordSuccess />;
@@ -56,8 +59,8 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken })
 
       return (
         <Formik
-          initialValues={{ resetToken, password: '' } as ResetCustomerPasswordVariables}
-          onSubmit={values => resetCustomerPassword({ variables: { input: values } })}
+          initialValues={{ resetToken, password: '' } as ResetPasswordInput}
+          onSubmit={values => resetPassword({ variables: { input: values } })}
         >
           {() => (
             <MiniFormLayout>
@@ -73,7 +76,7 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken })
         </Formik>
       );
     }}
-  </ResetCustomerPasswordMutation>
+  </ResetPasswordMutation>
 );
 
 const ResetPasswordSuccess: React.SFC = () => (

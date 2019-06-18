@@ -2,7 +2,7 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T, I18n } from '@deity/falcon-i18n';
 import { H1, H2, Box, Link, Icon, Button, Divider, FlexLayout } from '@deity/falcon-ui';
-import { getAddressType, AddressCardLayout, AddressListLayout, AddressDetails } from '@deity/falcon-uikit';
+import { getAddressType, AddressCardLayout, AddressListLayout, AddressDetails } from '@deity/falcon-ui-kit';
 import { RemoveAddressMutation, AddressListQuery } from '@deity/falcon-shop-data';
 
 const AddressBook = () => (
