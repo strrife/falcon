@@ -2,7 +2,6 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 // eslint-disable-next-line
 import { Location } from 'history';
-import { Text } from '@deity/falcon-ui';
 import { UrlQuery, ResourceMeta, ResourceType } from '@deity/falcon-data';
 import { Router } from '../Router';
 
@@ -41,7 +40,9 @@ export const DynamicRoute: React.SFC<DynamicRouteProps> = props => {
 
               const Component = components[url.type];
               if (!Component) {
-                return <Text>{`Please register component for '${url.type}' content type!`}</Text>;
+                console.warn(`Please register component for '${url.type}' content type!`);
+
+                return null;
               }
 
               return <Component id={url.id} path={url.path} />;
