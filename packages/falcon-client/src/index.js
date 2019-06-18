@@ -1,3 +1,4 @@
+import 'source-map-support/register';
 import http from 'http';
 import Logger from '@deity/falcon-logger';
 
