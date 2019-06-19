@@ -1,6 +1,6 @@
 import { Response, Request } from 'apollo-server-env';
 import { CacheOptions, RequestOptions } from 'apollo-datasource-rest/dist/RESTDataSource';
-import { IMiddleware } from 'koa-router';
+import { Middleware } from 'koa';
 import { RequestInit } from 'apollo-server-env';
 import { KeyValueCache } from 'apollo-server-caching';
 import { GraphQLSchema, GraphQLResolveInfo } from 'graphql';
@@ -29,9 +29,7 @@ export enum ApiUrlPriority {
   OFF = 0
 }
 
-export type DataSources = {
-  [name: string]: ApiDataSource<GraphQLContext>;
-};
+export type DataSources = Record<string, ApiDataSource<GraphQLContext>>;
 
 export interface IConfigurableConstructorParams<T = object> {
   /** short-name */
@@ -123,8 +121,8 @@ export type FetchUrlParams = {
 };
 
 export interface EndpointEntry {
-  methods: Array<RequestMethod> | RequestMethod;
-  handler: IMiddleware;
+  methods: Array<RequestMethod> | RequestMethod | string | string[];
+  handler: Middleware;
   path: string;
 }
 
@@ -151,3 +149,5 @@ export interface GqlServerConfig<TContext = any> {
   debug?: boolean;
   tracing?: boolean;
 }
+
+export type GraphQLResolverMap = Record<string, Record<string, GraphQLResolver<any>>>;
