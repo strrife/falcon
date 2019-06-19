@@ -4,3 +4,4 @@ export * from './Router';
 export * from './Routes';
 export * from './DynamicRoute';
 export * from './NetworkStatus';
+export * from './Locale';

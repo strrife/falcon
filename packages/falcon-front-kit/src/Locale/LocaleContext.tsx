@@ -1,6 +1,6 @@
 import React from 'react';
-import { BackendConfigQuery } from '../BackendConfig';
-import { Omit } from '../types';
+import { Omit } from '@deity/falcon-data';
+import { BackendConfigQuery } from '@deity/falcon-shop-data';
 
 export type LocaleContextType = {
   locale: string;

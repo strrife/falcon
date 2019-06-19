@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { themed, Text } from '@deity/falcon-ui';
-import { Locale, DateTimeFormatOptions } from './LocaleContext';
+import { Locale, DateTimeFormatOptions } from '@deity/falcon-front-kit';
 
 type DateFormatProps = {
   value: number | string | Date;
