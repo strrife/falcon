@@ -16,7 +16,7 @@ extend type Query {
   lastOrder: Order @cacheInvalidator(idPath: [{ path: "items", type: "Product" }])
   orders(pagination: PaginationInput): Orders
   address(id: Int!): Address
-  addresses: AddressList
+  addressList: AddressList
   customer: Customer
   cmsPage(id: Int, identifier: String): CmsPage
   cmsBlock(identifier: String): CmsBlock

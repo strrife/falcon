@@ -4,7 +4,7 @@ import { Query } from '../Query';
 
 export const GET_ADDRESS_LIST = gql`
   query AddressList {
-    addresses {
+    addressList {
       items {
         id
         firstname
@@ -24,7 +24,7 @@ export const GET_ADDRESS_LIST = gql`
   }
 `;
 export type AddressListResponse = {
-  addresses: {
+  addressList: {
     items: Pick<
       Address,
       | 'id'

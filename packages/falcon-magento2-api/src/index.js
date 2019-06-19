@@ -1348,7 +1348,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * Request customer addresses
    * @returns {Promise<AddressList>} requested addresses data
    */
-  async addresses() {
+  async addressList() {
     const response = await this.getForCustomer('/falcon/customers/me/address');
     const items = response.items || [];
 
