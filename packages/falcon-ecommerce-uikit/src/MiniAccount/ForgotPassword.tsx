@@ -1,14 +1,13 @@
 import React from 'react';
 import { I18n } from '@deity/falcon-i18n';
-import { ForgotPasswordForm } from '@deity/falcon-ui-kit';
-import { MiniFormLayout } from './MiniFormLayout';
+import { ForgotPasswordForm, SidebarLayout } from '@deity/falcon-ui-kit';
 
 export const ForgotPassword = () => (
   <I18n>
     {t => (
-      <MiniFormLayout title={t('forgotPassword.title')}>
+      <SidebarLayout title={t('forgotPassword.title')}>
         <ForgotPasswordForm />
-      </MiniFormLayout>
+      </SidebarLayout>
     )}
   </I18n>
 );
