@@ -63,11 +63,11 @@ type BackendConfig {
   """
   List of supported locales (for example: `["en-US", "nl-NL"]`)
   """
-  locales: [String]
+  locales: [String!]!
   """
   Current active locale (for example, `en-US`)
   """
-  activeLocale: String
+  activeLocale: String!
 }
 
 """
