@@ -14,7 +14,10 @@ export const AddressCardLayout = themed({
   }
 });
 
-export const AddressCard: React.SFC<{ address: Address }> = ({ address }) => (
+export type AddressCardProps = {
+  address: Address;
+};
+export const AddressCard: React.SFC<AddressCardProps> = ({ address }) => (
   <AddressCardLayout>
     <AddressDetails {...address} />
   </AddressCardLayout>

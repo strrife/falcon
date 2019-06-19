@@ -3,9 +3,9 @@ import { Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { ThemeProvider, Box, Button } from '@deity/falcon-ui';
 import ScrollToTop from '@deity/falcon-client/src/components/ScrollToTop';
+import { AppLayout } from '@deity/falcon-ui-kit';
 import { ServiceWorkerRegistrar, ServiceWorker } from '@deity/falcon-service-worker';
 import {
-  AppLayout,
   Header,
   ProtectedRoute,
   OnlyUnauthenticatedRoute,
