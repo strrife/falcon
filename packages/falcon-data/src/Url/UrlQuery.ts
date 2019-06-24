@@ -25,11 +25,11 @@ export type ResourceMeta = {
 export type UrlQueryVariables = {
   path: string;
 };
-export type UrlQueryResponse = {
+export type UrlResponse = {
   url: ResourceMeta;
 };
 
-export class UrlQuery extends Query<UrlQueryResponse, UrlQueryVariables> {
+export class UrlQuery extends Query<UrlResponse, UrlQueryVariables> {
   static defaultProps = {
     query: GET_URL
   };

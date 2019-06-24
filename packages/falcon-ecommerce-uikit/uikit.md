@@ -258,14 +258,14 @@
 ---
 
 > - ~~Customer~~ - moved to @deity/falcon-shop-extension
-> - ~~CustomerQueryData~~ - changed to `CustomerQueryResponse` and moved to @deity/falcon-shop-data
+> - ~~CustomerQueryData~~ - changed to `CustomerResponse` and moved to @deity/falcon-shop-data
 > - ~~IsAuthenticatedQueryData~~ - changed to `IsAuthenticatedResponse` and moved to @deity/falcon-shop-data
 
 ---
 
 > - ~~DynamicUrl~~ moved to @deity/falcon-data
 > - ~~UrlQueryVariables~~ moved to @deity/falcon-data
-> - ~~UrlQueryData~~ moved to @deity/falcon-data/dist/Url/UrlQuery `UrlQueryResponse`
+> - ~~UrlQueryData~~ changed to `UrlResponse` and moved to @deity/falcon-data/dist/Url/UrlQuery 
 
 ---
 

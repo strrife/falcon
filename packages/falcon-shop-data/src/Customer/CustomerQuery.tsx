@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import { Query } from '@deity/falcon-data';
-import { CustomerQueryResponse } from './types';
+import { CustomerResponse } from './types';
 
 export const GET_CUSTOMER = gql`
   query Customer {
@@ -14,7 +14,7 @@ export const GET_CUSTOMER = gql`
   }
 `;
 
-export class CustomerQuery extends Query<CustomerQueryResponse> {
+export class CustomerQuery extends Query<CustomerResponse> {
   static defaultProps = {
     query: GET_CUSTOMER
   };

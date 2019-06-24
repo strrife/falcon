@@ -15,11 +15,11 @@ export type BackendConfig = {
   activeLocale: string;
 };
 
-export type BackendConfigQueryResponse = {
+export type BackendConfigResponse = {
   backendConfig: BackendConfig;
 };
 
-export class BackendConfigQuery extends Query<BackendConfigQueryResponse> {
+export class BackendConfigQuery extends Query<BackendConfigResponse> {
   static defaultProps = {
     query: GET_BACKEND_CONFIG
   };
