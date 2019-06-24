@@ -5,7 +5,6 @@ import { T } from '@deity/falcon-i18n';
 import { H1, Text, Button, FlexLayout, GridLayout } from '@deity/falcon-ui';
 import { TwoColumnsLayout, TwoColumnsLayoutArea, CountriesQuery, CountrySelector } from '@deity/falcon-ecommerce-uikit';
 import { getAddressType, Form, FormField, CheckboxFormField, FormErrorSummary } from '@deity/falcon-ui-kit';
-
 import { GET_ADDRESS, AddressQuery, EditAddressMutation } from '@deity/falcon-shop-data';
 
 const EditAddress = ({ match, history }) => {
