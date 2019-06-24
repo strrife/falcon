@@ -7,30 +7,26 @@ process.on('uncaughtException', ex => {
   console.log('Uncaught Exception: ', ex);
 });
 
-const Logger = require('@deity/falcon-logger');
+const fs = require('fs-extra');
+const { paths } = require('../src/tools');
 
 (async () => {
   const script = process.argv[2];
-  const args = process.argv.slice(3) || [];
   const packagePath = process.cwd();
 
   try {
     switch (script) {
       case 'build': {
-        const target =
-          (args.find(x => x.startsWith('--target=')) || '')
-            .split('=')
-            .pop()
-            .toUpperCase() || undefined;
-
         const buildDts = require('../src/build-dts');
         const buildEsm = require('../src/build-esm');
         const buildCjs = require('../src/build-cjs');
 
         buildDts({ packagePath });
-        buildEsm({ packagePath, target });
-        if (target !== 'NODE') {
-          await buildCjs({ packagePath, target });
+        buildEsm({ packagePath });
+        await buildCjs.main({ packagePath });
+
+        if (fs.existsSync(paths.pkgBinSrc)) {
+          await buildCjs.bin({ packagePath });
         }
 
         break;
@@ -65,8 +61,8 @@ const Logger = require('@deity/falcon-logger');
       }
 
       default:
-        Logger.log(`Unknown script "${script}".`);
-        Logger.log('Perhaps you need to update @deity/falcon-scripts?');
+        console.log(`Unknown script "${script}".`);
+        console.log('Perhaps you need to update @deity/falcon-scripts?');
         process.exit();
 
         break;
@@ -74,7 +70,7 @@ const Logger = require('@deity/falcon-logger');
 
     process.exit(0);
   } catch (error) {
-    Logger.error(error);
+    console.error(error);
     process.exit(1);
   }
 })();
