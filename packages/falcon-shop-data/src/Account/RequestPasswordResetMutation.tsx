@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { RequestPasswordResetInput } from '@deity/falcon-shop-extension';
-import { InputArg } from '../types';
+import { OperationInput } from '../types';
 
 export const REQUEST_PASSWORD_RESET_TOKEN_MUTATION = gql`
   mutation RequestPasswordReset($input: RequestPasswordResetInput!) {
@@ -15,7 +15,7 @@ export type RequestPasswordResetResponse = {
 
 export class RequestPasswordResetMutation extends Mutation<
   RequestPasswordResetResponse,
-  InputArg<RequestPasswordResetInput>
+  OperationInput<RequestPasswordResetInput>
 > {
   static defaultProps = {
     mutation: REQUEST_PASSWORD_RESET_TOKEN_MUTATION

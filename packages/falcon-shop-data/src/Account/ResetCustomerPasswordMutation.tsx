@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { ResetPasswordInput } from '@deity/falcon-shop-extension';
-import { InputArg } from '../types';
+import { OperationInput } from '../types';
 
 export const RESET_PASSWORD_MUTATION = gql`
   mutation ResetPassword($input: ResetPasswordInput!) {
@@ -13,7 +13,7 @@ export type ResetPasswordResponse = {
   resetPassword: boolean;
 };
 
-export class ResetPasswordMutation extends Mutation<ResetPasswordResponse, InputArg<ResetPasswordInput>> {
+export class ResetPasswordMutation extends Mutation<ResetPasswordResponse, OperationInput<ResetPasswordInput>> {
   static defaultProps = {
     mutation: RESET_PASSWORD_MUTATION
   };

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { AddAddressInput, Address } from '@deity/falcon-shop-extension';
-import { InputArg } from '../types';
+import { OperationInput } from '../types';
 
 export const ADD_ADDRESS = gql`
   mutation AddAddress($input: AddAddressInput!) {
@@ -15,7 +15,7 @@ export type AddAddressResponse = {
   addAddress: Pick<Address, 'id'>;
 };
 
-export class AddAddressMutation extends Mutation<AddAddressResponse, InputArg<AddAddressInput>> {
+export class AddAddressMutation extends Mutation<AddAddressResponse, OperationInput<AddAddressInput>> {
   static defaultProps = {
     mutation: ADD_ADDRESS,
     awaitRefetchQueries: true,

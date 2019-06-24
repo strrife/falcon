@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { ChangePasswordInput } from '@deity/falcon-shop-extension';
-import { InputArg } from '../types';
+import { OperationInput } from '../types';
 
 export const CHANGE_PASSWORD = gql`
   mutation changePassword($input: ChangePasswordInput!) {
@@ -13,7 +13,7 @@ export type ChangePasswordResponse = {
   changePassword: boolean;
 };
 
-export class ChangePasswordMutation extends Mutation<ChangePasswordResponse, InputArg<ChangePasswordInput>> {
+export class ChangePasswordMutation extends Mutation<ChangePasswordResponse, OperationInput<ChangePasswordInput>> {
   static defaultProps = {
     mutation: CHANGE_PASSWORD
   };
