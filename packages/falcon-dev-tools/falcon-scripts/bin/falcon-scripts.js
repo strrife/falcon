@@ -24,10 +24,10 @@ const { paths } = require('../src/tools');
 
         buildDts({ packagePath });
         buildEsm({ packagePath });
-        await buildCjs.pkg({ packagePath });
+        await buildCjs.main({ packagePath });
 
         if (fs.existsSync(paths.pkgBinSrc)) {
-          await buildCjs.cli({ packagePath });
+          await buildCjs.bin({ packagePath });
         }
 
         break;

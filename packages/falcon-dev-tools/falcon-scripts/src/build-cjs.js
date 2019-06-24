@@ -15,7 +15,7 @@ const makeExternalPredicate = externalsArr => {
   return id => externalPattern.test(id);
 };
 
-module.exports.pkg = async () => {
+module.exports.main = async () => {
   Logger.log('building cjs...');
 
   process.env.ROLLUP = true;
@@ -56,7 +56,7 @@ module.exports.pkg = async () => {
   await bundle.write(outputOptions);
 };
 
-module.exports.cli = async () => {
+module.exports.bin = async () => {
   console.log('building cli...');
 
   process.env.ROLLUP = true;
@@ -70,7 +70,7 @@ module.exports.cli = async () => {
     return;
   }
   if (inputFiles.length !== 1) {
-    throw new Error(`'Directory '${paths.pkgBinSrc}' should contain single 'index.*' file!`);
+    throw new Error(`'Directory '${paths.pkgBinSrc}' should contain single 'index' file!`);
   }
 
   // eslint-disable-next-line
