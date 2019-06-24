@@ -1,11 +1,8 @@
 const spawn = require('cross-spawn');
 
-module.exports = ({ target }) => {
+module.exports = () => {
   console.log('building esm...');
 
-  if (target) {
-    process.env.TARGET = target;
-  }
   const babelConfigPath = require.resolve('./babel/babel.config');
 
   const result = spawn.sync(
