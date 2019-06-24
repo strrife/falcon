@@ -1,5 +1,5 @@
-const fs = require('fs-extra');
 const path = require('path');
+const fs = require('fs-extra');
 const deepMerge = require('deepmerge');
 const chalk = require('chalk');
 const clearConsole = require('react-dev-utils/clearConsole');

@@ -5,12 +5,12 @@ import { CheckoutLogic, CartQuery, CountriesQuery, Loader } from '@deity/falcon-
 import { toGridTemplate } from '@deity/falcon-ui-kit';
 import { CustomerQuery, GET_CUSTOMER_WITH_ADDRESSES } from '@deity/falcon-shop-data';
 import { Test3dSecure } from '@deity/falcon-payment-plugin';
+import ErrorList from '../components/ErrorList';
 import CheckoutCartSummary from './CheckoutCartSummary';
 import CustomerSelector from './CustomerSelector';
 import ShippingMethodSection from './ShippingMethodSection';
 import PaymentMethodSection from './PaymentMethodSection';
 import AddressSection from './AddressSection';
-import ErrorList from '../components/ErrorList';
 
 const CHECKOUT_STEPS = {
   EMAIL: 'EMAIL',

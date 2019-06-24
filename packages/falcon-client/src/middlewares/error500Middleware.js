@@ -1,7 +1,7 @@
-import send from 'koa-send';
-import Logger from '@deity/falcon-logger';
 import { existsSync } from 'fs';
 import { resolve as resolvePath, join as joinPath } from 'path';
+import send from 'koa-send';
+import Logger from '@deity/falcon-logger';
 import resolve from 'resolve';
 import { codes } from '@deity/falcon-errors';
 
