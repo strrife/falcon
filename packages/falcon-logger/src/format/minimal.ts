@@ -1,4 +1,6 @@
-import { CONSTANTS, colors, isObject, jsonParser, prettifyObject, prettifyGraphQLErrorLog, prettifyErrorLog } from '.';
+import colors from './colors';
+import * as CONSTANTS from './constants';
+import { isObject, jsonParser, prettifyObject, prettifyGraphQLErrorLog, prettifyErrorLog } from './utils';
 
 const colorizer = colors(true);
 const messageKey = CONSTANTS.MESSAGE_KEY;

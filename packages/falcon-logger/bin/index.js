@@ -5,7 +5,7 @@ const args = require('args');
 const { Transform } = require('readable-stream');
 const split = require('split2');
 const pump = require('pump');
-const falconPrettyFactory = require('../dist/format');
+const { falconPrettyFactory, CONSTANTS } = require('../dist/bin');
 
 args
   .option(['c', 'colorize'], 'Force adding color sequences to the output')
@@ -18,12 +18,8 @@ args
   )
   .option(['l', 'levelFirst'], 'Display the log level as the first output field')
   .option(['k', 'errorLikeObjectKeys'], 'Define which keys contain error objects (`-k err,error`)', 'err,error')
-  .option('messageKey', 'Highlight the message under the specified key', falconPrettyFactory.CONSTANTS.MESSAGE_KEY)
-  .option(
-    ['a', 'timestampKey'],
-    'Display the timestamp from the specified key',
-    falconPrettyFactory.CONSTANTS.TIMESTAMP_KEY
-  )
+  .option('messageKey', 'Highlight the message under the specified key', CONSTANTS.MESSAGE_KEY)
+  .option(['a', 'timestampKey'], 'Display the timestamp from the specified key', CONSTANTS.TIMESTAMP_KEY)
   .option(
     ['t', 'translateTime'],
     'Display epoch timestamps as UTC ISO format or according to an optional format string (default ISO 8601)'
@@ -48,7 +44,7 @@ args
   .example('cat log | logger-pretty -i pid,hostname', "Prettify logs but don't print pid and hostname");
 
 const opts = args.parse(process.argv);
-const pretty = falconPrettyFactory.default(opts);
+const pretty = falconPrettyFactory(opts);
 const falconPrettyTransport = new Transform({
   objectMode: true,
   transform(chunk, enc, cb) {
