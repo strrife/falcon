@@ -44,7 +44,7 @@ export type CustomerWithAddressesResponse = {
       | 'region'
       | 'regionId'
       | 'telephone'
-    >;
+    >[];
   };
 };
 
