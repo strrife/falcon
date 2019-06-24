@@ -531,7 +531,7 @@
 - LocaleSwitcher
 - Field
 - Form
-- LocaleProvider
+> - ~~LocaleProvider~~ moved to @deity/falcon-front-kit
 - ProductForm (it's not exported outside)
 - ProductConfigurator
 
