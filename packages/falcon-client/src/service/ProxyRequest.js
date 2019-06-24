@@ -1,5 +1,5 @@
-import fetch from 'node-fetch';
 import url from 'url';
+import fetch from 'node-fetch';
 
 export async function ProxyRequest(targetUrl, ctx) {
   const { method, header } = ctx.request;

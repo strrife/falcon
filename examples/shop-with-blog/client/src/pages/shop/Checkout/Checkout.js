@@ -11,12 +11,12 @@ import {
   Loader
 } from '@deity/falcon-ecommerce-uikit';
 import { Test3dSecure } from '@deity/falcon-payment-plugin';
+import ErrorList from '../components/ErrorList';
 import CheckoutCartSummary from './CheckoutCartSummary';
 import CustomerSelector from './CustomerSelector';
 import ShippingMethodSection from './ShippingMethodSection';
 import PaymentMethodSection from './PaymentMethodSection';
 import AddressSection from './AddressSection';
-import ErrorList from '../components/ErrorList';
 
 const CHECKOUT_STEPS = {
   EMAIL: 'EMAIL',

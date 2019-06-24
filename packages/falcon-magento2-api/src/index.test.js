@@ -6,8 +6,8 @@ const { Schema } = require('@deity/falcon-shop-extension');
 const { makeExecutableSchema } = require('graphql-tools');
 const { EventEmitter2 } = require('eventemitter2');
 const nock = require('nock');
-const Magento2Api = require('./index');
 const magentoResponses = require('./__mocks__/apiResponses');
+const Magento2Api = require('./index');
 
 const URL = 'http://example.com';
 const ee = new EventEmitter2();

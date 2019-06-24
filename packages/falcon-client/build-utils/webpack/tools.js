@@ -1,5 +1,5 @@
-const fs = require('fs-extra');
 const path = require('path');
+const fs = require('fs-extra');
 const chalk = require('chalk');
 const webpack = require('webpack');
 const Logger = require('@deity/falcon-logger');

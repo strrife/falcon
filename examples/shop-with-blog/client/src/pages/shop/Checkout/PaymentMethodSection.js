@@ -4,8 +4,8 @@ import { Details, DetailsContent, Text, Button } from '@deity/falcon-ui';
 import { I18n, T } from '@deity/falcon-i18n';
 import { TwoStepWizard } from '@deity/falcon-ecommerce-uikit';
 import loadable from 'src/components/loadable';
-import SectionHeader from './CheckoutSectionHeader';
 import ErrorList from '../components/ErrorList';
+import SectionHeader from './CheckoutSectionHeader';
 
 // Loading "PaymentMethodItem" component via loadable package
 // to avoid premature import of Payment frontend-plugins and their dependencies on SSR

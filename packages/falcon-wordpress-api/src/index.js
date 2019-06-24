@@ -1,9 +1,9 @@
+const url = require('url');
 const { ApiDataSource, htmlHelpers } = require('@deity/falcon-server-env');
 const qs = require('qs');
 const pick = require('lodash/pick');
 const isEmpty = require('lodash/isEmpty');
 const isObject = require('lodash/isObject');
-const url = require('url');
 
 module.exports = class WordpressApi extends ApiDataSource {
   constructor(params) {

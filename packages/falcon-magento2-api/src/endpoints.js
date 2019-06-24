@@ -1,5 +1,5 @@
-const { EndpointManager } = require('@deity/falcon-server-env');
 const url = require('url');
+const { EndpointManager } = require('@deity/falcon-server-env');
 const get = require('lodash/get');
 const set = require('lodash/set');
 const Logger = require('@deity/falcon-logger');
