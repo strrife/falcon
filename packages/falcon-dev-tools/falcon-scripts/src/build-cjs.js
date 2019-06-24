@@ -21,23 +21,23 @@ module.exports.pkg = async () => {
   process.env.ROLLUP = true;
   // process.env.TARGET = 'NODE';
 
-  const inputFiles = glob.sync(`${path.join(paths.pkgSrc, 'index')}@(*.js|*.jsx|*.ts|*.tsx)`);
+  const extensions = ['.tsx', '.ts', '.jsx', '.js'];
+
+  const inputFiles = glob.sync(`${path.join(paths.pkgSrc, 'index')}@(${extensions.map(x => `*${x}`).join('|')})`);
   if (inputFiles.length !== 1) {
     throw new Error(`Directory "${paths.pkgSrc}" should contain single "index" file!`);
   }
 
   // eslint-disable-next-line
   const packageJson = require(paths.pkgPackageJson);
-  const externals = [
-    ...Object.keys(packageJson.dependencies || {}),
-    ...Object.keys(packageJson.peerDependencies || {})
-  ];
-  const extensions = ['.ts', '.tsx', '.js', '.jsx'];
 
   const format = 'cjs';
   const inputOptions = {
     input: inputFiles[0],
-    external: makeExternalPredicate(externals),
+    external: makeExternalPredicate([
+      ...Object.keys(packageJson.dependencies || {}),
+      ...Object.keys(packageJson.peerDependencies || {})
+    ]),
     plugins: [
       nodeResolve({
         extensions
@@ -62,10 +62,9 @@ module.exports.cli = async () => {
   process.env.ROLLUP = true;
   // process.env.TARGET = 'NODE';
 
-  // eslint-disable-next-line
-  const packageJson = require(paths.pkgPackageJson);
+  const extensions = ['.tsx', '.ts', '.jsx', '.js'];
 
-  const inputFiles = glob.sync(`${path.join(paths.pkgBinSrc, 'index')}@(*.js|*.jsx|*.ts|*.tsx)`);
+  const inputFiles = glob.sync(`${path.join(paths.pkgBinSrc, 'index')}@(${extensions.map(x => `*${x}`).join('|')})`);
   if (inputFiles.length === 0) {
     // nothing to compile
     return;
@@ -74,16 +73,16 @@ module.exports.cli = async () => {
     throw new Error(`'Directory '${paths.pkgBinSrc}' should contain single 'index.*' file!`);
   }
 
-  const externals = [
-    ...Object.keys(packageJson.dependencies || {}),
-    ...Object.keys(packageJson.peerDependencies || {})
-  ];
-  const extensions = ['.ts', '.tsx', '.js', '.jsx'];
+  // eslint-disable-next-line
+  const packageJson = require(paths.pkgPackageJson);
 
   const format = 'cjs';
   const inputOptions = {
     input: inputFiles[0],
-    external: makeExternalPredicate(externals),
+    external: makeExternalPredicate([
+      ...Object.keys(packageJson.dependencies || {}),
+      ...Object.keys(packageJson.peerDependencies || {})
+    ]),
     plugins: [
       nodeResolve({
         extensions
