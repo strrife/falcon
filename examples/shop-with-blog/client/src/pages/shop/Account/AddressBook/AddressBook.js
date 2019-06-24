@@ -11,7 +11,7 @@ const AddressBook = () => (
       <T id="addressBook.title" />
     </H1>
     <AddressListQuery>
-      {({ addresses: { items } }) => {
+      {({ addressList: { items } }) => {
         const billing = items.find(x => x.defaultBilling);
         const shipping = items.find(x => x.defaultShipping);
         const rest = items.filter(x => !x.defaultBilling && !x.defaultShipping) || [];

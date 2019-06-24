@@ -1,6 +1,6 @@
 export type Address = {
   id: number;
-  firstname: String;
+  firstname: string;
   lastname: string;
   street: string[];
   city: string;
@@ -15,6 +15,35 @@ export type Address = {
   defaultShipping: boolean;
 };
 
+export type AddAddressInput = {
+  company?: string;
+  firstname: string;
+  lastname: string;
+  telephone: string;
+  street: string[];
+  postcode: string;
+  city: string;
+  countryId: string;
+  defaultBilling?: boolean;
+  defaultShipping?: boolean;
+  regionId?: number;
+};
+
+export type EditAddressInput = {
+  id: number;
+  company?: string;
+  firstname: string;
+  lastname: string;
+  telephone?: string;
+  street: string;
+  postcode: string;
+  city: string;
+  countryId: string;
+  defaultBilling?: boolean;
+  defaultShipping?: boolean;
+  regionId?: number;
+};
+
 export type Customer = {
   id?: number;
   websiteId?: number;
@@ -25,6 +54,15 @@ export type Customer = {
   firstname?: string;
   lastname?: string;
   newsletterSubscriber?: boolean;
+};
+
+export type EditCustomerInput = {
+  websiteId: number;
+  firstname?: string;
+  lastname?: string;
+  email?: string;
+  defaultBilling?: boolean;
+  defaultShipping?: boolean;
 };
 
 export type RequestPasswordResetInput = {

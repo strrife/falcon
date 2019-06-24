@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { Customer } from '@deity/falcon-shop-extension';
+import { Customer, Address } from '@deity/falcon-shop-extension';
 import { Query } from '../Query';
 
 export const GET_CUSTOMER_WITH_ADDRESSES = gql`
@@ -28,7 +28,27 @@ export const GET_CUSTOMER_WITH_ADDRESSES = gql`
   }
 `;
 
-export class CustomerWithAddressesQuery extends Query<Customer> {
+export type CustomerWithAddressesResponse = {
+  customer: Pick<Customer, 'id' | 'firstname' | 'lastname' | 'email'> & {
+    addresses: Pick<
+      Address,
+      | 'company'
+      | 'firstname'
+      | 'lastname'
+      | 'street'
+      | 'postcode'
+      | 'city'
+      | 'countryId'
+      | 'defaultBilling'
+      | 'defaultShipping'
+      | 'region'
+      | 'regionId'
+      | 'telephone'
+    >[];
+  };
+};
+
+export class CustomerWithAddressesQuery extends Query<CustomerWithAddressesResponse> {
   static defaultProps = {
     query: GET_CUSTOMER_WITH_ADDRESSES
   };

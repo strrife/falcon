@@ -16,7 +16,7 @@ extend type Query {
   lastOrder: Order @cacheInvalidator(idPath: [{ path: "items", type: "Product" }])
   orders(pagination: PaginationInput): Orders
   address(id: Int!): Address
-  addresses: AddressList
+  addressList: AddressList
   customer: Customer
   cmsPage(id: Int, identifier: String): CmsPage
   cmsBlock(identifier: String): CmsBlock
@@ -26,7 +26,6 @@ extend type Query {
 extend type Mutation {
   setShopCurrency(currency: String!): BackendConfig
   setShopStore(storeCode: String!): BackendConfig
-
   addToCart(input: AddToCartInput!): CartItemPayload
   updateCartItem(input: UpdateCartItemInput!): CartItemPayload
   removeCartItem(input: RemoveCartItemInput!): RemoveCartItemResponse
@@ -35,7 +34,7 @@ extend type Mutation {
   signUp(input: SignUp!): Boolean
   signIn(input: SignIn!): Boolean
   signOut: Boolean
-  editCustomer(input: CustomerInput!): Customer
+  editCustomer(input: EditCustomerInput!): Customer
   editAddress(input: EditAddressInput!): Address
   addAddress(input: AddAddressInput!): Address
   estimateShippingMethods(input: EstimateShippingInput!): [ShippingMethod]
@@ -156,13 +155,13 @@ enum FilterOperator {
   range
 }
 
-input CustomerInput {
+input EditCustomerInput {
   websiteId: Int!
   firstname: String
   lastname: String
   email: String
-  defaultBilling: String
-  defaultShipping: String
+  defaultBilling: Boolean
+  defaultShipping: Boolean
 }
 
 input AddressInput {
