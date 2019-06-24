@@ -1,15 +1,9 @@
 import React from 'react';
 import { H1, Text, Divider, Box, FlexLayout, GridLayout } from '@deity/falcon-ui';
-import { I18n, T } from '@deity/falcon-i18n';
-import {
-  GetOrderQuery,
-  AddressDetails,
-  DateFormat,
-  TotalRow,
-  LocaleProvider,
-  OrderItemSummary
-} from '@deity/falcon-ecommerce-uikit';
 import { toGridTemplate } from '@deity/falcon-ui-kit';
+import { LocaleProvider } from '@deity/falcon-front-kit';
+import { I18n, T } from '@deity/falcon-i18n';
+import { GetOrderQuery, AddressDetails, DateFormat, TotalRow, OrderItemSummary } from '@deity/falcon-ecommerce-uikit';
 
 const orderLayoutArea = {
   items: 'checkout',
