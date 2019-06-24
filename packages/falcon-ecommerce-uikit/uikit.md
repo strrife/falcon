@@ -460,7 +460,7 @@
 - AccountIcon
 - ForgotPassword
 - MiniAccount
-- MiniFormLayout
+  > - ~~MiniFormLayout~~ - renamed to SidebarLayout and moved to @deity/falcon-ui-kit
 - SignIn
 - SignUp
 
@@ -498,7 +498,7 @@
 
 ---
 
-> - ~~Responsive~~ - moved to @deity/falcon-uikit/src/Responsive/Responsive.tsx
+> - ~~Responsive~~ - moved to @deity/falcon-ui-kit/src/Responsive/Responsive.tsx
 
 ---
 
@@ -513,9 +513,9 @@
 
 ---
 
-- AppLayout
+- ~~AppLayout~~ -moved to `@deity/falcon-ui-kit/src/Layouts/AppLayout.tsx`
 - Breadcrumbs
-- FixCenteredLayout
+- ~~FixCenteredLayout~~ moved to `@deity/falcon-ui-kit/src/Layouts/FixCenteredLayout.tsx`
 - TwoColumnsLayout
 - TwoStepWizard
 

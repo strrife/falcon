@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Label, FlexLayout, Details, DetailsContent, Text, Radio, Box, Button } from '@deity/falcon-ui';
 import { Price } from '@deity/falcon-ecommerce-uikit';
 import { I18n, T } from '@deity/falcon-i18n';
-import SectionHeader from './CheckoutSectionHeader';
 import ErrorList from '../components/ErrorList';
+import SectionHeader from './CheckoutSectionHeader';
 
 const ShippingSelector = ({ availableShippingOptions = [], onShippingSelected }) => (
   <Box my="md">

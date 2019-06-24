@@ -1,8 +1,8 @@
 const { dirname, resolve } = require('path');
+const http = require('http');
 const fs = require('fs-extra');
 const execa = require('execa');
 const Listr = require('listr');
-const http = require('http');
 
 const examplesPath = resolve(__dirname, './../examples');
 const rootDir = resolve(__dirname, './../../..');
