@@ -1,10 +1,11 @@
+const fs = require('fs');
 const path = require('path');
 const glob = require('glob');
 const rollup = require('rollup');
 const babel = require('rollup-plugin-babel');
 const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
-const Logger = require('@deity/falcon-logger');
+const replace = require('rollup-plugin-replace');
 const { paths } = require('./tools');
 
 const makeExternalPredicate = externalsArr => {
@@ -16,10 +17,9 @@ const makeExternalPredicate = externalsArr => {
 };
 
 module.exports.main = async () => {
-  Logger.log('building cjs...');
+  console.log('building cjs...');
 
   process.env.ROLLUP = true;
-  // process.env.TARGET = 'NODE';
 
   const extensions = ['.tsx', '.ts', '.jsx', '.js'];
 
@@ -39,9 +39,7 @@ module.exports.main = async () => {
       ...Object.keys(packageJson.peerDependencies || {})
     ]),
     plugins: [
-      nodeResolve({
-        extensions
-      }),
+      nodeResolve({ extensions }),
       commonjs(),
       babel({
         extensions,
@@ -60,7 +58,6 @@ module.exports.bin = async () => {
   console.log('building cli...');
 
   process.env.ROLLUP = true;
-  // process.env.TARGET = 'NODE';
 
   const extensions = ['.tsx', '.ts', '.jsx', '.js'];
 
@@ -84,19 +81,28 @@ module.exports.bin = async () => {
       ...Object.keys(packageJson.peerDependencies || {})
     ]),
     plugins: [
-      nodeResolve({
-        extensions
+      replace({
+        delimiters: ['', ''],
+        '#!/usr/bin/env node': ''
       }),
+      nodeResolve({ extensions, preferBuiltins: true }),
+      commonjs(),
       babel({
         extensions,
         runtimeHelpers: true,
         ...require('./babel/babel.config')
-      }),
-      commonjs()
+      })
     ]
   };
-  const outputOptions = { file: 'dist/cli/index.js', format, sourcemap: true };
+  const outputOptions = {
+    file: 'dist/bin/index.js',
+    banner: '#!/usr/bin/env node',
+    format,
+    sourcemap: true
+  };
 
   const bundle = await rollup.rollup(inputOptions);
   await bundle.write(outputOptions, {});
+
+  fs.chmodSync(path.join(paths.pkgPath, outputOptions.file), '755');
 };
