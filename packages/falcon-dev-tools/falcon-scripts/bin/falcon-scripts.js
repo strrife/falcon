@@ -8,6 +8,8 @@ process.on('uncaughtException', ex => {
 });
 
 const Logger = require('@deity/falcon-logger');
+const fs = require('fs-extra');
+const { paths } = require('../src/tools');
 
 (async () => {
   const script = process.argv[2];
@@ -23,7 +25,10 @@ const Logger = require('@deity/falcon-logger');
         buildDts({ packagePath });
         buildEsm({ packagePath });
         await buildCjs.pkg({ packagePath });
-        await buildCjs.cli({ packagePath });
+
+        if (fs.existsSync(paths.pkgBinSrc)) {
+          await buildCjs.cli({ packagePath });
+        }
 
         break;
       }
