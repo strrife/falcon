@@ -2,22 +2,19 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 // eslint-disable-next-line
 import { Location } from 'history';
-import { Text } from '@deity/falcon-ui';
-import { Router } from './../Router';
-import { UrlQuery } from './GetUrlQuery';
+import { UrlQuery, ResourceMeta } from '@deity/falcon-data';
+import { Router } from '../Router';
 
-// export type contentType = 'shop-page' | 'shop-product' | 'shop-category';
+export type DynamicRouteComponentProps = Pick<ResourceMeta, 'id' | 'path'>;
+
+export type ComponentsMap = { [key: string]: React.ComponentType<DynamicRouteComponentProps> };
 
 export type DynamicRouteProps = {
   location?: Location;
-  components: {
-    /**
-     * components map, where key is content Type e.g. `shop-page`, `shop-product`, `shop-category`, `blog-post`
-     */
-    [id: string]: React.ComponentType<{ path: string; id: string }>;
-  };
+  components: ComponentsMap;
   notFound: React.ComponentType<{ location: Location }>;
 };
+
 export const DynamicRoute: React.SFC<DynamicRouteProps> = props => {
   const { components, notFound } = props;
 
@@ -31,7 +28,7 @@ export const DynamicRoute: React.SFC<DynamicRouteProps> = props => {
         return (
           <UrlQuery variables={{ path }}>
             {({ url }) => {
-              if (url === null) {
+              if (!url) {
                 const NotFound = notFound;
 
                 return <NotFound location={location} />;
@@ -43,7 +40,7 @@ export const DynamicRoute: React.SFC<DynamicRouteProps> = props => {
 
               const Component = components[url.type];
               if (!Component) {
-                return <Text>{`Please register component for '${url.type}' content type!`}</Text>;
+                throw new Error(`[DynamicRoute]: Please register component for '${url.type}' content type!`);
               }
 
               return <Component id={url.id} path={url.path} />;

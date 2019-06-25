@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { themed, Text } from '@deity/falcon-ui';
-import { Locale, PriceFormatOptions } from './LocaleContext';
+import { Locale, PriceFormatOptions } from '@deity/falcon-front-kit';
 
 export type PriceProps = {
   value: number;

@@ -1,6 +1,6 @@
 import React from 'react';
+import { DynamicRoute } from '@deity/falcon-front-kit';
 import { NotFound, Loader } from '@deity/falcon-ecommerce-uikit';
-import DynamicRoute from '@deity/falcon-client/src/components/DynamicRoute';
 import loadable from 'src/components/loadable';
 
 const BlogPost = loadable(() => import(/* webpackChunkName: "blog/post" */ './blog/Post'));

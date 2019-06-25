@@ -17,10 +17,11 @@ import {
   FlexLayout
 } from '@deity/falcon-ui';
 import { toGridTemplate, CloseSidebarMutation, prettyScrollbars } from '@deity/falcon-ui-kit';
+import { LocaleProvider } from '@deity/falcon-front-kit';
 import { I18n, T } from '@deity/falcon-i18n';
 import { MiniCartData } from './MiniCartQuery';
 import { RemoveCartItemMutation, UpdateCartItemMutation } from '../Cart/CartMutation';
-import { LocaleProvider, Price } from '../Locale';
+import { Price } from '../Locale';
 
 export const MiniCartProductArea = {
   empty: '.',

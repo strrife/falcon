@@ -58,7 +58,7 @@
 
 ---
 
-- UrlQuery
+> - ~~UrlQuery~~ - moved to @deity/falcon-data
 
 ---
 
@@ -159,7 +159,7 @@
 
 ---
 
-- GET_URL
+> - ~~GET_URL~~ - moved to @deity/falcon-data
 
 ---
 
@@ -258,18 +258,18 @@
 ---
 
 > - ~~Customer~~ - moved to @deity/falcon-shop-extension
-> - ~~CustomerQueryData~~ - changed to `CustomerQueryResponse` and moved to @deity/falcon-shop-data
+> - ~~CustomerQueryData~~ - changed to `CustomerResponse` and moved to @deity/falcon-shop-data
 > - ~~IsAuthenticatedQueryData~~ - changed to `IsAuthenticatedResponse` and moved to @deity/falcon-shop-data
 
 ---
 
-- DynamicUrl
-- UrlQueryVariables
-- UrlQueryData
+> - ~~DynamicUrl~~ moved to @deity/falcon-data
+> - ~~UrlQueryVariables~~ moved to @deity/falcon-data
+> - ~~UrlQueryData~~ changed to `UrlResponse` and moved to @deity/falcon-data/dist/Url/UrlQuery 
 
 ---
 
-- EnsureTTIRenderProps
+> - ~~EnsureTTIRenderProps~~ moved to @deity/falcon-front-kit
 
 ---
 
@@ -469,12 +469,6 @@
 - MiniCart
 - MiniCartIcon
 
----
-
-- OnlineStatus
-
----
-
 - OrderItemSummary
 
 ---
@@ -528,19 +522,25 @@
 ### Existing "business level" components:
 
 - CheckoutLogic
-- DynamicRoute
-- EnsureTTI
+
+> - ~~DynamicRoute~~ moved to @deity/falcon-front-kit
+> - ~~EnsureTTI~~ moved to @deity/falcon-front-kit
+> - ~~ScrollToTop~~ moved to @deity/falcon-front-kit
+
 - FiltersDataProvider
 - LocaleSwitcher
 - Field
 - Form
-- LocaleProvider
+> - ~~LocaleProvider~~ moved to @deity/falcon-front-kit
 - ProductForm (it's not exported outside)
 - ProductConfigurator
-- Query
-- OnlyUnauthenticatedRoute
-- ProtectedRoute
-- Router
+
+> - ~~Query~~ movet to @deity/falcon-data
+> - ~~OnlyUnauthenticatedRoute~~ moved to @deity/falcon-front-kit
+> - ~~ProtectedRoute~~ moved to @deity/falcon-front-kit
+> - ~~Router~~ moved to @deity/falcon-front-kit
+
 - SearchProvider
 - SignOutLogic
 - SortOrdersProvider
+> - ~~OnlineStatus~~ moved to @deity/falcon-front-kit/src/NetworkStatus/NetworkStatus.tsx

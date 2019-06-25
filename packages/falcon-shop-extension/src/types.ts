@@ -1,3 +1,18 @@
+export type ShopConfig = {
+  activeCurrency: string;
+  activeStore: string;
+  currencies: string[];
+  baseCurrency: string;
+  stores: ShopStoreEntry[];
+  timezone: string;
+  weightUnit: string;
+};
+
+export type ShopStoreEntry = {
+  name: string;
+  code: string;
+};
+
 export type Address = {
   id: number;
   firstname: string;

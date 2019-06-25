@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from '@emotion/styled-base';
 import isPropValid from '@emotion/is-prop-valid';
-
+import { extractThemableProps } from './utils';
+import { defaultBaseTheme } from './theme';
+import { mappings, PropsMappings, ResponsivePropMapping } from './responsiveprops';
 import {
   Theme,
   CSSObject,
@@ -10,9 +12,6 @@ import {
   ThemedComponentPropsWithVariants,
   InlineCss
 } from './index';
-import { extractThemableProps } from './utils';
-import { defaultBaseTheme } from './theme';
-import { mappings, PropsMappings, ResponsivePropMapping } from './responsiveprops';
 
 const propsMappingKeys = Object.keys(mappings) as (keyof PropsMappings)[];
 

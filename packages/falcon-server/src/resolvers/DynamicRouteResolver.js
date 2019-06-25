@@ -86,10 +86,10 @@ module.exports = class DynamicRouteResolver {
     /* eslint-enable no-await-in-loop */
     /* eslint-enable no-restricted-syntax */
 
-    if (response) {
-      response.path = path;
-    }
-
-    return response;
+    return {
+      redirect: false,
+      ...response,
+      path
+    };
   }
 };

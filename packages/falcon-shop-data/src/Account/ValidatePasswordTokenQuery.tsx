@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { Query } from '../Query';
+import { Query } from '@deity/falcon-data';
 
 export const VALIDATE_PASSWORD_TOKEN_QUERY = gql`
   query ValidatePasswordToken($token: String!) {

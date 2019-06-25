@@ -1,26 +1,32 @@
 import React from 'react';
 
-type OnlineStatusState = {
+type NetworkStatusState = {
   isOnline: boolean;
 };
-export type OnlineStatusRenderProps = {
+export type NetworkStatusRenderProps = {
   isOnline: boolean;
 };
-export type OnlineStatusProps = {
-  children: (renderProps: OnlineStatusRenderProps) => any;
+export type NetworkStatusProps = {
+  children: (renderProps: NetworkStatusRenderProps) => React.ReactNode;
 };
+export class NetworkStatus extends React.Component<NetworkStatusProps, NetworkStatusState> {
+  constructor(props) {
+    super(props);
 
-export class OnlineStatus extends React.Component<OnlineStatusProps, OnlineStatusState> {
-  state = {
-    isOnline: true
-  };
+    this.updateOnLineStatus = this.updateOnLineStatus.bind(this);
+
+    this.state = {
+      isOnline: true
+    };
+  }
 
   componentDidMount() {
     window.addEventListener('online', this.updateOnLineStatus);
     window.addEventListener('offline', this.updateOnLineStatus);
 
     // run detection logic when component mounts as React 16 optimizes too much and doesn't
-    // re-render even when SSR html doesn't match client-side, more  details: https://github.com/facebook/react/issues/10591
+    // re-render even when SSR html doesn't match client-side
+    // @see https://github.com/facebook/react/issues/10591
     this.updateOnLineStatus();
   }
 
@@ -29,7 +35,7 @@ export class OnlineStatus extends React.Component<OnlineStatusProps, OnlineStatu
     window.removeEventListener('offline', this.updateOnLineStatus);
   }
 
-  updateOnLineStatus = () => {
+  updateOnLineStatus() {
     const { navigator } = window;
     const online = navigator && navigator.onLine;
 
@@ -38,7 +44,7 @@ export class OnlineStatus extends React.Component<OnlineStatusProps, OnlineStatu
     }
 
     this.setState({ isOnline: online });
-  };
+  }
 
   render() {
     const { children } = this.props;
