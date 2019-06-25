@@ -22,22 +22,23 @@
     "watch": "falcon-scripts watch"
   },
   "dependencies": {
+    "@babel/runtime": "7.3.4",
     "@deity/falcon-data": "0.0.1",
-    "@deity/falcon-shop-extension": "0.4.2",
-    "apollo-client": "2.5.1",
-    "graphql-tag": "2.10.1"
+    "@deity/falcon-shop-extension": "0.4.2"
   },
   "devDependencies": {
     "@deity/falcon-scripts": "^0.0.1",
     "@types/react": "16.8.22",
+    "apollo-client": "2.5.1",
+    "graphql-tag": "2.10.1",
     "prop-types": "15.7.2",
     "react": "16.8.6",
-    "react-apollo": "2.5.6"
+    "react-apollo": "2.5.8"
   },
   "peerDependencies": {
     "apollo-client": "2.5.1",
     "graphql-tag": "^2.10.1",
     "react": "^16.8.6",
-    "react-apollo": "^2.5.1"
+    "react-apollo": "^2.5.8"
   }
 }

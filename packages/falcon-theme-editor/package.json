@@ -23,7 +23,7 @@
     "watch": "falcon-scripts watch"
   },
   "dependencies": {
-    "@babel/runtime": "7.3.1",
+    "@babel/runtime": "7.3.4",
     "deep-object-diff": "^1.1.0",
     "webfontloader": "^1.6.28"
   },

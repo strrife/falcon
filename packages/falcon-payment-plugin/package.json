@@ -22,7 +22,7 @@
     "watch": "falcon-scripts watch"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0"
+    "@babel/runtime": "7.3.4"
   },
   "devDependencies": {
     "@deity/falcon-scripts": "^0.0.1",
