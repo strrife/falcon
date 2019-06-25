@@ -40,9 +40,7 @@ export const DynamicRoute: React.SFC<DynamicRouteProps> = props => {
 
               const Component = components[url.type];
               if (!Component) {
-                console.warn(`Please register component for '${url.type}' content type!`);
-
-                return null;
+                throw new Error(`[DynamicRoute]: Please register component for '${url.type}' content type!`);
               }
 
               return <Component id={url.id} path={url.path} />;
