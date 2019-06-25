@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { Query } from '@deity/falcon-data';
+import { Customer } from '@deity/falcon-shop-extension';
 
 export const GET_IS_AUTHENTICATED = gql`
   query IsAuthenticated {
@@ -10,7 +11,7 @@ export const GET_IS_AUTHENTICATED = gql`
 `;
 
 export type IsAuthenticatedResponse = {
-  customer: { id: number };
+  customer: Pick<Customer, 'id'>;
 };
 
 export class IsAuthenticatedQuery extends Query<IsAuthenticatedResponse> {

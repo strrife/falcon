@@ -1,7 +1,6 @@
-import { Response, Request } from 'apollo-server-env';
+import { Response, Request, RequestInit } from 'apollo-server-env';
 import { CacheOptions, RequestOptions } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { IMiddleware } from 'koa-router';
-import { RequestInit } from 'apollo-server-env';
 import { EventEmitter2 } from 'eventemitter2';
 import { ApiDataSource } from './models/ApiDataSource';
 import Cache from './cache/Cache';

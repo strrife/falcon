@@ -21,7 +21,26 @@ export const GET_ADDRESS = gql`
     }
   }
 `;
-export class AddressQuery extends Query<Address> {
+
+export type AddressResponse = {
+  address: Pick<
+    Address,
+    | 'id'
+    | 'firstname'
+    | 'lastname'
+    | 'telephone'
+    | 'street'
+    | 'city'
+    | 'postcode'
+    | 'region'
+    | 'regionId'
+    | 'countryId'
+    | 'company'
+    | 'defaultBilling'
+    | 'defaultShipping'
+  >[];
+};
+export class AddressQuery extends Query<AddressResponse> {
   static defaultProps = {
     query: GET_ADDRESS
   };

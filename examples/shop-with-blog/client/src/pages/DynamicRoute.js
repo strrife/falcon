@@ -16,6 +16,6 @@ export default props => (
       'shop-category': Category,
       'shop-product': Product
     }}
-    notFoundComponent={NotFound}
+    notFound={NotFound}
   />
 );

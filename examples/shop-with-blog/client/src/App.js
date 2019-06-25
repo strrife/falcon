@@ -2,6 +2,8 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { ThemeProvider, Box, Button } from '@deity/falcon-ui';
+import { AppLayout, Sidebar } from '@deity/falcon-ui-kit';
+import { ServiceWorkerRegistrar, ServiceWorker } from '@deity/falcon-service-worker';
 import {
   NetworkStatus,
   ScrollToTop,
@@ -9,9 +11,7 @@ import {
   ProtectedRoute,
   LocaleProvider
 } from '@deity/falcon-front-kit';
-import { ServiceWorkerRegistrar, ServiceWorker } from '@deity/falcon-service-worker';
 import { Header, SearchProvider } from '@deity/falcon-ecommerce-uikit';
-import { AppLayout, Sidebar } from '@deity/falcon-ui-kit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
 import { ErrorBoundary } from 'src/components/ErrorBoundary';
