@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import PropTypes, { ReactNodeLike } from 'prop-types';
 // eslint-disable-next-line
 import { Location } from 'history';
 import { UrlQuery, ResourceMeta, ResourceType } from '@deity/falcon-data';
@@ -7,12 +8,12 @@ import { Router } from '../Router';
 
 export type DynamicRouteComponentProps = Pick<ResourceMeta, 'id' | 'path'>;
 
-export type ComponentsMap = { [key in ResourceType]: React.ComponentType<DynamicRouteComponentProps> };
+export type ComponentsMap = { [key in string]: React.ComponentType<DynamicRouteComponentProps> };
 
 export type DynamicRouteProps = {
   location?: Location;
   components: ComponentsMap;
-  notFound: React.ComponentType<{ location: Location }>;
+  notFound: React.ComponentType<any>;
 };
 
 export const DynamicRoute: React.SFC<DynamicRouteProps> = props => {
@@ -52,4 +53,14 @@ export const DynamicRoute: React.SFC<DynamicRouteProps> = props => {
       }}
     </Router>
   );
+};
+DynamicRoute.propTypes = {
+  location: PropTypes.any,
+  components: PropTypes.shape({
+    'shop-page': PropTypes.func.isRequired,
+    'shop-product': PropTypes.func.isRequired,
+    'shop-category': PropTypes.func.isRequired,
+    'blog-post': PropTypes.func.isRequired
+  }).isRequired,
+  notFound: PropTypes.func.isRequired
 };

@@ -28,16 +28,17 @@
   "devDependencies": {
     "@deity/falcon-scripts": "^0.0.1",
     "@types/i18next": "12.1.0",
+    "@types/react": "16.8.22",
     "i18next": "^12.1.0",
     "prop-types": "15.7.2",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3"
+    "react": "16.8.6",
+    "react-dom": "16.8.6"
   },
   "peerDependencies": {
     "i18next": "^12.1.0",
     "prop-types": "^15.7.2",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }

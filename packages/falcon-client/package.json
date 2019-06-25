@@ -49,7 +49,7 @@
     "css-loader": "1.0.1",
     "deepmerge": "^2.2.1",
     "enzyme": "^3.6.0",
-    "enzyme-adapter-react-16": "^1.5.0",
+    "enzyme-adapter-react-16": "^1.14.0",
     "eslint-loader": "^2.0.0",
     "file-loader": "^1.1.11",
     "fs-extra": "^7.0.0",
@@ -81,7 +81,6 @@
     "react-error-overlay": "5.1.4",
     "react-google-tag-manager": "2.2.1",
     "react-helmet": "^5.2.0",
-    "react-test-renderer": "^16.4.2",
     "resolve": "^1.8.1",
     "rollup": "0.66.4",
     "rollup-plugin-alias": "1.5.1",
@@ -116,10 +115,11 @@
     "graphql-tag": "2.10.1",
     "i18next": "^12.1.0",
     "prop-types": "15.7.2",
-    "react": "^16.6.3",
+    "react": "16.8.6",
     "react-apollo": "2.5.1",
-    "react-dom": "^16.6.3",
-    "react-router-dom": "5.0.1"
+    "react-dom": "16.8.6",
+    "react-router-dom": "5.0.1",
+    "react-test-renderer": "16.8.6"
   },
   "peerDependencies": {
     "@loadable/component": "^5.7.0",
@@ -127,9 +127,9 @@
     "graphql-tag": "^2.10.1",
     "i18next": "^12.1.0",
     "prop-types": "^15.7.2",
-    "react": "^16.6.3",
+    "react": "^16.8.6",
     "react-apollo": "2.5.1",
-    "react-dom": "^16.6.3",
+    "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
