@@ -1,3 +1,5 @@
+import { ExtensionInstance } from '@deity/falcon-server-env';
+
 export type Config = {
   debug?: boolean;
   maxListeners?: number;
@@ -44,6 +46,10 @@ export type ModuleDefinition<T> = Record<
 export type ExtensionConfig = {
   api?: string;
 };
+
+export type ExtensionGraphQLConfig = {
+  schema?: Array<string>;
+} & ExtensionInstance;
 
 export type ExternalResourceLikeConfig = {
   protocol?: string;

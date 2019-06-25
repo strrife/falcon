@@ -3749,6 +3749,11 @@ apollo-server-errors@2.2.1:
   resolved "https://registry.npmjs.org/apollo-server-errors/-/apollo-server-errors-2.2.1.tgz#f68a3f845929768057da7e1c6d30517db5872205"
   integrity sha512-wY/YE3iJVMYC+WYIf8QODBjIP4jhI+oc7kiYo9mrz7LdYPKAgxr/he+NteGcqn/0Ea9K5/ZFTGJDbEstSMeP8g==
 
+apollo-server-errors@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.npmjs.org/apollo-server-errors/-/apollo-server-errors-2.3.0.tgz#700622b66a16dffcad3b017e4796749814edc061"
+  integrity sha512-rUvzwMo2ZQgzzPh2kcJyfbRSfVKRMhfIlhY7BzUfM4x6ZT0aijlgsf714Ll3Mbf5Fxii32kD0A/DmKsTecpccw==
+
 apollo-server-koa@2.4.8:
   version "2.4.8"
   resolved "https://registry.npmjs.org/apollo-server-koa/-/apollo-server-koa-2.4.8.tgz#2a90da8f9eb3500cd0ee6bf4c40876817b22e9ee"

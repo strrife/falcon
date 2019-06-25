@@ -113,7 +113,7 @@ export interface ExtensionInitializer {
 }
 
 export interface ExtensionInstance {
-  resolvers?: Record<string, any>;
+  resolvers?: GraphQLResolverMap;
 }
 
 export type FetchUrlParams = {

@@ -30,7 +30,7 @@ export type GetCacheOptions = {
  * Cache-wrapper with extended methods
  */
 export class Cache<V = any> implements KeyValueCache<V> {
-  constructor(private cacheProvider: KeyValueCache<V>) {}
+  constructor(private cacheBackend: KeyValueCache<V>) {}
 
   async get(key: string): Promise<V>;
 
@@ -43,7 +43,7 @@ export class Cache<V = any> implements KeyValueCache<V> {
    * @returns {Promise<string|undefined>} Cached value
    */
   async get(key: string, setOptions?: GetCacheOptions): Promise<V> {
-    let value: GetCacheFetchResult = await this.cacheProvider.get(key);
+    let value: GetCacheFetchResult = await this.cacheBackend.get(key);
     // Validating by cache tags
     if (this.isValueWithOptions(value)) {
       const { tags: tagMap = {} } = value.options as ValueOptions;
@@ -95,7 +95,7 @@ export class Cache<V = any> implements KeyValueCache<V> {
         }
       };
     }
-    return this.cacheProvider.set(key, cachedValue, options);
+    return this.cacheBackend.set(key, cachedValue, options);
   }
 
   async delete(key: string): Promise<boolean>;
@@ -113,7 +113,7 @@ export class Cache<V = any> implements KeyValueCache<V> {
       await Promise.all(key.map(kKey => this.delete(kKey)));
       return;
     }
-    return this.cacheProvider.delete(key);
+    return this.cacheBackend.delete(key);
   }
 
   /**
