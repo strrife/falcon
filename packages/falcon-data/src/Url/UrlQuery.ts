@@ -13,10 +13,9 @@ export const GET_URL = gql`
   }
 `;
 
-export type ResourceType = 'shop-page' | 'shop-product' | 'shop-category' | 'blog-post';
-
 export type ResourceMeta = {
-  type: ResourceType;
+  /** @example `shop-page`, `shop-product`, `blog-post`,... */
+  type: string;
   redirect: boolean;
   id: string;
   path: string;

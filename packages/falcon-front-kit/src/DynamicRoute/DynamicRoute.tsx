@@ -3,12 +3,12 @@ import { Redirect } from 'react-router-dom';
 import PropTypes, { ReactNodeLike } from 'prop-types';
 // eslint-disable-next-line
 import { Location } from 'history';
-import { UrlQuery, ResourceMeta, ResourceType } from '@deity/falcon-data';
+import { UrlQuery, ResourceMeta } from '@deity/falcon-data';
 import { Router } from '../Router';
 
 export type DynamicRouteComponentProps = Pick<ResourceMeta, 'id' | 'path'>;
 
-export type ComponentsMap = { [key in string]: React.ComponentType<DynamicRouteComponentProps> };
+export type ComponentsMap = { [key: string]: React.ComponentType<DynamicRouteComponentProps> };
 
 export type DynamicRouteProps = {
   location?: Location;
@@ -41,9 +41,7 @@ export const DynamicRoute: React.SFC<DynamicRouteProps> = props => {
 
               const Component = components[url.type];
               if (!Component) {
-                console.warn(`Please register component for '${url.type}' content type!`);
-
-                return null;
+                throw new Error(`[DynamicRoute]: Please register component for '${url.type}' content type!`);
               }
 
               return <Component id={url.id} path={url.path} />;
@@ -56,11 +54,6 @@ export const DynamicRoute: React.SFC<DynamicRouteProps> = props => {
 };
 DynamicRoute.propTypes = {
   location: PropTypes.any,
-  components: PropTypes.shape({
-    'shop-page': PropTypes.func.isRequired,
-    'shop-product': PropTypes.func.isRequired,
-    'shop-category': PropTypes.func.isRequired,
-    'blog-post': PropTypes.func.isRequired
-  }).isRequired,
+  components: PropTypes.any.isRequired,
   notFound: PropTypes.func.isRequired
 };
