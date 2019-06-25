@@ -54,6 +54,6 @@ export const DynamicRoute: React.SFC<DynamicRouteProps> = props => {
 };
 DynamicRoute.propTypes = {
   location: PropTypes.any,
-  components: PropTypes.any.isRequired,
+  components: PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
   notFound: PropTypes.func.isRequired
 };
