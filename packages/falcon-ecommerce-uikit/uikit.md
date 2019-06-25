@@ -528,7 +528,7 @@
 > - ~~ScrollToTop~~ moved to @deity/falcon-front-kit
 
 - FiltersDataProvider
-- LocaleSwitcher
+> - ~~LocaleSwitcher~~ moved to @deity/falcon-front-kit
 - Field
 - Form
 > - ~~LocaleProvider~~ moved to @deity/falcon-front-kit
