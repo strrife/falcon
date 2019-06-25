@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import PropTypes, { ReactNodeLike } from 'prop-types';
+import PropTypes from 'prop-types';
 // eslint-disable-next-line
 import { Location } from 'history';
 import { UrlQuery, ResourceMeta } from '@deity/falcon-data';
