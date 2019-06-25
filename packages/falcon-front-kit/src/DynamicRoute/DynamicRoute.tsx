@@ -2,12 +2,12 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 // eslint-disable-next-line
 import { Location } from 'history';
-import { UrlQuery, ResourceMeta, ResourceType } from '@deity/falcon-data';
+import { UrlQuery, ResourceMeta } from '@deity/falcon-data';
 import { Router } from '../Router';
 
 export type DynamicRouteComponentProps = Pick<ResourceMeta, 'id' | 'path'>;
 
-export type ComponentsMap = { [key in ResourceType]: React.ComponentType<DynamicRouteComponentProps> };
+export type ComponentsMap = { [key: string]: React.ComponentType<DynamicRouteComponentProps> };
 
 export type DynamicRouteProps = {
   location?: Location;
