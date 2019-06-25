@@ -1,13 +1,13 @@
 import React from 'react';
 import { H4, List } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
+import { LocaleSwitcher } from '@deity/falcon-front-kit';
 import {
   FooterSectionsLayout,
   FooterSectionLayout,
   FooterLink,
   FooterLayout,
   LanguageSection,
-  LocaleSwitcher,
   LocaleSwitcherDropdown,
   Newsletter,
   Copyright
