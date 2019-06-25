@@ -32,7 +32,7 @@
     "chalk": "^2.4.2",
     "get-source": "1.0.37",
     "jmespath": "^0.15.0",
-    "pino-pretty": "3.1.0",
+    "pino-pretty": "3.2.0",
     "pump": "^3.0.0",
     "readable-stream": "^3.4.0",
     "split2": "^3.1.1",
@@ -40,8 +40,11 @@
   },
   "devDependencies": {
     "@deity/falcon-scripts": "^0.0.1",
+    "@types/args": "3.0.0",
     "@types/jmespath": "0.15.0",
-    "@types/pino": "5.8.8"
+    "@types/pino": "5.8.8",
+    "@types/pump": "1.1.0",
+    "@types/readable-stream": "2.3.1"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }
