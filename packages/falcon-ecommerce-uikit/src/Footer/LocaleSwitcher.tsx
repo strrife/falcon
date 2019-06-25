@@ -1,6 +1,5 @@
 import React from 'react';
-import { themed, Dropdown, DropdownLabel, DropdownMenu, DropdownMenuItem, Box } from '@deity/falcon-ui';
-import { LocaleItem } from '@deity/falcon-front-kit';
+import { themed, Box } from '@deity/falcon-ui';
 
 export const LanguageSection = themed({
   tag: Box,
@@ -16,22 +15,3 @@ export const LanguageSection = themed({
     }
   }
 });
-
-type LocaleSwitcherDropdownProps = {
-  items: LocaleItem[];
-  value: LocaleItem;
-  onChange?: (x: LocaleItem) => any;
-};
-
-export const LocaleSwitcherDropdown: React.SFC<LocaleSwitcherDropdownProps> = ({ items, value, onChange }) => (
-  <Dropdown onChange={onChange}>
-    <DropdownLabel>{value.name}</DropdownLabel>
-    <DropdownMenu variant="above">
-      {items.map(x => (
-        <DropdownMenuItem key={x.code} value={x}>
-          {x.name}
-        </DropdownMenuItem>
-      ))}
-    </DropdownMenu>
-  </Dropdown>
-);

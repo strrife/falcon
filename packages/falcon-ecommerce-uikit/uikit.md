@@ -114,8 +114,8 @@
 
 ---
 
-- GET_BACKEND_CONFIG
-- SET_LOCALE
+> - ~~GET_BACKEND_CONFIG~~ moved to @deity/falcon-data and @deity/falcon-shop-data
+> - ~~SET_LOCALE~~ moved to @deity/falcon-data
 
 ---
 
@@ -211,8 +211,8 @@
 
 ---
 
-- BackendConfig
-- SetLocaleData
+> - ~~BackendConfig~~ - moved to @deity/falcon-data and @deity/falcon-shop-data
+> - ~~SetLocaleData~~ - moved to @deity/falcon-data
 
 ---
 
@@ -281,7 +281,7 @@
 
 ---
 
-- LocaleItem
+> - ~~LocaleItem~~ moved to @deity/falcon-front-kit
 
 ---
 
@@ -295,8 +295,8 @@
 
 ---
 
-- LocaleContextType
-- LocaleContext
+> - ~~LocaleContextType~~ moved to @deity/falcon-front-kit
+> - ~~LocaleContext~~ moved to @deity/falcon-front-kit
 
 ---
 
@@ -363,8 +363,8 @@
 
 ---
 
-- BackendConfigQuery
-- SetLocaleMutation
+> - ~~BackendConfigQuery~~ moved to @deity/falcon-data
+> - ~~SetLocaleMutation~~ moved to @deity/falcon-data
 
 ---
 
@@ -420,8 +420,10 @@
 - FooterSectionLayout
 - FooterLink
 - LanguageSection
-- LocaleSwitcherDropdown
-- LocaleSwitcherRenderProps
+
+> - ~~LocaleSwitcherDropdown~~ - moved to @deity/falcon-ui-kit and renamed to `LocalePicker`
+> - ~~LocaleSwitcherRenderProps~~ moved to @deity/falcon-ui-kit and renamed to `LocalePickerProps`
+
 - NewsletterLayout
 - Newsletter
 

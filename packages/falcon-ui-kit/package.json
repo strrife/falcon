@@ -32,16 +32,20 @@
     "@deity/falcon-scripts": "^0.0.1",
     "@deity/falcon-shop-extension": "^0.4.2",
     "@deity/falcon-ui": "^0.2.2",
+    "@deity/falcon-front-kit": "^0.0.1",
     "@types/react": "16.8.22",
     "@types/react-dom": "16.8.4",
     "@types/react-responsive": "3.0.3",
     "graphql-tag": "2.10.1",
+    "prop-types": "15.7.2",
     "react": "16.8.6",
     "react-apollo": "2.5.8"
   },
   "peerDependencies": {
     "@deity/falcon-ui": "^0.2.2",
+    "@deity/falcon-front-kit": "^0.0.1",
     "graphql-tag": "^2.10.1",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-apollo": "2.5.8"
   }
