@@ -28,7 +28,7 @@ extend type Mutation {
   setShopStore(storeCode: String!): BackendConfig
   addToCart(input: AddToCartInput!): CartItemPayload
   updateCartItem(input: UpdateCartItemInput!): CartItemPayload
-  removeCartItem(input: RemoveCartItemInput!): RemoveCartItemResponse
+  removeCartItem(input: RemoveCartItemInput!): RemoveCartItemPayload
   applyCoupon(input: CouponInput!): Boolean
   cancelCoupon: Boolean
   signUp(input: SignUp!): Boolean
@@ -434,15 +434,15 @@ type CartItem {
 }
 
 type CartItemOption {
-  label: String
-  value: String
-  data: [CartItemOptionValue]
+  label: String!
+  value: String!
+  data: [CartItemOptionValue]!
 }
 
 type CartItemOptionValue {
-  qty: String
-  name: String
-  price: String
+  qty: String!
+  name: String!
+  price: String!
 }
 
 type OrderItem {
@@ -464,8 +464,8 @@ type OrderItem {
 
 type CartTotal {
   code: String!
-  title: String
-  value: Float
+  title: String!
+  value: Float!
 }
 
 input AddToCartInput {
@@ -503,15 +503,15 @@ input CouponInput {
 
 type CartItemPayload {
   itemId: Int!
-  sku: String
-  qty: Float
+  sku: String!
+  qty: Float!
   name: String
-  price: Float
+  price: Float!
   productType: String
 }
 
-type RemoveCartItemResponse {
-  itemId: Int
+type RemoveCartItemPayload {
+  itemId: Int!
 }
 
 type Customer {
