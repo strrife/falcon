@@ -71,6 +71,7 @@ module.exports = {
     'react/require-default-props': ['off'],
     'react/no-access-state-in-setstate': 'error',
     'react/prop-types': 'off',
+    'react/forbid-prop-types': 'off',
     'react/destructuring-assignment': 'off',
     'jsdoc/check-alignment': 1,
     'jsdoc/check-indentation': 1,
