@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, Box, Dropdown, DropdownLabel, DropdownMenu, DropdownMenuItem, themed } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
-import { SortOrder } from '../SortOrders/SortOrdersQuery';
+import { SortOrder } from '@deity/falcon-data';
 
 export const SortOrderDropdownLayout = themed({
   tag: Box,

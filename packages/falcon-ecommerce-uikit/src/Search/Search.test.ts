@@ -1,6 +1,6 @@
+import { SortOrderDirection } from '@deity/falcon-data';
 import { searchStateToURL } from './searchStateToURL';
 import { searchStateFromURL } from './searchStateFromURL';
-import { SortOrderDirection } from '../SortOrders/SortOrdersQuery';
 import { FilterOperator } from './types';
 
 describe('Filters', () => {
