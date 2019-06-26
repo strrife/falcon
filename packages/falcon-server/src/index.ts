@@ -1,7 +1,18 @@
+import 'source-map-support/register';
 import { codes } from '@deity/falcon-errors';
-import { Events, Cache, InMemoryLRUCache } from '@deity/falcon-server-env';
+import {
+  ApolloServerConfig,
+  Events,
+  Cache,
+  GraphQLResolver,
+  InMemoryLRUCache,
+  FetchUrlResult,
+  FetchUrlParams
+} from '@deity/falcon-server-env';
 import Logger from '@deity/falcon-logger';
 import { ApolloServer } from 'apollo-server-koa';
+import { KeyValueCache } from 'apollo-server-caching';
+import { ApolloError } from 'apollo-server-errors';
 import { EventEmitter2 } from 'eventemitter2';
 import GraphQLJSON from 'graphql-type-json';
 import cors from '@koa/cors';
@@ -14,13 +25,15 @@ import capitalize from 'lodash/capitalize';
 import trim from 'lodash/trim';
 import { resolve as resolvePath } from 'path';
 import { readFileSync } from 'fs';
-import ApiContainer from './containers/ApiContainer';
-import ExtensionContainer from './containers/ExtensionContainer';
-import EndpointContainer from './containers/EndpointContainer';
-import DynamicRouteResolver from './resolvers/DynamicRouteResolver';
-import cacheInvalidatorMiddleware from './middlewares/cacheInvalidatorMiddleware';
+import { ApiContainer } from './containers/ApiContainer';
+import { ExtensionContainer } from './containers/ExtensionContainer';
+import { EndpointContainer } from './containers/EndpointContainer';
+import { DynamicRouteResolver } from './resolvers/DynamicRouteResolver';
+import { cacheInvalidatorMiddleware } from './middlewares/cacheInvalidatorMiddleware';
 import schemaDirectives from './schemaDirectives';
-import { Config } from './types';
+import { Config, BackendConfig } from './types';
+
+export * from './types';
 
 const BaseSchema: string = readFileSync(resolvePath(__dirname, './../schema.graphql'), 'utf8');
 const isProduction: boolean = process.env.NODE_ENV === 'production';
@@ -28,20 +41,27 @@ const isProduction: boolean = process.env.NODE_ENV === 'production';
 export { BaseSchema, Events };
 
 export class FalconServer {
+  public eventEmitter: EventEmitter2;
+
   protected cache?: Cache;
 
-  protected loggableErrorCodes: string[];
+  protected loggableErrorCodes: string[] = [codes.INTERNAL_SERVER_ERROR, codes.GRAPHQL_PARSE_FAILED];
 
   protected backendConfig: object = {};
-
-  protected eventEmitter: EventEmitter2;
 
   protected server?: ApolloServer;
 
   protected app?: Koa;
 
+  protected router?: Router;
+
+  protected extensionContainer?: ExtensionContainer;
+
+  protected apiContainer?: ApiContainer;
+
+  protected endpointContainer?: EndpointContainer;
+
   constructor(protected config: Config) {
-    this.loggableErrorCodes = [codes.INTERNAL_SERVER_ERROR, codes.GRAPHQL_PARSE_FAILED];
     const { maxListeners = 20, verboseEvents = false } = this.config;
     if (config.logLevel) {
       Logger.setLogLevel(config.logLevel);
@@ -81,11 +101,11 @@ export class FalconServer {
     await this.eventEmitter.emitAsync(Events.AFTER_INITIALIZED, this);
   }
 
-  async getApolloServerConfig() {
-    this.cache = new Cache(this.getCacheProvider());
-    const dynamicRouteResolver = new DynamicRouteResolver(this.extensionContainer);
+  async getApolloServerConfig(): Promise<ApolloServerConfig> {
+    this.cache = this.getCache();
+    const dynamicRouteResolver = new DynamicRouteResolver();
 
-    const apolloServerConfig = await this.extensionContainer.createGraphQLConfig({
+    const apolloServerConfig: ApolloServerConfig = this.extensionContainer.createGraphQLConfig({
       schemas: [BaseSchema],
       dataSources: () => {
         Logger.debug('FalconServer: Instantiating GraphQL DataSources');
@@ -96,28 +116,30 @@ export class FalconServer {
         return dataSources;
       },
       schemaDirectives,
-      formatError: error => this.formatGraphqlError(error),
+      formatError: (error: ApolloError) => this.formatGraphqlError(error),
       // inject session and headers into GraphQL context
       context: ({ ctx }) => ({
         cache: this.cache,
         config: this.config,
         headers: ctx.req.headers,
-        session: ctx.req.session
+        session: ctx.session
       }),
       cache: this.cache,
-      resolvers: {
-        Query: {
-          url: async (...params) => dynamicRouteResolver.fetchUrl(...params),
-          backendConfig: async (...params) => this.fetchBackendConfig(...params)
-        },
-        Mutation: {
-          setLocale: (...params) => this.setLocale(...params)
-        },
-        BackendConfig: {
-          activeLocale: (_, __, { session: _session }) => _session.locale
-        },
-        JSON: GraphQLJSON
-      },
+      resolvers: [
+        {
+          Query: {
+            url: this.urlResolver(dynamicRouteResolver),
+            backendConfig: this.backendConfigResolver()
+          },
+          Mutation: {
+            setLocale: this.setLocaleMutation()
+          },
+          BackendConfig: {
+            activeLocale: this.activeLocaleResolver()
+          },
+          JSON: GraphQLJSON
+        }
+      ],
       tracing: this.config.debug,
       playground: this.config.debug && {
         settings: {
@@ -128,23 +150,42 @@ export class FalconServer {
 
     /* eslint-disable no-underscore-dangle */
     // Removing "placeholder" (_) fields from the Type definitions
-    delete apolloServerConfig.schema._subscriptionType._fields._;
+    delete apolloServerConfig.schema.getSubscriptionType().getFields()['_'];
 
     // If there were no other fields defined for Type by any other extension
     // - we need to remove it completely in order to comply with GraphQL specification
-    if (!Object.keys(apolloServerConfig.schema._subscriptionType._fields).length) {
+    if (!Object.keys(apolloServerConfig.schema.getSubscriptionType().getFields()).length) {
+      // @ts-ignore there's no other way to remove empty "Subscription" type from the schema
       apolloServerConfig.schema._subscriptionType = undefined;
-      delete apolloServerConfig.schema._typeMap.Subscription;
+      delete apolloServerConfig.schema.getTypeMap()['Subscription'];
     }
     /* eslint-enable no-underscore-dangle */
 
     return apolloServerConfig;
   }
 
-  /**
-   * @private
-   */
-  async initializeServerApp() {
+  protected urlResolver(
+    dynamicRouteResolver: DynamicRouteResolver
+  ): GraphQLResolver<FetchUrlResult | null, null, FetchUrlParams> {
+    return async (...params) => dynamicRouteResolver.fetchUrl(...params);
+  }
+
+  protected backendConfigResolver(): GraphQLResolver<BackendConfig, null, null> {
+    return async (...params) => this.extensionContainer.fetchBackendConfig(...params);
+  }
+
+  protected activeLocaleResolver(): GraphQLResolver<string, null, null> {
+    return async (obj, params, context, info) => context.session.locale;
+  }
+
+  protected setLocaleMutation(): GraphQLResolver<BackendConfig, null, { locale: string }> {
+    return async (obj, params, context, info) => {
+      context.session.locale = params.locale;
+      return this.backendConfigResolver()(null, null, context, info);
+    };
+  }
+
+  private async initializeServerApp() {
     await this.eventEmitter.emitAsync(Events.BEFORE_WEB_SERVER_CREATED, this.config);
     this.app = new Koa();
     // Set signed cookie keys (https://koajs.com/#app-keys-)
@@ -153,20 +194,9 @@ export class FalconServer {
     this.router = new Router();
 
     this.app.use(body());
-    this.app.use(
-      cors({
-        credentials: true
-      })
-    );
+    this.app.use(cors({ credentials: true }));
     // todo: implement backend session store e.g. https://www.npmjs.com/package/koa-redis-session
     this.app.use(session((this.config.session && this.config.session.options) || {}, this.app));
-
-    this.app.use((ctx, next) => {
-      // copy session to native Node's req object because GraphQL execution context doesn't have access to Koa's
-      // context, see https://github.com/apollographql/apollo-server/issues/1551
-      ctx.req.session = ctx.session;
-      return next();
-    });
     this.app.use(async (ctx, next) => {
       await this.eventEmitter.emitAsync(Events.BEFORE_WEB_SERVER_REQUEST, ctx);
       await next();
@@ -176,30 +206,22 @@ export class FalconServer {
     await this.eventEmitter.emitAsync(Events.AFTER_WEB_SERVER_CREATED, this.app);
   }
 
-  /**
-   * @private
-   */
-  async initializeContainers() {
+  private async initializeContainers() {
     await this.eventEmitter.emitAsync(Events.BEFORE_API_CONTAINER_CREATED, this.config.apis);
-    /** @type {ApiContainer} */
     this.apiContainer = new ApiContainer(this.eventEmitter);
     await this.apiContainer.registerApis(this.config.apis);
     await this.eventEmitter.emitAsync(Events.AFTER_API_CONTAINER_CREATED, this.apiContainer);
 
     await this.eventEmitter.emitAsync(Events.BEFORE_EXTENSION_CONTAINER_CREATED, this.config.extensions);
-    /** @type {ExtensionContainer} */
     this.extensionContainer = new ExtensionContainer(this.eventEmitter);
-    await this.extensionContainer.registerExtensions(this.config.extensions, this.apiContainer.dataSources);
+    await this.extensionContainer.registerExtensions(this.config.extensions);
     await this.eventEmitter.emitAsync(Events.AFTER_EXTENSION_CONTAINER_CREATED, this.extensionContainer);
 
     this.endpointContainer = new EndpointContainer(this.eventEmitter);
     await this.endpointContainer.registerEndpoints(this.config.endpoints);
   }
 
-  /**
-   * @private
-   */
-  async initializeApolloServer() {
+  private async initializeApolloServer() {
     const apolloServerConfig = await this.getApolloServerConfig();
 
     await this.eventEmitter.emitAsync(Events.BEFORE_APOLLO_SERVER_CREATED, apolloServerConfig);
@@ -210,12 +232,19 @@ export class FalconServer {
   }
 
   /**
-   * Create instance of cache backend based on configuration ("cache" key from config)
-   * @private
-   * @returns {KeyValueCache} instance of cache backend
+   * Cache initializer
+   * @returns Cache instance
    */
-  getCacheProvider() {
-    const { type, options = {} } = this.config.cache || {};
+  protected getCache(): Cache {
+    return new Cache(this.getCacheBackend());
+  }
+
+  /**
+   * Create instance of cache backend based on configuration ("cache" key from config)
+   * @returns Instance of cache backend
+   */
+  protected getCacheBackend(): KeyValueCache {
+    const { type = null, options = {} } = this.config.cache || {};
     const packageName = type ? `apollo-server-cache-${type}` : null;
     try {
       // eslint-disable-next-line import/no-dynamic-require
@@ -230,11 +259,10 @@ export class FalconServer {
 
   /**
    * Registers API Provider endpoints
-   * @private
    */
-  async registerEndpoints() {
+  protected async registerEndpoints(): Promise<void> {
     const endpoints = [];
-    const { url: cacheUrl } = this.config.cache || {};
+    const { url: cacheUrl = null } = this.config.cache || {};
     await this.eventEmitter.emitAsync(Events.BEFORE_ENDPOINTS_REGISTERED, this.endpointContainer.entries);
     this.endpointContainer.entries.forEach(({ methods, path: routerPath, handler }) => {
       (Array.isArray(methods) ? methods : [methods]).forEach(method => {
@@ -261,16 +289,7 @@ export class FalconServer {
     await this.eventEmitter.emitAsync(Events.AFTER_ENDPOINTS_REGISTERED, this.router);
   }
 
-  async setLocale(_, args, context, info) {
-    context.session.locale = args.locale;
-    return this.fetchBackendConfig(_, args, context, info);
-  }
-
-  async fetchBackendConfig(_, args, context, info) {
-    return this.extensionContainer.fetchBackendConfig(_, args, context, info);
-  }
-
-  formatGraphqlError(error) {
+  formatGraphqlError(error: ApolloError): ApolloError {
     let { code = codes.INTERNAL_SERVER_ERROR } = error.extensions || {};
 
     if (get(error, 'extensions.response.status') === 404) {
@@ -291,8 +310,8 @@ export class FalconServer {
     };
   }
 
-  start() {
-    const handleStartupError = err => {
+  start(): void {
+    const handleStartupError = (err: Error): void => {
       this.eventEmitter.emitAsync(Events.ERROR, err).then(() => {
         Logger.error('FalconServer: Initialization error - cannot start the server');
         Logger.error(err.stack);
@@ -304,17 +323,14 @@ export class FalconServer {
 
     this.initialize()
       .then(() => this.eventEmitter.emitAsync(Events.BEFORE_STARTED, this))
-      .then(
-        () =>
-          new Promise(resolve => {
-            this.app.listen({ port: this.config.port }, () => {
-              Logger.info(`🚀 Server ready at http://localhost:${this.config.port}`);
-              Logger.info(
-                `🌍 GraphQL endpoint ready at http://localhost:${this.config.port}${this.server.graphqlPath}`
-              );
-              resolve();
-            });
-          }, handleStartupError)
+      .then(() =>
+        new Promise(resolve => {
+          this.app.listen({ port: this.config.port }, () => {
+            Logger.info(`🚀 Server ready at http://localhost:${this.config.port}`);
+            Logger.info(`🌍 GraphQL endpoint ready at http://localhost:${this.config.port}${this.server.graphqlPath}`);
+            resolve();
+          });
+        }).catch(handleStartupError)
       )
       .then(() => this.eventEmitter.emitAsync(Events.AFTER_STARTED, this))
       .catch(handleStartupError);

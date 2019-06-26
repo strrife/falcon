@@ -1,14 +1,15 @@
 import supertest from 'supertest';
-import { FalconServer } from '.';
+import Koa from 'koa';
+import { FalconServer, Config, Events } from '.';
 
 describe('Falcon Server', () => {
-  const config = {
+  const config: Config = {
     debug: true,
     port: 4000,
     logLevel: 'error',
     endpoints: {
       'fake-api': {
-        package: 'fake-backend-api',
+        package: 'fake-backend-endpoints',
         config: {
           host: 'fake.host.com',
           protocol: 'http'
@@ -20,11 +21,15 @@ describe('Falcon Server', () => {
     }
   };
 
-  it('Should handle an incoming request to a custom API DataSource endpoint', async () => {
+  it('Should handle an incoming request to a custom API DataSource endpoint', async (done: jest.DoneCallback) => {
     const server = new FalconServer(config);
     await server.initialize();
-    const serverCallback = server.app.callback();
-    const response = await supertest(serverCallback).get('/api/info');
-    expect(response.text).toBe('foo');
+
+    server.eventEmitter.on(Events.AFTER_WEB_SERVER_CREATED, async (app: Koa) => {
+      const serverCallback = app.callback();
+      const response = await supertest(serverCallback).get('/api/info');
+      expect(response.text).toBe('foo');
+      done();
+    });
   });
 });
