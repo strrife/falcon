@@ -1,12 +1,14 @@
 import { Response, Request } from 'apollo-server-env';
 import { CacheOptions, RequestOptions } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { Middleware } from 'koa';
+import { Config as ApolloServerConfig } from 'apollo-server-koa';
 import { RequestInit } from 'apollo-server-env';
-import { KeyValueCache } from 'apollo-server-caching';
-import { GraphQLSchema, GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
 import { ApiDataSource } from './models/ApiDataSource';
 import { Cache } from './cache/Cache';
+
+export { ApolloServerConfig };
 
 export interface DataSourceConfig<TContext> {
   context: TContext;
@@ -137,17 +139,6 @@ export enum RequestMethod {
 
 export interface GraphQLResolver<T, O = any, P = any, C extends GraphQLContext = GraphQLContext> {
   (obj: O, params: P, context: C, info: GraphQLResolveInfo): Promise<T>;
-}
-
-export interface GqlServerConfig<TContext = any> {
-  schema: GraphQLSchema;
-  formatError?: Function;
-  context?: TContext;
-  formatResponse?: Function;
-  dataSources?: () => DataSources;
-  cache?: KeyValueCache;
-  debug?: boolean;
-  tracing?: boolean;
 }
 
 export type GraphQLResolverMap = Record<string, Record<string, GraphQLResolver<any>>>;

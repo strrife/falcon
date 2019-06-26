@@ -1,6 +1,5 @@
 export { InMemoryLRUCache } from 'apollo-server-caching';
 export * from './models/ApiDataSource';
-export * from './models/Extension';
 export * from './models/EndpointManager';
 export { default as ContextHTTPCache } from './cache/ContextHTTPCache';
 export * from './cache/Cache';
