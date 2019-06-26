@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
-import { Query } from '@deity/falcon-data';
-import { SortOrder } from './index';
+import { Query } from '../Query';
+import { SortOrder } from './SortOrder';
 
 export const GET_SORT_ORDER_LIST = gql`
   query SortOrderList {
