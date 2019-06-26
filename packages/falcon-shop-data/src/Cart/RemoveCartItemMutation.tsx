@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import { RemoveCartItemInput, RemoveCartItemPayload } from '@deity/falcon-shop-extension';
+import { OperationInput } from '../types';
 import { GET_CART } from './CartQuery';
 
 export const REMOVE_CART_ITEM = gql`
@@ -15,7 +16,7 @@ export type RemoveCartItemResponse = {
   removeCartItem: RemoveCartItemPayload;
 };
 
-export class RemoveCartItemMutation extends Mutation<RemoveCartItemResponse, { input: RemoveCartItemInput }> {
+export class RemoveCartItemMutation extends Mutation<RemoveCartItemResponse, OperationInput<RemoveCartItemInput>> {
   static defaultProps = {
     mutation: REMOVE_CART_ITEM,
     refetchQueries: ['Cart'],
