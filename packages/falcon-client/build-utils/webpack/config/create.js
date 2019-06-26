@@ -132,13 +132,15 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
  * @returns {Object} webpack configuration
  */
 module.exports = (target = 'web', options) => {
+  options = { ...options, publicPath: options.publicPath || '/' };
+
   const { NODE_ENV } = process.env;
   const IS_NODE = target === 'node';
   const IS_WEB = target === 'web';
   const IS_PROD = NODE_ENV === 'production';
   const IS_DEV = NODE_ENV === 'development';
 
-  const { paths, publicPath = '/', startDevServer, buildConfig } = options;
+  const { paths, publicPath, startDevServer, buildConfig } = options;
   const START_DEV_SERVER = IS_DEV ? startDevServer : false;
   const { devServerPort, useWebmanifest, plugins, modify, i18n, moduleOverride } = buildConfig;
 
