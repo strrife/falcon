@@ -1,3 +1,10 @@
+// This env var is needed for `chalk` package to be able to pass colors through the pipeline (when using "logger-pretty")
+// Presetting this env var before the actual import of `logDeityGreenInfo` method
+if (!('FORCE_COLOR' in process.env)) {
+  // Keeping the possibility of passing "FORCE_COLOR=0"
+  process.env.FORCE_COLOR = 1;
+}
+
 const clearConsole = require('react-dev-utils/clearConsole');
 const Logger = require('@deity/falcon-logger');
 const { exitIfBuildingItself, exitIfNoRequiredFiles, getBuildConfig } = require('./tools');
