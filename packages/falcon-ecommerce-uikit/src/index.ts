@@ -18,7 +18,6 @@ export * from './SignUp';
 export * from './Countries';
 export * from './Blog';
 export * from './Query';
-export * from './Locale';
 export * from './Errors';
 export * from './Search';
 export * from './Filters';

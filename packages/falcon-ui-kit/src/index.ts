@@ -1,5 +1,6 @@
 export * from './Address';
 export * from './Account';
+export * from './FormattedDate';
 export * from './Forms';
 export * from './Layouts';
 export * from './MiniCart';
