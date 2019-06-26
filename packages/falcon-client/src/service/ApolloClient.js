@@ -62,7 +62,12 @@ export function ApolloClient(config = {}) {
           cache: inMemoryCache,
           link: ApolloLink.from([...extraLinks, apolloHttpLink]),
           connectToDevTools: isBrowser && connectToDevTools,
-          resolvers: clientState.resolvers
+          resolvers: clientState.resolvers,
+          defaultOptions: {
+            mutate: {
+              awaitRefetchQueries: true
+            }
+          }
         },
         restApolloClientConfig
       ],
