@@ -22,6 +22,7 @@ module.exports = class DynamicRouteResolver {
    */
   constructor(extensionContainer) {
     this.extensionContainer = extensionContainer;
+    this.logger = Logger.getFor(this.constructor.name);
   }
 
   /**
@@ -58,7 +59,7 @@ module.exports = class DynamicRouteResolver {
     /* eslint-disable no-continue */
 
     for (const resolver of resolvers) {
-      Logger.debug(`Checking ${resolver.name} extension for url: "${path}"...`);
+      this.logger.debug(`Checking ${resolver.name} extension for url: "${path}"...`);
 
       try {
         // todo this will produce different cache keys for storeCode / blog entry combination
@@ -86,9 +87,7 @@ module.exports = class DynamicRouteResolver {
     /* eslint-enable no-await-in-loop */
     /* eslint-enable no-restricted-syntax */
 
-    if (response) {
-      response.path = path;
-    }
+    response.path = path;
 
     return response;
   }

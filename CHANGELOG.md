@@ -17,6 +17,11 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 - initial release
 
+### Falcon Logger vNext
+
+- changed Logger provider to [Pino](http://getpino.io/) ([#471](https://github.com/deity-io/falcon/pull/471))
+- added `setApp`, `getFor` and `traceTime` API methods ([#471](https://github.com/deity-io/falcon/pull/471))
+
 ### Falcon Server vNext
 
 - added source-map support for all modes ([#491](https://github.com/deity-io/falcon/pull/491))

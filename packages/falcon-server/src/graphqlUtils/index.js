@@ -43,7 +43,7 @@ const getRootType = type => {
  * @returns {undefined|string|string[]} Value or list of values (in case of `sourceValue` is an array)
  */
 const getFieldValue = (sourceValue, fieldName) => {
-  if (typeof sourceValue === 'undefined' || typeof fieldName === 'undefined') {
+  if (!sourceValue || !fieldName) {
     return undefined;
   }
   if (Array.isArray(sourceValue)) {
