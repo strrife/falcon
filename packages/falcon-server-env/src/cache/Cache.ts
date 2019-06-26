@@ -33,13 +33,14 @@ export default class Cache<V = any> implements KeyValueCache<V> {
   constructor(private cacheProvider: KeyValueCache<V>) {}
 
   async get(key: string): Promise<V>;
+
   async get(key: string, setOptions: GetCacheOptions): Promise<V>;
 
   /**
    * Returns cached value for the provided key and setOptions object
    * @param {string} key Cache key
    * @param {GetCacheOptions} setOptions Object with params to fetch the data to be cached
-   * @return {Promise<string|undefined>} Cached value
+   * @returns {Promise<string|undefined>} Cached value
    */
   async get(key: string, setOptions?: GetCacheOptions): Promise<V> {
     let value: GetCacheFetchResult = await this.cacheProvider.get(key);
@@ -79,7 +80,9 @@ export default class Cache<V = any> implements KeyValueCache<V> {
   }
 
   async set(key: string, value: V): Promise<void>;
+
   async set(key: string, value: V, options: SetCacheOptions): Promise<void>;
+
   async set(key: string, value: V, options?: SetCacheOptions): Promise<void> {
     let cachedValue: V | GetCacheFetchResult = value;
     const { tags } = options || ({} as SetCacheOptions);
@@ -96,13 +99,14 @@ export default class Cache<V = any> implements KeyValueCache<V> {
   }
 
   async delete(key: string): Promise<boolean>;
+
   async delete(keys: string[]): Promise<void>;
 
   /**
    * Cache key or array of cache keys to be removed from the cache.
    * Can be used to invalidate cache by tags
    * @param {string|string[]} key One or more cache keys to be removed
-   * @return {Promise<boolean|void>} Result
+   * @returns {Promise<boolean|void>} Result
    */
   async delete(key: string | string[]): Promise<boolean | void> {
     if (Array.isArray(key)) {
@@ -115,7 +119,7 @@ export default class Cache<V = any> implements KeyValueCache<V> {
   /**
    * Check provided key-value tag object with the tags from the cache backend
    * @param {TagMap} tagMap Key-value object (tags)
-   * @return {Promise<boolean>} Result
+   * @returns {Promise<boolean>} Result
    */
   private async isTagMapValid(tagMap: TagMap): Promise<boolean> {
     const tagNames: string[] = Object.keys(tagMap);
@@ -138,7 +142,7 @@ export default class Cache<V = any> implements KeyValueCache<V> {
    * Load tag values from the cache backend
    * @param {string[]} names List of tag names to be loaded from the Cache Backend
    * @param {boolean} [createIfMissing=false] Flag whether to create new values for missing tags
-   * @return {Promise<TagMap>} Key-value object
+   * @returns {Promise<TagMap>} Key-value object
    */
   private async getTagsByNames(names: string[], createIfMissing: boolean = false): Promise<TagMap> {
     const tagValues: TagMap = {};
@@ -163,15 +167,15 @@ export default class Cache<V = any> implements KeyValueCache<V> {
   /**
    * Check if the provided values contains cache "options" object
    * @param {any} data Data to be checked
-   * @return {boolean} Result of check
+   * @returns {boolean} Result of check
    */
   private isValueWithOptions(data: any): boolean {
-    return typeof data === 'object' && data.value && data.options;
+    return typeof data === 'object' && 'value' in data && 'options' in data;
   }
 
   /**
    * Generating a short and safe enough tag value (second + ms = will ensure a unique value for the same tag name)
-   * @return {string} Tag value
+   * @returns {string} Tag value
    */
   private generateTagValue(): string {
     const date: Date = new Date();

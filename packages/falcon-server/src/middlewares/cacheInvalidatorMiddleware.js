@@ -33,7 +33,7 @@ const cacheInvalidatorMiddleware = cache => async ctx => {
     .map(({ id, type }) => (id && type ? generateTagNames(type, id) : type))
     .filter(value => value);
 
-  Logger.debug(`Flushing cache tags: ${tags.join(', ')}`);
+  Logger.getFor('cache').debug(`Flushing cache tags: ${tags.join(', ')}`);
   await cache.delete(tags);
   ctx.body = 'ok';
 };
