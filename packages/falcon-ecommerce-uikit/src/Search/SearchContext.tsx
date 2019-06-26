@@ -1,7 +1,6 @@
 import React from 'react';
-import { PaginationInput } from './../types';
+import { SortOrderInput, PaginationInput } from '@deity/falcon-data';
 import { FilterOperator, FilterInput } from './types';
-import { SortOrderInput } from '../SortOrders/SortOrdersQuery';
 
 export type SearchState = {
   term?: string;
