@@ -27,22 +27,30 @@ function moduleFilter(modules) {
   return new RegExp(`[\\\\/]node_modules[\\\\/](${modules.map(x => x.replace('/', '[\\\\/]')).join('|')})[\\\\/]`);
 }
 
-function getEsLintLoaderOptions(eslintRcPath, isDev) {
-  const options = {
-    eslintPath: require.resolve('eslint'),
-    formatter: require('react-dev-utils/eslintFormatter'),
-    ignore: false,
-    useEslintrc: fs.existsSync(eslintRcPath),
-    emitWarning: isDev
-  };
-
-  if (!options.useEslintrc) {
-    options.baseConfig = {
-      extends: [require.resolve('@deity/eslint-config-falcon')]
-    };
-  }
-
-  return options;
+/**
+ * @param {import('../../paths')} paths
+ * @param {boolean} isDev
+ */
+function getESLintLoader(paths, isDev) {
+  return fs.existsSync(paths.appEslintRc)
+    ? {
+        test: /\.(js|jsx|mjs)$/,
+        include: paths.appSrc,
+        use: [
+          {
+            loader: require.resolve('eslint-loader'),
+            options: {
+              eslintPath: require.resolve('eslint'),
+              formatter: require('react-dev-utils/eslintFormatter'),
+              ignore: false,
+              useEslintrc: true,
+              emitWarning: isDev
+            }
+          }
+        ],
+        enforce: 'pre'
+      }
+    : undefined;
 }
 
 function getBabelLoaderOptions(babelRcPath) {
@@ -174,17 +182,7 @@ module.exports = (target = 'web', options) => {
           use: { loader: require.resolve('source-map-loader') },
           enforce: 'pre'
         },
-        {
-          test: /\.(js|jsx|mjs)$/,
-          include: paths.appSrc,
-          use: [
-            {
-              loader: require.resolve('eslint-loader'),
-              options: getEsLintLoaderOptions(paths.appEslintRc, IS_DEV)
-            }
-          ],
-          enforce: 'pre'
-        },
+        getESLintLoader(paths, IS_DEV),
         // Avoid "require is not defined" errors
         {
           test: /\.mjs$/,
