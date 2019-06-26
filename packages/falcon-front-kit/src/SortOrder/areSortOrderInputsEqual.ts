@@ -1,4 +1,4 @@
-import { SortOrderInput } from '@deity/falcon-shop-data';
+import { SortOrderInput } from '@deity/falcon-data';
 
 /**
  * Determines if two `SortOrderInput` are equal from a value perspective
