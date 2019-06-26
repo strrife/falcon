@@ -13,7 +13,7 @@ const onlyFromCacheWhenOfflineLink = new ApolloLink((operation, forward) => {
   }
 
   const operationDefinition = operation.query.definitions.find(x => x.kind === 'OperationDefinition');
-  if (!operationDefinition || (operationDefinition && operationDefinition.kind !== 'query')) {
+  if (!operationDefinition || (operationDefinition && operationDefinition.operation !== 'query')) {
     return forward(operation);
   }
 
