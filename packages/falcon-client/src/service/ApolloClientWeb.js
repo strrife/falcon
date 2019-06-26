@@ -12,9 +12,13 @@ const onlyFromCacheWhenOfflineLink = new ApolloLink((operation, forward) => {
     return forward(operation);
   }
 
+  const operationDefinition = operation.query.definitions.find(x => x.kind === 'OperationDefinition');
+  if (!operationDefinition || (operationDefinition && operationDefinition.kind !== 'query')) {
+    return forward(operation);
+  }
+
   const { cache } = operation.getContext();
   try {
-    // TODO: should we filter only `Query` operations?
     const response = { data: cache.read(operation) };
 
     // SEE: https://github.com/apollographql/apollo-link/blob/c32e170b72ae1a94cea1c633f977d2dbfcada0e1/packages/apollo-link-http/src/httpLink.ts#L133
