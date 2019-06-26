@@ -3,16 +3,15 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
 import { I18n } from '@deity/falcon-i18n';
 import { themed, Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
-import { Locale } from '../Locale';
+import { toGridTemplate, OpenSidebarMutation } from '@deity/falcon-ui-kit';
+import { Locale } from '@deity/falcon-front-kit';
 import { Breadcrumbs } from '../Breadcrumbs';
+import { AddToCartMutation } from '../Cart';
+import { Price } from '../Locale';
 import { ProductGallery } from './ProductGallery';
 import { ProductConfigurableOptions } from './ConfigurableOptions';
-import { AddToCartMutation } from '../Cart';
-import { OpenSidebarMutation } from '../Sidebar';
 import { ProductConfigurator } from './ProductConfigurator';
-import { Price } from '../Locale';
-import { toGridTemplate } from '../helpers';
-import { Product as ProductModel } from './ProductQuery';
+import { ProductData } from './ProductQuery';
 
 export const ProductLayout = themed({
   tag: 'div',
@@ -136,8 +135,8 @@ const ProductForm = adopt({
   )
 });
 
-export class Product extends React.PureComponent<{ product: ProductModel }> {
-  createValidator(product: ProductModel, t: any) {
+export class Product extends React.PureComponent<{ product: ProductData }> {
+  createValidator(product: ProductData, t: any) {
     return (values: any) => {
       const errors: any = {};
 

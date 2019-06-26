@@ -30,7 +30,7 @@
     "lerna": "3.4.3",
     "lint-staged": "7.3.0",
     "rimraf": "2.6.2",
-    "typescript": "3.4.5"
+    "typescript": "3.5.1"
   },
   "engines": {
     "node": ">=8.10",
@@ -41,6 +41,7 @@
     "packages/falcon-client",
     "packages/falcon-server",
     "packages/falcon-server-env",
+    "packages/falcon-service-worker",
     "packages/falcon-ui",
     "packages/falcon-theme-editor",
     "packages/falcon-ecommerce-uikit",
@@ -61,7 +62,12 @@
     "packages/falcon-dev-tools/normal-module-override-webpack-plugin",
     "packages/eject-ts",
     "examples/shop-with-blog/client",
-    "examples/shop-with-blog/server"
+    "examples/shop-with-blog/server",
+    "packages/falcon-shop-data",
+    "packages/falcon-blog-data",
+    "packages/falcon-ui-kit",
+    "packages/falcon-front-kit",
+    "packages/falcon-data"
   ],
   "husky": {
     "hooks": {
@@ -70,6 +76,9 @@
   },
   "resolutions": {
     "apollo-env": "0.4.0",
-    "react": "16.8.2"
+    "react": "16.8.6",
+    "prop-types": "15.7.2",
+    "@types/react": "16.8.22",
+    "@types/enzyme": "3.1.18"
   }
 }

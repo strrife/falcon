@@ -1,6 +1,6 @@
-import Logger from '@deity/falcon-logger';
-import { EventEmitter2 } from 'eventemitter2';
 import { resolve } from 'path';
+import Logger, { Logger as LoggerType } from '@deity/falcon-logger';
+import { EventEmitter2 } from 'eventemitter2';
 
 declare type TryRequireResult<T> = {
   module?: T;
@@ -28,7 +28,11 @@ const tryRequire = <T>(moduleName: string): TryRequireResult<T> => {
 };
 
 export class BaseContainer {
-  constructor(protected eventEmitter: EventEmitter2) {}
+  protected logger: LoggerType;
+
+  constructor(protected eventEmitter: EventEmitter2) {
+    this.logger = Logger.getFor(this.constructor.name);
+  }
 
   /**
    * Imports the specified module (via "require()") by checking installed NPM package
@@ -43,12 +47,12 @@ export class BaseContainer {
     if (requiredPackage.exists) {
       const { module: mdl, error } = requiredPackage;
       if (error) {
-        Logger.error(`${prefix}: "${pathOrPackage}" cannot be loaded. - ${error.message}\n${error.stack} `);
+        this.logger.error(`"${pathOrPackage}" cannot be loaded. - ${error.message}\n${error.stack} `);
 
         return undefined;
       }
 
-      Logger.debug(`${prefix}: "${pathOrPackage}" loaded as a package`);
+      this.logger.debug(`"${pathOrPackage}" loaded as a package`);
 
       return mdl;
     }
@@ -58,18 +62,18 @@ export class BaseContainer {
     if (requiredModule.exists) {
       const { module: mdl, error } = requiredModule;
       if (error) {
-        Logger.error(`${prefix}: "${pathOrPackage}" cannot be loaded. - ${error.message}\n${error.stack}`);
+        this.logger.error(`"${pathOrPackage}" cannot be loaded. - ${error.message}\n${error.stack}`);
 
         return undefined;
       }
 
-      Logger.debug(`${prefix}: "${pathOrPackage}" loaded from '${modulePath}'`);
+      this.logger.debug(`"${pathOrPackage}" loaded from '${modulePath}'`);
 
       return mdl;
     }
 
-    Logger.error(
-      `${prefix}: Cannot find package '${pathOrPackage}' or module '${modulePath}'. Please check your config ("package" key)`
+    this.logger.error(
+      `Cannot find package '${pathOrPackage}' or module '${modulePath}'. Please check your config ("package" key)`
     );
 
     return undefined;

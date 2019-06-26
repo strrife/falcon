@@ -1,4 +1,4 @@
-import Logger from '@deity/falcon-logger';
+import Logger, { Logger as LoggerType } from '@deity/falcon-logger';
 import { Body, Request, RESTDataSource } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
 import { EventEmitter2 } from 'eventemitter2';
@@ -86,6 +86,11 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
 
   protected gqlServerConfig: ApolloServerConfig;
 
+  protected logger: LoggerType;
+
+  /**
+   * @param params Constructor params
+   */
   constructor(params: ApiDataSourceConstructorParams) {
     super();
 
@@ -94,6 +99,7 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
     this.config = params.config || {};
     this.apiContainer = params.apiContainer;
     this.eventEmitter = params.eventEmitter;
+    this.logger = Logger.getFor(this.name);
 
     const { host, fetchUrlPriority, perPage } = this.config;
     if (host) {
@@ -258,17 +264,7 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
    */
   /* istanbul ignore next Skipping code coverage for "dev" function */
   private async traceLog<TResult>(label: string, fn: () => Promise<TResult>): Promise<TResult> {
-    if (this.context.config && this.context.config.logLevel === 'debug') {
-      const startTime = Date.now();
-      try {
-        return await fn();
-      } finally {
-        const duration = Date.now() - startTime;
-        Logger.debug(`${this.name}: ${label} (${duration}ms)`);
-      }
-    } else {
-      return fn();
-    }
+    return this.logger.traceTime(label, fn);
   }
 
   /**

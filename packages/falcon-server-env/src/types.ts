@@ -1,8 +1,7 @@
-import { Response, Request } from 'apollo-server-env';
+import { Response, Request, RequestInit } from 'apollo-server-env';
 import { CacheOptions, RequestOptions } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { Middleware } from 'koa';
 import { Config as ApolloServerConfig } from 'apollo-server-koa';
-import { RequestInit } from 'apollo-server-env';
 import { GraphQLResolveInfo } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
 import { ApiDataSource } from './models/ApiDataSource';

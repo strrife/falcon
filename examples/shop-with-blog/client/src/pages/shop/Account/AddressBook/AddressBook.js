@@ -2,14 +2,8 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T, I18n } from '@deity/falcon-i18n';
 import { H1, H2, Box, Link, Icon, Button, Divider, FlexLayout } from '@deity/falcon-ui';
-import {
-  AddressListQuery,
-  AddressCardLayout,
-  AddressDetails,
-  AddressListLayout,
-  getAddressType,
-  RemoveAddressMutation
-} from '@deity/falcon-ecommerce-uikit';
+import { getAddressType, AddressCardLayout, AddressListLayout, AddressDetails } from '@deity/falcon-ui-kit';
+import { RemoveAddressMutation, AddressListQuery } from '@deity/falcon-shop-data';
 
 const AddressBook = () => (
   <Box>
@@ -17,7 +11,7 @@ const AddressBook = () => (
       <T id="addressBook.title" />
     </H1>
     <AddressListQuery>
-      {({ addresses: { items } }) => {
+      {({ addressList: { items } }) => {
         const billing = items.find(x => x.defaultBilling);
         const shipping = items.find(x => x.defaultShipping);
         const rest = items.filter(x => !x.defaultBilling && !x.defaultShipping) || [];

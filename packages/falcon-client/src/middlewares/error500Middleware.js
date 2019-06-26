@@ -1,7 +1,7 @@
-import send from 'koa-send';
-import Logger from '@deity/falcon-logger';
 import { existsSync } from 'fs';
 import { resolve as resolvePath, join as joinPath } from 'path';
+import send from 'koa-send';
+import Logger from '@deity/falcon-logger';
 import resolve from 'resolve';
 import { codes } from '@deity/falcon-errors';
 
@@ -24,7 +24,8 @@ export default () => async (ctx, next) => {
     }
 
     if (networkError || code !== codes.NOT_FOUND) {
-      Logger.error(`Internal Server Error!\n request: ${request.url}\n`, errorToLog);
+      Logger.error(`Internal Server Error! Request: ${request.url}`);
+      Logger.error(errorToLog);
     }
 
     let viewsDir = resolvePath(__dirname, './../../', 'views');

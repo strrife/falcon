@@ -3,20 +3,9 @@ import { NavLink } from 'react-router-dom';
 import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
 import { H1, Text, Button, FlexLayout, GridLayout } from '@deity/falcon-ui';
-import {
-  Form,
-  FormField,
-  CheckboxFormField,
-  FormErrorSummary,
-  AddressQuery,
-  getAddressType,
-  GET_ADDRESS,
-  EditAddressMutation,
-  TwoColumnsLayout,
-  TwoColumnsLayoutArea,
-  CountriesQuery,
-  CountrySelector
-} from '@deity/falcon-ecommerce-uikit';
+import { TwoColumnsLayout, TwoColumnsLayoutArea, CountriesQuery, CountrySelector } from '@deity/falcon-ecommerce-uikit';
+import { getAddressType, Form, FormField, CheckboxFormField, FormErrorSummary } from '@deity/falcon-ui-kit';
+import { GET_ADDRESS, AddressQuery, EditAddressMutation } from '@deity/falcon-shop-data';
 
 const EditAddress = ({ match, history }) => {
   const id = parseInt(match.params.id, 10);
@@ -34,7 +23,7 @@ const EditAddress = ({ match, history }) => {
               <T id="editAddress.defaultAddressLabel" context={getAddressType(address)} />
             </Text>
           )}
-          <EditAddressMutation refetchQueries={['Addresses', { query: GET_ADDRESS, variables: { id } }]}>
+          <EditAddressMutation refetchQueries={['AddressList', { query: GET_ADDRESS, variables: { id } }]}>
             {(editAddress, { loading, error }) => (
               <Formik
                 initialValues={{

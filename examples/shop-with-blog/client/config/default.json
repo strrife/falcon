@@ -1,5 +1,6 @@
 {
   "__typename": "ClientConfig",
+  "appName": "falcon-client-demo",
   "port": 3000,
   "serverSideRendering": true,
   "i18n": {

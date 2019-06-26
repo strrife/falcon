@@ -55,7 +55,6 @@ export class DynamicRouteResolver {
       if (typeof resolver.fetchUrl !== 'function') {
         throw new Error(`"fetchUrl" method is not defined in your "${resolver.name}" api`);
       }
-
       Logger.debug(`Checking ${resolver.name} extension for url: "${path}"...`);
       try {
         response = await resolver.fetchUrl(obj, args, context, info);
@@ -80,10 +79,10 @@ export class DynamicRouteResolver {
     /* eslint-enable no-await-in-loop */
     /* eslint-enable no-restricted-syntax */
 
-    if (response) {
-      response.path = path;
-    }
-
-    return response;
+    return {
+      redirect: false,
+      ...response,
+      path
+    };
   };
 }

@@ -170,7 +170,7 @@ export class Cache<V = any> implements KeyValueCache<V> {
    * @returns {boolean} Result of check
    */
   private isValueWithOptions(data: any): boolean {
-    return typeof data === 'object' && data.value && data.options;
+    return typeof data === 'object' && 'value' in data && 'options' in data;
   }
 
   /**

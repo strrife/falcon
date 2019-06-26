@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CloseSidebarMutation, EnsureTTI } from '@deity/falcon-ecommerce-uikit';
+import { EnsureTTI } from '@deity/falcon-front-kit';
+import { CloseSidebarMutation } from '@deity/falcon-ui-kit';
 import { SidebarQuery } from './SidebarQuery';
 
 export const SidebarContainer = ({ children }) => (

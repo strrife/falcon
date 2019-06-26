@@ -16,7 +16,7 @@ extend type Query {
   lastOrder: Order @cacheInvalidator(idPath: [{ path: "items", type: "Product" }])
   orders(pagination: PaginationInput): Orders
   address(id: Int!): Address
-  addresses: AddressList
+  addressList: AddressList
   customer: Customer
   cmsPage(id: Int, identifier: String): CmsPage
   cmsBlock(identifier: String): CmsBlock
@@ -26,7 +26,6 @@ extend type Query {
 extend type Mutation {
   setShopCurrency(currency: String!): BackendConfig
   setShopStore(storeCode: String!): BackendConfig
-
   addToCart(input: AddToCartInput!): CartItemPayload
   updateCartItem(input: UpdateCartItemInput!): CartItemPayload
   removeCartItem(input: RemoveCartItemInput!): RemoveCartItemResponse
@@ -35,14 +34,14 @@ extend type Mutation {
   signUp(input: SignUp!): Boolean
   signIn(input: SignIn!): Boolean
   signOut: Boolean
-  editCustomer(input: CustomerInput!): Customer
+  editCustomer(input: EditCustomerInput!): Customer
   editAddress(input: EditAddressInput!): Address
   addAddress(input: AddAddressInput!): Address
   estimateShippingMethods(input: EstimateShippingInput!): [ShippingMethod]
-  removeCustomerAddress(id: Int!): Boolean
-  requestCustomerPasswordResetToken(input: EmailInput!): Boolean
-  changeCustomerPassword(input: CustomerPassword!): Boolean
-  resetCustomerPassword(input: CustomerPasswordReset!): Boolean
+  removeAddress(id: Int!): Boolean
+  requestPasswordReset(input: RequestPasswordResetInput!): Boolean
+  changePassword(input: ChangePasswordInput!): Boolean
+  resetPassword(input: ResetPasswordInput!): Boolean
   # set current customer order shipping information
   setShipping(input: ShippingInput): ShippingInformation
   placeOrder(input: PlaceOrderInput!): PlaceOrderResult
@@ -67,7 +66,7 @@ type ShopStoreEntry {
   code: String
 }
 
-input EmailInput {
+input RequestPasswordResetInput {
   email: String!
 }
 
@@ -156,13 +155,13 @@ enum FilterOperator {
   range
 }
 
-input CustomerInput {
+input EditCustomerInput {
   websiteId: Int!
   firstname: String
   lastname: String
   email: String
-  defaultBilling: String
-  defaultShipping: String
+  defaultBilling: Boolean
+  defaultShipping: Boolean
 }
 
 input AddressInput {
@@ -217,12 +216,12 @@ input EditAddressInput {
   regionId: Int
 }
 
-input CustomerPassword {
+input ChangePasswordInput {
   currentPassword: String!
   password: String!
 }
 
-input CustomerPasswordReset {
+input ResetPasswordInput {
   resetToken: String!
   password: String!
 }

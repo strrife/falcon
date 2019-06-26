@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Text, Image } from '@deity/falcon-ui';
-import { UpdateCartItemMutation, RemoveCartItemMutation, Price, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
+import { UpdateCartItemMutation, RemoveCartItemMutation, Price } from '@deity/falcon-ecommerce-uikit';
+import { toGridTemplate } from '@deity/falcon-ui-kit';
 import { RemoveItemButton, ChangeItemNumberInput } from './Inputs';
 
 export const CartItemArea = {

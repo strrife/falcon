@@ -1,8 +1,7 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop, no-underscore-dangle */
-import Logger from '@deity/falcon-logger';
 import { EndpointEntry, EndpointConstructor } from '@deity/falcon-server-env';
-import { BaseContainer } from './BaseContainer';
 import { EndpointEntryMap } from '../types';
+import { BaseContainer } from './BaseContainer';
 
 export class EndpointContainer extends BaseContainer {
   public entries: Array<EndpointEntry> = [];
@@ -18,7 +17,7 @@ export class EndpointContainer extends BaseContainer {
 
         const EndpointManagerClass = this.importModule<EndpointConstructor>(endpointManagerConfig.package);
         if (!EndpointManagerClass) {
-          Logger.warn(`${this.constructor.name}: Could not load ${endpointManagerConfig.package}`);
+          this.logger.warn(`Could not load ${endpointManagerConfig.package}`);
           return;
         }
         const endpointManager = new EndpointManagerClass({
@@ -27,7 +26,7 @@ export class EndpointContainer extends BaseContainer {
           eventEmitter: this.eventEmitter
         });
 
-        Logger.debug(`${this.constructor.name}: "${endpointManager.name}" Endpoint Manager has been instantiated`);
+        this.logger.debug(`"${endpointManager.name}" Endpoint Manager has been instantiated`);
         this.entries.push(...endpointManager.getEntries());
       }
     }

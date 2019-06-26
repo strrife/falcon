@@ -1,4 +1,6 @@
 import 'source-map-support/register';
+import { resolve as resolvePath } from 'path';
+import { readFileSync } from 'fs';
 import { codes } from '@deity/falcon-errors';
 import {
   ApolloServerConfig,
@@ -9,7 +11,7 @@ import {
   FetchUrlResult,
   FetchUrlParams
 } from '@deity/falcon-server-env';
-import Logger from '@deity/falcon-logger';
+import Logger, { Logger as LoggerType } from '@deity/falcon-logger';
 import { ApolloServer } from 'apollo-server-koa';
 import { KeyValueCache } from 'apollo-server-caching';
 import { ApolloError } from 'apollo-server-errors';
@@ -22,9 +24,6 @@ import session from 'koa-session';
 import body from 'koa-body';
 import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
-import trim from 'lodash/trim';
-import { resolve as resolvePath } from 'path';
-import { readFileSync } from 'fs';
 import { ApiContainer } from './containers/ApiContainer';
 import { ExtensionContainer } from './containers/ExtensionContainer';
 import { EndpointContainer } from './containers/EndpointContainer';
@@ -61,10 +60,15 @@ export class FalconServer {
 
   protected endpointContainer?: EndpointContainer;
 
+  protected logger: LoggerType = Logger;
+
   constructor(protected config: Config) {
     const { maxListeners = 20, verboseEvents = false } = this.config;
     if (config.logLevel) {
       Logger.setLogLevel(config.logLevel);
+    }
+    if (config.appName) {
+      Logger.setApp(config.appName);
     }
 
     this.eventEmitter = new EventEmitter2({
@@ -74,20 +78,12 @@ export class FalconServer {
     });
 
     this.eventEmitter.on(Events.ERROR, async error => {
-      const stacktrace = get(error, 'extensions.exception.stacktrace', []);
-      let { message } = error;
-      if (stacktrace.length > 0) {
-        message = stacktrace[0];
-        if (stacktrace[1]) {
-          message += ` ${trim(stacktrace[1])}`;
-        }
-      }
-      Logger.error(`FalconServer: ${message}`, error);
+      this.logger.error(error);
     });
 
     if (verboseEvents) {
       this.eventEmitter.onAny(event => {
-        Logger.debug(`Triggering "${event}" event...`);
+        this.logger.debug(`Triggering "${event}" event...`);
       });
     }
   }
@@ -108,7 +104,7 @@ export class FalconServer {
     const apolloServerConfig: ApolloServerConfig = this.extensionContainer.createGraphQLConfig({
       schemas: [BaseSchema],
       dataSources: () => {
-        Logger.debug('FalconServer: Instantiating GraphQL DataSources');
+        this.logger.debug('Instantiating GraphQL DataSources');
         const dataSources = {};
         this.apiContainer.dataSources.forEach((value, key) => {
           dataSources[key] = value(apolloServerConfig);
@@ -251,9 +247,10 @@ export class FalconServer {
       const CacheBackend = packageName ? require(packageName)[`${capitalize(type)}Cache`] : InMemoryLRUCache;
       return new CacheBackend(options);
     } catch (ex) {
-      Logger.error(
-        `FalconServer: Cannot initialize cache backend using "${packageName}" package, GraphQL server will operate without cache`
+      this.logger.error(
+        `Cannot initialize cache backend using "${packageName}" package, GraphQL server will operate without cache`
       );
+      this.logger.error(ex);
     }
   }
 
@@ -266,7 +263,7 @@ export class FalconServer {
     await this.eventEmitter.emitAsync(Events.BEFORE_ENDPOINTS_REGISTERED, this.endpointContainer.entries);
     this.endpointContainer.entries.forEach(({ methods, path: routerPath, handler }) => {
       (Array.isArray(methods) ? methods : [methods]).forEach(method => {
-        Logger.debug(`FalconServer: registering endpoint ${method.toUpperCase()}: "${routerPath}"`);
+        this.logger.debug(`Registering endpoint ${method.toUpperCase()}: "${routerPath}"`);
         this.router[method.toLowerCase()](routerPath, handler);
         if (endpoints.indexOf(routerPath) < 0) {
           endpoints.push(routerPath);
@@ -280,7 +277,9 @@ export class FalconServer {
     // Adding a custom route to handle Cache webhooks
     if (typeof cacheUrl === 'string') {
       if (cacheUrl === '/cache' && isProduction) {
-        Logger.warn('Consider changing "cache.url" config value with a unique route to secure your Cache endpoint');
+        this.logger.warn(
+          'Consider changing "cache.url" config value with a unique route to secure your Cache endpoint'
+        );
       }
       this.router.post(cacheUrl, cacheInvalidatorMiddleware(this.cache));
     }
@@ -313,21 +312,22 @@ export class FalconServer {
   start(): void {
     const handleStartupError = (err: Error): void => {
       this.eventEmitter.emitAsync(Events.ERROR, err).then(() => {
-        Logger.error('FalconServer: Initialization error - cannot start the server');
-        Logger.error(err.stack);
-        process.exit(2);
+        this.logger.error('Initialization error - cannot start the server');
+        process.exit(1);
       });
     };
 
-    Logger.info('Starting Falcon Server');
+    this.logger.info('Starting Falcon Server');
 
     this.initialize()
       .then(() => this.eventEmitter.emitAsync(Events.BEFORE_STARTED, this))
       .then(() =>
         new Promise(resolve => {
           this.app.listen({ port: this.config.port }, () => {
-            Logger.info(`🚀 Server ready at http://localhost:${this.config.port}`);
-            Logger.info(`🌍 GraphQL endpoint ready at http://localhost:${this.config.port}${this.server.graphqlPath}`);
+            this.logger.info(`🚀 Server ready at http://localhost:${this.config.port}`);
+            this.logger.info(
+              `🌍 GraphQL endpoint ready at http://localhost:${this.config.port}${this.server.graphqlPath}`
+            );
             resolve();
           });
         }).catch(handleStartupError)
