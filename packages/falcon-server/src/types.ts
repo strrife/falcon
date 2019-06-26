@@ -1,6 +1,7 @@
 import { ExtensionInstance } from '@deity/falcon-server-env';
 
 export type Config = {
+  appName?: string;
   debug?: boolean;
   maxListeners?: number;
   verboseEvents?: boolean;
