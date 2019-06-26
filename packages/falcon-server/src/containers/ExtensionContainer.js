@@ -1,5 +1,4 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop, no-underscore-dangle */
-const Logger = require('@deity/falcon-logger');
 const { mergeSchemas, makeExecutableSchema } = require('graphql-tools');
 const { Events } = require('@deity/falcon-server-env');
 const BaseContainer = require('./BaseContainer');
@@ -51,15 +50,13 @@ module.exports = class ExtensionContainer extends BaseContainer {
           eventEmitter: this.eventEmitter
         });
 
-        Logger.debug(`ExtensionContainer: "${extensionInstance.name}" added to the list of extensions`);
+        this.logger.debug(`"${extensionInstance.name}" added to the list of extensions`);
         const { api: apiName } = extension.config || {};
         if (apiName && dataSources.has(apiName)) {
           extensionInstance.api = dataSources.get(apiName);
-          Logger.debug(
-            `ExtensionContainer: "${apiName}" API DataSource assigned to "${extensionInstance.name}" extension`
-          );
+          this.logger.debug(`"${apiName}" API DataSource assigned to "${extensionInstance.name}" extension`);
         } else {
-          Logger.debug(`ExtensionContainer: Extension "${extensionInstance.name}" has no API defined`);
+          this.logger.debug(`Extension "${extensionInstance.name}" has no API defined`);
         }
         this.extensions.set(extensionInstance.name, extensionInstance);
 
@@ -84,7 +81,7 @@ module.exports = class ExtensionContainer extends BaseContainer {
 
     // initialization of extensions cannot be done in parallel because of race condition
     for (const [extName, ext] of this.extensions) {
-      Logger.debug(`ExtensionContainer: Fetching "${extName}" API backend config`);
+      this.logger.debug(`Fetching "${extName}" API backend config`);
       const extConfig = await ext.fetchApiBackendConfig(obj, args, context, info);
       if (extConfig) {
         configs.push(extConfig);
@@ -182,7 +179,7 @@ module.exports = class ExtensionContainer extends BaseContainer {
   }
 
   mergeGraphQLConfig(dest, source, extensionName) {
-    Logger.debug(`ExtensionContainer: merging "${extensionName}" extension GraphQL config`);
+    this.logger.debug(`Merging "${extensionName}" extension GraphQL config`);
 
     Object.keys(source).forEach(name => {
       if (!name || typeof source[name] === 'undefined') {
@@ -196,8 +193,8 @@ module.exports = class ExtensionContainer extends BaseContainer {
         case 'schemas':
           valueArray.forEach(schemaItem => {
             if (typeof schemaItem !== 'string') {
-              Logger.warn(
-                `ExtensionContainer: "${extensionName}" extension contains non-string GraphQL Schema definition,` +
+              this.logger.warn(
+                `"${extensionName}" extension contains non-string GraphQL Schema definition,` +
                   `please check its "${name}" configuration and make sure all items are represented as strings. ${schemaItem}`
               );
             }
@@ -219,8 +216,8 @@ module.exports = class ExtensionContainer extends BaseContainer {
           // skipping those
           // that would give a possibility to override any kind of ApolloServer setting but the downside is
           // that one extension could override setting returned by previous one
-          Logger.warn(
-            `ExtensionContainer: "${extensionName}" extension wants to use GraphQL "${name}" option which is not supported by Falcon extensions api yet - skipping that option`
+          this.logger.warn(
+            `"${extensionName}" extension wants to use GraphQL "${name}" option which is not supported by Falcon extensions api yet - skipping that option`
           );
           break;
       }

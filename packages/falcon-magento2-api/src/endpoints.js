@@ -2,7 +2,6 @@ const url = require('url');
 const { EndpointManager } = require('@deity/falcon-server-env');
 const get = require('lodash/get');
 const set = require('lodash/set');
-const Logger = require('@deity/falcon-logger');
 
 module.exports = class MagentoEndpoints extends EndpointManager {
   constructor(params) {
@@ -90,7 +89,7 @@ module.exports = class MagentoEndpoints extends EndpointManager {
       search: parsedUrl.search
     });
 
-    Logger.debug(`Proxying ${ctx.request.url} to ${targetUrl}`);
+    this.logger.debug(`Proxying ${ctx.request.url} to ${targetUrl}`);
 
     return this.fetch(targetUrl, {
       method: ctx.request.method,

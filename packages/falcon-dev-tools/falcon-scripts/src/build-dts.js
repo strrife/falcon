@@ -1,7 +1,6 @@
 const path = require('path');
 const glob = require('glob');
 const ts = require('typescript');
-const Logger = require('@deity/falcon-logger');
 
 class FormatHost {
   getCurrentDirectory() {
@@ -25,16 +24,16 @@ function tsc(fileNames, options) {
   allDiagnostics = ts.sortAndDeduplicateDiagnostics(allDiagnostics);
 
   if (allDiagnostics.some(x => x.category === 1)) {
-    Logger.error(ts.formatDiagnosticsWithColorAndContext(allDiagnostics, new FormatHost()));
+    console.error(ts.formatDiagnosticsWithColorAndContext(allDiagnostics, new FormatHost()));
 
     throw new Error();
   }
 
-  Logger.info(ts.formatDiagnosticsWithColorAndContext(allDiagnostics, new FormatHost()));
+  console.log(ts.formatDiagnosticsWithColorAndContext(allDiagnostics, new FormatHost()));
 }
 
 module.exports = ({ packagePath }) => {
-  Logger.log(`building d.ts...`);
+  console.log('building d.ts...');
 
   const files = glob.sync(`${path.join(packagePath, 'src')}/*(*.ts|*.tsx)`);
 
