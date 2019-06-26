@@ -16,7 +16,11 @@ export default initialConfig =>
         },
         connectToDevTools: process.env.NODE_ENV !== 'production',
         defaultOptions: {
-          __typename: 'ApolloClientDefaultOptions'
+          __typename: 'ApolloClientDefaultOptions',
+          mutate: {
+            __typename: 'ApolloClientDefaultMutateOptions',
+            awaitRefetchQueries: true
+          }
         },
         queryDeduplication: true
       },

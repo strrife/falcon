@@ -16,7 +16,6 @@ export type ApplyCouponResult = {
 export class ApplyCouponMutation extends Mutation<ApplyCouponResult, OperationInput<CouponInput>> {
   static defaultProps = {
     mutation: APPLY_COUPON,
-    awaitRefetchQueries: true,
     refetchQueries: ['Cart']
   };
 }

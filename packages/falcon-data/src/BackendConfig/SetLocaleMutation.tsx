@@ -22,7 +22,6 @@ export type SetLocaleVariables = {
 export class SetLocaleMutation extends Mutation<SetLocaleResponse, SetLocaleVariables> {
   static defaultProps = {
     mutation: SET_LOCALE,
-    awaitRefetchQueries: true,
     refetchQueries: ['BackendConfig']
   };
 }

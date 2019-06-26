@@ -14,7 +14,6 @@ export type CancelCouponResponse = {
 export class CancelCouponMutation extends Mutation<CancelCouponResponse, {}> {
   static defaultProps = {
     mutation: CANCEL_COUPON,
-    awaitRefetchQueries: true,
     refetchQueries: ['Cart']
   };
 }

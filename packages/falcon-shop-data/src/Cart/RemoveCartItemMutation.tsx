@@ -20,7 +20,6 @@ export class RemoveCartItemMutation extends Mutation<RemoveCartItemResponse, Ope
   static defaultProps = {
     mutation: REMOVE_CART_ITEM,
     refetchQueries: ['Cart'],
-    awaitRefetchQueries: true,
     update: (
       store: any,
       {

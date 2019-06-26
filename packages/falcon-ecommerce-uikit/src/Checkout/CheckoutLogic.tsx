@@ -213,7 +213,6 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           mutation: SET_SHIPPING,
           // refetch cart because totals have changed once shipping has been selected
           refetchQueries: ['Cart'],
-          awaitRefetchQueries: true,
           variables: {
             input: {
               billingAddress: this.state.values.billingAddress,
@@ -277,7 +276,6 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           mutation: PLACE_ORDER,
           // update cart once order is placed successfully
           refetchQueries: ['Cart', 'Orders'],
-          awaitRefetchQueries: true,
           variables: {
             input: {
               email: this.state.values.email,

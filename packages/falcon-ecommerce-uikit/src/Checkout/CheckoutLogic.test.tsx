@@ -7,10 +7,9 @@ import { ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 import { BaseSchema } from '@deity/falcon-server';
 import { Schema } from '@deity/falcon-shop-extension';
-
+import { wait } from '../../../../test/helpers';
 import { CheckoutLogic, CheckoutLogicInjectedProps } from './CheckoutLogic';
 import { PlaceOrderSuccessfulResult } from './CheckoutMutation';
-import { wait } from '../../../../test/helpers';
 
 const fragmentTypes = {
   __schema: {
@@ -109,7 +108,8 @@ const createApolloClient = (resolvers: any) => {
         errorPolicy: 'all'
       },
       mutate: {
-        errorPolicy: 'all'
+        errorPolicy: 'all',
+        awaitRefetchQueries: true
       }
     }
   });
