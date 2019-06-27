@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon-logger",
   "license": "OSL-3.0",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "homepage": "https://falcon.deity.io/docs/miscellaneous/falcon-logger",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-logger",
   "publishConfig": {
@@ -32,14 +32,14 @@
     "chalk": "^2.4.2",
     "get-source": "1.0.37",
     "jmespath": "^0.15.0",
+    "pino": "5.12.6",
     "pino-pretty": "3.2.0",
     "pump": "^3.0.0",
     "readable-stream": "^3.4.0",
-    "split2": "^3.1.1",
-    "pino": "5.12.6"
+    "split2": "^3.1.1"
   },
   "devDependencies": {
-    "@deity/falcon-scripts": "^0.0.1",
+    "@deity/falcon-scripts": "^0.0.2",
     "@types/args": "3.0.0",
     "@types/jmespath": "0.15.0",
     "@types/pino": "5.8.8",
