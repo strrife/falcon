@@ -1,4 +1,6 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop, no-underscore-dangle */
+import path from 'path';
+import fs from 'fs';
 import Logger from '@deity/falcon-logger';
 import {
   ApolloServerConfig,
@@ -14,11 +16,9 @@ import {
 import { GraphQLResolveInfo } from 'graphql';
 import { mergeSchemas, makeExecutableSchema } from 'graphql-tools';
 import deepMerge from 'deepmerge';
-import path from 'path';
-import fs from 'fs';
-import { BaseContainer } from './BaseContainer';
 import { getRootTypeFields } from '../graphqlUtils/schema';
 import { BackendConfig, ExtensionGraphQLConfig, ExtensionEntryMap } from '../types';
+import { BaseContainer } from './BaseContainer';
 
 export type GraphQLConfigDefaults = {
   schemas?: Array<string>;
@@ -79,7 +79,7 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
     for (const [apiName, api] of Object.entries(context.dataSources)) {
       if (typeof api.fetchBackendConfig !== 'function') {
         // Processing only supported APIs
-        return;
+        continue;
       }
       Logger.debug(`Fetching "${apiName}" API backend config`);
       const apiConfig = await api.fetchBackendConfig(obj, args, context, info);
@@ -149,9 +149,9 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
     // define context handler that invokes all context handlers delivered by extensions
     const { contextModifiers } = config;
     config.context = (arg: any) => {
-      let ctx = {};
+      const ctx = {};
       contextModifiers.forEach(modifier => {
-        ctx = Object.assign(ctx, typeof modifier === 'function' ? modifier(arg, ctx) : modifier);
+        Object.assign(ctx, typeof modifier === 'function' ? modifier(arg) : modifier);
       });
       return ctx;
     };
@@ -255,7 +255,7 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
     dataSourceName: string
   ): ExtensionGraphQLConfig | undefined {
     if (!typeDefs) {
-      return;
+      return undefined;
     }
 
     const rootTypes = getRootTypeFields(typeDefs as any);

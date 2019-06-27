@@ -171,13 +171,13 @@ export class FalconServer {
   }
 
   protected activeLocaleResolver(): GraphQLResolver<string, null, null> {
-    return async (obj, params, context, info) => context.session.locale;
+    return async (_obj, _params, context) => context.session.locale;
   }
 
   protected setLocaleMutation(): GraphQLResolver<BackendConfig, null, { locale: string }> {
     return async (obj, params, context, info) => {
       context.session.locale = params.locale;
-      return this.backendConfigResolver()(null, null, context, info);
+      return this.backendConfigResolver()(obj, null, context, info);
     };
   }
 
@@ -246,11 +246,9 @@ export class FalconServer {
       // eslint-disable-next-line import/no-dynamic-require
       const CacheBackend = packageName ? require(packageName)[`${capitalize(type)}Cache`] : InMemoryLRUCache;
       return new CacheBackend(options);
-    } catch (ex) {
-      this.logger.error(
-        `Cannot initialize cache backend using "${packageName}" package, GraphQL server will operate without cache`
-      );
-      this.logger.error(ex);
+    } catch (error) {
+      this.logger.error(`Cannot initialize cache backend using "${packageName}" package.`);
+      throw error;
     }
   }
 
