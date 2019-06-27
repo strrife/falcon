@@ -20,16 +20,16 @@ const makeExternalPredicate = externalsArr => {
  * Returns  `index.[supportedExtensions]` files
  * @param {string} directory directory to search in
  * @param {string[]} supportedExtensions extensions
- * @returns {string} entry point file
+ * @returns {string}
  */
-function getInputFile(directory, supportedExtensions) {
+function getEntryPointFile(directory, supportedExtensions) {
   const files = glob.sync(`${path.join(directory, 'index')}@(${supportedExtensions.join('|')})`);
   if (files.length > 1) {
-    throw new Error(`Directory "${directory}" should contain single "index" file!`);
+    throw new Error(`Directory "${directory}" should contain single entry point 'index.*' file!`);
   }
 
   if (files.length === 0) {
-    console.warn(`No entry point found in directory '${directory}'. Nothing to compile.`);
+    console.warn(`No entry point 'index.*' file found in directory '${directory}'. Nothing to compile.`);
 
     return undefined;
   }
@@ -43,7 +43,7 @@ module.exports.main = async () => {
   process.env.ROLLUP = true;
 
   const extensions = ['.tsx', '.ts', '.jsx', '.js'];
-  const inputFile = getInputFile(paths.pkgSrc, extensions);
+  const inputFile = getEntryPointFile(paths.pkgSrc, extensions);
   if (!inputFile) {
     return;
   }
@@ -80,7 +80,7 @@ module.exports.bin = async () => {
   process.env.ROLLUP = true;
 
   const extensions = ['.tsx', '.ts', '.jsx', '.js'];
-  const inputFile = getInputFile(paths.pkgBinSrc, extensions);
+  const inputFile = getEntryPointFile(paths.pkgBinSrc, extensions);
   if (!inputFile) {
     return;
   }
