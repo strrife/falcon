@@ -25,7 +25,7 @@
     "@babel/runtime": "^7.3.1"
   },
   "devDependencies": {
-    "@deity/falcon-scripts": "^0.0.1",
+    "@deity/falcon-scripts": "^0.0.2",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3"
