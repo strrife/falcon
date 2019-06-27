@@ -31,7 +31,7 @@
     "react-responsive": "6.1.1"
   },
   "devDependencies": {
-    "@deity/falcon-scripts": "^0.0.1",
+    "@deity/falcon-scripts": "^0.0.2",
     "@deity/falcon-shop-extension": "^0.4.2",
     "@deity/falcon-ui": "^0.2.2",
     "@types/react": "16.8.22",
