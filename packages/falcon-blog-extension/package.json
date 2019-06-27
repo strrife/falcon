@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon-blog-extension",
   "license": "OSL-3.0",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "homepage": "https://falcon.deity.io/docs/falcon-server/extensions#blog-extension",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-blog-extension",
   "publishConfig": {

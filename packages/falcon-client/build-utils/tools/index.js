@@ -1,4 +1,5 @@
 const path = require('path');
+const crypto = require('crypto');
 const fs = require('fs-extra');
 const deepMerge = require('deepmerge');
 const chalk = require('chalk');
@@ -94,8 +95,19 @@ function exitIfNoRequiredFiles(config) {
   }
 }
 
+function getFileHash(filePath) {
+  return new Promise((resolve, reject) => {
+    const hash = crypto.createHash('sha1');
+    const rs = fs.createReadStream(filePath);
+    rs.on('error', reject);
+    rs.on('data', chunk => hash.update(chunk));
+    rs.on('end', () => resolve(hash.digest('hex')));
+  });
+}
+
 module.exports = {
   getBuildConfig,
   exitIfBuildingItself,
-  exitIfNoRequiredFiles
+  exitIfNoRequiredFiles,
+  getFileHash
 };
