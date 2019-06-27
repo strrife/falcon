@@ -16,16 +16,36 @@ const makeExternalPredicate = externalsArr => {
   return id => externalPattern.test(id);
 };
 
+/**
+ * Returns  `index.[supportedExtensions]` files
+ * @param {string} directory directory to search in
+ * @param {string[]} supportedExtensions extensions
+ * @returns {string} entry point file
+ */
+function getInputFile(directory, supportedExtensions) {
+  const files = glob.sync(`${path.join(directory, 'index')}@(${supportedExtensions.join('|')})`);
+  if (files.length > 1) {
+    throw new Error(`Directory "${directory}" should contain single "index" file!`);
+  }
+
+  if (files.length === 0) {
+    console.warn(`No entry point found in directory '${directory}'. Nothing to compile.`);
+
+    return undefined;
+  }
+
+  return files[0];
+}
+
 module.exports.main = async () => {
   console.log('building cjs...');
 
   process.env.ROLLUP = true;
 
   const extensions = ['.tsx', '.ts', '.jsx', '.js'];
-
-  const inputFiles = glob.sync(`${path.join(paths.pkgSrc, 'index')}@(${extensions.map(x => `${x}`).join('|')})`);
-  if (inputFiles.length !== 1) {
-    throw new Error(`Directory "${paths.pkgSrc}" should contain single "index" file!`);
+  const inputFile = getInputFile(paths.pkgSrc, extensions);
+  if (!inputFile) {
+    return;
   }
 
   // eslint-disable-next-line
@@ -33,7 +53,7 @@ module.exports.main = async () => {
 
   const format = 'cjs';
   const inputOptions = {
-    input: inputFiles[0],
+    input: inputFile,
     external: makeExternalPredicate([
       ...Object.keys(packageJson.dependencies || {}),
       ...Object.keys(packageJson.peerDependencies || {})
@@ -60,14 +80,9 @@ module.exports.bin = async () => {
   process.env.ROLLUP = true;
 
   const extensions = ['.tsx', '.ts', '.jsx', '.js'];
-
-  const inputFiles = glob.sync(`${path.join(paths.pkgBinSrc, 'index')}@(${extensions.map(x => `${x}`).join('|')})`);
-  if (inputFiles.length === 0) {
-    // nothing to compile
+  const inputFile = getInputFile(paths.pkgBinSrc, extensions);
+  if (!inputFile) {
     return;
-  }
-  if (inputFiles.length !== 1) {
-    throw new Error(`'Directory '${paths.pkgBinSrc}' should contain single 'index' file!`);
   }
 
   // eslint-disable-next-line
@@ -75,7 +90,7 @@ module.exports.bin = async () => {
 
   const format = 'cjs';
   const inputOptions = {
-    input: inputFiles[0],
+    input: inputFile,
     external: makeExternalPredicate([
       ...Object.keys(packageJson.dependencies || {}),
       ...Object.keys(packageJson.peerDependencies || {})
