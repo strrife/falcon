@@ -23,7 +23,7 @@ module.exports.main = async () => {
 
   const extensions = ['.tsx', '.ts', '.jsx', '.js'];
 
-  const inputFiles = glob.sync(`${path.join(paths.pkgSrc, 'index')}@(${extensions.map(x => `*${x}`).join('|')})`);
+  const inputFiles = glob.sync(`${path.join(paths.pkgSrc, 'index')}@(${extensions.map(x => `${x}`).join('|')})`);
   if (inputFiles.length !== 1) {
     throw new Error(`Directory "${paths.pkgSrc}" should contain single "index" file!`);
   }
@@ -61,7 +61,7 @@ module.exports.bin = async () => {
 
   const extensions = ['.tsx', '.ts', '.jsx', '.js'];
 
-  const inputFiles = glob.sync(`${path.join(paths.pkgBinSrc, 'index')}@(${extensions.map(x => `*${x}`).join('|')})`);
+  const inputFiles = glob.sync(`${path.join(paths.pkgBinSrc, 'index')}@(${extensions.map(x => `${x}`).join('|')})`);
   if (inputFiles.length === 0) {
     // nothing to compile
     return;
