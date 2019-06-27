@@ -14,17 +14,17 @@ import {
   RemoteBackendConfig
 } from '@deity/falcon-server-env';
 import { GraphQLResolveInfo } from 'graphql';
-import { mergeSchemas, makeExecutableSchema } from 'graphql-tools';
+import { mergeSchemas, makeExecutableSchema, IExecutableSchemaDefinition } from 'graphql-tools';
 import deepMerge from 'deepmerge';
 import { getRootTypeFields } from '../graphqlUtils/schema';
 import { BackendConfig, ExtensionGraphQLConfig, ExtensionEntryMap } from '../types';
 import { BaseContainer } from './BaseContainer';
 
-export type GraphQLConfigDefaults = {
+export type GraphQLConfigDefaults = Partial<ApolloServerConfig> & {
   schemas?: Array<string>;
   contextModifiers?: ApolloServerConfig['context'][];
-  resolvers?: Array<GraphQLResolverMap>;
-} & Partial<ApolloServerConfig>;
+  rootResolvers?: IExecutableSchemaDefinition['resolvers'];
+};
 
 /**
  * Holds extensions and expose running hooks for for them.
@@ -138,7 +138,10 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
       },
       defaultConfig,
       {
-        resolvers: defaultConfig.resolvers && !Array.isArray(defaultConfig.resolvers) ? [defaultConfig.resolvers] : []
+        resolvers:
+          defaultConfig.rootResolvers && !Array.isArray(defaultConfig.rootResolvers)
+            ? [defaultConfig.rootResolvers]
+            : []
       }
     );
 
@@ -200,7 +203,7 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
           dest.schemas.push(...valueArray);
           break;
         case 'resolvers':
-          dest.resolvers.push(...valueArray);
+          (dest.resolvers as any).push(...valueArray);
           break;
         case 'context':
           dest.contextModifiers.push(value);

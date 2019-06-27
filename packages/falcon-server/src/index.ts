@@ -121,7 +121,7 @@ export class FalconServer {
         session: ctx.session
       }),
       cache: this.cache,
-      resolvers: [
+      rootResolvers: [
         {
           Query: {
             url: this.urlResolver(dynamicRouteResolver),
