@@ -110,6 +110,7 @@
   },
   "devDependencies": {
     "@deity/falcon-server": "^0.2.2",
+    "@types/fs-extra": "8.0.0",
     "graphql": "^14.1.1",
     "graphql-tag": "^2.9.2",
     "i18next": "^12.1.0",
