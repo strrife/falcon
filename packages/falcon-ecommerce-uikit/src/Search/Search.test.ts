@@ -1,7 +1,7 @@
 import { SortOrderDirection } from '@deity/falcon-data';
+import { FilterOperator } from '@deity/falcon-shop-extension';
 import { searchStateToURL } from './searchStateToURL';
 import { searchStateFromURL } from './searchStateFromURL';
-import { FilterOperator } from './types';
 
 describe('Filters', () => {
   describe('serializing and deserializing', () => {

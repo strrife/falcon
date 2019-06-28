@@ -1,6 +1,6 @@
 import qs from 'qs';
+import { FilterOperator } from '@deity/falcon-shop-extension';
 import { SearchState } from './SearchContext';
-import { FilterOperator } from './types';
 
 export function searchStateFromURL(url: string): Partial<SearchState> {
   const parts: any = qs.parse(url.replace('?', ''));

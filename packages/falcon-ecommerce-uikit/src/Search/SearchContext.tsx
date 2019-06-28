@@ -1,6 +1,6 @@
 import React from 'react';
 import { SortOrderInput, PaginationInput } from '@deity/falcon-data';
-import { FilterOperator, FilterInput } from './types';
+import { FilterOperator, FilterInput } from '@deity/falcon-shop-extension';
 
 export type SearchState = {
   term?: string;

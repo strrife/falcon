@@ -1,14 +1,14 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
 import { Button } from '@deity/falcon-ui';
+import { FilterOperator } from '@deity/falcon-shop-extension';
 import {
   FiltersLayout,
   FilterTile,
   SingleFilter,
   ColorFilter,
   MultipleFilter,
-  SearchConsumer,
-  FilterOperator
+  SearchConsumer
 } from '@deity/falcon-ecommerce-uikit';
 
 export const Filters = ({ data, ...rest }) => (
