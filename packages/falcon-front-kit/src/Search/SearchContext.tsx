@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchContextValue } from '@deity/falcon-front-kit';
+import { SearchContextValue } from './SearchContextValue';
 
 export const SearchContext = React.createContext<SearchContextValue>({
   state: {
@@ -12,5 +12,3 @@ export const SearchContext = React.createContext<SearchContextValue>({
   setSortOrder: () => {},
   setPagination: () => {}
 });
-
-export const SearchConsumer = SearchContext.Consumer;

@@ -5,9 +5,11 @@ import { mockSingleLink } from 'react-apollo/test-utils';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-client';
 import { InMemoryCache as Cache } from 'apollo-cache-inmemory';
-import { SearchProvider, SearchProviderImpl } from './SearchProvider';
-import { SearchContext, SearchContextType, SearchState } from './SearchContext';
 import { wait } from '../../../../test/helpers';
+import { SearchProvider, SearchProviderImpl } from './SearchProvider';
+import { SearchContextValue } from './SearchContextValue';
+import { SearchContext } from './SearchContext';
+import { SearchState } from './searchState';
 
 // custom serializing and deserializing go avoid problems when default implementation of those changes
 const stateToUrl = (state: SearchState) => JSON.stringify(state);
@@ -26,7 +28,7 @@ const sortOrders = [
 
 describe('SearchProvider', () => {
   let wrapper: ReactWrapper<any, any> | null;
-  let searchInfo: SearchContextType;
+  let searchInfo: SearchContextValue;
 
   // mounts all the required pieces (router, route, mocked apollo and search provider) and returns wrapper with all elements
   const renderSearchProvider = async (ContentComponent: any = null) => {

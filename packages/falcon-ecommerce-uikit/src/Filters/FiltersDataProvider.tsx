@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, themed } from '@deity/falcon-ui';
 import { FilterOperator, FilterInput } from '@deity/falcon-shop-extension';
+import { SearchConsumer } from '@deity/falcon-front-kit';
 import { Aggregation, SelectionType } from '../Category';
-import { SearchConsumer } from '../Search';
 
 export type FilterData = {
   field: string;

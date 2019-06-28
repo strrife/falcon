@@ -4,7 +4,6 @@ import { NetworkStatus } from 'apollo-client';
 import { Toggle } from 'react-powerplug';
 import { H1, H3, GridLayout, Box, FlexLayout, Divider, Button } from '@deity/falcon-ui';
 import {
-  SearchConsumer,
   CategoryProductsQuery,
   CategoryLayout,
   CategoryArea,
@@ -17,6 +16,7 @@ import {
   ShowMore,
   Loader
 } from '@deity/falcon-ecommerce-uikit';
+import { SearchConsumer } from '@deity/falcon-front-kit';
 import { Sidebar, Responsive } from '@deity/falcon-ui-kit';
 import { Filters } from './Filters';
 

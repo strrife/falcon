@@ -1,11 +1,11 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-// eslint-disable-next-line
 import { Location } from 'history';
-import { SortOrderListQuery, PaginationInput, SortOrderInput } from '@deity/falcon-data';
+import { SortOrderListQuery, SortOrderInput, PaginationInput } from '@deity/falcon-data';
 import { FilterOperator } from '@deity/falcon-shop-extension';
-import { SearchState, searchStateFromURL, searchStateToURL, areSortOrderInputsEqual } from '@deity/falcon-front-kit';
+import { areSortOrderInputsEqual } from '../SortOrder';
 import { SearchContext } from './SearchContext';
+import { SearchState, searchStateFromURL, searchStateToURL } from './searchState';
 
 export type SearchProviderProps = RouteComponentProps & {
   searchStateFromURL?(url: string): Partial<SearchState>;

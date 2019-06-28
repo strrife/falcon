@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, List, themed } from '@deity/falcon-ui';
-import { SearchConsumer } from '../Search';
+import { SearchConsumer } from '@deity/falcon-front-kit';
 import { SelectedFilterItem } from './FilterItem';
 import { getSelectedFilterOptionsFor, FilterData } from './FiltersDataProvider';
 
