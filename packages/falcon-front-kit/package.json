@@ -33,14 +33,18 @@
     "@deity/falcon-data": "^0.0.1",
     "@deity/falcon-shop-data": "^0.0.1",
     "formik": "^1.3.1",
-    "history": "4.9.0"
+    "history": "4.9.0",
+    "qs": "6.6.0"
   },
   "devDependencies": {
+    "@deity/falcon-shop-extension": "^0.4.2",
     "@deity/falcon-scripts": "^0.0.1",
     "@deity/falcon-i18n": "^0.2.5",
     "@types/history": "4.7.2",
     "@types/react": "16.8.22",
     "@types/react-router-dom": "4.3.4",
+    "apollo-client": "2.5.1",
+    "apollo-cache-inmemory": "1.5.1",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "prop-types": "15.7.2",
@@ -50,6 +54,7 @@
   },
   "peerDependencies": {
     "@deity/falcon-i18n": "^0.2.5",
+    "apollo-client": "^2.5.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-apollo": "2.5.8",
