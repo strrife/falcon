@@ -1376,14 +1376,6 @@
   resolved "https://registry.npmjs.org/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@deity/falcon-shop-extension@0.4.2":
-  version "0.4.2"
-  resolved "https://registry.npmjs.org/@deity/falcon-shop-extension/-/falcon-shop-extension-0.4.2.tgz#2abf5977e3d8561351513a73c459662328413b5c"
-  integrity sha512-Isw8X30zFjHKunu/Hwoxt8rHqjM1K71wfSf7zJSP0w8OmSPdgrymWusPxP0qIWE9uzcsi0iexX+jnS2S6gwa8Q==
-  dependencies:
-    "@deity/falcon-server-env" "^0.1.5"
-    graphql-tools "4.0.4"
-
 "@emotion/cache@^10.0.0", "@emotion/cache@^10.0.9":
   version "10.0.9"
   resolved "https://registry.npmjs.org/@emotion/cache/-/cache-10.0.9.tgz#e0c7b7a289f7530edcfad4dcf3858bd2e5700a6f"

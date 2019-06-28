@@ -24,7 +24,7 @@
   "dependencies": {
     "@babel/runtime": "7.3.4",
     "@deity/falcon-data": "0.0.1",
-    "@deity/falcon-shop-extension": "0.4.2"
+    "@deity/falcon-shop-extension": "0.4.3"
   },
   "devDependencies": {
     "@deity/falcon-scripts": "^0.0.2",
