@@ -1,6 +1,6 @@
 {
   "name": "@deity/falcon-i18n",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "license": "OSL-3.0",
   "homepage": "https://falcon.deity.io/docs/falcon-client/internationalization",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-i18n",
@@ -26,7 +26,7 @@
     "@babel/runtime": "7.3.4"
   },
   "devDependencies": {
-    "@deity/falcon-scripts": "^0.0.1",
+    "@deity/falcon-scripts": "^0.0.2",
     "@types/i18next": "12.1.0",
     "@types/react": "16.8.22",
     "i18next": "^12.1.0",

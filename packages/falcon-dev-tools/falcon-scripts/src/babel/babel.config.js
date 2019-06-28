@@ -1,6 +1,6 @@
-const { NODE_ENV, TARGET, ROLLUP } = process.env;
+const { NODE_ENV, ROLLUP } = process.env;
 
-const targetNode = TARGET === 'NODE' || NODE_ENV === 'test';
+const targetNode = NODE_ENV === 'test';
 const rollupCjsBuild = ROLLUP !== undefined;
 const useESModules = !(rollupCjsBuild || targetNode);
 

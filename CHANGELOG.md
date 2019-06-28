@@ -4,20 +4,26 @@
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
 
-## Falcon vNEXT
+## Falcon v1.2 (2019-06-26)
 
-### Falcon Client vNext
+### Falcon Client v0.5.0 (2019-06-26)
 
 - changed Service Worker pre-cache strategy to cache all static content and skip requesting Falcon Client `SSR` until the next Service Worker release ([#470](https://github.com/deity-io/falcon/pull/470)), also:
   - upgraded Workbox to the latest 4.3.1 version
   - add build for Service Worker `sw.js` file
 - added source-map support for all modes ([#491](https://github.com/deity-io/falcon/pull/491))
+- improvement: made eslint optional ([#506](https://github.com/deity-io/falcon/pull/506))
 
-### Falcon Service Worker
+### Falcon Service Worker v0.0.1 (2019-06-26)
 
 - initial release
 
-### Falcon Server vNext
+### Falcon Logger v1.0 (2019-06-26)
+
+- changed Logger provider to [Pino](http://getpino.io/) ([#471](https://github.com/deity-io/falcon/pull/471))
+- added `setApp`, `getFor` and `traceTime` API methods ([#471](https://github.com/deity-io/falcon/pull/471))
+
+### Falcon Server v0.3.0 (2019-06-26)
 
 - added source-map support for all modes ([#491](https://github.com/deity-io/falcon/pull/491))
 

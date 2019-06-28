@@ -1,5 +1,4 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
-const Logger = require('@deity/falcon-logger');
 const { Events } = require('@deity/falcon-server-env');
 const BaseContainer = require('./BaseContainer');
 
@@ -57,7 +56,7 @@ module.exports = class ApiContainer extends BaseContainer {
             name: apiInstance.name
           });
 
-          Logger.debug(`ApiContainer: "${apiInstance.name}" API DataSource instantiated`);
+          this.logger.debug(`"${apiInstance.name}" API DataSource instantiated`);
 
           return apiInstance;
         };
