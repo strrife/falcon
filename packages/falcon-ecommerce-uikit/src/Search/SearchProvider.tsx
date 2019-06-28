@@ -2,12 +2,10 @@ import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 // eslint-disable-next-line
 import { Location } from 'history';
-import { PaginationInput } from '@deity/falcon-data';
+import { SortOrderListQuery, PaginationInput, SortOrderInput } from '@deity/falcon-data';
 import { FilterOperator } from '@deity/falcon-shop-extension';
-import { SortOrdersQuery, SortOrderInput, AreSortOrderInputsEqual } from '../SortOrders/SortOrdersQuery';
-import { searchStateFromURL } from './searchStateFromURL';
-import { searchStateToURL } from './searchStateToURL';
-import { SearchContext, SearchState } from './SearchContext';
+import { SearchState, searchStateFromURL, searchStateToURL, areSortOrderInputsEqual } from '@deity/falcon-front-kit';
+import { SearchContext } from './SearchContext';
 
 export type SearchProviderProps = RouteComponentProps & {
   searchStateFromURL?(url: string): Partial<SearchState>;
@@ -87,7 +85,7 @@ export class SearchProviderImpl extends React.Component<SearchProviderImplProps,
   setTerm = (term: string) => this.updateURL({ ...this.state, term });
 
   sortOrderExists = (sort?: SortOrderInput): boolean =>
-    this.props.sortOrders.some(x => (!x && !sort) || AreSortOrderInputsEqual(x, sort));
+    this.props.sortOrders.some(x => (!x && !sort) || areSortOrderInputsEqual(x, sort));
 
   removeFilters = () => this.updateURL({ ...this.state, filters: [] });
 
@@ -137,9 +135,9 @@ export class SearchProviderImpl extends React.Component<SearchProviderImplProps,
 }
 
 const SearchProviderWithSortOrders: React.SFC<SearchProviderProps> = ({ ...rest }) => (
-  <SortOrdersQuery>
-    {({ sortOrders }) => <SearchProviderImpl {...rest} sortOrders={sortOrders.map(x => x.value)} />}
-  </SortOrdersQuery>
+  <SortOrderListQuery>
+    {({ sortOrderList }) => <SearchProviderImpl {...rest} sortOrders={sortOrderList.map(x => x.value)} />}
+  </SortOrderListQuery>
 );
 
 // wrap everything in router so SearchProviderImpl has access to history and location

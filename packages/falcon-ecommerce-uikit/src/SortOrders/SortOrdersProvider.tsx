@@ -1,5 +1,6 @@
 import React from 'react';
-import { SortOrdersQuery, SortOrder, AreSortOrderInputsEqual } from './SortOrdersQuery';
+import { SortOrderListQuery, SortOrder } from '@deity/falcon-data';
+import { areSortOrderInputsEqual } from '@deity/falcon-front-kit';
 import { SearchConsumer } from '../Search';
 
 type SortOrdersProviderRenderProps = {
@@ -13,17 +14,17 @@ type SortOrdersProviderProps = {
 };
 
 export const SortOrdersProvider: React.SFC<SortOrdersProviderProps> = ({ children }) => (
-  <SortOrdersQuery>
-    {({ sortOrders }) => (
+  <SortOrderListQuery>
+    {({ sortOrderList }) => (
       <SearchConsumer>
         {({ state: { sort }, setSortOrder }) =>
           children({
-            items: sortOrders,
-            value: sortOrders.find(x => (!x.value && !sort) || AreSortOrderInputsEqual(x.value, sort))!,
+            items: sortOrderList,
+            value: sortOrderList.find(x => (!x.value && !sort) || areSortOrderInputsEqual(x.value, sort))!,
             onChange: x => setSortOrder(x.value)
           })
         }
       </SearchConsumer>
     )}
-  </SortOrdersQuery>
+  </SortOrderListQuery>
 );

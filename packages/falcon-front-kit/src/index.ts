@@ -1,5 +1,7 @@
 export * from './EnsureTTI';
 export * from './ScrollToTop';
+export * from './Search';
+export * from './SortOrder';
 export * from './Router';
 export * from './Routes';
 export * from './DynamicRoute';
