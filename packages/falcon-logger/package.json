@@ -7,8 +7,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "module": "dist/index.js",
   "main": "dist/falcon-logger.cjs.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "files": [
