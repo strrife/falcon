@@ -1,9 +1,8 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop, import/no-extraneous-dependencies */
 import 'jest-extended';
+import nock from 'nock';
+import { ContextRequestOptions, ContextData } from '../types';
 import { ApiDataSource } from './ApiDataSource';
-import { ContextRequestOptions, ContextData, ContextFetchRequest, ContextFetchResponse } from '../types';
-
-import nock = require('nock');
 
 class CustomApiDataSource extends ApiDataSource {
   async getInfo(): Promise<object> {
