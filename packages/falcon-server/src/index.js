@@ -16,6 +16,7 @@ const body = require('koa-body');
 const get = require('lodash/get');
 const capitalize = require('lodash/capitalize');
 const ApiContainer = require('./containers/ApiContainer');
+const ComponentContainer = require('./containers/ComponentContainer');
 const ExtensionContainer = require('./containers/ExtensionContainer');
 const EndpointContainer = require('./containers/EndpointContainer');
 const DynamicRouteResolver = require('./resolvers/DynamicRouteResolver');
@@ -32,6 +33,7 @@ class FalconServer {
     this.server = null;
     this.cache = null;
     this.backendConfig = {};
+    this.components = {};
     const { maxListeners = 20, verboseEvents = false } = this.config;
     if (config.logLevel) {
       Logger.setLogLevel(config.logLevel);
@@ -60,6 +62,7 @@ class FalconServer {
 
   async initialize() {
     await this.eventEmitter.emitAsync(Events.BEFORE_INITIALIZED, this);
+    await this.initializeComponents();
     await this.initializeServerApp();
     await this.initializeContainers();
     await this.initializeApolloServer();
@@ -87,6 +90,7 @@ class FalconServer {
       context: ({ ctx }) => ({
         cache: this.cache,
         config: this.config,
+        components: this.componentContainer.components,
         headers: ctx.req.headers,
         session: ctx.req.session
       }),
@@ -180,6 +184,14 @@ class FalconServer {
 
     this.endpointContainer = new EndpointContainer(this.eventEmitter);
     await this.endpointContainer.registerEndpoints(this.config.endpoints);
+  }
+
+  async initializeComponents() {
+    await this.eventEmitter.emitAsync(Events.BEFORE_COMPONENT_CONTAINER_CREATED, this.config.components);
+    /** @type {ComponentContainer} */
+    this.componentContainer = new ComponentContainer(this.eventEmitter);
+    await this.componentContainer.registerComponents(this.config.components);
+    await this.eventEmitter.emitAsync(Events.AFTER_COMPONENT_CONTAINER_CREATED, this.componentContainer);
   }
 
   /**
