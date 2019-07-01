@@ -72,11 +72,12 @@ export const getFieldValue: GetFieldValueFn = (sourceValue: object | Array<objec
 export const findIdFieldName = (gqlType: GraphQLOutputType): string | undefined => {
   const rootType = getRootType(gqlType);
   const { name: objectTypeName } = rootType as GraphQLNamedType;
-  const fields = (rootType as GraphQLObjectType).getFields();
 
   if (isScalarType(gqlType)) {
     throw new Error(`Caching for "${objectTypeName}" scalar type is not supported yet`);
   }
+
+  const fields = (rootType as GraphQLObjectType).getFields();
 
   return Object.keys(fields).find(fieldName => {
     const { [fieldName]: fieldType } = fields;
