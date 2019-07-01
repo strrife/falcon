@@ -90,7 +90,7 @@ class FalconServer {
       context: ({ ctx }) => ({
         cache: this.cache,
         config: this.config,
-        components: this.componentContainer.components,
+        components: ctx.components,
         headers: ctx.req.headers,
         session: ctx.req.session
       }),
@@ -142,6 +142,7 @@ class FalconServer {
 
     this.router = new Router();
 
+    this.app.context.components = this.componentContainer.components;
     this.app.use(body());
     this.app.use(
       cors({
