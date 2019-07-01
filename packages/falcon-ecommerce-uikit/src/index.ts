@@ -24,4 +24,3 @@ export * from './Locale';
 export * from './Errors';
 export * from './Filters';
 export * from './TwoStepWizard';
-export * from './SortOrders';

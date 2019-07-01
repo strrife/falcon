@@ -8,7 +8,6 @@ import {
   CategoryLayout,
   CategoryArea,
   ShowingOutOf,
-  SortOrdersProvider,
   SortOrderDropdown,
   getFiltersData,
   FiltersSummary,
@@ -16,7 +15,7 @@ import {
   ShowMore,
   Loader
 } from '@deity/falcon-ecommerce-uikit';
-import { SearchConsumer } from '@deity/falcon-front-kit';
+import { SearchConsumer, SortOrderPickerProvider } from '@deity/falcon-front-kit';
 import { Sidebar, Responsive } from '@deity/falcon-ui-kit';
 import { Filters } from './Filters';
 
@@ -49,9 +48,9 @@ const CategoryPage = ({ id }) => (
                 <H1>{name}</H1>
                 <FlexLayout justifyContent="space-between" alignItems="center">
                   <ShowingOutOf itemsCount={items.length} totalItems={pagination.totalItems} />
-                  <SortOrdersProvider>
+                  <SortOrderPickerProvider>
                     {sortOrdersProps => <SortOrderDropdown {...sortOrdersProps} />}
-                  </SortOrdersProvider>
+                  </SortOrderPickerProvider>
                 </FlexLayout>
                 <Divider mt="xs" />
               </Box>

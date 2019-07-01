@@ -1,18 +1,18 @@
 import React from 'react';
 import { SortOrderListQuery, SortOrder } from '@deity/falcon-data';
-import { SearchConsumer, areSortOrderInputsEqual } from '@deity/falcon-front-kit';
+import { SearchConsumer } from '../Search';
+import { areSortOrderInputsEqual } from './areSortOrderInputsEqual';
 
-type SortOrdersProviderRenderProps = {
+export type SortOrderPickerProviderRenderProps = {
   items: SortOrder[];
   value: SortOrder;
   onChange(active: SortOrder): void;
 };
 
-type SortOrdersProviderProps = {
-  children(props: SortOrdersProviderRenderProps): any;
+export type SortOrderPickerProviderProps = {
+  children(props: SortOrderPickerProviderRenderProps): any;
 };
-
-export const SortOrdersProvider: React.SFC<SortOrdersProviderProps> = ({ children }) => (
+export const SortOrderPickerProvider: React.SFC<SortOrderPickerProviderProps> = ({ children }) => (
   <SortOrderListQuery>
     {({ sortOrderList }) => (
       <SearchConsumer>
