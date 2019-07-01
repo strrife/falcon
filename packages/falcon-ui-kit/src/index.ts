@@ -4,5 +4,6 @@ export * from './Forms';
 export * from './Layouts';
 export * from './Locale';
 export * from './Sidebar';
+export * from './SortOrder';
 export * from './Responsive';
 export * from './helpers';
