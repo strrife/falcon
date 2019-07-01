@@ -11,7 +11,7 @@ module.exports = {
       {
         modules: false,
         loose: true,
-        targets: targetNode ? { node: true } : 'defaults'
+        targets: !useESModules ? { node: true } : 'defaults'
       }
     ],
     require.resolve('@babel/preset-typescript'),
