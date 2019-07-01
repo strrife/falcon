@@ -1,3 +1,4 @@
+import { readFileSync } from 'fs';
 import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { makeExecutableSchema, mergeSchemas } from 'graphql-tools';
@@ -5,12 +6,12 @@ import { SchemaLink } from 'apollo-link-schema';
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
-import { BaseSchema } from '@deity/falcon-server';
-import { Schema } from '@deity/falcon-shop-extension';
-
+import { wait } from '../../../../test/helpers';
 import { CheckoutLogic, CheckoutLogicInjectedProps } from './CheckoutLogic';
 import { PlaceOrderSuccessfulResult } from './CheckoutMutation';
-import { wait } from '../../../../test/helpers';
+
+const BaseSchema = readFileSync(require.resolve('@deity/falcon-server/schema.graphql'), 'utf8');
+const Schema = readFileSync(require.resolve('@deity/falcon-shop-extension/schema.graphql'), 'utf8');
 
 const fragmentTypes = {
   __schema: {
