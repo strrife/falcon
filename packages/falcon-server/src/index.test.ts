@@ -23,13 +23,17 @@ describe('Falcon Server', () => {
 
   it('Should handle an incoming request to a custom API DataSource endpoint', async (done: jest.DoneCallback) => {
     const server = new FalconServer(config);
-    await server.initialize();
+    let callback;
 
     server.eventEmitter.on(Events.AFTER_WEB_SERVER_CREATED, async (app: Koa) => {
-      const serverCallback = app.callback();
-      const response = await supertest(serverCallback).get('/api/info');
+      callback = app.callback();
+    });
+    server.eventEmitter.on(Events.AFTER_INITIALIZED, async () => {
+      const response = await supertest(callback).get('/api/info');
       expect(response.text).toBe('foo');
       done();
     });
+
+    await server.initialize();
   });
 });

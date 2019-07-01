@@ -1,6 +1,6 @@
 import { ApiDataSource, ApiUrlPriority } from '@deity/falcon-server-env';
 import { EventEmitter2 } from 'eventemitter2';
-import { ExtensionContainer } from '../containers/ExtensionContainer';
+import { DynamicRouteResolver } from './DynamicRouteResolver';
 
 class Api1 extends ApiDataSource {
   getFetchUrlPriority(url) {
@@ -24,8 +24,6 @@ class Api2 extends ApiDataSource {
 describe('DynamicRouteResolver', () => {
   it('Should correctly resolve DynamicRoute request', async () => {
     const ee = new EventEmitter2();
-    const extensionContainer = new ExtensionContainer(ee);
-
     const dataSources = {
       api1: new Api1({
         eventEmitter: ee
@@ -35,18 +33,22 @@ describe('DynamicRouteResolver', () => {
       })
     };
 
-    extensionContainer.extensions.set(ext1.name, ext1);
-    extensionContainer.extensions.set(ext2.name, ext2);
-    const dynamicResolver = new DynamicRouteResolver(extensionContainer);
+    const spyApi1 = jest.spyOn(dataSources.api1, 'fetchUrl');
+    const spyApi2 = jest.spyOn(dataSources.api2, 'fetchUrl');
+
+    const dynamicResolver = new DynamicRouteResolver();
 
     const result = await dynamicResolver.fetchUrl({}, { path: 'foo.html' }, { dataSources });
-    expect(result).toEqual({ id: 2, path: 'foo.html', type: 'bar' });
-    expect(spyExt2).toHaveBeenCalled();
-    expect(spyExt1).not.toHaveBeenCalled();
+    expect(result).toEqual({ id: 2, path: 'foo.html', redirect: false, type: 'bar' });
+    expect(spyApi2).toHaveBeenCalled();
+    expect(spyApi1).not.toHaveBeenCalled();
+
+    spyApi1.mockClear();
+    spyApi2.mockClear();
 
     const result2 = await dynamicResolver.fetchUrl({}, { path: '/blog/bar/page' }, { dataSources });
-    expect(result2).toEqual({ id: 1, path: '/blog/bar/page', type: 'foo' });
-    expect(spyExt1).toHaveBeenCalled();
-    expect(spyExt2).not.toHaveBeenCalled();
+    expect(result2).toEqual({ id: 1, path: '/blog/bar/page', redirect: false, type: 'foo' });
+    expect(spyApi1).toHaveBeenCalled();
+    expect(spyApi2).not.toHaveBeenCalled();
   });
 });

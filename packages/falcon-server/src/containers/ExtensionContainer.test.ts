@@ -5,13 +5,13 @@ import { BaseSchema } from '..';
 
 const extensions = {
   shop: {
-    package: 'fake-shop-extension',
+    package: '../__mocks__/fake-shop-extension',
     config: {
       apiUrl: 'https://example.com'
     }
   },
   reviews: {
-    package: 'fake-product-reviews-extension'
+    package: '../__mocks__/fake-product-reviews-extension'
   }
 };
 
@@ -35,14 +35,6 @@ describe('ExtensionContainer', () => {
     ee = new EventEmitter2();
     container = new ExtensionContainer(ee);
     await container.registerExtensions(extensions);
-  });
-
-  it('Should correctly load extensions passed in configuration', async () => {
-    expect(container.extensions.size).toEqual(2);
-  });
-
-  it('Should correctly pass configuration to extensions', () => {
-    expect(container.extensions.get('shop').config.apiUrl).toEqual('https://example.com');
   });
 
   it('Should merge objects', () => {
@@ -90,7 +82,7 @@ describe('ExtensionContainer', () => {
     ];
 
     testCases.forEach(([incoming, expected]) => {
-      expect(container.mergeConfigs(incoming)).toEqual(expected);
+      expect(container.mergeBackendConfigs(incoming)).toEqual(expected);
     });
   });
 
