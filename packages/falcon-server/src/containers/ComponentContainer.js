@@ -23,7 +23,9 @@ module.exports = class ComponentContainer extends BaseContainer {
         if (!ComponentClass) {
           return;
         }
-        this.components = ComponentClass.prototype ? new ComponentClass(config) : ComponentClass(config);
+        this.components[componentKey] = ComponentClass.prototype
+          ? new ComponentClass(config)
+          : await ComponentClass(config);
       }
     }
   }
