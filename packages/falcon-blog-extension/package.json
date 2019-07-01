@@ -7,6 +7,11 @@
   "publishConfig": {
     "access": "public"
   },
+  "files": [
+    "src",
+    "schema.graphql",
+    "README.md"
+  ],
   "main": "src/index.js",
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }
