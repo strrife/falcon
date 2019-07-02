@@ -2,7 +2,6 @@ import { GraphQLResolveInfo, GraphQLSchema, GraphQLObjectType } from 'graphql';
 import { makeExecutableSchema } from 'graphql-tools';
 import { EventEmitter2 } from 'eventemitter2';
 import Logger, { Logger as LoggerType } from '@deity/falcon-logger';
-import { ApiDataSource } from './ApiDataSource';
 import {
   ApiUrlPriority,
   IConfigurableConstructorParams,
@@ -11,6 +10,7 @@ import {
   FetchUrlResult,
   GraphQLContext
 } from '../types';
+import { ApiDataSource } from './ApiDataSource';
 
 export type ExtensionConstructorParams = IConfigurableConstructorParams & {
   /** ExtensionContainer instance */
@@ -168,9 +168,8 @@ export abstract class Extension {
             : typeDefs
                 // Removing "extend type X" to avoid "X type missing" errors
                 .replace(/extend\s+type/gm, 'type')
-                // Removing directives
-                .replace(/@(\w+)\(.*\)/gm, '')
-                .replace(/@(\w+)/gm, '')
+                // Removing directives and their definitions
+                .replace(/(directive )?@\w+[^{\n]*/gm, '')
                 // Removing type references from the base schema types
                 .replace(/:\s*(\w+)/gm, ': Int')
                 .replace(/\[\s*(\w+)\s*]/gm, '[Int]')
