@@ -9,6 +9,9 @@
   },
   "main": "src/index.js",
   "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
     "setupFiles": [
       "../../test/nodeEnvSetupFile"
     ]
