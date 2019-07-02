@@ -169,7 +169,8 @@ export abstract class Extension {
                 // Removing "extend type X" to avoid "X type missing" errors
                 .replace(/extend\s+type/gm, 'type')
                 // Removing directives and their definitions
-                .replace(/(directive )?@\w+[^{\n]*/gm, '')
+                .replace(/(directive @(.*))/gm, '')
+                .replace(/@(.*[^{\n])/gm, '')
                 // Removing type references from the base schema types
                 .replace(/:\s*(\w+)/gm, ': Int')
                 .replace(/\[\s*(\w+)\s*]/gm, '[Int]')
