@@ -208,6 +208,9 @@ module.exports = class ExtensionContainer extends BaseContainer {
         case 'context':
           dest.contextModifiers.push(value);
           break;
+        case 'schemaDirectives':
+          Object.assign(dest.schemaDirectives, value);
+          break;
         case 'dataSources':
           Object.assign(dest.dataSources, value);
           break;
