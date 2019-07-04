@@ -9,7 +9,6 @@
     "access": "public"
   },
   "files": [
-    "dist",
     "src",
     "README.md"
   ],
