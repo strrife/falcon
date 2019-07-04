@@ -17,11 +17,11 @@ import {
   FlexLayout
 } from '@deity/falcon-ui';
 import { I18n, T } from '@deity/falcon-i18n';
-import { MiniCartData } from './MiniCartQuery';
 import { RemoveCartItemMutation, UpdateCartItemMutation } from '../Cart/CartMutation';
 import { CloseSidebarMutation } from '../Sidebar';
 import { toGridTemplate, prettyScrollbars } from '../helpers';
 import { LocaleProvider, Price } from '../Locale';
+import { MiniCartData } from './MiniCartQuery';
 
 export const MiniCartProductArea = {
   empty: '.',
@@ -108,7 +108,7 @@ const MiniCartProduct: React.SFC<any> = ({ product }) => (
                 disabled={loading}
                 min="1"
                 name="qty"
-                defaultValue={String(product.qty)}
+                value={product.qty}
                 aria-label={t('product.quantity')}
                 onChange={ev =>
                   updateCartItem({
@@ -151,7 +151,6 @@ export const MiniCart: React.SFC<MiniCartData> = ({ cart: { quoteCurrency, items
           <H3 gridArea={MiniCartLayoutArea.title}>
             <T id="miniCart.title" />
           </H3>
-
           <Box gridArea={MiniCartLayoutArea.items} css={props => ({ ...prettyScrollbars(props.theme) })}>
             <MiniCartProducts products={items} />
             {!items.length && (
