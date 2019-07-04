@@ -61,7 +61,7 @@
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.7.0",
     "graphql-tag": "2.10.0",
-    "graphql-tools": "^4.0.4",
+    "graphql-tools": "^4.0.0",
     "i18next": "^12.1.0",
     "prop-types": "15.6.2",
     "react": "^16.6.3",

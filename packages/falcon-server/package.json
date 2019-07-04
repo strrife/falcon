@@ -8,6 +8,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "files": [
+    "src",
+    "README.md"
+  ],
   "bin": {
     "falcon-server": "bin/falcon-server.js"
   },
@@ -41,7 +45,7 @@
     "apollo-server-koa": "2.4.8",
     "eventemitter2": "5.0.1",
     "graphql": "^14.1.1",
-    "graphql-tools": "4.0.4",
+    "graphql-tools": "^4.0.0",
     "graphql-type-json": "0.2.4",
     "koa": "2.7.0",
     "koa-body": "4.0.8",
