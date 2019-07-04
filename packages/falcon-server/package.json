@@ -8,6 +8,11 @@
   "publishConfig": {
     "access": "public"
   },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
   "bin": {
     "falcon-server": "bin/falcon-server.js"
   },
