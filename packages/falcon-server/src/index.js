@@ -31,6 +31,7 @@ class FalconServer {
     this.loggableErrorCodes = [codes.INTERNAL_SERVER_ERROR, codes.GRAPHQL_PARSE_FAILED];
     this.config = config;
     this.server = null;
+    this.httpServer = null;
     this.cache = null;
     this.backendConfig = {};
     this.components = {};
@@ -301,6 +302,10 @@ class FalconServer {
     };
   }
 
+  isSubscriptionsServerRequired() {
+    return 'Subscription' in this.apolloServerConfig.schema.getTypeMap();
+  }
+
   start() {
     const handleStartupError = err => {
       this.eventEmitter.emitAsync(Events.ERROR, err).then(() => {
@@ -316,17 +321,27 @@ class FalconServer {
       .then(
         () =>
           new Promise(resolve => {
-            this.app.listen({ port: this.config.port }, () => {
+            this.httpServer = this.app.listen({ port: this.config.port }, () => {
               this.logger.info(`🚀 Server ready at http://localhost:${this.config.port}`);
               this.logger.info(
                 `🌍 GraphQL endpoint ready at http://localhost:${this.config.port}${this.server.graphqlPath}`
               );
+              this.startSubscriptionServer();
               resolve();
             });
           }, handleStartupError)
       )
       .then(() => this.eventEmitter.emitAsync(Events.AFTER_STARTED, this))
       .catch(handleStartupError);
+  }
+
+  startSubscriptionServer() {
+    if (this.isSubscriptionsServerRequired()) {
+      this.server.installSubscriptionHandlers(this.httpServer);
+      this.logger.info(
+        `🔌 GraphQL Subscriptions endpoint ready at ws://localhost:${this.config.port}${this.server.subscriptionsPath}`
+      );
+    }
   }
 }
 
