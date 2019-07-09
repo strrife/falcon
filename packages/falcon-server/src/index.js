@@ -9,9 +9,11 @@ const { ApolloServer } = require('apollo-server-koa');
 const { EventEmitter2 } = require('eventemitter2');
 const GraphQLJSON = require('graphql-type-json');
 const cors = require('@koa/cors');
+const Cookies = require('cookies');
 const Koa = require('koa');
 const Router = require('koa-router');
 const session = require('koa-session');
+const SessionContext = require('koa-session/lib/context');
 const body = require('koa-body');
 const get = require('lodash/get');
 const capitalize = require('lodash/capitalize');
@@ -104,13 +106,28 @@ class FalconServer {
       schemaDirectives: this.getDefaultSchemaDirectives(),
       formatError: error => this.formatGraphqlError(error),
       // inject session and headers into GraphQL context
-      context: ({ ctx }) => ({
-        cache: this.cache,
-        config: this.config,
-        components: ctx.components,
-        headers: ctx.req.headers,
-        session: ctx.req.session
-      }),
+      context: ({ ctx, connection }) => {
+        const context = {
+          cache: this.cache,
+          config: this.config,
+          components: this.componentContainer.components
+        };
+
+        // Subscription request
+        if (connection) {
+          return {
+            ...context,
+            ...connection.context
+          };
+        }
+
+        // Query/Mutation request
+        return {
+          ...context,
+          headers: ctx.req.headers,
+          session: ctx.req.session
+        };
+      },
       cache: this.cache,
       resolvers: {
         Query: {
@@ -125,6 +142,7 @@ class FalconServer {
         },
         JSON: GraphQLJSON
       },
+      subscriptions: this.getSubscriptionsOptions(),
       tracing: this.config.debug,
       playground: this.config.debug && {
         settings: {
@@ -335,6 +353,9 @@ class FalconServer {
       .catch(handleStartupError);
   }
 
+  /**
+   * Starts (if needed) the subscriptions server (based on the stitched GraphQL Schema - Subscription type has resolvers)
+   */
   startSubscriptionsServer() {
     if (this.isSubscriptionsServerRequired()) {
       this.server.installSubscriptionHandlers(this.httpServer);
@@ -342,6 +363,41 @@ class FalconServer {
         `🔌 GraphQL Subscriptions endpoint ready at ws://localhost:${this.config.port}${this.server.subscriptionsPath}`
       );
     }
+  }
+
+  /**
+   * Get default Subscriptions Options with even handlers to properly initialize required context values
+   */
+  getSubscriptionsOptions() {
+    return {
+      onConnect: (connectionParams, websocket, context) => {
+        // Checking signed cookies (without a `req` argument, since for Subscriptions there're no "requests")
+        try {
+          const cookies = new Cookies(
+            context.request,
+            {},
+            {
+              keys: this.config.session.keys
+            }
+          );
+          // Manually decrypting session cookie
+          const sessionContext = new SessionContext(
+            {
+              sessionOptions: {},
+              cookies
+            },
+            this.config.session.options
+          );
+
+          return {
+            headers: context.request.headers,
+            session: sessionContext.get()
+          };
+        } catch (e) {
+          throw new Error('Failed to parse Cookie');
+        }
+      }
+    };
   }
 }
 
