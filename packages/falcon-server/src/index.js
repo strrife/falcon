@@ -326,7 +326,7 @@ class FalconServer {
               this.logger.info(
                 `🌍 GraphQL endpoint ready at http://localhost:${this.config.port}${this.server.graphqlPath}`
               );
-              this.startSubscriptionServer();
+              this.startSubscriptionsServer();
               resolve();
             });
           }, handleStartupError)
@@ -335,7 +335,7 @@ class FalconServer {
       .catch(handleStartupError);
   }
 
-  startSubscriptionServer() {
+  startSubscriptionsServer() {
     if (this.isSubscriptionsServerRequired()) {
       this.server.installSubscriptionHandlers(this.httpServer);
       this.logger.info(
