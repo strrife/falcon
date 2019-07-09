@@ -371,7 +371,7 @@ class FalconServer {
   getSubscriptionsOptions() {
     return {
       onConnect: (connectionParams, websocket, context) => {
-        // Checking signed cookies (without a `req` argument, since for Subscriptions there're no "requests")
+        // Checking signed cookies (without a `res` argument, since for Subscriptions there're no traditional "responses")
         try {
           const cookies = new Cookies(
             context.request,
