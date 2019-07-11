@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link, Icon, DefaultThemeProps, Box } from '@deity/falcon-ui';
-
 import { toGridTemplate } from '../helpers';
 import { MiniCartIcon } from '../MiniCart';
 import { CartQuery, CartData } from '../Cart';
@@ -40,35 +39,37 @@ export const Searchbar = () => (
     <Link aria-label="DEITY" pl="sm" height="xxl" as={RouterLink} gridArea={SearchBarArea.logo} to="/">
       <Icon src="logo" />
     </Link>
-    <OpenSidebarMutation>
-      {openSidebar => (
-        <React.Fragment>
-          <CustomerQuery>
-            {({ customer }) =>
-              customer ? (
-                <Link as={RouterLink} to="/account" gridArea={SearchBarArea.signIn}>
-                  <AccountIcon />
-                </Link>
-              ) : (
-                <SignInIcon
-                  gridArea={SearchBarArea.signIn}
-                  onClick={() => openSidebar({ variables: { contentType: 'account' } })}
-                />
-              )
-            }
-          </CustomerQuery>
-          <CartQuery>
-            {(data: CartData) => (
-              <MiniCartIcon
-                onClick={() => openSidebar({ variables: { contentType: 'cart' } })}
-                gridArea={SearchBarArea.cart}
-                itemsQty={data.cart ? data.cart.itemsQty : 0}
+    <CustomerQuery>
+      {({ customer }) =>
+        customer ? (
+          <Link as={RouterLink} to="/account" gridArea={SearchBarArea.signIn}>
+            <AccountIcon />
+          </Link>
+        ) : (
+          <OpenSidebarMutation>
+            {openSidebar => (
+              <SignInIcon
+                gridArea={SearchBarArea.signIn}
+                onClick={() => openSidebar({ variables: { contentType: 'account' } })}
               />
             )}
-          </CartQuery>
-        </React.Fragment>
+          </OpenSidebarMutation>
+        )
+      }
+    </CustomerQuery>
+    <CartQuery>
+      {(data: CartData) => (
+        <OpenSidebarMutation>
+          {openSidebar => (
+            <MiniCartIcon
+              onClick={() => openSidebar({ variables: { contentType: 'cart' } })}
+              gridArea={SearchBarArea.cart}
+              itemsQty={data.cart ? data.cart.itemsQty : 0}
+            />
+          )}
+        </OpenSidebarMutation>
       )}
-    </OpenSidebarMutation>
+    </CartQuery>
   </Box>
 );
 
