@@ -371,6 +371,12 @@ class FalconServer {
   getSubscriptionsOptions() {
     return {
       onConnect: (connectionParams, websocket, context) => {
+        const { cookie: paramsCookie } = connectionParams;
+        if (paramsCookie) {
+          // Forwarding `cookie` from `connectionParams` to the request object
+          context.request.headers.cookie = paramsCookie;
+        }
+
         // Checking signed cookies (without a `res` argument, since for Subscriptions there're no traditional "responses")
         try {
           const cookies = new Cookies(
