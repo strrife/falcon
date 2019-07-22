@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, List, themed } from '@deity/falcon-ui';
-import { SearchConsumer } from '@deity/falcon-front-kit';
+import { SearchConsumer, FilterData } from '@deity/falcon-front-kit';
 import { SelectedFilterItem } from './FilterItem';
-import { getSelectedFilterOptionsFor, FilterData } from './FiltersDataProvider';
+import { getSelectedFilterOptionsFor } from './FiltersDataProvider';
 
 export const FiltersSummaryLayout = themed({
   tag: Box,
