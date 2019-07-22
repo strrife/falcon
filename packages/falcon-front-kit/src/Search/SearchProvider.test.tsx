@@ -6,7 +6,7 @@ import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-client';
 import { InMemoryCache as Cache } from 'apollo-cache-inmemory';
 import { wait } from '../../../../test/helpers';
-import { SearchProvider, SearchProviderImpl } from './SearchProvider';
+import { SearchProvider, SearchProviderInner } from './SearchProvider';
 import { SearchContextValue } from './SearchContextValue';
 import { SearchContext } from './SearchContext';
 import { SearchState } from './searchState';
@@ -64,7 +64,7 @@ describe('SearchProvider', () => {
 
   const getLocation = () =>
     (wrapper!.find((SearchProvider as any).WrappedComponent).props() as RouteComponentProps).location;
-  const getSearchInfo = () => wrapper!.find(SearchProviderImpl as any).state();
+  const getSearchInfo = () => wrapper!.find(SearchProviderInner as any).state();
 
   beforeEach(async () => {
     await renderSearchProvider();

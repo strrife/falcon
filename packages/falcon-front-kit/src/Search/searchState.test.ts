@@ -1,5 +1,5 @@
 import { SortOrderDirection } from '@deity/falcon-data';
-import { FilterOperator } from '@deity/falcon-shop-extension';
+import { FilterOperator } from '@deity/falcon-shop-extension/src/types';
 import { searchStateFromURL, searchStateToURL } from './searchState';
 
 describe('Search State', () => {

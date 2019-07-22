@@ -1,6 +1,6 @@
 import React from 'react';
 import { SortOrderListQuery, SortOrder } from '@deity/falcon-data';
-import { SearchConsumer } from '../Search';
+import { SearchConsumer } from '../Search/SearchConsumer';
 import { areSortOrderInputsEqual } from './areSortOrderInputsEqual';
 
 export type SortOrderPickerProviderRenderProps = {

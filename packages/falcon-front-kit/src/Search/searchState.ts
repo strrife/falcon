@@ -1,6 +1,6 @@
 import qs from 'qs';
 import { SortOrderInput, PaginationInput } from '@deity/falcon-data';
-import { FilterInput, FilterOperator } from '@deity/falcon-shop-extension';
+import { FilterInput, FilterOperator } from '@deity/falcon-shop-extension/src/types';
 
 export type SearchState = {
   term?: string;

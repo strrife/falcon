@@ -2,8 +2,8 @@ import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Location } from 'history';
 import { SortOrderListQuery, SortOrderInput, PaginationInput } from '@deity/falcon-data';
-import { FilterOperator } from '@deity/falcon-shop-extension';
-import { areSortOrderInputsEqual } from '../SortOrder';
+import { FilterOperator } from '@deity/falcon-shop-extension/src/types';
+import { areSortOrderInputsEqual } from '../SortOrder/areSortOrderInputsEqual';
 import { SearchContext } from './SearchContext';
 import { SearchState, searchStateFromURL, searchStateToURL } from './searchState';
 
@@ -12,7 +12,7 @@ type SearchProviderInnerProps = SearchProviderProps &
     sortOrders: (SortOrderInput | undefined)[];
     defaultSortOrder?: SortOrderInput;
   };
-class SearchProviderInner extends React.Component<SearchProviderInnerProps, SearchState> {
+export class SearchProviderInner extends React.Component<SearchProviderInnerProps, SearchState> {
   static defaultProps = {
     searchStateFromURL,
     searchStateToURL,
