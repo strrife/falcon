@@ -31,7 +31,7 @@
     "@deity/falcon-payment-plugin": "^0.0.3",
     "@deity/falcon-paypal-plugin": "^0.0.3",
     "@deity/falcon-service-worker": "^0.0.1",
-    "@deity/falcon-shop-extension": "^0.4.3",
+    "@deity/falcon-shop-extension": "^0.4.4",
     "@deity/falcon-shop-data": "^0.0.1",
     "@deity/falcon-theme-editor": "^0.1.6",
     "@deity/falcon-ui": "^0.2.3",
