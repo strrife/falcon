@@ -1,8 +1,7 @@
 import React from 'react';
-import { List } from '@deity/falcon-ui';
 import { SearchConsumer, FilterData, getSelectedFilterOptionsFor } from '@deity/falcon-front-kit';
 import { SelectedFilterItemLayout } from './SelectedFilterItemLayout';
-import { FiltersSummaryLayout } from './FiltersSummaryLayout';
+import { SelectedFilterList } from './SelectedFilterList';
 
 export type FiltersSummaryProps = {
   data: FilterData[];
@@ -16,23 +15,21 @@ export const FiltersSummary: React.SFC<FiltersSummaryProps> = ({ data }) => (
       }
 
       return (
-        <FiltersSummaryLayout>
-          <List>
-            {data.map(({ field, title }) => {
-              const selectedFilterOptions = getSelectedFilterOptionsFor(data, field);
+        <SelectedFilterList>
+          {data.map(({ field, title }) => {
+            const selectedFilterOptions = getSelectedFilterOptionsFor(data, field);
 
-              if (selectedFilterOptions.length === 0) {
-                return null;
-              }
+            if (selectedFilterOptions.length === 0) {
+              return null;
+            }
 
-              return (
-                <SelectedFilterItemLayout key={field} onClick={() => removeFilter(field)}>
-                  {title}: {selectedFilterOptions.map(x => x.title || x.value).join(', ')}
-                </SelectedFilterItemLayout>
-              );
-            })}
-          </List>
-        </FiltersSummaryLayout>
+            return (
+              <SelectedFilterItemLayout key={field} onClick={() => removeFilter(field)}>
+                {title}: {selectedFilterOptions.map(x => x.title || x.value).join(', ')}
+              </SelectedFilterItemLayout>
+            );
+          })}
+        </SelectedFilterList>
       );
     }}
   </SearchConsumer>
