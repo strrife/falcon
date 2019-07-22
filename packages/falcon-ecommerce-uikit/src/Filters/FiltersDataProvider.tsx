@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, themed } from '@deity/falcon-ui';
 import { FilterOperator, FilterInput } from '@deity/falcon-shop-extension';
 import { SearchConsumer } from '@deity/falcon-front-kit';
-import { Aggregation, SelectionType } from '../Category';
+import { Aggregation, SelectionType } from '@deity/falcon-data';
 
 export type FilterData = {
   field: string;

@@ -1,6 +1,6 @@
 import React from 'react';
+import { AggregationBucket } from '@deity/falcon-data';
 import { Icon, ListItem, themed } from '@deity/falcon-ui';
-import { AggregationBucket } from '../Category/CategoryProductsQuery';
 
 export const FilterItemLayout = themed({
   tag: ListItem,
