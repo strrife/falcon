@@ -1,8 +1,9 @@
 import React from 'react';
 import { H4, DetailsContent } from '@deity/falcon-ui';
-import { FilterDetails, FilterSummary } from './FilterDetails';
+import { FilterDetails } from './FilterDetails';
+import { FilterDetailsSummaryLayout } from './FilterDetailsSummaryLayout';
 
-type FilterTileProps = {
+export type FilterTileProps = {
   title: string;
   initiallyOpen: boolean;
 };
@@ -11,9 +12,9 @@ export const FilterTile: React.SFC<FilterTileProps> = ({ title, initiallyOpen, c
   <FilterDetails initiallyOpen={initiallyOpen}>
     {({ toggle }) => (
       <React.Fragment>
-        <FilterSummary onClick={toggle}>
+        <FilterDetailsSummaryLayout onClick={toggle}>
           <H4>{title}</H4>
-        </FilterSummary>
+        </FilterDetailsSummaryLayout>
         <DetailsContent>{children}</DetailsContent>
       </React.Fragment>
     )}

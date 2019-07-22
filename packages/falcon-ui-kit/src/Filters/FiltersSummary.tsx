@@ -1,16 +1,10 @@
 import React from 'react';
-import { Box, List, themed } from '@deity/falcon-ui';
+import { List } from '@deity/falcon-ui';
 import { SearchConsumer, FilterData, getSelectedFilterOptionsFor } from '@deity/falcon-front-kit';
-import { SelectedFilterItem } from './FilterItem';
+import { SelectedFilterItemLayout } from './SelectedFilterItemLayout';
+import { FiltersSummaryLayout } from './FiltersSummaryLayout';
 
-export const FiltersSummaryLayout = themed({
-  tag: Box,
-  defaultTheme: {
-    filtersSummaryLayout: {}
-  }
-});
-
-type FiltersSummaryProps = {
+export type FiltersSummaryProps = {
   data: FilterData[];
 };
 
@@ -32,9 +26,9 @@ export const FiltersSummary: React.SFC<FiltersSummaryProps> = ({ data }) => (
               }
 
               return (
-                <SelectedFilterItem key={field} onClick={() => removeFilter(field)}>
+                <SelectedFilterItemLayout key={field} onClick={() => removeFilter(field)}>
                   {title}: {selectedFilterOptions.map(x => x.title || x.value).join(', ')}
-                </SelectedFilterItem>
+                </SelectedFilterItemLayout>
               );
             })}
           </List>

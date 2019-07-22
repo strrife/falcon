@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, themed } from '@deity/falcon-ui';
 
-export const FiltersLayout = themed({
+export const FiltersPanelLayout = themed({
   tag: Box,
   defaultTheme: {
     filtersPanelLayout: {

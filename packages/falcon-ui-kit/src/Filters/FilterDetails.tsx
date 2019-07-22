@@ -1,30 +1,19 @@
 import React from 'react';
 import { Toggle, Updater } from 'react-powerplug';
-import { Details, Summary, themed } from '@deity/falcon-ui';
+import { Details } from '@deity/falcon-ui';
 
-export const FilterSummary = themed({
-  tag: Summary,
-  defaultTheme: {
-    filterSummary: {
-      display: 'flex',
-      alignItems: 'center',
-      bg: 'transparent',
-      m: 'none',
-      px: 'none'
-    }
-  }
-});
+export type FilterDetailsRenderProps = {
+  on: boolean;
+  toggle: (e?: React.MouseEvent<HTMLElement>) => void;
+  set: Updater<boolean>;
+};
 
-export const FilterDetails: React.SFC<{
+export type FilterDetailsProps = {
   initiallyOpen?: boolean;
-  children: (
-    value: {
-      on: boolean;
-      toggle: (e?: React.MouseEvent<HTMLElement>) => void;
-      set: Updater<boolean>;
-    }
-  ) => React.ReactNode;
-}> = ({ initiallyOpen, children, ...rest }) => (
+  children: (value: FilterDetailsRenderProps) => React.ReactNode;
+};
+
+export const FilterDetails: React.SFC<FilterDetailsProps> = ({ initiallyOpen, children, ...rest }) => (
   <Toggle initial={initiallyOpen}>
     {({ on, toggle, ...restToggle }) => (
       <Details

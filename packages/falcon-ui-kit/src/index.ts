@@ -1,5 +1,7 @@
 export * from './Address';
 export * from './Account';
+export * from './Color';
+export * from './Filters';
 export * from './Forms';
 export * from './Layouts';
 export * from './Locale';

@@ -1,8 +1,9 @@
 import React from 'react';
 import { ThemedComponentProps } from '@deity/falcon-ui';
 import { FilterOption } from '@deity/falcon-front-kit';
-import { FilterItemLayout, SelectedFilterItem } from './FilterItem';
-import { FilterItemList } from './FilterItemList';
+import { FilterItemListLayout } from './FilterItemListLayout';
+import { FilterItemLayout } from './FilterItemLayout';
+import { SelectedFilterItemLayout } from './SelectedFilterItemLayout';
 
 export type SingleFilterProps = {
   options: FilterOption[];
@@ -18,14 +19,16 @@ export const SingleFilter: React.SFC<SingleFilterProps & ThemedComponentProps> =
   const selectedOption = selected !== undefined ? options.find(x => x.value === selected) : undefined;
 
   return (
-    <FilterItemList {...rest as any}>
-      {selectedOption && <SelectedFilterItem onClick={() => onChange()}>{selectedOption!.title}</SelectedFilterItem>}
+    <FilterItemListLayout {...rest as any}>
+      {selectedOption && (
+        <SelectedFilterItemLayout onClick={() => onChange()}>{selectedOption!.title}</SelectedFilterItemLayout>
+      )}
       {!selectedOption &&
         options.map(x => (
           <FilterItemLayout key={x.value} onClick={() => onChange(x.value)}>
             {x.title} ({x.count})
           </FilterItemLayout>
         ))}
-    </FilterItemList>
+    </FilterItemListLayout>
   );
 };

@@ -1,26 +1,10 @@
 import React from 'react';
-import { Box, themed, ThemedComponentProps } from '@deity/falcon-ui';
-import { FilterItemLayout, SelectedFilterItem } from './FilterItem';
-import { FilterItemList } from './FilterItemList';
+import { ThemedComponentProps } from '@deity/falcon-ui';
+import { ColorTile } from '../Color';
+import { FilterItemLayout } from './FilterItemLayout';
+import { SelectedFilterItemLayout } from './SelectedFilterItemLayout';
+import { FilterItemListLayout } from './FilterItemListLayout';
 import { SingleFilterProps } from './SingleFilter';
-
-export const ColorTile = themed<{ color: string }, any>({
-  tag: Box,
-  defaultProps: {
-    color: 'black'
-  },
-  defaultTheme: {
-    colorTile: {
-      size: 'md',
-      borderRadius: 'small',
-      border: 'bold',
-      borderColor: 'secondaryDark',
-      css: ({ color }) => ({
-        backgroundColor: color
-      })
-    }
-  }
-});
 
 export const ColorFilter: React.SFC<SingleFilterProps & ThemedComponentProps> = ({
   options,
@@ -31,11 +15,11 @@ export const ColorFilter: React.SFC<SingleFilterProps & ThemedComponentProps> = 
   const selectedOption = selected !== undefined ? options.find(x => x.value === selected) : undefined;
 
   return (
-    <FilterItemList display="flex" flexWrap="wrap" {...rest as any}>
+    <FilterItemListLayout display="flex" flexWrap="wrap" {...rest as any}>
       {selectedOption && (
-        <SelectedFilterItem onClick={() => onChange()}>
+        <SelectedFilterItemLayout onClick={() => onChange()}>
           <ColorTile size="lg" color={selectedOption!.value} title={selectedOption!.title} />
-        </SelectedFilterItem>
+        </SelectedFilterItemLayout>
       )}
       {!selectedOption &&
         options.map(x => (
@@ -43,6 +27,6 @@ export const ColorFilter: React.SFC<SingleFilterProps & ThemedComponentProps> = 
             <ColorTile size="lg" color={x!.value} title={x!.title} />
           </FilterItemLayout>
         ))}
-    </FilterItemList>
+    </FilterItemListLayout>
   );
 };
