@@ -16,6 +16,7 @@ const body = require('koa-body');
 const get = require('lodash/get');
 const capitalize = require('lodash/capitalize');
 const ApiContainer = require('./containers/ApiContainer');
+const ComponentContainer = require('./containers/ComponentContainer');
 const ExtensionContainer = require('./containers/ExtensionContainer');
 const EndpointContainer = require('./containers/EndpointContainer');
 const DynamicRouteResolver = require('./resolvers/DynamicRouteResolver');
@@ -32,6 +33,7 @@ class FalconServer {
     this.server = null;
     this.cache = null;
     this.backendConfig = {};
+    this.components = {};
     const { maxListeners = 20, verboseEvents = false } = this.config;
     if (config.logLevel) {
       Logger.setLogLevel(config.logLevel);
@@ -60,6 +62,8 @@ class FalconServer {
 
   async initialize() {
     await this.eventEmitter.emitAsync(Events.BEFORE_INITIALIZED, this);
+    this.cache = new Cache(this.getCacheProvider());
+    await this.initializeComponents();
     await this.initializeServerApp();
     await this.initializeContainers();
     await this.initializeApolloServer();
@@ -68,32 +72,48 @@ class FalconServer {
   }
 
   async getApolloServerConfig() {
-    this.cache = new Cache(this.getCacheProvider());
-    const dynamicRouteResolver = new DynamicRouteResolver(this.extensionContainer);
+    this.apolloServerConfig = await this.extensionContainer.createGraphQLConfig(this.getInitialGraphQLConfig());
 
-    const apolloServerConfig = await this.extensionContainer.createGraphQLConfig({
+    /* eslint-disable no-underscore-dangle */
+    // Removing "placeholder" (_) fields from the Type definitions
+    delete this.apolloServerConfig.schema._subscriptionType._fields._;
+
+    // If there were no other fields defined for Type by any other extension
+    // - we need to remove it completely in order to comply with GraphQL specification
+    if (!Object.keys(this.apolloServerConfig.schema._subscriptionType._fields).length) {
+      this.apolloServerConfig.schema._subscriptionType = undefined;
+      delete this.apolloServerConfig.schema._typeMap.Subscription;
+    }
+    /* eslint-enable no-underscore-dangle */
+
+    return this.apolloServerConfig;
+  }
+
+  getInitialGraphQLConfig() {
+    return {
       schemas: [BaseSchema],
       dataSources: () => {
         this.logger.debug('Instantiating GraphQL DataSources');
         const dataSources = {};
         this.apiContainer.dataSources.forEach((value, key) => {
-          dataSources[key] = value(apolloServerConfig);
+          dataSources[key] = value(this.apolloServerConfig);
         });
         return dataSources;
       },
-      schemaDirectives,
+      schemaDirectives: this.getDefaultSchemaDirectives(),
       formatError: error => this.formatGraphqlError(error),
       // inject session and headers into GraphQL context
       context: ({ ctx }) => ({
         cache: this.cache,
         config: this.config,
+        components: ctx.components,
         headers: ctx.req.headers,
         session: ctx.req.session
       }),
       cache: this.cache,
       resolvers: {
         Query: {
-          url: async (...params) => dynamicRouteResolver.fetchUrl(...params),
+          url: async (...params) => this.dynamicRouteResolver.fetchUrl(...params),
           backendConfig: async (...params) => this.fetchBackendConfig(...params)
         },
         Mutation: {
@@ -110,21 +130,11 @@ class FalconServer {
           'request.credentials': 'include' // include to keep the session between requests
         }
       }
-    });
+    };
+  }
 
-    /* eslint-disable no-underscore-dangle */
-    // Removing "placeholder" (_) fields from the Type definitions
-    delete apolloServerConfig.schema._subscriptionType._fields._;
-
-    // If there were no other fields defined for Type by any other extension
-    // - we need to remove it completely in order to comply with GraphQL specification
-    if (!Object.keys(apolloServerConfig.schema._subscriptionType._fields).length) {
-      apolloServerConfig.schema._subscriptionType = undefined;
-      delete apolloServerConfig.schema._typeMap.Subscription;
-    }
-    /* eslint-enable no-underscore-dangle */
-
-    return apolloServerConfig;
+  getDefaultSchemaDirectives() {
+    return schemaDirectives;
   }
 
   /**
@@ -138,6 +148,7 @@ class FalconServer {
 
     this.router = new Router();
 
+    this.app.context.components = this.componentContainer.components;
     this.app.use(body());
     this.app.use(
       cors({
@@ -180,6 +191,16 @@ class FalconServer {
 
     this.endpointContainer = new EndpointContainer(this.eventEmitter);
     await this.endpointContainer.registerEndpoints(this.config.endpoints);
+
+    this.dynamicRouteResolver = new DynamicRouteResolver(this.extensionContainer);
+  }
+
+  async initializeComponents() {
+    await this.eventEmitter.emitAsync(Events.BEFORE_COMPONENT_CONTAINER_CREATED, this.config.components);
+    /** @type {ComponentContainer} */
+    this.componentContainer = new ComponentContainer(this.eventEmitter);
+    await this.componentContainer.registerComponents(this.config.components);
+    await this.eventEmitter.emitAsync(Events.AFTER_COMPONENT_CONTAINER_CREATED, this.componentContainer);
   }
 
   /**
