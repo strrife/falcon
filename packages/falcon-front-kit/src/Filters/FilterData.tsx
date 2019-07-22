@@ -1,4 +1,4 @@
-import { SelectionType } from '@deity/falcon-data';
+import { SelectionType, Aggregation } from '@deity/falcon-data';
 
 export type FilterData = {
   field: string;
@@ -13,3 +13,11 @@ export type FilterOption = {
   value: string;
   count: number;
 };
+
+export const aggregationToFilterData = (aggregation: Aggregation): FilterData => ({
+  field: aggregation.field,
+  title: aggregation.title,
+  type: aggregation.type,
+  options: aggregation.buckets,
+  value: []
+});

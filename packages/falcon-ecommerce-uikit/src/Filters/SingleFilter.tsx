@@ -1,6 +1,6 @@
 import React from 'react';
 import { ThemedComponentProps } from '@deity/falcon-ui';
-import { FilterOption } from './FiltersDataProvider';
+import { FilterOption } from '@deity/falcon-front-kit';
 import { FilterItemLayout, SelectedFilterItem } from './FilterItem';
 import { FilterItemList } from './FilterItemList';
 
