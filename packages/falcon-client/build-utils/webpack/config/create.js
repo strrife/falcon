@@ -516,7 +516,7 @@ module.exports = (target = 'web', options) => {
     ...config.plugins,
     new NormalModuleOverridePlugin(moduleOverride),
     new WebpackBar({
-      fancy: buildConfig.CI,
+      fancy: !buildConfig.CI,
       color: colors.deityGreen,
       name: IS_WEB ? 'client' : 'server'
     })
