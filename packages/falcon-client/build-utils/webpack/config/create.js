@@ -116,7 +116,7 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
 }
 
 /**
- * @typedef {Object} CreateWebpackOptions
+ * @typedef {object} CreateWebpackOptions
  * @property {string} inspect
  * @property {boolean} analyze
  * @property {import('../../paths')} paths
@@ -129,7 +129,7 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
  * Webpack configuration factory. It's the juice!
  * @param {'web' | 'node' } target target
  * @param {CreateWebpackOptions} options
- * @returns {Object} webpack configuration
+ * @returns {object} webpack configuration
  */
 module.exports = (target = 'web', options) => {
   options = { ...options, publicPath: options.publicPath || '/' };
@@ -516,10 +516,9 @@ module.exports = (target = 'web', options) => {
     ...config.plugins,
     new NormalModuleOverridePlugin(moduleOverride),
     new WebpackBar({
-      minimal: buildConfig.CI,
+      fancy: buildConfig.CI,
       color: colors.deityGreen,
-      name: IS_WEB ? 'client' : 'server',
-      compiledIn: true
+      name: IS_WEB ? 'client' : 'server'
     })
   ];
 

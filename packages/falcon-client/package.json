@@ -101,7 +101,7 @@
     "webpack-bundle-analyzer": "^3.0.2",
     "webpack-dev-server-speedy": "^3.1.1",
     "webpack-virtual-modules": "^0.1.10",
-    "webpackbar": "^2.4.0",
+    "webpackbar": "3.2.0",
     "whatwg-fetch": "^3.0.0",
     "workbox-build": "4.3.1",
     "workbox-core": "4.3.1",
