@@ -111,7 +111,7 @@ module.exports = {
         'react/prop-types': 'off',
         'import/order': 1,
         'import/prefer-default-export': 'off',
-        'import-name': [true, { react: 'React' }]
+        'import-name': [1, { react: 'React' }]
       }
     }
   ]
