@@ -29,8 +29,9 @@
     "test:coverage": "falcon-scripts test:coverage"
   },
   "dependencies": {
-    "@babel/runtime": "7.3.1",
+    "@babel/runtime": "7.5.5",
     "@types/react-responsive": "3.0.3",
+    "core-js": "3.1.4",
     "lodash.isequal": "^4.5.0",
     "qs": "6.6.0",
     "react-adopt": "^0.6.0",
@@ -69,6 +70,7 @@
     "react-dom": "^16.6.3",
     "react-router-dom": "5.0.0",
     "react-test-renderer": "^16.6.3",
+    "regenerator-runtime": "0.13.3",
     "size-limit": "0.20.1"
   },
   "peerDependencies": {

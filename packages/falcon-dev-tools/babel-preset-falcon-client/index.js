@@ -5,7 +5,8 @@ module.exports = (/* api */) => {
         require.resolve('@babel/preset-env'),
         {
           modules: false,
-          useBuiltIns: 'entry'
+          useBuiltIns: 'entry',
+          corejs: '3'
         }
       ],
       require.resolve('@babel/preset-react')
