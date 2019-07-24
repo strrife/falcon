@@ -70,8 +70,7 @@
     "react-dom": "^16.6.3",
     "react-router-dom": "5.0.0",
     "react-test-renderer": "^16.6.3",
-    "regenerator-runtime": "0.13.3",
-    "size-limit": "0.20.1"
+    "regenerator-runtime": "0.13.3"
   },
   "peerDependencies": {
     "@deity/falcon-i18n": "^0.2.5",

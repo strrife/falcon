@@ -35,8 +35,7 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-test-renderer": "^16.6.3",
-    "regenerator-runtime": "0.13.3",
-    "size-limit": "0.20.1"
+    "regenerator-runtime": "0.13.3"
   },
   "peerDependencies": {
     "react": "^16.6.3",
