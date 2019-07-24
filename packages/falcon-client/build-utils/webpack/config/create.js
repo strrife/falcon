@@ -355,7 +355,42 @@ module.exports = (target = 'web', options) => {
       libraryTarget: 'var'
     };
 
-    config.optimization = {};
+    config.optimization = {
+      splitChunks: {
+        cacheGroups: {
+          polyfills: {
+            name: 'polyfills',
+            enforce: true,
+            priority: 100,
+            chunks: 'initial',
+            test: moduleFilter(['core-js', 'object-assign', 'whatwg-fetch', 'pwacompat'])
+          },
+          vendor: {
+            name: 'vendors',
+            enforce: true,
+            chunks: 'initial',
+            test: moduleFilter([
+              'apollo-cache-inmemory',
+              'apollo-client',
+              'apollo-link',
+              'apollo-link-http',
+              'apollo-utilities',
+              'i18next',
+              'i18next-xhr-backend',
+              'react',
+              'react-apollo',
+              'react-dom',
+              'react-google-tag-manager',
+              `react-helmet`,
+              'react-router',
+              'react-router-dom',
+              'history'
+            ])
+          }
+        }
+      }
+    };
+
     config.plugins = [
       new VirtualModulesPlugin({ [paths.ownWebmanifest]: '{}' }),
       new FalconI18nLocalesPlugin({
@@ -437,6 +472,7 @@ module.exports = (target = 'web', options) => {
       ];
 
       config.optimization = {
+        ...config.optimization,
         minimize: true,
         minimizer: [
           new UglifyJsPlugin({
@@ -474,40 +510,7 @@ module.exports = (target = 'web', options) => {
             parallel: true,
             sourceMap: !!devtool
           })
-        ],
-        splitChunks: {
-          cacheGroups: {
-            polyfills: {
-              name: 'polyfills',
-              enforce: true,
-              priority: 100,
-              chunks: 'initial',
-              test: moduleFilter(['core-js', 'object-assign', 'whatwg-fetch', 'pwacompat'])
-            },
-            vendor: {
-              name: 'vendors',
-              enforce: true,
-              chunks: 'initial',
-              test: moduleFilter([
-                'apollo-cache-inmemory',
-                'apollo-client',
-                'apollo-link',
-                'apollo-link-http',
-                'apollo-utilities',
-                'i18next',
-                'i18next-xhr-backend',
-                'react',
-                'react-apollo',
-                'react-dom',
-                'react-google-tag-manager',
-                `react-helmet`,
-                'react-router',
-                'react-router-dom',
-                'history'
-              ])
-            }
-          }
-        }
+        ]
       };
     }
   }
