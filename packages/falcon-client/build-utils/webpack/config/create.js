@@ -68,8 +68,14 @@ function getBabelLoaderOptions(babelRcPath) {
   return options;
 }
 
+/**
+ * @param {'web' | 'node' } target target
+ * @param {'development' | 'production'} env
+ * @param {object} cssLoaderOptions
+ */
 function getStyleLoaders(target, env, cssLoaderOptions) {
-  const { sourceMap = false } = cssLoaderOptions;
+  const { minimize, ...restOptions } = cssLoaderOptions;
+  const sourceMap = cssLoaderOptions.sourceMap || false;
 
   // "postcss" loader applies autoprefixer to our CSS.
   // "css" loader resolves paths in CSS and adds assets as dependencies.
@@ -83,10 +89,10 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
     // Style-loader does not work in Node.js without some crazy magic. Luckily we just need css-loader.
     return [
       {
-        loader: require.resolve('css-loader/locals'),
+        loader: require.resolve('css-loader'),
         options: {
-          ...cssLoaderOptions,
-          minimize: false
+          ...restOptions,
+          onlyLocals: true
         }
       }
     ];
@@ -96,7 +102,7 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
     env === 'production' ? MiniCssExtractPlugin.loader : require.resolve('style-loader'),
     {
       loader: require.resolve('css-loader'),
-      options: { ...cssLoaderOptions }
+      options: { ...restOptions }
     },
     {
       loader: require.resolve('postcss-loader'),
@@ -107,7 +113,8 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
           require('postcss-preset-env')({
             autoprefixer: { flexbox: 'no-2009' },
             stage: 3
-          })
+          }),
+          require('cssnano')({ preset: 'default' })
         ],
         sourceMap
       }
@@ -244,7 +251,6 @@ module.exports = (target = 'web', options) => {
           exclude: [paths.appBuild, /\.module\.css$/],
           use: getStyleLoaders(target, NODE_ENV, {
             importLoaders: 1,
-            modules: false,
             minimize: IS_PROD,
             sourceMap: !!devtool
           }),
@@ -255,7 +261,7 @@ module.exports = (target = 'web', options) => {
           exclude: [paths.appBuild],
           use: getStyleLoaders(target, NODE_ENV, {
             importLoaders: 1,
-            modules: true,
+            modules: 'global',
             minimize: IS_PROD,
             getLocalIdent: getCSSModuleLocalIdent,
             sourceMap: !!devtool
@@ -268,7 +274,6 @@ module.exports = (target = 'web', options) => {
           use: [
             ...getStyleLoaders(target, NODE_ENV, {
               importLoaders: 2,
-              modules: false,
               minimize: IS_PROD,
               sourceMap: !!devtool
             }),
@@ -281,7 +286,7 @@ module.exports = (target = 'web', options) => {
           use: [
             ...getStyleLoaders(target, NODE_ENV, {
               importLoaders: 2,
-              modules: true,
+              modules: 'global',
               minimize: IS_PROD,
               getLocalIdent: getCSSModuleLocalIdent,
               sourceMap: !!devtool
