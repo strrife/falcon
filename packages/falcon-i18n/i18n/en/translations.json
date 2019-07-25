@@ -216,6 +216,17 @@
     "shippingAmountLabel": "Shipping & Handling",
     "grandTotalLabel": "Total"
   },
+  "customerSelector": {
+    "title": "Customer",
+    "signOut": "$t(signOut.link)",
+    "edit": "$t(edit)",
+    "or": "or",
+    "signInLink": "sign in with your account",
+    "ifAlreadyRegistered": "if you are already registered",
+    "invalidEmail": "Invalid email address",
+    "guestPrompt": "Type your email and continue as guest:",
+    "guestContinue": "Continue as guest"
+  },
   "addressForm": {
     "companyLabel": "Company",
     "firstNameLabel": "First name",
