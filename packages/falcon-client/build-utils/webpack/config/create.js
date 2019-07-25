@@ -82,8 +82,6 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
   // "style" loader turns CSS into JS modules that inject <style> tags.
   // In production, we use a plugin to extract that CSS to a file, but
   // in development "style" loader enables hot editing of CSS.
-  //
-  // Note: this yields the exact same CSS config as create-react-app.
 
   if (target === 'node') {
     // Style-loader does not work in Node.js without some crazy magic. Luckily we just need css-loader.
