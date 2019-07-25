@@ -72,7 +72,7 @@ export const prettifyGraphQLErrorLog: PrettifyGraphQLErrorLogFn = ({
   }
 
   const stack: string[] = extensions && extensions.exception && extensions.exception.stacktrace;
-  if (stack.length) {
+  if (stack && stack.length) {
     const codeLine: string = stack[1];
     // Highlighting the actual code line
     stack[1] = colorizer.error(codeLine);
