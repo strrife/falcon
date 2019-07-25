@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, FormField, CountrySelector, toGridTemplate } from '@deity/falcon-ecommerce-uikit';
 import { Box, Button } from '@deity/falcon-ui';
-import { I18n } from '@deity/falcon-i18n';
 
 const AddressFormArea = {
   firstName: 'firstName',
@@ -47,75 +46,49 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
   const getAutoComplete = attribute => [autoCompleteSection, attribute].filter(x => x).join(' ');
 
   return (
-    <I18n>
-      {t => (
-        <Form id={id} defaultTheme={addressFormLayout}>
-          <FormField name="email" type="email" label="Email" required gridArea={AddressFormArea.email} />
-          <FormField
-            name="firstname"
-            label={t('addressForm.firstNameLabel')}
-            required
-            autoComplete={getAutoComplete('given-name')}
-            gridArea={AddressFormArea.firstName}
-          />
-          <FormField
-            name="lastname"
-            label={t('addressForm.lastNameLabel')}
-            required
-            autoComplete={getAutoComplete('family-name')}
-            gridArea={AddressFormArea.lastName}
-          />
-          <FormField
-            name="street1"
-            label={t('addressForm.street1Label')}
-            required
-            autoComplete={getAutoComplete('address-line1')}
-            gridArea={AddressFormArea.street1}
-          />
-          <FormField
-            name="street2"
-            label={t('addressForm.street2Label')}
-            autoComplete={getAutoComplete('address-line2')}
-            gridArea={AddressFormArea.street2}
-          />
-          <FormField
-            name="countryId"
-            label={t('addressForm.countryLabel')}
-            required
-            autoComplete={getAutoComplete('country')}
-            gridArea={AddressForm.country}
-          >
-            {({ form, field }) => (
-              <CountrySelector {...field} items={countries} onChange={x => form.setFieldValue(field.name, x)} />
-            )}
-          </FormField>
-          <FormField
-            name="postcode"
-            label={t('addressForm.postcodeLabel')}
-            required
-            autoComplete={getAutoComplete('postal-code')}
-            gridArea={AddressFormArea.postCode}
-          />
-          <FormField
-            name="city"
-            label={t('addressForm.cityLabel')}
-            required
-            autoComplete={getAutoComplete('address-level2')}
-            gridArea={AddressFormArea.city}
-          />
-          <FormField
-            name="telephone"
-            label={t('addressForm.telephoneLabel')}
-            required
-            autoComplete={getAutoComplete('tel')}
-            gridArea={AddressFormArea.phone}
-          />
-          <Box gridArea={AddressFormArea.submit}>
-            <Button type="submit">{submitLabel}</Button>
-          </Box>
-        </Form>
-      )}
-    </I18n>
+    <Form id={id} defaultTheme={addressFormLayout} i18nId="addressForm">
+      <FormField name="email" type="email" required gridArea={AddressFormArea.email} />
+      <FormField
+        name="firstName"
+        required
+        autoComplete={getAutoComplete('given-name')}
+        gridArea={AddressFormArea.firstName}
+      />
+      <FormField
+        name="lastName"
+        required
+        autoComplete={getAutoComplete('family-name')}
+        gridArea={AddressFormArea.lastName}
+      />
+      <FormField
+        name="street1"
+        required
+        autoComplete={getAutoComplete('address-line1')}
+        gridArea={AddressFormArea.street1}
+      />
+      <FormField name="street2" autoComplete={getAutoComplete('address-line2')} gridArea={AddressFormArea.street2} />
+      <FormField name="countryId" required autoComplete={getAutoComplete('country')} gridArea={AddressForm.country}>
+        {({ form, field }) => (
+          <CountrySelector {...field} items={countries} onChange={x => form.setFieldValue(field.name, x)} />
+        )}
+      </FormField>
+      <FormField
+        name="postcode"
+        required
+        autoComplete={getAutoComplete('postal-code')}
+        gridArea={AddressFormArea.postCode}
+      />
+      <FormField
+        name="city"
+        required
+        autoComplete={getAutoComplete('address-level2')}
+        gridArea={AddressFormArea.city}
+      />
+      <FormField name="telephone" required autoComplete={getAutoComplete('tel')} gridArea={AddressFormArea.phone} />
+      <Box gridArea={AddressFormArea.submit}>
+        <Button type="submit">{submitLabel}</Button>
+      </Box>
+    </Form>
   );
 };
 
