@@ -69,7 +69,7 @@ function getBabelLoaderOptions(babelRcPath) {
 }
 
 /**
- * @param {'web' | 'node' } target target
+ * @param {'web' | 'node' } target
  * @param {'development' | 'production'} env
  * @param {object} cssLoaderOptions
  */
@@ -134,7 +134,7 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
 
 /**
  * Webpack configuration factory. It's the juice!
- * @param {'web' | 'node' } target target
+ * @param {'web' | 'node' } target
  * @param {CreateWebpackOptions} options
  * @returns {object} webpack configuration
  */
