@@ -6,7 +6,7 @@ export * from './FilterDetails';
 export * from './FilterDetailsSummaryLayout';
 export * from './FilterTile';
 export * from './FiltersPanelLayout';
-export * from './FiltersSummaryLayout';
+export * from './SelectedFilterList';
 export * from './FiltersSummary';
 export * from './SingleFilter';
 export * from './MultipleFilter';
