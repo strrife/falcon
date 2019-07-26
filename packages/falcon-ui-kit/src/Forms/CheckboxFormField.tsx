@@ -1,11 +1,10 @@
 import React from 'react';
+import { Field, requiredValidator, getDefaultInputTypeValidator } from '@deity/falcon-front-kit';
 import { Box, Label, Checkbox, FlexLayout, extractThemableProps, themed } from '@deity/falcon-ui';
 import { toGridTemplate } from '../helpers';
-import { Field } from './Field';
 import { FormFieldProps } from './FormField';
 import { FormFieldError } from './FormFieldError';
 import { FormFieldArea } from './FormFieldLayout';
-import { requiredValidator, getDefaultInputTypeValidator } from './validators';
 
 export const CheckboxFormFieldLayout = themed({
   tag: Box,

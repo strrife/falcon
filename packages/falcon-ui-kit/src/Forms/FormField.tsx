@@ -1,11 +1,10 @@
 import React from 'react';
 import { FieldProps as FormikFieldProps } from 'formik';
+import { Field, Validator, requiredValidator, getDefaultInputTypeValidator } from '@deity/falcon-front-kit';
 import { Input, extractThemableProps, ThemedComponentProps } from '@deity/falcon-ui';
-import { Field } from './Field';
 import { FormFieldLabel } from './FormFieldLabel';
 import { FormFieldError } from './FormFieldError';
 import { FormFieldArea, FormFieldLayout } from './FormFieldLayout';
-import { Validator, requiredValidator, getDefaultInputTypeValidator } from './validators';
 
 export type FormFieldRenderProps<TValue = any> = {
   form: FormikFieldProps<TValue>['form'] & {

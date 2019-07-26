@@ -1,10 +1,9 @@
 import React from 'react';
+import { Field, requiredValidator, getDefaultInputTypeValidator } from '@deity/falcon-front-kit';
 import { Box, Label, Radio, FlexLayout, extractThemableProps, themed } from '@deity/falcon-ui';
 import { toGridTemplate } from '../helpers';
-import { Field } from './Field';
 import { FormFieldProps } from './FormField';
 import { FormFieldArea } from './FormFieldLayout';
-import { requiredValidator, getDefaultInputTypeValidator } from './validators';
 
 export const RadioFormFieldLayout = themed({
   tag: Box,
