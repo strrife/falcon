@@ -291,6 +291,7 @@
 > - ~~FieldProps~~ - moved to @deity/falcon-ui-kit
 > - ~~FormContextValue~~ - moved to @deity/falcon-ui-kit
 > - ~~FormContext~~ - moved to @deity/falcon-ui-kit
+> - ~~formLayout~~ - moved to @deity/falcon-ui-kit and renamed to `form`
 > - ~~FormProps~~ - moved to @deity/falcon-ui-kit
 > - ~~FormFieldRenderProps~~ - moved to @deity/falcon-ui-kit
 > - ~~FormFieldProps~~ - moved to @deity/falcon-ui-kit

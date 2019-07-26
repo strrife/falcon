@@ -1,8 +1,8 @@
 import React from 'react';
 import { Field as FormikField, FieldProps as FormikFieldProps, FieldConfig, getIn } from 'formik';
 import { I18n } from '@deity/falcon-i18n';
+import { FormContext } from '@deity/falcon-front-kit';
 import { Validator } from './validators';
-import { FormContext } from './FormContext';
 
 type ValidateSequentially = { (validators: Validator[], label: string): FieldConfig['validate'] };
 const validateSequentially: ValidateSequentially = (validators, label) => value => {

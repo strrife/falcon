@@ -1,6 +1,7 @@
 export * from './DynamicRoute';
 export * from './EnsureTTI';
 export * from './Filters';
+export * from './Forms';
 export * from './Locale';
 export * from './NetworkStatus';
 export * from './Router';
