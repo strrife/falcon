@@ -14,19 +14,6 @@ const path = require('path');
  */
 
 /**
- * @param {string[]} envToBuildIn
- * @returns {object} env variables name/value map
- */
-function getEnvValuesToBuildIn(envToBuildIn) {
-  return Object.keys(process.env)
-    .filter(x => envToBuildIn.find(e => e === x))
-    .reduce((result, x) => {
-      result[x] = process.env[x];
-      return result;
-    }, {});
-}
-
-/**
  * @param {'web'|'node'} target
  * @param {'development'|'production'| 'test'} env
  * @param {string} publicPath
@@ -57,8 +44,15 @@ function buildClientEnv(
     SW_DIR: path.relative(paths.appPath, env === 'production' ? paths.appBuildPublic : paths.appBuild)
   };
 
+  const envVariablesToBuildIn = Object.keys(process.env)
+    .filter(x => envToBuildIn.find(e => e === x))
+    .reduce((result, x) => {
+      result[x] = process.env[x];
+      return result;
+    }, {});
+
   return {
-    ...getEnvValuesToBuildIn(envToBuildIn),
+    ...envVariablesToBuildIn,
     ...falconEnv
   };
 }
@@ -75,7 +69,6 @@ function serializeEnvVariables(data) {
 }
 
 module.exports = {
-  getEnvValuesToBuildIn,
-  serializeEnvVariables,
-  buildClientEnv
+  buildClientEnv,
+  serializeEnvVariables
 };
