@@ -32,6 +32,13 @@ function buildClientEnv(
   devServerPort = undefined,
   envToBuildIn = []
 ) {
+  const envVariablesToBuildIn = Object.keys(process.env)
+    .filter(x => envToBuildIn.find(e => e === x))
+    .reduce((result, x) => {
+      result[x] = process.env[x];
+      return result;
+    }, {});
+
   const falconEnv = {
     NODE_ENV: env,
     BABEL_ENV: env,
@@ -43,13 +50,6 @@ function buildClientEnv(
     PUBLIC_DIR: path.relative(paths.appPath, !startDevServer ? paths.appBuildPublic : paths.appPublic),
     SW_DIR: path.relative(paths.appPath, env === 'production' ? paths.appBuildPublic : paths.appBuild)
   };
-
-  const envVariablesToBuildIn = Object.keys(process.env)
-    .filter(x => envToBuildIn.find(e => e === x))
-    .reduce((result, x) => {
-      result[x] = process.env[x];
-      return result;
-    }, {});
 
   return {
     ...envVariablesToBuildIn,
