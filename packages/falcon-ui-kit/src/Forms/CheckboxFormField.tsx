@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field, requiredValidator, getDefaultInputTypeValidator } from '@deity/falcon-front-kit';
+import { Field, getInputDefaultValidators } from '@deity/falcon-front-kit';
 import { Box, Label, Checkbox, FlexLayout, extractThemableProps, themed } from '@deity/falcon-ui';
 import { toGridTemplate } from '../helpers';
 import { FormFieldProps } from './FormField';
@@ -26,18 +26,8 @@ export const CheckboxFormField: React.SFC<FormFieldProps> = props => {
   const { name, validate, required, children, ...restProps } = props;
   const { themableProps, rest } = extractThemableProps(restProps);
 
-  // eslint-disable-next-line
-  let validators = validate || [];
-  if (required) {
-    validators.unshift(requiredValidator);
-  }
-  const defaultInputTypeValidator = !validate && getDefaultInputTypeValidator(restProps.type);
-  if (defaultInputTypeValidator) {
-    validators.push(defaultInputTypeValidator);
-  }
-
   return (
-    <Field name={name} validate={validators} {...rest}>
+    <Field name={name} validate={getInputDefaultValidators(props)} {...rest}>
       {({ form, field, label, error }) => (
         <CheckboxFormFieldLayout {...themableProps}>
           <Checkbox
