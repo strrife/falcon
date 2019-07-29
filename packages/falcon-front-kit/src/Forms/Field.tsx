@@ -4,15 +4,13 @@ import { I18n } from '@deity/falcon-i18n';
 import { FormContext } from './FormContext';
 import { Validator } from './validators';
 
-type ValidateSequentially = {
-  (validators: Validator[], label: string): FieldConfig['validate'];
-};
-
-const validateSequentially: ValidateSequentially = (validators, label) => value => {
+const validateSequentially = (validators: Validator[], label: string): FieldConfig['validate'] => value => {
   const firstInvalid = validators.find(validator => validator(value, label) !== undefined);
 
   return firstInvalid ? firstInvalid(value, label) : undefined;
 };
+
+const translateIfExists = (t, key?: string) => (key ? (t(key, { defaultValue: '' }) as string) : undefined);
 
 const LABEL_SUFFIX = 'FieldLabel';
 const PLACEHOLDER_SUFFIX = 'FieldPlaceholder';
@@ -64,9 +62,8 @@ export const Field: React.SFC<FieldProps> = props => {
                 }
               : {};
 
-            const translateIfExists = (key?: string) => (key ? (t(key, { defaultValue: '' }) as string) : undefined);
-            const fieldLabel = label || translateIfExists(i18nIds.label);
-            const fieldPlaceholder = placeholder || translateIfExists(i18nIds.placeholder);
+            const fieldLabel = label || translateIfExists(t, i18nIds.label);
+            const fieldPlaceholder = placeholder || translateIfExists(t, i18nIds.placeholder);
 
             return (
               <FormikField name={name} validate={validateSequentially(validate || [], fieldLabel || name)}>

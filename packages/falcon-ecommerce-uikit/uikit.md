@@ -440,7 +440,12 @@
 > - ~~FormFieldLayout~~ - moved to @deity/falcon-ui-kit
 > - ~~FormFieldLabel~~ - moved to @deity/falcon-ui-kit
 > - ~~FormFieldError~~ - moved to @deity/falcon-ui-kit
-> - ~~FormField~~ - moved to @deity/falcon-ui-kit
+> - ~~FormField~~ - moved to @deity/falcon-front-kit
+> - ~~getDefaultInputTypeValidator~~ - moved to @deity/falcon-front-kit and renamed to `inputTypeToDefaultValidatorsMapper`
+> - ~~passwordValidator~~ - moved to @deity/falcon-front-kit
+> - ~~emailValidator~~ - moved to @deity/falcon-front-kit
+
+
 > - ~~CheckboxFormFieldLayout~~ - moved to @deity/falcon-ui-kit
 > - ~~CheckboxFormField~~ - moved to @deity/falcon-ui-kit
 > - ~~RadioFormFieldLayout~~ - moved to @deity/falcon-ui-kit
@@ -538,7 +543,7 @@
 
 > - ~~FiltersDataProvider~~ moved to @deity/falcon-front-kit
 > - ~~LocaleSwitcher~~ moved to @deity/falcon-front-kit
-- Field
+> - ~~Field~~ moved to to @deity/falcon-front-kit
 - Form
 > - ~~LocaleProvider~~ moved to @deity/falcon-front-kit
 - ProductForm (it's not exported outside)
