@@ -33,9 +33,9 @@ Node 10:
   <<: *job_definition
   image: node:10
 
-Node 11:
+Node 12:
   <<: *job_definition
-  image: node:11
+  image: node:12
 
 Publish nightly build:
   stage: build
