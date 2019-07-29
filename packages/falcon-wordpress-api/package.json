@@ -16,11 +16,11 @@
     "@deity/falcon-logger": "^1.0.1",
     "@deity/falcon-server-env": "^0.1.8",
     "graphql": "^14.1.1",
-    "lodash": "4.17.11",
+    "lodash": "4.17.15",
     "qs": "6.6.0"
   },
   "devDependencies": {
-    "nock": "10.0.4"
+    "nock": "10.0.6"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }
