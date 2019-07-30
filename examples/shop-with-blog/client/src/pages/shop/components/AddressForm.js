@@ -49,13 +49,13 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
     <Form id={id} defaultTheme={addressFormLayout} i18nId="addressForm">
       <FormField name="email" type="email" required gridArea={AddressFormArea.email} />
       <FormField
-        name="firstName"
+        name="firstname"
         required
         autoComplete={getAutoComplete('given-name')}
         gridArea={AddressFormArea.firstName}
       />
       <FormField
-        name="lastName"
+        name="lastname"
         required
         autoComplete={getAutoComplete('family-name')}
         gridArea={AddressFormArea.lastName}
