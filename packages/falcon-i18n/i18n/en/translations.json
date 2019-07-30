@@ -237,7 +237,7 @@
     "street2FieldLabel": "Street line 2",
     "postcodeFieldLabel": "ZIP code",
     "cityFieldLabel": "City",
-    "countryFieldLabel": "Country"
+    "countryIdFieldLabel": "Country"
   },
   "addressBook": {
     "title": "Address Book",
