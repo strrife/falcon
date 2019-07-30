@@ -77,6 +77,9 @@ export abstract class Extension {
     const resolvers: GraphQLResolverMap = {};
 
     Object.keys(rootTypes).forEach((typeName: string) => {
+      if (!rootTypes[typeName].length) {
+        return;
+      }
       resolvers[typeName] = {};
       rootTypes[typeName].forEach((fieldName: string) => {
         this.logger.debug(
