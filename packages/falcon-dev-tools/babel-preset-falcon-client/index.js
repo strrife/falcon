@@ -9,7 +9,12 @@ module.exports = (/* api */) => {
           corejs: '3'
         }
       ],
-      require.resolve('@babel/preset-react')
+      [
+        require.resolve('@babel/preset-react'),
+        {
+          useBuiltIns: true
+        }
+      ]
     ],
     plugins: [
       // class { handleThing = () => { } }
