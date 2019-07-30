@@ -18,7 +18,6 @@ export type AddAddressResponse = {
 export class AddAddressMutation extends Mutation<AddAddressResponse, OperationInput<AddAddressInput>> {
   static defaultProps = {
     mutation: ADD_ADDRESS,
-    awaitRefetchQueries: true,
     refetchQueries: ['AddressList']
   };
 }

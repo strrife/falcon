@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
-import { Query } from '../Query/Query';
+import { CartItem, CartItemOption, CartTotal } from '@deity/falcon-shop-extension';
+import { Query } from '@deity/falcon-data';
 
 export const GET_CART = gql`
   query Cart {
@@ -29,39 +30,19 @@ export const GET_CART = gql`
   }
 `;
 
-export type CartData = {
+export type CartResponse = {
   cart: {
     itemsQty: number;
     quoteCurrency: string;
     couponCode: string;
     totals: CartTotal[];
-    items: CartItem[];
+    items: Pick<CartItem, 'itemId' | 'sku' | 'qty' | 'name' | 'price' | 'rowTotalInclTax' | 'thumbnailUrl'> & {
+      itemOptions: Pick<CartItemOption, 'label' | 'value'>[];
+    };
   };
 };
 
-type CartTotal = {
-  code: string;
-  title: string;
-  value: number;
-};
-
-type CartItem = {
-  itemId: number;
-  sku: string;
-  qty: number;
-  name: string;
-  price: number;
-  rowTotalInclTax: number;
-  thumbnailUrl: string;
-  itemOptions: CartItemOption[];
-};
-
-type CartItemOption = {
-  label: string;
-  value: string;
-};
-
-export class CartQuery extends Query<CartData> {
+export class CartQuery extends Query<CartResponse> {
   static defaultProps = {
     query: GET_CART
   };
