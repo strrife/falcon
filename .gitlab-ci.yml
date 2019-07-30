@@ -4,7 +4,7 @@ stages:
 
 before_script:
   # puppeteer chromium
-  - sudo sysctl -w kernel.unprivileged_userns_clone=1
+  - sysctl -w kernel.unprivileged_userns_clone=1
   - rm /usr/local/bin/yarn && rm /usr/local/bin/yarnpkg
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.17.3
   - export PATH=$HOME/.yarn/bin:$PATH
