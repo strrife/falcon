@@ -212,3 +212,97 @@ export type UpdateCartItemInput = {
   sku: string;
   qty: number;
 };
+
+export type Product = {
+  id: string;
+  sku: string;
+  name: string;
+  image?: string;
+  urlPath: string;
+  thumbnail?: string;
+  price: ProductPrice;
+  tierPrices?: ProductTierPrice[];
+  currency: string;
+  description: string;
+  stock: Stock;
+  type: string;
+  configurableOptions: ConfigurableProductOption[];
+  bundleOptions: BundleProductOption[];
+  gallery: GalleryEntry[];
+  seo: ProductSeo;
+  breadcrumbs: Breadcrumb[];
+};
+
+export type ProductPrice = {
+  regular: number;
+  special?: number;
+  minTier?: number;
+};
+
+export type ProductTierPrice = {
+  qty: number;
+  value: number;
+  discount: number;
+};
+
+export type Stock = {
+  isInStock: boolean;
+  qty: number;
+};
+
+export type BundleProductOption = {
+  optionId: number;
+  position: number;
+  productLinks: BundleProductOptionLink[];
+  required: boolean;
+  sku: string;
+  title: string;
+  type: string;
+};
+
+export type BundleProductOptionLink = {
+  canChangeQuantity: number;
+  name: string;
+  catalogDisplayPrice: string;
+  id: string;
+  isDefault: boolean;
+  optionId: number;
+  position: number;
+  price: string;
+  priceType: string;
+  qty: number;
+  sku: string;
+};
+
+export type GalleryEntry = {
+  type: string;
+  full: string;
+  thumbnail: string;
+  embedUrl?: string;
+};
+
+export type ConfigurableProductOption = {
+  id: string;
+  attributeId: string;
+  label?: string;
+  position: string;
+  productId: string;
+  values: ConfigurableProductOptionValue[];
+};
+
+export type ConfigurableProductOptionValue = {
+  inStock: string;
+  label: string;
+  valueIndex: string;
+};
+
+export type ProductSeo = {
+  title: String;
+  description: String;
+  keywords: String;
+};
+
+export type Breadcrumb = {
+  name: String;
+  urlPath: String;
+};

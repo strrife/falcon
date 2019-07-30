@@ -81,7 +81,7 @@
 ---
 
 > - ~~ProductQuery~~ - moved to @deity/falcon-shop-data
-- ProductListQuery
+> - ~~ProductListQuery~~ = moved to @deity/falcon-shop-data
 
 ---
 
@@ -183,7 +183,7 @@
 ---
 
 > - ~~GET_PRODUCT~~ - moved to @deity/falcon-shop-data
-- GET_PRODUCT_LIST
+> - ~~GET_PRODUCT_LIST~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -326,7 +326,7 @@
 
 ---
 
-- Products
+> - ~~Products~~ - moved to  moved to @deity/falcon-shop-data and renamed to `ProductList`
 
 ---
 

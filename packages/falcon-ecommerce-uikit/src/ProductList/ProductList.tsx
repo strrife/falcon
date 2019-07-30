@@ -38,7 +38,7 @@ export class ProductList extends React.Component<ProductListProps> {
       <ProductListLayout>
         {products.map((product: any) => (
           <ListItem key={product.id}>
-            <ProductCard product={product} />
+            <ProductCard {...product} />
           </ListItem>
         ))}
       </ProductListLayout>

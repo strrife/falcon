@@ -316,14 +316,14 @@ type Product {
   # Full url to resized product image
   thumbnail: String
   price: ProductPrice!
-  tierPrices: [ProductTierPrice]
+  tierPrices: [ProductTierPrice!]!
   currency: String
   description: String
   stock: Stock
   type: String
-  configurableOptions: [ConfigurableProductOption]
-  bundleOptions: [BundleProductOption]
-  gallery: [GalleryEntry]
+  configurableOptions: [ConfigurableProductOption!]!
+  bundleOptions: [BundleProductOption!]!
+  gallery: [GalleryEntry!]!
   breadcrumbs(path: String!): [Breadcrumb] @cache(ttl: 20, idPath: ["$parent"])
   seo: ProductSeo
 }
@@ -531,7 +531,7 @@ type Address {
   company: String
   firstname: String!
   lastname: String!
-  street: [String]!
+  street: [String!]!
   city: String!
   postcode: String!
   countryId: String!
@@ -564,7 +564,7 @@ input SignIn {
 type GalleryEntry {
   type: String!
   full: String!
-  thumbnail: String
+  thumbnail: String!
   embedUrl: String
 }
 
@@ -579,11 +579,11 @@ type ConfigurableProductOption {
   label: String
   position: String
   productId: String!
-  values: [ConfigurableProductOptionValue]!
+  values: [ConfigurableProductOptionValue!]!
 }
 
 type ConfigurableProductOptionValue {
-  inStock: [String]!
+  inStock: [String!]!
   label: String
   valueIndex: String!
 }

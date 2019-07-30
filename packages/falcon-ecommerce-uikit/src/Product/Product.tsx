@@ -5,12 +5,11 @@ import { I18n } from '@deity/falcon-i18n';
 import { themed, Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
 import { toGridTemplate, OpenSidebarMutation, Price } from '@deity/falcon-ui-kit';
 import { Locale } from '@deity/falcon-front-kit';
-import { AddToCartMutation } from '@deity/falcon-shop-data';
+import { AddToCartMutation, ProductResponse } from '@deity/falcon-shop-data';
 import { Breadcrumbs } from '../Breadcrumbs';
 import { ProductGallery } from './ProductGallery';
 import { ProductConfigurableOptions } from './ConfigurableOptions';
 import { ProductConfigurator } from './ProductConfigurator';
-import { ProductData } from './ProductQuery';
 
 export const ProductLayout = themed({
   tag: 'div',
@@ -134,8 +133,8 @@ const ProductForm = adopt({
   )
 });
 
-export class Product extends React.PureComponent<{ product: ProductData }> {
-  createValidator(product: ProductData, t: any) {
+export class Product extends React.PureComponent<ProductResponse> {
+  createValidator(product: ProductResponse['product'], t: any) {
     return (values: any) => {
       const errors: any = {};
 
