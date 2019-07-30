@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text, Image, themed, Swipeable, SwipeableItem, Box } from '@deity/falcon-ui';
 import { I18n, T } from '@deity/falcon-i18n';
-import { GalleryEntry } from './ProductQuery';
 
 const ProductGalleryLayout = themed({
   tag: 'div',
@@ -23,7 +22,15 @@ const ProductGalleryLayout = themed({
   }
 });
 
-export class ProductGallery extends React.Component<{ items: GalleryEntry[] }> {
+export type GalleryItem = {
+  full: string;
+  thumbnail: string;
+};
+export type ProductGalleryProps = {
+  items: GalleryItem[];
+};
+
+export class ProductGallery extends React.Component<ProductGalleryProps> {
   state = {
     activeIndex: 0
   };
