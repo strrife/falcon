@@ -4,6 +4,15 @@
 
 Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) are already released and available via npm. Versions without a date are not released yet.
 
+## Falcon vNext
+
+> Required changes were made to make Falcon compatible with Node v12 ([#537](https://github.com/deity-io/falcon/pull/537))
+
+### Falcon Server vNext
+
+- added support of ComponentContainer ([#515](https://github.com/deity-io/falcon/pull/515))
+- added auto-installing of Subscription handlers ([#520](https://github.com/deity-io/falcon/pull/520))
+
 ## Falcon v1.2 (2019-06-26)
 
 ### Falcon Client v0.5.0 (2019-06-26)

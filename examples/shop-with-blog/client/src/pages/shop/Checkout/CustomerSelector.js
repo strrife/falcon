@@ -5,6 +5,7 @@ import { graphql } from 'react-apollo';
 import { Box, Text, Link, Input, Button, Details, DetailsContent } from '@deity/falcon-ui';
 import { SignOutMutation, GET_CUSTOMER } from '@deity/falcon-ecommerce-uikit';
 import { OpenSidebarMutation, toGridTemplate } from '@deity/falcon-ui-kit';
+import { I18n, T } from '@deity/falcon-i18n';
 import SectionHeader from './CheckoutSectionHeader';
 
 const customerEmailFormLayout = {
@@ -43,14 +44,16 @@ const EmailForm = ({ email = '', setEmail }) => (
   >
     {({ values, errors, handleChange }) => (
       <Form>
-        <Text>Type your email and continue as guest:</Text>
+        <Text>
+          <T id="customerSelector.guestPrompt" />
+        </Text>
         <Box defaultTheme={customerEmailFormLayout}>
           <Box gridArea="input">
             <Input type="text" name="email" value={values.email} onChange={handleChange} />
             <ErrorMessage name="email" render={msg => <Text color="error">{msg}</Text>} />
           </Box>
           <Button gridArea="button" disabled={errors.email} type="submit">
-            continue as guest
+            <T id="customerSelector.guestContinue" />
           </Button>
         </Box>
       </Form>
@@ -126,18 +129,22 @@ class EmailSection extends React.Component {
       header = (
         <SignOutMutation>
           {signOut => (
-            <SectionHeader
-              title="Customer"
-              editLabel={isSignedIn ? 'Sign out' : 'Edit'}
-              onActionClick={isSignedIn ? signOut : onEditRequested}
-              complete
-              summary={<Text>{this.state.email}</Text>}
-            />
+            <I18n>
+              {t => (
+                <SectionHeader
+                  title={t('customerSelector.title')}
+                  editLabel={t(isSignedIn ? 'customerSelector.signOut' : 'customerSelector.edit')}
+                  onActionClick={isSignedIn ? signOut : onEditRequested}
+                  complete
+                  summary={<Text>{this.state.email}</Text>}
+                />
+              )}
+            </I18n>
           )}
         </SignOutMutation>
       );
     } else {
-      header = <SectionHeader title="Customer" />;
+      header = <I18n>{t => <SectionHeader title={t('customerSelector.title')} />}</I18n>;
     }
 
     const content = (
@@ -146,7 +153,7 @@ class EmailSection extends React.Component {
           <Box>
             <EmailForm email={this.state.email} setEmail={this.props.setEmail} />
             <Text>
-              or
+              <T id="customerSelector.or" />
               <Link
                 mx="xs"
                 color="primary"
@@ -158,9 +165,9 @@ class EmailSection extends React.Component {
                   })
                 }
               >
-                sign in with your account
+                <T id="customerSelector.signInLink" />
               </Link>
-              if you are already registered
+              <T id="customerSelector.ifAlreadyRegistered" />
             </Text>
           </Box>
         )}
