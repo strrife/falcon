@@ -18,7 +18,6 @@ export type RemoveAddressVariables = {
 export class RemoveAddressMutation extends Mutation<RemoveAddressResponse, RemoveAddressVariables> {
   static defaultProps = {
     mutation: REMOVE_ADDRESS,
-    awaitRefetchQueries: true,
     refetchQueries: ['AddressList']
   };
 }

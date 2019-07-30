@@ -22,7 +22,6 @@ type SignUpMutationVariables = {
 export class SignUpMutation extends Mutation<boolean, SignUpMutationVariables> {
   static defaultProps = {
     mutation: SIGN_UP_MUTATION,
-    awaitRefetchQueries: true,
     refetchQueries: ['Customer', 'MiniAccount', 'Cart']
   };
 }

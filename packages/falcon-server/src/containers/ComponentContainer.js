@@ -4,13 +4,13 @@ const BaseContainer = require('./BaseContainer');
 module.exports = class ComponentContainer extends BaseContainer {
   constructor(eventEmitter) {
     super(eventEmitter);
-    /** @type {Object<string, mixed>} Object of components */
+    /** @type {object<string, mixed>} Object of components */
     this.components = {};
   }
 
   /**
    * Registers components based on the provided configuration
-   * @param {Object<string, Object>} components Key-value list of components
+   * @param {object<string, object>} components Key-value list of components
    * @returns {undefined}
    */
   async registerComponents(components = {}) {
