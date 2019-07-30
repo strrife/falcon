@@ -80,7 +80,7 @@
 
 ---
 
-- ProductQuery
+> - ~~ProductQuery~~ - moved to @deity/falcon-shop-data
 - ProductListQuery
 
 ---
@@ -181,7 +181,7 @@
 
 ---
 
-- GET_PRODUCT
+> - ~~GET_PRODUCT~~ - moved to @deity/falcon-shop-data
 - GET_PRODUCT_LIST
 
 ---
