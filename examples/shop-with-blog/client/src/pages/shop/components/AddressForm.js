@@ -12,7 +12,6 @@ const AddressFormArea = {
   number: 'number',
   postCode: 'postCode',
   city: 'city',
-  email: 'email',
   phone: 'phone',
   region: 'region',
   country: 'country',
@@ -28,7 +27,6 @@ const addressFormLayout = {
     // prettier-ignore
     gridTemplate:  toGridTemplate([
       ['1fr'                      ],
-      [AddressFormArea.email      ],
       [AddressFormArea.firstName  ],
       [AddressFormArea.lastName   ],
       [AddressFormArea.street1    ],
@@ -48,7 +46,6 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
 
   return (
     <Form id={id} defaultTheme={addressFormLayout} i18nId="addressForm">
-      <FormField name="email" type="email" required gridArea={AddressFormArea.email} />
       <FormField
         name="firstName"
         required
