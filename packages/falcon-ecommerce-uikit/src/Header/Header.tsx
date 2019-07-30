@@ -1,11 +1,8 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link, Icon, DefaultThemeProps, Box } from '@deity/falcon-ui';
-
-import { CustomerQuery } from '@deity/falcon-shop-data';
-import { toGridTemplate, OpenSidebarMutation } from '@deity/falcon-ui-kit';
-import { MiniCartIcon } from '../MiniCart';
-import { CartQuery, CartData } from '../Cart';
+import { CustomerQuery, CartQuery, CartResponse } from '@deity/falcon-shop-data';
+import { toGridTemplate, OpenSidebarMutation, MiniCartIcon } from '@deity/falcon-ui-kit';
 import { AccountIcon } from '../MiniAccount';
 import { SignInIcon } from '../SignIn';
 import { MenuQuery, MenuNavbar } from '../Menu';
@@ -57,7 +54,7 @@ export const Searchbar = () => (
             }
           </CustomerQuery>
           <CartQuery>
-            {(data: CartData) => (
+            {(data: CartResponse) => (
               <MiniCartIcon
                 onClick={() => openSidebar({ variables: { contentType: 'cart' } })}
                 gridArea={SearchBarArea.cart}

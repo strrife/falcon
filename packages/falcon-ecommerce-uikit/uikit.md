@@ -21,12 +21,12 @@
 
 ---
 
-- AddToCartMutation
-- RemoveCartItemMutation
-- UpdateCartItemMutation
-- ApplyCouponMutation
-- CancelCouponMutation
-- CartQuery
+> - ~~AddToCartMutation~~ - moved to @deity/falcon-shop-data
+> - ~~RemoveCartItemMutation~~ - moved to @deity/falcon-shop-data
+> - ~~UpdateCartItemMutation~~ - moved to @deity/falcon-shop-data
+> - ~~ApplyCouponMutation~~ - moved to @deity/falcon-shop-data
+> - ~~CancelCouponMutation~~ - moved to @deity/falcon-shop-data
+> - ~~CartQuery~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -70,7 +70,7 @@
 
 ---
 
-- MiniCartQuery
+> - ~~MiniCartQuery~~ - moved to @deity/falcon-ui-kit
 
 ---
 
@@ -85,8 +85,8 @@
 
 ---
 
-- CloseSidebarMutation
-- OpenSidebarMutation
+> - ~~CloseSidebarMutation~~ - moved to @deity/falcon-ui-kit
+> - ~~OpenSidebarMutation~~ - moved to @deity/falcon-ui-kit
 
 ---
 
@@ -114,8 +114,9 @@
 
 ---
 
-> - ~~GET_BACKEND_CONFIG~~ moved to @deity/falcon-data and @deity/falcon-shop-data
-> - ~~SET_LOCALE~~ moved to @deity/falcon-data
+> - ~~GET_BACKEND_CONFIG~~ - moved to @deity/falcon-data and @deity/falcon-shop-data
+> - ~~SET_LOCALE~~ - moved to @deity/falcon-data
+
 
 ---
 
@@ -124,12 +125,12 @@
 
 ---
 
-- ADD_TO_CART
-- REMOVE_CART_ITEM
-- UPDATE_CART_ITEM
-- APPLY_COUPON
-- CANCEL_COUPON
-- GET_CART
+> - ~~ADD_TO_CART~~ - moved to @deity/falcon-shop-data
+> - ~~REMOVE_CART_ITEM~~ - moved to @deity/falcon-shop-data
+> - ~~UPDATE_CART_ITEM~~ - moved to @deity/falcon-shop-data
+> - ~~APPLY_COUPON~~ - moved to @deity/falcon-shop-data
+> - ~~CANCEL_COUPON~~ - moved to @deity/falcon-shop-data
+> - ~~GET_CART~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -171,7 +172,7 @@
 
 ---
 
-- GET_MINI_CART
+> - ~~GET_MINI_CART~~ - moved to @deity/falcon-ui-kit
 
 ---
 
@@ -225,7 +226,7 @@
 
 ---
 
-- CartData
+> - ~~CartData~~ - renamed to `CartResponse` and moved to @deity/falcon-shop-data
 
 ---
 
@@ -265,7 +266,7 @@
 
 > - ~~DynamicUrl~~ moved to @deity/falcon-data
 > - ~~UrlQueryVariables~~ moved to @deity/falcon-data
-> - ~~UrlQueryData~~ changed to `UrlResponse` and moved to @deity/falcon-data/dist/Url/UrlQuery 
+> - ~~UrlQueryData~~ changed to `UrlResponse` and moved to @deity/falcon-data/dist/Url/UrlQuery
 
 ---
 
@@ -545,7 +546,7 @@
 > - ~~LocaleSwitcher~~ moved to @deity/falcon-front-kit
 > - ~~Field~~ moved to to @deity/falcon-front-kit
 - Form
-> - ~~LocaleProvider~~ moved to @deity/falcon-front-kit
+  > - ~~LocaleProvider~~ moved to @deity/falcon-front-kit
 - ProductForm (it's not exported outside)
 - ProductConfigurator
 
@@ -559,3 +560,4 @@
 > - ~~SortOrdersProvider~~ change to `SortOrderPickerProvider` and moved to @deity/falcon-front-kit
 > - ~~AreSortOrderInputsEqual~~ changed to `areSortOrderInputsEqual` and moved to @deity/falcon-front-kit
 > - ~~OnlineStatus~~ changed to `NetworkStatus` and moved to @deity/falcon-front-kit
+

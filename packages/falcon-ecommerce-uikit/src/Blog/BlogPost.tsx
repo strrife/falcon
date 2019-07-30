@@ -2,8 +2,8 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, H1, DefaultThemeProps, Breadcrumbs, Breadcrumb, Link } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
+import { FormattedDate } from '@deity/falcon-ui-kit';
 import { BlogPostType } from './BlogPostQuery';
-import { DateFormat } from '../Locale';
 import { CMSContent } from './CmsContent';
 
 const blogPostLayout: DefaultThemeProps = {
@@ -26,7 +26,7 @@ export const BlogPost: React.SFC<BlogPostType> = ({ blogPost }) => (
       <Breadcrumb key="post">{blogPost.title}</Breadcrumb>
     </Breadcrumbs>
     <H1>{blogPost.title}</H1>
-    <DateFormat mb="xl" value={blogPost.date} />
+    <FormattedDate mb="xl" value={blogPost.date} />
     <CMSContent html={blogPost.content} />
   </Box>
 );

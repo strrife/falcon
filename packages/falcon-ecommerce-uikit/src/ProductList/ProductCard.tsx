@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
 import { themed, Image, Text, FlexLayout } from '@deity/falcon-ui';
-import { Price } from '../Locale';
+import { Price } from '@deity/falcon-ui-kit';
 import { ProductData } from '../Product/ProductQuery';
 
 export const ProductCardLayout = themed({
