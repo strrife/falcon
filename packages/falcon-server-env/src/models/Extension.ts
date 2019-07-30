@@ -1,4 +1,4 @@
-import { DocumentNode, GraphQLResolveInfo, parse } from 'graphql';
+import { DocumentNode, Kind, GraphQLResolveInfo, parse } from 'graphql';
 import { EventEmitter2 } from 'eventemitter2';
 import Logger, { Logger as LoggerType } from '@deity/falcon-logger';
 import {
@@ -170,7 +170,7 @@ export abstract class Extension {
     try {
       const docNode: DocumentNode = parse(Array.isArray(typeDefs) ? typeDefs.join('\n') : typeDefs);
       docNode.definitions.forEach(definition => {
-        if (definition.kind !== 'ObjectTypeDefinition' && definition.kind !== 'ObjectTypeExtension') {
+        if (definition.kind !== Kind.OBJECT_TYPE_DEFINITION && definition.kind !== Kind.OBJECT_TYPE_EXTENSION) {
           return;
         }
 
