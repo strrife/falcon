@@ -436,7 +436,7 @@ type CartItem {
 type CartItemOption {
   label: String!
   value: String!
-  data: [CartItemOptionValue]!
+  data: [CartItemOptionValue!]!
 }
 
 type CartItemOptionValue {
