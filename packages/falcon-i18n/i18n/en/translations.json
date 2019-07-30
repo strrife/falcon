@@ -265,7 +265,7 @@
     "street2FieldLabel": "$t(addressForm.street2FieldLabel)",
     "postcodeFieldLabel": "$t(addressForm.postcodeFieldLabel)",
     "cityFieldLabel": "$t(addressForm.cityFieldLabel)",
-    "countryIdFieldLabel": "$t(addressForm.countryFieldLabel)",
+    "countryIdFieldLabel": "$t(addressForm.countryIdFieldLabel)",
     "submitButton": "Update Address",
     "cancelButton": "Cancel"
   },
@@ -281,7 +281,7 @@
     "street2FieldLabel": "$t(addressForm.street2FieldLabel)",
     "postcodeFieldLabel": "$t(addressForm.postcodeFieldLabel)",
     "cityFieldLabel": "$t(addressForm.cityFieldLabel)",
-    "countryIdFieldLabel": "$t(addressForm.countryFieldLabel)",
+    "countryIdFieldLabel": "$t(addressForm.countryIdFieldLabel)",
     "submitButton": "Save Address",
     "cancelButton": "$t(editAddress.cancelButton)"
   },
