@@ -569,7 +569,7 @@ type GalleryEntry {
 }
 
 type Breadcrumb {
-  name: String
+  name: String!
   urlPath: String
 }
 

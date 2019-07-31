@@ -297,12 +297,12 @@ export type ConfigurableProductOptionValue = {
 };
 
 export type ProductSeo = {
-  title: String;
-  description: String;
-  keywords: String;
+  title: string;
+  description: string;
+  keywords: string;
 };
 
 export type Breadcrumb = {
-  name: String;
-  urlPath: String;
+  name: string;
+  urlPath?: string;
 };

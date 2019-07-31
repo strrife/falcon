@@ -3,10 +3,9 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
 import { I18n } from '@deity/falcon-i18n';
 import { themed, Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
-import { ProductLayout, toGridTemplate, OpenSidebarMutation, Price } from '@deity/falcon-ui-kit';
+import { ProductLayout, Breadcrumbs, toGridTemplate, OpenSidebarMutation, Price } from '@deity/falcon-ui-kit';
 import { Locale } from '@deity/falcon-front-kit';
 import { AddToCartMutation, ProductResponse } from '@deity/falcon-shop-data';
-import { Breadcrumbs } from '../Breadcrumbs';
 import { ProductGallery } from './ProductGallery';
 import { ProductConfigurableOptions } from './ConfigurableOptions';
 import { ProductConfigurator } from './ProductConfigurator';
@@ -150,7 +149,7 @@ export class Product extends React.PureComponent<ProductResponse> {
 
     return (
       <ProductLayout>
-        <Breadcrumbs breadcrumbs={product.breadcrumbs || []} />
+        <Breadcrumbs items={product.breadcrumbs} />
         <I18n>
           {t => (
             <ProductForm sku={product.sku} validate={this.createValidator(product, t)}>
