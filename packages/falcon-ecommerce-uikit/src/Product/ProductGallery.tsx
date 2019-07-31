@@ -1,27 +1,7 @@
 import React from 'react';
-import { Text, Image, themed, Swipeable, SwipeableItem, Box } from '@deity/falcon-ui';
-import { I18n, T } from '@deity/falcon-i18n';
-import { NoProductImagePlaceholder } from '@deity/falcon-ui-kit';
-
-const ProductGalleryLayout = themed({
-  tag: 'div',
-
-  defaultTheme: {
-    productGalleryLayout: {
-      display: 'grid',
-
-      gridTemplateColumns: {
-        xs: '1fr',
-        md: '100px 1fr'
-      },
-
-      gridTemplateAreas: {
-        xs: '"full" "thumbs"',
-        md: '"thumbs full"'
-      }
-    }
-  }
-});
+import { Box, Image, Swipeable, SwipeableItem } from '@deity/falcon-ui';
+import { I18n } from '@deity/falcon-i18n';
+import { NoProductImagePlaceholder, ProductGalleryLayout, productGalleryLayoutAreas } from '@deity/falcon-ui-kit';
 
 export type GalleryItem = {
   full: string;
@@ -63,7 +43,7 @@ export class ProductGallery extends React.Component<ProductGalleryProps> {
 
     return (
       <ProductGalleryLayout>
-        <Box gridArea="thumbs">
+        <Box gridArea={productGalleryLayoutAreas.Thumbs}>
           {items.map((item, index) => (
             <Box
               onClick={this.scrollToItem(index)}
@@ -98,7 +78,7 @@ export class ProductGallery extends React.Component<ProductGalleryProps> {
           ))}
         </Box>
 
-        <Swipeable gridArea="full" ref={this.scrollableEl} alignItems="center">
+        <Swipeable gridArea={productGalleryLayoutAreas.full} ref={this.scrollableEl} alignItems="center">
           {items.map(item => (
             <I18n key={item.thumbnail}>
               {t => <SwipeableItem key={item.full} as={Image} src={item.full} alt={t('productGallery.imageAlt')} />}
