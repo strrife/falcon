@@ -6,3 +6,4 @@ export * from './ProductGallery';
 export * from './ProductGalleryThumbLayout';
 export * from './ProductMeta';
 export * from './ProductOptionList';
+export * from './ProductOptionRadio';
