@@ -25,3 +25,21 @@ export const passwordValidator: Validator = value => {
   }
   return undefined;
 };
+
+export function rangeValidator(min: number, max?: number): Validator {
+  if (max && max < min) {
+    throw new Error(`value of 'min' can not be grater that 'max'!`);
+  }
+
+  return value => {
+    if (parseInt(value, 10) < min) {
+      return `Value must be greater than ${min}`;
+    }
+
+    if (max && parseInt(value, 10) > max) {
+      return `Value must be lower than ${max}`;
+    }
+
+    return undefined;
+  };
+}
