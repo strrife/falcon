@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, Image, themed, Swipeable, SwipeableItem, Box } from '@deity/falcon-ui';
 import { I18n, T } from '@deity/falcon-i18n';
+import { NoProductImagePlaceholder } from '@deity/falcon-ui-kit';
 
 const ProductGalleryLayout = themed({
   tag: 'div',
@@ -51,7 +52,7 @@ export class ProductGallery extends React.Component<ProductGalleryProps> {
     const { items } = this.props;
 
     if (!items.length) {
-      return <NoProductImage />;
+      return <NoProductImagePlaceholder />;
     }
 
     if (items.length === 1) {
@@ -108,9 +109,3 @@ export class ProductGallery extends React.Component<ProductGalleryProps> {
     );
   }
 }
-
-export const NoProductImage = () => (
-  <Text>
-    <T id="productGallery.noImage" />
-  </Text>
-);

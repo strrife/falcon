@@ -504,7 +504,7 @@
 > - ~~ProductDetailsLayout~~ - moved to @deity/falcon-ui-kit
 - Product
 - ProductGallery
-- NoProductImage
+> - ~~NoProductImage~~ - renamed to `NoProductImagePlaceholder` and moved to @deity/falcon-ui-kit
 - ProductMeta
 - EmptyProductListLayout
 - EmptyProductList
