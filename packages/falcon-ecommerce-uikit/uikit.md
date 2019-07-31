@@ -503,7 +503,7 @@
 > - ~~Area~~ (product) - renamed to `ProductLayoutAreas` moved to @deity/falcon-ui-kit
 > - ~~ProductDetailsLayout~~ - moved to @deity/falcon-ui-kit
 - Product
-- ProductGallery
+> - ~~ProductGallery~~ - moved to @deity/falcon-ui-kit
 > - ~~NoProductImage~~ - renamed to `NoProductImagePlaceholder` and moved to @deity/falcon-ui-kit
 - ProductMeta
 - EmptyProductListLayout

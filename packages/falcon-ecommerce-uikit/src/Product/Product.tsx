@@ -10,11 +10,11 @@ import {
   ProductDescription,
   Breadcrumbs,
   OpenSidebarMutation,
-  Price
+  Price,
+  ProductGallery
 } from '@deity/falcon-ui-kit';
 import { Locale } from '@deity/falcon-front-kit';
 import { AddToCartMutation, ProductResponse } from '@deity/falcon-shop-data';
-import { ProductGallery } from './ProductGallery';
 import { ProductConfigurableOptions } from './ConfigurableOptions';
 import { ProductConfigurator } from './ProductConfigurator';
 
