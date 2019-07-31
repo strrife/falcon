@@ -8,14 +8,12 @@ import {
   CategoryLayout,
   CategoryArea,
   ShowingOutOf,
-  getFiltersData,
-  FiltersSummary,
   ProductList,
   ShowMore,
   Loader
 } from '@deity/falcon-ecommerce-uikit';
-import { SearchConsumer, SortOrderPickerProvider } from '@deity/falcon-front-kit';
-import { Sidebar, Responsive, SortOrderPicker } from '@deity/falcon-ui-kit';
+import { SearchConsumer, SortOrderPickerProvider, getFiltersData } from '@deity/falcon-front-kit';
+import { Sidebar, Responsive, SortOrderPicker, FiltersSummary } from '@deity/falcon-ui-kit';
 import { Filters } from './Filters';
 
 const copy = item => item && JSON.parse(JSON.stringify(item));
