@@ -11,11 +11,11 @@ import {
   Breadcrumbs,
   OpenSidebarMutation,
   Price,
-  ProductGallery
+  ProductGallery,
+  ProductOptionList
 } from '@deity/falcon-ui-kit';
 import { Locale } from '@deity/falcon-front-kit';
 import { AddToCartMutation, ProductResponse } from '@deity/falcon-shop-data';
-import { ProductConfigurableOptions } from './ConfigurableOptions';
 import { ProductConfigurator } from './ProductConfigurator';
 
 /**
@@ -135,8 +135,8 @@ export class Product extends React.PureComponent<ProductResponse> {
                       }
                     </Locale>
                   </Box>
-                  <ProductConfigurableOptions
-                    options={product.configurableOptions}
+                  <ProductOptionList
+                    items={product.configurableOptions}
                     error={errors.configurableOptions}
                     onChange={(ev: React.ChangeEvent<any>) =>
                       productConfigurator.handleProductConfigurationChange('configurableOption', ev)
