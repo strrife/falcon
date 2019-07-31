@@ -137,6 +137,7 @@ export class Product extends React.PureComponent<ProductResponse> {
                   </Box>
                   <ProductOptionList
                     items={product.configurableOptions}
+                    disabled={loading}
                     error={errors.configurableOptions}
                     onChange={(ev: React.ChangeEvent<any>) =>
                       productConfigurator.handleProductConfigurationChange('configurableOption', ev)
