@@ -1,2 +1,2 @@
 export * from './ProductLayout';
-export * from './ProductDescriptionLayout';
+export * from './ProductDescription';

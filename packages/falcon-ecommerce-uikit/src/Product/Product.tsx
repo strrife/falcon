@@ -7,7 +7,7 @@ import {
   PageLayout,
   ProductLayout,
   ProductLayoutAreas,
-  ProductDescriptionLayout,
+  ProductDescription,
   Breadcrumbs,
   OpenSidebarMutation,
   Price
@@ -142,10 +142,7 @@ export class Product extends React.PureComponent<ProductResponse> {
                       productConfigurator.handleProductConfigurationChange('configurableOption', ev)
                     }
                   />
-                  <ProductDescriptionLayout
-                    dangerouslySetInnerHTML={{ __html: product.description }}
-                    gridArea={ProductLayoutAreas.description}
-                  />
+                  <ProductDescription gridArea={ProductLayoutAreas.description} value={product.description} />
                   <FlexLayout alignItems="center" gridArea={ProductLayoutAreas.cta} mt="xs">
                     <NumberInput
                       mr="sm"
