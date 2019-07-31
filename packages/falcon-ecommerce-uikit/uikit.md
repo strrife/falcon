@@ -498,10 +498,10 @@
 
 - Option
 - ProductConfigurableOptions
-> - ~~ProductLayout~~ - moved to @deity/falcon-ui-kit
+> - ~~ProductLayout~~ - renamed to `PageLayout` and moved to @deity/falcon-ui-kit
 > - ~~ProductDescriptionLayout~~ - moved to @deity/falcon-ui-kit
 > - ~~ProductDetailsLayout~~ - moved to @deity/falcon-ui-kit
-> - ~~Area~~ - renamed to ProductDetailsLayoutAreas moved to @deity/falcon-ui-kit
+> - ~~Area~~ (product) - renamed to ProductDetailsLayoutAreas moved to @deity/falcon-ui-kit
 - Product
 - ProductGallery
 - NoProductImage

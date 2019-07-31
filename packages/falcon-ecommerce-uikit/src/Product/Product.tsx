@@ -4,7 +4,7 @@ import { adopt } from 'react-adopt';
 import { I18n } from '@deity/falcon-i18n';
 import { Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
 import {
-  ProductLayout,
+  PageLayout,
   ProductDetailsLayout,
   ProductDetailsLayoutAreas,
   ProductDescriptionLayout,
@@ -91,7 +91,7 @@ export class Product extends React.PureComponent<ProductResponse> {
     const { product } = this.props;
 
     return (
-      <ProductLayout>
+      <PageLayout>
         <Breadcrumbs items={product.breadcrumbs} />
         <I18n>
           {t => (
@@ -177,7 +177,7 @@ export class Product extends React.PureComponent<ProductResponse> {
             </ProductForm>
           )}
         </I18n>
-      </ProductLayout>
+      </PageLayout>
     );
   }
 }
