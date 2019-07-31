@@ -17,15 +17,15 @@ type HandleChangeParam = React.ChangeEvent<any>;
 type ProductConfiguratorInjectedProps = {
   /**
    *
-   * @param type - type of the changed option (currently only configurable products are supported so 'configurableOption' goes here)
-   * @param ev - change event
+   * @param type type of the changed option (currently only configurable products are supported so 'configurableOption' goes here)
+   * @param ev change event
    */
   handleProductConfigurationChange(type: OptionType, ev: HandleChangeParam): void;
   /**
    * Helper that allows to check if a particular option is already selected
-   * @param type - type of option to check
-   * @param name - name of option to check
-   * @param value  - value to check
+   * @param type type of option to check
+   * @param name name of option to check
+   * @param value  value to check
    */
   isValueSelected(type: OptionType, name: string, value: any): boolean;
 };
@@ -33,13 +33,13 @@ type ProductConfiguratorInjectedProps = {
 type ProductConfiguratorProps = {
   /**
    * Handler which will be called when option change has been processed and we have final state after change that can be submitted
-   * @param name - name of changed option
-   * @param value - final value of changed option
+   * @param name name of changed option
+   * @param value final value of changed option
    */
   onChange(name: string, value: any): void;
   /**
    * Render prop function that should return valid react element
-   * @param props - props passed to render function
+   * @param props props passed to render function
    */
   children(props: ProductConfiguratorInjectedProps): any;
 };
@@ -58,9 +58,36 @@ export class ProductConfigurator extends React.Component<ProductConfiguratorProp
   };
 
   /**
+   * Handler for all configuration changes, based on the type invokes proper type handler
+   * @param {OptionType} type type of the change
+   * @param {HandleChangeParam} ev change data
+   */
+  handleProductConfigurationChange = (type: OptionType, ev: HandleChangeParam) => {
+    const { name, value } = ev.target;
+
+    if (type === 'configurableOption') {
+      this.handleConfigurationOptionChange(name, value);
+    }
+  };
+
+  /**
+   * Checks if passed value is selected.
+   * @param {OptionType} type type of the option to check
+   * @param {string} name name of the option to check
+   * @param {any} value value of the option to check
+   * @returns {boolean} true when option with passed name has passed value
+   */
+  isValueSelected = (type: OptionType, name: string, value: any): boolean => {
+    if (type === 'configurableOption') {
+      return this.state.selectedConfigurableOptions.get(name) === value;
+    }
+    return false;
+  };
+
+  /**
    * Handles change of configurable product option
-   * @param {string} name - name of the option
-   * @param {any} value - value of changed option
+   * @param {string} name name of the option
+   * @param {any} value value of changed option
    */
   handleConfigurationOptionChange(name: string, value: any) {
     this.setState(
@@ -80,33 +107,6 @@ export class ProductConfigurator extends React.Component<ProductConfiguratorProp
       }
     );
   }
-
-  /**
-   * Handler for all configuration changes, based on the type invokes proper type handler
-   * @param {OptionType} type - type of the change
-   * @param {HandleChangeParam} ev - change data
-   */
-  handleProductConfigurationChange = (type: OptionType, ev: HandleChangeParam) => {
-    const { name, value } = ev.target;
-
-    if (type === 'configurableOption') {
-      this.handleConfigurationOptionChange(name, value);
-    }
-  };
-
-  /**
-   * Checks if passed value is selected.
-   * @param {OptionType} type - type of the option to check
-   * @param {string} name - name of the option to check
-   * @param {any} value - value of the option to check
-   * @returns {boolean} true when option with passed name has passed value
-   */
-  isValueSelected = (type: OptionType, name: string, value: any): boolean => {
-    if (type === 'configurableOption') {
-      return this.state.selectedConfigurableOptions.get(name) === value;
-    }
-    return false;
-  };
 
   render() {
     return this.props.children({
