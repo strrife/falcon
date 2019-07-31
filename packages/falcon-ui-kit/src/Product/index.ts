@@ -4,3 +4,4 @@ export * from './NoProductImagePlaceholder';
 export * from './ProductGalleryLayout';
 export * from './ProductGallery';
 export * from './ProductGalleryThumbLayout';
+export * from './ProductMeta';

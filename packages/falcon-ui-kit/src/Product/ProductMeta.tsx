@@ -1,15 +1,16 @@
 import React from 'react';
 import { Details, Summary, DetailsContent } from '@deity/falcon-ui';
 
-type MetaItem = {
+export type MetaItem = {
   name: string;
   content: string;
 };
-export const ProductMeta: React.SFC<{
+export type ProductMetaProps = {
   meta: MetaItem[];
   onChange?: Function;
   activeItem?: MetaItem;
-}> = ({ meta, onChange, activeItem }) => (
+};
+export const ProductMeta: React.SFC<ProductMetaProps> = ({ meta, onChange, activeItem }) => (
   <React.Fragment>
     {meta.map(item => (
       <Details key={item.name} open={activeItem && activeItem === item}>
