@@ -498,7 +498,7 @@
 
 - Option
 - ProductConfigurableOptions
-- ProductLayout
+> - ~~ProductLayout~~ - moved to @deity/falcon-ui-kit
 - ProductDetailsLayout
 - Product
 - ProductGallery
