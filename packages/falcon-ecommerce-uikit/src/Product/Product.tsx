@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
 import { I18n } from '@deity/falcon-i18n';
-import { Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
+import { Box, Text, H1, NumberInput, Button, Icon, FlexLayout, extractThemableProps } from '@deity/falcon-ui';
 import {
   PageLayout,
   ProductLayout,
@@ -14,7 +14,7 @@ import {
   ProductGallery,
   ProductOptionList
 } from '@deity/falcon-ui-kit';
-import { Locale } from '@deity/falcon-front-kit';
+import { Locale, Field, rangeValidator, getInputDefaultValidators } from '@deity/falcon-front-kit';
 import { AddToCartMutation, ProductResponse } from '@deity/falcon-shop-data';
 import { ProductConfigurator } from './ProductConfigurator';
 
@@ -68,11 +68,6 @@ export class Product extends React.PureComponent<ProductResponse> {
   createValidator(product: ProductResponse['product'], t: any) {
     return (values: any) => {
       const errors: any = {};
-
-      // handle qty
-      if (parseInt(values.qty, 10) < 1) {
-        errors.qty = t('product.error.quantity');
-      }
 
       // handle configuration options
       if (product.configurableOptions && product.configurableOptions.length) {
@@ -145,23 +140,19 @@ export class Product extends React.PureComponent<ProductResponse> {
                   />
                   <ProductDescription gridArea={ProductLayoutAreas.description} value={product.description} />
                   <FlexLayout alignItems="center" gridArea={ProductLayoutAreas.cta} mt="xs">
-                    <NumberInput
-                      mr="sm"
-                      mt="sm"
-                      min="1"
-                      name="qty"
-                      aria-label={t('product.quantity')}
-                      disabled={loading}
-                      defaultValue={String(values.qty)}
-                      onChange={ev => setFieldValue('qty', ev.target.value, !!submitCount)}
-                    />
-                    <Button
-                      type="submit"
-                      height="xl"
-                      mt="sm"
-                      disabled={loading}
-                      variant={loading ? 'loader' : undefined}
-                    >
+                    <Field name="qty" validate={[rangeValidator(1)]}>
+                      {({ field }) => (
+                        <NumberInput
+                          {...field}
+                          disabled={loading}
+                          mr="sm"
+                          mt="sm"
+                          min="1"
+                          aria-label={`t('product.quantity')`}
+                        />
+                      )}
+                    </Field>
+                    <Button type="submit" height="xl" mt="sm" disabled={loading} variant={loading && 'loader'}>
                       {!loading && <Icon src="cart" stroke="white" size="md" mr="sm" />}
                       {t('product.addToCart')}
                     </Button>
