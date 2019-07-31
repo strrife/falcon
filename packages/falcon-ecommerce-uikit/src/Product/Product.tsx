@@ -5,8 +5,8 @@ import { I18n } from '@deity/falcon-i18n';
 import { Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
 import {
   PageLayout,
-  ProductDetailsLayout,
-  ProductDetailsLayoutAreas,
+  ProductLayout,
+  ProductLayoutAreas,
   ProductDescriptionLayout,
   Breadcrumbs,
   OpenSidebarMutation,
@@ -103,16 +103,16 @@ export class Product extends React.PureComponent<ProductResponse> {
                 formik: { values, errors, setFieldValue, submitCount },
                 productConfigurator
               }: any) => (
-                <ProductDetailsLayout>
-                  <FlexLayout gridArea={ProductDetailsLayoutAreas.gallery} alignItems="center" justifyContent="center">
+                <ProductLayout>
+                  <FlexLayout gridArea={ProductLayoutAreas.gallery} alignItems="center" justifyContent="center">
                     <ProductGallery items={product.gallery} />
                   </FlexLayout>
-                  <Text fontSize="sm" gridArea={ProductDetailsLayoutAreas.sku}>
+                  <Text fontSize="sm" gridArea={ProductLayoutAreas.sku}>
                     {t('product.sku', { sku: product.sku })}
                   </Text>
-                  <H1 gridArea={ProductDetailsLayoutAreas.title}>{product.name}</H1>
+                  <H1 gridArea={ProductLayoutAreas.title}>{product.name}</H1>
 
-                  <Box gridArea={ProductDetailsLayoutAreas.price}>
+                  <Box gridArea={ProductLayoutAreas.price}>
                     {product.price.special ? (
                       <React.Fragment>
                         <Price value={product.price.regular} fontSize="xl" variant="old" mr="xs" />
@@ -144,9 +144,9 @@ export class Product extends React.PureComponent<ProductResponse> {
                   />
                   <ProductDescriptionLayout
                     dangerouslySetInnerHTML={{ __html: product.description }}
-                    gridArea={ProductDetailsLayoutAreas.description}
+                    gridArea={ProductLayoutAreas.description}
                   />
-                  <FlexLayout alignItems="center" gridArea={ProductDetailsLayoutAreas.cta} mt="xs">
+                  <FlexLayout alignItems="center" gridArea={ProductLayoutAreas.cta} mt="xs">
                     <NumberInput
                       mr="sm"
                       mt="sm"
@@ -168,11 +168,11 @@ export class Product extends React.PureComponent<ProductResponse> {
                       {t('product.addToCart')}
                     </Button>
                   </FlexLayout>
-                  <Box gridArea={ProductDetailsLayoutAreas.error}>
+                  <Box gridArea={ProductLayoutAreas.error}>
                     <ErrorMessage name="qty" render={msg => <Text color="error">{msg}</Text>} />
                     {!!error && <Text color="error">{error.message}</Text>}
                   </Box>
-                </ProductDetailsLayout>
+                </ProductLayout>
               )}
             </ProductForm>
           )}
