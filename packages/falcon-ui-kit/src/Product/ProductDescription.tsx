@@ -5,7 +5,10 @@ const ProductDescriptionInnerHTML = ({ value, ...rest }) => (
   <Box {...rest} dangerouslySetInnerHTML={{ __html: value }} />
 );
 
-export const ProductDescription = themed({
+export type ProductDescriptionProps = {
+  value: string;
+};
+export const ProductDescription = themed<ProductDescriptionProps, any>({
   tag: ProductDescriptionInnerHTML,
   defaultTheme: {
     productDescription: {
