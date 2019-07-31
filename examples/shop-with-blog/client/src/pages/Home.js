@@ -1,6 +1,7 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { H1, GridLayout } from '@deity/falcon-ui';
+import { H1 } from '@deity/falcon-ui';
+import { PageLayout } from '@deity/falcon-ui-kit';
 import { T } from '@deity/falcon-i18n';
 import { Query, ProductList } from '@deity/falcon-ecommerce-uikit';
 
@@ -25,14 +26,14 @@ const HOMEPAGE_PRODUCTS_QUERY = gql`
 `;
 
 const Home = () => (
-  <GridLayout gridGap="md" py="ld">
+  <PageLayout>
     <H1 css={{ textAlign: 'center' }}>
       <T id="home.hotSellers" />
     </H1>
     <Query query={HOMEPAGE_PRODUCTS_QUERY} variables={{ categoryId: '25', amount: 20 }}>
       {({ category }) => <ProductList products={category.products.items} />}
     </Query>
-  </GridLayout>
+  </PageLayout>
 );
 
 export default Home;
