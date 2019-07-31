@@ -499,7 +499,9 @@
 - Option
 - ProductConfigurableOptions
 > - ~~ProductLayout~~ - moved to @deity/falcon-ui-kit
-- ProductDetailsLayout
+> - ~~ProductDescriptionLayout~~ - moved to @deity/falcon-ui-kit
+> - ~~ProductDetailsLayout~~ - moved to @deity/falcon-ui-kit
+> - ~~Area~~ - renamed to ProductDetailsLayoutAreas moved to @deity/falcon-ui-kit
 - Product
 - ProductGallery
 - NoProductImage
@@ -528,8 +530,8 @@
 
 ---
 
-- ~~AppLayout~~ -moved to `@deity/falcon-ui-kit/src/Layouts/AppLayout.tsx`
-- Breadcrumbs
+> - ~~AppLayout~~ -moved to `@deity/falcon-ui-kit/src/Layouts/AppLayout.tsx`
+> - ~~Breadcrumbs~~ - moved to @deity/falcon-ui-kit
 - ~~FixCenteredLayout~~ moved to `@deity/falcon-ui-kit/src/Layouts/FixCenteredLayout.tsx`
 - TwoColumnsLayout
 - TwoStepWizard

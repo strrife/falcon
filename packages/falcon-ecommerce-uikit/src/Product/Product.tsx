@@ -2,12 +2,13 @@ import React from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
 import { I18n } from '@deity/falcon-i18n';
-import { themed, Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
+import { Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
 import {
   ProductLayout,
+  ProductDetailsLayout,
+  ProductDetailsLayoutAreas,
   ProductDescriptionLayout,
   Breadcrumbs,
-  toGridTemplate,
   OpenSidebarMutation,
   Price
 } from '@deity/falcon-ui-kit';
@@ -16,57 +17,6 @@ import { AddToCartMutation, ProductResponse } from '@deity/falcon-shop-data';
 import { ProductGallery } from './ProductGallery';
 import { ProductConfigurableOptions } from './ConfigurableOptions';
 import { ProductConfigurator } from './ProductConfigurator';
-
-const Area = {
-  gallery: 'gallery',
-  sku: 'sku',
-  title: 'title',
-  description: 'description',
-  cta: 'cta',
-  price: 'price',
-  meta: 'meta',
-  empty: 'empty',
-  options: 'options',
-  error: 'error'
-};
-
-export const ProductDetailsLayout = themed({
-  tag: 'article',
-  defaultTheme: {
-    productDetailsLayout: {
-      display: 'grid',
-      gridGap: 'sm',
-
-      gridTemplate: {
-        // prettier-ignore
-        xs: toGridTemplate([
-          ['1fr'           ],
-          [Area.title      ],
-          [Area.sku        ],
-          [Area.gallery    ],
-          [Area.price      ],
-          [Area.error      ],
-          [Area.options    ],
-          [Area.cta        ],
-          [Area.description],
-          [Area.meta       ]
-        ]),
-        // prettier-ignore
-        md: toGridTemplate([
-          ['1.5fr',        '1fr'                  ],
-          [Area.gallery,   Area.sku               ],
-          [Area.gallery,   Area.title             ],
-          [Area.gallery,   Area.price             ],
-          [Area.gallery,   Area.options           ],
-          [Area.gallery,   Area.cta               ],
-          [Area.gallery,   Area.error             ],
-          [Area.gallery,   Area.description, '1fr'],
-          [Area.gallery,   Area.meta              ]
-        ])
-      }
-    }
-  }
-});
 
 /**
  * Combine render props functions into one with react-adopt
@@ -154,15 +104,15 @@ export class Product extends React.PureComponent<ProductResponse> {
                 productConfigurator
               }: any) => (
                 <ProductDetailsLayout>
-                  <FlexLayout gridArea={Area.gallery} alignItems="center" justifyContent="center">
+                  <FlexLayout gridArea={ProductDetailsLayoutAreas.gallery} alignItems="center" justifyContent="center">
                     <ProductGallery items={product.gallery} />
                   </FlexLayout>
-                  <Text fontSize="sm" gridArea={Area.sku}>
+                  <Text fontSize="sm" gridArea={ProductDetailsLayoutAreas.sku}>
                     {t('product.sku', { sku: product.sku })}
                   </Text>
-                  <H1 gridArea={Area.title}>{product.name}</H1>
+                  <H1 gridArea={ProductDetailsLayoutAreas.title}>{product.name}</H1>
 
-                  <Box gridArea={Area.price}>
+                  <Box gridArea={ProductDetailsLayoutAreas.price}>
                     {product.price.special ? (
                       <React.Fragment>
                         <Price value={product.price.regular} fontSize="xl" variant="old" mr="xs" />
@@ -194,9 +144,9 @@ export class Product extends React.PureComponent<ProductResponse> {
                   />
                   <ProductDescriptionLayout
                     dangerouslySetInnerHTML={{ __html: product.description }}
-                    gridArea={Area.description}
+                    gridArea={ProductDetailsLayoutAreas.description}
                   />
-                  <FlexLayout alignItems="center" gridArea={Area.cta} mt="xs">
+                  <FlexLayout alignItems="center" gridArea={ProductDetailsLayoutAreas.cta} mt="xs">
                     <NumberInput
                       mr="sm"
                       mt="sm"
@@ -218,7 +168,7 @@ export class Product extends React.PureComponent<ProductResponse> {
                       {t('product.addToCart')}
                     </Button>
                   </FlexLayout>
-                  <Box gridArea={Area.error}>
+                  <Box gridArea={ProductDetailsLayoutAreas.error}>
                     <ErrorMessage name="qty" render={msg => <Text color="error">{msg}</Text>} />
                     {!!error && <Text color="error">{error.message}</Text>}
                   </Box>
