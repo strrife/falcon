@@ -187,12 +187,14 @@ export default class Cache<V = any> implements KeyValueCache<V> {
 
   /**
    * Generating a short and safe enough tag value (second + ms = will ensure a unique value for the same tag name)
-   * @returns {string} Tag value
+   * @returns {number} Tag value
    */
-  private generateTagValue(): string {
-    const date: Date = new Date();
-    return `${Date.now()
-      .toString()
-      .substr(6)}`;
+  private generateTagValue(): number {
+    return parseInt(
+      Date.now()
+        .toString()
+        .substr(6),
+      10
+    );
   }
 }
