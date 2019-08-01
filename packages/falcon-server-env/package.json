@@ -58,7 +58,7 @@
     "graphql": "^14.1.1",
     "graphql-tools": "^4.0.0",
     "html-entities": "1.2.1",
-    "node-fetch": "2.3.0",
+    "node-fetch": "2.6.0",
     "qs": "6.6.0",
     "striptags": "3.1.1"
   },
@@ -70,7 +70,7 @@
     "@types/koa-router": "7.0.35",
     "@types/nock": "9.3.0",
     "@types/node": "11.9.5",
-    "@types/node-fetch": "2.1.6",
+    "@types/node-fetch": "2.5.0",
     "@types/qs": "6.5.1",
     "eventemitter2": "5.0.1",
     "koa": "2.7.0",
