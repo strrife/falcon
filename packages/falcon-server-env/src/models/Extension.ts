@@ -65,7 +65,7 @@ export abstract class Extension {
   /**
    * GraphQL configuration getter
    * @param {string|Array<string>} typeDefs Extension's GQL schema type definitions
-   * @returns {object} GraphQL configuration object
+   * @returns {Object} GraphQL configuration object
    */
   async getGraphQLConfig(typeDefs: string | Array<string> = ''): Promise<GraphQLConfig> {
     if (!typeDefs) {
@@ -118,7 +118,7 @@ export abstract class Extension {
   /**
    * Returns a session object from the assigned API Provider
    * @param {GraphQLContext} context GraphQL Resolver context object
-   * @returns {object} Session object
+   * @returns {Object} Session object
    */
   getApiSession(context: GraphQLContext): any {
     return this.getApi(context)!.session;
