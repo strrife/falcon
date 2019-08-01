@@ -4,7 +4,7 @@ import { MockedProvider } from 'react-apollo/test-utils';
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server';
 import { MemoryRouter } from 'react-router-dom';
 import { I18nProvider } from '@deity/falcon-i18n';
-import i18nFactory from '../src/i18n/__mocks__/i18nFactory';
+import i18nFactory from '../src/i18n/__fakes__/i18nFactory';
 
 /**
  * @typedef {Object} FalconClientProps
