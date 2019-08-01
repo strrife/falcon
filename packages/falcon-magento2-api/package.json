@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon-magento2-api",
   "license": "OSL-3.0",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "homepage": "https://falcon.deity.io/docs/falcon-server/api-providers#falcon-magento-2-api",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-magento2-api",
   "publishConfig": {
