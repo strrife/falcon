@@ -34,7 +34,7 @@
     "regenerator-runtime": "0.13.3"
   },
   "peerDependencies": {
-    "@deity/falcon-payment-plugin": "^0.0.2",
+    "@deity/falcon-payment-plugin": "^0.0.4",
     "react": "^16.6.3"
   }
 }
