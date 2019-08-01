@@ -13,7 +13,7 @@ const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware')
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 const { colors } = require('./../tools');
-const { getClientEnv } = require('./env');
+const { buildClientEnv, serializeEnvVariables } = require('./env');
 const runPlugin = require('./runPlugin');
 
 const falconClientPolyfills = require.resolve('./../../polyfills');
@@ -71,7 +71,7 @@ function getBabelLoaderOptions(babelRcPath) {
 /**
  * @param {'web' | 'node' } target
  * @param {'development' | 'production'} env
- * @param {object} cssLoaderOptions
+ * @param {Object} cssLoaderOptions
  */
 function getStyleLoaders(target, env, cssLoaderOptions) {
   const { minimize, ...restOptions } = cssLoaderOptions;
@@ -134,7 +134,7 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
  * Webpack configuration factory. It's the juice!
  * @param {'web' | 'node' } target
  * @param {CreateWebpackOptions} options
- * @returns {object} webpack configuration
+ * @returns {Object} webpack configuration
  */
 module.exports = (target = 'web', options) => {
   options = { ...options, publicPath: options.publicPath || '/' };
@@ -151,13 +151,8 @@ module.exports = (target = 'web', options) => {
 
   const devtool = 'source-map';
   const devServerUrl = `http://localhost:${devServerPort}/`;
-  const clientEnv = getClientEnv(
-    target,
-    NODE_ENV,
-    START_DEV_SERVER,
-    publicPath,
-    devServerPort,
-    buildConfig.envToBuildIn
+  const serializedClientEnv = serializeEnvVariables(
+    buildClientEnv(target, NODE_ENV, publicPath, paths, START_DEV_SERVER, devServerPort, buildConfig.envToBuildIn)
   );
 
   let config = {
@@ -313,7 +308,7 @@ module.exports = (target = 'web', options) => {
     };
 
     config.plugins = [
-      new webpack.DefinePlugin(clientEnv.stringified),
+      new webpack.DefinePlugin(serializedClientEnv),
       new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })
     ];
 
@@ -453,7 +448,7 @@ module.exports = (target = 'web', options) => {
       config.plugins = [
         ...config.plugins,
         START_DEV_SERVER && new webpack.HotModuleReplacementPlugin({ multiStep: true }),
-        new webpack.DefinePlugin(clientEnv.stringified)
+        new webpack.DefinePlugin(serializedClientEnv)
       ].filter(x => x);
     } else {
       config.output = {
@@ -464,7 +459,7 @@ module.exports = (target = 'web', options) => {
 
       config.plugins = [
         ...config.plugins,
-        new webpack.DefinePlugin(clientEnv.stringified),
+        new webpack.DefinePlugin(serializedClientEnv),
         // Extract our CSS into a files.
         new MiniCssExtractPlugin({
           filename: 'static/css/[name].[contenthash:8].css',

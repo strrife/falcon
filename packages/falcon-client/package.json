@@ -12,12 +12,12 @@
     "falcon-client": "./bin/falcon-client.js"
   },
   "scripts": {
-    "test": "node ./bin/falcon-client test --env=jsdom",
-    "test:coverage": "node ./bin/falcon-client test --env=jsdom --ci --coverage"
+    "test": "falcon-scripts test",
+    "test:coverage": "falcon-scripts test:coverage"
   },
   "jest": {
     "setupFilesAfterEnv": [
-      "./../../test/setupTests.js"
+      "./setupTests.js"
     ]
   },
   "dependencies": {
@@ -30,6 +30,7 @@
     "@deity/falcon-i18n-webpack-plugin": "^0.2.1",
     "@deity/falcon-logger": "^1.0.1",
     "@deity/normal-module-override-webpack-plugin": "^0.0.2",
+    "@deity/falcon-scripts": "^0.0.2",
     "@loadable/server": "5.7.0",
     "@loadable/webpack-plugin": "5.7.1",
     "apollo-cache-inmemory": "^1.3.0",
