@@ -46,8 +46,6 @@ class AddressSection extends React.Component {
       availableAddresses,
       defaultSelected
     } = this.props;
-    let header;
-    let content;
 
     const { street = [], ...selectedAddressRest } = selectedAddress || {};
     const initialAddressValue = {
@@ -62,12 +60,15 @@ class AddressSection extends React.Component {
       ...selectedAddressRest
     };
 
+    let header;
+    let content;
+
     if (!open && selectedAddress) {
       header = (
         <SectionHeader
           title={title}
           onActionClick={onEditRequested}
-          editLabel="Edit"
+          editLabel="Edit" // TODO: translation
           complete
           summary={<AddressDetails {...selectedAddress} />}
         />
@@ -79,20 +80,28 @@ class AddressSection extends React.Component {
     let selectedAvailableAddress;
     // if available addresses are passed then we should display dropdown so the user can pick his saved address
     if (availableAddresses) {
-      // compute address that should be selected in the dropdown
-      if (this.state.selectedAddressId) {
+      // get address ID that should be selected in the dropdown
+      const selectedId =
         // if we have locally selected address id then use it
-        selectedAvailableAddress = availableAddresses.find(item => item.id === this.state.selectedAddressId);
-      } else if (selectedAddress && selectedAddress.id) {
+        this.state.selectedAddressId ||
         // if there's passed selected address then use it
-        selectedAvailableAddress = availableAddresses.find(item => item.id === selectedAddress.id);
-      } else if (defaultSelected) {
+        (selectedAddress && selectedAddress.id) ||
         // if default that should be selected is passed then use it
-        selectedAvailableAddress = availableAddresses.find(item => item.id === defaultSelected.id);
-      }
+        (defaultSelected && defaultSelected.id);
+
+      selectedAvailableAddress = availableAddresses.find(item => item.id === selectedId);
     }
 
-    // TODO: might be worth refactoring to reduce duplication
+    // lets the user manually enter an address
+    const addressForm = (
+      <Formik initialValues={initialAddressValue} onSubmit={this.submitAddress}>
+        <Box my="sm">
+          <AddressForm id={id} countries={countries} submitLabel={submitLabel} autoCompleteSection={id} />
+        </Box>
+      </Formik>
+    );
+
+    // lets the user pick an existing address or show the address form
     const addressEditor = (
       <React.Fragment>
         {availableAddresses && (
@@ -102,15 +111,7 @@ class AddressSection extends React.Component {
             onChange={addrId => this.setState({ selectedAddressId: addrId })}
           />
         )}
-        {!selectedAvailableAddress && (
-          <Formik initialValues={initialAddressValue} onSubmit={this.submitAddress}>
-            {() => (
-              <Box my="sm">
-                <AddressForm id={id} countries={countries} submitLabel={submitLabel} autoCompleteSection={id} />
-              </Box>
-            )}
-          </Formik>
-        )}
+        {!selectedAvailableAddress && addressForm}
         {!!selectedAvailableAddress && (
           <Button my="sm" onClick={this.submitSelectedAddress}>
             <T id="continue" />
@@ -120,6 +121,7 @@ class AddressSection extends React.Component {
     );
 
     if (setUseTheSame) {
+      // ask if the same address from a previous step should be used
       content = (
         <React.Fragment>
           <FlexLayout mb="md">
@@ -135,7 +137,7 @@ class AddressSection extends React.Component {
           </FlexLayout>
 
           {this.state.useTheSame ? (
-            <Button onClick={() => this.props.setUseTheSame(true)}>
+            <Button onClick={() => setUseTheSame(true)}>
               <T id="continue" />
             </Button>
           ) : (
@@ -144,17 +146,11 @@ class AddressSection extends React.Component {
         </React.Fragment>
       );
     } else if (availableAddresses) {
+      // let the user pick an existing address or enter another one
       content = addressEditor;
     } else {
-      content = (
-        <Formik initialValues={initialAddressValue} onSubmit={this.submitAddress}>
-          {() => (
-            <Box my="sm">
-              <AddressForm id={id} countries={countries} submitLabel={submitLabel} autoCompleteSection={id} />
-            </Box>
-          )}
-        </Formik>
-      );
+      // no addresses are available, the only option is to enter one manually
+      content = addressForm;
     }
 
     return (
