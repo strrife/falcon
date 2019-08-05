@@ -237,7 +237,9 @@
     "street2FieldLabel": "Street line 2",
     "postcodeFieldLabel": "ZIP code",
     "cityFieldLabel": "City",
-    "countryIdFieldLabel": "Country"
+    "countryIdFieldLabel": "Country",
+    "defaultShippingFieldLabel": "Use as my default shipping address",
+    "defaultBillingFieldLabel": "Use as my default billing address"
   },
   "addressBook": {
     "title": "Address Book",
@@ -271,8 +273,6 @@
   },
   "addAddress": {
     "title": "Add Address",
-    "defaultShippingFieldLabel": "$t(editAddress.defaultShippingFieldLabel)",
-    "defaultBillingFieldLabel": "$t(editAddress.defaultBillingFieldLabel)",
     "companyFieldLabel": "$t(addressForm.companyFieldLabel)",
     "firstnameFieldLabel": "$t(addressForm.firstNameFieldLabel)",
     "lastnameFieldLabel": "$t(addressForm.lastNameFieldLabel)",
