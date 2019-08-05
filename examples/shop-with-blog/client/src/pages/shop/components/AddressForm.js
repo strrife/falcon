@@ -4,13 +4,6 @@ import { CheckboxFormField, CountrySelector } from '@deity/falcon-ecommerce-uiki
 import { Form, FormField } from '@deity/falcon-ui-kit';
 import { Box, Button } from '@deity/falcon-ui';
 
-const addressFormLayout = {
-  addressFormLayout: {
-    display: 'flex',
-    flexDirection: 'column'
-  }
-};
-
 const AddressForm = ({ countries = [], submitLabel = 'Save', askDefault, id = '', autoCompleteSection }) => {
   const getAutoComplete = attribute => [autoCompleteSection, attribute].filter(x => x).join(' ');
 
@@ -22,20 +15,20 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', askDefault, id = ''
   ) : null;
 
   return (
-    <Form id={id} defaultTheme={addressFormLayout} i18nId="addressForm" height="400px">
+    <Form id={id} i18nId="addressForm">
       {askDefaultFields}
-      <FormField name="firstname" required autoComplete={getAutoComplete('given-name')} mb="sm" />
-      <FormField name="lastname" required autoComplete={getAutoComplete('family-name')} mb="sm" />
-      <FormField name="street1" required autoComplete={getAutoComplete('address-line1')} mb="sm" />
-      <FormField name="street2" autoComplete={getAutoComplete('address-line2')} mb="sm" />
-      <FormField name="countryId" required autoComplete={getAutoComplete('country')} mb="sm">
+      <FormField name="firstname" required autoComplete={getAutoComplete('given-name')} />
+      <FormField name="lastname" required autoComplete={getAutoComplete('family-name')} />
+      <FormField name="street1" required autoComplete={getAutoComplete('address-line1')} />
+      <FormField name="street2" autoComplete={getAutoComplete('address-line2')} />
+      <FormField name="countryId" required autoComplete={getAutoComplete('country')}>
         {({ form, field }) => (
           <CountrySelector {...field} items={countries} onChange={x => form.setFieldValue(field.name, x)} />
         )}
       </FormField>
-      <FormField name="postcode" required autoComplete={getAutoComplete('postal-code')} mb="sm" />
-      <FormField name="city" required autoComplete={getAutoComplete('address-level2')} mb="sm" />
-      <FormField name="telephone" required autoComplete={getAutoComplete('tel')} mb="sm" />
+      <FormField name="postcode" required autoComplete={getAutoComplete('postal-code')} />
+      <FormField name="city" required autoComplete={getAutoComplete('address-level2')} />
+      <FormField name="telephone" required autoComplete={getAutoComplete('tel')} />
       <Box mb="sm">
         <Button type="submit">{submitLabel}</Button>
       </Box>
