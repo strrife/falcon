@@ -12,11 +12,11 @@ import {
   OpenSidebarMutation,
   Price,
   ProductGallery,
-  ProductOptionList
+  ProductOptionList,
+  ProductConfigurator
 } from '@deity/falcon-ui-kit';
 import { Locale, Field, rangeValidator, requiredValidator } from '@deity/falcon-front-kit';
 import { AddToCartMutation, ProductResponse } from '@deity/falcon-shop-data';
-import { ProductConfigurator } from './ProductConfigurator';
 
 /**
  * Combine render props functions into one with react-adopt
