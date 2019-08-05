@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, FormField, CountrySelector } from '@deity/falcon-ecommerce-uikit';
+import { Form, FormField, CheckboxFormField, CountrySelector } from '@deity/falcon-ecommerce-uikit';
 import { Box, Button } from '@deity/falcon-ui';
 
 const addressFormLayout = {
@@ -10,11 +10,19 @@ const addressFormLayout = {
   }
 };
 
-const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoCompleteSection }) => {
+const AddressForm = ({ countries = [], submitLabel = 'Save', askDefault, id = '', autoCompleteSection }) => {
   const getAutoComplete = attribute => [autoCompleteSection, attribute].filter(x => x).join(' ');
+
+  const askDefaultFields = askDefault ? (
+    <Box mb="sm">
+      <CheckboxFormField name="defaultShipping" />
+      <CheckboxFormField name="defaultBilling" />
+    </Box>
+  ) : null;
 
   return (
     <Form id={id} defaultTheme={addressFormLayout} i18nId="addressForm" height="400px">
+      {askDefaultFields}
       <FormField name="firstname" required autoComplete={getAutoComplete('given-name')} mb="sm" />
       <FormField name="lastname" required autoComplete={getAutoComplete('family-name')} mb="sm" />
       <FormField name="street1" required autoComplete={getAutoComplete('address-line1')} mb="sm" />
@@ -38,7 +46,7 @@ AddressForm.propTypes = {
   id: PropTypes.string.isRequired,
   submitLabel: PropTypes.string,
   // TODO: allow cancel
-  // TODO: ask default
+  askDefault: PropTypes.bool,
   countries: PropTypes.arrayOf(
     PropTypes.shape({
       localName: PropTypes.string,
