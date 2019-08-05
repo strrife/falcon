@@ -21,6 +21,8 @@ function triggerChange(element: any, value: any) {
 class NumberInputInnerDOM extends React.Component<
   React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 > {
+  inputRef = React.createRef<HTMLInputElement>();
+
   getStep() {
     if (this.props.step === undefined) {
       return 1;
@@ -41,8 +43,6 @@ class NumberInputInnerDOM extends React.Component<
     }
     return +this.props.min;
   }
-
-  inputRef = React.createRef<HTMLInputElement>();
 
   stepUp = () => {
     if (!this.inputRef.current) {
@@ -100,6 +100,7 @@ export const NumberInput = themed({
   tag: NumberInputInnerDOM,
 
   defaultProps: {
+    invalid: false,
     readOnly: true
   },
 
