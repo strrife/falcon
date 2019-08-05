@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
 import { H1, GridLayout } from '@deity/falcon-ui';
@@ -6,7 +7,7 @@ import { CountriesQuery, AddAddressMutation, Loader } from '@deity/falcon-ecomme
 import AddressForm from '../../components/AddressForm';
 import ErrorList from '../../components/ErrorList';
 
-const AddAddress = ({ history }) => {
+const AddAddress = () => {
   const initialAddressValues = {
     firstname: '',
     lastname: '',
@@ -21,6 +22,12 @@ const AddAddress = ({ history }) => {
     defaultShipping: false
   };
 
+  const [done, setDone] = useState(false);
+
+  if (done) {
+    return <Redirect to="/account/address-book" />;
+  }
+
   return (
     <CountriesQuery>
       {({ countries }) => (
@@ -33,19 +40,24 @@ const AddAddress = ({ history }) => {
               </H1>
               <Formik
                 initialValues={initialAddressValues}
-                onSubmit={
-                  ({ street1, street2, ...values }) =>
-                    addAddress({
-                      variables: {
-                        input: {
-                          ...values,
-                          street: [street1, street2]
-                        }
+                onSubmit={({ street1, street2, ...values }) =>
+                  addAddress({
+                    variables: {
+                      input: {
+                        ...values,
+                        street: [street1, street2]
                       }
-                    }).then(() => history.push('/account/address-book')) // TODO: render Redirect instead
+                    }
+                  }).then(setDone(true))
                 }
               >
-                {() => <AddressForm twoColumns id="add-address" countries={countries.items} askDefault />}
+                <AddressForm
+                  id="add-address"
+                  twoColumns
+                  askDefault
+                  onCancel={() => setDone(true)}
+                  countries={countries.items}
+                />
               </Formik>
               <ErrorList errors={error ? [new Error(error)] : []} />
             </GridLayout>

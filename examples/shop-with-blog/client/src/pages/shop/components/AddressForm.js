@@ -9,9 +9,18 @@ import {
   TwoColumnsLayoutArea
 } from '@deity/falcon-ecommerce-uikit';
 import { Box, Button, GridLayout, FlexLayout } from '@deity/falcon-ui';
+import { T } from '@deity/falcon-i18n';
 
 const AddressForm = props => {
-  const { countries = [], submitLabel = 'Save', twoColumns, askDefault, id = '', autoCompleteSection } = props;
+  const {
+    id = '',
+    submitLabel = 'Save',
+    twoColumns,
+    askDefault,
+    onCancel,
+    countries = [],
+    autoCompleteSection
+  } = props;
 
   const getAutoComplete = attribute => [autoCompleteSection, attribute].filter(x => x).join(' ');
 
@@ -22,7 +31,7 @@ const AddressForm = props => {
     </Box>
   );
 
-  // Define the form content, not including optional fields for default address
+  // The form content, not including default address fields and submit button(s)
   const formContent = (
     <React.Fragment>
       <GridLayout gridArea={twoColumns ? TwoColumnsLayoutArea.left : null}>
@@ -41,11 +50,6 @@ const AddressForm = props => {
         <FormField name="postcode" required autoComplete={getAutoComplete('postal-code')} />
         <FormField name="city" required autoComplete={getAutoComplete('address-level2')} />
       </GridLayout>
-      <FlexLayout>
-        <Box mb="sm">
-          <Button type="submit">{submitLabel}</Button>
-        </Box>
-      </FlexLayout>
     </React.Fragment>
   );
 
@@ -53,6 +57,14 @@ const AddressForm = props => {
     <Form id={id} i18nId="addressForm">
       {askDefault && askDefaultFields}
       {twoColumns ? <TwoColumnsLayout>{formContent}</TwoColumnsLayout> : formContent}
+      <FlexLayout justifyContent={twoColumns ? 'flex-end' : 'flex-start'} alignItems="center" mt="md">
+        {onCancel && (
+          <Button onClick={onCancel} mr="md">
+            <T id="addressForm.cancelButton" />
+          </Button>
+        )}
+        <Button type="submit">{submitLabel}</Button>
+      </FlexLayout>
     </Form>
   );
 };
@@ -60,9 +72,9 @@ const AddressForm = props => {
 AddressForm.propTypes = {
   id: PropTypes.string.isRequired,
   submitLabel: PropTypes.string,
-  twoColumn: PropTypes.bool,
-  // TODO: allow cancel
+  twoColumns: PropTypes.bool,
   askDefault: PropTypes.bool,
+  onCancel: PropTypes.func,
   countries: PropTypes.arrayOf(
     PropTypes.shape({
       localName: PropTypes.string,
