@@ -31,7 +31,7 @@ const AddressForm = props => {
     </Box>
   );
 
-  // The form content, not including default address fields and submit button(s)
+  // the form content, not including default address fields and submit button(s)
   const formContent = (
     <React.Fragment>
       <GridLayout gridArea={twoColumns ? TwoColumnsLayoutArea.left : null}>
@@ -70,11 +70,17 @@ const AddressForm = props => {
 };
 
 AddressForm.propTypes = {
+  // id of the form - used for generating unique ids for form fields inside
   id: PropTypes.string.isRequired,
+  // a custom label for the submit button
   submitLabel: PropTypes.string,
+  // whether to use a two column layout instead of a single column
   twoColumns: PropTypes.bool,
+  // whether the form should ask whether the address should be set as default
   askDefault: PropTypes.bool,
+  // callback that cancels the form submission
   onCancel: PropTypes.func,
+  // list of available countries
   countries: PropTypes.arrayOf(
     PropTypes.shape({
       localName: PropTypes.string,
