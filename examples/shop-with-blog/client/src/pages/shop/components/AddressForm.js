@@ -41,13 +41,13 @@ const AddressForm = props => {
       <GridLayout gridArea={twoColumns ? TwoColumnsLayoutArea.right : null}>
         <FormField name="street1" required autoComplete={getAutoComplete('address-line1')} />
         <FormField name="street2" autoComplete={getAutoComplete('address-line2')} />
+        <FormField name="postcode" required autoComplete={getAutoComplete('postal-code')} />
+        <FormField name="city" required autoComplete={getAutoComplete('address-level2')} />
         <FormField name="countryId" required autoComplete={getAutoComplete('country')}>
           {({ form, field }) => (
             <CountrySelector {...field} items={countries} onChange={x => form.setFieldValue(field.name, x)} />
           )}
         </FormField>
-        <FormField name="postcode" required autoComplete={getAutoComplete('postal-code')} />
-        <FormField name="city" required autoComplete={getAutoComplete('address-level2')} />
       </GridLayout>
     </React.Fragment>
   );
