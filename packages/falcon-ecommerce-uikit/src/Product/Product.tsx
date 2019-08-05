@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
 import { I18n } from '@deity/falcon-i18n';
-import { Box, Text, H1, NumberInput, Button, Icon, FlexLayout, extractThemableProps } from '@deity/falcon-ui';
+import { Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
 import {
   PageLayout,
   ProductLayout,
@@ -14,7 +14,7 @@ import {
   ProductGallery,
   ProductOptionList
 } from '@deity/falcon-ui-kit';
-import { Locale, Field, rangeValidator, getInputDefaultValidators } from '@deity/falcon-front-kit';
+import { Locale, Field, rangeValidator, requiredValidator } from '@deity/falcon-front-kit';
 import { AddToCartMutation, ProductResponse } from '@deity/falcon-shop-data';
 import { ProductConfigurator } from './ProductConfigurator';
 
@@ -95,7 +95,7 @@ export class Product extends React.PureComponent<ProductResponse> {
                 addToCartMutation: {
                   result: { loading, error }
                 },
-                formik: { values, errors, setFieldValue, submitCount },
+                formik: { errors },
                 productConfigurator
               }: any) => (
                 <ProductLayout>
@@ -140,7 +140,7 @@ export class Product extends React.PureComponent<ProductResponse> {
                   />
                   <ProductDescription gridArea={ProductLayoutAreas.description} value={product.description} />
                   <FlexLayout alignItems="center" gridArea={ProductLayoutAreas.cta} mt="xs">
-                    <Field name="qty" validate={[rangeValidator(1)]}>
+                    <Field name="qty" validate={[requiredValidator, rangeValidator(1)]}>
                       {({ field }) => (
                         <NumberInput
                           {...field}
