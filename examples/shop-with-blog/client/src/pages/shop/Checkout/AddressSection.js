@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { FlexLayout, Checkbox, Label, Details, DetailsContent, Button, Box } from '@deity/falcon-ui';
-import { T } from '@deity/falcon-i18n';
+import { T, I18n } from '@deity/falcon-i18n';
 import { AddressDetails } from '@deity/falcon-ecommerce-uikit';
 import AddressForm from '../components/AddressForm';
 import ErrorList from '../components/ErrorList';
@@ -65,13 +65,17 @@ class AddressSection extends React.Component {
 
     if (!open && selectedAddress) {
       header = (
-        <SectionHeader
-          title={title}
-          onActionClick={onEditRequested}
-          editLabel="Edit" // TODO: translation
-          complete
-          summary={<AddressDetails {...selectedAddress} />}
-        />
+        <I18n>
+          {t => (
+            <SectionHeader
+              title={title}
+              onActionClick={onEditRequested}
+              editLabel={t('edit')}
+              complete
+              summary={<AddressDetails {...selectedAddress} />}
+            />
+          )}
+        </I18n>
       );
     } else {
       header = <SectionHeader title={title} />;
