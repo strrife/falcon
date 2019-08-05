@@ -59,7 +59,7 @@ export default {
 
   resolvers: {
     Query: {
-      sortOrders: () => sortOrders
+      sortOrderList: () => sortOrders
     },
 
     Mutation: {
