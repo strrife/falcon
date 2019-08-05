@@ -46,7 +46,7 @@ const AddAddress = ({ history }) => {
                     }).then(() => history.push('/account/address-book')) // TODO: render Redirect instead
                 }
               >
-                {() => <AddressForm id="add-address" countries={countries.items} askDefault />}
+                {() => <AddressForm twoColumns id="add-address" countries={countries.items} askDefault />}
               </Formik>
               <ErrorList errors={error ? [new Error(error)] : []} />
             </GridLayout>
