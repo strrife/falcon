@@ -1,7 +1,7 @@
 import { ConfigurableProductOption, ConfigurableOptionInput } from '@deity/falcon-shop-extension';
 
 export const productConfigurableOptionsToForm = (
-  configurableOptions: ConfigurableProductOption[]
+  configurableOptions: Pick<ConfigurableProductOption, 'attributeId'>[]
 ): { [attributeId: string]: any } =>
   configurableOptions.map(x => x.attributeId).reduce((prev, x) => ({ ...prev, [x]: undefined }), {});
 

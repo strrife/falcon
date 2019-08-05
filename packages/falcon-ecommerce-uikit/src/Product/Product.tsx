@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
-import { I18n } from '@deity/falcon-i18n';
+import { T } from '@deity/falcon-i18n';
 import { Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
 import {
   PageLayout,
@@ -40,7 +40,7 @@ const ProductForm = adopt({
     </AddToCartMutation>
   ),
   // formik handles form operations and triggers submit when onSubmit event is fired on the form
-  formik: ({ product, sku, validate, addToCartMutation, render }) => (
+  formik: ({ product, validate, addToCartMutation, render }) => (
     <Formik
       initialValues={{
         qty: 1,
@@ -51,7 +51,7 @@ const ProductForm = adopt({
         return addToCartMutation.addToCart({
           variables: {
             input: {
-              sku,
+              sku: product.sku,
               ...values,
               configurableOptions: formProductConfigurableOptionsToInput(values.configurableOptions),
               qty: parseInt(values.qty, 10)
@@ -72,84 +72,78 @@ const ProductForm = adopt({
 export class Product extends React.PureComponent<ProductResponse> {
   render() {
     const { product } = this.props;
+    const { price, tierPrices } = product;
 
     return (
       <PageLayout>
         <Breadcrumbs items={product.breadcrumbs} />
-        <I18n>
-          {t => (
-            <ProductForm sku={product.sku} product={product}>
-              {({
-                addToCartMutation: {
-                  result: { loading, error }
-                }
-              }) => (
-                <ProductLayout>
-                  <FlexLayout gridArea={ProductLayoutAreas.gallery} alignItems="center" justifyContent="center">
-                    <ProductGallery items={product.gallery} />
-                  </FlexLayout>
-                  <Text fontSize="sm" gridArea={ProductLayoutAreas.sku}>
-                    {t('product.sku', { sku: product.sku })}
-                  </Text>
-                  <H1 gridArea={ProductLayoutAreas.title}>{product.name}</H1>
 
-                  <Box gridArea={ProductLayoutAreas.price}>
-                    {product.price.special ? (
-                      <React.Fragment>
-                        <Price value={product.price.regular} fontSize="xl" variant="old" mr="xs" />
-                        <Price value={product.price.special} fontSize="xl" variant="special" />
-                      </React.Fragment>
-                    ) : (
-                      <Price value={product.price.regular} fontSize="xl" />
-                    )}
-                    <Locale>
-                      {({ priceFormat }) =>
-                        (product.tierPrices || []).map(x => (
-                          <Text key={x.qty}>
-                            {t('product.tierPriceDescription', {
-                              qty: x.qty,
-                              price: priceFormat(x.value),
-                              discount: x.discount
-                            })}
-                          </Text>
-                        ))
-                      }
-                    </Locale>
-                  </Box>
-                  <ProductOptionList
-                    gridArea={ProductLayoutAreas.options}
-                    name="configurableOptions"
-                    items={product.configurableOptions}
-                    disabled={loading}
-                  />
-                  <ProductDescription gridArea={ProductLayoutAreas.description} value={product.description} />
-                  <FlexLayout alignItems="center" gridArea={ProductLayoutAreas.cta} mt="xs">
-                    <Field name="qty" validate={[requiredValidator, rangeValidator(1)]}>
-                      {({ field }) => (
-                        <NumberInput
-                          {...field}
-                          disabled={loading}
-                          mr="sm"
-                          mt="sm"
-                          min="1"
-                          aria-label={`t('product.quantity')`}
-                        />
-                      )}
-                    </Field>
-                    <Button type="submit" height="xl" mt="sm" disabled={loading} variant={loading && 'loader'}>
-                      {!loading && <Icon src="cart" stroke="white" size="md" mr="sm" />}
-                      {t('product.addToCart')}
-                    </Button>
-                  </FlexLayout>
-                  <Box gridArea={ProductLayoutAreas.error}>
-                    <ErrorMessage name="qty" render={msg => <Text color="error">{msg}</Text>} />
-                    {!!error && <Text color="error">{error.message}</Text>}
-                  </Box>
-                </ProductLayout>
-              )}
-            </ProductForm>
+        <ProductForm sku={product.sku} product={product}>
+          {({
+            addToCartMutation: {
+              result: { loading, error }
+            }
+          }) => (
+            <ProductLayout>
+              <FlexLayout gridArea={ProductLayoutAreas.gallery} alignItems="center" justifyContent="center">
+                <ProductGallery items={product.gallery} />
+              </FlexLayout>
+              <Text fontSize="sm" gridArea={ProductLayoutAreas.sku}>
+                <T id="product.sku" sku={product.sku} />
+              </Text>
+              <H1 gridArea={ProductLayoutAreas.title}>{product.name}</H1>
+
+              <Box gridArea={ProductLayoutAreas.price}>
+                {price.special ? (
+                  <React.Fragment>
+                    <Price value={price.regular} fontSize="xl" variant="old" mr="xs" />
+                    <Price value={price.special} fontSize="xl" variant="special" />
+                  </React.Fragment>
+                ) : (
+                  <Price value={price.regular} fontSize="xl" />
+                )}
+                {tierPrices.length > 0 && (
+                  <Locale>
+                    {({ priceFormat }) =>
+                      tierPrices.map(x => (
+                        <Text key={x.qty}>
+                          <T
+                            id="product.tierPriceDescription"
+                            qty={x.qty}
+                            price={priceFormat(x.value)}
+                            discount={x.discount}
+                          />
+                        </Text>
+                      ))
+                    }
+                  </Locale>
+                )}
+              </Box>
+              <ProductOptionList
+                gridArea={ProductLayoutAreas.options}
+                name="configurableOptions"
+                items={product.configurableOptions}
+                disabled={loading}
+              />
+              <ProductDescription gridArea={ProductLayoutAreas.description} value={product.description} />
+              <FlexLayout alignItems="center" gridArea={ProductLayoutAreas.cta} mt="xs">
+                <Field name="qty" validate={[requiredValidator, rangeValidator(1)]}>
+                  {({ field, label }) => (
+                    <NumberInput {...field} disabled={loading} mr="sm" mt="sm" min="1" aria-label={label} />
+                  )}
+                </Field>
+                <Button type="submit" height="xl" mt="sm" disabled={loading} variant={loading && 'loader'}>
+                  {!loading && <Icon src="cart" stroke="white" size="md" mr="sm" />}
+                  <T id="product.addToCart" />
+                </Button>
+              </FlexLayout>
+              <Box gridArea={ProductLayoutAreas.error}>
+                <ErrorMessage name="qty" render={msg => <Text color="error">{msg}</Text>} />
+                {!!error && <Text color="error">{error.message}</Text>}
+              </Box>
+            </ProductLayout>
           )}
-        </I18n>
+        </ProductForm>
       </PageLayout>
     );
   }
