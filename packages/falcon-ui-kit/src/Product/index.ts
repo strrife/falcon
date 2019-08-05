@@ -5,6 +5,7 @@ export * from './ProductGalleryLayout';
 export * from './ProductGallery';
 export * from './ProductGalleryThumbLayout';
 export * from './ProductMeta';
-export * from './ProductOptionList';
 export * from './ProductOptionRadio';
+export * from './ConfigurableProductOptionRadioGroupField';
+export * from './ProductOptionList';
 export * from './ProductConfigurator';

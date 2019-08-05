@@ -13,10 +13,16 @@ import {
   Price,
   ProductGallery,
   ProductOptionList,
-  ProductConfigurator,
   Form
 } from '@deity/falcon-ui-kit';
-import { Locale, Field, rangeValidator, requiredValidator } from '@deity/falcon-front-kit';
+import {
+  Locale,
+  Field,
+  rangeValidator,
+  requiredValidator,
+  formProductConfigurableOptionsToInput,
+  productConfigurableOptionsToForm
+} from '@deity/falcon-front-kit';
 import { AddToCartMutation, ProductResponse } from '@deity/falcon-shop-data';
 
 /**
@@ -34,21 +40,25 @@ const ProductForm = adopt({
     </AddToCartMutation>
   ),
   // formik handles form operations and triggers submit when onSubmit event is fired on the form
-  formik: ({ sku, validate, addToCartMutation, render }) => (
+  formik: ({ product, sku, validate, addToCartMutation, render }) => (
     <Formik
-      initialValues={{ qty: 1 }}
+      initialValues={{
+        qty: 1,
+        configurableOptions: productConfigurableOptionsToForm(product.configurableOptions)
+      }}
       validate={validate}
-      onSubmit={(values: any) =>
-        addToCartMutation.addToCart({
+      onSubmit={(values: any) => {
+        return addToCartMutation.addToCart({
           variables: {
             input: {
               sku,
               ...values,
+              configurableOptions: formProductConfigurableOptionsToInput(values.configurableOptions),
               qty: parseInt(values.qty, 10)
             }
           }
-        })
-      }
+        });
+      }}
     >
       {(...props) => (
         <Form id="product" i18nId="product">
@@ -56,37 +66,10 @@ const ProductForm = adopt({
         </Form>
       )}
     </Formik>
-  ),
-
-  // product configurator takes care about interactions between configurable product options and serializes
-  // selected data into proper format so GraphQL can use it
-  productConfigurator: ({ formik, render }) => (
-    <ProductConfigurator
-      onChange={(name: string, value: any) => formik.setFieldValue(name, value, !!formik.submitCount)}
-    >
-      {render}
-    </ProductConfigurator>
   )
 });
 
 export class Product extends React.PureComponent<ProductResponse> {
-  createValidator(product: ProductResponse['product'], t: any) {
-    return (values: any) => {
-      const errors: any = {};
-
-      // handle configuration options
-      if (product.configurableOptions && product.configurableOptions.length) {
-        if (!values.configurableOptions || values.configurableOptions.length !== product.configurableOptions.length) {
-          errors.configurableOptions = t('product.error.configurableOptions');
-        }
-      }
-
-      // todo: handle bundled products
-
-      return errors;
-    };
-  }
-
   render() {
     const { product } = this.props;
 
@@ -95,14 +78,12 @@ export class Product extends React.PureComponent<ProductResponse> {
         <Breadcrumbs items={product.breadcrumbs} />
         <I18n>
           {t => (
-            <ProductForm sku={product.sku} validate={this.createValidator(product, t)}>
+            <ProductForm sku={product.sku} product={product}>
               {({
                 addToCartMutation: {
                   result: { loading, error }
-                },
-                formik: { errors },
-                productConfigurator
-              }: any) => (
+                }
+              }) => (
                 <ProductLayout>
                   <FlexLayout gridArea={ProductLayoutAreas.gallery} alignItems="center" justifyContent="center">
                     <ProductGallery items={product.gallery} />
@@ -136,12 +117,10 @@ export class Product extends React.PureComponent<ProductResponse> {
                     </Locale>
                   </Box>
                   <ProductOptionList
+                    gridArea={ProductLayoutAreas.options}
+                    name="configurableOptions"
                     items={product.configurableOptions}
                     disabled={loading}
-                    error={errors.configurableOptions}
-                    onChange={(ev: React.ChangeEvent<any>) =>
-                      productConfigurator.handleProductConfigurationChange('configurableOption', ev)
-                    }
                   />
                   <ProductDescription gridArea={ProductLayoutAreas.description} value={product.description} />
                   <FlexLayout alignItems="center" gridArea={ProductLayoutAreas.cta} mt="xs">
