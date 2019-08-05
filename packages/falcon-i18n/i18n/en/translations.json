@@ -239,7 +239,8 @@
     "cityFieldLabel": "City",
     "countryIdFieldLabel": "Country",
     "defaultShippingFieldLabel": "Use as my default shipping address",
-    "defaultBillingFieldLabel": "Use as my default billing address"
+    "defaultBillingFieldLabel": "Use as my default billing address",
+    "cancelButton": "Cancel"
   },
   "addressBook": {
     "title": "Address Book",
@@ -269,7 +270,7 @@
     "cityFieldLabel": "$t(addressForm.cityFieldLabel)",
     "countryIdFieldLabel": "$t(addressForm.countryIdFieldLabel)",
     "submitButton": "Update Address",
-    "cancelButton": "Cancel"
+    "cancelButton": "$t(addressForm.cancelButton)"
   },
   "addAddress": {
     "title": "Add Address",
@@ -283,7 +284,7 @@
     "cityFieldLabel": "$t(addressForm.cityFieldLabel)",
     "countryIdFieldLabel": "$t(addressForm.countryIdFieldLabel)",
     "submitButton": "Save Address",
-    "cancelButton": "$t(editAddress.cancelButton)"
+    "cancelButton": "$t(addressForm.cancelButton)"
   },
   "editCustomer": {
     "title": "Personal Information",
