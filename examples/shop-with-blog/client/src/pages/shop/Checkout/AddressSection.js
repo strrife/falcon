@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
-import { FlexLayout, Checkbox, Label, Details, DetailsContent, Button } from '@deity/falcon-ui';
+import { FlexLayout, Checkbox, Label, Details, DetailsContent, Button, Box } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 import { AddressDetails } from '@deity/falcon-ecommerce-uikit';
 import AddressForm from '../components/AddressForm';
@@ -51,7 +51,6 @@ class AddressSection extends React.Component {
 
     const { street = [], ...selectedAddressRest } = selectedAddress || {};
     const initialAddressValue = {
-      email: '',
       firstname: '',
       lastname: '',
       street1: street[0] || '',
@@ -93,6 +92,7 @@ class AddressSection extends React.Component {
       }
     }
 
+    // TODO: might be worth refactoring to reduce duplication
     const addressEditor = (
       <React.Fragment>
         {availableAddresses && (
@@ -104,7 +104,11 @@ class AddressSection extends React.Component {
         )}
         {!selectedAvailableAddress && (
           <Formik initialValues={initialAddressValue} onSubmit={this.submitAddress}>
-            {() => <AddressForm id={id} countries={countries} submitLabel={submitLabel} autoCompleteSection={id} />}
+            {() => (
+              <Box my="sm">
+                <AddressForm id={id} countries={countries} submitLabel={submitLabel} autoCompleteSection={id} />
+              </Box>
+            )}
           </Formik>
         )}
         {!!selectedAvailableAddress && (
@@ -144,7 +148,11 @@ class AddressSection extends React.Component {
     } else {
       content = (
         <Formik initialValues={initialAddressValue} onSubmit={this.submitAddress}>
-          {() => <AddressForm id={id} countries={countries} submitLabel={submitLabel} autoCompleteSection={id} />}
+          {() => (
+            <Box my="sm">
+              <AddressForm id={id} countries={countries} submitLabel={submitLabel} autoCompleteSection={id} />
+            </Box>
+          )}
         </Formik>
       );
     }
