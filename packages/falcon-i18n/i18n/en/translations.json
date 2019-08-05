@@ -244,8 +244,8 @@
   },
   "addressBook": {
     "title": "Address Book",
-    "sectionTitle_billing": "Default Invoice Address",
-    "sectionTitle_shipping": "Default Delivery Address",
+    "sectionTitle_billing": "Default Billing Address",
+    "sectionTitle_shipping": "Default Shipping Address",
     "sectionTitle_billing&shipping": "Default Address",
     "sectionTitle_other": "Other Addresses",
     "addNewButton": "Add new Address",
@@ -255,36 +255,10 @@
   },
   "editAddress": {
     "title": "Edit Address",
-    "defaultAddressLabel_billing": "It's a default Invoice address.",
-    "defaultAddressLabel_shipping": "It's a default Delivery Address.",
-    "defaultAddressLabel_billing&shipping": "It's a default Invoice and Delivery Address.",
-    "defaultShippingFieldLabel": "Use as my default Delivery Address",
-    "defaultBillingFieldLabel": "Use as my default Invoice Address",
-    "companyFieldLabel": "$t(addressForm.companyFieldLabel)",
-    "firstnameFieldLabel": "$t(addressForm.firstNameFieldLabel)",
-    "lastnameFieldLabel": "$t(addressForm.lastNameFieldLabel)",
-    "telephoneFieldLabel": "$t(addressForm.telephoneFieldLabel)",
-    "street1FieldLabel": "$t(addressForm.street1FieldLabel)",
-    "street2FieldLabel": "$t(addressForm.street2FieldLabel)",
-    "postcodeFieldLabel": "$t(addressForm.postcodeFieldLabel)",
-    "cityFieldLabel": "$t(addressForm.cityFieldLabel)",
-    "countryIdFieldLabel": "$t(addressForm.countryIdFieldLabel)",
-    "submitButton": "Update Address",
-    "cancelButton": "$t(addressForm.cancelButton)"
+    "submitButton": "Update"
   },
   "addAddress": {
-    "title": "Add Address",
-    "companyFieldLabel": "$t(addressForm.companyFieldLabel)",
-    "firstnameFieldLabel": "$t(addressForm.firstNameFieldLabel)",
-    "lastnameFieldLabel": "$t(addressForm.lastNameFieldLabel)",
-    "telephoneFieldLabel": "$t(addressForm.telephoneFieldLabel)",
-    "street1FieldLabel": "$t(addressForm.street1FieldLabel)",
-    "street2FieldLabel": "$t(addressForm.street2FieldLabel)",
-    "postcodeFieldLabel": "$t(addressForm.postcodeFieldLabel)",
-    "cityFieldLabel": "$t(addressForm.cityFieldLabel)",
-    "countryIdFieldLabel": "$t(addressForm.countryIdFieldLabel)",
-    "submitButton": "Save Address",
-    "cancelButton": "$t(addressForm.cancelButton)"
+    "title": "Add Address"
   },
   "editCustomer": {
     "title": "Personal Information",
