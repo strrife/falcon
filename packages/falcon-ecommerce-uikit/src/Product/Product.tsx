@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Form, ErrorMessage } from 'formik';
+import { Formik, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
 import { I18n } from '@deity/falcon-i18n';
 import { Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
@@ -13,7 +13,8 @@ import {
   Price,
   ProductGallery,
   ProductOptionList,
-  ProductConfigurator
+  ProductConfigurator,
+  Form
 } from '@deity/falcon-ui-kit';
 import { Locale, Field, rangeValidator, requiredValidator } from '@deity/falcon-front-kit';
 import { AddToCartMutation, ProductResponse } from '@deity/falcon-shop-data';
@@ -49,7 +50,11 @@ const ProductForm = adopt({
         })
       }
     >
-      {(...props) => <Form>{render(...props)}</Form>}
+      {(...props) => (
+        <Form id="product" i18nId="product">
+          {render(...props)}
+        </Form>
+      )}
     </Formik>
   ),
 
