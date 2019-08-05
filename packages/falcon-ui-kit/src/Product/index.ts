@@ -7,3 +7,4 @@ export * from './ProductGalleryThumbLayout';
 export * from './ProductMeta';
 export * from './ProductOptionList';
 export * from './ProductOptionRadio';
+export * from './ProductConfigurator';
