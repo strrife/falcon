@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Formik } from 'formik';
-import { T } from '@deity/falcon-i18n';
+import { T, I18n } from '@deity/falcon-i18n';
 import { H1, GridLayout } from '@deity/falcon-ui';
 import { AddressQuery, GET_ADDRESS, EditAddressMutation, CountriesQuery, Loader } from '@deity/falcon-ecommerce-uikit';
 import AddressForm from '../../components/AddressForm';
@@ -54,13 +54,18 @@ const EditAddress = ({ match }) => {
                       }).then(() => setDone(true))
                     }
                   >
-                    <AddressForm
-                      id="edit-address"
-                      twoColumns
-                      askDefault
-                      onCancel={() => setDone(true)}
-                      countries={countries.items}
-                    />
+                    <I18n>
+                      {t => (
+                        <AddressForm
+                          id="add-address"
+                          submitLabel={t('editAddress.submitButton')}
+                          twoColumns
+                          askDefault
+                          onCancel={() => setDone(true)}
+                          countries={countries.items}
+                        />
+                      )}
+                    </I18n>
                   </Formik>
                   <ErrorList errors={error ? [new Error(error)] : []} />
                 </GridLayout>
