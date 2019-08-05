@@ -1,4 +1,5 @@
 import React from 'react';
+import { formProductConfigurableOptionsToInput } from '@deity/falcon-front-kit';
 
 /**
  * Available options that can be changed. Currently ProductConfigurator handles only product configurable options.
@@ -99,11 +100,10 @@ export class ProductConfigurator extends React.Component<ProductConfiguratorProp
       }),
       () => {
         // when state is set then update form manager
-        const configurableOptions = Object.entries(this.state.selectedConfigurableOptions).map(item => ({
-          optionId: parseInt(item[0], 10),
-          value: parseInt(item[1], 10)
-        }));
-        this.props.onChange('configurableOptions', configurableOptions);
+        this.props.onChange(
+          'configurableOptions',
+          formProductConfigurableOptionsToInput(this.state.selectedConfigurableOptions)
+        );
       }
     );
   }
