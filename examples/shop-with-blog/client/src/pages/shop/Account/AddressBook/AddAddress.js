@@ -34,7 +34,7 @@ const AddAddress = () => {
       {({ countries }) => (
         <AddAddressMutation>
           {(addAddress, { loading, error }) => (
-            <GridLayout position="relative" mb="md" gridGap="md">
+            <GridLayout mb="md" gridGap="md">
               {loading && <Loader variant="overlay" />}
               <H1>
                 <T id="addAddress.title" />
