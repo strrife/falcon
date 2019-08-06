@@ -506,11 +506,12 @@
 > - ~~ProductGallery~~ - moved to @deity/falcon-ui-kit
 > - ~~NoProductImage~~ - renamed to `NoProductImagePlaceholder` and moved to @deity/falcon-ui-kit
 > - ~~ProductMeta~~ - moved to @deity/falcon-ui-kit
-- EmptyProductListLayout
-- EmptyProductList
+> - ~~EmptyProductList~~ - moved to @deity/falcon-ui-kit
+> - ~~EmptyProductListLayout~~ moved to @deity/falcon-ui-kit
 - ProductCardLayout
 - ProductCard
 - ProductList
+> - ~~ProductListLayout~~ - moved to @deity/falcon-ui-kit
 - Loader
 
 ---

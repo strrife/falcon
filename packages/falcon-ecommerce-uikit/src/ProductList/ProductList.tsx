@@ -1,8 +1,8 @@
 import React from 'react';
 import { forceCheck } from 'react-lazyload';
-import { themed, List, ListItem } from '@deity/falcon-ui';
+import { ListItem } from '@deity/falcon-ui';
+import { ProductListLayout, EmptyProductList } from '@deity/falcon-ui-kit';
 import { ProductCard } from './ProductCard';
-import { EmptyProductList } from './EmptyProductList';
 
 export type ProductListProps = {
   products: any[];
@@ -45,20 +45,3 @@ export class ProductList extends React.Component<ProductListProps> {
     );
   }
 }
-
-export const ProductListLayout = themed({
-  tag: List,
-  defaultTheme: {
-    productListLayout: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))',
-      gridAutoRows: '280px',
-      gridGap: 'sm',
-      m: 'none',
-      p: 'none',
-      css: {
-        listStyle: 'none'
-      }
-    }
-  }
-});
