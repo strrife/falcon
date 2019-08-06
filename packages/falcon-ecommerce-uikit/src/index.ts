@@ -4,7 +4,6 @@ export * from './Footer';
 export * from './TwoColumnsLayout';
 export * from './Menu';
 export * from './Product';
-export * from './ProductList';
 export * from './Category';
 export * from './CreditCard';
 export * from './Checkout';

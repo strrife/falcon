@@ -1,9 +1,9 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { H1 } from '@deity/falcon-ui';
-import { PageLayout } from '@deity/falcon-ui-kit';
+import { PageLayout, ProductList } from '@deity/falcon-ui-kit';
 import { T } from '@deity/falcon-i18n';
-import { Query, ProductList } from '@deity/falcon-ecommerce-uikit';
+import { Query } from '@deity/falcon-ecommerce-uikit';
 
 const HOMEPAGE_PRODUCTS_QUERY = gql`
   query HomepageProducts($categoryId: String!, $amount: Int) {
@@ -31,7 +31,7 @@ const Home = () => (
       <T id="home.hotSellers" />
     </H1>
     <Query query={HOMEPAGE_PRODUCTS_QUERY} variables={{ categoryId: '25', amount: 20 }}>
-      {({ category }) => <ProductList products={category.products.items} />}
+      {({ category }) => <ProductList items={category.products.items} />}
     </Query>
   </PageLayout>
 );

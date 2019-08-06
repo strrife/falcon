@@ -14,3 +14,4 @@ export * from './EmptyProductList';
 export * from './EmptyProductListLayout';
 export * from './ProductCardLayout';
 export * from './ProductCard';
+export * from './ProductList';

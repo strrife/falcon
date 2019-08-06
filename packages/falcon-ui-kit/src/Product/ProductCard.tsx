@@ -1,10 +1,12 @@
 import React from 'react';
 import LazyLoad from 'react-lazyload';
+import PropTypes from 'prop-types';
 import { Image, Text, FlexLayout } from '@deity/falcon-ui';
 import { Price } from '../Price';
 import { ProductCardLayout } from './ProductCardLayout';
 
 export type ProductCardProps = {
+  id: string;
   name: string;
   thumbnail: string;
   urlPath: string;
