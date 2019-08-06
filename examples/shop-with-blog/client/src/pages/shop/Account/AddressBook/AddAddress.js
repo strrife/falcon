@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
 import { H1, GridLayout } from '@deity/falcon-ui';
-import { CountriesQuery, AddAddressMutation, Loader } from '@deity/falcon-ecommerce-uikit';
+import { AddAddressMutation, Loader } from '@deity/falcon-ecommerce-uikit';
 import AddressForm from '../../components/AddressForm';
 import ErrorList from '../../components/ErrorList';
 
@@ -29,42 +29,32 @@ const AddAddress = () => {
   }
 
   return (
-    <CountriesQuery>
-      {({ countries }) => (
-        <AddAddressMutation>
-          {(addAddress, { loading, error }) => (
-            <GridLayout mb="md" gridGap="md">
-              {loading && <Loader variant="overlay" />}
-              <H1>
-                <T id="addAddress.title" />
-              </H1>
-              <Formik
-                initialValues={initialAddressValues}
-                onSubmit={({ street1, street2, ...values }) =>
-                  addAddress({
-                    variables: {
-                      input: {
-                        ...values,
-                        street: [street1, street2]
-                      }
-                    }
-                  }).then(setDone(true))
+    <AddAddressMutation>
+      {(addAddress, { loading, error }) => (
+        <GridLayout position="relative" mb="md" gridGap="md">
+          {loading && <Loader variant="overlay" />}
+          <H1>
+            <T id="addAddress.title" />
+          </H1>
+          <Formik
+            initialValues={initialAddressValues}
+            onSubmit={({ street1, street2, ...values }) =>
+              addAddress({
+                variables: {
+                  input: {
+                    ...values,
+                    street: [street1, street2]
+                  }
                 }
-              >
-                <AddressForm
-                  id="add-address"
-                  twoColumns
-                  askDefault
-                  onCancel={() => setDone(true)}
-                  countries={countries.items}
-                />
-              </Formik>
-              <ErrorList errors={error ? [new Error(error)] : []} />
-            </GridLayout>
-          )}
-        </AddAddressMutation>
+              }).then(setDone(true))
+            }
+          >
+            <AddressForm id="add-address" twoColumns askDefault onCancel={() => setDone(true)} />
+          </Formik>
+          <ErrorList errors={error ? [new Error(error)] : []} />
+        </GridLayout>
       )}
-    </CountriesQuery>
+    </AddAddressMutation>
   );
 };
 
