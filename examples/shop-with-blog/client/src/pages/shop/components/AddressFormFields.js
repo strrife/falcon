@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Form,
   FormField,
   CheckboxFormField,
   CountrySelector,
@@ -9,11 +8,10 @@ import {
   TwoColumnsLayoutArea,
   CountriesQuery
 } from '@deity/falcon-ecommerce-uikit';
-import { Box, Button, GridLayout, FlexLayout } from '@deity/falcon-ui';
-import { T } from '@deity/falcon-i18n';
+import { Box, GridLayout } from '@deity/falcon-ui';
 
-const AddressForm = props => {
-  const { id = '', submitLabel, twoColumns, askDefault, onCancel, autoCompleteSection } = props;
+const AddressFormFields = props => {
+  const { twoColumns, askDefault, autoCompleteSection } = props;
 
   const getAutoComplete = attribute => [autoCompleteSection, attribute].filter(x => x).join(' ');
 
@@ -25,7 +23,7 @@ const AddressForm = props => {
   );
 
   // the form content, not including default address fields and submit button(s)
-  const formContent = (
+  const mainContent = (
     <React.Fragment>
       <GridLayout gridArea={twoColumns ? TwoColumnsLayoutArea.left : null}>
         <FormField name="firstname" required autoComplete={getAutoComplete('given-name')} />
@@ -51,36 +49,18 @@ const AddressForm = props => {
   );
 
   return (
-    <Form id={id} i18nId="addressForm">
+    <React.Fragment>
       {askDefault && askDefaultFields}
-      {twoColumns ? <TwoColumnsLayout>{formContent}</TwoColumnsLayout> : formContent}
-      <FlexLayout justifyContent={twoColumns ? 'flex-end' : 'flex-start'} alignItems="center" mt="md">
-        {onCancel && (
-          <Button onClick={onCancel} mr="md">
-            <T id="addressForm.cancelButton" />
-          </Button>
-        )}
-        <Button type="submit">{submitLabel}</Button>
-      </FlexLayout>
-    </Form>
+      {twoColumns ? <TwoColumnsLayout>{mainContent}</TwoColumnsLayout> : mainContent}
+    </React.Fragment>
   );
 };
 
-AddressForm.propTypes = {
-  // id of the form - used for generating unique ids for form fields inside
-  id: PropTypes.string.isRequired,
-  // a custom label for the submit button
-  submitLabel: PropTypes.string,
+AddressFormFields.propTypes = {
   // whether to use a two column layout instead of a single column
   twoColumns: PropTypes.bool,
   // whether the form should ask whether the address should be set as default
-  askDefault: PropTypes.bool,
-  // callback that cancels the form submission
-  onCancel: PropTypes.func
+  askDefault: PropTypes.bool
 };
 
-AddressForm.defaultProps = {
-  submitLabel: 'Save'
-};
-
-export default AddressForm;
+export default AddressFormFields;

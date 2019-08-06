@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Formik } from 'formik';
-import { T, I18n } from '@deity/falcon-i18n';
-import { H1, GridLayout } from '@deity/falcon-ui';
-import { AddressQuery, GET_ADDRESS, EditAddressMutation, Loader } from '@deity/falcon-ecommerce-uikit';
-import AddressForm from '../../components/AddressForm';
+import { T } from '@deity/falcon-i18n';
+import { H1, GridLayout, FlexLayout, Button } from '@deity/falcon-ui';
+import { AddressQuery, GET_ADDRESS, EditAddressMutation, Loader, Form } from '@deity/falcon-ecommerce-uikit';
+import AddressFormFields from '../../components/AddressFormFields';
 import ErrorList from '../../components/ErrorList';
 
 const EditAddress = ({ match }) => {
@@ -52,17 +52,17 @@ const EditAddress = ({ match }) => {
                   }).then(() => setDone(true))
                 }
               >
-                <I18n>
-                  {t => (
-                    <AddressForm
-                      id="add-address"
-                      submitLabel={t('editAddress.submitButton')}
-                      twoColumns
-                      askDefault
-                      onCancel={() => setDone(true)}
-                    />
-                  )}
-                </I18n>
+                <Form id="edit-address" i18nId="addressForm">
+                  <AddressFormFields twoColumns askDefault onCancel={() => setDone(true)} />
+                  <FlexLayout justifyContent="flex-end" alignItems="center" mt="md">
+                    <Button onClick={() => setDone(true)} mr="md">
+                      <T id="editAddress.cancelButton" />
+                    </Button>
+                    <Button type="submit">
+                      <T id="editAddress.submitButton" />
+                    </Button>
+                  </FlexLayout>
+                </Form>
               </Formik>
             )}
           </AddressQuery>

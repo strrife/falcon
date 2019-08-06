@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
-import { FlexLayout, Checkbox, Label, Details, DetailsContent, Button, Box } from '@deity/falcon-ui';
+import { FlexLayout, Checkbox, Label, Details, DetailsContent, Button } from '@deity/falcon-ui';
 import { T, I18n } from '@deity/falcon-i18n';
-import { AddressDetails } from '@deity/falcon-ecommerce-uikit';
-import AddressForm from '../components/AddressForm';
+import { AddressDetails, Form } from '@deity/falcon-ecommerce-uikit';
+import AddressFormFields from '../components/AddressFormFields';
 import ErrorList from '../components/ErrorList';
 import SectionHeader from './CheckoutSectionHeader';
 import AddressPicker from './AddressPicker';
@@ -98,9 +98,10 @@ class AddressSection extends React.Component {
     // lets the user manually enter an address
     const addressForm = (
       <Formik initialValues={initialAddressValue} onSubmit={this.submitAddress}>
-        <Box my="sm">
-          <AddressForm id={id} submitLabel={submitLabel} autoCompleteSection={id} />
-        </Box>
+        <Form id={id} i18nId="addressForm" my="sm">
+          <AddressFormFields id={id} submitLabel={submitLabel} autoCompleteSection={id} />
+          <Button type="submit">{submitLabel}</Button>
+        </Form>
       </Formik>
     );
 
