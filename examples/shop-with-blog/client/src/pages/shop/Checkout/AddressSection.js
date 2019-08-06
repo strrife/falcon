@@ -42,7 +42,6 @@ class AddressSection extends React.Component {
       onEditRequested,
       submitLabel,
       errors,
-      countries,
       availableAddresses,
       defaultSelected
     } = this.props;
@@ -100,7 +99,7 @@ class AddressSection extends React.Component {
     const addressForm = (
       <Formik initialValues={initialAddressValue} onSubmit={this.submitAddress}>
         <Box my="sm">
-          <AddressForm id={id} countries={countries} submitLabel={submitLabel} autoCompleteSection={id} />
+          <AddressForm id={id} submitLabel={submitLabel} autoCompleteSection={id} />
         </Box>
       </Formik>
     );
@@ -194,13 +193,6 @@ AddressSection.propTypes = {
   availableAddresses: PropTypes.arrayOf(PropTypes.shape({})),
   // default selected address - address that should be selected when address picker is shown
   defaultSelected: PropTypes.shape({}),
-  // list of available countries
-  countries: PropTypes.arrayOf(
-    PropTypes.shape({
-      code: PropTypes.string,
-      localName: PropTypes.string
-    })
-  ),
   // errors passed from outside that should be displayed for this section
   errors: PropTypes.arrayOf(
     PropTypes.shape({

@@ -4,14 +4,15 @@ import {
   CheckboxFormField,
   CountrySelector,
   TwoColumnsLayout,
-  TwoColumnsLayoutArea
+  TwoColumnsLayoutArea,
+  CountriesQuery
 } from '@deity/falcon-ecommerce-uikit';
 import { Form, FormField } from '@deity/falcon-ui-kit';
 import { Box, Button, GridLayout, FlexLayout } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 
 const AddressForm = props => {
-  const { id, submitLabel, twoColumns, askDefault, onCancel, countries, autoCompleteSection } = props;
+  const { id = '', submitLabel, twoColumns, askDefault, onCancel, autoCompleteSection } = props;
 
   const getAutoComplete = attribute => [autoCompleteSection, attribute].filter(x => x).join(' ');
 
@@ -37,7 +38,11 @@ const AddressForm = props => {
         <FormField name="city" required autoComplete={getAutoComplete('address-level2')} />
         <FormField name="countryId" required autoComplete={getAutoComplete('country')}>
           {({ form, field }) => (
-            <CountrySelector {...field} items={countries} onChange={x => form.setFieldValue(field.name, x)} />
+            <CountriesQuery passLoading>
+              {({ countries = { items: [] } }) => (
+                <CountrySelector {...field} items={countries.items} onChange={x => form.setFieldValue(field.name, x)} />
+              )}
+            </CountriesQuery>
           )}
         </FormField>
       </GridLayout>
@@ -70,19 +75,11 @@ AddressForm.propTypes = {
   // whether the form should ask whether the address should be set as default
   askDefault: PropTypes.bool,
   // callback that cancels the form submission
-  onCancel: PropTypes.func,
-  // list of available countries
-  countries: PropTypes.arrayOf(
-    PropTypes.shape({
-      localName: PropTypes.string,
-      code: PropTypes.string
-    })
-  )
+  onCancel: PropTypes.func
 };
 
 AddressForm.defaultProps = {
-  submitLabel: 'Save',
-  countries: []
+  submitLabel: 'Save'
 };
 
 export default AddressForm;
