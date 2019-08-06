@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 import { Query } from '@deity/falcon-data';
 import { Category } from '@deity/falcon-shop-extension';
 
-export const GET_CATEGORY_PRODUCTS = gql`
-  query CategoryProducts(
+export const GET_CATEGORY_WITH_PRODUCTS = gql`
+  query CategoryWithProducts(
     $categoryId: String!
     $sort: SortOrderInput
     $pagination: PaginationInput
@@ -69,9 +69,9 @@ const fetchMore = (data: any, apolloFetchMore: any) =>
     }
   });
 
-export class CategoryProductsQuery extends Query<any> {
+export class CategoryWithProductsQuery extends Query<any> {
   static defaultProps = {
-    query: GET_CATEGORY_PRODUCTS,
+    query: GET_CATEGORY_WITH_PRODUCTS,
     fetchPolicy: 'cache-and-network',
     fetchMore,
     notifyOnNetworkStatusChange: true

@@ -3,16 +3,18 @@ import PropTypes from 'prop-types';
 import { NetworkStatus } from 'apollo-client';
 import { Toggle } from 'react-powerplug';
 import { H1, H3, GridLayout, Box, FlexLayout, Divider, Button } from '@deity/falcon-ui';
+import { CategoryWithProductsQuery } from '@deity/falcon-shop-data';
+import { ShowingOutOf, ShowMore, Loader } from '@deity/falcon-ecommerce-uikit';
+import { SearchConsumer, SortOrderPickerProvider, getFiltersData } from '@deity/falcon-front-kit';
 import {
-  CategoryProductsQuery,
   CategoryLayout,
   CategoryArea,
-  ShowingOutOf,
-  ShowMore,
-  Loader
-} from '@deity/falcon-ecommerce-uikit';
-import { SearchConsumer, SortOrderPickerProvider, getFiltersData } from '@deity/falcon-front-kit';
-import { Sidebar, Responsive, SortOrderPicker, FiltersSummary, ProductList } from '@deity/falcon-ui-kit';
+  Sidebar,
+  Responsive,
+  SortOrderPicker,
+  FiltersSummary,
+  ProductList
+} from '@deity/falcon-ui-kit';
 import { Filters } from './Filters';
 
 const copy = item => item && JSON.parse(JSON.stringify(item));
@@ -20,7 +22,7 @@ const copy = item => item && JSON.parse(JSON.stringify(item));
 const CategoryPage = ({ id }) => (
   <SearchConsumer>
     {({ state }) => (
-      <CategoryProductsQuery
+      <CategoryWithProductsQuery
         variables={{
           categoryId: id,
           sort: state.sort,
@@ -88,7 +90,7 @@ const CategoryPage = ({ id }) => (
             </CategoryLayout>
           );
         }}
-      </CategoryProductsQuery>
+      </CategoryWithProductsQuery>
     )}
   </SearchConsumer>
 );
