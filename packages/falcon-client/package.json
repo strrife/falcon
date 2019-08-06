@@ -113,6 +113,7 @@
     "@deity/falcon-front-kit": "^0.0.1",
     "@deity/falcon-server": "^0.3.3",
     "@types/fs-extra": "8.0.0",
+    "@types/prop-types": "15.7.1",
     "graphql": "^14.1.1",
     "graphql-tag": "2.10.1",
     "i18next": "^12.1.0",

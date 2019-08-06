@@ -1,13 +1,13 @@
 import React from 'react';
-import { forceCheck } from 'react-lazyload';
 import PropTypes from 'prop-types';
+import { forceCheck } from 'react-lazyload';
 import { ListItem } from '@deity/falcon-ui';
 import { ProductListLayout } from './ProductListLayout';
 import { EmptyProductList } from './EmptyProductList';
 import { ProductCard, ProductCardProps } from './ProductCard';
 
 export type ProductListProps = {
-  items: ProductCardProps[];
+  items: ({ id: number } & ProductCardProps)[];
 };
 export class ProductList extends React.Component<ProductListProps> {
   static propTypes = {

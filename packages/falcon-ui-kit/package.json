@@ -38,6 +38,7 @@
     "@deity/falcon-shop-extension": "^0.4.4",
     "@deity/falcon-ui": "^0.2.2",
     "@deity/falcon-front-kit": "^0.0.1",
+    "@types/prop-types": "15.7.1",
     "@types/react": "16.8.22",
     "@types/react-dom": "16.8.4",
     "@types/react-lazyload": "2.5.0",

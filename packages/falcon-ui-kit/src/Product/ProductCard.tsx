@@ -1,16 +1,18 @@
 import React from 'react';
-import LazyLoad from 'react-lazyload';
 import PropTypes from 'prop-types';
+import LazyLoad from 'react-lazyload';
 import { Image, Text, FlexLayout } from '@deity/falcon-ui';
 import { Price } from '../Price';
 import { ProductCardLayout } from './ProductCardLayout';
 
 export type ProductCardProps = {
-  id: string;
   name: string;
-  thumbnail: string;
   urlPath: string;
-  price;
+  price: {
+    regular: number;
+    special?: number;
+  };
+  thumbnail: string;
 };
 export const ProductCard: React.SFC<ProductCardProps> = ({ name, thumbnail, urlPath, price }) => {
   return (
@@ -33,4 +35,13 @@ export const ProductCard: React.SFC<ProductCardProps> = ({ name, thumbnail, urlP
       </FlexLayout>
     </ProductCardLayout>
   );
+};
+ProductCard.propTypes = {
+  name: PropTypes.string.isRequired,
+  urlPath: PropTypes.string.isRequired,
+  price: PropTypes.shape({
+    regular: PropTypes.number.isRequired,
+    special: PropTypes.number
+  }).isRequired,
+  thumbnail: PropTypes.string.isRequired
 };
