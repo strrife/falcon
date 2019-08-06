@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
-import { Query } from '../Query/Query';
+import { Query } from '@deity/falcon-data';
+import { Category } from '@deity/falcon-shop-extension';
 
 export const GET_CATEGORY_PRODUCTS = gql`
   query CategoryProducts(
