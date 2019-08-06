@@ -314,3 +314,12 @@ export type Breadcrumb = {
   name: string;
   urlPath?: string;
 };
+
+export type Category = {
+  id: string;
+  name: string;
+  children: Category[];
+  description: string;
+  breadcrumbs: Breadcrumb[];
+  products: ProductList;
+};
