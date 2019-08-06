@@ -11,15 +11,7 @@ import { Box, Button, GridLayout, FlexLayout } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 
 const AddressForm = props => {
-  const {
-    id = '',
-    submitLabel = 'Save',
-    twoColumns,
-    askDefault,
-    onCancel,
-    countries = [],
-    autoCompleteSection
-  } = props;
+  const { id, submitLabel, twoColumns, askDefault, onCancel, countries, autoCompleteSection } = props;
 
   const getAutoComplete = attribute => [autoCompleteSection, attribute].filter(x => x).join(' ');
 
@@ -86,6 +78,11 @@ AddressForm.propTypes = {
       code: PropTypes.string
     })
   )
+};
+
+AddressForm.defaultProps = {
+  submitLabel: 'Save',
+  countries: []
 };
 
 export default AddressForm;
