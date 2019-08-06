@@ -273,7 +273,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {string[]} params.skus skus of products that search should be narrowed to
    * @returns {Promise<Product[]>}  response with list of products
    */
-  async products(obj, params) {
+  async productList(obj, params) {
     const { filters: simpleFilters = [], categoryId, skus } = params;
     // params.filters =  contains "simple" key-value filters (will be transpiled to Magento-like filters)
     const filtersToCheck = {};

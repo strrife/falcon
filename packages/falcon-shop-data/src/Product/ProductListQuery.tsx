@@ -3,8 +3,8 @@ import { Query } from '@deity/falcon-data';
 import { Product } from '@deity/falcon-shop-extension';
 
 export const GET_PRODUCT_LIST = gql`
-  query Products {
-    products {
+  query ProductList {
+    productList {
       items {
         id
         name

@@ -2,14 +2,14 @@ extend type Query {
   menu: [MenuItem] @cache(ttl: 15)
   category(id: String!): Category @cache(ttl: 15)
   product(id: String!): Product @cache(ttl: 5)
-  products(
+  productList(
     categoryId: String
     includeSubcategories: Boolean
     query: ShopPageQuery
-    sortOrders: [SortOrderInput]
-    filters: [FilterInput]
-    skus: [String]
-  ): ProductList
+    sortOrders: [SortOrderInput!]
+    filters: [FilterInput!]
+    skus: [String!]
+  ): ProductList!
   cart: Cart
   countries: CountryList
   order(id: Int!): Order
@@ -378,8 +378,8 @@ type Category {
 }
 
 type ProductList {
-  items: [Product]!
-  aggregations: [Aggregation]
+  items: [Product!]!
+  aggregations: [Aggregation!]!
   pagination: Pagination
 }
 

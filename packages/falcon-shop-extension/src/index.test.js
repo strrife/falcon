@@ -46,10 +46,10 @@ const QUERY_TEST_CASES = [
   },
 
   {
-    name: 'products - should return correct products list',
+    name: 'productList - should return correct products list',
     query: `
-      query Products($categoryId: String) {
-        products(categoryId: $categoryId) {
+      query ProductList($categoryId: String) {
+        productList(categoryId: $categoryId) {
           items {
             id
             sku
@@ -60,7 +60,7 @@ const QUERY_TEST_CASES = [
     `,
     expected: {
       data: {
-        products: {
+        productList: {
           items: [
             {
               id: '1',
