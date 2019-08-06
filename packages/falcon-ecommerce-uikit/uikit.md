@@ -508,9 +508,9 @@
 > - ~~ProductMeta~~ - moved to @deity/falcon-ui-kit
 > - ~~EmptyProductList~~ - moved to @deity/falcon-ui-kit
 > - ~~EmptyProductListLayout~~ moved to @deity/falcon-ui-kit
-- ProductCardLayout
-- ProductCard
-- ProductList
+> - ~~ProductCardLayout~~ moved to @deity/falcon-ui-kit
+> - ~~ProductCard~~ moved to @deity/falcon-ui-kit
+> - ~~ProductList~~ moved to @deity/falcon-ui-kit
 > - ~~ProductListLayout~~ - moved to @deity/falcon-ui-kit
 - Loader
 
