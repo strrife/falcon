@@ -1,27 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
-import { themed, Image, Text, FlexLayout } from '@deity/falcon-ui';
-import { Price } from '@deity/falcon-ui-kit';
-
-export const ProductCardLayout = themed({
-  tag: Link,
-  defaultTheme: {
-    card: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      color: 'secondaryText',
-
-      css: {
-        height: '100%',
-        textDecoration: 'none',
-        overflow: 'hidden',
-        cursor: 'pointer'
-      }
-    }
-  }
-});
+import { Image, Text, FlexLayout } from '@deity/falcon-ui';
+import { Price } from '../Price';
+import { ProductCardLayout } from './ProductCardLayout';
 
 export type ProductCardProps = {
   name: string;

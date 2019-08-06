@@ -12,3 +12,5 @@ export * from './ProductConfigurator';
 export * from './ProductListLayout';
 export * from './EmptyProductList';
 export * from './EmptyProductListLayout';
+export * from './ProductCardLayout';
+export * from './ProductCard';

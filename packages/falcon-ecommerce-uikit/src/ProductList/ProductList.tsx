@@ -1,8 +1,7 @@
 import React from 'react';
 import { forceCheck } from 'react-lazyload';
 import { ListItem } from '@deity/falcon-ui';
-import { ProductListLayout, EmptyProductList } from '@deity/falcon-ui-kit';
-import { ProductCard } from './ProductCard';
+import { ProductListLayout, EmptyProductList, ProductCard } from '@deity/falcon-ui-kit';
 
 export type ProductListProps = {
   products: any[];
