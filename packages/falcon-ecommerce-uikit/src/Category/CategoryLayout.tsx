@@ -1,5 +1,5 @@
 import React from 'react';
-import { themed } from '@deity/falcon-ui';
+import { themed, Box } from '@deity/falcon-ui';
 import { toGridTemplate } from '@deity/falcon-ui-kit';
 
 export const CategoryArea = {
@@ -10,10 +10,10 @@ export const CategoryArea = {
 };
 
 export const CategoryLayout = themed({
-  tag: 'div',
+  tag: Box,
 
   defaultTheme: {
-    productsCategory: {
+    categoryLayout: {
       display: 'grid',
       gridGap: 'md',
       my: 'lg',
