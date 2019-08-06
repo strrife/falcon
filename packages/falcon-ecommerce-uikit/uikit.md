@@ -549,9 +549,9 @@
 > - ~~LocaleSwitcher~~ moved to @deity/falcon-front-kit
 > - ~~Field~~ moved to to @deity/falcon-front-kit
 - Form
-  > - ~~LocaleProvider~~ moved to @deity/falcon-front-kit
+> - ~~LocaleProvider~~ moved to @deity/falcon-front-kit
 - ProductForm (it's not exported outside)
-- ProductConfigurator
+> - ~~ProductConfigurator~~ moved to @deity/falcon-front-kit but, not used and extracted two functions and moved them into @deity/falcon-front-kit/productConfigurableOptionMappers
 
 > - ~~Query~~ moved to @deity/falcon-data
 > - ~~OnlyUnauthenticatedRoute~~ moved to @deity/falcon-front-kit
