@@ -1,3 +1,5 @@
+import { Pagination, Aggregation } from '@deity/falcon-data';
+
 export type GraphQLBase = {
   __typename?: string;
 };
@@ -211,6 +213,12 @@ export type UpdateCartItemInput = {
   itemId: number;
   sku: string;
   qty: number;
+};
+
+export type ProductList = {
+  items: Product[];
+  aggregations: Aggregation[];
+  pagination: Pagination;
 };
 
 export type Product = {
