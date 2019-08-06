@@ -3,13 +3,8 @@ import { Formik } from 'formik';
 import { NavLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { H1, FlexLayout, GridLayout, Button } from '@deity/falcon-ui';
-import {
-  ChangePasswordMutation,
-  TwoColumnsLayout,
-  TwoColumnsLayoutArea,
-  PasswordRevealInput
-} from '@deity/falcon-ecommerce-uikit';
-import { FormField, Form, FormErrorSummary } from '@deity/falcon-ui-kit';
+import { ChangePasswordMutation, PasswordRevealInput } from '@deity/falcon-ecommerce-uikit';
+import { FormField, Form, FormErrorSummary, TwoColumnsLayout, TwoColumnsLayoutArea } from '@deity/falcon-ui-kit';
 
 const ChangePassword = ({ history }) => (
   <GridLayout mb="md" gridGap="md">

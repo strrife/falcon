@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, themed } from '@deity/falcon-ui';
-import { toGridTemplate } from '@deity/falcon-ui-kit';
+import { toGridTemplate } from '../helpers';
 
 export const TwoColumnsLayoutArea = {
   left: 'left',
@@ -13,8 +13,13 @@ export const TwoColumnsLayout = themed({
     twoColumnsLayout: {
       display: 'grid',
       alignItems: 'flex-start',
-      gridColumnGap: { xs: 'sm', md: 'xxl' },
-      gridRowGap: { xs: 'sm' },
+      gridColumnGap: {
+        xs: 'sm',
+        md: 'xxl'
+      },
+      gridRowGap: {
+        xs: 'sm'
+      },
 
       // prettier-ignore
       gridTemplate: {
