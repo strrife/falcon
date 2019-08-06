@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
-import { H1, GridLayout } from '@deity/falcon-ui';
-import { Loader } from '@deity/falcon-ecommerce-uikit';
+import { H1, GridLayout, FlexLayout, Button } from '@deity/falcon-ui';
+import { Loader, Form } from '@deity/falcon-ecommerce-uikit';
 import { AddAddressMutation } from '@deity/falcon-shop-data';
-import AddressForm from '../../components/AddressForm';
+import AddressFormFields from '../../components/AddressFormFields';
 import ErrorList from '../../components/ErrorList';
 
 const AddAddress = () => {
@@ -50,7 +50,17 @@ const AddAddress = () => {
               }).then(setDone(true))
             }
           >
-            <AddressForm id="add-address" twoColumns askDefault onCancel={() => setDone(true)} />
+            <Form id="add-address" i18nId="addressForm">
+              <AddressFormFields id="add-address" twoColumns askDefault onCancel={() => setDone(true)} />
+              <FlexLayout justifyContent="flex-end" alignItems="center" mt="md">
+                <Button onClick={() => setDone(true)} mr="md">
+                  <T id="addAddress.cancelButton" />
+                </Button>
+                <Button type="submit">
+                  <T id="addAddress.submitButton" />
+                </Button>
+              </FlexLayout>
+            </Form>
           </Formik>
           <ErrorList errors={error ? [new Error(error)] : []} />
         </GridLayout>
