@@ -2,7 +2,16 @@ import React from 'react';
 import { Formik, ErrorMessage } from 'formik';
 import { adopt } from 'react-adopt';
 import { T } from '@deity/falcon-i18n';
+import { AddToCartMutation, ProductResponse } from '@deity/falcon-shop-data';
 import { Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
+import {
+  Locale,
+  Field,
+  rangeValidator,
+  requiredValidator,
+  formProductConfigurableOptionsToInput,
+  productConfigurableOptionsToForm
+} from '@deity/falcon-front-kit';
 import {
   PageLayout,
   ProductLayout,
@@ -15,15 +24,6 @@ import {
   ProductOptionList,
   Form
 } from '@deity/falcon-ui-kit';
-import {
-  Locale,
-  Field,
-  rangeValidator,
-  requiredValidator,
-  formProductConfigurableOptionsToInput,
-  productConfigurableOptionsToForm
-} from '@deity/falcon-front-kit';
-import { AddToCartMutation, ProductResponse } from '@deity/falcon-shop-data';
 
 /**
  * Combine render props functions into one with react-adopt
