@@ -173,7 +173,7 @@ export abstract class Extension {
                 .replace(/@(.*[^{\n])/gm, '')
                 // Removing type references from the base schema types
                 .replace(/:\s*(\w+)/gm, ': Int')
-                .replace(/\[\s*(\w+)\s*]/gm, '[Int]')
+                .replace(/\[\s*(\w+)\s*!?]/gm, '[Int]')
         ],
         resolverValidationOptions: {
           requireResolversForResolveType: false
