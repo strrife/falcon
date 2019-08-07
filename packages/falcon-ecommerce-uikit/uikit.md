@@ -30,7 +30,7 @@
 
 ---
 
-- CategoryProductsQuery
+> - ~~CategoryProductsQuery~~ renamed to `CategoryWithProductsQuery` moved to @deity/falcon-shop-data
 
 ---
 
@@ -134,7 +134,7 @@
 
 ---
 
-- GET_CATEGORY_PRODUCTS
+> - ~~GET_CATEGORY_PRODUCTS~~ - renamed to `GET_CATEGORY_WITH_PRODUCTS` and moved to @deity/falcon-shop-data
 
 ---
 
@@ -384,9 +384,9 @@
 
 ---
 
-- CategoryLayout
-- ShowingOutOf
-- ShowMore
+> - ~~CategoryLayout~~ moved to @deity/falcon-ui-kit
+> - ~~ShowingOutOf~~ moved to examples/shop-with-blog
+> - ~~ShowMore~~ moved to examples/shop-with-blog
 > - ~~SortOrderDropdownLayout~~ changed to `SortOrderPickerLayout` and moved to @deity/falcon-ui-kit
 > - ~~SortOrderDropdown~~ changed to `SortOrderPicker` and moved to @deity/falcon-ui-kit
 - TotalRow

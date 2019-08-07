@@ -3,7 +3,6 @@ export * from './Header';
 export * from './Footer';
 export * from './Menu';
 export * from './Product';
-export * from './Category';
 export * from './CreditCard';
 export * from './Checkout';
 export * from './Config';

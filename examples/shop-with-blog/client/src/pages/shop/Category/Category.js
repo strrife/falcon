@@ -4,7 +4,7 @@ import { NetworkStatus } from 'apollo-client';
 import { Toggle } from 'react-powerplug';
 import { H1, H3, GridLayout, Box, FlexLayout, Divider, Button } from '@deity/falcon-ui';
 import { CategoryWithProductsQuery } from '@deity/falcon-shop-data';
-import { ShowingOutOf, ShowMore, Loader } from '@deity/falcon-ecommerce-uikit';
+import { Loader } from '@deity/falcon-ecommerce-uikit';
 import { SearchConsumer, SortOrderPickerProvider, getFiltersData } from '@deity/falcon-front-kit';
 import {
   CategoryLayout,
@@ -16,6 +16,8 @@ import {
   ProductList
 } from '@deity/falcon-ui-kit';
 import { Filters } from './Filters';
+import { ShowingOutOf } from './ShowingOutOf';
+import { ShowMore } from './ShowMore';
 
 const copy = item => item && JSON.parse(JSON.stringify(item));
 
