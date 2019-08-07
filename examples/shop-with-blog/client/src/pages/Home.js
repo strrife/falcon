@@ -6,7 +6,7 @@ import { T } from '@deity/falcon-i18n';
 import { Query } from '@deity/falcon-ecommerce-uikit';
 
 const HOMEPAGE_PRODUCTS_QUERY = gql`
-  query HomepageProducts($categoryId: String!, $amount: Int) {
+  query HomepageProducts($categoryId: ID!, $amount: Int) {
     category(id: $categoryId) {
       products(pagination: { perPage: $amount, page: 1 }) {
         items {

@@ -3,7 +3,7 @@ import { Query } from '@deity/falcon-data';
 import { Product as ShopProduct, GalleryEntry, ConfigurableProductOption } from '@deity/falcon-shop-extension';
 
 export const GET_PRODUCT = gql`
-  query Product($id: String!, $path: String!) {
+  query Product($id: ID!, $path: String!) {
     product(id: $id) {
       id
       sku

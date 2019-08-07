@@ -1,9 +1,9 @@
 extend type Query {
   menu: [MenuItem] @cache(ttl: 15)
-  category(id: String!): Category @cache(ttl: 15)
-  product(id: String!): Product @cache(ttl: 5)
+  category(id: ID!): Category @cache(ttl: 15)
+  product(id: ID!): Product @cache(ttl: 5)
   productList(
-    categoryId: String
+    categoryId: ID
     includeSubcategories: Boolean
     query: ShopPageQuery
     sortOrders: [SortOrderInput!]
@@ -308,7 +308,7 @@ type ProductTierPrice {
 }
 
 type Product {
-  id: String!
+  id: ID!
   sku: ID!
   name: String!
   image: String

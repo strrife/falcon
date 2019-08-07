@@ -31,7 +31,7 @@ const QUERY_TEST_CASES = [
   {
     name: 'category - should return correct category',
     query: `
-      query Category($id: String!) {
+      query Category($id: ID!) {
         category(id: $id) {
           id
           name
@@ -48,7 +48,7 @@ const QUERY_TEST_CASES = [
   {
     name: 'productList - should return correct products list',
     query: `
-      query ProductList($categoryId: String) {
+      query ProductList($categoryId: ID) {
         productList(categoryId: $categoryId) {
           items {
             id

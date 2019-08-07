@@ -4,10 +4,10 @@ import { Category, Product, FilterInput } from '@deity/falcon-shop-extension';
 
 export const GET_CATEGORY_WITH_PRODUCTS = gql`
   query CategoryWithProducts(
-    $categoryId: ID
+    $categoryId: ID!
     $sort: SortOrderInput
     $pagination: PaginationInput
-    $filters: [FilterInput]
+    $filters: [FilterInput!]
   ) {
     category(id: $categoryId) {
       id
