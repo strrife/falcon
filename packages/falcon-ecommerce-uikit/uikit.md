@@ -563,4 +563,3 @@
 > - ~~SortOrdersProvider~~ change to `SortOrderPickerProvider` and moved to @deity/falcon-front-kit
 > - ~~AreSortOrderInputsEqual~~ changed to `areSortOrderInputsEqual` and moved to @deity/falcon-front-kit
 > - ~~OnlineStatus~~ changed to `NetworkStatus` and moved to @deity/falcon-front-kit
-
