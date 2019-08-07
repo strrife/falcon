@@ -92,7 +92,7 @@
 
 > - ~~SignInMutation~~ - moved to @deity/falcon-shop-data
 > - ~~SignOutMutation~~ - moved to @deity/falcon-shop-data
-- SignUpMutation
+> - ~~SignUpMutation~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -194,7 +194,7 @@
 
 > - ~~SIGN_IN_MUTATION~~ - moved to @deity/falcon-shop-data
 > - ~~SIGN_OUT_MUTATION~~ - moved to @deity/falcon-shop-data
-- SIGN_UP_MUTATION
+> - ~~SIGN_UP_MUTATION~~ - moved to @deity/falcon-shop-data
 
 ---
 

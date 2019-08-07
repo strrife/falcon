@@ -1,7 +1,8 @@
 import React from 'react';
 import { Formik } from 'formik';
+import { SignUpMutation } from '@deity/falcon-shop-data';
 import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '@deity/falcon-ui-kit';
-import { SignUpMutation, SignUpVariables } from './SignUpMutation';
+// import { SignUpVariables } from './SignUpMutation';
 
 type SignUpFormProps = {
   onCompleted?: () => void;
@@ -12,15 +13,13 @@ export const SignUpForm: React.SFC<SignUpFormProps> = ({ onCompleted }) => (
     {(signUp, { loading, error }) => (
       <Formik
         // initial values need to be set because of: https://github.com/jaredpalmer/formik/issues/738
-        initialValues={
-          {
-            firstname: '',
-            lastname: '',
-            email: '',
-            password: ''
-          } as SignUpVariables
-        }
-        onSubmit={(values: SignUpVariables) => {
+        initialValues={{
+          firstname: '',
+          lastname: '',
+          email: '',
+          password: ''
+        }}
+        onSubmit={values => {
           signUp({ variables: { input: { ...values, autoSignIn: true } } });
         }}
       >
