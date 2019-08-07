@@ -32,7 +32,7 @@ extend type Mutation {
   applyCoupon(input: CouponInput!): Boolean
   cancelCoupon: Boolean!
   signUp(input: SignUp!): Boolean
-  signIn(input: SignIn!): Boolean
+  signIn(input: SignInInput!): Boolean!
   signOut: Boolean
   editCustomer(input: EditCustomerInput!): Customer
   editAddress(input: EditAddressInput!): Address
@@ -556,9 +556,9 @@ input SignUp {
   autoSignIn: Boolean
 }
 
-input SignIn {
-  email: String
-  password: String
+input SignInInput {
+  email: String!
+  password: String!
 }
 
 type GalleryEntry {

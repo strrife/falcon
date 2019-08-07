@@ -2,9 +2,8 @@ import React from 'react';
 import { Formik } from 'formik';
 import { Button, FlexLayout } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
-
+import { SignInMutation } from '@deity/falcon-shop-data';
 import { FormField, Form, PasswordRevealInput, FormErrorSummary } from '@deity/falcon-ui-kit';
-import { SignInMutation } from './SignInMutation';
 import { ForgotPasswordTrigger } from './ForgotPasswordTrigger';
 
 type SignInFormProps = {

@@ -323,3 +323,8 @@ export type Category = {
   breadcrumbs: Breadcrumb[];
   products: ProductList;
 };
+
+export type SignInInput = {
+  email: string;
+  password: string;
+};
