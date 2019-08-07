@@ -534,8 +534,10 @@
 > - ~~AppLayout~~ -moved to `@deity/falcon-ui-kit/src/Layouts/AppLayout.tsx`
 > - ~~Breadcrumbs~~ - moved to @deity/falcon-ui-kit
 > - ~~FixCenteredLayout~~ - moved to `@deity/falcon-ui-kit/src/Layouts/FixCenteredLayout.tsx`
-> - ~~TwoColumnsLayout~~ - moved to @deity/falcon-ui-kit
+> - ~~TwoColumnsLayout~~ - moved to `@deity/falcon-ui-kit`
 - TwoStepWizard
+
+> - added `DeityLogo` into `@deity/falcon-ui-kit`
 
 ### Existing "business level" components:
 
