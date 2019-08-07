@@ -1,8 +1,7 @@
 import React from 'react';
 import { MutationFn, OperationVariables, MutationResult } from 'react-apollo';
-import { IsAuthenticatedQuery } from '@deity/falcon-shop-data';
+import { SignOutMutation, IsAuthenticatedQuery } from '@deity/falcon-shop-data';
 import { Router } from '@deity/falcon-front-kit';
-import { SignOutMutation } from './SignOutMutation';
 
 export type SignOutLogicRenderProps = {
   isSignedIn: boolean;

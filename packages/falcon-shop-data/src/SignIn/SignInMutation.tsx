@@ -4,7 +4,7 @@ import { SignInInput } from '@deity/falcon-shop-extension';
 import { OperationInput } from '../types';
 
 export const SIGN_IN_MUTATION = gql`
-  mutation SignIn($input: SignIn!) {
+  mutation SignIn($input: SignInInput!) {
     signIn(input: $input)
   }
 `;

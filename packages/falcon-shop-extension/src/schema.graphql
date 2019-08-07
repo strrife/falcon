@@ -33,7 +33,7 @@ extend type Mutation {
   cancelCoupon: Boolean!
   signUp(input: SignUp!): Boolean
   signIn(input: SignInInput!): Boolean!
-  signOut: Boolean
+  signOut: Boolean!
   editCustomer(input: EditCustomerInput!): Customer
   editAddress(input: EditAddressInput!): Address
   addAddress(input: AddAddressInput!): Address

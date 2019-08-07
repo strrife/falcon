@@ -7,7 +7,9 @@ export const SIGN_OUT_MUTATION = gql`
   }
 `;
 
-export class SignOutMutation extends Mutation {
+export type SignOutResponse = { signOut: boolean };
+
+export class SignOutMutation extends Mutation<SignOutResponse> {
   static defaultProps = {
     mutation: SIGN_OUT_MUTATION,
     refetchQueries: ['Customer', 'MiniAccount', 'Cart']
