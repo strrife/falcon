@@ -1,7 +1,7 @@
 module.exports = {
   parser: 'babel-eslint',
   extends: ['eslint-config-airbnb', 'plugin:prettier/recommended'],
-  plugins: ['react', 'import', 'prettier', 'jsdoc'],
+  plugins: ['react', 'import', 'prettier', 'jsdoc', 'jsx-a11y'],
   settings: {
     'import/parser': 'babel-eslint',
     'import/resolver': { node: true },
@@ -112,9 +112,7 @@ module.exports = {
         'react/prop-types': 'off',
         'import/order': 1,
         'import/prefer-default-export': 'off',
-        'no-useless-constructor': 'off',
-        'no-empty-function': 'off',
-        'import-name': [true, { react: 'React' }]
+        'import-name': [1, { react: 'React' }]
       }
     }
   ]

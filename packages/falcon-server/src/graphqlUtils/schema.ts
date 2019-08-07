@@ -1,5 +1,4 @@
-import { GraphQLObjectType } from 'graphql';
-import { makeExecutableSchema } from 'graphql-tools';
+import { DocumentNode, Kind, parse } from 'graphql';
 
 export type RootFieldTypes = Record<string, string[]>;
 
@@ -16,37 +15,30 @@ export const getRootTypeFields: RootTypeFieldsFn = (typeDefs: string | Array<str
   const combinedTypeDefs: string = Array.isArray(typeDefs) ? typeDefs.join('\n') : typeDefs;
 
   try {
-    const executableSchema = makeExecutableSchema({
-      typeDefs: [
-        combinedTypeDefs
-          // Removing "extend type X" to avoid "X type missing" errors
-          .replace(/extend\s+type/gm, 'type')
-          // Removing directives and their definitions
-          .replace(/(directive @(.*))/gm, '')
-          .replace(/@(.*[^{\n])/gm, '')
-          // Removing type references from the base schema types
-          .replace(/:\s*(\w+)/gm, ': Int')
-          .replace(/\[\s*(\w+)\s*]/gm, '[Int]')
-      ],
-      resolverValidationOptions: {
-        requireResolversForResolveType: false
+    const docNode: DocumentNode = parse(combinedTypeDefs);
+    docNode.definitions.forEach(definition => {
+      if (definition.kind !== Kind.OBJECT_TYPE_DEFINITION && definition.kind !== Kind.OBJECT_TYPE_EXTENSION) {
+        return;
       }
-    });
 
-    [executableSchema.getQueryType(), executableSchema.getMutationType()].forEach(
-      (type: GraphQLObjectType | undefined | null) => {
-        if (!type) {
-          return;
-        }
-        const typeName: string = (type as GraphQLObjectType).name;
-        Object.keys((type as GraphQLObjectType).getFields()).forEach((field: string) => {
+      const typeName: string = definition.name.value;
+      if (!['Query', 'Mutation'].includes(typeName)) {
+        return;
+      }
+
+      if (definition.fields) {
+        definition.fields.forEach(field => {
+          const fieldName = field.name.value;
           if (!(typeName in result)) {
             result[typeName] = [];
           }
-          result[typeName].push(field as string);
+
+          if (!result[typeName].includes(fieldName)) {
+            result[typeName].push(fieldName);
+          }
         });
       }
-    );
+    });
   } catch (error) {
     error.message = `Failed to get root type fields - ${error.message}`;
     throw error;

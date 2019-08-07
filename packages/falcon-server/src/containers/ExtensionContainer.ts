@@ -16,7 +16,7 @@ import {
 import { GraphQLResolveInfo } from 'graphql';
 import { mergeSchemas, makeExecutableSchema, IExecutableSchemaDefinition } from 'graphql-tools';
 import deepMerge from 'deepmerge';
-import { getRootTypeFields } from '../graphqlUtils/schema';
+import { getRootTypeFields, RootFieldTypes } from '../graphqlUtils/schema';
 import { BackendConfig, ExtensionGraphQLConfig, ExtensionEntryMap } from '../types';
 import { BaseContainer } from './BaseContainer';
 
@@ -52,7 +52,10 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
 
         const schemaContent = this.importExtensionGraphQLSchema(extension.package);
         if (schemaContent) {
-          extGqlConfig = deepMerge(extGqlConfig, this.getExtensionGraphQLConfig(schemaContent, extensionConfig.api));
+          extGqlConfig = deepMerge(
+            extGqlConfig,
+            await this.getExtensionGraphQLConfig(schemaContent, extensionConfig.api)
+          );
         } else {
           Logger.warn(`"${extKey}" ("${extension.package}") extension does not contain ${this.schemaFileName} file.`);
         }
@@ -208,6 +211,9 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
         case 'context':
           dest.contextModifiers.push(value);
           break;
+        case 'schemaDirectives':
+          Object.assign(dest.schemaDirectives, value);
+          break;
         case 'dataSources':
           Object.assign(dest.dataSources, value);
           break;
@@ -253,24 +259,24 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
    * @param dataSource DataSource initializer
    * @returns GraphQL configuration object
    */
-  protected getExtensionGraphQLConfig(
+  protected async getExtensionGraphQLConfig(
     typeDefs: string | Array<string>,
     dataSourceName: string
-  ): ExtensionGraphQLConfig | undefined {
+  ): Promise<ExtensionGraphQLConfig | undefined> {
     if (!typeDefs) {
       return undefined;
     }
 
-    const rootTypes = getRootTypeFields(typeDefs as any);
+    const rootTypes: RootFieldTypes = await this.logger.traceTime(`Processing schema fields`, () =>
+      Promise.resolve(getRootTypeFields(typeDefs as any))
+    );
     const resolvers: GraphQLResolverMap = {};
 
     Object.keys(rootTypes).forEach((typeName: string) => {
       resolvers[typeName] = {};
       rootTypes[typeName].forEach((fieldName: string) => {
         Logger.debug(
-          `${
-            this.constructor.name
-          }: binding "${typeName}.${fieldName} => ${dataSourceName}.${fieldName}(obj, args, context, info)" resolver`
+          `${this.constructor.name}: binding "${typeName}.${fieldName} => ${dataSourceName}.${fieldName}(obj, args, context, info)" resolver`
         );
         resolvers[typeName][fieldName] = async (
           obj: any,

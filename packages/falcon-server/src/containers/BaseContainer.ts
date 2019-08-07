@@ -19,9 +19,10 @@ const tryRequire = <T>(moduleName: string): TryRequireResult<T> => {
   } catch (error) {
     const { code, message } = error;
 
+    // Note: error.message in Node 12 contains "Require stack" now.
     return {
       module: undefined,
-      exists: code !== 'MODULE_NOT_FOUND' || message !== `Cannot find module '${moduleName}'`,
+      exists: code !== 'MODULE_NOT_FOUND' || !message.startsWith(`Cannot find module '${moduleName}'`),
       error
     };
   }

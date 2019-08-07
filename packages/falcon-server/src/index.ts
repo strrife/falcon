@@ -1,6 +1,7 @@
 import 'source-map-support/register';
 import { resolve as resolvePath } from 'path';
 import { readFileSync } from 'fs';
+import { Server as HttpServer, IncomingMessage } from 'http';
 import { codes } from '@deity/falcon-errors';
 import {
   ApolloServerConfig,
@@ -17,15 +18,21 @@ import { KeyValueCache } from 'apollo-server-caching';
 import { ApolloError } from 'apollo-server-errors';
 import { EventEmitter2 } from 'eventemitter2';
 import GraphQLJSON from 'graphql-type-json';
+import Cookies from 'cookies';
 import cors from '@koa/cors';
 import Koa from 'koa';
+import compress from 'koa-compress';
 import Router from 'koa-router';
 import session from 'koa-session';
+import SessionContext from 'koa-session/lib/context';
 import body from 'koa-body';
 import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
+import { ConnectionContext } from 'subscriptions-transport-ws';
+import * as WebSocket from 'ws';
 import { ApiContainer } from './containers/ApiContainer';
-import { ExtensionContainer } from './containers/ExtensionContainer';
+import { ComponentContainer } from './containers/ComponentContainer';
+import { ExtensionContainer, GraphQLConfigDefaults } from './containers/ExtensionContainer';
 import { EndpointContainer } from './containers/EndpointContainer';
 import { DynamicRouteResolver } from './resolvers/DynamicRouteResolver';
 import { cacheInvalidatorMiddleware } from './middlewares/cacheInvalidatorMiddleware';
@@ -58,9 +65,15 @@ export class FalconServer {
 
   protected apiContainer?: ApiContainer;
 
+  protected componentContainer?: ComponentContainer;
+
   protected endpointContainer?: EndpointContainer;
 
   protected logger: LoggerType = Logger;
+
+  protected httpServer?: HttpServer;
+
+  protected apolloServerConfig?: ApolloServerConfig;
 
   constructor(protected config: Config) {
     const { maxListeners = 20, verboseEvents = false } = this.config;
@@ -90,6 +103,8 @@ export class FalconServer {
 
   async initialize() {
     await this.eventEmitter.emitAsync(Events.BEFORE_INITIALIZED, this);
+    this.cache = this.getCache();
+    await this.initializeComponents();
     await this.initializeServerApp();
     await this.initializeContainers();
     await this.initializeApolloServer();
@@ -97,67 +112,87 @@ export class FalconServer {
     await this.eventEmitter.emitAsync(Events.AFTER_INITIALIZED, this);
   }
 
-  async getApolloServerConfig(): Promise<ApolloServerConfig> {
-    this.cache = this.getCache();
+  async getApolloServerConfig() {
+    this.apolloServerConfig = await this.extensionContainer.createGraphQLConfig(this.getInitialGraphQLConfig());
+
+    // Removing "placeholder" (_) fields from the Type definitions
+    delete this.apolloServerConfig.schema.getSubscriptionType().getFields()['_'];
+
+    // If there were no other fields defined for Type by any other extension
+    // - we need to remove it completely in order to comply with GraphQL specification
+    if (!Object.keys(this.apolloServerConfig.schema.getSubscriptionType().getFields()).length) {
+      // @ts-ignore there's no other way to remove empty "Subscription" type from the schema
+      apolloServerConfig.schema._subscriptionType = undefined;
+      delete this.apolloServerConfig.schema.getTypeMap()['Subscription'];
+    }
+
+    return this.apolloServerConfig;
+  }
+
+  getInitialGraphQLConfig(): GraphQLConfigDefaults {
     const dynamicRouteResolver = new DynamicRouteResolver();
 
-    const apolloServerConfig: ApolloServerConfig = this.extensionContainer.createGraphQLConfig({
+    return {
       schemas: [BaseSchema],
       dataSources: () => {
         this.logger.debug('Instantiating GraphQL DataSources');
         const dataSources = {};
         this.apiContainer.dataSources.forEach((value, key) => {
-          dataSources[key] = value(apolloServerConfig);
+          dataSources[key] = value(this.apolloServerConfig);
         });
         return dataSources;
       },
-      schemaDirectives,
-      formatError: (error: ApolloError) => this.formatGraphqlError(error),
+      schemaDirectives: this.getDefaultSchemaDirectives(),
+      formatError: error => this.formatGraphqlError(error),
       // inject session and headers into GraphQL context
-      context: ({ ctx }) => ({
-        cache: this.cache,
-        config: this.config,
-        headers: ctx.req.headers,
-        session: ctx.session
-      }),
-      cache: this.cache,
-      rootResolvers: [
-        {
-          Query: {
-            url: this.urlResolver(dynamicRouteResolver),
-            backendConfig: this.backendConfigResolver()
-          },
-          Mutation: {
-            setLocale: this.setLocaleMutation()
-          },
-          BackendConfig: {
-            activeLocale: this.activeLocaleResolver()
-          },
-          JSON: GraphQLJSON
+      context: ({ ctx, connection }) => {
+        const context = {
+          cache: this.cache,
+          config: this.config,
+          components: this.componentContainer.components
+        };
+
+        // Subscription request
+        if (connection) {
+          return {
+            ...context,
+            ...connection.context
+          };
         }
-      ],
+
+        // Query/Mutation request
+        return {
+          ...context,
+          headers: ctx.req.headers,
+          session: ctx.req.session
+        };
+      },
+      cache: this.cache,
+      rootResolvers: {
+        Query: {
+          url: this.urlResolver(dynamicRouteResolver),
+          backendConfig: this.backendConfigResolver()
+        },
+        Mutation: {
+          setLocale: this.setLocaleMutation()
+        },
+        BackendConfig: {
+          activeLocale: this.activeLocaleResolver()
+        },
+        JSON: GraphQLJSON
+      },
+      subscriptions: this.getSubscriptionsOptions(),
       tracing: this.config.debug,
       playground: this.config.debug && {
         settings: {
           'request.credentials': 'include' // include to keep the session between requests
         }
       }
-    });
+    };
+  }
 
-    /* eslint-disable no-underscore-dangle */
-    // Removing "placeholder" (_) fields from the Type definitions
-    delete apolloServerConfig.schema.getSubscriptionType().getFields()['_'];
-
-    // If there were no other fields defined for Type by any other extension
-    // - we need to remove it completely in order to comply with GraphQL specification
-    if (!Object.keys(apolloServerConfig.schema.getSubscriptionType().getFields()).length) {
-      // @ts-ignore there's no other way to remove empty "Subscription" type from the schema
-      apolloServerConfig.schema._subscriptionType = undefined;
-      delete apolloServerConfig.schema.getTypeMap()['Subscription'];
-    }
-    /* eslint-enable no-underscore-dangle */
-
-    return apolloServerConfig;
+  getDefaultSchemaDirectives() {
+    return schemaDirectives;
   }
 
   protected urlResolver(
@@ -189,8 +224,14 @@ export class FalconServer {
 
     this.router = new Router();
 
+    this.app.context.components = this.componentContainer.components;
     this.app.use(body());
-    this.app.use(cors({ credentials: true }));
+    this.app.use(compress());
+    this.app.use(
+      cors({
+        credentials: true
+      })
+    );
     // todo: implement backend session store e.g. https://www.npmjs.com/package/koa-redis-session
     this.app.use(session((this.config.session && this.config.session.options) || {}, this.app));
     this.app.use(async (ctx, next) => {
@@ -215,6 +256,13 @@ export class FalconServer {
 
     this.endpointContainer = new EndpointContainer(this.eventEmitter);
     await this.endpointContainer.registerEndpoints(this.config.endpoints);
+  }
+
+  async initializeComponents() {
+    await this.eventEmitter.emitAsync(Events.BEFORE_COMPONENT_CONTAINER_CREATED, this.config.components);
+    this.componentContainer = new ComponentContainer(this.eventEmitter);
+    await this.componentContainer.registerComponents(this.config.components);
+    await this.eventEmitter.emitAsync(Events.AFTER_COMPONENT_CONTAINER_CREATED, this.componentContainer);
   }
 
   private async initializeApolloServer() {
@@ -307,6 +355,10 @@ export class FalconServer {
     };
   }
 
+  isSubscriptionsServerRequired() {
+    return 'Subscription' in this.apolloServerConfig.schema.getTypeMap();
+  }
+
   start(): void {
     const handleStartupError = (err: Error): void => {
       this.eventEmitter.emitAsync(Events.ERROR, err).then(() => {
@@ -321,16 +373,73 @@ export class FalconServer {
       .then(() => this.eventEmitter.emitAsync(Events.BEFORE_STARTED, this))
       .then(() =>
         new Promise(resolve => {
-          this.app.listen({ port: this.config.port }, () => {
+          this.httpServer = this.app.listen({ port: this.config.port }, () => {
             this.logger.info(`🚀 Server ready at http://localhost:${this.config.port}`);
             this.logger.info(
               `🌍 GraphQL endpoint ready at http://localhost:${this.config.port}${this.server.graphqlPath}`
             );
+            this.startSubscriptionsServer();
             resolve();
           });
         }).catch(handleStartupError)
       )
       .then(() => this.eventEmitter.emitAsync(Events.AFTER_STARTED, this))
       .catch(handleStartupError);
+  }
+
+  /**
+   * Starts (if needed) the subscriptions server (based on the stitched GraphQL Schema - Subscription type has resolvers)
+   */
+  startSubscriptionsServer(): void {
+    if (this.isSubscriptionsServerRequired()) {
+      this.server.installSubscriptionHandlers(this.httpServer);
+      this.logger.info(
+        `🔌 GraphQL Subscriptions endpoint ready at ws://localhost:${this.config.port}${this.server.subscriptionsPath}`
+      );
+    }
+  }
+
+  /**
+   * Get default Subscriptions Options with even handlers to properly initialize required context values
+   */
+  getSubscriptionsOptions() {
+    return {
+      onConnect: (connectionParams: any, _websocket: WebSocket, context: ConnectionContext) => {
+        const { cookie: paramsCookie } = connectionParams;
+        let { request } = context;
+
+        if (paramsCookie) {
+          // Faking `cookie` data passed from `connectionParams` to the request "headers" object
+          request = {
+            headers: {
+              cookie: paramsCookie,
+              ...context.request.headers
+            }
+          } as IncomingMessage;
+        }
+
+        // Checking signed cookies (without a `res` argument, since for Subscriptions there're no traditional "responses")
+        try {
+          const cookies = new Cookies(request, {} as any, {
+            keys: this.config.session.keys
+          });
+          // Manually decrypting session cookie
+          const sessionContext = new SessionContext(
+            {
+              sessionOptions: {},
+              cookies
+            },
+            this.config.session.options
+          );
+
+          return {
+            headers: context.request.headers,
+            session: sessionContext.get()
+          };
+        } catch (e) {
+          throw new Error('Failed to parse Cookie');
+        }
+      }
+    };
   }
 }

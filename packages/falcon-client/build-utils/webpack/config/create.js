@@ -13,7 +13,7 @@ const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware')
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 const { colors } = require('./../tools');
-const { getClientEnv } = require('./env');
+const { buildClientEnv, serializeEnvVariables } = require('./env');
 const runPlugin = require('./runPlugin');
 
 const falconClientPolyfills = require.resolve('./../../polyfills');
@@ -68,25 +68,29 @@ function getBabelLoaderOptions(babelRcPath) {
   return options;
 }
 
+/**
+ * @param {'web' | 'node' } target
+ * @param {'development' | 'production'} env
+ * @param {Object} cssLoaderOptions
+ */
 function getStyleLoaders(target, env, cssLoaderOptions) {
-  const { sourceMap = false } = cssLoaderOptions;
+  const { minimize, ...restOptions } = cssLoaderOptions;
+  const sourceMap = cssLoaderOptions.sourceMap || false;
 
   // "postcss" loader applies autoprefixer to our CSS.
   // "css" loader resolves paths in CSS and adds assets as dependencies.
   // "style" loader turns CSS into JS modules that inject <style> tags.
   // In production, we use a plugin to extract that CSS to a file, but
   // in development "style" loader enables hot editing of CSS.
-  //
-  // Note: this yields the exact same CSS config as create-react-app.
 
   if (target === 'node') {
     // Style-loader does not work in Node.js without some crazy magic. Luckily we just need css-loader.
     return [
       {
-        loader: require.resolve('css-loader/locals'),
+        loader: require.resolve('css-loader'),
         options: {
-          ...cssLoaderOptions,
-          minimize: false
+          ...restOptions,
+          onlyLocals: true
         }
       }
     ];
@@ -96,7 +100,7 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
     env === 'production' ? MiniCssExtractPlugin.loader : require.resolve('style-loader'),
     {
       loader: require.resolve('css-loader'),
-      options: { ...cssLoaderOptions }
+      options: { ...restOptions }
     },
     {
       loader: require.resolve('postcss-loader'),
@@ -107,7 +111,8 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
           require('postcss-preset-env')({
             autoprefixer: { flexbox: 'no-2009' },
             stage: 3
-          })
+          }),
+          require('cssnano')({ preset: 'default' })
         ],
         sourceMap
       }
@@ -116,7 +121,7 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
 }
 
 /**
- * @typedef {Object} CreateWebpackOptions
+ * @typedef {object} CreateWebpackOptions
  * @property {string} inspect
  * @property {boolean} analyze
  * @property {import('../../paths')} paths
@@ -127,7 +132,7 @@ function getStyleLoaders(target, env, cssLoaderOptions) {
 
 /**
  * Webpack configuration factory. It's the juice!
- * @param {'web' | 'node' } target target
+ * @param {'web' | 'node' } target
  * @param {CreateWebpackOptions} options
  * @returns {Object} webpack configuration
  */
@@ -146,13 +151,8 @@ module.exports = (target = 'web', options) => {
 
   const devtool = 'source-map';
   const devServerUrl = `http://localhost:${devServerPort}/`;
-  const clientEnv = getClientEnv(
-    target,
-    NODE_ENV,
-    START_DEV_SERVER,
-    publicPath,
-    devServerPort,
-    buildConfig.envToBuildIn
+  const serializedClientEnv = serializeEnvVariables(
+    buildClientEnv(target, NODE_ENV, publicPath, paths, START_DEV_SERVER, devServerPort, buildConfig.envToBuildIn)
   );
 
   let config = {
@@ -244,7 +244,6 @@ module.exports = (target = 'web', options) => {
           exclude: [paths.appBuild, /\.module\.css$/],
           use: getStyleLoaders(target, NODE_ENV, {
             importLoaders: 1,
-            modules: false,
             minimize: IS_PROD,
             sourceMap: !!devtool
           }),
@@ -255,7 +254,7 @@ module.exports = (target = 'web', options) => {
           exclude: [paths.appBuild],
           use: getStyleLoaders(target, NODE_ENV, {
             importLoaders: 1,
-            modules: true,
+            modules: 'global',
             minimize: IS_PROD,
             getLocalIdent: getCSSModuleLocalIdent,
             sourceMap: !!devtool
@@ -268,7 +267,6 @@ module.exports = (target = 'web', options) => {
           use: [
             ...getStyleLoaders(target, NODE_ENV, {
               importLoaders: 2,
-              modules: false,
               minimize: IS_PROD,
               sourceMap: !!devtool
             }),
@@ -281,7 +279,7 @@ module.exports = (target = 'web', options) => {
           use: [
             ...getStyleLoaders(target, NODE_ENV, {
               importLoaders: 2,
-              modules: true,
+              modules: 'global',
               minimize: IS_PROD,
               getLocalIdent: getCSSModuleLocalIdent,
               sourceMap: !!devtool
@@ -310,7 +308,7 @@ module.exports = (target = 'web', options) => {
     };
 
     config.plugins = [
-      new webpack.DefinePlugin(clientEnv.stringified),
+      new webpack.DefinePlugin(serializedClientEnv),
       new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })
     ];
 
@@ -355,7 +353,42 @@ module.exports = (target = 'web', options) => {
       libraryTarget: 'var'
     };
 
-    config.optimization = {};
+    config.optimization = {
+      splitChunks: {
+        cacheGroups: {
+          polyfills: {
+            name: 'polyfills',
+            enforce: true,
+            priority: 100,
+            chunks: 'initial',
+            test: moduleFilter(['core-js', 'whatwg-fetch', 'pwacompat'])
+          },
+          vendor: {
+            name: 'vendors',
+            enforce: true,
+            chunks: 'initial',
+            test: moduleFilter([
+              'apollo-cache-inmemory',
+              'apollo-client',
+              'apollo-link',
+              'apollo-link-http',
+              'apollo-utilities',
+              'i18next',
+              'i18next-xhr-backend',
+              'react',
+              'react-apollo',
+              'react-dom',
+              'react-google-tag-manager',
+              `react-helmet`,
+              'react-router',
+              'react-router-dom',
+              'history'
+            ])
+          }
+        }
+      }
+    };
+
     config.plugins = [
       new VirtualModulesPlugin({ [paths.ownWebmanifest]: '{}' }),
       new FalconI18nLocalesPlugin({
@@ -415,7 +448,7 @@ module.exports = (target = 'web', options) => {
       config.plugins = [
         ...config.plugins,
         START_DEV_SERVER && new webpack.HotModuleReplacementPlugin({ multiStep: true }),
-        new webpack.DefinePlugin(clientEnv.stringified)
+        new webpack.DefinePlugin(serializedClientEnv)
       ].filter(x => x);
     } else {
       config.output = {
@@ -426,7 +459,7 @@ module.exports = (target = 'web', options) => {
 
       config.plugins = [
         ...config.plugins,
-        new webpack.DefinePlugin(clientEnv.stringified),
+        new webpack.DefinePlugin(serializedClientEnv),
         // Extract our CSS into a files.
         new MiniCssExtractPlugin({
           filename: 'static/css/[name].[contenthash:8].css',
@@ -437,6 +470,7 @@ module.exports = (target = 'web', options) => {
       ];
 
       config.optimization = {
+        ...config.optimization,
         minimize: true,
         minimizer: [
           new UglifyJsPlugin({
@@ -474,40 +508,7 @@ module.exports = (target = 'web', options) => {
             parallel: true,
             sourceMap: !!devtool
           })
-        ],
-        splitChunks: {
-          cacheGroups: {
-            polyfills: {
-              name: 'polyfills',
-              enforce: true,
-              priority: 100,
-              chunks: 'initial',
-              test: moduleFilter(['core-js', 'object-assign', 'whatwg-fetch', 'pwacompat'])
-            },
-            vendor: {
-              name: 'vendors',
-              enforce: true,
-              chunks: 'initial',
-              test: moduleFilter([
-                'apollo-cache-inmemory',
-                'apollo-client',
-                'apollo-link',
-                'apollo-link-http',
-                'apollo-utilities',
-                'i18next',
-                'i18next-xhr-backend',
-                'react',
-                'react-apollo',
-                'react-dom',
-                'react-google-tag-manager',
-                `react-helmet`,
-                'react-router',
-                'react-router-dom',
-                'history'
-              ])
-            }
-          }
-        }
+        ]
       };
     }
   }
@@ -516,10 +517,9 @@ module.exports = (target = 'web', options) => {
     ...config.plugins,
     new NormalModuleOverridePlugin(moduleOverride),
     new WebpackBar({
-      minimal: buildConfig.CI,
+      fancy: !buildConfig.CI,
       color: colors.deityGreen,
-      name: IS_WEB ? 'client' : 'server',
-      compiledIn: true
+      name: IS_WEB ? 'client' : 'server'
     })
   ];
 

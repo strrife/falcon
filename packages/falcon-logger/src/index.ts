@@ -56,19 +56,17 @@ logger.getFor = (moduleName: string): Logger => logger.child({ module: moduleNam
  * @param fn Function to trace the execution time of
  * @returns `fn` result
  */
-logger.traceTime = async function<T = any>(label: string, fn: () => Promise<T>): Promise<T> {
+logger.traceTime = function<T = any>(label: string, fn: () => Promise<T>): Promise<T> {
   // using `function()` statement to preserve the context in case of "getFor" call
   if (!this.isLevelEnabled('trace')) {
     return fn();
   }
 
   const startTime = Date.now();
-  try {
-    return await fn();
-  } finally {
+  return fn().finally(() => {
     const duration = Date.now() - startTime;
     this.trace(`${label} (${duration}ms)`);
-  }
+  });
 };
 
 export default logger;

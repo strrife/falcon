@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon-server",
   "license": "OSL-3.0",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "homepage": "https://falcon.deity.io/docs/falcon-server/basics",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-server",
   "publishConfig": {
@@ -10,6 +10,12 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
+  "files": [
+    "dist",
+    "src",
+    "schema.graphql",
+    "README.md"
+  ],
   "scripts": {
     "prepare": "npm run clean && npm run build",
     "clean": "falcon-scripts clean",
@@ -34,8 +40,8 @@
   },
   "dependencies": {
     "@deity/falcon-errors": "^0.1.2",
-    "@deity/falcon-logger": "^1.0.0",
-    "@deity/falcon-server-env": "^0.1.6",
+    "@deity/falcon-logger": "^1.0.2",
+    "@deity/falcon-server-env": "^0.1.9",
     "@koa/cors": "2.2.2",
     "apollo-server-errors": "2.3.0",
     "apollo-server-cache-memcached": "0.3.1",
@@ -43,25 +49,30 @@
     "apollo-server-caching": "0.3.1",
     "apollo-server-env": "2.2.0",
     "apollo-server-koa": "2.4.8",
+    "cookies": "~0.7.1",
     "deepmerge": "^2.2.1",
     "eventemitter2": "5.0.1",
     "graphql": "^14.1.1",
-    "graphql-tools": "4.0.4",
+    "graphql-tools": "^4.0.0",
     "graphql-type-json": "0.3.0",
     "koa": "2.7.0",
     "koa-body": "4.1.0",
+    "koa-compress": "^3.0.0",
     "koa-router": "7.4.0",
     "koa-session": "5.12.0",
-    "lodash": "4.17.11",
+    "lodash": "4.17.15",
     "source-map-support": "0.5.12"
   },
   "devDependencies": {
     "@types/graphql-type-json": "0.3.0",
-    "@types/koa-session": "5.10.0",
+    "@types/koa-compress": "^2.0.9",
     "@types/jest": "23.3.10",
     "@types/supertest": "2.0.7",
+    "@types/cookies": "^0.7.2",
     "@deity/falcon-scripts": "^0.0.2",
-    "supertest": "4.0.2"
+    "@types/ws": "^6.0.0",
+    "supertest": "4.0.2",
+    "subscriptions-transport-ws": "^0.9.11"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }

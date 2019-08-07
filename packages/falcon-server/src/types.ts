@@ -11,6 +11,7 @@ export type Config = {
   apis?: ApiEntryMap;
   extensions?: ExtensionEntryMap;
   endpoints?: EndpointEntryMap;
+  components?: ComponentEntryMap;
   cache?: CacheConfig;
 };
 
@@ -61,6 +62,8 @@ export type ExternalResourceLikeConfig = {
 export type EndpointEntryMap = ModuleDefinition<ExternalResourceLikeConfig>;
 
 export type ApiEntryMap = ModuleDefinition<ExternalResourceLikeConfig>;
+
+export type ComponentEntryMap = ModuleDefinition<any>;
 
 export type ExtensionEntryMap = ModuleDefinition<ExtensionConfig>;
 
