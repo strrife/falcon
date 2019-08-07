@@ -34,6 +34,6 @@
   },
   "peerDependencies": {
     "@deity/falcon-payment-plugin": "^0.0.4",
-    "react": "^16.6.3"
+    "react": "^16.8.6"
   }
 }
