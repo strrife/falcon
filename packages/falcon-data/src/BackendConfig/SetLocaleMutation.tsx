@@ -8,16 +8,20 @@ export const SET_LOCALE = gql`
     }
   }
 `;
-export type SetLocaleData = {
+
+export type SetLocaleResponse = {
   setLocale: {
     activeLocale: string;
   };
 };
 
-export class SetLocaleMutation extends Mutation<SetLocaleData, { locale: string }> {
+export type SetLocaleVariables = {
+  locale: string;
+};
+
+export class SetLocaleMutation extends Mutation<SetLocaleResponse, SetLocaleVariables> {
   static defaultProps = {
     mutation: SET_LOCALE,
-    awaitRefetchQueries: true,
     refetchQueries: ['BackendConfig']
   };
 }

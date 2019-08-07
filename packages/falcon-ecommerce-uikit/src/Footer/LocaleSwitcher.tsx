@@ -1,8 +1,8 @@
 import React from 'react';
 import { themed, Dropdown, DropdownLabel, DropdownMenu, DropdownMenuItem, Box } from '@deity/falcon-ui';
-import { T, I18n } from '@deity/falcon-i18n';
+import { I18n } from '@deity/falcon-i18n';
 import { BackendConfigQuery } from '@deity/falcon-shop-data';
-import { SetLocaleMutation } from '../BackendConfig';
+import { SetLocaleMutation } from '@deity/falcon-data';
 
 export const LanguageSection = themed({
   tag: Box,

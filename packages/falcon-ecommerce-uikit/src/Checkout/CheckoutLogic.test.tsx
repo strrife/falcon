@@ -110,7 +110,8 @@ const createApolloClient = (resolvers: any) => {
         errorPolicy: 'all'
       },
       mutate: {
-        errorPolicy: 'all'
+        errorPolicy: 'all',
+        awaitRefetchQueries: true
       }
     }
   });

@@ -2,8 +2,7 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { Box, H3, Text, Image, DefaultThemeProps, Link } from '@deity/falcon-ui';
-import { toGridTemplate } from '@deity/falcon-ui-kit';
-import { DateFormat } from '../Locale';
+import { toGridTemplate, FormattedDate } from '@deity/falcon-ui-kit';
 import { BlogPostExcerptType } from './BlogPostsQuery';
 
 const BlogPostEcerptArea = {
@@ -49,7 +48,7 @@ export const BlogPostExcerpt: React.SFC<{ excerpt: BlogPostExcerptType }> = ({ e
         />
       )}
       <H3 gridArea={BlogPostEcerptArea.title}>{excerpt.title}</H3>
-      <DateFormat gridArea={BlogPostEcerptArea.date} value={excerpt.date} />
+      <FormattedDate gridArea={BlogPostEcerptArea.date} value={excerpt.date} />
       <Text gridArea={BlogPostEcerptArea.excerpt}>{excerpt.excerpt}</Text>
       <Text gridArea={BlogPostEcerptArea.readMore} css={{ textDecoration: 'underline' }}>
         <T id="blog.readMore" />

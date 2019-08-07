@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box } from '@deity/falcon-ui';
-import { MiniCartQuery, MiniCart, SignIn, SignUp, ForgotPassword } from '@deity/falcon-ecommerce-uikit';
+import { SignIn, SignUp, ForgotPassword } from '@deity/falcon-ecommerce-uikit';
+import { MiniCartQuery, MiniCart } from '@deity/falcon-ui-kit';
 import { SIDEBAR_CONTENT_TYPES } from './SidebarQuery';
 
 export default ({ contentType }) => {

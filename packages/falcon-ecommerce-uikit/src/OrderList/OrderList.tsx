@@ -2,8 +2,7 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { themed, Box, Text, DefaultThemeProps, Link, List, ListItem } from '@deity/falcon-ui';
-import { toGridTemplate } from '@deity/falcon-ui-kit';
-import { Price, DateFormat } from '../Locale';
+import { toGridTemplate, Price, FormattedDate } from '@deity/falcon-ui-kit';
 import { Order } from '../Order/OrderQuery';
 
 const OrderListItemArea = {
@@ -78,7 +77,7 @@ export const OrderListItem: React.SFC<Order> = props => (
       <CellLabel>
         <T id="orderList.createdAtLabel" />
       </CellLabel>
-      <DateFormat value={props.createdAt} display="flex" />
+      <FormattedDate value={props.createdAt} display="flex" />
     </Box>
     <Box gridArea={OrderListItemArea.shipTo} display="flex" alignContent="flex-start">
       <CellLabel>
