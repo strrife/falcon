@@ -1,17 +1,12 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
-import { Box, Icon, Text } from '@deity/falcon-ui';
+import { Box, Icon, Text, IconRenderer } from '@deity/falcon-ui';
 
-export const SignInIcon: React.SFC<{
-  onClick?: Function;
-  gridArea?: string;
-}> = ({ onClick, gridArea }) => (
-  <Box
-    gridArea={gridArea}
-    onClick={() => onClick && onClick()}
-    css={{ cursor: onClick ? 'pointer' : undefined, position: 'relative' }}
-  >
-    <Icon src="user" />
+/* eslint-disable */
+
+export const SignInIcon: React.SFC = () => (
+  <Box css={{ position: 'relative' }} >
+    <Icon src="user" fallback={<IconRenderer as={Text} style={{ textAlign: 'center' }}>👤</IconRenderer>} />
     <Text
       color="primary"
       fontSize="xs"

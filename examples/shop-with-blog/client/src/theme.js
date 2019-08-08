@@ -16,7 +16,7 @@ import CheckCircle from 'react-feather/dist/icons/check-circle';
 import Eye from 'react-feather/dist/icons/eye';
 import EyeOff from 'react-feather/dist/icons/eye-off';
 import { createTheme } from '@deity/falcon-ui';
-import { DeityLogo } from '@deity/falcon-ui-kit';
+import { DeityLogo, SignInIcon } from '@deity/falcon-ui-kit';
 
 export const deityGreenTheme = createTheme({
   colors: {
@@ -38,6 +38,7 @@ export const deityGreenTheme = createTheme({
         height: '100%'
       }
     },
+    signIn: { icon: SignInIcon },
     loader: {
       icon: props => (
         <svg viewBox="0 0 50 50" {...props}>

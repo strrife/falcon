@@ -14,5 +14,6 @@ export * from './Price';
 export * from './Product';
 export * from './Responsive';
 export * from './Sidebar';
+export * from './SignIn';
 export * from './SortOrder';
 export * from './helpers';
