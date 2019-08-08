@@ -64,7 +64,7 @@
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.14.0",
     "formik": "^1.5.8",
-    "graphql-tag": "2.10.0",
+    "graphql-tag": "2.10.1",
     "graphql-tools": "^4.0.0",
     "i18next": "^12.1.0",
     "prop-types": "15.7.2",
