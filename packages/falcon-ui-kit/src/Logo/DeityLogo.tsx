@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const DeityLogo = props => (
+export const DeityLogo: React.SFC = props => (
   <svg {...props} viewBox="0 0 175 239">
     <path
       transform="translate(0 24)"
