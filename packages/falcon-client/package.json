@@ -83,7 +83,6 @@
     "react-error-overlay": "5.1.4",
     "react-google-tag-manager": "2.2.1",
     "react-helmet": "^5.2.0",
-    "react-test-renderer": "^16.4.2",
     "regenerator-runtime": "0.13.3",
     "resolve": "^1.8.1",
     "rollup": "0.66.4",
