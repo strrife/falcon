@@ -3,10 +3,10 @@ import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
 import { Text, Button, GridLayout, H1, Box } from '@deity/falcon-ui';
 import { FormField, Form, FormSubmit, FormErrorSummary, PasswordRevealInput } from '../Forms';
-import { ResetCustomerPasswordMutation, ResetCustomerPasswordVariables } from './AccountRecoveryMutations';
-import { ValidatePasswordTokenQuery } from './AccountRecoveryQueries';
 import { OpenSidebarMutation } from '../Sidebar';
 import { MiniFormLayout } from '../MiniAccount';
+import { ResetCustomerPasswordMutation, ResetCustomerPasswordVariables } from './AccountRecoveryMutations';
+import { ValidatePasswordTokenQuery } from './AccountRecoveryQueries';
 
 type ResetPasswordProps = {
   resetToken: string;
@@ -57,7 +57,10 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken })
       return (
         <Formik
           initialValues={{ resetToken, password: '' } as ResetCustomerPasswordVariables}
-          onSubmit={values => resetCustomerPassword({ variables: { input: values } })}
+          onSubmit={async (values, { setSubmitting }) => {
+            await resetCustomerPassword({ variables: { input: values } });
+            setSubmitting(false);
+          }}
         >
           {() => (
             <MiniFormLayout>
@@ -65,7 +68,7 @@ export const ResetPasswordForm: React.SFC<ResetPasswordProps> = ({ resetToken })
                 <FormField name="password" required type="password" autoComplete="new-password">
                   {({ field }) => <PasswordRevealInput {...field} />}
                 </FormField>
-                <FormSubmit justifySelf="center" submitting={loading} value="Reset my password" />
+                <FormSubmit justifySelf="center" value="Reset my password" />
                 <FormErrorSummary errors={error && [error.message]} />
               </Form>
             </MiniFormLayout>

@@ -15,12 +15,15 @@ export const ForgotPasswordForm: React.SFC<ForgotPasswordProps> = ({ onCompleted
       return (
         <Formik
           initialValues={{ email: '' }}
-          onSubmit={values => requestPasswordReset({ variables: { input: { email: values.email } } })}
+          onSubmit={async (values, { setSubmitting }) => {
+            await requestPasswordReset({ variables: { input: { email: values.email } } });
+            setSubmitting(false);
+          }}
         >
           {({ values }) => (
             <Form id="forgot-password" i18nId="forgotPassword">
               <FormField name="email" required type="email" autoComplete="email" />
-              <FormSubmit submitting={loading} value="Reset my password" />
+              <FormSubmit value="Reset my password" />
               <FormErrorSummary errors={error && [error.message]} />
 
               {submitSucceed && (
