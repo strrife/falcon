@@ -166,7 +166,7 @@ export class FalconServer {
         return {
           ...context,
           headers: ctx.req.headers,
-          session: ctx.req.session
+          session: ctx.session
         };
       },
       cache: this.cache,
