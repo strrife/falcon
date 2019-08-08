@@ -1,8 +1,7 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
-import Logger from '@deity/falcon-logger';
 import { ApiDataSource, ApiDataSourceConstructor, ApolloServerConfig, Events } from '@deity/falcon-server-env';
-import { BaseContainer } from './BaseContainer';
 import { ApiEntryMap } from '../types';
+import { BaseContainer } from './BaseContainer';
 
 export type ApiDataSourceInitializer = (gqlServerConfig: ApolloServerConfig) => ApiDataSource;
 
@@ -43,7 +42,7 @@ export class ApiContainer extends BaseContainer {
             name: instance.name
           });
 
-          Logger.debug(`ApiContainer: "${instance.name}" API DataSource instantiated`);
+          this.logger.debug(`"${instance.name}" API DataSource instantiated`);
 
           return instance;
         };

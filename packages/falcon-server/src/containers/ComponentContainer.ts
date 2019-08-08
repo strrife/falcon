@@ -30,6 +30,8 @@ export class ComponentContainer extends BaseContainer {
         this.components[componentKey] = ComponentClass.prototype
           ? new (ComponentClass as ComponentConstructorInterface)(config)
           : await (ComponentClass as ComponentFunction)(config);
+
+        this.logger.debug(`"${componentKey}" component instantiated`);
       }
     }
   }

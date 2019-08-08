@@ -30,7 +30,7 @@ export const cacheInvalidatorMiddleware = (cache: Cache): Middleware => async ct
     .map(({ id, type }) => (id && type ? generateTagNames(type, id)[0] : type))
     .filter(value => value);
 
-  Logger.debug(`Flushing cache tags: ${tags.join(', ')}`);
+  Logger.getFor('cacheInvalidator').debug(`Flushing cache tags: ${tags.join(', ')}`);
   await cache.delete(tags);
   ctx.body = { success: true };
 };

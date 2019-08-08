@@ -14,7 +14,6 @@ import {
  * (example: sale.html)
  * That information can be used for fetching detailed data of that url.
  * It provides back information about entity type for passed url:
- *
  * @example
  * {
  *  type: 'shop-category',
@@ -55,7 +54,7 @@ export class DynamicRouteResolver {
       if (typeof resolver.fetchUrl !== 'function') {
         throw new Error(`"fetchUrl" method is not defined in your "${resolver.name}" api`);
       }
-      Logger.debug(`Checking ${resolver.name} extension for url: "${path}"...`);
+      Logger.getFor(this.constructor.name).debug(`Checking ${resolver.name} extension for url: "${path}"...`);
       try {
         response = await resolver.fetchUrl(obj, args, context, info);
         if (response) {

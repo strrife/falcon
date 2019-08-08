@@ -1,7 +1,6 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop, no-underscore-dangle */
 import path from 'path';
 import fs from 'fs';
-import Logger from '@deity/falcon-logger';
 import {
   ApolloServerConfig,
   ApiDataSource,
@@ -50,17 +49,19 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
           extGqlConfig = deepMerge(extGqlConfig, ExtensionInstanceFn(extensionConfig) || {});
         }
 
-        const schemaContent = this.importExtensionGraphQLSchema(extension.package);
+        const schemaContent = this.importExtensionGraphQLSchema(extension.package, extKey);
         if (schemaContent) {
           extGqlConfig = deepMerge(
             extGqlConfig,
-            await this.getExtensionGraphQLConfig(schemaContent, extensionConfig.api)
+            await this.getExtensionGraphQLConfig(schemaContent, extensionConfig.api, extKey)
           );
         } else {
-          Logger.warn(`"${extKey}" ("${extension.package}") extension does not contain ${this.schemaFileName} file.`);
+          this.logger
+            .getFor(extKey)
+            .warn(`("${extension.package}") extension does not contain ${this.schemaFileName} file.`);
         }
 
-        Logger.debug(`${this.constructor.name}: "${extKey}" added to the list of extensions`);
+        this.logger.debug(`"${extKey}" added to the list of extensions`);
         this.entries.set(extKey, extGqlConfig);
 
         await this.eventEmitter.emitAsync(Events.EXTENSION_REGISTERED, {
@@ -84,7 +85,7 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
         // Processing only supported APIs
         continue;
       }
-      Logger.debug(`Fetching "${apiName}" API backend config`);
+      this.logger.debug(`Fetching "${apiName}" API backend config`);
       const apiConfig = await api.fetchBackendConfig(obj, args, context, info);
       if (apiConfig) {
         configs.push(apiConfig);
@@ -182,7 +183,7 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
   }
 
   protected mergeGraphQLConfig(dest: GraphQLConfigDefaults, source: ExtensionGraphQLConfig, extensionName: string) {
-    Logger.debug(`${this.constructor.name}: merging "${extensionName}" extension GraphQL config`);
+    this.logger.debug(`Merging "${extensionName}" extension GraphQL config`);
 
     Object.keys(source).forEach(name => {
       if (!name || typeof source[name] === 'undefined') {
@@ -196,10 +197,12 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
         case 'schemas':
           valueArray.forEach(schemaItem => {
             if (typeof schemaItem !== 'string') {
-              Logger.warn(
-                `ExtensionContainer: "${extensionName}" extension contains non-string GraphQL Schema definition,` +
-                  `please check its "${name}" configuration and make sure all items are represented as strings. ${schemaItem}`
-              );
+              this.logger
+                .getFor(extensionName)
+                .warn(
+                  `Extension contains non-string GraphQL Schema definition,` +
+                    `please check its "${name}" configuration and make sure all items are represented as strings. ${schemaItem}`
+                );
             }
           });
 
@@ -222,9 +225,11 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
           // skipping those
           // that would give a possibility to override any kind of ApolloServer setting but the downside is
           // that one extension could override setting returned by previous one
-          Logger.warn(
-            `ExtensionContainer: "${extensionName}" extension wants to use GraphQL "${name}" option which is not supported by Falcon extensions api yet - skipping that option`
-          );
+          this.logger
+            .getFor(extensionName)
+            .warn(
+              `Extension wants to use GraphQL "${name}" option which is not supported by Falcon extensions api yet - skipping that option`
+            );
           break;
       }
     });
@@ -232,20 +237,22 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
 
   /**
    * Imports extension's GraphQL Schema (if present in the provided "package")
+   * @param basePath Base path of the package
+   * @param extKey Extension name
    * @returns Partial GraphQL Schema (if available)
    */
-  protected importExtensionGraphQLSchema(basePath: string): string | undefined {
+  protected importExtensionGraphQLSchema(basePath: string, extKey: string): string | undefined {
     const packagePath = path.join(basePath, this.schemaFileName);
     const subFolderPath = path.join(process.cwd(), packagePath);
     const readFile = (filePath: string) => fs.readFileSync(filePath, 'utf8');
 
     try {
       const packageResolvedPath: string = require.resolve(packagePath);
-      Logger.debug(`${this.constructor.name}: Loading Schema from "${packageResolvedPath}"`);
+      this.logger.getFor(extKey).debug(`Loading Schema from "${packageResolvedPath}"`);
       return readFile(packageResolvedPath);
     } catch {
       try {
-        Logger.debug(`${this.constructor.name}: Loading Schema from "${subFolderPath}"`);
+        this.logger.getFor(extKey).debug(`Loading Schema from "${subFolderPath}"`);
         return readFile(subFolderPath);
       } catch {
         return undefined;
@@ -257,27 +264,31 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
    * Performs partial auto-binding for DataSource methods based on the provided `typeDefs`
    * @param typeDefs Extension's GQL schema type definitions
    * @param dataSource DataSource initializer
+   * @param extKey Extension name
    * @returns GraphQL configuration object
    */
   protected async getExtensionGraphQLConfig(
     typeDefs: string | Array<string>,
-    dataSourceName: string
+    dataSourceName: string,
+    extKey: string
   ): Promise<ExtensionGraphQLConfig | undefined> {
     if (!typeDefs) {
       return undefined;
     }
 
-    const rootTypes: RootFieldTypes = await this.logger.traceTime(`Processing schema fields`, () =>
-      Promise.resolve(getRootTypeFields(typeDefs as any))
-    );
+    const rootTypes: RootFieldTypes = await this.logger
+      .getFor(extKey)
+      .traceTime(`Processing schema fields`, () => Promise.resolve(getRootTypeFields(typeDefs as any)));
     const resolvers: GraphQLResolverMap = {};
 
     Object.keys(rootTypes).forEach((typeName: string) => {
       resolvers[typeName] = {};
       rootTypes[typeName].forEach((fieldName: string) => {
-        Logger.debug(
-          `${this.constructor.name}: binding "${typeName}.${fieldName} => ${dataSourceName}.${fieldName}(obj, args, context, info)" resolver`
-        );
+        this.logger
+          .getFor(extKey)
+          .debug(
+            `Binding "${typeName}.${fieldName} => ${dataSourceName}.${fieldName}(obj, args, context, info)" resolver`
+          );
         resolvers[typeName][fieldName] = async (
           obj: any,
           args: any,
