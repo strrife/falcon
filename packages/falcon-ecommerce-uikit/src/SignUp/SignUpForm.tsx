@@ -9,7 +9,7 @@ type SignUpFormProps = {
 
 export const SignUpForm: React.SFC<SignUpFormProps> = ({ onCompleted }) => (
   <SignUpMutation onCompleted={onCompleted}>
-    {(signUp, { loading, error }) => (
+    {(signUp, { error }) => (
       <Formik
         // initial values need to be set because of: https://github.com/jaredpalmer/formik/issues/738
         initialValues={
