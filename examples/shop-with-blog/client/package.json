@@ -35,7 +35,7 @@
     "@deity/falcon-shop-data": "^0.0.1",
     "@deity/falcon-theme-editor": "^0.1.6",
     "@deity/falcon-ui": "^0.2.3",
-    "@deity/falcon-ui-kit": "0.0.1",
+    "@deity/falcon-ui-kit": "^0.0.1",
     "@loadable/component": "5.7.0",
     "apollo-client": "2.5.1",
     "config": "^2.0.1",

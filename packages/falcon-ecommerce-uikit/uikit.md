@@ -550,7 +550,7 @@
 > - ~~FiltersDataProvider~~ moved to @deity/falcon-front-kit
 > - ~~LocaleSwitcher~~ moved to @deity/falcon-front-kit
 > - ~~Field~~ moved to to @deity/falcon-front-kit
-- Form
+> - ~~Form~~ moved to to @deity/falcon-front-kit
 > - ~~LocaleProvider~~ moved to @deity/falcon-front-kit
 - ProductForm (it's not exported outside)
 > - ~~ProductConfigurator~~ moved to @deity/falcon-front-kit but, not used and extracted two functions and moved them into @deity/falcon-front-kit/productConfigurableOptionMappers
