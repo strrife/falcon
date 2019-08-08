@@ -121,9 +121,11 @@ export class FalconServer {
     // If there were no other fields defined for Type by any other extension
     // - we need to remove it completely in order to comply with GraphQL specification
     if (!Object.keys(this.apolloServerConfig.schema.getSubscriptionType().getFields()).length) {
+      /* eslint-disable no-underscore-dangle */
       // @ts-ignore there's no other way to remove empty "Subscription" type from the schema
-      apolloServerConfig.schema._subscriptionType = undefined;
+      this.apolloServerConfig.schema._subscriptionType = undefined;
       delete this.apolloServerConfig.schema.getTypeMap()['Subscription'];
+      /* eslint-enable no-underscore-dangle */
     }
 
     return this.apolloServerConfig;
@@ -355,7 +357,7 @@ export class FalconServer {
     };
   }
 
-  isSubscriptionsServerRequired() {
+  isSubscriptionsServerRequired(): boolean {
     return 'Subscription' in this.apolloServerConfig.schema.getTypeMap();
   }
 

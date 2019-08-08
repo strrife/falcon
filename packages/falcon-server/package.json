@@ -72,7 +72,8 @@
     "@deity/falcon-scripts": "^0.0.3",
     "@types/ws": "^6.0.0",
     "supertest": "4.0.2",
-    "subscriptions-transport-ws": "^0.9.11"
+    "subscriptions-transport-ws": "^0.9.11",
+    "ws": "^6.0.0"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }
