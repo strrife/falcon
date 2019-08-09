@@ -30,7 +30,7 @@ export class Product extends React.PureComponent<ProductResponse> {
             onSubmit={() => openSidebar({ variables: { contentType: 'cart' } })}
           >
             {({ isSubmitting, status }) => (
-              <ProductLayout as={Form} id="add-to-cart">
+              <ProductLayout as={Form} id="add-to-cart" i18nId="product">
                 <FlexLayout gridArea={ProductLayoutAreas.gallery} alignItems="center" justifyContent="center">
                   <ProductGallery items={product.gallery} />
                 </FlexLayout>
