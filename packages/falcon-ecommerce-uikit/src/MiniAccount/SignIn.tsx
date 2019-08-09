@@ -1,15 +1,14 @@
 import React from 'react';
 import { Divider, H4, Text, List, ListItem, Icon, Button, GridLayout } from '@deity/falcon-ui';
-import { OpenSidebarMutation, CloseSidebarMutation, SidebarLayout } from '@deity/falcon-ui-kit';
+import { OpenSidebarMutation, CloseSidebarMutation, SidebarLayout, SignInForm } from '@deity/falcon-ui-kit';
 import { I18n, T } from '@deity/falcon-i18n';
-import { SignInForm } from '../SignIn';
 
 export const SignIn = () => (
   <I18n>
     {t => (
       <SidebarLayout title={t('signIn.title')}>
         <CloseSidebarMutation>
-          {closeSidebar => <SignInForm id="sign-in-sidebar" onCompleted={closeSidebar} />}
+          {closeSidebar => <SignInForm id="sign-in-sidebar" onSubmit={closeSidebar} />}
         </CloseSidebarMutation>
         <Divider my="lg" />
         <GridLayout>

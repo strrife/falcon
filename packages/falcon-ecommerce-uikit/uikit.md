@@ -338,10 +338,10 @@
 
 ---
 
-- SignInModel
-- SignInData
+- SignInModel ? 
+- SignInData ? 
 - SignOutLogicRenderProps
-- SignUpVariables (Variables?)
+> - ~~SignUpVariables~~ moved to @deity/falcon-shop-extension and renamed to SignUpInput
 
 ---
 
@@ -524,10 +524,10 @@
 
 ---
 
-- ForgotPasswordTrigger
-- SignInForm
-- SignInIcon
-- SignUpForm
+> - ~~ForgotPasswordTrigger~~ - moved to @deity/falcon-ui-kit
+> - ~~SignInForm~~ - moved to @deity/falcon-ui-kit and extracted SignInFormProvider to @deity/falcon-front-kit
+> - ~~SignInIcon~~ - moved to @deity/falcon-ui-kit
+> - ~~SignUpForm~~ - moved to @deity/falcon-ui-kit and extracted SignUpFormProvider to @deity/falcon-front-kit
 
 ---
 

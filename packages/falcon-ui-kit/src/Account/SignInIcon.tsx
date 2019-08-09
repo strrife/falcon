@@ -3,10 +3,16 @@ import { T } from '@deity/falcon-i18n';
 import { Box, Icon, Text, IconRenderer } from '@deity/falcon-ui';
 
 /* eslint-disable */
+const UserIconFallback = () => (
+  <IconRenderer as={Text} style={{ textAlign: 'center' }}>
+    👤
+  </IconRenderer>
+);
+/* eslint-enable */
 
 export const SignInIcon: React.SFC = () => (
-  <Box css={{ position: 'relative' }} >
-    <Icon src="user" fallback={<IconRenderer as={Text} style={{ textAlign: 'center' }}>👤</IconRenderer>} />
+  <Box css={{ position: 'relative' }}>
+    <Icon src="user" fallback={<UserIconFallback />} />
     <Text
       color="primary"
       fontSize="xs"

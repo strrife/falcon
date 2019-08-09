@@ -1,7 +1,6 @@
 import React from 'react';
 import { I18n } from '@deity/falcon-i18n';
-import { OpenSidebarMutation, SidebarLayout } from '@deity/falcon-ui-kit';
-import { SignUpForm } from '../SignUp';
+import { OpenSidebarMutation, SidebarLayout, SignUpForm } from '@deity/falcon-ui-kit';
 
 export const SignUp = () => (
   <I18n>
@@ -9,7 +8,7 @@ export const SignUp = () => (
       <SidebarLayout title={t('signUp.title')}>
         <OpenSidebarMutation>
           {openSidebarMutation => (
-            <SignUpForm onCompleted={() => openSidebarMutation({ variables: { contentType: 'account' } })} />
+            <SignUpForm onSubmit={() => openSidebarMutation({ variables: { contentType: 'account' } })} />
           )}
         </OpenSidebarMutation>
       </SidebarLayout>
