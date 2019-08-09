@@ -26,11 +26,14 @@ export type GetCacheOptions = {
   options?: SetCacheOptions;
 };
 
+// 1 hour
+const DEFAULT_TAG_TTL: number = 60 * 60;
+
 /**
  * Cache-wrapper with extended methods
  */
 export class Cache<V = any> implements KeyValueCache<V> {
-  constructor(private cacheBackend: KeyValueCache<string>) {}
+  constructor(protected cacheBackend: KeyValueCache<string>, protected tagTtl: number = DEFAULT_TAG_TTL) {}
 
   async get(key: string): Promise<V>;
 
@@ -164,7 +167,7 @@ export class Cache<V = any> implements KeyValueCache<V> {
         if (typeof tagValue === 'undefined' && createIfMissing) {
           // For "createIfMissing" flag - generate new tag value and save it to the cache
           tagValue = this.generateTagValue();
-          await this.set(tag, tagValue);
+          await this.set(tag, tagValue, { ttl: this.tagTtl });
         }
 
         if (tagValue) {
