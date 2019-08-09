@@ -37,6 +37,7 @@ export const ConfigurableProductOptionRadioGroupField: React.SFC<ConfigurablePro
           {values.map(value => (
             <ProductOptionRadio
               {...field}
+              id={`${field.id}-${value.valueIndex}`}
               key={value.valueIndex}
               value={value.valueIndex}
               checked={value.valueIndex === field.value}
