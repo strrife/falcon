@@ -38,7 +38,6 @@ export class Product extends React.PureComponent<ProductResponse> {
                   <T id="product.sku" sku={product.sku} />
                 </Text>
                 <H1 gridArea={ProductLayoutAreas.title}>{product.name}</H1>
-
                 <Box gridArea={ProductLayoutAreas.price}>
                   {price.special ? (
                     <React.Fragment>
