@@ -784,6 +784,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       };
     }
 
+    // TODO: I think we should do `Array.isArray(input.bundleOptions) && input.bundleOptions.length` instead
     if (input.bundleOptions) {
       product.cart_item.product_option = {
         extension_attributes: {
