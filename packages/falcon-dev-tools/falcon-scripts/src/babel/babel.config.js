@@ -13,12 +13,13 @@ module.exports = {
       {
         modules: false,
         loose: true,
-        targets: rollupCjsBuild ? { node: true } : 'defaults'
+        targets: rollupCjsBuild || targetNode ? { node: true } : 'defaults'
       }
     ],
     require.resolve('@babel/preset-typescript'),
     require.resolve('@babel/preset-react')
   ],
+
   plugins: [
     require.resolve('babel-plugin-graphql-tag'),
     require.resolve('@babel/plugin-proposal-class-properties'),
