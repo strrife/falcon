@@ -42,8 +42,6 @@ export class BaseContainer {
    * @returns Imported module
    */
   importModule<T>(pathOrPackage: string): T | undefined {
-    const prefix: string = this.constructor.name;
-
     const requiredPackage = tryRequire<T>(pathOrPackage);
     if (requiredPackage.exists) {
       const { module: mdl, error } = requiredPackage;

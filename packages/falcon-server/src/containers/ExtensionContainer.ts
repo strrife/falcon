@@ -296,7 +296,7 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
           info: GraphQLResolveInfo
         ) => {
           const dataSource = this.getApi(context.dataSources, dataSourceName);
-          if (typeof (dataSource[fieldName] !== 'function')) {
+          if (typeof dataSource[fieldName] !== 'function') {
             throw new Error(
               `${this.constructor.name}: ${dataSourceName}.${fieldName}() resolver method is not defined!`
             );
