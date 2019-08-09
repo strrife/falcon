@@ -27,10 +27,7 @@ export class Product extends React.PureComponent<ProductResponse> {
           <AddToCartFormProvider
             quantity={1}
             product={product}
-            onSubmit={() => {
-              console.log('asd');
-              return openSidebar({ variables: { contentType: 'cart' } });
-            }}
+            onSubmit={() => openSidebar({ variables: { contentType: 'cart' } })}
           >
             {({ isSubmitting, status }) => (
               <ProductLayout as={Form} id="add-to-cart">
