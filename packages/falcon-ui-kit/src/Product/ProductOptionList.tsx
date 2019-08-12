@@ -11,7 +11,7 @@ export type ProductOptionListProps = {
 };
 export const ProductOptionList: React.SFC<ProductOptionListProps> = props => {
   return (
-    <GridLayout gridGap="md" gridArea={props.gridArea}>
+    <GridLayout gridGap="sm" gridArea={props.gridArea}>
       {props.items.map(({ label, attributeId, values }) => (
         <ProductOptionRadioGroupField
           key={attributeId}
