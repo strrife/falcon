@@ -1,16 +1,17 @@
 import React from 'react';
-import { Box } from '@deity/falcon-ui';
+import { GridLayout } from '@deity/falcon-ui';
 import { ProductOptionRadioGroupField, ProductOption } from './ProductOptionRadioGroupField';
 
 export type ProductOptionListProps = {
   gridArea: string;
+  /** form state property name which should be edit */
   name: string;
   items: ProductOption[];
   disabled?: boolean;
 };
 export const ProductOptionList: React.SFC<ProductOptionListProps> = props => {
   return (
-    <Box gridArea={props.gridArea}>
+    <GridLayout gridGap="md" gridArea={props.gridArea}>
       {props.items.map(({ label, attributeId, values }) => (
         <ProductOptionRadioGroupField
           key={attributeId}
@@ -20,7 +21,7 @@ export const ProductOptionList: React.SFC<ProductOptionListProps> = props => {
           disabled={props.disabled}
         />
       ))}
-    </Box>
+    </GridLayout>
   );
 };
 ProductOptionList.defaultProps = {

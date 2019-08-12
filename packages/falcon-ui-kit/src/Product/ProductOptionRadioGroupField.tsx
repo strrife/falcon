@@ -32,8 +32,8 @@ export const ProductOptionRadioGroupField: React.SFC<ProductOptionRadioGroupFiel
   <Field name={name} label={label} validate={[requiredValidator]}>
     {({ field, error }) => {
       return (
-        <Box mb="sm">
-          {label && <H4 mb="sm">{label}</H4>}
+        <Box>
+          {label && <H4 mb="xs">{label}</H4>}
           {values.map(value => (
             <ProductOptionRadio
               {...field}
