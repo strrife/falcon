@@ -205,19 +205,13 @@ class Magento2ApiBase extends ApiDataSource {
    * @returns {object} Magento config
    */
   async fetchBackendConfig() {
-    const getCachedValue = async url => {
-      const value = await this.cache.get([this.name, this.getStoreCode(), url].join(':'), {
-        fetchData: async () => {
-          const rawValue = await this.getForIntegration(url);
-
-          return JSON.stringify(rawValue);
-        },
+    const getCachedValue = async url =>
+      this.cache.get([this.name, this.getStoreCode(), url].join(':'), {
+        fetchData: async () => this.getForIntegration(url),
         options: {
           ttl: 10 * 60 // 10 min
         }
       });
-      return JSON.parse(value);
-    };
 
     const [storeConfigs, storeViews, storeGroups, storeWebsites] = await Promise.all([
       getCachedValue('/store/storeConfigs'),
