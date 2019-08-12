@@ -1,7 +1,8 @@
 import { Cache, InMemoryLRUCache } from '@deity/falcon-server-env';
+import { KeyValueCache } from 'apollo-server-caching';
 import { addResolveFunctionsToSchema } from 'graphql-tools';
-import { GraphQLCacheDirective } from './GraphQLCacheDirective';
 import { runQuery, buildSchema, buildSchemaAndRunQuery } from '../utils/testing';
+import { GraphQLCacheDirective } from './GraphQLCacheDirective';
 
 const directiveDefinition: string = `directive @cache(ttl: Int, idPath: [String]) on FIELD_DEFINITION`;
 
@@ -18,7 +19,7 @@ const schemaDirectives = {
 };
 
 describe('@cache directive', () => {
-  let cacheProvider: InMemoryLRUCache;
+  let cacheProvider: KeyValueCache<string>;
   let cache: Cache;
 
   beforeEach(() => {

@@ -3,6 +3,7 @@ import { CacheOptions, RequestOptions } from 'apollo-datasource-rest/dist/RESTDa
 import { Middleware } from 'koa';
 import { Config as ApolloServerConfig } from 'apollo-server-koa';
 import { GraphQLResolveInfo } from 'graphql';
+import { IResolvers } from 'graphql-tools';
 import { EventEmitter2 } from 'eventemitter2';
 import { ApiDataSource } from './models/ApiDataSource';
 import { Cache } from './cache/Cache';
@@ -18,7 +19,7 @@ export interface FetchUrlResult {
   id: string | number;
   type: string;
   path: string;
-  redirect?: boolean;
+  redirect: boolean;
 }
 
 export enum ApiUrlPriority {
@@ -122,7 +123,7 @@ export type FetchUrlParams = {
 };
 
 export interface EndpointEntry {
-  methods: Array<RequestMethod> | RequestMethod | string | string[];
+  methods: Array<RequestMethod | keyof typeof RequestMethod> | RequestMethod | keyof typeof RequestMethod;
   handler: Middleware;
   path: string;
 }
@@ -133,6 +134,10 @@ export enum RequestMethod {
   PUT = 'put',
   DELETE = 'delete',
   PATCH = 'patch',
+  HEAD = 'head',
+  LINK = 'link',
+  UNLINK = 'unlink',
+  OPTIONS = 'options',
   ALL = 'all'
 }
 
@@ -140,4 +145,4 @@ export interface GraphQLResolver<T, O = any, P = any, C extends GraphQLContext =
   (obj: O, params: P, context: C, info: GraphQLResolveInfo): Promise<T>;
 }
 
-export type GraphQLResolverMap = Record<string, Record<string, GraphQLResolver<any>>>;
+export type GraphQLResolverMap = IResolvers<any, GraphQLContext>;

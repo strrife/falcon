@@ -56,9 +56,9 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
             await this.getExtensionGraphQLConfig(schemaContent, extensionConfig.api, extKey)
           );
         } else {
-          this.logger
-            .getFor(extKey)
-            .warn(`("${extension.package}") extension does not contain ${this.schemaFileName} file.`);
+          this.logger.warn(
+            `${extKey} ("${extension.package}") extension does not contain ${this.schemaFileName} file.`
+          );
         }
 
         this.logger.debug(`"${extKey}" added to the list of extensions`);
