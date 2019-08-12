@@ -14,7 +14,7 @@ export const ProductPrice: React.SFC<ProductPriceProps & ThemedComponentProps> =
       <Price value={special} fontSize="md" {...(rest as any)} variant="special" />
     </React.Fragment>
   ) : (
-    <Price value={regular} fontSize="md" />
+    <Price value={regular} fontSize="md" {...(rest as any)} />
   );
 };
 ProductPrice.propTypes = {
