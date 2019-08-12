@@ -27,7 +27,7 @@ export const SignInFormProvider: React.SFC<FormProviderProps<SignInFormValues>> 
               })
               .catch(e => {
                 formikActions.setSubmitting(false);
-                formikActions.setError(e.message);
+                formikActions.setStatus({ error: e.message });
               })
           }
           {...formikProps}

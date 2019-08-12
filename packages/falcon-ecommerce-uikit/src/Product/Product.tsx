@@ -74,13 +74,13 @@ export class Product extends React.PureComponent<ProductResponse> {
                 <FlexLayout alignItems="center" gridArea={ProductLayoutAreas.cta} mt="xs">
                   <Field name="qty" validate={[requiredValidator, rangeValidator(1)]}>
                     {({ field, label, error }) => (
-                      <React.Fragment>
-                        <NumberInput {...field} disabled={isSubmitting} mr="sm" mt="sm" min="1" aria-label={label} />
+                      <Box mr="md">
+                        <NumberInput {...field} min={1} disabled={isSubmitting} aria-label={label} />
                         <FormFieldError>{field.invalid ? error : null}</FormFieldError>
-                      </React.Fragment>
+                      </Box>
                     )}
                   </Field>
-                  <Button type="submit" height="xl" mt="sm" disabled={isSubmitting} variant={isSubmitting && 'loader'}>
+                  <Button type="submit" height="xl" disabled={isSubmitting} variant={isSubmitting && 'loader'}>
                     {!isSubmitting && <Icon src="cart" stroke="white" size="md" mr="sm" />}
                     <T id="product.addToCart" />
                   </Button>

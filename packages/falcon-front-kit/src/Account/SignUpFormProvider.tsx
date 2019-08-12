@@ -33,7 +33,7 @@ export const SignUpFormProvider: React.SFC<FormProviderProps<SignUpFormValues>> 
               })
               .catch(e => {
                 formikActions.setSubmitting(false);
-                formikActions.setError(e.message);
+                formikActions.setStatus({ error: e.message });
               })
           }
           {...formikProps}
