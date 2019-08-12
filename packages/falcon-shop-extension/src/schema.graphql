@@ -321,7 +321,7 @@ type Product {
   description: String
   stock: Stock
   type: String
-  configurableOptions: [ConfigurableProductOption!]!
+  options: [ProductOption!]!
   bundleOptions: [BundleProductOption!]!
   gallery: [GalleryEntry!]!
   breadcrumbs(path: String!): [Breadcrumb] @cache(ttl: 20, idPath: ["$parent"])
@@ -471,8 +471,19 @@ type CartTotal {
 input AddToCartInput {
   sku: String!
   qty: Float!
-  configurableOptions: [ConfigurableOptionInput]
+  options: [ProductOptionInput]
   bundleOptions: [BundleOptionInput]
+}
+
+input ProductOptionInput {
+  optionId: Int!
+  value: Int!
+}
+
+input BundleOptionInput {
+  optionId: Int!
+  optionQty: Float!
+  optionSelections: [Int]
 }
 
 input UpdateCartItemInput {
@@ -484,17 +495,6 @@ input UpdateCartItemInput {
 
 input RemoveCartItemInput {
   itemId: Int!
-}
-
-input ConfigurableOptionInput {
-  optionId: Int!
-  value: Int!
-}
-
-input BundleOptionInput {
-  optionId: Int!
-  optionQty: Float!
-  optionSelections: [Int]
 }
 
 input CouponInput {
@@ -572,16 +572,16 @@ type Breadcrumb {
   urlPath: String
 }
 
-type ConfigurableProductOption {
+type ProductOption {
   id: String!
   attributeId: String!
   label: String
   position: String
   productId: String!
-  values: [ConfigurableProductOptionValue!]!
+  values: [ProductOptionValue!]!
 }
 
-type ConfigurableProductOptionValue {
+type ProductOptionValue {
   inStock: [String!]!
   label: String
   valueIndex: String!

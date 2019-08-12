@@ -53,7 +53,7 @@
     "tierPriceDescription": "Buy {{qty}} for {{price}} and safe {{discount}}%",
     "error": {
       "quantity": "Quantity must be greater than 0",
-      "configurableOptions": "Please select all required options"
+      "options": "Please select all required options"
     },
     "tabs": {
       "description": "Description",

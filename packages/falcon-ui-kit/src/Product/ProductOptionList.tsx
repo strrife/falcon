@@ -1,21 +1,18 @@
 import React from 'react';
 import { Box } from '@deity/falcon-ui';
-import {
-  ConfigurableProductOptionRadioGroupField,
-  ConfigurableProductOption
-} from './ConfigurableProductOptionRadioGroupField';
+import { ProductOptionRadioGroupField, ProductOption } from './ProductOptionRadioGroupField';
 
 export type ProductOptionListProps = {
   gridArea: string;
   name: string;
-  items: ConfigurableProductOption[];
+  items: ProductOption[];
   disabled?: boolean;
 };
 export const ProductOptionList: React.SFC<ProductOptionListProps> = props => {
   return (
     <Box gridArea={props.gridArea}>
       {props.items.map(({ label, attributeId, values }) => (
-        <ConfigurableProductOptionRadioGroupField
+        <ProductOptionRadioGroupField
           key={attributeId}
           label={label}
           name={`${props.name}.${attributeId}`}

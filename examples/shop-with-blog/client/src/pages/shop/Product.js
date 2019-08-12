@@ -72,8 +72,8 @@ const ProductPage = ({ id, path }) => (
                     </Box>
                     <ProductOptionList
                       gridArea={ProductLayoutAreas.options}
-                      name="configurableOptions"
-                      items={product.configurableOptions}
+                      name="options"
+                      items={product.options}
                       disabled={isSubmitting}
                     />
                     <ProductDescription gridArea={ProductLayoutAreas.description} value={product.description} />

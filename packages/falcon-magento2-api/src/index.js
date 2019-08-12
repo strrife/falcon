@@ -48,7 +48,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       Product: {
         price: (...args) => this.productPrice(...args),
         tierPrices: (...args) => this.productTierPrices(...args),
-        configurableOptions: (...x) => this.configurableProductOptions(...x),
+        options: (...x) => this.productOptions(...x),
         breadcrumbs: (...args) => this.breadcrumbs(...args)
       },
       Category: {
@@ -607,7 +607,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         result.stock = pick(stockItem, 'qty', 'isInStock');
       }
 
-      result.configurableOptions = configurableProductOptions || [];
+      result.options = configurableProductOptions || [];
 
       if (bundleProductOptions) {
         // remove extension attributes for option product links
@@ -666,14 +666,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
-   * Resolve Configurable Product Options from Product
+   * Resolve Product Options from Product
    * @param {object} parent parent (MagentoProduct or MagentoProductListItem)
    * @param {object} args arguments
    * @param {object} context context
    * @param {object} info info
-   * @returns {ConfigurableProductOption} configurable product options
+   * @returns {ProductOption} product options
    */
-  async configurableProductOptions(parent, args, context, info) {
+  async productOptions(parent, args, context, info) {
     // a parent could be an item of Magento Product List, which does not contain necessary data, so we need to fetch Product by its id
     const data = typeResolverPathToString(info.path).startsWith('category.products')
       ? await this.fetchProduct(parent.id)
@@ -773,10 +773,10 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       }
     };
 
-    if (input.configurableOptions) {
+    if (input.options) {
       product.cart_item.product_option = {
         extension_attributes: {
-          configurable_item_options: input.configurableOptions.map(item => ({
+          configurable_item_options: input.options.map(item => ({
             option_id: item.optionId,
             option_value: item.value
           }))

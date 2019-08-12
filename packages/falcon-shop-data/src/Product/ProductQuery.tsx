@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import { Query } from '@deity/falcon-data';
-import { Product as ShopProduct, GalleryEntry, ConfigurableProductOption } from '@deity/falcon-shop-extension';
+import { Product as ShopProduct, GalleryEntry, ProductOption } from '@deity/falcon-shop-extension';
 
 export const GET_PRODUCT = gql`
   query Product($id: ID!, $path: String!) {
@@ -24,7 +24,7 @@ export const GET_PRODUCT = gql`
         full
         thumbnail
       }
-      configurableOptions {
+      options {
         id
         attributeId
         label
@@ -53,7 +53,7 @@ export type Product = Pick<
   'id' | 'sku' | 'name' | 'description' | 'price' | 'tierPrices' | 'currency' | 'seo' | 'breadcrumbs'
 > & {
   gallery: Pick<GalleryEntry, 'full' | 'thumbnail'>[];
-  configurableOptions: Pick<ConfigurableProductOption, 'id' | 'attributeId' | 'label' | 'productId' | 'values'>[];
+  options: Pick<ProductOption, 'id' | 'attributeId' | 'label' | 'productId' | 'values'>[];
 };
 export type ProductResponse = {
   product: Product;

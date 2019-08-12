@@ -4,7 +4,7 @@ import { Field, requiredValidator } from '@deity/falcon-front-kit';
 import { FormFieldError } from '../Forms';
 import { ProductOptionRadio } from './ProductOptionRadio';
 
-export type ConfigurableProductOption = {
+export type ProductOption = {
   id: string;
   attributeId: string;
   label?: string;
@@ -17,13 +17,13 @@ export type ProductOptionValue = {
   valueIndex: string;
 };
 
-export type ConfigurableProductOptionRadioGroupFieldProps = {
+export type ProductOptionRadioGroupFieldProps = {
   label?: string;
   name: string;
   values: ProductOptionValue[];
   disabled?: boolean;
 };
-export const ConfigurableProductOptionRadioGroupField: React.SFC<ConfigurableProductOptionRadioGroupFieldProps> = ({
+export const ProductOptionRadioGroupField: React.SFC<ProductOptionRadioGroupFieldProps> = ({
   label,
   name,
   values,

@@ -1,23 +1,19 @@
 import React from 'react';
 import { Formik } from 'formik';
-import { ConfigurableProductOption, Product } from '@deity/falcon-shop-extension';
+import { Product, ProductOption } from '@deity/falcon-shop-extension';
 import { AddToCartMutation } from '@deity/falcon-shop-data';
 import { FormProviderProps } from '../Forms';
-import {
-  ProductOptionsMap,
-  productConfigurableOptionsToForm,
-  formProductConfigurableOptionsToInput
-} from './productConfigurableOptionMappers';
+import { ProductOptionsMap, productOptionsToForm, formProductOptionsToInput } from './productOptionMappers';
 
 export type AddToCartFormValues = {
   qty: string;
-  configurableOptions: ProductOptionsMap;
+  options: ProductOptionsMap;
   bundleOptions: [];
 };
 export type AddToCartFormProviderProps = FormProviderProps<AddToCartFormValues> & {
   quantity: number;
   product: Pick<Product, 'sku'> & {
-    configurableOptions?: Pick<ConfigurableProductOption, 'attributeId'>[];
+    options?: Pick<ProductOption, 'attributeId'>[];
     bundleOptions?: Pick<Product, 'bundleOptions'>;
   };
 };
@@ -25,7 +21,7 @@ export const AddToCartFormProvider: React.SFC<AddToCartFormProviderProps> = prop
   const { onSubmit, initialValues, quantity, product, ...formikProps } = props;
   const defaultInitialValues = {
     qty: quantity,
-    configurableOptions: productConfigurableOptionsToForm(product.configurableOptions),
+    options: productOptionsToForm(product.options),
     bundleOptions: product.bundleOptions || []
   };
 
@@ -40,7 +36,7 @@ export const AddToCartFormProvider: React.SFC<AddToCartFormProviderProps> = prop
                 input: {
                   sku: product.sku,
                   qty: parseInt(values.qty.toString(), 10),
-                  configurableOptions: formProductConfigurableOptionsToInput(values.configurableOptions),
+                  options: formProductOptionsToInput(values.options),
                   bundleOptions: undefined // values.bundleOptions as any - TODO add appropriate mapper
                 }
               }
