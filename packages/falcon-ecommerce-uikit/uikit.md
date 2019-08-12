@@ -552,7 +552,7 @@
 > - ~~Field~~ moved to to @deity/falcon-front-kit
 > - ~~Form~~ moved to to @deity/falcon-front-kit
 > - ~~LocaleProvider~~ moved to @deity/falcon-front-kit
-- ProductForm (it's not exported outside)
+> - ~~ProductForm ~~ extracted AddToCartFormProvider and moved to @deity/falcon-front-kit
 > - ~~ProductConfigurator~~ moved to @deity/falcon-front-kit but, not used and extracted two functions and moved them into @deity/falcon-front-kit/productConfigurableOptionMappers
 
 > - ~~Query~~ moved to @deity/falcon-data

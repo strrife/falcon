@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import LazyLoad from 'react-lazyload';
 import { Image, Text, FlexLayout } from '@deity/falcon-ui';
-import { Price } from '../Price';
+import { ProductPrice } from './ProductPrice';
 import { ProductCardLayout } from './ProductCardLayout';
 
 export type ProductCardProps = {
@@ -24,14 +24,7 @@ export const ProductCard: React.SFC<ProductCardProps> = ({ name, thumbnail, urlP
         {name}
       </Text>
       <FlexLayout>
-        {price.special ? (
-          <React.Fragment>
-            <Price value={price.regular} fontSize="md" variant="old" mr="xs" />
-            <Price value={price.special} fontSize="md" variant="special" />
-          </React.Fragment>
-        ) : (
-          <Price value={price.regular} fontSize="md" />
-        )}
+        <ProductPrice {...price} fontSize="md" />
       </FlexLayout>
     </ProductCardLayout>
   );

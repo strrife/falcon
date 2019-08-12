@@ -9,7 +9,7 @@ import {
   ProductLayoutAreas,
   ProductDescription,
   OpenSidebarMutation,
-  Price,
+  ProductPrice,
   ProductGallery,
   ProductOptionList,
   Form,
@@ -45,14 +45,7 @@ const ProductPage = ({ id, path }) => (
                     </Text>
                     <H1 gridArea={ProductLayoutAreas.title}>{product.name}</H1>
                     <Box gridArea={ProductLayoutAreas.price}>
-                      {price.special ? (
-                        <React.Fragment>
-                          <Price value={price.regular} fontSize="xl" variant="old" mr="xs" />
-                          <Price value={price.special} fontSize="xl" variant="special" />
-                        </React.Fragment>
-                      ) : (
-                        <Price value={price.regular} fontSize="xl" />
-                      )}
+                      <ProductPrice {...price} fontSize="xl" />
                       {tierPrices.length > 0 && (
                         <Locale>
                           {({ priceFormat }) =>
