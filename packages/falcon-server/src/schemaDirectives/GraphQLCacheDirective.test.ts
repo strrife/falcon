@@ -1,9 +1,9 @@
-const { Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
-const { addResolveFunctionsToSchema } = require('graphql-tools');
-const { runQuery, buildSchema, buildSchemaAndRunQuery } = require('../utils/testing');
-const GraphQLCacheDirective = require('./GraphQLCacheDirective');
+import { Cache, InMemoryLRUCache } from '@deity/falcon-server-env';
+import { addResolveFunctionsToSchema } from 'graphql-tools';
+import { GraphQLCacheDirective } from './GraphQLCacheDirective';
+import { runQuery, buildSchema, buildSchemaAndRunQuery } from '../utils/testing';
 
-const directiveDefinition = `directive @cache(ttl: Int, idPath: [String]) on FIELD_DEFINITION`;
+const directiveDefinition: string = `directive @cache(ttl: Int, idPath: [String]) on FIELD_DEFINITION`;
 
 const config = {
   cache: {
@@ -18,8 +18,8 @@ const schemaDirectives = {
 };
 
 describe('@cache directive', () => {
-  let cacheProvider;
-  let cache;
+  let cacheProvider: InMemoryLRUCache;
+  let cache: Cache;
 
   beforeEach(() => {
     cacheProvider = new InMemoryLRUCache();

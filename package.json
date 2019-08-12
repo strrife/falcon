@@ -8,7 +8,7 @@
     "new-package": "node scripts/new-package.js",
     "cleanup": "rimraf packages/**/{dist,coverage} packages/create-falcon-app/examples ./**/node_modules",
     "cleanup:all": "rimraf yarn.lock && yarn cleanup",
-    "test": "lerna run test:coverage",
+    "test": "lerna run test:coverage --ignore @deity/example-shop-with-blog-client",
     "coverage": "codecov -p packages",
     "watch": "lerna run watch --parallel",
     "start": "cross-env CI=true lerna run start:dbg --scope=@deity/example-shop-with-blog* --parallel",
@@ -19,8 +19,8 @@
   "devDependencies": {
     "@deity/eslint-config-falcon": "^0.1.4",
     "chalk": "2.4.1",
-    "commander": "2.19.0",
     "codecov": "3.1.0",
+    "commander": "2.19.0",
     "cross-env": "5.2.0",
     "eslint": "6.1.0",
     "husky": "1.1.1",
@@ -79,6 +79,6 @@
     "react": "16.8.6",
     "prop-types": "15.7.2",
     "@types/react": "16.8.22",
-    "@types/enzyme": "3.1.18"
+    "@types/enzyme": "3.10.3"
   }
 }

@@ -1,10 +1,18 @@
-const { resolve } = require('path');
-const Logger = require('@deity/falcon-logger');
+import { resolve } from 'path';
+import Logger, { Logger as LoggerType } from '@deity/falcon-logger';
+import { EventEmitter2 } from 'eventemitter2';
 
-const tryRequire = moduleName => {
+declare type TryRequireResult<T> = {
+  module?: T;
+  exists: boolean;
+  error?: Error;
+};
+
+const tryRequire = <T>(moduleName: string): TryRequireResult<T> => {
   try {
+    const mdl = require(moduleName); // eslint-disable-line import/no-dynamic-require
     return {
-      module: require(moduleName), // eslint-disable-line import/no-dynamic-require,
+      module: typeof mdl.default === 'function' ? mdl.default : mdl,
       exists: true,
       error: undefined
     };
@@ -20,26 +28,23 @@ const tryRequire = moduleName => {
   }
 };
 
-module.exports = class BaseContainer {
-  /**
-   * Base Container constructor
-   * @param {EventEmitter2} eventEmitter EventEmitter
-   */
-  constructor(eventEmitter) {
-    this.eventEmitter = eventEmitter;
+export class BaseContainer {
+  protected logger: LoggerType;
+
+  constructor(protected eventEmitter: EventEmitter2) {
     this.logger = Logger.getFor(this.constructor.name);
   }
 
   /**
    * Imports the specified module (via "require()") by checking installed NPM package
    * (by package name) and your local project folder.
-   * @param {string} pathOrPackage Local path or package name of the module
-   * @returns {any} Imported module
+   * @param pathOrPackage Local path or package name of the module
+   * @returns Imported module
    */
-  importModule(pathOrPackage) {
-    const requiredPackage = tryRequire(pathOrPackage);
+  importModule<T>(pathOrPackage: string): T | undefined {
+    const requiredPackage = tryRequire<T>(pathOrPackage);
     if (requiredPackage.exists) {
-      const { module, error } = requiredPackage;
+      const { module: mdl, error } = requiredPackage;
       if (error) {
         this.logger.error(`"${pathOrPackage}" cannot be loaded. - ${error.message}\n${error.stack} `);
 
@@ -48,13 +53,13 @@ module.exports = class BaseContainer {
 
       this.logger.debug(`"${pathOrPackage}" loaded as a package`);
 
-      return typeof module.default === 'function' ? module.default : module;
+      return mdl;
     }
 
-    const modulePath = resolve(process.cwd(), pathOrPackage);
-    const requiredModule = tryRequire(modulePath);
+    const modulePath: string = resolve(process.cwd(), pathOrPackage);
+    const requiredModule = tryRequire<T>(modulePath);
     if (requiredModule.exists) {
-      const { module, error } = requiredModule;
+      const { module: mdl, error } = requiredModule;
       if (error) {
         this.logger.error(`"${pathOrPackage}" cannot be loaded. - ${error.message}\n${error.stack}`);
 
@@ -63,7 +68,7 @@ module.exports = class BaseContainer {
 
       this.logger.debug(`"${pathOrPackage}" loaded from '${modulePath}'`);
 
-      return module;
+      return mdl;
     }
 
     this.logger.error(
@@ -72,4 +77,4 @@ module.exports = class BaseContainer {
 
     return undefined;
   }
-};
+}

@@ -32,6 +32,7 @@ const { build, size, startDevServer, test } = require('../build-utils');
       }
 
       case 'test': {
+        process.env.FORCE_COLOR = 0;
         test();
         break;
       }

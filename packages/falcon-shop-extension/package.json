@@ -13,7 +13,9 @@
   "source": "src/index.ts",
   "files": [
     "dist",
-    "src"
+    "src",
+    "schema.graphql",
+    "README.md"
   ],
   "scripts": {
     "prepare": "npm run clean && npm run build",

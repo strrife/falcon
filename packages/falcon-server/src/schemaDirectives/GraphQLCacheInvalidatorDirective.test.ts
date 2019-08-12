@@ -1,6 +1,6 @@
-const { Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
-const { buildSchemaAndRunQuery } = require('../utils/testing');
-const GraphQLCacheInvalidatorDirective = require('./GraphQLCacheInvalidatorDirective');
+import { Cache, InMemoryLRUCache } from '@deity/falcon-server-env';
+import { GraphQLCacheInvalidatorDirective } from './GraphQLCacheInvalidatorDirective';
+import { buildSchemaAndRunQuery } from '../utils/testing';
 
 const directiveDefinition = `directive @cacheInvalidator(idPath: [IdPathEntryInput]) on FIELD_DEFINITION
 
@@ -22,8 +22,8 @@ const schemaDirectives = {
 };
 
 describe('@cacheInvalidator directive', () => {
-  let cacheProvider;
-  let cache;
+  let cacheProvider: InMemoryLRUCache;
+  let cache: Cache;
 
   beforeEach(() => {
     cacheProvider = new InMemoryLRUCache();
