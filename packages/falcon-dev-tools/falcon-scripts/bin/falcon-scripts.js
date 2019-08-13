@@ -10,6 +10,7 @@ process.on('uncaughtException', ex => {
 const fs = require('fs-extra');
 const { paths } = require('../src/tools');
 const esm = require('../src/build-esm');
+const test = require('../src/test');
 
 (async () => {
   const script = process.argv[2];
@@ -46,16 +47,12 @@ const esm = require('../src/build-esm');
       }
 
       case 'test': {
-        const watchTest = require('../src/watch-test');
-
-        await watchTest({ packagePath });
+        await test.watch({ packagePath });
         break;
       }
 
       case 'test:coverage': {
-        const testCoverage = require('../src/test-coverage');
-
-        await testCoverage({ packagePath });
+        await test.coverage({ packagePath });
         break;
       }
 
