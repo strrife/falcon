@@ -34,6 +34,11 @@ describe('SearchProvider', () => {
   const renderSearchProvider = async (ContentComponent: any = null) => {
     const client = new ApolloClient({
       link: mockSingleLink(),
+      resolvers: {
+        Query: {
+          sortOrderList: () => sortOrders
+        }
+      },
       cache: new Cache({ addTypename: false }).restore({
         ROOT_QUERY: {
           sortOrders
