@@ -129,16 +129,16 @@ export interface EndpointEntry {
 }
 
 export enum RequestMethod {
-  GET = 'get',
-  POST = 'post',
-  PUT = 'put',
-  DELETE = 'delete',
-  PATCH = 'patch',
-  HEAD = 'head',
-  LINK = 'link',
-  UNLINK = 'unlink',
-  OPTIONS = 'options',
-  ALL = 'all'
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+  PATCH = 'PATCH',
+  HEAD = 'HEAD',
+  LINK = 'LINK',
+  UNLINK = 'UNLINK',
+  OPTIONS = 'OPTIONS',
+  ALL = 'ALL'
 }
 
 export interface GraphQLResolver<T, O = any, P = any, C extends GraphQLContext = GraphQLContext> {

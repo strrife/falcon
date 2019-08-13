@@ -2,9 +2,9 @@
 import { ComponentEntryMap } from '../types';
 import { BaseContainer } from './BaseContainer';
 
-export interface IComponentConstructor<T = any> {
-  new (config: any): T;
-  (config: any): Promise<any>;
+export interface IComponent<TComponentInstance = any, TConfig = any> {
+  new (config: TConfig): TComponentInstance;
+  (config: TConfig): Promise<TComponentInstance>;
 }
 
 export class ComponentContainer extends BaseContainer {
@@ -20,7 +20,7 @@ export class ComponentContainer extends BaseContainer {
         const component = components[componentKey];
 
         const { package: pkg, config = {} } = component;
-        const ComponentClass = this.importModule<IComponentConstructor>(pkg);
+        const ComponentClass = this.importModule<IComponent>(pkg);
         if (!ComponentClass) {
           return;
         }
