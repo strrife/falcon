@@ -11,14 +11,13 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/index.js",
+  "main": "dist/falcon-server-env.cjs.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "scripts": {
     "prepare": "npm run clean && npm run build",
     "clean": "falcon-scripts clean",
     "build": "falcon-scripts build",
-    "watch": "falcon-scripts watch",
     "test": "falcon-scripts test",
     "test:coverage": "falcon-scripts test:coverage"
   },
