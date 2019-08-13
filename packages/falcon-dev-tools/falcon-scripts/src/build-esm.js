@@ -1,9 +1,8 @@
 const spawn = require('cross-spawn');
+const { config } = require('./tools');
 
-module.exports = () => {
+module.exports.build = () => {
   console.log('building esm...');
-
-  const babelConfigPath = require.resolve('./babel/babel.config');
 
   const result = spawn.sync(
     `babel`,
@@ -12,14 +11,44 @@ module.exports = () => {
       '-d',
       'dist',
       '-x',
-      '.ts,.tsx,.js,.jsx',
+      config.fileExtensions.join(','),
       '--ignore',
-      '**/*.test.ts,**/*.test.js,**/__mocks__',
+      `**/__mocks__,${config.fileExtensions.map(x => `**/*.test${x}`).join(',')}`,
       '-s',
       '--config-file',
-      babelConfigPath,
+      config.babelConfigPath,
       '--source-map',
       'inline'
+    ],
+    {
+      stdio: 'inherit'
+    }
+  );
+
+  if (result.status !== 0) {
+    throw result;
+  }
+};
+
+module.exports.watch = () => {
+  console.log('building esm...');
+
+  const result = spawn.sync(
+    `babel`,
+    [
+      'src',
+      '-d',
+      'dist',
+      '-x',
+      config.fileExtensions.join(','),
+      '--ignore',
+      `**/__mocks__,${config.fileExtensions.map(x => `**/*.test${x}`).join(',')}`,
+      '-s',
+      '--config-file',
+      config.babelConfigPath,
+      '--source-map',
+      'inline',
+      '--watch'
     ],
     {
       stdio: 'inherit'
