@@ -35,7 +35,9 @@ function tsc(fileNames, options) {
 module.exports = ({ packagePath }) => {
   console.log('building d.ts...');
 
-  const files = glob.sync(`${path.join(packagePath, 'src')}/*(*.ts|*.tsx)`);
+  const files = glob.sync(`${path.join(packagePath, 'src')}/*(*.ts|*.tsx)`, {
+    ignore: [`${path.join(packagePath, 'src')}/*(*.test.ts|*.test.tsx)`]
+  });
 
   tsc(files, {
     outDir: 'dist',

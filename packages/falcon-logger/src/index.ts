@@ -1,6 +1,8 @@
 import pino, { Logger as PinoLogger, Level } from 'pino';
 import { chindingsSym } from 'pino/lib/symbols';
 
+export { Level };
+
 export type Logger = {
   setLogLevel: (level: Level) => void;
   setApp: (name: string) => void;

@@ -35,7 +35,7 @@ describe('DynamicRoute', () => {
       <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={['/test']}>
           <Switch>
-            <DynamicRoute loaderComponent={Loader} components={{ foo: Foo }} />
+            <DynamicRoute loaderComponent={Loader} notFound={() => <span>Not found</span>} components={{ foo: Foo }} />
           </Switch>
         </MemoryRouter>
       </MockedProvider>

@@ -26,11 +26,14 @@ export type GetCacheOptions = {
   options?: SetCacheOptions;
 };
 
+// 1 hour
+const DEFAULT_TAG_TTL: number = 60 * 60;
+
 /**
  * Cache-wrapper with extended methods
  */
-export default class Cache<V = any> implements KeyValueCache<V> {
-  constructor(private cacheProvider: KeyValueCache<string>) {}
+export class Cache<V = any> implements KeyValueCache<V> {
+  constructor(protected cacheBackend: KeyValueCache<string>, protected tagTtl: number = DEFAULT_TAG_TTL) {}
 
   async get(key: string): Promise<V>;
 
@@ -43,7 +46,7 @@ export default class Cache<V = any> implements KeyValueCache<V> {
    * @returns {Promise<string|undefined>} Cached value
    */
   async get(key: string, setOptions?: GetCacheOptions): Promise<V> {
-    let value: GetCacheFetchResult = await this.cacheProvider.get(key);
+    let value: GetCacheFetchResult = await this.cacheBackend.get(key);
     try {
       value = JSON.parse(value);
     } catch {
@@ -107,7 +110,7 @@ export default class Cache<V = any> implements KeyValueCache<V> {
       cachedValue = JSON.stringify(cachedValue);
     }
 
-    return this.cacheProvider.set(key, cachedValue, options);
+    return this.cacheBackend.set(key, cachedValue, options);
   }
 
   async delete(key: string): Promise<boolean>;
@@ -125,7 +128,7 @@ export default class Cache<V = any> implements KeyValueCache<V> {
       await Promise.all(key.map(kKey => this.delete(kKey)));
       return;
     }
-    return this.cacheProvider.delete(key);
+    return this.cacheBackend.delete(key);
   }
 
   /**
@@ -164,7 +167,7 @@ export default class Cache<V = any> implements KeyValueCache<V> {
         if (typeof tagValue === 'undefined' && createIfMissing) {
           // For "createIfMissing" flag - generate new tag value and save it to the cache
           tagValue = this.generateTagValue();
-          await this.set(tag, tagValue);
+          await this.set(tag, tagValue, { ttl: this.tagTtl });
         }
 
         if (tagValue) {

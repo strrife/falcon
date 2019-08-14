@@ -8,6 +8,10 @@ export interface EndpointConstructorParams extends IConfigurableConstructorParam
   entries?: string[];
 }
 
+export interface EndpointConstructor<T extends EndpointManager = EndpointManager> {
+  new (params: EndpointConstructorParams): T;
+}
+
 export abstract class EndpointManager {
   public config: UrlConfig;
 
@@ -33,7 +37,7 @@ export abstract class EndpointManager {
   }
 
   /**
-   * @returns {Array<EndpointEntry>} List of supported endpoints
+   * @returns List of supported endpoints
    */
   getEntries(): Array<EndpointEntry> {
     return [];

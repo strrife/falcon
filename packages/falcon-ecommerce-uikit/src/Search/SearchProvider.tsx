@@ -3,11 +3,11 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 // eslint-disable-next-line
 import { Location } from 'history';
 import { PaginationInput } from '../types';
+import { SortOrdersQuery, SortOrderInput, AreSortOrderInputsEqual } from '../SortOrders/SortOrdersQuery';
 import { FilterOperator } from './types';
 import { searchStateFromURL } from './searchStateFromURL';
 import { searchStateToURL } from './searchStateToURL';
 import { SearchContext, SearchState } from './SearchContext';
-import { SortOrdersQuery, SortOrderInput, AreSortOrderInputsEqual } from '../SortOrders/SortOrdersQuery';
 
 export type SearchProviderProps = RouteComponentProps & {
   searchStateFromURL?(url: string): Partial<SearchState>;

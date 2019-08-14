@@ -1,7 +1,7 @@
-const { EndpointManager } = require('@deity/falcon-server-env');
+import { EndpointManager, EndpointEntry } from '@deity/falcon-server-env';
 
-module.exports = class FakeBackendApi extends EndpointManager {
-  getEntries() {
+export default class FakeBackendEndpoints extends EndpointManager {
+  getEntries(): Array<EndpointEntry> {
     return [
       {
         path: '/api/info',
@@ -13,4 +13,4 @@ module.exports = class FakeBackendApi extends EndpointManager {
       }
     ];
   }
-};
+}

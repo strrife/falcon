@@ -1,13 +1,15 @@
 global.__SERVER__ = true; // eslint-disable-line no-underscore-dangle
 
+const fs = require('fs');
 const { Cache, InMemoryLRUCache } = require('@deity/falcon-server-env');
-const { BaseSchema } = require('@deity/falcon-server');
-const { Schema } = require('@deity/falcon-shop-extension');
 const { makeExecutableSchema } = require('graphql-tools');
 const { EventEmitter2 } = require('eventemitter2');
 const nock = require('nock');
 const magentoResponses = require('./__mocks__/apiResponses');
 const Magento2Api = require('./index');
+
+const BaseSchema = fs.readFileSync(require.resolve('@deity/falcon-server/schema.graphql'), 'utf8');
+const Schema = fs.readFileSync(require.resolve('@deity/falcon-shop-extension/schema.graphql'), 'utf8');
 
 const URL = 'http://example.com';
 const ee = new EventEmitter2();
