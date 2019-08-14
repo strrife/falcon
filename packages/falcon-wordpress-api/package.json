@@ -9,9 +9,6 @@
     "access": "public"
   },
   "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.js"
-    ],
     "setupFiles": [
       "../../test/nodeEnvSetupFile"
     ]
