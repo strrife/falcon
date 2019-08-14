@@ -230,8 +230,8 @@
   "addressForm": {
     "emailFieldLabel": "Email",
     "companyFieldLabel": "Company",
-    "firstNameFieldLabel": "First name",
-    "lastNameFieldLabel": "Last name",
+    "firstnameFieldLabel": "First name",
+    "lastnameFieldLabel": "Last name",
     "telephoneFieldLabel": "Phone number",
     "street1FieldLabel": "Street line 1",
     "street2FieldLabel": "Street line 2",
