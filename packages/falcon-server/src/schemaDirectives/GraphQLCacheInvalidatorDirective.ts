@@ -5,9 +5,9 @@ import { extractTagsForIdPath, getTagsForField } from '../graphqlUtils';
 import { FieldType, FieldTypeResolver } from './GraphQLCacheDirective';
 
 export type IdPathEntry = {
-  // Entity type (optional)
+  /** Entity type (optional) */
   type?: string;
-  // Path to a list of entries or a single entry
+  /** Path to a list of entries or a single entry */
   path: string;
 };
 

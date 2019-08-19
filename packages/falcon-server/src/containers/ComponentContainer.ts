@@ -2,13 +2,10 @@
 import { ComponentEntryMap } from '../types';
 import { BaseContainer } from './BaseContainer';
 
-export interface ComponentConstructorInterface<T = any> {
-  new (config: any): T;
+export interface IComponent<TComponentInstance = any, TConfig = any> {
+  new (config: TConfig): TComponentInstance;
+  (config: TConfig): Promise<TComponentInstance>;
 }
-
-export type ComponentFunction = (config: any) => Promise<any>;
-
-export type ComponentConstructor = ComponentConstructorInterface | ComponentFunction;
 
 export class ComponentContainer extends BaseContainer {
   public components: Record<string, any> = {};
@@ -23,13 +20,13 @@ export class ComponentContainer extends BaseContainer {
         const component = components[componentKey];
 
         const { package: pkg, config = {} } = component;
-        const ComponentClass = this.importModule<ComponentConstructor>(pkg);
+        const ComponentClass = this.importModule<IComponent>(pkg);
         if (!ComponentClass) {
           return;
         }
         this.components[componentKey] = ComponentClass.prototype
-          ? new (ComponentClass as ComponentConstructorInterface)(config)
-          : await (ComponentClass as ComponentFunction)(config);
+          ? new ComponentClass(config)
+          : await ComponentClass(config);
 
         this.logger.debug(`"${componentKey}" component instantiated`);
       }

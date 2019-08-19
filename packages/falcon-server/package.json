@@ -24,9 +24,6 @@
     "test:coverage": "falcon-scripts test:coverage"
   },
   "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.ts"
-    ],
     "coverageReporters": [
       "html",
       "text",
