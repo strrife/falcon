@@ -12,5 +12,5 @@ module.exports = async ({ packagePath }) => {
     ...(packageJson.jest ? packageJson.jest : {})
   };
 
-  await jest.run(['--config', JSON.stringify(config), '--coverage', '--ci']);
+  await jest.run(['--config', JSON.stringify(config), '--coverage', '--ci', '--passWithNoTests']);
 };

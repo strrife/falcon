@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Location } from 'history';
 import { SortOrderListQuery, SortOrderInput, PaginationInput } from '@deity/falcon-data';
-import { FilterOperator } from '@deity/falcon-shop-extension/src/types';
+import { FilterOperator } from '@deity/falcon-shop-extension';
 import { areSortOrderInputsEqual } from '../SortOrder/areSortOrderInputsEqual';
 import { SearchContext } from './SearchContext';
 import { SearchState, searchStateFromURL, searchStateToURL } from './searchState';

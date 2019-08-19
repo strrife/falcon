@@ -1,5 +1,8 @@
-const { EventEmitter2 } = require('eventemitter2');
-const ApiContainer = require('./ApiContainer');
+import { EventEmitter2 } from 'eventemitter2';
+import Logger from '@deity/falcon-logger';
+import { ApiContainer } from './ApiContainer';
+
+Logger.setLogLevel('silent');
 
 const apis = {
   'fake-api': {

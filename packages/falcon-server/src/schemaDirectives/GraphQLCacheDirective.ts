@@ -1,16 +1,25 @@
-const { SchemaDirectiveVisitor } = require('graphql-tools');
-const { defaultFieldResolver } = require('graphql');
-const { getRootType, getOperationPath, extractTagsForIdPath, getTagsForField } = require('../graphqlUtils');
-const { createShortHash } = require('../utils');
+import { SchemaDirectiveVisitor } from 'graphql-tools';
+import { GetCacheFetchResult } from '@deity/falcon-server-env';
+import {
+  defaultFieldResolver,
+  GraphQLNamedType,
+  GraphQLFieldResolver,
+  GraphQLField,
+  GraphQLResolveInfo
+} from 'graphql';
+import { getRootType, getOperationPath, extractTagsForIdPath, getTagsForField } from '../graphqlUtils';
+import { createShortHash } from '../utils';
+import { CacheResolversConfig } from '../types';
 
 // Default cache TTL (10 minutes)
 const DEFAULT_TTL = 10;
 
-/**
- * @typedef {import('graphql').GraphQLType} GraphQLType
- * @typedef {import('graphql').GraphQLField} GraphQLField
- * @typedef {import('graphql').GraphQLResolveInfo} GraphQLResolveInfo
- */
+export type FieldType = GraphQLField<any, any>;
+export type FieldTypeResolver = FieldType['resolve'];
+
+export type GraphQLCacheDirectiveParams = {
+  ttl?: number;
+};
 
 /**
  * `@cache` directive
@@ -22,15 +31,11 @@ const DEFAULT_TTL = 10;
  * }
  * ```
  */
-module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
-  /**
-   * @param {GraphQLType|GraphQLField} field GQL Field
-   * @returns {void}
-   */
-  visitFieldDefinition(field) {
+export class GraphQLCacheDirective extends SchemaDirectiveVisitor {
+  visitFieldDefinition(field: FieldType): void {
     const { ttl = DEFAULT_TTL } = this.args;
     let { resolve = defaultFieldResolver } = field;
-    const defaultValue = {
+    const defaultValue: GraphQLCacheDirectiveParams = {
       ttl
     };
 
@@ -38,9 +43,9 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
     // which will override "wrapped" resolve functions during Falcon-Server startup. By providing getter/setter
     // methods - we can ensure such such calls will be handled properly.
     Object.defineProperty(field, 'resolve', {
-      get: () => this.getResolverWithCache(resolve, field, defaultValue),
+      get: () => this.getResolverWithCache(resolve as FieldTypeResolver, field, defaultValue),
       // Handling potential "addResolveFunctionsToSchema" calls that define dynamic resolvers
-      set: newResolve => {
+      set: (newResolve: GraphQLFieldResolver<any, any>) => {
         resolve = newResolve;
       },
       configurable: true
@@ -49,12 +54,16 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
 
   /**
    * Get a resolver function with caching capabilities (depends on the provided config)
-   * @param {Function} resolve Native GQL resolver function
-   * @param {GraphQLField} field Field info object
-   * @param {object} defaultCacheConfig Default cache config
-   * @returns {Function} Resolver function with caching
+   * @param resolve Native GQL resolver function
+   * @param field Field info object
+   * @param defaultCacheConfig Default cache config
+   * @returns Resolver function with caching
    */
-  getResolverWithCache(resolve, field, defaultCacheConfig) {
+  getResolverWithCache(
+    resolve: FieldTypeResolver,
+    field: FieldType,
+    defaultCacheConfig: GraphQLCacheDirectiveParams
+  ): FieldTypeResolver {
     const thisDirective = this;
     return async function fieldResolver(parent, params, context, info) {
       const resolver = async () => resolve.call(this, parent, params, context, info);
@@ -97,15 +106,19 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
 
   /**
    * Execute the actual GraphQL resolver and generate cache tags
-   * @param {object} result Resolver result
-   * @param {object} parent GraphQL parent object
-   * @param {GraphQLResolveInfo} info GraphQL Info object
-   * @returns {object} Final resolver result
+   * @param result Resolver result
+   * @param parent GraphQL parent object
+   * @param info GraphQL Info object
+   * @returns Final resolver result
    */
-  handleCacheCallbackResponse(result, parent, info) {
+  handleCacheCallbackResponse(
+    result: GetCacheFetchResult,
+    parent: object,
+    info: GraphQLResolveInfo
+  ): GetCacheFetchResult {
     const resolverResult = result && result.value ? result.value : result;
     const { idPath = [] } = this.args;
-    const { name: returnTypeName } = getRootType(info.returnType);
+    const { name: returnTypeName } = getRootType(info.returnType) as GraphQLNamedType;
     const tags = [returnTypeName];
 
     // Checking if Type is "self-cacheable"
@@ -130,16 +143,20 @@ module.exports = class GraphQLCacheDirective extends SchemaDirectiveVisitor {
    * - default cache config provided from `context.config`
    * - cache config provided in `@cache(...)` directive
    * - cache config for a specific operation via `context.config`
-   * @param {GraphQLResolveInfo} info GraphQL Request info object
-   * @param {object} resolversCacheConfig Cache object provided via `context.config`
-   * @param {object} defaultDirectiveValue Default options defined in cache directive for the specific type
-   * @returns {object} Final cache options object
+   * @param info GraphQL Request info object
+   * @param resolversCacheConfig Cache object provided via `context.config`
+   * @param defaultDirectiveValue Default options defined in cache directive for the specific type
+   * @returns Final cache options object
    */
-  getCacheConfigForField(info, resolversCacheConfig, defaultDirectiveValue) {
+  getCacheConfigForField(
+    info: GraphQLResolveInfo,
+    resolversCacheConfig: CacheResolversConfig,
+    defaultDirectiveValue: GraphQLCacheDirectiveParams
+  ): GraphQLCacheDirectiveParams {
     const { path: gqlPath, operation } = info;
     const fullPath = `${operation.operation}.${getOperationPath(gqlPath)}`;
     const { [fullPath]: operationConfig = {}, default: defaultConfig = {} } = resolversCacheConfig;
 
     return Object.assign({}, defaultConfig, defaultDirectiveValue, operationConfig);
   }
-};
+}

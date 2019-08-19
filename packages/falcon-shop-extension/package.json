@@ -13,15 +13,15 @@
   "source": "src/index.ts",
   "files": [
     "dist",
-    "src"
+    "src",
+    "schema.graphql",
+    "README.md"
   ],
   "scripts": {
     "prepare": "npm run clean && npm run build",
     "clean": "falcon-scripts clean",
     "build": "falcon-scripts build",
-    "watch": "falcon-scripts watch",
-    "test": "falcon-scripts test",
-    "test:coverage": "falcon-scripts test:coverage"
+    "watch": "falcon-scripts watch"
   },
   "dependencies": {
     "@babel/runtime": "7.5.5",
