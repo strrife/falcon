@@ -1,11 +1,11 @@
-const spawn = require('cross-spawn');
+const spawn = require('cross-spawn-promise');
 const { config } = require('./tools');
 
-module.exports.build = () => {
+module.exports.build = async () => {
   console.log('building esm...');
 
-  const result = spawn.sync(
-    `babel`,
+  return spawn(
+    'babel',
     [
       'src',
       '-d',
@@ -24,16 +24,12 @@ module.exports.build = () => {
       stdio: 'inherit'
     }
   );
-
-  if (result.status !== 0) {
-    throw result;
-  }
 };
 
-module.exports.watch = () => {
+module.exports.watch = async () => {
   console.log('building esm...');
 
-  const result = spawn.sync(
+  return spawn(
     `babel`,
     [
       'src',
@@ -54,8 +50,4 @@ module.exports.watch = () => {
       stdio: 'inherit'
     }
   );
-
-  if (result.status !== 0) {
-    throw result;
-  }
 };
