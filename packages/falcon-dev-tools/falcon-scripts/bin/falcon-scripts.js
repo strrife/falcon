@@ -9,6 +9,7 @@ process.on('uncaughtException', ex => {
 
 const fs = require('fs-extra');
 const { paths } = require('../src/tools');
+const dts = require('../src/build-dts');
 const esm = require('../src/build-esm');
 const test = require('../src/test');
 
@@ -19,22 +20,22 @@ const test = require('../src/test');
   try {
     switch (script) {
       case 'build': {
-        const buildDts = require('../src/build-dts');
-        const buildCjs = require('../src/build-cjs');
+        const cjs = require('../src/build-cjs');
 
-        buildDts({ packagePath });
-        esm.build({ packagePath });
-        await buildCjs.main({ packagePath });
-
-        if (fs.existsSync(paths.pkgBinSrc)) {
-          await buildCjs.bin({ packagePath });
-        }
+        await Promise.all(
+          [
+            dts.build({ packagePath }),
+            esm.build({ packagePath }),
+            cjs.main({ packagePath }),
+            fs.existsSync(paths.pkgBinSrc) && cjs.bin({ packagePath })
+          ].filter(x => x)
+        );
 
         break;
       }
 
       case 'watch': {
-        esm.watch();
+        await Promise.all([dts.watch({ packagePath }), esm.watch()]);
 
         break;
       }
