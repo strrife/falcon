@@ -9,30 +9,30 @@ function tsCompilerOptionsToCliParams(compilerOptions) {
   );
 }
 
+const compilerOptions = {
+  outDir: 'dist',
+  declarationDir: 'dist',
+  target: 'ESNEXT',
+  module: 'ESNext',
+  moduleResolution: 'Node',
+  allowSyntheticDefaultImports: true,
+  esModuleInterop: true,
+  jsx: 'react',
+  alwaysStrict: true,
+  noFallthroughCasesInSwitch: true,
+  noImplicitReturns: true,
+  noUnusedParameters: true,
+  sourceMap: true,
+  skipLibCheck: true,
+  declaration: true,
+  emitDeclarationOnly: true,
+  declarationMap: true,
+  forceConsistentCasingInFileNames: true,
+  pretty: true
+};
+
 module.exports.build = ({ packagePath }) => {
   console.log('building dts...');
-
-  const compilerOptions = {
-    outDir: 'dist',
-    declarationDir: 'dist',
-    target: 'ESNEXT',
-    module: 'ESNext',
-    moduleResolution: 'Node',
-    allowSyntheticDefaultImports: true,
-    esModuleInterop: true,
-    jsx: 'react',
-    alwaysStrict: true,
-    noFallthroughCasesInSwitch: true,
-    noImplicitReturns: true,
-    noUnusedParameters: true,
-    sourceMap: true,
-    skipLibCheck: true,
-    declaration: true,
-    emitDeclarationOnly: true,
-    declarationMap: true,
-    forceConsistentCasingInFileNames: true,
-    pretty: true
-  };
 
   return spawn(
     `tsc`,
@@ -47,29 +47,7 @@ module.exports.build = ({ packagePath }) => {
 };
 
 module.exports.watch = ({ packagePath }) => {
-  console.log('building dts (cli) ...');
-
-  const compilerOptions = {
-    outDir: 'dist',
-    declarationDir: 'dist',
-    target: 'ESNEXT',
-    module: 'ESNext',
-    moduleResolution: 'Node',
-    allowSyntheticDefaultImports: true,
-    esModuleInterop: true,
-    jsx: 'react',
-    alwaysStrict: true,
-    noFallthroughCasesInSwitch: true,
-    noImplicitReturns: true,
-    noUnusedParameters: true,
-    sourceMap: true,
-    skipLibCheck: true,
-    declaration: true,
-    emitDeclarationOnly: true,
-    declarationMap: true,
-    forceConsistentCasingInFileNames: true,
-    pretty: true
-  };
+  console.log('building dts...');
 
   return spawn(
     `tsc`,
