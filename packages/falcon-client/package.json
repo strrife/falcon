@@ -24,7 +24,6 @@
     "@babel/code-frame": "7.5.5",
     "@babel/core": "7.5.5",
     "@babel/preset-env": "7.5.5",
-    "@babel/polyfill": "7.2.5",
     "@deity/babel-preset-falcon-client": "^0.1.4",
     "@deity/falcon-data": "^0.0.1",
     "@deity/falcon-errors": "^0.1.2",

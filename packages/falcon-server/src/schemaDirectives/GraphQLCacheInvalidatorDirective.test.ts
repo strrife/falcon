@@ -1,6 +1,7 @@
 import { Cache, InMemoryLRUCache } from '@deity/falcon-server-env';
-import { GraphQLCacheInvalidatorDirective } from './GraphQLCacheInvalidatorDirective';
+import { KeyValueCache } from 'apollo-server-caching';
 import { buildSchemaAndRunQuery } from '../utils/testing';
+import { GraphQLCacheInvalidatorDirective } from './GraphQLCacheInvalidatorDirective';
 
 const directiveDefinition = `directive @cacheInvalidator(idPath: [IdPathEntryInput]) on FIELD_DEFINITION
 
@@ -22,7 +23,7 @@ const schemaDirectives = {
 };
 
 describe('@cacheInvalidator directive', () => {
-  let cacheProvider: InMemoryLRUCache;
+  let cacheProvider: KeyValueCache<string>;
   let cache: Cache;
 
   beforeEach(() => {

@@ -10,9 +10,9 @@ declare type TryRequireResult<T> = {
 
 const tryRequire = <T>(moduleName: string): TryRequireResult<T> => {
   try {
-    const mdl = require(moduleName); // eslint-disable-line import/no-dynamic-require
+    const moduleResult = require(moduleName); // eslint-disable-line import/no-dynamic-require
     return {
-      module: typeof mdl.default === 'function' ? mdl.default : mdl,
+      module: typeof moduleResult.default === 'function' ? moduleResult.default : moduleResult,
       exists: true,
       error: undefined
     };
@@ -44,7 +44,7 @@ export class BaseContainer {
   importModule<T>(pathOrPackage: string): T | undefined {
     const requiredPackage = tryRequire<T>(pathOrPackage);
     if (requiredPackage.exists) {
-      const { module: mdl, error } = requiredPackage;
+      const { module: moduleResult, error } = requiredPackage;
       if (error) {
         this.logger.error(`"${pathOrPackage}" cannot be loaded. - ${error.message}\n${error.stack} `);
 
@@ -53,13 +53,13 @@ export class BaseContainer {
 
       this.logger.debug(`"${pathOrPackage}" loaded as a package`);
 
-      return mdl;
+      return moduleResult;
     }
 
     const modulePath: string = resolve(process.cwd(), pathOrPackage);
     const requiredModule = tryRequire<T>(modulePath);
     if (requiredModule.exists) {
-      const { module: mdl, error } = requiredModule;
+      const { module: moduleResult, error } = requiredModule;
       if (error) {
         this.logger.error(`"${pathOrPackage}" cannot be loaded. - ${error.message}\n${error.stack}`);
 
@@ -68,7 +68,7 @@ export class BaseContainer {
 
       this.logger.debug(`"${pathOrPackage}" loaded from '${modulePath}'`);
 
-      return mdl;
+      return moduleResult;
     }
 
     this.logger.error(
