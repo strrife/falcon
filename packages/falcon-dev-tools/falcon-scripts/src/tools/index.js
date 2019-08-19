@@ -1,4 +1,5 @@
 const paths = require('./paths');
+const { getEntryPointFile } = require('./getEntryPointFile');
 
 const config = {
   fileExtensions: ['.tsx', '.ts', '.jsx', '.js'],
@@ -7,5 +8,6 @@ const config = {
 
 module.exports = {
   config,
+  getEntryPointFile,
   paths
 };
