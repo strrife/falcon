@@ -85,7 +85,7 @@
     "react-test-renderer": "^16.4.2",
     "regenerator-runtime": "0.13.3",
     "resolve": "^1.8.1",
-    "rollup": "0.66.4",
+    "rollup": "1.19.4",
     "rollup-plugin-alias": "1.5.1",
     "rollup-plugin-node-resolve": "3.4.0",
     "rollup-plugin-re": "1.0.7",
