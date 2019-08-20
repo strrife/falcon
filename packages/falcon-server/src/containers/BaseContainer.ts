@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import Logger, { Logger as LoggerType } from '@deity/falcon-logger';
+import Logger from '@deity/falcon-logger';
 import { EventEmitter2 } from 'eventemitter2';
 
 declare type TryRequireResult<T> = {
@@ -29,7 +29,7 @@ const tryRequire = <T>(moduleName: string): TryRequireResult<T> => {
 };
 
 export class BaseContainer {
-  protected logger: LoggerType;
+  protected logger: typeof Logger;
 
   constructor(protected eventEmitter: EventEmitter2) {
     this.logger = Logger.getFor(this.constructor.name);
