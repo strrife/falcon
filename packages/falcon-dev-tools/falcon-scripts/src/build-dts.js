@@ -1,6 +1,7 @@
 const path = require('path');
 const spawn = require('cross-spawn-promise');
 const { getEntryPointFile } = require('./tools');
+const { paths } = require('./tools');
 
 function tsCompilerOptionsToCliParams(compilerOptions) {
   return Object.entries(compilerOptions).reduce(
@@ -35,8 +36,9 @@ module.exports.build = ({ packagePath }) => {
   console.log('building dts...');
 
   return spawn(
-    `tsc`,
+    'node',
     [
+      paths.tsc,
       ...tsCompilerOptionsToCliParams(compilerOptions),
       getEntryPointFile(path.join(packagePath, 'src'), 'index', ['.ts', '.tsx'])
     ],
@@ -50,8 +52,9 @@ module.exports.watch = ({ packagePath }) => {
   console.log('building dts...');
 
   return spawn(
-    `tsc`,
+    'node',
     [
+      paths.tsc,
       ...tsCompilerOptionsToCliParams(compilerOptions),
       '--watch',
       '--preserveWatchOutput',
