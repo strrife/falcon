@@ -3,9 +3,9 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Icon, List, ListItem, Box, H3, DefaultThemeProps, Text, Divider, Button, FlexLayout } from '@deity/falcon-ui';
 import { LocaleProvider } from '@deity/falcon-front-kit';
 import { T } from '@deity/falcon-i18n';
+import { MiniCartResponse } from '@deity/falcon-shop-data';
 import { CloseSidebarMutation } from '../Sidebar';
 import { toGridTemplate, prettyScrollbars } from '../helpers';
-import { MiniCartData } from './MiniCartQuery';
 import { MiniCartProduct } from './MiniCartProduct';
 
 export const MiniCartLayoutArea = {
@@ -44,7 +44,7 @@ const MiniCartProducts: React.SFC<any> = ({ products }) => (
   </List>
 );
 
-export const MiniCart: React.SFC<MiniCartData> = ({ cart: { quoteCurrency, items } }) => (
+export const MiniCart: React.SFC<MiniCartResponse> = ({ cart: { quoteCurrency, items } }) => (
   <CloseSidebarMutation>
     {closeSidebar => (
       <LocaleProvider currency={quoteCurrency}>

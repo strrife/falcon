@@ -70,7 +70,7 @@
 
 ---
 
-> - ~~MiniCartQuery~~ - moved to @deity/falcon-ui-kit
+> - ~~MiniCartQuery~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -313,7 +313,7 @@
 
 ---
 
-- MiniCartData
+> - ~~MiniCartData~~ -renamed to `MiniCartResponse` and moved to @deity/falcon-shop-data
 
 ---
 
