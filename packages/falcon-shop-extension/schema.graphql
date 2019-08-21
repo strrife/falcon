@@ -395,15 +395,15 @@ type ProductSeo {
 }
 
 type Cart {
-  active: Boolean
+  active: Boolean!
   """
-  State wheather products will be shipped or not
+  indicates whether products will be shipped or not
   """
-  virtual: Boolean
-  items: [CartItem]
-  itemsCount: Int
-  itemsQty: Int
-  totals: [CartTotal]
+  virtual: Boolean!
+  items: [CartItem!]!
+  itemsCount: Int!
+  itemsQty: Int!
+  totals: [CartTotal!]!
   quoteCurrency: String @deprecated(reason: "Use ShopConfig.activeCurrency")
   couponCode: String
   billingAddress: Address
