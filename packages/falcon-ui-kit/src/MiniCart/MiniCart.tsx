@@ -9,7 +9,6 @@ import { toGridTemplate, prettyScrollbars } from '../helpers';
 import { MiniCartProduct } from './MiniCartProduct';
 
 export const MiniCartLayoutArea = {
-  title: 'title',
   items: 'items',
   cta: 'cta'
 };
@@ -22,7 +21,6 @@ const miniCartTheme: DefaultThemeProps = {
     // prettier-ignore
     gridTemplate: toGridTemplate([
       ['1fr'                          ],
-      [MiniCartLayoutArea.title       ],
       [MiniCartLayoutArea.items, '1fr'],
       [MiniCartLayoutArea.cta         ]
     ]),
@@ -49,10 +47,6 @@ export const MiniCart: React.SFC<MiniCartResponse> = ({ cart: { quoteCurrency, i
     {closeSidebar => (
       <LocaleProvider currency={quoteCurrency}>
         <Box defaultTheme={miniCartTheme}>
-          <H3 gridArea={MiniCartLayoutArea.title}>
-            <T id="miniCart.title" />
-          </H3>
-
           <Box gridArea={MiniCartLayoutArea.items} css={props => ({ ...prettyScrollbars(props.theme) })}>
             <MiniCartProducts products={items} />
             {!items.length && (
