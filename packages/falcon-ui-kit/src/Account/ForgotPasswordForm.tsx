@@ -1,38 +1,32 @@
 import React from 'react';
-import { Formik } from 'formik';
 import { Text } from '@deity/falcon-ui';
-import { RequestPasswordResetMutation } from '@deity/falcon-shop-data';
-import { FormField, Form, FormSubmit, FormErrorSummary } from '../Forms';
+import { ResetPasswordFormProvider } from '@deity/falcon-front-kit';
+import { FormField, Form, FormSubmit, FormProps, FormErrorSummary } from '../Forms';
 
-type ForgotPasswordProps = {
-  onCompleted?: () => void;
+export type ForgetPasswordFormProps = Partial<FormProps> & {
+  onSubmit?: () => void;
 };
 
-export const ForgotPasswordForm: React.SFC<ForgotPasswordProps> = ({ onCompleted }) => (
-  <RequestPasswordResetMutation onCompleted={onCompleted}>
-    {(requestPasswordReset, { loading, error, called }) => {
-      const submitSucceed = called && !loading && !error;
-      return (
-        <Formik
-          initialValues={{ email: '' }}
-          onSubmit={values => requestPasswordReset({ variables: { input: { email: values.email } } })}
-        >
-          {({ values }) => (
-            <Form id="forgot-password" i18nId="forgotPassword">
-              <FormField name="email" required type="email" autoComplete="email" />
-              <FormSubmit submitting={loading} value="Reset my password" />
-              <FormErrorSummary errors={error && [error.message]} />
+export const ForgotPasswordForm: React.SFC<ForgetPasswordFormProps> = () => (
+  <ResetPasswordFormProvider>
+    {({ isSubmitting, status, values, submitCount }) => {
+      const error = (status && status.error) || undefined;
+      const submitSucceed = !isSubmitting && submitCount > 0 && !error;
 
-              {submitSucceed && (
-                <Text mt="md" fontSize="md">
-                  If there is an account associated with <b>{values.email}</b> you will receive an email with a link to
-                  reset your password.
-                </Text>
-              )}
-            </Form>
+      return (
+        <Form id="forgot-password" i18nId="forgotPassword">
+          <FormField name="email" required type="email" autoComplete="email" />
+          <FormSubmit submitting={isSubmitting} value="Reset my password" />
+          <FormErrorSummary errors={error} />
+
+          {submitSucceed && (
+            <Text mt="md" fontSize="md">
+              If there is an account associated with <b>{values.email}</b> you will receive an email with a link to
+              reset your password.
+            </Text>
           )}
-        </Formik>
+        </Form>
       );
     }}
-  </RequestPasswordResetMutation>
+  </ResetPasswordFormProvider>
 );

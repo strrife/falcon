@@ -473,7 +473,8 @@
 ---
 
 - AccountIcon
-- ForgotPassword
+> - ~~ForgotPassword~~ moved to @deity/falcon-ui-kit
+> - ~~ResetPasswordFormProvider~~ extracted from `ForgotPassword` and moved to @deity/falcon-front-kit
 - MiniAccount
   > - ~~MiniFormLayout~~ - renamed to SidebarLayout and moved to @deity/falcon-ui-kit
 - SignIn
