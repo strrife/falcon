@@ -1,4 +1,4 @@
-import Logger, { Logger as LoggerType } from '@deity/falcon-logger';
+import Logger from '@deity/falcon-logger';
 import { Body, Request, RESTDataSource } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
 import { EventEmitter2 } from 'eventemitter2';
@@ -86,7 +86,7 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
 
   protected gqlServerConfig: ApolloServerConfig;
 
-  protected logger: LoggerType;
+  protected logger: typeof Logger;
 
   /**
    * @param params Constructor params
