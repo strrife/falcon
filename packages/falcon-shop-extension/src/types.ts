@@ -128,6 +128,20 @@ export enum FilterOperator {
   range = 'range'
 }
 
+export type Cart = {
+  active: boolean;
+  /** indicates whether products will be shipped or not */
+  virtual: boolean;
+  items: CartItem[];
+  itemsCount: number;
+  itemsQty: number;
+  totals: CartTotal[];
+  /** @deprecated Use ShopConfig.activeCurrency */
+  quoteCurrency: string;
+  couponCode: string;
+  billingAddress: Address;
+};
+
 export type CartItem = {
   itemId: number;
   sku: string;
