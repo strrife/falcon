@@ -163,7 +163,7 @@
     "passwordFieldLabel": "Password",
     "passwordFieldPlaceholder": "At least 8 characters"
   },
-  "newCustomer": {
+  "newAccount": {
     "title": "New Customers",
     "benefitsHeader": "Creating an account has many benefits:",
     "benefitList": ["check out faster", "keep more than one address", "track orders and more"],
