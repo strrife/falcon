@@ -13,12 +13,6 @@ coverage:
       falcon-server-env:
         paths:
           - falcon-server-env/
-      falcon-shop-extension:
-        paths:
-          - falcon-shop-extension/
-      falcon-blog-extension:
-        paths:
-          - falcon-blog-extension/
       falcon-magento2-api:
         paths:
           - falcon-magento2-api/

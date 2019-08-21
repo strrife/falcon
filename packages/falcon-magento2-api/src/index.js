@@ -43,7 +43,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         currencies: () => this.getActiveCurrencies(),
         baseCurrency: () => this.session.baseCurrency,
         timezone: () => this.session.timezone,
-        weightUnit: () => this.session.weightUnit
+        weightUnit: () => this.session.weightUnit,
+        activeCurrency: () => this.session.currency,
+        activeStore: () => this.session.storeCode
       },
       Product: {
         price: (...args) => this.productPrice(...args),

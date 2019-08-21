@@ -1,5 +1,5 @@
 import { SortOrderInput, PaginationInput } from '@deity/falcon-data';
-import { FilterOperator } from '@deity/falcon-shop-extension/src/types';
+import { FilterOperator } from '@deity/falcon-shop-extension';
 import { SearchState } from './searchState';
 
 export type SearchContextValue = {
