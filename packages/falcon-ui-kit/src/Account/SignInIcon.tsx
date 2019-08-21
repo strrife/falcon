@@ -3,7 +3,7 @@ import { T } from '@deity/falcon-i18n';
 import { Box, Icon, Text, IconRenderer } from '@deity/falcon-ui';
 
 /* eslint-disable */
-const UserIconFallback = () => (
+export const UserIconFallback = () => (
   <IconRenderer as={Text} style={{ textAlign: 'center' }}>
     👤
   </IconRenderer>

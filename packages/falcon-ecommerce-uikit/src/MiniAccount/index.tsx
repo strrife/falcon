@@ -1,4 +1,3 @@
-export * from './AccountIcon';
 export * from './MiniAccount';
 export * from './MiniAccountQuery';
 export * from './SignIn';

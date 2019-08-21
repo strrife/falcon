@@ -3,7 +3,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Link, Icon, DefaultThemeProps, Box } from '@deity/falcon-ui';
 import { CustomerQuery, CartQuery, CartResponse } from '@deity/falcon-shop-data';
 import { toGridTemplate, OpenSidebarMutation, MiniCartIcon } from '@deity/falcon-ui-kit';
-import { AccountIcon } from '../MiniAccount';
 import { MenuQuery, MenuNavbar } from '../Menu';
 import { Banner } from './Banner';
 
@@ -42,7 +41,7 @@ export const Searchbar = () => (
             {({ customer }) =>
               customer ? (
                 <Link as={RouterLink} to="/account" gridArea={SearchBarArea.signIn}>
-                  <AccountIcon />
+                  <Icon src="account" />
                 </Link>
               ) : (
                 <Link

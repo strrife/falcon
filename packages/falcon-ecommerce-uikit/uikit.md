@@ -472,7 +472,7 @@
 
 ---
 
-- AccountIcon
+> - ~~AccountIcon~~ - moved to @deity/falcon-ui-kit
 > - ~~ForgotPassword~~ moved to @deity/falcon-ui-kit
 > - ~~ResetPasswordFormProvider~~ extracted from `ForgotPassword` and moved to @deity/falcon-front-kit
 - MiniAccount
