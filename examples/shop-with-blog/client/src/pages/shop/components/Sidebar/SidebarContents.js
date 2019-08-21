@@ -2,12 +2,13 @@ import React from 'react';
 import { I18n } from '@deity/falcon-i18n';
 import { MiniCartQuery } from '@deity/falcon-shop-data';
 import { Box, Divider } from '@deity/falcon-ui';
-import { SignUp } from '@deity/falcon-ecommerce-uikit';
 import {
   CloseSidebarMutation,
+  OpenSidebarMutation,
   SidebarLayout,
   NewAccount,
   SignInForm,
+  SignUpForm,
   MiniCart,
   ForgotPasswordForm
 } from '@deity/falcon-ui-kit';
@@ -46,7 +47,13 @@ export default ({ contentType }) => {
             </SidebarLayout>
           </ContentBox>
           <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.signUp}>
-            <SignUp />
+            <SidebarLayout title={t('signUp.title')}>
+              <OpenSidebarMutation>
+                {openSidebarMutation => (
+                  <SignUpForm onSubmit={() => openSidebarMutation({ variables: { contentType: 'account' } })} />
+                )}
+              </OpenSidebarMutation>
+            </SidebarLayout>
           </ContentBox>
           <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.forgotPassword}>
             <SidebarLayout title={t('forgotPassword.title')}>
