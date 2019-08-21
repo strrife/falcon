@@ -186,11 +186,11 @@ export type CartItemPayload = {
 export type AddToCartInput = {
   sku: string;
   qty: number;
-  configurableOptions?: ConfigurableOptionInput[];
+  options?: ProductOptionInput[];
   bundleOptions: BundleOptionInput[];
 };
 
-export type ConfigurableOptionInput = {
+export type ProductOptionInput = {
   optionId: number;
   value: number;
 };
@@ -234,7 +234,7 @@ export type Product = {
   description: string;
   stock: Stock;
   type: string;
-  configurableOptions: ConfigurableProductOption[];
+  options: ProductOption[];
   bundleOptions: BundleProductOption[];
   gallery: GalleryEntry[];
   seo: ProductSeo;
@@ -289,7 +289,7 @@ export type GalleryEntry = {
   embedUrl?: string;
 };
 
-export type ConfigurableProductOption = {
+export type ProductOption = {
   id: string;
   attributeId: string;
   label?: string;
@@ -322,6 +322,14 @@ export type Category = {
   description: string;
   breadcrumbs: Breadcrumb[];
   products: ProductList;
+};
+
+export type SignUpInput = {
+  email: string;
+  firstname: string;
+  lastname: string;
+  password: string;
+  autoSignIn?: boolean;
 };
 
 export type SignInInput = {
