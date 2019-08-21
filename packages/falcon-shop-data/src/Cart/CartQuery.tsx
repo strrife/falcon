@@ -31,7 +31,7 @@ export const GET_CART = gql`
 `;
 
 export type CartResponse = {
-  cart: Pick<Cart, 'itemsCount' | 'quoteCurrency' | 'couponCode' | 'totals'> & {
+  cart: Pick<Cart, 'itemsQty' | 'itemsCount' | 'quoteCurrency' | 'couponCode' | 'totals'> & {
     items: Pick<CartItem, 'itemId' | 'sku' | 'qty' | 'name' | 'price' | 'rowTotalInclTax' | 'thumbnailUrl'> & {
       itemOptions: Pick<CartItemOption, 'label' | 'value'>[];
     };
