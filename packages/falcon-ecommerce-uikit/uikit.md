@@ -473,9 +473,9 @@
 ---
 
 > - ~~AccountIcon~~ - moved to @deity/falcon-ui-kit
-> - ~~ForgotPassword~~ moved to @deity/falcon-ui-kit
+> - ~~ForgotPassword~~ - moved to @deity/falcon-ui-kit
 > - ~~ResetPasswordFormProvider~~ extracted from `ForgotPassword` and moved to @deity/falcon-front-kit
-- MiniAccount
+> - ~~MiniAccount~~ - removed - because it should be located in example project, but it is not used anymore
   > - ~~MiniFormLayout~~ - renamed to SidebarLayout and moved to @deity/falcon-ui-kit
 - SignIn
 - SignUp
