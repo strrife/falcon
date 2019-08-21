@@ -9,9 +9,9 @@ export type ForgetPasswordFormProps = Partial<FormProps> & {
 
 export const ForgotPasswordForm: React.SFC<ForgetPasswordFormProps> = () => (
   <ResetPasswordFormProvider>
-    {({ isSubmitting, status, values, submitCount }) => {
+    {({ isSubmitting, status, values, submitCount, isValid }) => {
       const error = (status && status.error) || undefined;
-      const submitSucceed = !isSubmitting && submitCount > 0 && !error;
+      const submitSucceed = isValid && !isSubmitting && submitCount > 0 && !error;
 
       return (
         <Form id="forgot-password" i18nId="forgotPassword">

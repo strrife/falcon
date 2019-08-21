@@ -1,7 +1,8 @@
 import React from 'react';
+import { I18n } from '@deity/falcon-i18n';
 import { Box } from '@deity/falcon-ui';
-import { SignIn, SignUp, ForgotPassword } from '@deity/falcon-ecommerce-uikit';
-import { MiniCartQuery, MiniCart } from '@deity/falcon-ui-kit';
+import { SignIn, SignUp } from '@deity/falcon-ecommerce-uikit';
+import { MiniCartQuery, MiniCart, ForgotPasswordForm, SidebarLayout } from '@deity/falcon-ui-kit';
 import { SIDEBAR_CONTENT_TYPES } from './SidebarQuery';
 
 export default ({ contentType }) => {
@@ -31,7 +32,13 @@ export default ({ contentType }) => {
         <SignUp />
       </ContentBox>
       <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.forgotPassword}>
-        <ForgotPassword />
+        <I18n>
+          {t => (
+            <SidebarLayout title={t('forgotPassword.title')}>
+              <ForgotPasswordForm />
+            </SidebarLayout>
+          )}
+        </I18n>
       </ContentBox>
     </React.Fragment>
   );
