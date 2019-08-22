@@ -1,17 +1,6 @@
 import gql from 'graphql-tag';
-import { Query } from '../Query';
-
-export type Menu = {
-  menu: MenuItem[];
-};
-
-export type MenuItem = {
-  id: string;
-  name: string;
-  urlPath: string;
-  cssClass?: string;
-  children: MenuItem[];
-};
+import { MenuItem } from '@deity/falcon-shop-extension';
+import { Query } from '@deity/falcon-data';
 
 export const GET_MENU = gql`
   query Menu {
@@ -36,7 +25,11 @@ export const GET_MENU = gql`
   }
 `;
 
-export class MenuQuery extends Query<Menu> {
+export type MenuResponse = {
+  menu: MenuItem[];
+};
+
+export class MenuQuery extends Query<MenuResponse> {
   static defaultProps = {
     query: GET_MENU
   };

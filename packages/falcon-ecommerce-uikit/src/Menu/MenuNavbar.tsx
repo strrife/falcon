@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { MenuItem } from '@deity/falcon-shop-extension';
 import { Navbar, NavbarItem, NavbarItemMenu, Link, List, ListItem } from '@deity/falcon-ui';
-import { MenuItem } from '../Menu';
 
-export const MenuNavbar: React.SFC<{ items: MenuItem[] }> = ({ items }) => (
+export type MenuNavbarProps = {
+  items: MenuItem[];
+};
+export const MenuNavbar: React.SFC<MenuNavbarProps> = ({ items }) => (
   <nav>
     <Navbar>
       {items.map(item => (

@@ -360,11 +360,11 @@ type PaymentMethod {
 }
 
 type MenuItem {
-  id: String!
+  id: ID!
   name: String!
   urlPath: String!
   cssClass: String
-  children: [MenuItem]!
+  children: [MenuItem!]!
 }
 
 type Category {

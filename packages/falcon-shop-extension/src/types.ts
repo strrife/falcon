@@ -367,3 +367,11 @@ export type Region = {
   code: string;
   name: string;
 };
+
+export type MenuItem = {
+  id: string;
+  name: string;
+  urlPath: string;
+  cssClass: string;
+  children: MenuItem[];
+};

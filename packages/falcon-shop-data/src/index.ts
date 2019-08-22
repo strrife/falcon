@@ -4,5 +4,6 @@ export * from './Cart';
 export * from './Category';
 export * from './Country';
 export * from './Customer';
+export * from './Menu';
 export * from './Product';
 export * from './SignIn';
