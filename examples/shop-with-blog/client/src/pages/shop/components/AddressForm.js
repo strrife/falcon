@@ -68,7 +68,7 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
       />
       <FormField name="street2" autoComplete={getAutoComplete('address-line2')} gridArea={AddressFormArea.street2} />
       <FormField name="countryId" required autoComplete={getAutoComplete('country')} gridArea={AddressForm.country}>
-        {({ field }) => <CountryPicker {...field} items={countries} />}
+        {({ field }) => <CountryPicker {...field} options={countries} />}
       </FormField>
       <FormField
         name="postcode"

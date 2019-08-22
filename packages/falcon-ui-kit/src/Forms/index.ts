@@ -8,3 +8,4 @@ export * from './FormFieldLayout';
 export * from './FormSubmit';
 export * from './PasswordRevealInput';
 export * from './RadioFormField';
+export * from './SelectInput';

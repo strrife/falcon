@@ -79,7 +79,7 @@ const EditAddress = ({ match, history }) => {
                           {({ field }) => (
                             <CountryListQuery passLoading>
                               {({ countryList = { items: [] } }) => (
-                                <CountryPicker {...field} items={countryList.items} />
+                                <CountryPicker {...field} options={countryList.items} />
                               )}
                             </CountryListQuery>
                           )}
