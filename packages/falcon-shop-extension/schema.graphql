@@ -35,13 +35,13 @@ extend type Mutation {
   signIn(input: SignInInput!): Boolean!
   signOut: Boolean!
   editCustomer(input: EditCustomerInput!): Customer
+  changePassword(input: ChangePasswordInput!): Boolean
+  requestPasswordReset(input: RequestPasswordResetInput!): Boolean
+  resetPassword(input: ResetPasswordInput!): Boolean
   editAddress(input: EditAddressInput!): Address
   addAddress(input: AddAddressInput!): Address
-  estimateShippingMethods(input: EstimateShippingInput!): [ShippingMethod]
   removeAddress(id: Int!): Boolean
-  requestPasswordReset(input: RequestPasswordResetInput!): Boolean
-  changePassword(input: ChangePasswordInput!): Boolean
-  resetPassword(input: ResetPasswordInput!): Boolean
+  estimateShippingMethods(input: EstimateShippingInput!): [ShippingMethod]
   # set current customer order shipping information
   setShipping(input: ShippingInput): ShippingInformation
   placeOrder(input: PlaceOrderInput!): PlaceOrderResult
