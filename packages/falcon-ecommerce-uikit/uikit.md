@@ -66,7 +66,7 @@
 
 ---
 
-- MiniAccountQuery
+> - ~~MiniAccountQuery~~ renamed to `MiniCustomerQuery` and moved to @deity/falcon-shop-data 
 
 ---
 
@@ -168,11 +168,11 @@
 
 ---
 
-- GET_MINI_ACCOUNT
+> - ~~GET_MINI_ACCOUNT~~ - renamed to `GET_MINI_CUSTOMER` and moved to @deity/falcon-shop-data
 
 ---
 
-> - ~~GET_MINI_CART~~ - moved to @deity/falcon-ui-kit
+> - ~~GET_MINI_CART~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -309,7 +309,7 @@
 
 ---
 
-- MiniAccountData
+> - ~~MiniAccountData~~ renamed to `MiniCustomerResponse` and moved to @deity/falcon-shop-data
 
 ---
 

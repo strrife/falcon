@@ -14,6 +14,6 @@ export type SignUpResponse = { signUp: boolean };
 export class SignUpMutation extends Mutation<SignUpResponse, OperationInput<SignUpInput>> {
   static defaultProps = {
     mutation: SIGN_UP_MUTATION,
-    refetchQueries: ['Customer', 'MiniAccount', 'Cart']
+    refetchQueries: ['Customer', 'Cart']
   };
 }
