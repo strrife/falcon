@@ -13,7 +13,7 @@ module.exports.build = async () => {
       '-x',
       config.fileExtensions.join(','),
       '--ignore',
-      `**/__mocks__,${config.fileExtensions.map(x => `**/*.test${x}`).join(',')}`,
+      `**/__mocks__,${config.fileExtensions.map(x => `**/*.test${x}`).join(',')},src/bin/**`,
       '-s',
       '--config-file',
       config.babelConfigPath,
@@ -26,7 +26,7 @@ module.exports.build = async () => {
   );
 };
 
-module.exports.watch = async () => {
+module.exports.watch = () => {
   console.log('building esm...');
 
   return spawn(
@@ -38,7 +38,7 @@ module.exports.watch = async () => {
       '-x',
       config.fileExtensions.join(','),
       '--ignore',
-      `**/__mocks__,${config.fileExtensions.map(x => `**/*.test${x}`).join(',')}`,
+      `**/__mocks__,${config.fileExtensions.map(x => `**/*.test${x}`).join(',')},src/bin/**`,
       '-s',
       '--config-file',
       config.babelConfigPath,
