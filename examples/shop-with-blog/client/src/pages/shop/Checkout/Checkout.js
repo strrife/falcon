@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { Box, H2, H4, Button, Divider } from '@deity/falcon-ui';
-import { CheckoutLogic, CountriesQuery, Loader } from '@deity/falcon-ecommerce-uikit';
+import { CheckoutLogic, Loader } from '@deity/falcon-ecommerce-uikit';
 import { toGridTemplate } from '@deity/falcon-ui-kit';
-import { CustomerQuery, GET_CUSTOMER_WITH_ADDRESSES, CartQuery } from '@deity/falcon-shop-data';
+import { CustomerQuery, GET_CUSTOMER_WITH_ADDRESSES, CartQuery, CountryListQuery } from '@deity/falcon-shop-data';
 import { T, I18n } from '@deity/falcon-i18n';
 import { Test3dSecure } from '@deity/falcon-payment-plugin';
 import ErrorList from '../components/ErrorList';
@@ -185,8 +185,8 @@ class CheckoutWizard extends React.Component {
     }
 
     return (
-      <CountriesQuery>
-        {({ countries }) => (
+      <CountryListQuery>
+        {({ countryList }) => (
           <CartQuery>
             {({ cart }) => {
               // cart is empty and it's not a "placeOrder" result so redirect user to the homepage
@@ -222,7 +222,7 @@ class CheckoutWizard extends React.Component {
                         <AddressSection
                           id="shipping-address"
                           open={currentStep === CHECKOUT_STEPS.SHIPPING_ADDRESS}
-                          countries={countries.items}
+                          countries={countryList.items}
                           onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.SHIPPING_ADDRESS)}
                           title={t('checkout.shippingAddress')}
                           submitLabel={t('checkout.nextStep')}
@@ -241,7 +241,7 @@ class CheckoutWizard extends React.Component {
                           onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.BILLING_ADDRESS)}
                           title={t('checkout.billingAddress')}
                           submitLabel={t('checkout.nextStep')}
-                          countries={countries.items}
+                          countries={countryList.items}
                           selectedAddress={values.billingAddress}
                           setAddress={setBillingAddress}
                           setUseTheSame={setBillingSameAsShipping}
@@ -292,7 +292,7 @@ class CheckoutWizard extends React.Component {
             }}
           </CartQuery>
         )}
-      </CountriesQuery>
+      </CountryListQuery>
     );
   }
 }

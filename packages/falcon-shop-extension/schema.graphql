@@ -10,8 +10,8 @@ extend type Query {
     filters: [FilterInput!]
     skus: [String!]
   ): ProductList!
-  cart: Cart
-  countries: CountryList
+  cart: Cart!
+  countryList: CountryList!
   order(id: Int!): Order
   lastOrder: Order @cacheInvalidator(idPath: [{ path: "items", type: "Product" }])
   orders(pagination: PaginationInput): Orders
@@ -183,7 +183,7 @@ input AddressInput {
   defaultShipping: Boolean
   region: String
   regionId: Int
-  street: [String]
+  street: [String!]!
   telephone: String
 }
 
@@ -612,20 +612,20 @@ type BundleProductOptionLink {
 }
 
 type Region {
-  id: Int
-  name: String
+  id: ID!
   code: String!
+  name: String
 }
 
 type Country {
+  code: String!
   englishName: String
   localName: String
-  code: String!
-  regions: [Region]
+  regions: [Region!]!
 }
 
 type CountryList {
-  items: [Country]
+  items: [Country!]!
 }
 
 type CmsBlock {

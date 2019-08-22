@@ -44,7 +44,7 @@
 
 ---
 
-- CountriesQuery
+> - ~~CountriesQuery~~ - renamed to `CountryListQuery` and moved to @deity/falcon-shop-data
 
 ---
 
@@ -148,7 +148,7 @@
 
 ---
 
-- GET_COUNTRIES
+> - ~~GET_COUNTRIES~~ - renamed to `GET_COUNTRY_LIST` and moved to @deity/falcon-shop-data
 
 ---
 
@@ -249,7 +249,7 @@
 
 ---
 
-- Country
+> - ~~Country~~ - moved to @deity/falcon-shop-extension
 - CountriesData
 
 ---
@@ -364,7 +364,8 @@
 
 ---
 
-> - ~~AddressDetails~~ - moved to @deity/falcon-ui-kit/src/Address/AddressDetails.tsx
+> - ~~AddressDetails~~ - moved to @deity/falcon-ui-kit/src/Address/AddressDetails.tsx (extracted AddressDetailsLayout)
+> - ~~addressToString~~ - moved to @deity/falcon-front-kit
 > - ~~AddressCardLayout~~ - moved to @deity/falcon-ui-kit/src/Address/AddressCard.tsx
 > - ~~AddressCard~~ - moved to @deity/falcon-ui-kit/src/Address/AddressCard.tsx
 > - ~~AddressListLayout~~ - moved to @deity/falcon-ui-kit/src/AddressListLayout.tsx

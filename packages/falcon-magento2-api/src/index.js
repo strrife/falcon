@@ -967,18 +967,18 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
-   * Fetch country data
+   * Fetch country list
    * @returns {CountryList} parsed country list
    */
-  async countries() {
-    const response = await this.getAuth('/directory/countries', {}, { context: { isAuthRequired: false } });
-
-    const countries = response.map(item => ({
-      code: item.id,
-      englishName: item.full_name_english,
-      localName: item.full_name_locale,
-      regions: item.available_regions || []
-    }));
+  async countryList() {
+    const countries = await this.getAuth('/directory/countries', {}, { context: { isAuthRequired: false } }).map(
+      item => ({
+        code: item.id,
+        englishName: item.full_name_english,
+        localName: item.full_name_locale,
+        regions: item.available_regions || []
+      })
+    );
 
     return { items: countries };
   }

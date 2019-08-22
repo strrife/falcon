@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select, Option } from '@deity/falcon-ui';
-import { Country } from '.';
+import { Country } from '@deity/falcon-shop-extension';
 
 export type CountrySelectorProps = {
   id?: string;

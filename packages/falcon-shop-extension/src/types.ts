@@ -350,3 +350,20 @@ export type SignInInput = {
   email: string;
   password: string;
 };
+
+export type CountryList = {
+  items: Country[];
+};
+
+export type Country = {
+  code: string;
+  englishName: string;
+  localName: string;
+  regions: Region[];
+};
+
+export type Region = {
+  id: string;
+  code: string;
+  name: string;
+};
