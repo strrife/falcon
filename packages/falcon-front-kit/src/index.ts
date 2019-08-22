@@ -1,5 +1,6 @@
 export * from './Account';
 export * from './Address';
+export * from './ClientConfig';
 export * from './DynamicRoute';
 export * from './EnsureTTI';
 export * from './Filters';

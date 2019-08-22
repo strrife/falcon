@@ -144,7 +144,7 @@
 
 ---
 
-- GET_CONFIG (-> GET_CLIENT_CONFIG)
+> - ~~GET_CONFIG~~ - renamed to GET_CLIENT_CONFIG and moved to @deity/falcon-front-kit
 
 ---
 
@@ -245,7 +245,7 @@
 
 ---
 
-- ConfigQuery (-> ClientConfigQuery)
+> - ~~ConfigQuery~~ renamed to ClientConfigQuery and moved to @deity/falcon-front-kit
 
 ---
 

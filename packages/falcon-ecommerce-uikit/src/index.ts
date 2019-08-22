@@ -3,7 +3,6 @@ export * from './Footer';
 export * from './Menu';
 export * from './CreditCard';
 export * from './Checkout';
-export * from './Config';
 export * from './Order';
 export * from './OrderList';
 export * from './SignOut';
