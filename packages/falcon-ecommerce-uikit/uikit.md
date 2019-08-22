@@ -394,7 +394,7 @@
 
 ---
 
-- CountrySelector
+> - ~~CountrySelector~~ renamed to CountryPicker and moved to @deity/falcon-ui-kit
 
 ---
 

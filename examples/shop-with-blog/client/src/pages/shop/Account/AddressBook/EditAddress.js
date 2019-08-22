@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom';
 import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
 import { H1, Text, Button, FlexLayout, GridLayout } from '@deity/falcon-ui';
-import { CountrySelector } from '@deity/falcon-ecommerce-uikit';
 import {
   getAddressType,
   Form,
@@ -11,7 +10,8 @@ import {
   CheckboxFormField,
   FormErrorSummary,
   TwoColumnsLayout,
-  TwoColumnsLayoutArea
+  TwoColumnsLayoutArea,
+  CountryPicker
 } from '@deity/falcon-ui-kit';
 import { GET_ADDRESS, AddressQuery, EditAddressMutation, CountryListQuery } from '@deity/falcon-shop-data';
 
@@ -76,14 +76,10 @@ const EditAddress = ({ match, history }) => {
                         <FormField name="postcode" required />
                         <FormField name="city" required />
                         <FormField name="countryId" required>
-                          {({ form, field }) => (
+                          {({ field }) => (
                             <CountryListQuery passLoading>
                               {({ countryList = { items: [] } }) => (
-                                <CountrySelector
-                                  {...field}
-                                  onChange={x => form.setFieldValue(field.name, x)}
-                                  items={countryList.items}
-                                />
+                                <CountryPicker {...field} items={countryList.items} />
                               )}
                             </CountryListQuery>
                           )}

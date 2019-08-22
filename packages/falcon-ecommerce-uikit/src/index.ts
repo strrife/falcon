@@ -7,7 +7,6 @@ export * from './Config';
 export * from './Order';
 export * from './OrderList';
 export * from './SignOut';
-export * from './Countries';
 export * from './Blog';
 export * from './Query';
 export * from './Errors';
