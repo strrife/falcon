@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Query as ApolloQuery, OperationVariables, QueryProps as ApolloQueryProps, QueryResult } from 'react-apollo';
 import { NetworkStatus, ApolloError } from 'apollo-client';
-import { Omit } from '../types';
 import { Loader } from './Loader';
 
 export type ApolloFetchMore<TData, TVariables> = QueryResult<TData, TVariables>['fetchMore'];
