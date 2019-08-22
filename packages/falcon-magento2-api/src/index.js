@@ -971,14 +971,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @returns {CountryList} parsed country list
    */
   async countryList() {
-    const countries = await this.getAuth('/directory/countries', {}, { context: { isAuthRequired: false } }).map(
-      item => ({
-        code: item.id,
-        englishName: item.full_name_english,
-        localName: item.full_name_locale,
-        regions: item.available_regions || []
-      })
-    );
+    const response = await this.getAuth('/directory/countries', {}, { context: { isAuthRequired: false } });
+    const countries = response.map(item => ({
+      code: item.id,
+      englishName: item.full_name_english,
+      localName: item.full_name_locale,
+      regions: item.available_regions || []
+    }));
 
     return { items: countries };
   }
