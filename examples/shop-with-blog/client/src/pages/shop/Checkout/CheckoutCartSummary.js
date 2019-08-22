@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Image, Text, Divider } from '@deity/falcon-ui';
-import { Price } from '@deity/falcon-ecommerce-uikit';
-import { toGridTemplate } from '@deity/falcon-ui-kit';
+import { Price, toGridTemplate } from '@deity/falcon-ui-kit';
 import CartTotals from '../components/CartTotals';
 
 const MAX_THUMB_SIZE = '80px';
