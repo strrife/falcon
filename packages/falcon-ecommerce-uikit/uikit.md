@@ -62,7 +62,7 @@
 
 ---
 
-- MenuQuery
+> - ~~MenuQuery~~ - moved to '@deity/falcon-shop-data'
 
 ---
 
@@ -469,7 +469,7 @@
 
 ---
 
-- MenuNavbar
+> - ~~MenuNavbar~~ - moved to @deity/falcon-ui-kit
 
 ---
 

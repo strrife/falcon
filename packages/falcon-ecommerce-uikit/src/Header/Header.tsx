@@ -2,8 +2,7 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link, Icon, DefaultThemeProps, Box } from '@deity/falcon-ui';
 import { MenuQuery, CustomerQuery, CartQuery, CartResponse } from '@deity/falcon-shop-data';
-import { toGridTemplate, OpenSidebarMutation, MiniCartIcon } from '@deity/falcon-ui-kit';
-import { MenuNavbar } from '../Menu';
+import { MenuNavbar, toGridTemplate, OpenSidebarMutation, MiniCartIcon } from '@deity/falcon-ui-kit';
 import { Banner } from './Banner';
 
 export const SearchBarArea = {
