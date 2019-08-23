@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
+import { OperationInput } from '@deity/falcon-data';
 import { RequestPasswordResetInput } from '@deity/falcon-shop-extension';
-import { OperationInput } from '../types';
 
 export const REQUEST_PASSWORD_RESET_TOKEN_MUTATION = gql`
   mutation RequestPasswordReset($input: RequestPasswordResetInput!) {

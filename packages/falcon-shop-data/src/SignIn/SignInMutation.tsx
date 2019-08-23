@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
+import { OperationInput } from '@deity/falcon-data';
 import { SignInInput } from '@deity/falcon-shop-extension';
-import { OperationInput } from '../types';
 
 export const SIGN_IN_MUTATION = gql`
   mutation SignIn($input: SignInInput!) {
