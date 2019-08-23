@@ -457,7 +457,7 @@
 
 ---
 
-- BannerLayout
+> - ~~BannerLayout~~ renamed to HeaderBannerLayout moved to @deity/falcon-ui-kit
 - Banner
 - Searchbar
 - Header

@@ -7,6 +7,7 @@ export * from './Country';
 export * from './Filters';
 export * from './FormattedDate';
 export * from './Forms';
+export * from './Header';
 export * from './Layouts';
 export * from './Locale';
 export * from './Logo';
