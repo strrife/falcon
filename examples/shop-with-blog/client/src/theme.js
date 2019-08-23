@@ -32,11 +32,7 @@ export const deityGreenTheme = createTheme({
   icons: {
     logo: {
       icon: DeityLogo,
-      stroke: 'none',
-      css: {
-        width: 'auto',
-        height: '100%'
-      }
+      stroke: 'none'
     },
     signIn: { icon: SignInIcon },
     account: { icon: AccountIcon },
