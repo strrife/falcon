@@ -1,2 +1,2 @@
-export * from './HeaderBannerLayout';
-export * from './HeaderSearchBarLayout';
+export * from './HeaderBanner';
+export * from './HeaderBarLayout';

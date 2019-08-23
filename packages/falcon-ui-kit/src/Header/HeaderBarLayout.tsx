@@ -2,24 +2,24 @@ import React from 'react';
 import { Box, themed } from '@deity/falcon-ui';
 import { toGridTemplate } from '../helpers';
 
-export const HeaderSearchBarArea = {
+export const HeaderBarArea = {
   logo: 'logo',
   signIn: 'signIn',
   cart: 'cart',
   search: 'search'
 };
 
-export const HeaderSearchBarLayout = themed({
+export const HeaderBarLayout = themed({
   tag: Box,
   defaultTheme: {
-    headerSearchBarLayout: {
+    headerBarLayout: {
       display: 'grid',
       py: 'sm',
       gridGap: 'sm',
       // prettier-ignore
       gridTemplate: toGridTemplate([
-        ['200px',                  '1fr',                      'auto',                     'auto'                  ],
-        [HeaderSearchBarArea.logo, HeaderSearchBarArea.search, HeaderSearchBarArea.signIn, HeaderSearchBarArea.cart]
+        ['auto',            '1fr',                'auto',               'auto'             ],
+        [HeaderBarArea.logo, HeaderBarArea.search, HeaderBarArea.signIn, HeaderBarArea.cart]
       ]),
       css: {
         alignItems: 'center'

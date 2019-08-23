@@ -1,18 +1,21 @@
 import React from 'react';
 import { List, themed } from '@deity/falcon-ui';
 
-export const HeaderBannerLayout = themed({
+export const HeaderBanner = themed({
   tag: List,
   defaultTheme: {
-    headerBannerLayout: {
+    headerBanner: {
       display: 'flex',
       justifyContent: 'flex-end',
       bgFullWidth: 'secondaryLight',
       m: 'none',
       p: 'none',
-      css: {
-        listStyle: 'none'
-      }
+      css: ({ theme }) => ({
+        listStyle: 'none',
+        '> li': {
+          padding: theme.spacing.xs
+        }
+      })
     }
   }
 });
