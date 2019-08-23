@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link, Icon, DefaultThemeProps, Box } from '@deity/falcon-ui';
-import { MenuQuery, CustomerQuery, CartQuery, CartResponse } from '@deity/falcon-shop-data';
-import { MenuNavbar, toGridTemplate, OpenSidebarMutation, MiniCartIcon } from '@deity/falcon-ui-kit';
+import { MenuQuery, CustomerQuery, CartQuery } from '@deity/falcon-shop-data';
+import { MenuNavbar, toGridTemplate, OpenSidebarMutation, CartIcon } from '@deity/falcon-ui-kit';
 import { Banner } from './Banner';
 
 export const SearchBarArea = {
@@ -53,12 +53,10 @@ export const Searchbar = () => (
             }
           </CustomerQuery>
           <CartQuery>
-            {(data: CartResponse) => (
-              <MiniCartIcon
-                onClick={() => openSidebar({ variables: { contentType: 'cart' } })}
-                gridArea={SearchBarArea.cart}
-                itemsQty={data.cart ? data.cart.itemsQty : 0}
-              />
+            {({ cart }) => (
+              <Link gridArea={SearchBarArea.cart} onClick={() => openSidebar({ variables: { contentType: 'cart' } })}>
+                <CartIcon itemsQty={cart && cart.itemsQty} />
+              </Link>
             )}
           </CartQuery>
         </React.Fragment>

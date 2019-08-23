@@ -1,3 +1,3 @@
 export * from './MiniCart';
-export * from './MiniCartIcon';
+export * from './CartIcon';
 export * from './MiniCartProduct';

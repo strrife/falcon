@@ -1,14 +1,10 @@
 import React from 'react';
 import { Box, Badge, Icon } from '@deity/falcon-ui';
 
-export const MiniCartIcon: React.SFC<{
-  onClick: Function;
-  gridArea: string;
-  itemsQty: number;
-}> = ({ onClick, gridArea, itemsQty }) => (
-  <Box gridArea={gridArea} onClick={() => onClick()} css={{ cursor: 'pointer', position: 'relative' }}>
+export const CartIcon: React.SFC<{ itemsQty?: number }> = ({ itemsQty }) => (
+  <Box css={{ position: 'relative' }}>
     <Icon src="cart" />
-    {itemsQty > 0 && (
+    {!!itemsQty && (
       <Badge
         borderRadius="round"
         boxShadow="pronounced"

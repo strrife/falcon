@@ -485,7 +485,7 @@
 ---
 
 - MiniCart
-- MiniCartIcon
+> - ~~MiniCartIcon~~ - renamed to CartIcon moved to @deity/falcon-ui-kit
 
 - OrderItemSummary
 
