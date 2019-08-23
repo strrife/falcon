@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-// eslint-disable-next-line
 import { Location, LocationState } from 'history';
+import PropTypes from 'prop-types';
 import { T } from '@deity/falcon-i18n';
 import { H1, Text, Button, FlexLayout, GridLayout } from '@deity/falcon-ui';
 
@@ -27,4 +27,7 @@ export const NotFound: React.SFC<NotFoundProps> = ({ location }) => {
       </FlexLayout>
     </GridLayout>
   );
+};
+NotFound.propTypes = {
+  location: PropTypes.any.isRequired
 };

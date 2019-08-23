@@ -5,5 +5,4 @@ export * from './Order';
 export * from './OrderList';
 export * from './Blog';
 export * from './Query';
-export * from './Errors';
 export * from './TwoStepWizard';

@@ -4,6 +4,7 @@ export * from './Breadcrumbs';
 export * from './Category';
 export * from './Color';
 export * from './Country';
+export * from './Error';
 export * from './Filters';
 export * from './FormattedDate';
 export * from './Forms';
