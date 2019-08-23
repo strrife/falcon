@@ -460,7 +460,7 @@
 > - ~~BannerLayout~~ renamed to HeaderBannerLayout moved to @deity/falcon-ui-kit
 - Banner
 - Searchbar
-- Header
+> - ~~Header~~ - moved to moved to examples/shop-with-blog
 
 ---
 
