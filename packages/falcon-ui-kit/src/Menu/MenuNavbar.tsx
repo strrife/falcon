@@ -11,29 +11,27 @@ export type MenuNavbarProps = {
   items: NavbarItem[];
 };
 export const MenuNavbar: React.SFC<MenuNavbarProps> = ({ items }) => (
-  <nav>
-    <Navbar>
-      {items.map(item => (
-        <NavbarItem key={item.urlPath}>
-          <Link p="sm" as={RouterLink} to={item.urlPath}>
-            {item.name}
-          </Link>
+  <Navbar>
+    {items.map(item => (
+      <NavbarItem key={item.urlPath}>
+        <Link p="sm" as={RouterLink} to={item.urlPath}>
+          {item.name}
+        </Link>
 
-          {item.children.length > 0 && (
-            <NavbarItemMenu>
-              <List>
-                {item.children.map(subItem => (
-                  <ListItem key={subItem.urlPath}>
-                    <Link p="xs" display="block" as={RouterLink} to={subItem.urlPath}>
-                      {subItem.name}
-                    </Link>
-                  </ListItem>
-                ))}
-              </List>
-            </NavbarItemMenu>
-          )}
-        </NavbarItem>
-      ))}
-    </Navbar>
-  </nav>
+        {item.children.length > 0 && (
+          <NavbarItemMenu>
+            <List>
+              {item.children.map(subItem => (
+                <ListItem key={subItem.urlPath}>
+                  <Link p="xs" display="block" as={RouterLink} to={subItem.urlPath}>
+                    {subItem.name}
+                  </Link>
+                </ListItem>
+              ))}
+            </List>
+          </NavbarItemMenu>
+        )}
+      </NavbarItem>
+    ))}
+  </Navbar>
 );

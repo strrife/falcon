@@ -71,6 +71,8 @@ export const Header: React.SFC = () => (
   <header>
     <Banner />
     <Searchbar />
-    <MenuQuery>{({ menu }) => <MenuNavbar items={menu} />}</MenuQuery>
+    <nav>
+      <MenuQuery>{({ menu }) => <MenuNavbar items={menu} />}</MenuQuery>
+    </nav>
   </header>
 );
