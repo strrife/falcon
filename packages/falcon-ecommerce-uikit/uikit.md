@@ -340,7 +340,7 @@
 
 - SignInModel ? 
 - SignInData ? 
-- SignOutLogicRenderProps
+> - ~~SignOutLogicRenderProps~~ - renamed to SignOutProviderRenderProps, moved to @deity/falcon-ui-kit
 > - ~~SignUpVariables~~ moved to @deity/falcon-shop-extension and renamed to SignUpInput
 
 ---
@@ -457,8 +457,8 @@
 
 ---
 
-> - ~~BannerLayout~~ renamed to HeaderBannerLayout moved to @deity/falcon-ui-kit
-- Banner
+> - ~~BannerLayout~~ - renamed to HeaderBannerLayout moved to @deity/falcon-ui-kit
+> - ~~Banner~~ - moved to examples/shop-with-blog
 - Searchbar
 > - ~~Header~~ - moved to moved to examples/shop-with-blog
 
@@ -564,7 +564,7 @@
 > - ~~Router~~ moved to @deity/falcon-front-kit
 
 > - ~~SearchProvider~~ moved to @deity/falcon-front-kit
-- SignOutLogic
+> - ~~SignOutLogic~~ - renamed to SignOutProvider and moved to @deity/falcon-front-kit - but not using it
 > - ~~SortOrdersProvider~~ change to `SortOrderPickerProvider` and moved to @deity/falcon-front-kit
 > - ~~AreSortOrderInputsEqual~~ changed to `areSortOrderInputsEqual` and moved to @deity/falcon-front-kit
 > - ~~OnlineStatus~~ changed to `NetworkStatus` and moved to @deity/falcon-front-kit
