@@ -84,8 +84,8 @@ const App = () => (
                     ) : null
                   }
                 </ServiceWorker>
+                <NetworkStatus>{({ isOnline }) => !isOnline && <Box>you are offline.</Box>}</NetworkStatus>
                 <Header />
-                <NetworkStatus>{({ isOnline }) => !isOnline && <p>you are offline.</p>}</NetworkStatus>
                 <ErrorBoundary>
                   <Switch>
                     <Route exact path="/" component={Home} />
