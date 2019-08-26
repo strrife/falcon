@@ -406,7 +406,7 @@ export type OrderItem = {
   qty: number;
   price: number;
   productType?: String;
-  rowTotalInclTax?: number;
+  rowTotalInclTax: number;
   basePrice?: number;
   basePriceInclTax?: number;
   thumbnailUrl?: string;

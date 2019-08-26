@@ -1,11 +1,16 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
-import { OrderItem } from '@deity/falcon-shop-extension';
 import { Box, Image, Text } from '@deity/falcon-ui';
 import { Price } from '../Price';
 import { OrderItemSummaryLayout, OrderItemSummaryArea } from './OrderItemSummaryLayout';
 
-export const OrderItemSummary: React.SFC<OrderItem> = props => {
+export type OrderItemSummaryProps = {
+  name: string;
+  thumbnailUrl?: string;
+  rowTotalInclTax: number;
+  qty: number;
+};
+export const OrderItemSummary: React.SFC<OrderItemSummaryProps> = props => {
   const thumbMaxSize = 80;
 
   return (

@@ -419,7 +419,7 @@ type CartItem {
   productType: String
   priceInclTax: Float
   rowTotal: Float
-  rowTotalInclTax: Float
+  rowTotalInclTax: Float!
   rowTotalWithDiscount: Float
   taxAmount: Float
   taxPercent: Float
