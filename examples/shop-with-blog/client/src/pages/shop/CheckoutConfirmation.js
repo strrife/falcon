@@ -1,6 +1,6 @@
 import React from 'react';
+import { LastOrderQuery } from '@deity/falcon-shop-data';
 import { Box, H1, Text, FlexLayout } from '@deity/falcon-ui';
-import { LastOrderQuery } from '@deity/falcon-ecommerce-uikit';
 
 const OrderSummary = ({ order }) => (
   <Box>

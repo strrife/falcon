@@ -5,5 +5,6 @@ export * from './Category';
 export * from './Country';
 export * from './Customer';
 export * from './Menu';
+export * from './Order';
 export * from './Product';
 export * from './SignIn';
