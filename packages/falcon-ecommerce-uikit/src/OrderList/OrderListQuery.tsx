@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
+import { Order } from '@deity/falcon-shop-extension';
 import { Pagination, PaginationQuery } from '@deity/falcon-data';
 import { Query, FetchMore } from '../Query';
-import { Order } from '../Order';
 
 export const GET_ORDER_LIST = gql`
   query Orders($pagination: PaginationInput) {
