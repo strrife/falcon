@@ -16,13 +16,13 @@ const Order = ({ match }) => {
           <H1>
             <T id="order.title" orderId={order.incrementId} />
           </H1>
-          <FlexLayout>
-            <Text fontWeight="bold" mr="md">
-              <T id="order.statusLabel" />
-            </Text>
-            <T id="order.status" context={order.status || 'na'} />
-          </FlexLayout>
           <OrderLayout>
+            <FlexLayout gridArea={OrderLayoutArea.status}>
+              <Text fontWeight="bold" mr="md">
+                <T id="order.statusLabel" />
+              </Text>
+              <T id="order.status" context={order.status || 'na'} />
+            </FlexLayout>
             <GridLayout gridArea={OrderLayoutArea.items} alignContent="flex-start">
               <I18n>
                 {t => (
