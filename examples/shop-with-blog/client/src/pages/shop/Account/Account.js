@@ -4,7 +4,7 @@ import { Link as RouterLink, Switch, Route } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { SignOutMutation } from '@deity/falcon-shop-data';
 import { Box, Link, Menu, MenuItem } from '@deity/falcon-ui';
-import { NotFound, toGridTemplate } from '@deity/falcon-ui-kit';
+import { PageLayout, NotFound, toGridTemplate } from '@deity/falcon-ui-kit';
 import AccountDashboard from './Dashboard';
 import PersonalInformation from './PersonalInformation';
 import ChangePassword from './ChangePassword';
@@ -22,11 +22,6 @@ const AccountArea = {
 const accountLayout = {
   accountLayout: {
     display: 'grid',
-    gridGap: {
-      xs: 'sm',
-      md: 'md'
-    },
-    my: 'lg',
     // prettier-ignore
     gridTemplate: {
       xs: toGridTemplate([
@@ -54,8 +49,8 @@ MenuLink.propTypes = {
 };
 
 const Account = ({ history }) => (
-  <Box defaultTheme={accountLayout}>
-    <Box gridArea={AccountArea.menu} display="flex" flexDirection="column" alignItems="stretch" my="md">
+  <Box as={PageLayout} defaultTheme={accountLayout}>
+    <Box gridArea={AccountArea.menu} display="flex" flexDirection="column" alignItems="stretch" mt="md">
       <Menu>
         <MenuLink to="/account">
           <T id="account.dashboardLink" />

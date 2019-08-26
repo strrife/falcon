@@ -12,7 +12,7 @@ const Order = ({ match }) => {
   return (
     <OrderQuery variables={{ id }}>
       {({ order }) => (
-        <GridLayout mb="md" gridGap="md">
+        <GridLayout gridGap="md">
           <H1>
             <T id="order.title" orderId={order.incrementId} />
           </H1>
