@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Text } from '@deity/falcon-ui';
+import { Text, GridLayout } from '@deity/falcon-ui';
 import { Price } from '@deity/falcon-ui-kit';
 
 export type TotalRowProps = {
@@ -7,8 +7,8 @@ export type TotalRowProps = {
   value: number;
 };
 export const TotalRow: React.SFC<TotalRowProps> = ({ title, value, ...props }) => (
-  <Box display="flex" {...props}>
-    <Text flex="1">{title}</Text>
+  <GridLayout gridAutoFlow="column" gridTemplateColumns="1fr auto" gridGap="md" {...props}>
+    <Text>{title}</Text>
     <Price value={value} />
-  </Box>
+  </GridLayout>
 );
