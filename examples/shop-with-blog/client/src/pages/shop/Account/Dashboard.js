@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
+import { CustomerQuery, OrderListQuery } from '@deity/falcon-shop-data';
 import { Box, H1, H2, Text, Link, Divider, FlexLayout, GridLayout } from '@deity/falcon-ui';
-import { OrderListQuery, NoOrders, OrderList } from '@deity/falcon-ecommerce-uikit';
-import { CustomerQuery } from '@deity/falcon-shop-data';
+import { NoOrders, OrderList } from '@deity/falcon-ecommerce-uikit';
 
 const Dashboard = () => (
   <GridLayout mb="md" gridGap="md">

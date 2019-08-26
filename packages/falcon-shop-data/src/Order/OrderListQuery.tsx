@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
 import { Order } from '@deity/falcon-shop-extension';
-import { Pagination, PaginationQuery } from '@deity/falcon-data';
-import { Query, FetchMore } from '../Query';
+import { Query, FetchMore, Pagination, PaginationQuery } from '@deity/falcon-data';
 
 export const GET_ORDER_LIST = gql`
   query Orders($pagination: PaginationInput) {
@@ -25,14 +24,24 @@ export const GET_ORDER_LIST = gql`
   }
 `;
 
-export type OrdersData = {
+export type OrderListResponse = {
   orders: {
-    items: Order[];
-    pagination: Pagination;
+    items: Pick<
+      Order,
+      | 'entityId'
+      | 'incrementId'
+      | 'createdAt'
+      | 'customerFirstname'
+      | 'customerLastname'
+      | 'status'
+      | 'grandTotal'
+      | 'orderCurrencyCode'
+    >[];
+    pagination: Pick<Pagination, 'currentPage' | 'totalItems' | 'nextPage'>;
   };
 };
 
-const fetchMore: FetchMore<OrdersData, PaginationQuery> = (data, apolloFetchMore) =>
+const fetchMore: FetchMore<OrderListResponse, PaginationQuery> = (data: any, apolloFetchMore: any) =>
   apolloFetchMore({
     variables: { pagination: { ...data.orders.pagination, page: data.orders.pagination.nextPage } },
     updateQuery: (prev, { fetchMoreResult }) => {
@@ -53,7 +62,7 @@ const fetchMore: FetchMore<OrdersData, PaginationQuery> = (data, apolloFetchMore
     }
   });
 
-export class OrderListQuery extends Query<OrdersData, PaginationQuery> {
+export class OrderListQuery extends Query<OrderListResponse, PaginationQuery> {
   static defaultProps = {
     query: GET_ORDER_LIST,
     fetchMore,

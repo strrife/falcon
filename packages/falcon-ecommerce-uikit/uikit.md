@@ -75,7 +75,7 @@
 ---
 
 > - ~~GetOrderQuery~~ - renamed to OrderQuery, moved to @deity/falcon-shop-data
-- OrderListQuery
+> - ~~OrderListQuery~~ - moved to @deity/falcon-shop-data
 > - ~~LastOrderQuery~~ - moved to @deity/falcon-shop-data
 
 ---

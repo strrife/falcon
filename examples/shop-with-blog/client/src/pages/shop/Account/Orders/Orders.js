@@ -1,8 +1,9 @@
 import React from 'react';
 import { NetworkStatus } from 'apollo-client';
-import { H1, GridLayout, Button, FlexLayout } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
-import { OrderListQuery, OrderList, NoOrders } from '@deity/falcon-ecommerce-uikit';
+import { OrderListQuery } from '@deity/falcon-shop-data';
+import { H1, GridLayout, Button, FlexLayout } from '@deity/falcon-ui';
+import { OrderList, NoOrders } from '@deity/falcon-ecommerce-uikit';
 
 const Orders = () => (
   <GridLayout mb="md" gridGap="md">
