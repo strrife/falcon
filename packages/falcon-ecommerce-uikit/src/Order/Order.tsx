@@ -1,8 +1,8 @@
 import React from 'react';
-import { Box, Image, Text, DefaultThemeProps } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
+import { OrderItem } from '@deity/falcon-shop-extension';
+import { Box, Image, Text, DefaultThemeProps } from '@deity/falcon-ui';
 import { toGridTemplate, Price } from '@deity/falcon-ui-kit';
-import { OrderItem } from './OrderQuery';
 
 const MAX_THUMB_SIZE = '80px';
 
