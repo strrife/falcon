@@ -50,6 +50,8 @@
     "packages/falcon-blog-extension",
     "packages/falcon-magento2-api",
     "packages/falcon-wordpress-api",
+    "packages/falcon-test-api",
+    "packages/falcon-test-extension",
     "packages/falcon-payment-plugin",
     "packages/payment/falcon-adyen-plugin",
     "packages/payment/falcon-paypal-plugin",

@@ -1,0 +1,19 @@
+extend type Query {
+  testStuff(keyword: String!): TestValue
+}
+
+extend type BackendConfig {
+  testStuff: TestStuffConfig
+}
+
+type TestStuffConfig {
+  """
+  _Placeholder field until Blog config gets defined_
+  """
+  _: Boolean
+}
+
+type TestValue {
+  id: Int!
+  title: String
+}
