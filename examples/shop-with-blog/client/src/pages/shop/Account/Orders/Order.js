@@ -1,36 +1,10 @@
 import React from 'react';
 import { OrderQuery } from '@deity/falcon-shop-data';
 import { H1, Text, Divider, Box, FlexLayout, GridLayout } from '@deity/falcon-ui';
-import { toGridTemplate, FormattedDate, AddressDetails } from '@deity/falcon-ui-kit';
+import { OrderLayout, OrderLayoutArea, FormattedDate, AddressDetails } from '@deity/falcon-ui-kit';
 import { LocaleProvider } from '@deity/falcon-front-kit';
 import { I18n, T } from '@deity/falcon-i18n';
 import { TotalRow, OrderItemSummary } from '@deity/falcon-ecommerce-uikit';
-
-const orderLayoutArea = {
-  items: 'checkout',
-  summary: 'cart',
-  divider: 'divider'
-};
-
-const orderLayout = {
-  orderLayout: {
-    display: 'grid',
-    gridGap: 'lg',
-    // prettier-ignore
-    gridTemplate: {
-      xs: toGridTemplate([
-        ['1fr'],
-        [orderLayoutArea.items],
-        [orderLayoutArea.divider],
-        [orderLayoutArea.summary]
-      ]),
-      md: toGridTemplate([
-        ['2fr', '1px', '1fr'],
-        [orderLayoutArea.items, orderLayoutArea.divider, orderLayoutArea.summary]
-      ])
-    }
-  }
-};
 
 const Order = ({ match }) => {
   const id = parseInt(match.params.id, 10);
@@ -48,8 +22,8 @@ const Order = ({ match }) => {
             </Text>
             <T id="order.status" context={order.status || 'na'} />
           </FlexLayout>
-          <Box defaultTheme={orderLayout}>
-            <GridLayout gridArea={orderLayoutArea.items} alignContent="flex-start">
+          <OrderLayout>
+            <GridLayout gridArea={OrderLayoutArea.items} alignContent="flex-start">
               <I18n>
                 {t => (
                   <LocaleProvider currency={order.orderCurrencyCode}>
@@ -71,8 +45,8 @@ const Order = ({ match }) => {
                 )}
               </I18n>
             </GridLayout>
-            <Divider gridArea={orderLayoutArea.divider} />
-            <GridLayout gridArea={orderLayoutArea.summary} alignContent="flex-start">
+            <Divider gridArea={OrderLayoutArea.divider} />
+            <GridLayout gridArea={OrderLayoutArea.summary} alignContent="flex-start">
               <Box>
                 <Text fontWeight="bold">
                   <T id="order.billingAddressLabel" />
@@ -104,7 +78,7 @@ const Order = ({ match }) => {
                 {order.shippingDescription}
               </Box>
             </GridLayout>
-          </Box>
+          </OrderLayout>
         </GridLayout>
       )}
     </OrderQuery>

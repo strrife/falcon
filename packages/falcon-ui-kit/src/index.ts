@@ -14,6 +14,7 @@ export * from './Locale';
 export * from './Logo';
 export * from './Menu';
 export * from './MiniCart';
+export * from './Order';
 export * from './Price';
 export * from './Product';
 export * from './Responsive';
