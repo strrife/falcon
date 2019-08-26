@@ -2,17 +2,15 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { Order } from '@deity/falcon-shop-extension';
-import { themed, Box, Text, DefaultThemeProps, Link, List, ListItem } from '@deity/falcon-ui';
-import { toGridTemplate, Price, FormattedDate, OrderListLayout } from '@deity/falcon-ui-kit';
-
-const OrderListItemArea = {
-  id: 'id',
-  createdAt: 'createdAt',
-  shipTo: 'shipTo',
-  grandTotal: 'grandTotal',
-  status: 'status',
-  actions: 'actions'
-};
+import { themed, Box, Text, Link, List } from '@deity/falcon-ui';
+import {
+  Price,
+  FormattedDate,
+  OrderListLayout,
+  OrderListItemLayout,
+  OrderListItemArea,
+  OrderListHeader
+} from '@deity/falcon-ui-kit';
 
 export const OrderList: React.SFC<{ items: Order[] }> = ({ items }) => (
   <OrderListLayout>
@@ -25,36 +23,8 @@ export const OrderList: React.SFC<{ items: Order[] }> = ({ items }) => (
   </OrderListLayout>
 );
 
-const orderListItemLayout: DefaultThemeProps = {
-  orderListItemLayout: {
-    display: 'grid',
-    gridGap: {
-      sm: 'none',
-      md: 'sm'
-    },
-    py: 'sm',
-    borderBottom: 'regular',
-    // prettier-ignore
-    gridTemplate: {
-      xs: toGridTemplate([
-        ['1fr'                       ],
-        [OrderListItemArea.id        ],
-        [OrderListItemArea.createdAt ],
-        [OrderListItemArea.shipTo    ],
-        [OrderListItemArea.grandTotal],
-        [OrderListItemArea.status    ],
-        [OrderListItemArea.actions   ]
-      ]),
-      md: toGridTemplate([
-        ['1fr',                '1fr',                       '2fr',                    '1fr',                        '1fr',                    '1fr'                    ],
-        [OrderListItemArea.id, OrderListItemArea.createdAt, OrderListItemArea.shipTo, OrderListItemArea.grandTotal, OrderListItemArea.status, OrderListItemArea.actions]
-      ])
-    }
-  }
-};
-
 export const OrderListItem: React.SFC<Order> = props => (
-  <ListItem defaultTheme={orderListItemLayout}>
+  <OrderListItemLayout>
     <Box gridArea={OrderListItemArea.id} display="flex" alignContent="flex-start">
       <CellLabel>
         <T id="orderList.idLabel" />
@@ -92,7 +62,7 @@ export const OrderListItem: React.SFC<Order> = props => (
         <T id="orderList.viewOrderLink" />
       </Link>
     </Box>
-  </ListItem>
+  </OrderListItemLayout>
 );
 
 const CellLabel = themed({
@@ -112,35 +82,3 @@ const CellLabel = themed({
     }
   }
 });
-
-const orderListHeaderLayout: DefaultThemeProps = {
-  orderListHeaderLayout: {
-    ...orderListItemLayout.orderListItemLayout,
-    fontWeight: 'bold',
-    pb: 'xs',
-    display: { xs: 'none', sm: 'none', md: 'grid' }
-  }
-};
-
-export const OrderListHeader = () => (
-  <Box defaultTheme={orderListHeaderLayout}>
-    <Box gridArea={OrderListItemArea.id}>
-      <T id="orderList.idLabel" />
-    </Box>
-    <Box gridArea={OrderListItemArea.createdAt}>
-      <T id="orderList.createdAtLabel" />
-    </Box>
-    <Box gridArea={OrderListItemArea.shipTo}>
-      <T id="orderList.shipToLabel" />
-    </Box>
-    <Box gridArea={OrderListItemArea.grandTotal}>
-      <T id="orderList.grandTotalLabel" />
-    </Box>
-    <Box gridArea={OrderListItemArea.status}>
-      <T id="orderList.statusLabel" />
-    </Box>
-    <Box gridArea={OrderListItemArea.actions}>
-      <T id="orderList.actionsLabel" />
-    </Box>
-  </Box>
-);
