@@ -13,7 +13,7 @@ export const OrderLayout = themed({
   defaultTheme: {
     orderLayout: {
       display: 'grid',
-      gridGap: 'lg',
+      gridGap: 'md',
       // prettier-ignore
       gridTemplate: {
         xs: toGridTemplate([
