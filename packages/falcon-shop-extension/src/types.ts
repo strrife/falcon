@@ -375,3 +375,42 @@ export type MenuItem = {
   cssClass: string;
   children: MenuItem[];
 };
+
+export type Order = {
+  incrementId: string;
+  entityId: number;
+  createdAt?: string;
+  customerFirstname?: string;
+  customerLastname?: string;
+  status?: string; // list of possible statuses?
+  baseGrandTotal: number;
+  subtotal: number;
+  grandTotal: number;
+  shippingAmount: number;
+  taxAmount: number;
+  discountAmount: number;
+  orderCurrencyCode?: string;
+  items: OrderItem[];
+  paymentMethodName?: string;
+  billingAddress?: Address;
+  shippingDescription?: string;
+  shippingAddress?: Address;
+  couponCode?: string;
+};
+
+export type OrderItem = {
+  itemId: string;
+  sku: string;
+  name: string;
+  availableQty: number;
+  qty: number;
+  price: number;
+  productType?: String;
+  rowTotalInclTax?: number;
+  basePrice?: number;
+  basePriceInclTax?: number;
+  thumbnailUrl?: string;
+  urlKey?: string;
+  link?: string;
+  parentItem?: OrderItem;
+};

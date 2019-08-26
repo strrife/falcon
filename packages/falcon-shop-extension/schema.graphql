@@ -8,7 +8,7 @@ extend type Query {
     query: ShopPageQuery
     sortOrders: [SortOrderInput!]
     filters: [FilterInput!]
-    skus: [String!]
+    skus: [ID!]
   ): ProductList!
   cart: Cart!
   countryList: CountryList!
@@ -233,11 +233,11 @@ type Orders {
 
 type Order {
   incrementId: String!
-  entityId: Int
+  entityId: Int!
   createdAt: String
   customerFirstname: String
   customerLastname: String
-  status: String
+  status: String!
   orderCurrencyCode: String
   baseGrandTotal: Float!
   subtotal: Float!
@@ -245,7 +245,7 @@ type Order {
   taxAmount: Float!
   discountAmount: Float!
   grandTotal: Float!
-  items: [OrderItem]
+  items: [OrderItem!]!
   shippingDescription: String
   paymentMethodName: String
   shippingAddress: Address
@@ -411,7 +411,7 @@ type Cart {
 
 type CartItem {
   itemId: ID!
-  sku: String!
+  sku: ID!
   qty: Float!
   name: String
   availableQty: Float
@@ -449,9 +449,9 @@ type OrderItem {
   itemId: ID!
   sku: ID!
   qty: Float!
-  name: String
-  availableQty: Float
-  price: Float
+  name: String!
+  availableQty: Float!
+  price: Float!
   productType: String
   rowTotalInclTax: Float
   basePrice: Float
@@ -469,7 +469,7 @@ type CartTotal {
 }
 
 input AddToCartInput {
-  sku: String!
+  sku: ID!
   qty: Float!
   options: [ProductOptionInput]
   bundleOptions: [BundleOptionInput]
@@ -489,7 +489,7 @@ input BundleOptionInput {
 input UpdateCartItemInput {
   itemId: ID!
   # Magento 2 legacy both itemId and sku need to be provided for rest endpoint to work
-  sku: String!
+  sku: ID!
   qty: Float!
 }
 
@@ -592,7 +592,7 @@ type BundleProductOption {
   position: Int
   productLinks: [BundleProductOptionLink]
   required: Boolean
-  sku: String
+  sku: ID
   title: String
   type: String
 }
@@ -608,7 +608,7 @@ type BundleProductOptionLink {
   price: String
   priceType: String
   qty: Int
-  sku: String
+  sku: ID
 }
 
 type Region {
