@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { Order } from '@deity/falcon-shop-extension';
 import { themed, Box, Text, DefaultThemeProps, Link, List, ListItem } from '@deity/falcon-ui';
-import { toGridTemplate, Price, FormattedDate } from '@deity/falcon-ui-kit';
+import { toGridTemplate, Price, FormattedDate, OrderListLayout } from '@deity/falcon-ui-kit';
 
 const OrderListItemArea = {
   id: 'id',
@@ -24,16 +24,6 @@ export const OrderList: React.SFC<{ items: Order[] }> = ({ items }) => (
     </List>
   </OrderListLayout>
 );
-
-export const OrderListLayout = themed({
-  tag: Box,
-  defaultTheme: {
-    orderListLayout: {
-      display: 'flex',
-      flexDirection: 'column'
-    }
-  }
-});
 
 const orderListItemLayout: DefaultThemeProps = {
   orderListItemLayout: {

@@ -164,7 +164,7 @@
 
 ---
 
-- GET_MENU
+> - ~~GET_MENU~~ - moved to @deity/falcon-data
 
 ---
 
@@ -176,9 +176,9 @@
 
 ---
 
-- GET_ORDER
-- GET_LAST_ORDER
-- GET_ORDER_LIST
+> - ~~GET_ORDER~~ - moved to @deity/falcon-shop-data
+> - ~~GET_LAST_ORDER~~ - moved to @deity/falcon-shop-data
+> - ~~GET_ORDER_LIST~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -487,13 +487,13 @@
 - MiniCart
 > - ~~MiniCartIcon~~ - renamed to CartIcon moved to @deity/falcon-ui-kit
 
-- OrderItemSummary
+> - ~~OrderItemSummary~~ - moved to @deity/falcon-ui-kit
 
 ---
 
 > - ~~NoOrders~~ - renamed to EmptyOrderList and moved to @deity/falcon-ui-kit
 - OrderList
-- OrderListLayout
+> - ~~OrderListLayout~~ moved to @deity/falcon-ui-kit
 - OrderListItem
 - OrderListHeader
 
