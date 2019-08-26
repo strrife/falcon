@@ -3,7 +3,8 @@ import { NetworkStatus } from 'apollo-client';
 import { T } from '@deity/falcon-i18n';
 import { OrderListQuery } from '@deity/falcon-shop-data';
 import { H1, Button, GridLayout, FlexLayout } from '@deity/falcon-ui';
-import { OrderList, NoOrders } from '@deity/falcon-ecommerce-uikit';
+import { EmptyOrderList } from '@deity/falcon-ui-kit';
+import { OrderList } from '@deity/falcon-ecommerce-uikit';
 
 const Orders = () => (
   <GridLayout gridGap="md">
@@ -28,7 +29,7 @@ const Orders = () => (
             )}
           </React.Fragment>
         ) : (
-          <NoOrders />
+          <EmptyOrderList />
         )
       }
     </OrderListQuery>

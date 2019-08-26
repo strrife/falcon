@@ -491,7 +491,7 @@
 
 ---
 
-- NoOrders
+> - ~~NoOrders~~ - renamed to EmptyOrderList and moved to @deity/falcon-ui-kit
 - OrderList
 - OrderListLayout
 - OrderListItem
