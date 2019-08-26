@@ -12,9 +12,9 @@ extend type Query {
   ): ProductList!
   cart: Cart!
   countryList: CountryList!
-  order(id: Int!): Order
   lastOrder: Order @cacheInvalidator(idPath: [{ path: "items", type: "Product" }])
-  orders(pagination: PaginationInput): Orders
+  order(id: Int!): Order
+  orderList(pagination: PaginationInput): Orders
   address(id: Int!): Address
   addressList: AddressList
   customer: Customer

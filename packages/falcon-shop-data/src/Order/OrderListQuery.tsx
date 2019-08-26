@@ -4,7 +4,7 @@ import { Query, FetchMore, Pagination, PaginationQuery } from '@deity/falcon-dat
 
 export const GET_ORDER_LIST = gql`
   query Orders($pagination: PaginationInput) {
-    orders(pagination: $pagination) {
+    orderList(pagination: $pagination) {
       items {
         entityId
         incrementId
@@ -25,7 +25,7 @@ export const GET_ORDER_LIST = gql`
 `;
 
 export type OrderListResponse = {
-  orders: {
+  orderList: {
     items: Pick<
       Order,
       | 'entityId'
@@ -52,7 +52,7 @@ const fetchMore: FetchMore<OrderListResponse, PaginationQuery> = (data: any, apo
       return {
         ...prev,
         ...{
-          orders: {
+          orderList: {
             ...prev.orders,
             items: [...prev.orders.items, ...fetchMoreResult.orders.items],
             pagination: { ...fetchMoreResult.orders.pagination }

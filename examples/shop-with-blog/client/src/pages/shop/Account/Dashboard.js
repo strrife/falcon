@@ -12,7 +12,7 @@ const Dashboard = () => (
     </H1>
     <Box>
       <OrderListQuery variables={{ pagination: { perPage: 1, page: 1 } }}>
-        {({ orders: { items } }) => (
+        {({ orderList: { items } }) => (
           <React.Fragment>
             <FlexLayout justifyContent="flex-start" alignItems="baseline">
               <H2>

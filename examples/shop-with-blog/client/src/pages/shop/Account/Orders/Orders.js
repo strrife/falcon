@@ -11,7 +11,7 @@ const Orders = () => (
       <T id="orderList.title" />
     </H1>
     <OrderListQuery>
-      {({ orders: { items, pagination }, fetchMore, networkStatus }) =>
+      {({ orderList: { items, pagination }, fetchMore, networkStatus }) =>
         items.length ? (
           <React.Fragment>
             <OrderList items={items} />

@@ -1139,7 +1139,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
-   * Fetch collection of customer orders
+   * Fetch customers order list
    * @param {object} obj Parent object
    * @param {object} params request params
    * @param {object} params.query request query params
@@ -1147,7 +1147,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {number} params.query.perPage number of items per page
    * @returns {Orders} parsed orders with pagination info
    */
-  async orders(obj, params) {
+  async orderList(obj, params) {
     const { pagination = { perPage: this.perPage, page: 1 } } = params;
 
     const query = this.createSearchParams({
