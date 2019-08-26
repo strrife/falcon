@@ -1,10 +1,10 @@
 import React from 'react';
 import { OrderQuery } from '@deity/falcon-shop-data';
 import { H1, Text, Divider, Box, FlexLayout, GridLayout } from '@deity/falcon-ui';
-import { OrderLayout, OrderLayoutArea, FormattedDate, AddressDetails } from '@deity/falcon-ui-kit';
+import { OrderLayout, OrderLayoutArea, OrderItemSummary, FormattedDate, AddressDetails } from '@deity/falcon-ui-kit';
 import { LocaleProvider } from '@deity/falcon-front-kit';
 import { I18n, T } from '@deity/falcon-i18n';
-import { TotalRow, OrderItemSummary } from '@deity/falcon-ecommerce-uikit';
+import { TotalRow } from '@deity/falcon-ecommerce-uikit';
 
 const Order = ({ match }) => {
   const id = parseInt(match.params.id, 10);
