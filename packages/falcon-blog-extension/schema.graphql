@@ -1,6 +1,6 @@
 extend type Query {
   blogPost(path: String!): BlogPost
-  blogPosts(query: BlogPageQuery, pagination: PaginationInput): BlogPostListing
+  blogPosts(query: BlogPageQuery, pagination: PaginationInput): BlogPostList
 }
 
 extend type BackendConfig {
@@ -18,22 +18,22 @@ input BlogPageQuery {
   category: String
 }
 
-type BlogPostListing {
-  items: [BlogPost]
+type BlogPostList {
+  items: [BlogPost!]!
   pagination: Pagination
 }
 
 type BlogPostImage {
-  url: String
+  url: String!
   description: String
 }
 
 type BlogPost {
   id: Int!
-  date: String
+  date: String!
   modified: String
-  title: String
-  content: String
+  title: String!
+  content: String!
   """
   Short content for use on post lists
   """
@@ -41,5 +41,5 @@ type BlogPost {
   slug: String
   status: String
   image: BlogPostImage
-  related: BlogPostListing
+  related: BlogPostList
 }
