@@ -3,7 +3,7 @@ import { Order } from '@deity/falcon-shop-extension';
 import { Query, FetchMore, Pagination, PaginationQuery } from '@deity/falcon-data';
 
 export const GET_ORDER_LIST = gql`
-  query Orders($pagination: PaginationInput) {
+  query OrderList($pagination: PaginationInput) {
     orderList(pagination: $pagination) {
       items {
         entityId

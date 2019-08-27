@@ -317,16 +317,16 @@
 
 ---
 
-- Order
-- OrderItem
+> - ~~Order~~ - moved to @deity/falcon-shop-data
+> - ~~OrderItem~~ - moved to @deity/falcon-shop-data
 
 ---
 
-- OrdersData
+> - ~~OrdersData~~ - renamed to OrderList, moved to @deity/falcon-shop-data 
 
 ---
 
-> - ~~Products~~ - moved to  moved to @deity/falcon-shop-data and renamed to `ProductList`
+> - ~~Products~~ - moved to @deity/falcon-shop-data and renamed to `ProductList`
 
 ---
 
@@ -492,10 +492,10 @@
 ---
 
 > - ~~NoOrders~~ - renamed to EmptyOrderList and moved to @deity/falcon-ui-kit
-- OrderList
+> - ~~OrderList~~ - moved to examples/shop-with-blog
 > - ~~OrderListLayout~~ moved to @deity/falcon-ui-kit
-- OrderListItem
-- OrderListHeader
+> - ~~OrderListItem~~ - moved to examples/shop-with-blog
+> - ~~OrderListHeader~~ moved to @deity/falcon-ui-kit (not sure if correct)
 
 ---
 

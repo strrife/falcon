@@ -14,7 +14,7 @@ extend type Query {
   countryList: CountryList!
   lastOrder: Order @cacheInvalidator(idPath: [{ path: "items", type: "Product" }])
   order(id: Int!): Order
-  orderList(pagination: PaginationInput): Orders
+  orderList(pagination: PaginationInput): OrderList
   address(id: Int!): Address
   addressList: AddressList
   customer: Customer
@@ -226,7 +226,7 @@ input ResetPasswordInput {
   password: String!
 }
 
-type Orders {
+type OrderList {
   items: [Order]!
   pagination: Pagination
 }

@@ -275,7 +275,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
         .mutate({
           mutation: PLACE_ORDER,
           // update cart once order is placed successfully
-          refetchQueries: ['Cart', 'Orders'],
+          refetchQueries: ['Cart', 'OrderList'],
           variables: {
             input: {
               email: this.state.values.email,

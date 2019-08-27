@@ -1145,7 +1145,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {object} params.query request query params
    * @param {number} params.query.page pagination page
    * @param {number} params.query.perPage number of items per page
-   * @returns {Orders} parsed orders with pagination info
+   * @returns {OrderList} parsed orders with pagination info
    */
   async orderList(obj, params) {
     const { pagination = { perPage: this.perPage, page: 1 } } = params;
