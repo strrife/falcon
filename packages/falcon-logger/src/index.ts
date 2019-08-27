@@ -56,7 +56,7 @@ logger.getFor = (moduleName: string): Logger => logger.child({ module: moduleNam
  * @param fn Function to trace the execution time of
  * @returns `fn` result
  */
-logger.traceTime = <T = any>(label: string, fn: () => Promise<T>): Promise<T> => {
+logger.traceTime = function traceTime<T = any>(label: string, fn: () => Promise<T>): Promise<T> {
   // using `function()` statement to preserve the context in case of "getFor" call
   if (!logger.isLevelEnabled('trace')) {
     return fn();
