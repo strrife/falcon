@@ -1,5 +1,6 @@
 export * from './Address';
 export * from './Account';
+export * from './Blog';
 export * from './Breadcrumbs';
 export * from './Category';
 export * from './Color';
