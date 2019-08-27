@@ -5,7 +5,7 @@ import { Box, H3, Text, Image, DefaultThemeProps, Link } from '@deity/falcon-ui'
 import { toGridTemplate, FormattedDate } from '@deity/falcon-ui-kit';
 import { BlogPostExcerptType } from './BlogPostsQuery';
 
-const BlogPostEcerptArea = {
+const BlogPostExcerptArea = {
   image: 'image',
   title: 'title',
   date: 'date',
@@ -22,12 +22,12 @@ const blogPostExcerptLayout: DefaultThemeProps = {
     // prettier-ignore
     gridTemplate: {
       xs: toGridTemplate([
-        [ '1fr',                      ],
-        [ BlogPostEcerptArea.image    ],
-        [ BlogPostEcerptArea.date     ],
-        [ BlogPostEcerptArea.title    ],
-        [ BlogPostEcerptArea.excerpt  ],
-        [ BlogPostEcerptArea.readMore ]
+        [ '1fr',                       ],
+        [ BlogPostExcerptArea.image    ],
+        [ BlogPostExcerptArea.date     ],
+        [ BlogPostExcerptArea.title    ],
+        [ BlogPostExcerptArea.excerpt  ],
+        [ BlogPostExcerptArea.readMore ]
       ])
     },
     css: {
@@ -42,15 +42,15 @@ export const BlogPostExcerpt: React.SFC<{ excerpt: BlogPostExcerptType }> = ({ e
       {excerpt.image && (
         <Image
           css={{ height: 300 }}
-          gridArea={BlogPostEcerptArea.image}
+          gridArea={BlogPostExcerptArea.image}
           src={excerpt.image.url}
           alt={excerpt.image.description}
         />
       )}
-      <H3 gridArea={BlogPostEcerptArea.title}>{excerpt.title}</H3>
-      <FormattedDate gridArea={BlogPostEcerptArea.date} value={excerpt.date} />
-      <Text gridArea={BlogPostEcerptArea.excerpt}>{excerpt.excerpt}</Text>
-      <Text gridArea={BlogPostEcerptArea.readMore} css={{ textDecoration: 'underline' }}>
+      <H3 gridArea={BlogPostExcerptArea.title}>{excerpt.title}</H3>
+      <FormattedDate gridArea={BlogPostExcerptArea.date} value={excerpt.date} />
+      <Text gridArea={BlogPostExcerptArea.excerpt}>{excerpt.excerpt}</Text>
+      <Text gridArea={BlogPostExcerptArea.readMore} css={{ textDecoration: 'underline' }}>
         <T id="blog.readMore" />
       </Text>
     </Link>
