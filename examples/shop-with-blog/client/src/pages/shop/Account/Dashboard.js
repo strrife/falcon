@@ -3,8 +3,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { CustomerQuery, OrderListQuery } from '@deity/falcon-shop-data';
 import { Box, H1, H2, Text, Link, Divider, GridLayout, FlexLayout } from '@deity/falcon-ui';
-import { EmptyOrderList } from '@deity/falcon-ui-kit';
-import { OrderList } from '@deity/falcon-ecommerce-uikit';
+import { EmptyOrderList, OrderListLayout, OrderListHeader } from '@deity/falcon-ui-kit';
+import { OrderList } from './Orders/OrderList';
 
 const Dashboard = () => (
   <GridLayout gridGap="md">
@@ -25,7 +25,14 @@ const Dashboard = () => (
                 </Link>
               )}
             </FlexLayout>
-            <Box>{items.length ? <OrderList items={items} /> : <EmptyOrderList />}</Box>
+            {items.length ? (
+              <OrderListLayout>
+                <OrderListHeader />
+                <OrderList items={items} />
+              </OrderListLayout>
+            ) : (
+              <EmptyOrderList />
+            )}
           </React.Fragment>
         )}
       </OrderListQuery>

@@ -3,8 +3,8 @@ import { NetworkStatus } from 'apollo-client';
 import { T } from '@deity/falcon-i18n';
 import { OrderListQuery } from '@deity/falcon-shop-data';
 import { H1, Button, GridLayout, FlexLayout } from '@deity/falcon-ui';
-import { EmptyOrderList } from '@deity/falcon-ui-kit';
-import { OrderList } from '@deity/falcon-ecommerce-uikit';
+import { OrderListLayout, OrderListHeader, EmptyOrderList } from '@deity/falcon-ui-kit';
+import { OrderList } from './OrderList';
 
 const Orders = () => (
   <GridLayout gridGap="md">
@@ -14,7 +14,8 @@ const Orders = () => (
     <OrderListQuery>
       {({ orderList: { items, pagination }, fetchMore, networkStatus }) =>
         items.length ? (
-          <React.Fragment>
+          <OrderListLayout>
+            <OrderListHeader />
             <OrderList items={items} />
             {pagination.nextPage && (
               <FlexLayout justifyContent="center">
@@ -27,7 +28,7 @@ const Orders = () => (
                 </Button>
               </FlexLayout>
             )}
-          </React.Fragment>
+          </OrderListLayout>
         ) : (
           <EmptyOrderList />
         )
