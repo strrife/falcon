@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@deity/falcon-adyen-plugin": "^0.0.4",
+    "@deity/falcon-blog-data": "^0.0.1",
     "@deity/falcon-client": "^0.5.3",
     "@deity/falcon-errors": "^0.1.2",
     "@deity/falcon-front-kit": "^0.0.1",
