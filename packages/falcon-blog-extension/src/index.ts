@@ -1,7 +1,9 @@
+export * from './types';
+
 /**
  * Blog Extension
  */
-module.exports = () => ({
+export default () => ({
   resolvers: {
     BackendConfig: {
       // Returning an empty object to make BlogConfig resolvers work
