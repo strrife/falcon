@@ -26,9 +26,9 @@ export function extractThemableProps(props: any) {
 }
 
 function isMergeableObject(object: any) {
-  // emotion sets anim=1 to keyframes processed by keyframes function
+  // emotion sets `anim=1` to keyframes processed by keyframes function
   // such objects can't be merged but simply replaced
-  return object.anim !== 1 && isPlainObject(object);
+  return isPlainObject(object) && object.anim !== 1;
 }
 
 export function mergeThemes(theme: Theme, themeOverride: RecursivePartial<Theme>): Theme {

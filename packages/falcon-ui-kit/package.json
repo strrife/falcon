@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@deity/falcon-scripts": "^0.0.3",
-    "@deity/falcon-shop-extension": "^0.4.5",
+    "@deity/falcon-shop-extension": "^0.4.6",
     "@deity/falcon-ui": "^0.2.4",
     "@deity/falcon-front-kit": "^0.0.1",
     "@types/react": "16.8.22",

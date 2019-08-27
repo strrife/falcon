@@ -47,7 +47,7 @@
     "@deity/falcon-i18n": "^0.2.7",
     "@deity/falcon-scripts": "^0.0.3",
     "@deity/falcon-server": "^0.4.0",
-    "@deity/falcon-shop-extension": "^0.4.5",
+    "@deity/falcon-shop-extension": "^0.4.6",
     "@deity/falcon-ui": "^0.2.4",
     "@types/enzyme": "3.10.3",
     "@types/enzyme-adapter-react-16": "1.0.5",
