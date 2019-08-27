@@ -51,7 +51,7 @@ const ProductPage = ({ id, path }) => (
                     items={product.options}
                     disabled={isSubmitting}
                   />
-                  <ProductDescription gridArea={ProductLayoutArea.description} value={product.description} />
+                  <ProductDescription gridArea={ProductLayoutArea.description} html={product.description} />
                   <FlexLayout alignItems="center" gridArea={ProductLayoutArea.cta} mt="md">
                     <Field name="qty" validate={[requiredValidator, rangeValidator(1)]}>
                       {({ field, label, error }) => (
