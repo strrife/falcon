@@ -23,11 +23,12 @@ module.exports = class ApiContainer extends BaseContainer {
     super(eventEmitter);
     /** @type {Map<string, ApiDataSource>} Array with API instances */
     this.dataSources = new Map();
+    this.resolvers = [];
   }
 
   /**
    * Instantiates apis based on passed configuration
-   * @param {Object<string, ApiInstanceConfig>} apis Key-value list of APIs configuration
+   * @param {object<string, ApiInstanceConfig>} apis Key-value list of APIs configuration
    * @returns {undefined}
    */
   async registerApis(apis = {}) {
@@ -39,6 +40,17 @@ module.exports = class ApiContainer extends BaseContainer {
         const ApiClass = this.importModule(pkg);
         if (!ApiClass) {
           return;
+        }
+
+        // If imported ApiClass has a defined "getExtraResolvers" static method
+        if (ApiClass.getExtraResolvers) {
+          const apiGetter = resolve => async (root, params, context, info) => {
+            if (!(apiKey in context.dataSources)) {
+              throw new Error(`"${apiKey}" API not found `);
+            }
+            return resolve(context.dataSources[apiKey], root, params, context, info);
+          };
+          this.resolvers.push(ApiClass.getExtraResolvers(apiGetter));
         }
 
         const apiInstanceCb = apolloServerConfig => {

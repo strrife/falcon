@@ -31,7 +31,7 @@ module.exports = class ExtensionContainer extends BaseContainer {
 
   /**
    * Instantiates extensions based on passed configuration and registers event handlers for them
-   * @param {Object<string, ExtensionInstanceConfig>} extensions Key-value list of extension configurations
+   * @param {object<string, ExtensionInstanceConfig>} extensions Key-value list of extension configurations
    * @param {Map<string, ApiDataSource>} dataSources Map of API DataSources
    */
   async registerExtensions(extensions, dataSources) {
@@ -70,30 +70,27 @@ module.exports = class ExtensionContainer extends BaseContainer {
 
   /**
    * Initializes each registered extension (in sequence)
-   * @param {Object} obj Parent object
-   * @param {Object} args GQL args
-   * @param {Object} context GQL context
-   * @param {Object} info GQL info
+   * @param {object} obj Parent object
+   * @param {object} args GQL args
+   * @param {object} context GQL context
+   * @param {object} info GQL info
    * @returns {BackendConfig} Merged config
    */
   async fetchBackendConfig(obj, args, context, info) {
-    const configs = [];
-
-    // initialization of extensions cannot be done in parallel because of race condition
-    for (const [extName, ext] of this.extensions) {
-      this.logger.debug(`Fetching "${extName}" API backend config`);
-      const extConfig = await ext.fetchApiBackendConfig(obj, args, context, info);
-      if (extConfig) {
-        configs.push(extConfig);
-      }
-    }
+    // Fetching backend configs async
+    const configs = await Promise.all(
+      Array.from(this.extensions, ([extName, ext]) => {
+        this.logger.debug(`Fetching "${extName}" API backend config`);
+        return ext.fetchApiBackendConfig(obj, args, context, info);
+      })
+    );
 
     return this.mergeConfigs(configs);
   }
 
   /**
    * Merges
-   * @param {Object[]} configs List of API config
+   * @param {object[]} configs List of API config
    * @returns {BackendConfig} Merged config
    */
   mergeConfigs(configs) {
@@ -125,8 +122,8 @@ module.exports = class ExtensionContainer extends BaseContainer {
 
   /**
    * Creates a complete configuration for ApolloServer
-   * @param {Object} defaultConfig default configuration that should be used
-   * @returns {Object} resolved configuration
+   * @param {object} defaultConfig default configuration that should be used
+   * @returns {object} resolved configuration
    */
   async createGraphQLConfig(defaultConfig = {}) {
     const config = Object.assign(
@@ -136,10 +133,7 @@ module.exports = class ExtensionContainer extends BaseContainer {
         // all of them when context will be created. All the results will be merged to produce final context
         contextModifiers: defaultConfig.context ? [defaultConfig.context] : []
       },
-      defaultConfig,
-      {
-        resolvers: defaultConfig.resolvers && !Array.isArray(defaultConfig.resolvers) ? [defaultConfig.resolvers] : []
-      }
+      defaultConfig
     );
 
     for (const [extName, ext] of this.extensions) {

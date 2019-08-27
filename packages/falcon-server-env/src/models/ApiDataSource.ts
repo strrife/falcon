@@ -128,8 +128,8 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
   /**
    * Should be implemented if ApiDataSource wants to deliver content via dynamic URLs.
    * It should return priority value for passed url.
-   * @param url - url for which the priority should be returned
-   * @return {number} Priority index
+   * @param url url for which the priority should be returned
+   * @returns {number} Priority index
    */
   getFetchUrlPriority?(url: string): number;
 
@@ -139,6 +139,8 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
     context: TContext,
     info: GraphQLResolveInfo
   ): Promise<FetchUrlResult>;
+
+  static getExtraResolvers?(apiGetter: () => ApiDataSource): object;
 
   /**
    * Optional method to get a cache context object which should contain a distinguish data
@@ -164,7 +166,7 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
   /**
    * Hook that is going to be executed for every REST request if authorization is required
    * @param {ContextRequestOptions} request request
-   * @return {Promise<void>} promise
+   * @returns {Promise<void>} promise
    */
   async authorizeRequest?(req: ContextRequestOptions): Promise<void>;
 
@@ -240,14 +242,6 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
     return result;
   }
 
-  protected cacheKeyFor(request: Request): string {
-    const cacheKey: string = super.cacheKeyFor(request);
-    // Note: temporary disabling "memoized" map due to issues with GraphQL resolvers,
-    // GET-requests in particular ("fetchUrl" query)
-    this.memoizedResults.delete(cacheKey);
-    return cacheKey;
-  }
-
   private ensureContextPassed(init?: ContextRequestInit): ContextRequestInit {
     const processedInit: ContextRequestInit = init || {};
 
@@ -267,8 +261,8 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
   /**
    * This is a temporary solution to override Apollo's own "trace" method to use external Logger
    * @param {string} label Trace label
-   * @param {function} fn Callback to trace
-   * @return {Promise<TResult>} Result
+   * @param {Function} fn Callback to trace
+   * @returns {Promise<TResult>} Result
    */
   /* istanbul ignore next Skipping code coverage for "dev" function */
   private async traceLog<TResult>(label: string, fn: () => Promise<TResult>): Promise<TResult> {
