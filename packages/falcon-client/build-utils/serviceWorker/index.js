@@ -3,7 +3,7 @@ const Logger = require('@deity/falcon-logger');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const rollup = require('rollup');
-const resolve = require('rollup-plugin-node-resolve');
+const nodeResolve = require('rollup-plugin-node-resolve');
 const { terser } = require('rollup-plugin-terser');
 const re = require('rollup-plugin-re');
 const alias = require('rollup-plugin-alias');
@@ -29,7 +29,7 @@ module.exports.build = async buildConfig => {
       input,
       plugins: [
         alias({ 'app-path': paths.appPath }),
-        resolve(),
+        nodeResolve(),
         re({
           patterns: [
             { test: 'process.env.NODE_ENV', replace: JSON.stringify(NODE_ENV) },
@@ -87,7 +87,7 @@ module.exports.watch = async buildConfig => {
       input,
       plugins: [
         alias({ 'app-path': paths.appPath }),
-        resolve(),
+        nodeResolve(),
         re({
           patterns: [
             { test: 'process.env.NODE_ENV', replace: JSON.stringify(NODE_ENV) },

@@ -1,6 +1,6 @@
 import { EventEmitter2 } from 'eventemitter2';
 import fetch from 'node-fetch';
-import Logger, { Logger as LoggerType } from '@deity/falcon-logger';
+import Logger from '@deity/falcon-logger';
 import { IConfigurableConstructorParams, EndpointEntry, UrlConfig } from '../types';
 import { formatUrl } from '../helpers/url';
 
@@ -25,7 +25,7 @@ export abstract class EndpointManager {
 
   protected eventEmitter: EventEmitter2;
 
-  protected logger: LoggerType;
+  protected logger: typeof Logger;
 
   constructor(params: EndpointConstructorParams) {
     this.config = params.config || {};

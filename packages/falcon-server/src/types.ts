@@ -1,12 +1,12 @@
 import { ExtensionInstance } from '@deity/falcon-server-env';
-import { Level } from '@deity/falcon-logger';
+import Logger from '@deity/falcon-logger';
 
 export type Config = {
   appName?: string;
   debug?: boolean;
   maxListeners?: number;
   verboseEvents?: boolean;
-  logLevel?: Level;
+  logLevel?: Parameters<typeof Logger.setLogLevel>[0];
   session: SessionConfig;
   port?: number;
   apis?: ApiEntryMap;
