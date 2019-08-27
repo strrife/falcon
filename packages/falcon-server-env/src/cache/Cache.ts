@@ -26,8 +26,7 @@ export type GetCacheOptions = {
   options?: SetCacheOptions;
 };
 
-// 1 hour
-const DEFAULT_TAG_TTL: number = 60 * 60;
+const DEFAULT_TAG_TTL: number = 60 * 60; // 1 hour
 
 /**
  * Cache-wrapper with extended methods
