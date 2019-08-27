@@ -17,7 +17,7 @@
 
 ---
 
-- BlogPostQuery
+> - ~~BlogPostQuery~~ - moved to @deity/falcon-blog-data
 
 ---
 
@@ -120,7 +120,7 @@
 
 ---
 
-- GET_BLOG_POST
+> - ~~GET_BLOG_POST~~ - movde to @deity/falcon-blog-data
 - GET_BLOG_POSTS
 
 ---
@@ -217,8 +217,8 @@
 
 ---
 
-- BlogPostType
-- BlogPostQueryVariables
+> - ~~BlogPostType~~ - renamed to BlogPostResponse, moved to @deity/falcon-blog-data
+> - ~~BlogPostQueryVariables~~ - moved to @deity/falcon-blog-data
 - BlogPostExcerptType
 - BlogPagination
 - BlogPosts (-> BlogPostList)

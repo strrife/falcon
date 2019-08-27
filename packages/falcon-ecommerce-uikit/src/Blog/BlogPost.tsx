@@ -3,7 +3,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Box, H1, DefaultThemeProps, Breadcrumbs, Breadcrumb, Link } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 import { FormattedDate } from '@deity/falcon-ui-kit';
-import { BlogPostType } from './BlogPostQuery';
 import { CMSContent } from './CmsContent';
 
 const blogPostLayout: DefaultThemeProps = {
@@ -15,7 +14,12 @@ const blogPostLayout: DefaultThemeProps = {
   }
 };
 
-export const BlogPost: React.SFC<BlogPostType> = ({ blogPost }) => (
+export type BlogPostProps = {
+  title: string;
+  date: Date;
+  content: string;
+};
+export const BlogPost: React.SFC<BlogPostProps> = ({ title, content, date }) => (
   <Box as="article" defaultTheme={blogPostLayout}>
     <Breadcrumbs my="md" alignSelf="flex-start">
       <Breadcrumb key="index">
@@ -23,10 +27,10 @@ export const BlogPost: React.SFC<BlogPostType> = ({ blogPost }) => (
           <T id="blog.title" />
         </Link>
       </Breadcrumb>
-      <Breadcrumb key="post">{blogPost.title}</Breadcrumb>
+      <Breadcrumb key="post">{title}</Breadcrumb>
     </Breadcrumbs>
-    <H1>{blogPost.title}</H1>
-    <FormattedDate mb="xl" value={blogPost.date} />
-    <CMSContent html={blogPost.content} />
+    <H1>{title}</H1>
+    <FormattedDate mb="xl" value={date} />
+    <CMSContent html={content} />
   </Box>
 );
