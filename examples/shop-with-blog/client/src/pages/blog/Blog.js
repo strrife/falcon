@@ -1,7 +1,8 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
 import { Box, Breadcrumbs, Breadcrumb, Link } from '@deity/falcon-ui';
-import { BlogPostsQuery, BlogPostsLayout, BlogPostExcerpt, BlogPostsPaginator } from '@deity/falcon-ecommerce-uikit';
+import { BlogPostListLayout } from '@deity/falcon-ui-kit';
+import { BlogPostsQuery, BlogPostExcerpt, BlogPostsPaginator } from '@deity/falcon-ecommerce-uikit';
 
 const Blog = props => (
   <Box as="section">
@@ -25,11 +26,11 @@ const Blog = props => (
     >
       {({ blogPosts }) => (
         <React.Fragment>
-          <BlogPostsLayout>
+          <BlogPostListLayout>
             {blogPosts.items.map((item, index) => (
               <BlogPostExcerpt key={item.slug} gridColumn={index < 2 ? 'span 3' : 'span 2'} excerpt={item} />
             ))}
-          </BlogPostsLayout>
+          </BlogPostListLayout>
           <BlogPostsPaginator pagination={blogPosts.pagination} />
         </React.Fragment>
       )}

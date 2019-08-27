@@ -379,7 +379,7 @@
 
 - BlogPost
 - BlogPostExcerpt
-- BlogPostsLayout
+> - ~~BlogPostsLayout~~ - renamed to BlogPostListLayout and moved to @deity/falcon-ui-kit
 - BlogPostsPaginator
 - CMSContent
 

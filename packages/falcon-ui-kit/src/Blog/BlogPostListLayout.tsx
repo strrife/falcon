@@ -1,10 +1,10 @@
 import React from 'react';
-import { themed } from '@deity/falcon-ui';
+import { themed, List } from '@deity/falcon-ui';
 
-export const BlogPostsLayout = themed({
-  tag: 'ul',
+export const BlogPostListLayout = themed({
+  tag: List,
   defaultTheme: {
-    blogPostsLayout: {
+    blogPostListLayout: {
       display: 'grid',
       my: 'lg',
       mx: 'none',
