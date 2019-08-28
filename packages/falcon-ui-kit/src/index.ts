@@ -2,6 +2,7 @@ export * from './Address';
 export * from './Account';
 export * from './Blog';
 export * from './Breadcrumbs';
+export * from './Cms';
 export * from './Category';
 export * from './Color';
 export * from './Country';

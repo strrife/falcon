@@ -381,7 +381,7 @@
 - BlogPostExcerpt
 > - ~~BlogPostsLayout~~ - renamed to BlogPostListLayout and moved to @deity/falcon-ui-kit
 - BlogPostsPaginator
-- CMSContent
+> - ~~CMSContent~~ - moved to @deity/falcon-ui-kit
 
 ---
 

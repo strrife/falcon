@@ -6,6 +6,7 @@ export type InnerHtmlProps = {
   html: string;
 } & ThemedComponentProps<any>;
 
+/** TODO: think if this component should go into @deity/falcon-ui */
 export const InnerHTML: React.SFC<InnerHtmlProps> = ({ html, ...rest }) => (
   <Box {...(rest as any)} dangerouslySetInnerHTML={{ __html: html }} />
 );

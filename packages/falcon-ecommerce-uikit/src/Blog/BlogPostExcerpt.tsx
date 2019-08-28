@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
-import { Box, H3, Text, Image, DefaultThemeProps, Link } from '@deity/falcon-ui';
-import { toGridTemplate, FormattedDate } from '@deity/falcon-ui-kit';
+import { H3, Text, Image, ListItem } from '@deity/falcon-ui';
+import { FormattedDate, BlogPostExcerptLayout } from '@deity/falcon-ui-kit';
 import { BlogPostExcerptType } from './BlogPostsQuery';
 
 const BlogPostExcerptArea = {
@@ -13,32 +13,9 @@ const BlogPostExcerptArea = {
   readMore: 'readMore'
 };
 
-const blogPostExcerptLayout: DefaultThemeProps = {
-  blogPostExcerptLayout: {
-    display: 'grid',
-    gridRowGap: 'xs',
-    gridColumnGap: 'lg',
-    color: 'black',
-    // prettier-ignore
-    gridTemplate: {
-      xs: toGridTemplate([
-        [ '1fr',                       ],
-        [ BlogPostExcerptArea.image    ],
-        [ BlogPostExcerptArea.date     ],
-        [ BlogPostExcerptArea.title    ],
-        [ BlogPostExcerptArea.excerpt  ],
-        [ BlogPostExcerptArea.readMore ]
-      ])
-    },
-    css: {
-      textDecoration: 'none'
-    }
-  }
-};
-
 export const BlogPostExcerpt: React.SFC<{ excerpt: BlogPostExcerptType }> = ({ excerpt, ...rest }) => (
-  <Box as="li" {...rest}>
-    <Link as={RouterLink} to={excerpt.slug} defaultTheme={blogPostExcerptLayout}>
+  <ListItem {...rest}>
+    <BlogPostExcerptLayout as={RouterLink} to={excerpt.slug}>
       {excerpt.image && (
         <Image
           css={{ height: 300 }}
@@ -53,6 +30,6 @@ export const BlogPostExcerpt: React.SFC<{ excerpt: BlogPostExcerptType }> = ({ e
       <Text gridArea={BlogPostExcerptArea.readMore} css={{ textDecoration: 'underline' }}>
         <T id="blog.readMore" />
       </Text>
-    </Link>
-  </Box>
+    </BlogPostExcerptLayout>
+  </ListItem>
 );

@@ -1,10 +1,9 @@
 import React from 'react';
 import { BlogPostQuery } from '@deity/falcon-blog-data';
 import { Link as RouterLink } from 'react-router-dom';
-import { H1, Breadcrumbs, Breadcrumb, Link } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
-import { FormattedDate, BlogPostLayout } from '@deity/falcon-ui-kit';
-import { CMSContent } from './CmsContent';
+import { H1, Breadcrumbs, Breadcrumb, Link } from '@deity/falcon-ui';
+import { BlogPostLayout, FormattedDate, CMSContent } from '@deity/falcon-ui-kit';
 
 const Post = ({ path }) => (
   <BlogPostQuery variables={{ path }}>
