@@ -199,7 +199,9 @@ export const deityGreenTheme = createTheme({
       fontWeight: 'bold'
     },
     footer: {
-      mt: 'md'
+      mt: 'md',
+      pt: 'md',
+      bgFullWidth: 'secondaryLight'
     }
   }
 });

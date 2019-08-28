@@ -5,8 +5,6 @@ import { T, I18n } from '@deity/falcon-i18n';
 export const NewsletterLayout = themed({
   tag: 'div',
   defaultProps: {
-    bgFullWidth: 'secondaryLight',
-    py: 'md',
     gridGap: 'sm',
     display: 'grid',
     gridTemplateColumns: '1fr',

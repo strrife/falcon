@@ -5,8 +5,6 @@ export const LanguageSection = themed({
   tag: Box,
   defaultTheme: {
     languageSection: {
-      bgFullWidth: 'secondaryLight',
-      py: 'md',
       css: {
         maxWidth: 190,
         margin: '0 auto',

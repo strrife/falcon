@@ -7,7 +7,6 @@ export const FooterSectionsLayout = themed({
   defaultTheme: {
     footerSectionsLayout: {
       display: 'flex',
-      bgFullWidth: 'secondaryLight',
       css: {
         flexDirection: 'row',
         justifyContent: 'space-around',

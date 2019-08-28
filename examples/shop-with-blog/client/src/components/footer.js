@@ -1,6 +1,6 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
-import { H4, List } from '@deity/falcon-ui';
+import { GridLayout, H4, List } from '@deity/falcon-ui';
 import { Footer, LocalePicker } from '@deity/falcon-ui-kit';
 import { LocaleSwitcher } from '@deity/falcon-front-kit';
 import {
@@ -63,12 +63,12 @@ export const Sitemap = () => (
 );
 
 export const PageFooter = () => (
-  <Footer>
+  <GridLayout as={Footer}>
     <Newsletter />
     <Sitemap />
     <LanguageSection>
       <LocaleSwitcher>{({ ...props }) => <LocalePicker {...props} />}</LocaleSwitcher>
     </LanguageSection>
     <Copyright />
-  </Footer>
+  </GridLayout>
 );
