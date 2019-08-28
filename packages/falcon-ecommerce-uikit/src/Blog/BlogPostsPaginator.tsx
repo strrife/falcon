@@ -1,23 +1,16 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, DefaultThemeProps, Link, Icon } from '@deity/falcon-ui';
+import { Text, ThemedComponentProps, Link, Icon } from '@deity/falcon-ui';
+import { BlogPostListPaginationLayout } from '@deity/falcon-ui-kit';
 import { T } from '@deity/falcon-i18n';
-import { BlogPagination } from './BlogPostListQuery';
-
-const blogPostsPaginatorLayout: DefaultThemeProps = {
-  blogPostsPaginatorLayout: {
-    display: 'flex',
-    my: 'xxxl'
-  }
-};
 
 type BlogPostsPaginatorProps = {
-  pagination: BlogPagination;
+  pagination: any;
   blogUrlBase: string;
-};
+} & ThemedComponentProps;
 
-export const BlogPostsPaginator: React.SFC<BlogPostsPaginatorProps> = ({ pagination, blogUrlBase }) => (
-  <Box defaultTheme={blogPostsPaginatorLayout} justifyContent={!pagination.prevPage ? 'flex-end' : 'space-between'}>
+export const BlogPostsPaginator: React.SFC<BlogPostsPaginatorProps> = ({ pagination, blogUrlBase, ...rest }) => (
+  <BlogPostListPaginationLayout isPrevPage={pagination.prevPage} {...(rest as any)}>
     {pagination.prevPage && (
       <Link
         display="flex"
@@ -26,7 +19,10 @@ export const BlogPostsPaginator: React.SFC<BlogPostsPaginatorProps> = ({ paginat
         as={RouterLink}
         to={`${blogUrlBase}/${pagination.prevPage}`}
       >
-        <Icon size="md" mr="xs" src="prevPage" /> <T id="blog.newerEntries" />
+        <Icon size="md" mr="xs" src="prevPage" />
+        <Text>
+          <T id="blog.newerEntries" />
+        </Text>
       </Link>
     )}
     {pagination.nextPage && (
@@ -40,7 +36,7 @@ export const BlogPostsPaginator: React.SFC<BlogPostsPaginatorProps> = ({ paginat
         <T id="blog.olderEntries" /> <Icon ml="xs" size="md" src="nextPage" />
       </Link>
     )}
-  </Box>
+  </BlogPostListPaginationLayout>
 );
 
 BlogPostsPaginator.defaultProps = {
