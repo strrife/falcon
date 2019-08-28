@@ -129,6 +129,7 @@ module.exports = class ExtensionContainer extends BaseContainer {
     const config = Object.assign(
       {
         schemas: [],
+        resolvers: [],
         // contextModifiers will be used as helpers - it will gather all the context functions and we'll invoke
         // all of them when context will be created. All the results will be merged to produce final context
         contextModifiers: defaultConfig.context ? [defaultConfig.context] : []

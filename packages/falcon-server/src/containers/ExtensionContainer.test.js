@@ -103,7 +103,7 @@ describe('ExtensionContainer', () => {
       }).not.toThrow();
     });
 
-    it('Should produce proper schema from schemas returned by extensions', async () => {
+    it('Should produce proper schema from partial schemas returned by extensions', async () => {
       const query = `
         {
           __type(name: "Product") {
