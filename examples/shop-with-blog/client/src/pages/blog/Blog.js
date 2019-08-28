@@ -18,7 +18,9 @@ const Blog = ({ match }) => {
           </Link>
         </Breadcrumb>
         <Breadcrumb key="blog">
-          <T id="blog.title" />
+          <Link to="/blog" as={RouterLink}>
+            <T id="blog.title" />
+          </Link>
         </Breadcrumb>
       </Breadcrumbs>
 
