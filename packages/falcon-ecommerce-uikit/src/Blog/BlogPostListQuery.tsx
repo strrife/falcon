@@ -1,4 +1,6 @@
 import gql from 'graphql-tag';
+import { PaginationQuery } from '@deity/falcon-data';
+import { BlogPost, BlogPostList } from '@deity/falcon-blog-extension';
 import { Query } from '../Query/Query';
 
 const GET_BLOG_POST_LIST = gql`
@@ -25,38 +27,12 @@ const GET_BLOG_POST_LIST = gql`
   }
 `;
 
-export type BlogPostExcerptType = {
-  title: string;
-  date: string;
-  slug: string;
-  excerpt: string;
-  image?: {
-    url: string;
-    description: string;
-  };
-};
-
-export type BlogPagination = {
-  currentPage: number;
-  nextPage?: number;
-  prevPage?: number;
-  perPage: number;
-  totalPages: number;
-};
-
 export type BlogPostListResponse = {
-  blogPostList: {
-    items: BlogPostExcerptType;
-    pagination: BlogPagination;
+  blogPostList: Pick<BlogPostList, 'pagination'> & {
+    items: Pick<BlogPost, 'title' | 'date' | 'slug' | 'excerpt' | 'image'>[];
   };
 };
-
-export type BlogPostsQueryVariables = {
-  pagination: {
-    page: number;
-    perPage: number;
-  };
-};
+export type BlogPostsQueryVariables = PaginationQuery;
 
 export class BlogPostsQuery extends Query<BlogPostListResponse, BlogPostsQueryVariables> {
   static defaultProps = {

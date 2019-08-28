@@ -7,12 +7,12 @@ export type BlogPostList = {
 
 export type BlogPost = {
   id: number;
+  title: string;
+  slug: string;
   date: string;
   modified?: string;
-  title: string;
   content: string;
-  excerpt?: string;
-  slug?: string;
+  excerpt: string;
   status?: string;
   image?: BlogPostImage;
   related?: BlogPostList;
