@@ -5,40 +5,38 @@ import { Breadcrumbs, Breadcrumb, Link, ListItem } from '@deity/falcon-ui';
 import { BlogPostListLayout, BlogPostExcerpt, PageLayout } from '@deity/falcon-ui-kit';
 import { BlogPostsQuery, BlogPostsPaginator } from '@deity/falcon-ecommerce-uikit';
 
-const Blog = props => (
-  <PageLayout as="section">
-    <Breadcrumbs alignSelf="flex-start">
-      <Breadcrumb key="home">
-        <Link to="/" as={RouterLink}>
-          <T id="name" />
-        </Link>
-      </Breadcrumb>
-      <Breadcrumb key="blog">
-        <T id="blog.title" />
-      </Breadcrumb>
-    </Breadcrumbs>
+const Blog = ({ match }) => {
+  const { params } = match;
 
-    <BlogPostsQuery
-      variables={{
-        pagination: {
-          page: +props.match.params.page || 1
-        }
-      }}
-    >
-      {({ blogPosts: { items, pagination } }) => (
-        <React.Fragment>
-          <BlogPostListLayout>
-            {items.map((x, index) => (
-              <ListItem key={x.slug} gridColumn={index < 2 ? 'span 3' : 'span 2'}>
-                <BlogPostExcerpt title={x.title} slug={x.slug} date={x.date} image={x.image} excerpt={x.excerpt} />
-              </ListItem>
-            ))}
-          </BlogPostListLayout>
-          <BlogPostsPaginator pagination={pagination} />
-        </React.Fragment>
-      )}
-    </BlogPostsQuery>
-  </PageLayout>
-);
+  return (
+    <PageLayout as="section">
+      <Breadcrumbs alignSelf="flex-start">
+        <Breadcrumb key="home">
+          <Link to="/" as={RouterLink}>
+            <T id="name" />
+          </Link>
+        </Breadcrumb>
+        <Breadcrumb key="blog">
+          <T id="blog.title" />
+        </Breadcrumb>
+      </Breadcrumbs>
+
+      <BlogPostsQuery variables={{ pagination: { page: +params.page || 1 } }}>
+        {({ blogPosts: { items, pagination } }) => (
+          <React.Fragment>
+            <BlogPostListLayout>
+              {items.map((x, index) => (
+                <ListItem key={x.slug} gridColumn={index < 2 ? 'span 3' : 'span 2'}>
+                  <BlogPostExcerpt title={x.title} slug={x.slug} date={x.date} image={x.image} excerpt={x.excerpt} />
+                </ListItem>
+              ))}
+            </BlogPostListLayout>
+            <BlogPostsPaginator pagination={pagination} />
+          </React.Fragment>
+        )}
+      </BlogPostsQuery>
+    </PageLayout>
+  );
+};
 
 export default Blog;
