@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { Navbar, NavbarItem, NavbarItemMenu, Link, List, ListItem } from '@deity/falcon-ui';
+import { Navbar, NavbarItem, NavbarItemMenu, List, ListItem } from '@deity/falcon-ui';
+import { RouterLink } from '../Router';
 
 export type NavbarItem = {
   name: string;
@@ -14,18 +14,18 @@ export const MenuNavbar: React.SFC<MenuNavbarProps> = ({ items }) => (
   <Navbar>
     {items.map(item => (
       <NavbarItem key={item.urlPath}>
-        <Link p="sm" as={RouterLink} to={item.urlPath}>
+        <RouterLink p="sm" to={item.urlPath}>
           {item.name}
-        </Link>
+        </RouterLink>
 
         {item.children.length > 0 && (
           <NavbarItemMenu>
             <List>
               {item.children.map(subItem => (
                 <ListItem key={subItem.urlPath}>
-                  <Link p="xs" display="block" as={RouterLink} to={subItem.urlPath}>
+                  <RouterLink p="xs" display="block" to={subItem.urlPath}>
                     {subItem.name}
-                  </Link>
+                  </RouterLink>
                 </ListItem>
               ))}
             </List>

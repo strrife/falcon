@@ -3,7 +3,7 @@ import { T } from '@deity/falcon-i18n';
 import { BlogPostListQuery } from '@deity/falcon-blog-data';
 import { Breadcrumbs, ListItem, Icon } from '@deity/falcon-ui';
 import {
-  Link,
+  RouterLink,
   PageLayout,
   BlogPostListLayout,
   BlogPostExcerpt,
@@ -37,15 +37,14 @@ const Blog = ({ match }) => {
             </BlogPostListLayout>
             <BlogPostListPaginationLayout isPrevPage={pagination.prevPage}>
               {pagination.prevPage && (
-                <Link display="flex" lineHeight="small" fontSize="md" to={`/blog/${pagination.prevPage}`}>
-                  <Icon size="md" mr="xs" src="prevPage" />
-                  <T id="blog.newerEntries" />
-                </Link>
+                <RouterLink display="flex" lineHeight="small" fontSize="md" to={`/blog/${pagination.prevPage}`}>
+                  <Icon size="md" mr="xs" src="prevPage" /> <T id="blog.newerEntries" />
+                </RouterLink>
               )}
               {pagination.nextPage && (
-                <Link display="flex" lineHeight="small" fontSize="md" to={`/blog/${pagination.nextPage}`}>
+                <RouterLink display="flex" lineHeight="small" fontSize="md" to={`/blog/${pagination.nextPage}`}>
                   <T id="blog.olderEntries" /> <Icon ml="xs" size="md" src="nextPage" />
-                </Link>
+                </RouterLink>
               )}
             </BlogPostListPaginationLayout>
           </React.Fragment>

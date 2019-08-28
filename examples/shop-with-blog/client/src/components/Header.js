@@ -1,9 +1,10 @@
 import React from 'react';
-import { Link as RouterLink, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { MenuQuery, CustomerQuery, CartQuery, SignOutMutation } from '@deity/falcon-shop-data';
 import { T } from '@deity/falcon-i18n';
 import { Link, ListItem, Icon } from '@deity/falcon-ui';
 import {
+  RouterLink,
   MenuNavbar,
   HeaderBanner,
   OpenSidebarMutation,
@@ -29,26 +30,26 @@ export const Header = withRouter(({ history }) => (
             </ListItem>
           )}
           <ListItem>
-            <Link as={RouterLink} to="#">
+            <RouterLink to="#">
               <T id="banner.contactLink" />
-            </Link>
+            </RouterLink>
           </ListItem>
           <ListItem>
-            <Link as={RouterLink} to="/blog">
+            <RouterLink to="/blog">
               <T id="banner.blogLink" />
-            </Link>
+            </RouterLink>
           </ListItem>
         </HeaderBanner>
         <OpenSidebarMutation>
           {openSidebar => (
             <HeaderBarLayout>
-              <Link as={RouterLink} gridArea={HeaderBarArea.logo} to="/" aria-label="DEITY">
+              <RouterLink gridArea={HeaderBarArea.logo} to="/" aria-label="DEITY">
                 <Icon src="logo" size="xxl" />
-              </Link>
+              </RouterLink>
               {customer ? (
-                <Link as={RouterLink} gridArea={HeaderBarArea.signIn} to="/account">
+                <RouterLink gridArea={HeaderBarArea.signIn} to="/account">
                   <Icon src="account" />
-                </Link>
+                </RouterLink>
               ) : (
                 <Link
                   gridArea={HeaderBarArea.signIn}
