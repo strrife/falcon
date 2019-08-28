@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop, import/no-extraneous-dependencies */
 import 'jest-extended';
-import { ApiDataSource } from './ApiDataSource';
 import { ContextRequestOptions, ContextData, ContextFetchRequest, ContextFetchResponse } from '../types';
+import { ApiDataSource } from './ApiDataSource';
 
 import nock = require('nock');
 
@@ -249,7 +249,7 @@ describe('ApiDataSource', () => {
       );
     });
 
-    it('Should skip "memoizedResults" map for GET requests', async () => {
+    it('Should not skip "memoizedResults" map for GET requests', async () => {
       const customApi: CustomApiDataSource = new CustomApiDataSource({
         config: { protocol: 'http', host: 'example.com' }
       });
@@ -259,7 +259,7 @@ describe('ApiDataSource', () => {
       await customApi.getInfo();
       expect(didReceiveResponseSpy).toHaveBeenCalledTimes(1);
       await customApi.getInfo();
-      expect(didReceiveResponseSpy).toHaveBeenCalledTimes(2);
+      expect(didReceiveResponseSpy).toHaveBeenCalledTimes(1);
     });
   });
 
