@@ -13,3 +13,4 @@ export * from './Routes';
 export * from './ScrollToTop';
 export * from './Search';
 export * from './SortOrder';
+export * from './Wizards';
