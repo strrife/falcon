@@ -1,13 +1,10 @@
 import React from 'react';
-import { themed, Box, H3, Text, Group, Input, Button, Checkbox, Label } from '@deity/falcon-ui';
+import { GridLayout, themed, Box, H3, Text, Group, Input, Button, Checkbox, Label } from '@deity/falcon-ui';
 import { T, I18n } from '@deity/falcon-i18n';
 
 export const NewsletterLayout = themed({
-  tag: 'div',
+  tag: GridLayout,
   defaultProps: {
-    gridGap: 'sm',
-    display: 'grid',
-    gridTemplateColumns: '1fr',
     css: {
       maxWidth: 560,
       margin: '0 auto',

@@ -63,7 +63,7 @@ export const Sitemap = () => (
 );
 
 export const PageFooter = () => (
-  <GridLayout as={Footer}>
+  <GridLayout as={Footer} gridGap="md">
     <Newsletter />
     <Sitemap />
     <LanguageSection>
