@@ -27,6 +27,14 @@ import {
 
 export type PaginationValue = number | string | null;
 
+export type ApiGetter = (
+  api: ApiDataSource,
+  root: any,
+  params: any,
+  context: GraphQLContext,
+  info: GraphQLResolveInfo
+) => any;
+
 export interface GqlServerConfig<TContext = any> {
   schema: GraphQLSchema;
   formatError?: Function;
@@ -140,7 +148,7 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
     info: GraphQLResolveInfo
   ): Promise<FetchUrlResult>;
 
-  static getExtraResolvers?(apiGetter: () => ApiDataSource): object;
+  static getExtraResolvers?(apiGetter: ApiGetter): object;
 
   /**
    * Optional method to get a cache context object which should contain a distinguish data
