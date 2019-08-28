@@ -6,8 +6,6 @@ export const BlogPostListLayout = themed({
   defaultTheme: {
     blogPostListLayout: {
       display: 'grid',
-      my: 'lg',
-      mx: 'none',
       gridGap: 'xl',
       gridTemplateColumns: {
         xs: '1fr',

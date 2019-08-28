@@ -8,7 +8,7 @@ export const BlogPostLayout = themed({
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      mb: 'xxxl'
+      mb: 'xxl'
     }
   }
 });

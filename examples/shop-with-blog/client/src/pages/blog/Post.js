@@ -3,13 +3,13 @@ import { BlogPostQuery } from '@deity/falcon-blog-data';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { H1, Breadcrumbs, Breadcrumb, Link } from '@deity/falcon-ui';
-import { BlogPostLayout, FormattedDate, CMSContent } from '@deity/falcon-ui-kit';
+import { BlogPostLayout, FormattedDate, CMSContent, PageLayout } from '@deity/falcon-ui-kit';
 
 const Post = ({ path }) => (
   <BlogPostQuery variables={{ path }}>
     {({ blogPost }) => (
-      <BlogPostLayout>
-        <Breadcrumbs my="md" alignSelf="flex-start">
+      <PageLayout>
+        <Breadcrumbs alignSelf="flex-start">
           <Breadcrumb key="home">
             <Link to="/" as={RouterLink}>
               <T id="name" />
@@ -23,10 +23,12 @@ const Post = ({ path }) => (
           <Breadcrumb key="post">{blogPost.title}</Breadcrumb>
         </Breadcrumbs>
 
-        <H1>{blogPost.title}</H1>
-        <FormattedDate mb="xl" value={blogPost.date} />
-        <CMSContent html={blogPost.content} />
-      </BlogPostLayout>
+        <BlogPostLayout>
+          <H1>{blogPost.title}</H1>
+          <FormattedDate mb="xl" value={blogPost.date} />
+          <CMSContent html={blogPost.content} />
+        </BlogPostLayout>
+      </PageLayout>
     )}
   </BlogPostQuery>
 );

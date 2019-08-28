@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
-import { Box, Breadcrumbs, Breadcrumb, Link, ListItem } from '@deity/falcon-ui';
-import { BlogPostListLayout, BlogPostExcerpt } from '@deity/falcon-ui-kit';
+import { Breadcrumbs, Breadcrumb, Link, ListItem } from '@deity/falcon-ui';
+import { BlogPostListLayout, BlogPostExcerpt, PageLayout } from '@deity/falcon-ui-kit';
 import { BlogPostsQuery, BlogPostsPaginator } from '@deity/falcon-ecommerce-uikit';
 
 const Blog = props => (
-  <Box as="section">
-    <Breadcrumbs my="md" alignSelf="flex-start">
+  <PageLayout as="section">
+    <Breadcrumbs alignSelf="flex-start">
       <Breadcrumb key="home">
         <Link to="/" as={RouterLink}>
           <T id="name" />
@@ -38,7 +38,7 @@ const Blog = props => (
         </React.Fragment>
       )}
     </BlogPostsQuery>
-  </Box>
+  </PageLayout>
 );
 
 export default Blog;
