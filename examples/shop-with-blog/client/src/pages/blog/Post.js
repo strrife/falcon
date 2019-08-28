@@ -10,6 +10,11 @@ const Post = ({ path }) => (
     {({ blogPost }) => (
       <BlogPostLayout>
         <Breadcrumbs my="md" alignSelf="flex-start">
+          <Breadcrumb key="home">
+            <Link to="/" as={RouterLink}>
+              <T id="name" />
+            </Link>
+          </Breadcrumb>
           <Breadcrumb key="index">
             <Link to="/blog" as={RouterLink}>
               <T id="blog.title" />
