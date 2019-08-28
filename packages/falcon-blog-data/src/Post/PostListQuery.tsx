@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
-import { PaginationQuery } from '@deity/falcon-data';
+import { PaginationQuery, Query } from '@deity/falcon-data';
 import { BlogPost, BlogPostList } from '@deity/falcon-blog-extension';
-import { Query } from '../Query/Query';
 
 const GET_BLOG_POST_LIST = gql`
   query BlogPosts($pagination: PaginationInput) {
@@ -32,9 +31,9 @@ export type BlogPostListResponse = {
     items: Pick<BlogPost, 'title' | 'date' | 'slug' | 'excerpt' | 'image'>[];
   };
 };
-export type BlogPostsQueryVariables = PaginationQuery;
+export type BlogPostListQueryVariables = PaginationQuery;
 
-export class BlogPostsQuery extends Query<BlogPostListResponse, BlogPostsQueryVariables> {
+export class BlogPostListQuery extends Query<BlogPostListResponse, BlogPostListQueryVariables> {
   static defaultProps = {
     query: GET_BLOG_POST_LIST
   };

@@ -220,9 +220,9 @@
 > - ~~BlogPostType~~ - renamed to BlogPostResponse, moved to @deity/falcon-blog-data
 > - ~~BlogPostQueryVariables~~ - moved to @deity/falcon-blog-data
 - BlogPostExcerptType
-- BlogPagination
-- BlogPosts (-> BlogPostList)
-- BlogPostsQueryVariables (-> BlogPostListQueryVariables)
+> - ~~BlogPagination~~ - removed, used Pagination instead
+> - ~~BlogPosts~~ - renamed to BlogPostList, moved to @deity/falcon-blog-data
+> - ~~BlogPostsQueryVariables~~ renamed to BlogPostListQueryVariables, moved to @deity/falcon-blog-data
 
 ---
 

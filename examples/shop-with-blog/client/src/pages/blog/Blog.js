@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
+import { BlogPostListQuery } from '@deity/falcon-blog-data';
 import { Breadcrumbs, Breadcrumb, Link, ListItem } from '@deity/falcon-ui';
 import { BlogPostListLayout, BlogPostExcerpt, PageLayout } from '@deity/falcon-ui-kit';
-import { BlogPostsQuery, BlogPostsPaginator } from '@deity/falcon-ecommerce-uikit';
+import { BlogPostsPaginator } from '@deity/falcon-ecommerce-uikit';
 
 const Blog = ({ match }) => {
   const { params } = match;
@@ -21,7 +22,7 @@ const Blog = ({ match }) => {
         </Breadcrumb>
       </Breadcrumbs>
 
-      <BlogPostsQuery variables={{ pagination: { page: +params.page || 1 } }}>
+      <BlogPostListQuery variables={{ pagination: { page: +params.page || 1 } }}>
         {({ blogPostList: { items, pagination } }) => (
           <React.Fragment>
             <BlogPostListLayout>
@@ -34,7 +35,7 @@ const Blog = ({ match }) => {
             <BlogPostsPaginator pagination={pagination} />
           </React.Fragment>
         )}
-      </BlogPostsQuery>
+      </BlogPostListQuery>
     </PageLayout>
   );
 };
