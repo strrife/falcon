@@ -1,7 +1,7 @@
 import React from 'react';
-import { BlogPostQuery } from '@deity/falcon-blog-data';
 import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
+import { BlogPostQuery } from '@deity/falcon-blog-data';
 import { H1, Breadcrumbs, Breadcrumb, Link } from '@deity/falcon-ui';
 import { BlogPostLayout, FormattedDate, CMSContent, PageLayout } from '@deity/falcon-ui-kit';
 

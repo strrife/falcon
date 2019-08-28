@@ -1,9 +1,9 @@
 import gql from 'graphql-tag';
 import { Query } from '../Query/Query';
 
-const GET_BLOG_POSTS = gql`
+const GET_BLOG_POST_LIST = gql`
   query BlogPosts($pagination: PaginationInput) {
-    blogPosts(pagination: $pagination) {
+    blogPostList(pagination: $pagination) {
       items {
         title
         date
@@ -44,8 +44,8 @@ export type BlogPagination = {
   totalPages: number;
 };
 
-export type BlogPosts = {
-  blogPosts: {
+export type BlogPostListResponse = {
+  blogPostList: {
     items: BlogPostExcerptType;
     pagination: BlogPagination;
   };
@@ -58,8 +58,8 @@ export type BlogPostsQueryVariables = {
   };
 };
 
-export class BlogPostsQuery extends Query<BlogPosts, BlogPostsQueryVariables> {
+export class BlogPostsQuery extends Query<BlogPostListResponse, BlogPostsQueryVariables> {
   static defaultProps = {
-    query: GET_BLOG_POSTS
+    query: GET_BLOG_POST_LIST
   };
 }

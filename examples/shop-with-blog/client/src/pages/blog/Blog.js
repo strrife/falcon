@@ -22,7 +22,7 @@ const Blog = ({ match }) => {
       </Breadcrumbs>
 
       <BlogPostsQuery variables={{ pagination: { page: +params.page || 1 } }}>
-        {({ blogPosts: { items, pagination } }) => (
+        {({ blogPostList: { items, pagination } }) => (
           <React.Fragment>
             <BlogPostListLayout>
               {items.map((x, index) => (

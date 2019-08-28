@@ -120,8 +120,8 @@
 
 ---
 
-> - ~~GET_BLOG_POST~~ - movde to @deity/falcon-blog-data
-- GET_BLOG_POSTS
+> - ~~GET_BLOG_POST~~ - moved to @deity/falcon-blog-data
+> - ~~GET_BLOG_POSTS~~ - renamed to GET_BLOG_POST_LIST, moved to @deity/falcon-blog-data
 
 ---
 

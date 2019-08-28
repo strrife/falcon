@@ -1,6 +1,6 @@
 extend type Query {
   blogPost(path: String!): BlogPost
-  blogPosts(query: BlogPageQuery, pagination: PaginationInput): BlogPostList
+  blogPostList(query: BlogPageQuery, pagination: PaginationInput): BlogPostList
 }
 
 extend type BackendConfig {

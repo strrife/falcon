@@ -1,2 +1,2 @@
-export * from './BlogPostsQuery';
+export * from './BlogPostListQuery';
 export * from './BlogPostsPaginator';
