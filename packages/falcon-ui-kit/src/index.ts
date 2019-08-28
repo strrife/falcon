@@ -21,6 +21,7 @@ export * from './Order';
 export * from './Price';
 export * from './Product';
 export * from './Responsive';
+export * from './Router';
 export * from './Sidebar';
 export * from './SortOrder';
 export * from './helpers';
