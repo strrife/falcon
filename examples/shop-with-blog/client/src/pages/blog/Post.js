@@ -1,26 +1,21 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { BlogPostQuery } from '@deity/falcon-blog-data';
-import { H1, Breadcrumbs, Breadcrumb, Link } from '@deity/falcon-ui';
-import { BlogPostLayout, FormattedDate, CMSContent, PageLayout } from '@deity/falcon-ui-kit';
+import { H1, Breadcrumbs, Breadcrumb } from '@deity/falcon-ui';
+import { BlogPostLayout, FormattedDate, CMSContent, PageLayout, BreadcrumbLink } from '@deity/falcon-ui-kit';
 
 const Post = ({ path }) => (
   <BlogPostQuery variables={{ path }}>
     {({ blogPost }) => (
       <PageLayout>
         <Breadcrumbs alignSelf="flex-start">
-          <Breadcrumb key="home">
-            <Link to="/" as={RouterLink}>
-              <T id="name" />
-            </Link>
-          </Breadcrumb>
-          <Breadcrumb key="index">
-            <Link to="/blog" as={RouterLink}>
-              <T id="blog.title" />
-            </Link>
-          </Breadcrumb>
-          <Breadcrumb key="post">{blogPost.title}</Breadcrumb>
+          <BreadcrumbLink to="/">
+            <T id="name" />
+          </BreadcrumbLink>
+          <BreadcrumbLink to="/blog">
+            <T id="blog.title" />
+          </BreadcrumbLink>
+          <Breadcrumb>{blogPost.title}</Breadcrumb>
         </Breadcrumbs>
 
         <BlogPostLayout>

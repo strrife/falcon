@@ -1,9 +1,8 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import { T } from '@deity/falcon-i18n';
 import { BlogPostListQuery } from '@deity/falcon-blog-data';
-import { Breadcrumbs, Breadcrumb, Link, ListItem } from '@deity/falcon-ui';
-import { BlogPostListLayout, BlogPostExcerpt, PageLayout } from '@deity/falcon-ui-kit';
+import { Breadcrumbs, ListItem } from '@deity/falcon-ui';
+import { BreadcrumbLink, BlogPostListLayout, BlogPostExcerpt, PageLayout } from '@deity/falcon-ui-kit';
 import { BlogPostsPaginator } from '@deity/falcon-ecommerce-uikit';
 
 const Blog = ({ match }) => {
@@ -12,16 +11,12 @@ const Blog = ({ match }) => {
   return (
     <PageLayout as="section">
       <Breadcrumbs alignSelf="flex-start">
-        <Breadcrumb key="home">
-          <Link to="/" as={RouterLink}>
-            <T id="name" />
-          </Link>
-        </Breadcrumb>
-        <Breadcrumb key="blog">
-          <Link to="/blog" as={RouterLink}>
-            <T id="blog.title" />
-          </Link>
-        </Breadcrumb>
+        <BreadcrumbLink to="/">
+          <T id="name" />
+        </BreadcrumbLink>
+        <BreadcrumbLink to="/blog">
+          <T id="blog.title" />
+        </BreadcrumbLink>
       </Breadcrumbs>
 
       <BlogPostListQuery variables={{ pagination: { page: +params.page || 1 } }}>
