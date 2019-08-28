@@ -377,10 +377,10 @@
 
 ---
 
-- BlogPost
-- BlogPostExcerpt
+> - ~~BlogPost~~ - moved to examples/shop-with-blog
+> - ~~BlogPostExcerpt~~ moved to @deity/falcon-ui-kit
 > - ~~BlogPostsLayout~~ - renamed to BlogPostListLayout and moved to @deity/falcon-ui-kit
-- BlogPostsPaginator
+> - ~~BlogPostsPaginator~~ moved to examples/shop-with-blog
 > - ~~CMSContent~~ - moved to @deity/falcon-ui-kit
 
 ---

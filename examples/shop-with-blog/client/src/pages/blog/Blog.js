@@ -1,9 +1,15 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
 import { BlogPostListQuery } from '@deity/falcon-blog-data';
-import { Breadcrumbs, ListItem } from '@deity/falcon-ui';
-import { BreadcrumbLink, BlogPostListLayout, BlogPostExcerpt, PageLayout } from '@deity/falcon-ui-kit';
-import { BlogPostsPaginator } from '@deity/falcon-ecommerce-uikit';
+import { Breadcrumbs, ListItem, Icon } from '@deity/falcon-ui';
+import {
+  Link,
+  PageLayout,
+  BlogPostListLayout,
+  BlogPostExcerpt,
+  BreadcrumbLink,
+  BlogPostListPaginationLayout
+} from '@deity/falcon-ui-kit';
 
 const Blog = ({ match }) => {
   const { params } = match;
@@ -19,7 +25,7 @@ const Blog = ({ match }) => {
         </BreadcrumbLink>
       </Breadcrumbs>
 
-      <BlogPostListQuery variables={{ pagination: { page: +params.page || 1 } }}>
+      <BlogPostListQuery variables={{ pagination: { perPage: 2, page: +params.page || 1 } }}>
         {({ blogPostList: { items, pagination } }) => (
           <React.Fragment>
             <BlogPostListLayout>
@@ -29,7 +35,19 @@ const Blog = ({ match }) => {
                 </ListItem>
               ))}
             </BlogPostListLayout>
-            <BlogPostsPaginator pagination={pagination} />
+            <BlogPostListPaginationLayout isPrevPage={pagination.prevPage}>
+              {pagination.prevPage && (
+                <Link display="flex" lineHeight="small" fontSize="md" to={`/blog/${pagination.prevPage}`}>
+                  <Icon size="md" mr="xs" src="prevPage" />
+                  <T id="blog.newerEntries" />
+                </Link>
+              )}
+              {pagination.nextPage && (
+                <Link display="flex" lineHeight="small" fontSize="md" to={`/blog/${pagination.nextPage}`}>
+                  <T id="blog.olderEntries" /> <Icon ml="xs" size="md" src="nextPage" />
+                </Link>
+              )}
+            </BlogPostListPaginationLayout>
           </React.Fragment>
         )}
       </BlogPostListQuery>
