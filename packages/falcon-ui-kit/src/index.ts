@@ -10,6 +10,7 @@ export * from './Error';
 export * from './Filters';
 export * from './FormattedDate';
 export * from './Forms';
+export * from './Footer';
 export * from './Header';
 export * from './InnerHtml';
 export * from './Layouts';

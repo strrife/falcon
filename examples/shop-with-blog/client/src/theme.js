@@ -194,10 +194,12 @@ export const deityGreenTheme = createTheme({
     select: {
       height: 'xl'
     },
-
     label: {
       fontSize: 'xs',
       fontWeight: 'bold'
+    },
+    footer: {
+      mt: 'md'
     }
   }
 });

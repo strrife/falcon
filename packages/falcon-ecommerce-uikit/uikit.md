@@ -427,7 +427,7 @@
 
 - CopyrightLayout
 - Copyright
-- FooterLayout
+> - ~~FooterLayout~~ renamed to Footer, moved to @deity/falcon-ui-kit
 - FooterSectionsLayout
 - FooterSectionLayout
 - FooterLink

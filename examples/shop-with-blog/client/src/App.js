@@ -19,7 +19,7 @@ import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
 import DynamicRoute from 'src/pages/DynamicRoute';
 import { SidebarContainer } from 'src/pages/shop/components/Sidebar';
-import { Header, Footer } from './components';
+import { Header, PageFooter } from './components';
 import { deityGreenTheme, globalCss } from './theme';
 
 const HeadMetaTags = () => (
@@ -99,7 +99,7 @@ const App = () => (
                     <OnlyUnauthenticatedRoute exact path="/reset-password" component={ResetPassword} />
                     <DynamicRoute />
                   </Switch>
-                  <Footer />
+                  <PageFooter />
                   <SidebarContainer>
                     {sidebarProps => (
                       <Sidebar {...sidebarProps}>

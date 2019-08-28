@@ -1,13 +1,12 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
 import { H4, List } from '@deity/falcon-ui';
-import { LocalePicker } from '@deity/falcon-ui-kit';
+import { Footer, LocalePicker } from '@deity/falcon-ui-kit';
 import { LocaleSwitcher } from '@deity/falcon-front-kit';
 import {
   FooterSectionsLayout,
   FooterSectionLayout,
   FooterLink,
-  FooterLayout,
   LanguageSection,
   Newsletter,
   Copyright
@@ -63,13 +62,13 @@ export const Sitemap = () => (
   </FooterSectionsLayout>
 );
 
-export const Footer = () => (
-  <FooterLayout as="footer">
+export const PageFooter = () => (
+  <Footer>
     <Newsletter />
     <Sitemap />
     <LanguageSection>
       <LocaleSwitcher>{({ ...props }) => <LocalePicker {...props} />}</LocaleSwitcher>
     </LanguageSection>
     <Copyright />
-  </FooterLayout>
+  </Footer>
 );
