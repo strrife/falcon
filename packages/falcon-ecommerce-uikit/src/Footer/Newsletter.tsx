@@ -1,17 +1,7 @@
 import React from 'react';
-import { GridLayout, themed, Box, H3, Text, Group, Input, Button, Checkbox, Label } from '@deity/falcon-ui';
+import { Box, H3, Text, Group, Input, Button, Checkbox, Label } from '@deity/falcon-ui';
 import { T, I18n } from '@deity/falcon-i18n';
-
-export const NewsletterLayout = themed({
-  tag: GridLayout,
-  defaultProps: {
-    css: {
-      maxWidth: 560,
-      margin: '0 auto',
-      justifyItems: 'center'
-    }
-  }
-});
+import { NewsletterLayout } from '@deity/falcon-ui-kit';
 
 export const Newsletter: React.SFC<{}> = () => (
   <NewsletterLayout>
