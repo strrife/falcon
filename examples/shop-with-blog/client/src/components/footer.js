@@ -1,9 +1,17 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
 import { GridLayout, H4, List, ListItem } from '@deity/falcon-ui';
-import { Footer, LocalePicker, Newsletter, Copyright, FooterBanner, RouterLink } from '@deity/falcon-ui-kit';
 import { LocaleSwitcher } from '@deity/falcon-front-kit';
-import { FooterSectionListLayout, FooterSectionLayout } from '@deity/falcon-ecommerce-uikit';
+import {
+  Footer,
+  LocalePicker,
+  Newsletter,
+  Copyright,
+  FooterBanner,
+  RouterLink,
+  FooterSectionListLayout,
+  FooterSectionLayout
+} from '@deity/falcon-ui-kit';
 
 const FooterLink = ({ to, children }) => (
   <ListItem p="xs">
