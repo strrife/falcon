@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box, H3, Text, Group, Input, Button, Checkbox, Label } from '@deity/falcon-ui';
 import { T, I18n } from '@deity/falcon-i18n';
-import { NewsletterLayout } from '@deity/falcon-ui-kit';
+import { Box, H3, Text, Group, Input, Button, Checkbox, Label } from '@deity/falcon-ui';
+import { NewsletterLayout } from './NewsletterLayout';
 
-export const Newsletter: React.SFC<{}> = () => (
+export const Newsletter: React.SFC = () => (
   <NewsletterLayout>
     <H3>
       <T id="newsletter.title" />
