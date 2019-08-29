@@ -33,7 +33,7 @@
   "devDependencies": {
     "@deity/falcon-scripts": "^0.0.3",
     "@deity/falcon-server": "^0.4.0",
-    "@deity/falcon-shop-extension": "^0.4.5",
+    "@deity/falcon-shop-extension": "^0.4.6",
     "eventemitter2": "5.0.1",
     "graphql": "^14.1.1",
     "graphql-tools": "4.0.4",
