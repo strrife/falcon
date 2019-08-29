@@ -20,31 +20,15 @@ const CreditCardLayout = themed({
   }
 });
 
-export type CreditCardProps = {
-  onCompletion: (creditCardInfo: CreditCardState) => void;
-} & PropsWithTheme;
-
-export type CreditCardState = {
+type CreditCardState = {
   number?: string;
   expiry?: string;
   cvc?: string;
   name?: string;
 };
-
-type FieldValue = {
-  target: {
-    value: string;
-  };
-};
-
-type onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => void;
-
-type InputRenderer = {
-  props: object;
-  handleCardNumberChange: () => onChangeHandler;
-  handleCardExpiryChange: () => onChangeHandler;
-  handleCardCVCChange: () => onChangeHandler;
-};
+export type CreditCardProps = {
+  onCompletion: (creditCardInfo: CreditCardState) => void;
+} & PropsWithTheme;
 
 class CreditCardInner extends React.Component<CreditCardProps, CreditCardState> {
   constructor(props: CreditCardProps) {
@@ -106,32 +90,14 @@ class CreditCardInner extends React.Component<CreditCardProps, CreditCardState> 
                 cvcPlaceholder: t('creditCard.cvcPlaceholder')
               }}
               fieldStyle={{ border: '1px solid', borderColor: theme.colors.secondaryDark }}
-              cardNumberInputProps={{
-                value: this.state.number,
-                onChange: ({ target: { value: number } }: FieldValue) => {
-                  this.setState({ number });
-                }
-              }}
-              cardNumberInputRenderer={({ handleCardNumberChange, props }: InputRenderer) => (
-                <Input {...props} onChange={handleCardNumberChange()} />
+              cardNumberInputRenderer={({ handleCardNumberChange, props }) => (
+                <Input {...props} onChange={handleCardNumberChange(e => this.setState({ number: e.target.value }))} />
               )}
-              cardExpiryInputProps={{
-                value: this.state.expiry,
-                onChange: ({ target: { value: expiry } }: FieldValue) => {
-                  this.setState({ expiry });
-                }
-              }}
-              cardExpiryInputRenderer={({ handleCardExpiryChange, props }: InputRenderer) => (
-                <Input {...props} onChange={handleCardExpiryChange()} />
+              cardExpiryInputRenderer={({ handleCardExpiryChange, props }) => (
+                <Input {...props} onChange={handleCardExpiryChange(e => this.setState({ expiry: e.target.value }))} />
               )}
-              cardCVCInputProps={{
-                value: this.state.cvc,
-                onChange: ({ target: { value: cvc } }: FieldValue) => {
-                  this.setState({ cvc });
-                }
-              }}
-              cardCVCInputRenderer={({ handleCardCVCChange, props }: InputRenderer) => (
-                <Input {...props} onChange={handleCardCVCChange()} />
+              cardCVCInputRenderer={({ handleCardCVCChange, props }) => (
+                <Input {...props} onChange={handleCardCVCChange(e => this.setState({ cvc: e.target.value }))} />
               )}
             />
           </CreditCardLayout>

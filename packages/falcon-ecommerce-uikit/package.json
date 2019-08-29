@@ -39,7 +39,7 @@
     "lodash.isequal": "^4.5.0",
     "qs": "6.6.0",
     "react-adopt": "^0.6.0",
-    "react-credit-card-input": "1.1.1",
+    "react-credit-card-input": "1.1.5",
     "react-lazyload": "2.6.2",
     "react-powerplug": "1.0.0"
   },
