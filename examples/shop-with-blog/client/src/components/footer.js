@@ -1,16 +1,9 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
 import { GridLayout, H4, List } from '@deity/falcon-ui';
-import { Footer, LocalePicker } from '@deity/falcon-ui-kit';
+import { Footer, LocalePicker, Newsletter, Copyright, FooterBanner } from '@deity/falcon-ui-kit';
 import { LocaleSwitcher } from '@deity/falcon-front-kit';
-import {
-  FooterSectionsLayout,
-  FooterSectionLayout,
-  FooterLink,
-  LanguageSection,
-  Newsletter,
-  Copyright
-} from '@deity/falcon-ecommerce-uikit';
+import { FooterSectionsLayout, FooterSectionLayout, FooterLink } from '@deity/falcon-ecommerce-uikit';
 
 export const Sitemap = () => (
   <FooterSectionsLayout>
@@ -66,9 +59,9 @@ export const PageFooter = () => (
   <GridLayout as={Footer} gridGap="md">
     <Newsletter />
     <Sitemap />
-    <LanguageSection>
-      <LocaleSwitcher>{({ ...props }) => <LocalePicker {...props} />}</LocaleSwitcher>
-    </LanguageSection>
-    <Copyright />
+    <LocaleSwitcher>{({ ...props }) => <LocalePicker {...props} />}</LocaleSwitcher>
+    <FooterBanner>
+      <Copyright />
+    </FooterBanner>
   </GridLayout>
 );
