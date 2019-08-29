@@ -46,7 +46,7 @@ type InputRenderer = {
   handleCardCVCChange: () => onChangeHandler;
 };
 
-class CreditCardClass extends React.Component<CreditCardProps, CreditCardState> {
+class CreditCardInner extends React.Component<CreditCardProps, CreditCardState> {
   constructor(props: CreditCardProps) {
     super(props);
     this.state = {
@@ -141,4 +141,4 @@ class CreditCardClass extends React.Component<CreditCardProps, CreditCardState> 
   }
 }
 
-export const CreditCard = withTheme(CreditCardClass);
+export const CreditCard = withTheme(CreditCardInner);
