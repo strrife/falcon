@@ -1,16 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownLabel, DropdownMenu, DropdownMenuItem } from '@deity/falcon-ui';
+import {
+  themed,
+  Dropdown,
+  DropdownLabel,
+  DropdownMenu,
+  DropdownMenuItem,
+  ThemedComponentProps
+} from '@deity/falcon-ui';
 import { LocaleItem } from '@deity/falcon-front-kit';
 
-export type LocalePickerProps = {
+export type LocalePickerProps = ThemedComponentProps & {
   items: LocaleItem[];
   value: LocaleItem;
   onChange?: (x: LocaleItem) => any;
 };
 
-export const LocalePicker: React.SFC<LocalePickerProps> = ({ items, value, onChange }) => (
-  <Dropdown onChange={onChange}>
+export const LocalePickerInnerDOM: React.SFC<LocalePickerProps> = ({ items, value, ...rest }) => (
+  <Dropdown {...(rest as any)}>
     <DropdownLabel>{value.name}</DropdownLabel>
     <DropdownMenu variant="above">
       {items.map(x => (
@@ -21,8 +28,7 @@ export const LocalePicker: React.SFC<LocalePickerProps> = ({ items, value, onCha
     </DropdownMenu>
   </Dropdown>
 );
-
-LocalePicker.propTypes = {
+LocalePickerInnerDOM.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.exact({
       code: PropTypes.string.isRequired,
@@ -35,3 +41,10 @@ LocalePicker.propTypes = {
   }).isRequired,
   onChange: PropTypes.func
 };
+
+export const LocalePicker = themed<LocalePickerProps, {}>({
+  tag: LocalePickerInnerDOM,
+  defaultTheme: {
+    localePicker: {}
+  }
+});

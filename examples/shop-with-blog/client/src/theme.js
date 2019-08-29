@@ -200,6 +200,12 @@ export const deityGreenTheme = createTheme({
     },
     footer: {
       mt: 'md'
+    },
+    localePicker: {
+      css: {
+        margin: '0 auto',
+        zIndex: 2
+      }
     }
   }
 });
