@@ -1,1 +1,1 @@
-export * from './FooterSections';
+export * from './FooterSectionListLayout';

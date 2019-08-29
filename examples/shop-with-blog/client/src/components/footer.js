@@ -3,10 +3,10 @@ import { T } from '@deity/falcon-i18n';
 import { GridLayout, H4, List } from '@deity/falcon-ui';
 import { Footer, LocalePicker, Newsletter, Copyright, FooterBanner } from '@deity/falcon-ui-kit';
 import { LocaleSwitcher } from '@deity/falcon-front-kit';
-import { FooterSectionsLayout, FooterSectionLayout, FooterLink } from '@deity/falcon-ecommerce-uikit';
+import { FooterSectionListLayout, FooterSectionLayout, FooterLink } from '@deity/falcon-ecommerce-uikit';
 
 export const Sitemap = () => (
-  <FooterSectionsLayout>
+  <FooterSectionListLayout>
     <FooterSectionLayout>
       <H4 fontWeight="bold">
         <T id="sitemap.customerService" />
@@ -52,7 +52,7 @@ export const Sitemap = () => (
         </FooterLink>
       </List>
     </FooterSectionLayout>
-  </FooterSectionsLayout>
+  </FooterSectionListLayout>
 );
 
 export const PageFooter = () => (

@@ -2,10 +2,10 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, Link, ListItem, themed } from '@deity/falcon-ui';
 
-export const FooterSectionsLayout = themed({
+export const FooterSectionListLayout = themed({
   tag: Box,
   defaultTheme: {
-    footerSectionsLayout: {
+    footerSectionListLayout: {
       display: 'flex',
       css: {
         flexDirection: 'row',

@@ -427,9 +427,9 @@
 
 > - ~~CopyrightLayout~~ renamed to FooterBanner, moved to @deity/falcon-ui-kit
 > - ~~Copyright~~ moved to @deity/falcon-ui-kit
-  > - ~~FooterLayout~~ renamed to Footer, moved to @deity/falcon-ui-kit
-- FooterSectionsLayout
-- FooterSectionLayout
+> - ~~FooterLayout~~ renamed to Footer, moved to @deity/falcon-ui-kit
+> - ~~FooterSectionsLayout~~ renamed to FooterSectionListLayout moved to @deity/falcon-ui-kit
+> - ~~FooterSectionLayout~~ moved to @deity/falcon-ui-kit
 - FooterLink
 > - ~~LanguageSection~~ - removed
 
