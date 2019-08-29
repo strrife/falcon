@@ -1,4 +1,4 @@
-import Logger, { Logger as LoggerType } from '@deity/falcon-logger';
+import Logger from '@deity/falcon-logger';
 import { Body, Request, RESTDataSource } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
 import { EventEmitter2 } from 'eventemitter2';
@@ -40,8 +40,8 @@ export interface ApiDataSource<TContext extends GraphQLContext = GraphQLContext>
   /**
    * Should be implemented if ApiDataSource wants to deliver content via dynamic URLs.
    * It should return priority value for passed url.
-   * @param url - url for which the priority should be returned
-   * @return Priority index
+   * @param url url for which the priority should be returned
+   * @returns Priority index
    */
   getFetchUrlPriority?(url: string): number;
 
@@ -64,7 +64,7 @@ export interface ApiDataSource<TContext extends GraphQLContext = GraphQLContext>
   /**
    * Hook that is going to be executed for every REST request if authorization is required
    * @param req request
-   * @return promise
+   * @returns promise
    */
   authorizeRequest?(req: ContextRequestOptions): Promise<void>;
 }
@@ -86,7 +86,7 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
 
   protected gqlServerConfig: ApolloServerConfig;
 
-  protected logger: LoggerType;
+  protected logger: typeof Logger;
 
   /**
    * @param params Constructor params
@@ -259,8 +259,8 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
   /**
    * This is a temporary solution to override Apollo's own "trace" method to use external Logger
    * @param {string} label Trace label
-   * @param {function} fn Callback to trace
-   * @return {Promise<TResult>} Result
+   * @param {Function} fn Callback to trace
+   * @returns {Promise<TResult>} Result
    */
   /* istanbul ignore next Skipping code coverage for "dev" function */
   private async traceLog<TResult>(label: string, fn: () => Promise<TResult>): Promise<TResult> {

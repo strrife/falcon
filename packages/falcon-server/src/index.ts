@@ -12,7 +12,7 @@ import {
   FetchUrlResult,
   FetchUrlParams
 } from '@deity/falcon-server-env';
-import Logger, { Logger as LoggerType } from '@deity/falcon-logger';
+import Logger from '@deity/falcon-logger';
 import { ApolloServer } from 'apollo-server-koa';
 import { KeyValueCache } from 'apollo-server-caching';
 import { ApolloError } from 'apollo-server-errors';
@@ -69,7 +69,7 @@ export class FalconServer {
 
   protected endpointContainer?: EndpointContainer;
 
-  protected logger: LoggerType = Logger;
+  protected logger: typeof Logger = Logger;
 
   protected httpServer?: HttpServer;
 

@@ -4,14 +4,14 @@
   "version": "0.2.4",
   "homepage": "https://falcon-ui.docs.deity.io/",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-ui",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/falcon-ui.cjs.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "sideEffects": false,
-  "publishConfig": {
-    "access": "public"
-  },
   "files": [
     "dist",
     "src"

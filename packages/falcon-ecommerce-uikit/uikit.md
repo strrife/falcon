@@ -96,7 +96,7 @@
 
 ---
 
-- SortOrdersQuery
+> - ~~SortOrdersQuery~~ changed to `SortOrderListQuery` and moved to  @deity/falcon-data
 
 ### Existing constants:
 
@@ -114,8 +114,9 @@
 
 ---
 
-> - ~~GET_BACKEND_CONFIG~~ - moved to @deity/falcon-data
+> - ~~GET_BACKEND_CONFIG~~ - moved to @deity/falcon-data and @deity/falcon-shop-data
 > - ~~SET_LOCALE~~ - moved to @deity/falcon-data
+
 
 ---
 
@@ -197,7 +198,7 @@
 
 ---
 
-- SORT_ORDERS_QUERY
+> - ~~SORT_ORDERS_QUERY~~ changed to `GET_SORT_ORDER_LIST` and moved to @deity/falcon-data
 
 ### Existing TypeScript types and interfaces (without component props definitions):
 
@@ -211,8 +212,8 @@
 
 ---
 
-- BackendConfig
-- SetLocaleData
+> - ~~BackendConfig~~ - moved to @deity/falcon-data and @deity/falcon-shop-data
+> - ~~SetLocaleData~~ - moved to @deity/falcon-data
 
 ---
 
@@ -229,9 +230,9 @@
 
 ---
 
-- Aggregation
-- SelectionType
-- AggregationBucket
+> - ~~Aggregation~~ - moved to @deity/falcon-data
+> - ~~SelectionType~~ - moved to @deity/falcon-data
+> - ~~AggregationBucket~~ - moved to @deity/falcon-data
 
 ---
 
@@ -273,15 +274,17 @@
 
 ---
 
-- FilterData
-- FilterOption
-- FilterDataProviderRenderProps
-- MultipleFilterProps
-- SingleFilterProps
+> - ~~FilterInput~~ moved to @deity/falcon-shop-extension
+> - ~~FilterOperator~~ moved to @deity/falcon-shop-extension
+> - ~~FilterData~~ moved to @deity/falcon-front-kit
+> - ~~FilterOption~~ moved to @deity/falcon-front-kit
+> - ~~FilterDataProviderRenderProps~~ changed to `FiltersDataProviderRenderProps` and moved to @deity/falcon-front-kit 
+> - ~~MultipleFilterProps~~ moved to @deity/falcon-ui-kit
+> - ~~SingleFilterProps~~ moved to @deity/falcon-ui-kit
 
 ---
 
-- LocaleItem
+> - ~~LocaleItem~~ moved to @deity/falcon-front-kit
 
 ---
 
@@ -295,8 +298,8 @@
 
 ---
 
-- LocaleContextType
-- LocaleContext
+> - ~~LocaleContextType~~ moved to @deity/falcon-front-kit
+> - ~~LocaleContext~~ moved to @deity/falcon-front-kit
 
 ---
 
@@ -326,11 +329,11 @@
 
 ---
 
-- SearchState
-- SearchContextType
-- SearchContext
-- SearchConsumer
-- SearchProviderProps
+> - ~~SearchState~~ moved to @deity/falcon-ui-kit
+> - ~~SearchContextType~~ changed to `SearchContextValue` and moved to @deity/falcon-ui-kit
+> - ~~SearchContext~~ moved to @deity/falcon-ui-kit
+> - ~~SearchConsumer~~ moved to @deity/falcon-ui-kit
+> - ~~SearchProviderProps~~ moved to @deity/falcon-ui-kit
 
 ---
 
@@ -341,10 +344,14 @@
 
 ---
 
-- SortOrderDirection
-- SortOrderInput
-- SortOrders
-- SortOrdersData
+> - ~~SortOrderDirection~~ - moved to @deity/falcon-data
+> - ~~SortOrderInput~~ - moved to @deity/falcon-data
+- SortOrders ?
+> - ~~SortOrdersData~~ changed to `SortOrderListResponse` and moved to @deity/falcon-dat
+
+> - ~~Pagination~~ - moved to @deity/falcon-data
+> - ~~PaginationQuery~~ - moved to @deity/falcon-data
+> - ~~PaginationInput~~ - moved to @deity/falcon-data
 
 ### Existing UI components:
 
@@ -363,8 +370,8 @@
 
 ---
 
-- BackendConfigQuery
-- SetLocaleMutation
+> - ~~BackendConfigQuery~~ moved to @deity/falcon-data
+> - ~~SetLocaleMutation~~ moved to @deity/falcon-data
 
 ---
 
@@ -379,8 +386,8 @@
 - CategoryLayout
 - ShowingOutOf
 - ShowMore
-- SortOrderDropdownLayout
-- SortOrderDropdown
+> - ~~SortOrderDropdownLayout~~ changed to `SortOrderPickerLayout` and moved to @deity/falcon-ui-kit
+> - ~~SortOrderDropdown~~ changed to `SortOrderPicker` and moved to @deity/falcon-ui-kit
 - TotalRow
 
 ---
@@ -397,19 +404,19 @@
 
 ---
 
-- ColorTile
-- ColorFilter
-- FilterSummary
-- FilterDetails
-- FilterItemLayout
-- FilterItem
-- FilterItemList
-- FiltersLayout
-- FiltersSummaryLayout
-- FiltersSummary
-- FilterTile
-- MultipleFilter
-- SingleFilter
+> - ~~ColorTile~~ moved to @deity/falcon-ui-kit
+> - ~~ColorFilter~~ moved to @deity/falcon-ui-kit
+> - ~~FilterSummary~~ moved to @deity/falcon-ui-kit and renamed to `FilterDetailsSummaryLayout`
+> - ~~FilterDetails~~ moved to @deity/falcon-ui-kit
+> - ~~FilterItemLayout~~ moved to @deity/falcon-ui-kit
+> - ~~FilterItem~~ moved to @deity/falcon-ui-kit
+> - ~~FilterItemList~~ moved to @deity/falcon-ui-kit and renamed to `FilterItemListLayout`
+> - ~~FiltersLayout~~ moved to @deity/falcon-ui-kit and renamed to `FiltersPanelLayout`
+> - ~~FiltersSummaryLayout~~ moved to @deity/falcon-ui-kit and renamed to `SelectedFilterList`
+> - ~~FiltersSummary~~ moved to @deity/falcon-ui-kit
+> - ~~FilterTile~~ moved to @deity/falcon-ui-kit
+> - ~~MultipleFilter~~ moved to @deity/falcon-ui-kit
+> - ~~SingleFilter~~ moved to @deity/falcon-ui-kit
 
 ---
 
@@ -420,8 +427,10 @@
 - FooterSectionLayout
 - FooterLink
 - LanguageSection
-- LocaleSwitcherDropdown
-- LocaleSwitcherRenderProps
+
+> - ~~LocaleSwitcherDropdown~~ - moved to @deity/falcon-ui-kit and renamed to `LocalePicker`
+> - ~~LocaleSwitcherRenderProps~~ moved to @deity/falcon-ui-kit and renamed to `LocalePickerProps`
+
 - NewsletterLayout
 - Newsletter
 
@@ -527,20 +536,21 @@
 > - ~~EnsureTTI~~ moved to @deity/falcon-front-kit
 > - ~~ScrollToTop~~ moved to @deity/falcon-front-kit
 
-- FiltersDataProvider
-- LocaleSwitcher
+> - ~~FiltersDataProvider~~ moved to @deity/falcon-front-kit
+> - ~~LocaleSwitcher~~ moved to @deity/falcon-front-kit
 - Field
 - Form
   > - ~~LocaleProvider~~ moved to @deity/falcon-front-kit
 - ProductForm (it's not exported outside)
 - ProductConfigurator
 
-> - ~~Query~~ movet to @deity/falcon-data
+> - ~~Query~~ moved to @deity/falcon-data
 > - ~~OnlyUnauthenticatedRoute~~ moved to @deity/falcon-front-kit
 > - ~~ProtectedRoute~~ moved to @deity/falcon-front-kit
 > - ~~Router~~ moved to @deity/falcon-front-kit
 
-- SearchProvider
+> - ~~SearchProvider~~ moved to @deity/falcon-front-kit
 - SignOutLogic
-- SortOrdersProvider
-  > - ~~OnlineStatus~~ moved to @deity/falcon-front-kit/src/NetworkStatus/NetworkStatus.tsx
+> - ~~SortOrdersProvider~~ change to `SortOrderPickerProvider` and moved to @deity/falcon-front-kit
+> - ~~AreSortOrderInputsEqual~~ changed to `areSortOrderInputsEqual` and moved to @deity/falcon-front-kit
+> - ~~OnlineStatus~~ changed to `NetworkStatus` and moved to @deity/falcon-front-kit

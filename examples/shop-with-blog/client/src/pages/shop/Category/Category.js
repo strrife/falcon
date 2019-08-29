@@ -4,20 +4,16 @@ import { NetworkStatus } from 'apollo-client';
 import { Toggle } from 'react-powerplug';
 import { H1, H3, GridLayout, Box, FlexLayout, Divider, Button } from '@deity/falcon-ui';
 import {
-  SearchConsumer,
   CategoryProductsQuery,
   CategoryLayout,
   CategoryArea,
   ShowingOutOf,
-  SortOrdersProvider,
-  SortOrderDropdown,
-  getFiltersData,
-  FiltersSummary,
   ProductList,
   ShowMore,
   Loader
 } from '@deity/falcon-ecommerce-uikit';
-import { Sidebar, Responsive } from '@deity/falcon-ui-kit';
+import { SearchConsumer, SortOrderPickerProvider, getFiltersData } from '@deity/falcon-front-kit';
+import { Sidebar, Responsive, SortOrderPicker, FiltersSummary } from '@deity/falcon-ui-kit';
 import { Filters } from './Filters';
 
 const copy = item => item && JSON.parse(JSON.stringify(item));
@@ -49,9 +45,9 @@ const CategoryPage = ({ id }) => (
                 <H1>{name}</H1>
                 <FlexLayout justifyContent="space-between" alignItems="center">
                   <ShowingOutOf itemsCount={items.length} totalItems={pagination.totalItems} />
-                  <SortOrdersProvider>
-                    {sortOrdersProps => <SortOrderDropdown {...sortOrdersProps} />}
-                  </SortOrdersProvider>
+                  <SortOrderPickerProvider>
+                    {sortOrderPickerProps => <SortOrderPicker {...sortOrderPickerProps} />}
+                  </SortOrderPickerProvider>
                 </FlexLayout>
                 <Divider mt="xs" />
               </Box>

@@ -103,9 +103,9 @@ input ShopPageQuery {
 }
 
 input FilterInput {
-  field: String
-  value: [String]
-  operator: FilterOperator
+  field: String!
+  value: [String!]!
+  operator: FilterOperator!
 }
 
 enum FilterOperator {

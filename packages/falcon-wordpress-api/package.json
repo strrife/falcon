@@ -1,13 +1,13 @@
 {
   "name": "@deity/falcon-wordpress-api",
   "license": "OSL-3.0",
-  "main": "src/index.js",
   "version": "0.1.9",
   "homepage": "https://falcon.deity.io/docs/falcon-server/extensions#blog-extension",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-wordpress-api",
   "publishConfig": {
     "access": "public"
   },
+  "main": "src/index.js",
   "jest": {
     "setupFiles": [
       "../../test/nodeEnvSetupFile"

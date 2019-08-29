@@ -9,9 +9,10 @@ import {
   ScrollToTop,
   OnlyUnauthenticatedRoute,
   ProtectedRoute,
-  LocaleProvider
+  LocaleProvider,
+  SearchProvider
 } from '@deity/falcon-front-kit';
-import { Header, SearchProvider } from '@deity/falcon-ecommerce-uikit';
+import { Header } from '@deity/falcon-ecommerce-uikit';
 import { ThemeEditor, ThemeEditorState } from '@deity/falcon-theme-editor';
 import loadable from 'src/components/loadable';
 import { ErrorBoundary } from 'src/components/ErrorBoundary';
