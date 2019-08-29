@@ -1,12 +1,15 @@
 import React from 'react';
-import { Box, themed } from '@deity/falcon-ui';
+import { Box, Text, themed } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 
-export const CopyrightLayout = themed({
+export const FooterBanner = themed({
   tag: Box,
   defaultTheme: {
-    copyrightLayout: {
-      p: 'sm',
+    footerBanner: {
+      display: 'grid',
+      gridGap: 'sm',
+      m: 'none',
+      p: 'none',
       color: 'secondaryText',
       bgFullWidth: 'secondary',
       css: {
@@ -16,8 +19,18 @@ export const CopyrightLayout = themed({
   }
 });
 
-export const Copyright = () => (
-  <CopyrightLayout>
+export const CopyrightInnerDOM = props => (
+  <Text {...props}>
     <T id="copyright" year={new Date().getFullYear()} />
-  </CopyrightLayout>
+  </Text>
 );
+
+export const Copyright = themed({
+  tag: CopyrightInnerDOM,
+  defaultTheme: {
+    copyright: {
+      p: 'sm',
+      color: 'secondaryText'
+    }
+  }
+});

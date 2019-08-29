@@ -425,19 +425,19 @@
 
 ---
 
-- CopyrightLayout
-- Copyright
-> - ~~FooterLayout~~ renamed to Footer, moved to @deity/falcon-ui-kit
+> - ~~CopyrightLayout~~ renamed to FooterBanner, moved to @deity/falcon-ui-kit
+> - ~~Copyright~~ moved to @deity/falcon-ui-kit
+  > - ~~FooterLayout~~ renamed to Footer, moved to @deity/falcon-ui-kit
 - FooterSectionsLayout
 - FooterSectionLayout
 - FooterLink
-- LanguageSection
+> - ~~LanguageSection~~ - removed
 
 > - ~~LocaleSwitcherDropdown~~ - moved to @deity/falcon-ui-kit and renamed to `LocalePicker`
 > - ~~LocaleSwitcherRenderProps~~ moved to @deity/falcon-ui-kit and renamed to `LocalePickerProps`
 
-- NewsletterLayout
-- Newsletter
+> - ~~NewsletterLayout~~ - moved to @deity/falcon-ui-kit
+> - ~~Newsletter~~ - moved to @deity/falcon-ui-kit  
 
 ---
 
