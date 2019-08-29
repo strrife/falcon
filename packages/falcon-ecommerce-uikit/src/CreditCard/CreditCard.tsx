@@ -1,5 +1,5 @@
 import React from 'react';
-import CreditCardInput from 'react-credit-card-input';
+import ReactCreditCardInput from 'react-credit-card-input';
 import { Box, Input, PropsWithTheme, withTheme, themed } from '@deity/falcon-ui';
 import { I18n } from '@deity/falcon-i18n';
 
@@ -30,7 +30,7 @@ export type CreditCardProps = {
   onCompletion: (creditCardInfo: CreditCardState) => void;
 } & PropsWithTheme;
 
-class CreditCardInner extends React.Component<CreditCardProps, CreditCardState> {
+class CreditCardInputInner extends React.Component<CreditCardProps, CreditCardState> {
   constructor(props: CreditCardProps) {
     super(props);
     this.state = {
@@ -75,7 +75,7 @@ class CreditCardInner extends React.Component<CreditCardProps, CreditCardState> 
                 }}
               />
             </Box>
-            <CreditCardInput
+            <ReactCreditCardInput
               customTextLabels={{
                 expiryError: {
                   invalidExpiryDate: t('creditCard.errors.invalidExpiryDate'),
@@ -107,4 +107,4 @@ class CreditCardInner extends React.Component<CreditCardProps, CreditCardState> 
   }
 }
 
-export const CreditCard = withTheme(CreditCardInner);
+export const CreditCardInput = withTheme(CreditCardInputInner);

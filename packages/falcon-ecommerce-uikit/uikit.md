@@ -255,7 +255,7 @@
 
 ---
 
-- CreditCardState
+> - ~~CreditCardState~~ hide, I think we should not export any component state
 
 ---
 
@@ -401,7 +401,7 @@
 
 ---
 
-- CreditCard
+> - ~~CreditCard~~ renamed to CreditCardInput, and moved to @deity/falcon-ui-kit
 
 ---
 
