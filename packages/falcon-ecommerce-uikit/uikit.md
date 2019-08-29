@@ -430,7 +430,7 @@
 > - ~~FooterLayout~~ renamed to Footer, moved to @deity/falcon-ui-kit
 > - ~~FooterSectionsLayout~~ renamed to FooterSectionListLayout moved to @deity/falcon-ui-kit
 > - ~~FooterSectionLayout~~ moved to @deity/falcon-ui-kit
-- FooterLink
+> - ~~FooterLink~~ moved to examples/shop-with-blog
 > - ~~LanguageSection~~ - removed
 
 > - ~~LocaleSwitcherDropdown~~ - moved to @deity/falcon-ui-kit and renamed to `LocalePicker`
