@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { Box, Link, ListItem, themed } from '@deity/falcon-ui';
+import { Box, themed } from '@deity/falcon-ui';
 
 export const FooterSectionListLayout = themed({
   tag: Box,
@@ -39,11 +38,3 @@ export const FooterSectionLayout = themed({
     }
   }
 });
-
-export const FooterLink: React.SFC<{ to: string }> = ({ to, children }) => (
-  <ListItem p="xs">
-    <Link as={RouterLink} to={to}>
-      {children}
-    </Link>
-  </ListItem>
-);
