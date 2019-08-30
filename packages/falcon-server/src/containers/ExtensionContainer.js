@@ -77,7 +77,6 @@ module.exports = class ExtensionContainer extends BaseContainer {
    * @returns {BackendConfig} Merged config
    */
   async fetchBackendConfig(obj, args, context, info) {
-    // Fetching backend configs async
     const configs = await Promise.all(
       Array.from(this.extensions, ([extName, ext]) => {
         this.logger.debug(`Fetching "${extName}" API backend config`);
