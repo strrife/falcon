@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 // eslint-disable-next-line
 import { Location } from 'history';
 import { Text } from '@deity/falcon-ui';
-import { Router } from './../Router';
+import { Router } from '../Router';
 import { UrlQuery } from './GetUrlQuery';
 
 // export type contentType = 'shop-page' | 'shop-product' | 'shop-category';
@@ -25,8 +25,7 @@ export const DynamicRoute: React.SFC<DynamicRouteProps> = props => {
     <Router>
       {router => {
         const location = props.location || router.location;
-        const { pathname } = location;
-        const path = pathname.startsWith('/') ? pathname.substring(1) : pathname;
+        const { pathname: path } = location;
 
         return (
           <UrlQuery variables={{ path }}>

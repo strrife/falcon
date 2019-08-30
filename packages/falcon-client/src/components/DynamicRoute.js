@@ -5,8 +5,7 @@ import { GET_URL } from '../graphql/url.gql';
 import Query from './Query';
 
 const DynamicRoute = ({ components, location, loaderComponent, errorComponent, notFoundComponent }) => {
-  const { pathname } = location;
-  const path = pathname.startsWith('/') ? pathname.substring(1) : pathname;
+  const { pathname: path } = location;
 
   return (
     <Query query={GET_URL} variables={{ path }} loaderComponent={loaderComponent} errorComponent={errorComponent}>
