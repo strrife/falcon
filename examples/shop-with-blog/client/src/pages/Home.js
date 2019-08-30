@@ -1,10 +1,11 @@
 import React from 'react';
 import gql from 'graphql-tag';
+import { T } from '@deity/falcon-i18n';
+import { Query } from '@deity/falcon-data';
 import { H1 } from '@deity/falcon-ui';
 import { PageLayout, ProductList } from '@deity/falcon-ui-kit';
-import { T } from '@deity/falcon-i18n';
-import { Query } from '@deity/falcon-ecommerce-uikit';
 
+// TODO: move to falcon-shop-data
 const HOMEPAGE_PRODUCTS_QUERY = gql`
   query HomepageProducts($categoryId: ID!, $amount: Int) {
     category(id: $categoryId) {

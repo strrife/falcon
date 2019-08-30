@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { Query } from '@deity/falcon-ecommerce-uikit';
+import { Query } from '@deity/falcon-query';
 
 export const GET_SIDEBAR_STATE = gql`
   query Sidebar {
