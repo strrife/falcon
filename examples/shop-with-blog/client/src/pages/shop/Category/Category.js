@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NetworkStatus } from 'apollo-client';
 import { Toggle } from 'react-powerplug';
-import { H1, H3, GridLayout, Box, FlexLayout, Divider, Button } from '@deity/falcon-ui';
 import { CategoryWithProductsQuery } from '@deity/falcon-shop-data';
-import { Loader } from '@deity/falcon-ecommerce-uikit';
+import { H1, H3, GridLayout, Box, FlexLayout, Divider, Button } from '@deity/falcon-ui';
 import { SearchConsumer, SortOrderPickerProvider, getFiltersData } from '@deity/falcon-front-kit';
 import {
+  Loader,
   CategoryLayout,
   CategoryArea,
   Sidebar,

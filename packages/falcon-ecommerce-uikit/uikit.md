@@ -437,7 +437,7 @@
 > - ~~LocaleSwitcherRenderProps~~ moved to @deity/falcon-ui-kit and renamed to `LocalePickerProps`
 
 > - ~~NewsletterLayout~~ - moved to @deity/falcon-ui-kit
-> - ~~Newsletter~~ - moved to @deity/falcon-ui-kit  
+> - ~~Newsletter~~ - moved to @deity/falcon-ui-kit
 
 ---
 
@@ -520,7 +520,7 @@
   > - ~~ProductCard~~ moved to @deity/falcon-ui-kit
   > - ~~ProductList~~ moved to @deity/falcon-ui-kit
   > - ~~ProductListLayout~~ - moved to @deity/falcon-ui-kit
-- Loader
+  > - ~~Loader~~ - moved to to @deity/falcon-ui-kit
 
 ---
 
