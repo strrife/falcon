@@ -32,7 +32,7 @@ const DEFAULT_TAG_TTL: number = 60 * 60; // 1 hour
  * Cache-wrapper with extended methods
  */
 export default class Cache<V = any> implements KeyValueCache<V> {
-  protected getMap: Map<string, Promise<V>> = new Map();
+  protected activeGetRequests: Map<string, Promise<V>> = new Map();
 
   constructor(protected cacheProvider: KeyValueCache<string>, protected tagTtl: number = DEFAULT_TAG_TTL) {}
 
@@ -47,13 +47,13 @@ export default class Cache<V = any> implements KeyValueCache<V> {
    * @returns Cached value
    */
   async get(key: string, setOptions?: GetCacheOptions): Promise<V> {
-    if (this.getMap.has(key)) {
-      return this.getMap.get(key) as Promise<V>;
+    if (this.activeGetRequests.has(key)) {
+      return this.activeGetRequests.get(key) as Promise<V>;
     }
 
-    this.getMap.set(key, this.rawGet(key, setOptions));
-    const result = await this.getMap.get(key);
-    this.getMap.delete(key);
+    this.activeGetRequests.set(key, this.createGetRequest(key, setOptions));
+    const result = await this.activeGetRequests.get(key);
+    this.activeGetRequests.delete(key);
 
     return result as V;
   }
@@ -158,7 +158,7 @@ export default class Cache<V = any> implements KeyValueCache<V> {
     return typeof data === 'object' && 'value' in data && 'options' in data;
   }
 
-  private async rawGet(key: string, setOptions?: GetCacheOptions): Promise<V> {
+  private async createGetRequest(key: string, setOptions?: GetCacheOptions): Promise<V> {
     let value: GetCacheFetchResult = await this.cacheProvider.get(key);
     try {
       value = JSON.parse(value);
