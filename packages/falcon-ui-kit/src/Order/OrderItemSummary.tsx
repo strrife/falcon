@@ -2,6 +2,7 @@ import React from 'react';
 import { T } from '@deity/falcon-i18n';
 import { Box, Image, Text } from '@deity/falcon-ui';
 import { Price } from '../Price';
+import { PropertyRowLayout } from '../Layouts';
 import { OrderItemSummaryLayout, OrderItemSummaryArea } from './OrderItemSummaryLayout';
 
 export type OrderItemSummaryProps = {
@@ -29,11 +30,11 @@ export const OrderItemSummary: React.SFC<OrderItemSummaryProps> = props => {
         fontWeight="bold"
         css={{ textAlign: 'right' }}
       />
-      <Box gridArea={OrderItemSummaryArea.details} display="flex" fontSize="xs">
-        <Text flex="1">
+      <Box gridArea={OrderItemSummaryArea.details}>
+        <PropertyRowLayout>
           <T id="order.quantityLabel" />
-        </Text>
-        <Text flex="2">{props.qty}</Text>
+          <Text>{props.qty}</Text>
+        </PropertyRowLayout>
       </Box>
     </OrderItemSummaryLayout>
   );

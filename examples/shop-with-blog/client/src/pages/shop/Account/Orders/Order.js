@@ -1,10 +1,17 @@
 import React from 'react';
+import { T } from '@deity/falcon-i18n';
 import { OrderQuery } from '@deity/falcon-shop-data';
 import { H1, Text, Divider, Box, FlexLayout, GridLayout } from '@deity/falcon-ui';
-import { OrderLayout, OrderLayoutArea, OrderItemSummary, FormattedDate, AddressDetails } from '@deity/falcon-ui-kit';
+import {
+  OrderLayout,
+  OrderLayoutArea,
+  OrderItemSummary,
+  FormattedDate,
+  AddressDetails,
+  PropertyRowLayout,
+  Price
+} from '@deity/falcon-ui-kit';
 import { LocaleProvider } from '@deity/falcon-front-kit';
-import { I18n, T } from '@deity/falcon-i18n';
-import { TotalRow } from '@deity/falcon-ecommerce-uikit';
 
 const Order = ({ match }) => {
   const id = parseInt(match.params.id, 10);
@@ -24,26 +31,30 @@ const Order = ({ match }) => {
                 </Text>
                 <T id="order.status" context={order.status || 'na'} />
               </FlexLayout>
-              <I18n>
-                {t => (
-                  <GridLayout gridArea={OrderLayoutArea.items} alignContent="flex-start">
+              <GridLayout gridArea={OrderLayoutArea.items} alignContent="flex-start">
+                <Divider />
+                {order.items.map(x => (
+                  <React.Fragment key={x.sku}>
+                    <OrderItemSummary {...x} />
                     <Divider />
-                    {order.items.map(x => (
-                      <React.Fragment key={x.sku}>
-                        <OrderItemSummary {...x} />
-                        <Divider />
-                      </React.Fragment>
-                    ))}
-
-                    <Box>
-                      <TotalRow title={t('order.subtotalLabel')} value={order.subtotal} />
-                      <TotalRow title={t('order.shippingAmountLabel')} value={order.shippingAmount} />
-                    </Box>
-                    <Divider />
-                    <TotalRow title={t('order.grandTotalLabel')} value={order.grandTotal} fontWeight="bold" />
-                  </GridLayout>
-                )}
-              </I18n>
+                  </React.Fragment>
+                ))}
+                <Box>
+                  <PropertyRowLayout variant="spaceBetween">
+                    <T id="order.subtotalLabel" />
+                    <Price value={order.subtotal} />
+                  </PropertyRowLayout>
+                  <PropertyRowLayout variant="spaceBetween">
+                    <T id="order.shippingAmountLabel" />
+                    <Price value={order.shippingAmount} />
+                  </PropertyRowLayout>
+                </Box>
+                <Divider />
+                <PropertyRowLayout variant="spaceBetween" fontWeight="bold">
+                  <T id="order.grandTotalLabel" />
+                  <Price value={order.grandTotal} />
+                </PropertyRowLayout>
+              </GridLayout>
               <Divider gridArea={OrderLayoutArea.divider} />
               <GridLayout gridArea={OrderLayoutArea.summary} alignContent="flex-start">
                 <Box>

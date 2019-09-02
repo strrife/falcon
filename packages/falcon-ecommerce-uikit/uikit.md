@@ -393,7 +393,7 @@
 > - ~~SortOrderDropdownLayout~~ changed to `SortOrderPickerLayout` and moved to @deity/falcon-ui-kit
 > - ~~SortOrderDropdown~~ changed to `SortOrderPicker` and moved to @deity/falcon-ui-kit
 
-- TotalRow
+> - ~~TotalRow~~ - removed, (introduced PropertyRowLayout in @deity/falcon-ui-kit)
 
 ---
 
