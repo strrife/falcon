@@ -3,6 +3,7 @@ import { withApollo, WithApolloClient, FetchResult } from 'react-apollo';
 import isEqual from 'lodash.isequal';
 import { OperationInput } from '@deity/falcon-data';
 import {
+  PlaceOrderInput,
   PlaceOrderResult,
   CheckoutAddressInput,
   EstimateShippingMethodsInput,
@@ -11,6 +12,7 @@ import {
 } from '@deity/falcon-shop-extension';
 import {
   PLACE_ORDER,
+  PlaceOrderResponse,
   ESTIMATE_SHIPPING_METHODS,
   EstimateShippingMethodsResponse,
   SET_SHIPPING,
@@ -149,11 +151,11 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           mutation: ESTIMATE_SHIPPING_METHODS,
           variables: { input: { address: shippingAddress } }
         })
-        .then(response => {
-          if (response.errors) {
+        .then(({ errors, data }) => {
+          if (errors) {
             this.setPartialState({
               loading: false,
-              errors: { shippingAddress: response.errors },
+              errors: { shippingAddress: errors },
               availableShippingMethods: null
             });
           } else {
@@ -164,9 +166,8 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
               values.billingAddress = shippingAddress;
             }
 
-            const { estimateShippingMethods } = response.data;
             // if shipping methods has changed then remove already selected shipping method
-            if (!isEqual(estimateShippingMethods, this.state.availableShippingMethods)) {
+            if (!isEqual(data.estimateShippingMethods, this.state.availableShippingMethods)) {
               values.shippingMethod = null;
             }
 
@@ -174,7 +175,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
               loading: false,
               errors: {},
               values,
-              availableShippingMethods: estimateShippingMethods
+              availableShippingMethods: data.estimateShippingMethods
             });
           }
         })
@@ -203,17 +204,17 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
             }
           }
         })
-        .then(response => {
-          if (response.errors) {
+        .then(({ errors, data }) => {
+          if (errors) {
             this.setPartialState({
               loading: false,
-              errors: { shippingMethod: response.errors },
+              errors: { shippingMethod: errors },
               availablePaymentMethods: null
             });
           } else {
             const values = { shippingMethod } as CheckoutLogicData;
             // if available payment methods has changed then remove selected payment method
-            if (!isEqual(response.data.setShipping.paymentMethods, this.state.availablePaymentMethods)) {
+            if (!isEqual(data.setShipping.paymentMethods, this.state.availablePaymentMethods)) {
               values.paymentMethod = null;
             }
 
@@ -221,7 +222,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
               loading: false,
               errors: {},
               values,
-              availablePaymentMethods: response.data!.setShipping.paymentMethods
+              availablePaymentMethods: data.setShipping.paymentMethods
             });
           }
         })
@@ -235,26 +236,29 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
   };
 
   placeOrder = () => {
-    const handleResponse = (resp: FetchResult) => {
-      if (resp.errors) {
+    const handleResponse = ({
+      data,
+      errors
+    }: FetchResult<PlaceOrderResponse, Record<string, any>, Record<string, any>>) => {
+      if (errors) {
         this.setPartialState({
           loading: false,
           errors: {
-            order: resp.errors
+            order: errors
           }
         });
       } else {
         this.setPartialState({
           loading: false,
           error: null,
-          result: resp.data!.placeOrder
+          result: data.placeOrder
         });
       }
     };
 
     this.setLoading(true, () => {
       this.props.client
-        .mutate({
+        .mutate<PlaceOrderResponse, OperationInput<PlaceOrderInput>>({
           mutation: PLACE_ORDER,
           // update cart once order is placed successfully
           refetchQueries: ['Cart', 'OrderList'],
