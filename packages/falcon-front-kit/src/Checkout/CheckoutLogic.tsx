@@ -8,7 +8,8 @@ import {
   CheckoutAddressInput,
   EstimateShippingMethodsInput,
   ShippingMethod,
-  SetShippingInput
+  SetShippingInput,
+  PaymentMethod
 } from '@deity/falcon-shop-extension';
 import {
   PLACE_ORDER,
@@ -19,18 +20,13 @@ import {
   SetShippingResponse
 } from '@deity/falcon-shop-data';
 
-export type CheckoutPaymentMethod = {
-  code: string;
-  title: string;
-};
-
 type CheckoutLogicData = {
   email: string | null;
-  shippingAddress?: CheckoutAddressInput;
-  billingAddress?: CheckoutAddressInput;
+  shippingAddress: CheckoutAddressInput | null;
+  billingAddress: CheckoutAddressInput | null;
   billingSameAsShipping: boolean | null;
   shippingMethod: ShippingMethod | null;
-  paymentMethod: CheckoutPaymentMethod | null;
+  paymentMethod: PaymentMethod | null;
   paymentAdditionalData: object | null;
 };
 
@@ -38,49 +34,46 @@ type CheckoutLogicError = {
   message: string;
 };
 
-type CheckoutErrors = CheckoutLogicError[];
-
 type CheckoutLogicState = {
   loading: boolean;
   errors: CheckoutLogicErrors;
   values: CheckoutLogicData;
   result?: PlaceOrderResult;
   availableShippingMethods: ShippingMethod[];
-  availablePaymentMethods: CheckoutPaymentMethod[];
+  availablePaymentMethods: PaymentMethod[];
 };
 
 type CheckoutLogicErrors = {
-  email?: CheckoutErrors;
-  shippingAddress?: CheckoutErrors;
-  billingSameAsShipping?: CheckoutErrors;
-  billingAddress?: CheckoutErrors;
-  shippingMethod?: CheckoutErrors;
-  paymentMethod?: CheckoutErrors;
-  order?: CheckoutErrors;
+  email?: CheckoutLogicError[];
+  shippingAddress?: CheckoutLogicError[];
+  billingSameAsShipping?: CheckoutLogicError[];
+  billingAddress?: CheckoutLogicError[];
+  shippingMethod?: CheckoutLogicError[];
+  paymentMethod?: CheckoutLogicError[];
+  order?: CheckoutLogicError[];
 };
 
-export type CheckoutLogicInjectedProps = {
+export type CheckoutLogicRenderProps = {
   values: CheckoutLogicData;
   errors: CheckoutLogicErrors;
   loading: boolean;
   availableShippingMethods: ShippingMethod[];
-  availablePaymentMethods: CheckoutPaymentMethod[];
+  availablePaymentMethods: PaymentMethod[];
   result?: PlaceOrderResult;
   setEmail(email: string): void;
   setShippingAddress(address: CheckoutAddressInput): void;
   setBillingSameAsShipping(same: boolean): void;
   setBillingAddress(address: CheckoutAddressInput): void;
   setShippingMethod(shipping: ShippingMethod): void;
-  setPaymentMethod(payment: CheckoutPaymentMethod, additionalData?: any): void;
+  setPaymentMethod(payment: PaymentMethod, additionalData?: any): void;
   placeOrder(): void;
 };
 
 export type CheckoutLogicProps = WithApolloClient<{
   initialValues?: CheckoutLogicData;
-  children(props: CheckoutLogicInjectedProps): any;
+  children(props: CheckoutLogicRenderProps): React.ReactNode;
 }>;
-
-class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogicState> {
+class CheckoutLogicInner extends React.Component<CheckoutLogicProps, CheckoutLogicState> {
   constructor(props: CheckoutLogicProps) {
     super(props);
     this.state = {
@@ -138,7 +131,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
   setBillingAddress = (billingAddress: CheckoutAddressInput) =>
     this.setLoading(true, () => this.setPartialState({ loading: false, values: { billingAddress } }));
 
-  setPaymentMethod = (paymentMethod: CheckoutPaymentMethod, additionalData?: any) =>
+  setPaymentMethod = (paymentMethod: PaymentMethod, additionalData?: any) =>
     this.setLoading(true, () =>
       this.setPartialState({ loading: false, values: { paymentMethod, paymentAdditionalData: additionalData } })
     );
@@ -298,4 +291,4 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
   }
 }
 
-export const CheckoutLogic = withApollo(CheckoutLogicImpl);
+export const CheckoutLogic = withApollo(CheckoutLogicInner);
