@@ -1,10 +1,10 @@
 import React from 'react';
 import { themed, Box } from '@deity/falcon-ui';
 
-export const PropertyLayout = themed({
+export const PropertyRowLayout = themed({
   tag: Box,
   defaultTheme: {
-    propertyLayout: {
+    propertyRowLayout: {
       display: 'grid',
       gridGap: 'sm',
       gridAutoFlow: 'column',

@@ -3,4 +3,4 @@ export * from './FixCenteredLayout';
 export * from './PageLayout';
 export * from './SidebarLayout';
 export * from './TwoColumnsLayout';
-export * from './PropertyLayout';
+export * from './PropertyRowLayout';
