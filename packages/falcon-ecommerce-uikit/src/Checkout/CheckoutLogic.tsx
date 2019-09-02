@@ -270,25 +270,21 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
   };
 
   render() {
-    return (
-      <React.Fragment>
-        {this.props.children({
-          loading: this.state.loading,
-          values: this.state.values,
-          errors: this.state.errors,
-          result: this.state.result,
-          availablePaymentMethods: this.state.availablePaymentMethods,
-          availableShippingMethods: this.state.availableShippingMethods,
-          setEmail: this.setEmail,
-          setShippingAddress: this.setShippingAddress,
-          setBillingAddress: this.setBillingAddress,
-          setBillingSameAsShipping: this.setBillingSameAsShipping,
-          setShippingMethod: this.setShippingMethod,
-          setPaymentMethod: this.setPaymentMethod,
-          placeOrder: this.placeOrder
-        })}
-      </React.Fragment>
-    );
+    return this.props.children({
+      loading: this.state.loading,
+      values: this.state.values,
+      errors: this.state.errors,
+      result: this.state.result,
+      availablePaymentMethods: this.state.availablePaymentMethods,
+      availableShippingMethods: this.state.availableShippingMethods,
+      setEmail: this.setEmail,
+      setShippingAddress: this.setShippingAddress,
+      setBillingAddress: this.setBillingAddress,
+      setBillingSameAsShipping: this.setBillingSameAsShipping,
+      setShippingMethod: this.setShippingMethod,
+      setPaymentMethod: this.setPaymentMethod,
+      placeOrder: this.placeOrder
+    });
   }
 }
 
