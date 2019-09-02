@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, GridLayout } from '@deity/falcon-ui';
-import { Price } from '@deity/falcon-ui-kit';
+import { Price } from '../Price';
 
 export type TotalRowProps = {
   title: string;
