@@ -15,18 +15,18 @@ const getTotalByCode = (totals, code) => totals.find(total => total.code === cod
 
 const CartTotals = ({ totalsData, totalsToDisplay = [], bold = [], ...props }) => (
   <Box {...props}>
-    {totalsToDisplay.map((type, index) => {
-      if (type === 'divider') {
+    {totalsToDisplay.map((code, index) => {
+      if (code === 'divider') {
         return <Divider key={`divider-${index}`} />; // eslint-disable-line react/no-array-index-key
       }
 
-      const total = getTotalByCode(totalsData, type);
+      const total = getTotalByCode(totalsData, code);
       if (total) {
         return (
           <PropertyRowLayout
-            key={type}
+            key={code}
             variant="spaceBetween"
-            fontWeight={bold.indexOf(type) !== -1 ? 'bold' : 'normal'}
+            fontWeight={bold.indexOf(code) !== -1 ? 'bold' : 'normal'}
           >
             <Text>{total.title}</Text>
             <Price value={total.value} />
