@@ -2,6 +2,7 @@ export * from './Address';
 export * from './BackendConfig';
 export * from './Cart';
 export * from './Category';
+export * from './Checkout';
 export * from './Country';
 export * from './Customer';
 export * from './Menu';

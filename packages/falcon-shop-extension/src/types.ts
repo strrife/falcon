@@ -19,50 +19,43 @@ export type ShopStoreEntry = {
   code: string;
 } & GraphQLBase;
 
-export type Address = {
-  id: number;
+export type AddressBase = {
   firstname: string;
   lastname: string;
   street: string[];
   city: string;
-  postcode?: string;
+  postcode: string;
+  regionId?: number;
   countryId: string;
   company?: string;
-  region?: string;
-  regionId?: number;
   telephone?: string;
+};
+
+export type Address = AddressBase & {
+  id: number;
+  region?: string;
   fax?: string;
   defaultBilling: boolean;
   defaultShipping: boolean;
 } & GraphQLBase;
 
-export type AddAddressInput = {
-  company?: string;
-  firstname: string;
-  lastname: string;
-  telephone: string;
-  street: string[];
-  postcode: string;
-  city: string;
-  countryId: string;
-  defaultBilling?: boolean;
-  defaultShipping?: boolean;
-  regionId?: number;
+export type CheckoutAddressInput = AddressBase & {
+  id?: number;
+  email?: string;
+  saveInAddressBook?: number;
+  sameAsBilling?: number;
 };
 
-export type EditAddressInput = {
-  id: number;
-  company?: string;
-  firstname: string;
-  lastname: string;
-  telephone?: string;
-  street: string;
-  postcode: string;
-  city: string;
-  countryId: string;
+export type AddAddressInput = AddressBase & {
   defaultBilling?: boolean;
   defaultShipping?: boolean;
-  regionId?: number;
+};
+
+export type EditAddressInput = AddressBase & {
+  id: number;
+  telephone?: string;
+  defaultBilling?: boolean;
+  defaultShipping?: boolean;
 };
 
 export type Customer = {
@@ -413,4 +406,33 @@ export type OrderItem = {
   urlKey?: string;
   link?: string;
   parentItem?: OrderItem;
+};
+
+export type PlaceOrderInput = {
+  billingAddress?: CheckoutAddressInput;
+  email?: string;
+  paymentMethod: PaymentMethodInput;
+};
+
+export type PaymentMethodInput = {
+  method: string;
+  additionalData: object;
+};
+
+export type PlaceOrderResult = PlaceOrderSuccessfulResult | PlaceOrder3dSecureResult;
+
+export type PlaceOrderSuccessfulResult = {
+  orderId: string;
+  orderRealId: string;
+};
+
+export type PlaceOrder3dSecureResult = {
+  url: string;
+  method: string;
+  fields: PlaceOrder3dSecureField[];
+};
+
+export type PlaceOrder3dSecureField = {
+  name: string;
+  value?: string;
 };

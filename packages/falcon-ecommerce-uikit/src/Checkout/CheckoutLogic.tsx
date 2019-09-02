@@ -1,28 +1,14 @@
 import React from 'react';
 import { withApollo, WithApolloClient, FetchResult } from 'react-apollo';
 import isEqual from 'lodash.isequal';
+import { PlaceOrderResult, CheckoutAddressInput } from '@deity/falcon-shop-extension';
+import { PLACE_ORDER } from '@deity/falcon-shop-data';
 import {
   ESTIMATE_SHIPPING_METHODS,
   EstimateShippingMethodsData,
   SET_SHIPPING,
-  SetShippingData,
-  PLACE_ORDER,
-  PlaceOrderResult
+  SetShippingData
 } from './CheckoutMutation';
-
-type CheckoutAddress = {
-  id?: number;
-  firstname: string;
-  lastname: string;
-  city: string;
-  postcode: string;
-  company?: string;
-  countryId: string;
-  region?: string;
-  regionId?: number;
-  street: string[];
-  telephone: string;
-};
 
 export type CheckoutShippingMethod = {
   carrierTitle: string;
@@ -42,8 +28,8 @@ export type CheckoutPaymentMethod = {
 
 type CheckoutLogicData = {
   email: string | null;
-  shippingAddress: CheckoutAddress | null;
-  billingAddress: CheckoutAddress | null;
+  shippingAddress?: CheckoutAddressInput;
+  billingAddress?: CheckoutAddressInput;
   billingSameAsShipping: boolean | null;
   shippingMethod: CheckoutShippingMethod | null;
   paymentMethod: CheckoutPaymentMethod | null;
@@ -83,9 +69,9 @@ export type CheckoutLogicInjectedProps = {
   availablePaymentMethods: CheckoutPaymentMethod[];
   result?: PlaceOrderResult;
   setEmail(email: string): void;
-  setShippingAddress(address: CheckoutAddress): void;
+  setShippingAddress(address: CheckoutAddressInput): void;
   setBillingSameAsShipping(same: boolean): void;
-  setBillingAddress(address: CheckoutAddress): void;
+  setBillingAddress(address: CheckoutAddressInput): void;
   setShippingMethod(shipping: CheckoutShippingMethod): void;
   setPaymentMethod(payment: CheckoutPaymentMethod, additionalData?: any): void;
   placeOrder(): void;
@@ -151,7 +137,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
       })
     );
 
-  setBillingAddress = (billingAddress: CheckoutAddress) =>
+  setBillingAddress = (billingAddress: CheckoutAddressInput) =>
     this.setLoading(true, () => this.setPartialState({ loading: false, values: { billingAddress } }));
 
   setPaymentMethod = (paymentMethod: CheckoutPaymentMethod, additionalData?: any) =>
@@ -159,7 +145,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
       this.setPartialState({ loading: false, values: { paymentMethod, paymentAdditionalData: additionalData } })
     );
 
-  setShippingAddress = (shippingAddress: CheckoutAddress) => {
+  setShippingAddress = (shippingAddress: CheckoutAddressInput) => {
     this.setLoading(true, () => {
       // trigger mutation that will return available shipping options
       this.props.client

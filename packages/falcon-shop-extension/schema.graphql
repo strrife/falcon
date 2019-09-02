@@ -44,7 +44,7 @@ extend type Mutation {
   estimateShippingMethods(input: EstimateShippingInput!): [ShippingMethod]
   # set current customer order shipping information
   setShipping(input: ShippingInput): ShippingInformation
-  placeOrder(input: PlaceOrderInput!): PlaceOrderResult
+  placeOrder(input: PlaceOrderInput!): PlaceOrderResult!
 }
 
 extend type BackendConfig {
@@ -52,13 +52,13 @@ extend type BackendConfig {
 }
 
 type ShopConfig {
-  activeCurrency: String
-  activeStore: String
-  currencies: [String]
-  baseCurrency: String
-  stores: [ShopStoreEntry]
-  timezone: String
-  weightUnit: String
+  activeCurrency: String!
+  activeStore: String!
+  currencies: [String!]!
+  baseCurrency: String!
+  stores: [ShopStoreEntry!]!
+  timezone: String!
+  weightUnit: String!
 }
 
 type ShopStoreEntry {
@@ -71,9 +71,9 @@ input RequestPasswordResetInput {
 }
 
 input PlaceOrderInput {
-  billingAddress: AddressInput
+  billingAddress: CheckoutAddressInput
   email: String
-  paymentMethod: PaymentMethodInput
+  paymentMethod: PaymentMethodInput!
 }
 
 input PaymentMethodInput {
@@ -85,14 +85,14 @@ input PaymentMethodInput {
 }
 
 input ShippingInput {
-  billingAddress: AddressInput
-  shippingAddress: AddressInput
+  billingAddress: CheckoutAddressInput
+  shippingAddress: CheckoutAddressInput
   shippingCarrierCode: String
   shippingMethodCode: String
 }
 
 input EstimateShippingInput {
-  address: AddressInput
+  address: CheckoutAddressInput
 }
 
 input ShopPageQuery {
@@ -164,12 +164,13 @@ input EditCustomerInput {
   defaultShipping: Boolean
 }
 
-input AddressInput {
-  id: Int
+input CheckoutAddressInput {
+  id: ID
   # legacy from Magento 2 for placeOrder billingAddress input field
   terms: Boolean
-  firstname: String
-  lastname: String
+
+  firstname: String!
+  lastname: String!
   city: String
   customerId: Int
   customerAddressId: Int
@@ -178,11 +179,9 @@ input AddressInput {
   saveInAddressBook: Int
   email: String
   company: String
-  countryId: String
-  defaultBilling: Boolean
-  defaultShipping: Boolean
+  countryId: ID!
   region: String
-  regionId: Int
+  regionId: ID
   street: [String!]!
   telephone: String
 }
@@ -191,11 +190,11 @@ input AddAddressInput {
   company: String
   firstname: String!
   lastname: String!
-  telephone: String!
+  telephone: String
   street: [String]
   postcode: String!
   city: String!
-  countryId: String!
+  countryId: ID!
   defaultBilling: Boolean
   defaultShipping: Boolean
   regionId: Int
@@ -207,10 +206,10 @@ input EditAddressInput {
   firstname: String!
   lastname: String!
   telephone: String
-  street: [String]
+  street: [String!]!
   postcode: String!
   city: String!
-  countryId: String!
+  countryId: ID!
   defaultBilling: Boolean
   defaultShipping: Boolean
   regionId: Int
@@ -260,11 +259,11 @@ type PlaceOrderSuccessfulResult {
   """
   Increment order id
   """
-  orderId: String
+  orderId: ID!
   """
   like 0000001 - used for reference by customer
   """
-  orderRealId: String
+  orderRealId: ID!
 }
 
 """
@@ -278,11 +277,11 @@ type PlaceOrder3dSecureResult {
   """
   HTTP method (GET or POST)
   """
-  method: String
+  method: String!
   """
   List of fields to pass to the issuer page
   """
-  fields: [PlaceOrder3dSecureField]
+  fields: [PlaceOrder3dSecureField!]!
 }
 
 type PlaceOrder3dSecureField {
