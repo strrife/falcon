@@ -436,3 +436,18 @@ export type PlaceOrder3dSecureField = {
   name: string;
   value?: string;
 };
+
+export type EstimateShippingMethodsInput = {
+  address: CheckoutAddressInput;
+};
+
+export type ShippingMethod = {
+  carrierTitle: string;
+  carrierCode: string;
+  methodCode: string;
+  methodTitle: string;
+  amount: number;
+  priceExclTax: number;
+  priceInclTax: number;
+  currency: string;
+};

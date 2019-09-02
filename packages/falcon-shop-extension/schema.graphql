@@ -41,7 +41,7 @@ extend type Mutation {
   editAddress(input: EditAddressInput!): Address
   addAddress(input: AddAddressInput!): Address
   removeAddress(id: Int!): Boolean
-  estimateShippingMethods(input: EstimateShippingInput!): [ShippingMethod]
+  estimateShippingMethods(input: EstimateShippingMethodsInput!): [ShippingMethod!]!
   # set current customer order shipping information
   setShipping(input: ShippingInput): ShippingInformation
   placeOrder(input: PlaceOrderInput!): PlaceOrderResult!
@@ -91,8 +91,8 @@ input ShippingInput {
   shippingMethodCode: String
 }
 
-input EstimateShippingInput {
-  address: CheckoutAddressInput
+input EstimateShippingMethodsInput {
+  address: CheckoutAddressInput!
 }
 
 input ShopPageQuery {
@@ -328,14 +328,14 @@ type Product {
 }
 
 type ShippingMethod {
-  carrierTitle: String
-  amount: Float
-  carrierCode: String
-  methodCode: String
-  methodTitle: String
-  priceExclTax: Float
-  priceInclTax: Float
-  currency: String
+  carrierTitle: String!
+  carrierCode: String!
+  methodCode: String!
+  methodTitle: String!
+  amount: Float!
+  priceExclTax: Float!
+  priceInclTax: Float!
+  currency: String!
 }
 
 type ShippingInformation {

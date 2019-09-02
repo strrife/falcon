@@ -34,11 +34,11 @@
 
 ---
 
-- CheckoutShippingMethod
+> - ~~CheckoutShippingMethod~~ - renamed to `ShippingMethod` moved to @deity/falcon-shop-extension
 - CheckoutPaymentMethod
 - CheckoutLogicInjectedProps
 - CheckoutLogicProps
-- EstimateShippingMethodsMutation
+> - ~~EstimateShippingMethodsMutation~~ - moved to @deity/falcon-shop-data
 - SetShippingMutation
 - PlaceOrderMutation
 
@@ -137,9 +137,9 @@
 
 ---
 
-- ESTIMATE_SHIPPING_METHODS
+> - ~~ESTIMATE_SHIPPING_METHODS~~ - moved to @deity/falcon-shop-data
 - SET_SHIPPING
-- PLACE_ORDER
+> - ~~PLACE_ORDER~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -236,7 +236,7 @@
 
 ---
 
-- EstimateShippingMethodsData
+> - ~~EstimateShippingMethodsData~~ - renamed to EstimateShippingMethodsResponse and move to @deity/falcon-shop-data
 - SetShippingData
 - PlaceOrderSuccessfulResult
 - PlaceOrder3dSecureResult

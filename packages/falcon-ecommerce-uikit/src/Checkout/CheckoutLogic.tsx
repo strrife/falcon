@@ -1,25 +1,15 @@
 import React from 'react';
 import { withApollo, WithApolloClient, FetchResult } from 'react-apollo';
 import isEqual from 'lodash.isequal';
-import { PlaceOrderResult, CheckoutAddressInput } from '@deity/falcon-shop-extension';
-import { PLACE_ORDER } from '@deity/falcon-shop-data';
+import { OperationInput } from '@deity/falcon-data';
 import {
-  ESTIMATE_SHIPPING_METHODS,
-  EstimateShippingMethodsData,
-  SET_SHIPPING,
-  SetShippingData
-} from './CheckoutMutation';
-
-export type CheckoutShippingMethod = {
-  carrierTitle: string;
-  amount: number;
-  carrierCode: string;
-  methodCode: string;
-  methodTitle: string;
-  priceExclTax: number;
-  priceInclTax: number;
-  currency: string;
-};
+  PlaceOrderResult,
+  CheckoutAddressInput,
+  EstimateShippingMethodsInput,
+  ShippingMethod
+} from '@deity/falcon-shop-extension';
+import { PLACE_ORDER, ESTIMATE_SHIPPING_METHODS, EstimateShippingMethodsResponse } from '@deity/falcon-shop-data';
+import { SET_SHIPPING, SetShippingData } from './CheckoutMutation';
 
 export type CheckoutPaymentMethod = {
   code: string;
@@ -31,7 +21,7 @@ type CheckoutLogicData = {
   shippingAddress?: CheckoutAddressInput;
   billingAddress?: CheckoutAddressInput;
   billingSameAsShipping: boolean | null;
-  shippingMethod: CheckoutShippingMethod | null;
+  shippingMethod: ShippingMethod | null;
   paymentMethod: CheckoutPaymentMethod | null;
   paymentAdditionalData: object | null;
 };
@@ -47,7 +37,7 @@ type CheckoutLogicState = {
   errors: CheckoutLogicErrors;
   values: CheckoutLogicData;
   result?: PlaceOrderResult;
-  availableShippingMethods: CheckoutShippingMethod[];
+  availableShippingMethods: ShippingMethod[];
   availablePaymentMethods: CheckoutPaymentMethod[];
 };
 
@@ -65,14 +55,14 @@ export type CheckoutLogicInjectedProps = {
   values: CheckoutLogicData;
   errors: CheckoutLogicErrors;
   loading: boolean;
-  availableShippingMethods: CheckoutShippingMethod[];
+  availableShippingMethods: ShippingMethod[];
   availablePaymentMethods: CheckoutPaymentMethod[];
   result?: PlaceOrderResult;
   setEmail(email: string): void;
   setShippingAddress(address: CheckoutAddressInput): void;
   setBillingSameAsShipping(same: boolean): void;
   setBillingAddress(address: CheckoutAddressInput): void;
-  setShippingMethod(shipping: CheckoutShippingMethod): void;
+  setShippingMethod(shipping: ShippingMethod): void;
   setPaymentMethod(payment: CheckoutPaymentMethod, additionalData?: any): void;
   placeOrder(): void;
 };
@@ -114,7 +104,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
     this.setPartialState({ loading }, callback);
   }
 
-  getShippingMethodData(shippingMethod: CheckoutShippingMethod) {
+  getShippingMethodData(shippingMethod: ShippingMethod) {
     return {
       shippingCarrierCode: shippingMethod.carrierCode,
       shippingMethodCode: shippingMethod.methodCode
@@ -149,7 +139,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
     this.setLoading(true, () => {
       // trigger mutation that will return available shipping options
       this.props.client
-        .mutate<EstimateShippingMethodsData>({
+        .mutate<EstimateShippingMethodsResponse, OperationInput<EstimateShippingMethodsInput>>({
           mutation: ESTIMATE_SHIPPING_METHODS,
           variables: { input: { address: shippingAddress } }
         })
@@ -191,7 +181,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
     });
   };
 
-  setShippingMethod = (shippingMethod: CheckoutShippingMethod) => {
+  setShippingMethod = (shippingMethod: ShippingMethod) => {
     this.setLoading(true, () => {
       // trigger mutation that will return available payment options
       this.props.client

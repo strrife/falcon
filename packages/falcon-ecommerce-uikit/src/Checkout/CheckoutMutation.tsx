@@ -1,31 +1,6 @@
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import { CheckoutPaymentMethod, CheckoutShippingMethod } from './CheckoutLogic';
-
-export type EstimateShippingMethodsData = {
-  estimateShippingMethods: CheckoutShippingMethod[];
-};
-
-export const ESTIMATE_SHIPPING_METHODS = gql`
-  mutation EstimateShippingMethods($input: EstimateShippingInput!) {
-    estimateShippingMethods(input: $input) {
-      carrierTitle
-      amount
-      carrierCode
-      methodCode
-      methodTitle
-      priceExclTax
-      priceInclTax
-      currency
-    }
-  }
-`;
-
-export class EstimateShippingMethodsMutation extends Mutation {
-  static defaultProps = {
-    mutation: ESTIMATE_SHIPPING_METHODS
-  };
-}
+import { CheckoutPaymentMethod } from './CheckoutLogic';
 
 export type SetShippingData = {
   setShipping: {
