@@ -1579,7 +1579,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   /**
    * Sets shipping method for the order
    * @param {object} obj Parent object
-   * @param {ShippingInput} input shipping configuration
+   * @param {SetShippingInput} input shipping configuration
    * @returns {Promise<ShippingInformation>} shipping configuration info
    */
   async setShipping(obj, { input }) {

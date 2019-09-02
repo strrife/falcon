@@ -43,7 +43,7 @@ extend type Mutation {
   removeAddress(id: Int!): Boolean
   estimateShippingMethods(input: EstimateShippingMethodsInput!): [ShippingMethod!]!
   # set current customer order shipping information
-  setShipping(input: ShippingInput): ShippingInformation
+  setShipping(input: SetShippingInput): SetShippingResult!
   placeOrder(input: PlaceOrderInput!): PlaceOrderResult!
 }
 
@@ -84,11 +84,11 @@ input PaymentMethodInput {
   additionalData: JSON
 }
 
-input ShippingInput {
-  billingAddress: CheckoutAddressInput
-  shippingAddress: CheckoutAddressInput
-  shippingCarrierCode: String
-  shippingMethodCode: String
+input SetShippingInput {
+  billingAddress: CheckoutAddressInput!
+  shippingAddress: CheckoutAddressInput!
+  shippingCarrierCode: String!
+  shippingMethodCode: String!
 }
 
 input EstimateShippingMethodsInput {
@@ -338,9 +338,9 @@ type ShippingMethod {
   currency: String!
 }
 
-type ShippingInformation {
-  paymentMethods: [PaymentMethod]
-  totals: [CartTotal]
+type SetShippingResult {
+  paymentMethods: [PaymentMethod!]!
+  totals: [CartTotal!]!
 }
 
 type PaymentMethod {

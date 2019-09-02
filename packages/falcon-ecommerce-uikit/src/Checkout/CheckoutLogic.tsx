@@ -6,10 +6,16 @@ import {
   PlaceOrderResult,
   CheckoutAddressInput,
   EstimateShippingMethodsInput,
-  ShippingMethod
+  ShippingMethod,
+  SetShippingInput
 } from '@deity/falcon-shop-extension';
-import { PLACE_ORDER, ESTIMATE_SHIPPING_METHODS, EstimateShippingMethodsResponse } from '@deity/falcon-shop-data';
-import { SET_SHIPPING, SetShippingData } from './CheckoutMutation';
+import {
+  PLACE_ORDER,
+  ESTIMATE_SHIPPING_METHODS,
+  EstimateShippingMethodsResponse,
+  SET_SHIPPING,
+  SetShippingResponse
+} from '@deity/falcon-shop-data';
 
 export type CheckoutPaymentMethod = {
   code: string;
@@ -143,11 +149,11 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
           mutation: ESTIMATE_SHIPPING_METHODS,
           variables: { input: { address: shippingAddress } }
         })
-        .then((resp: FetchResult) => {
-          if (resp.errors) {
+        .then(response => {
+          if (response.errors) {
             this.setPartialState({
               loading: false,
-              errors: { shippingAddress: resp.errors },
+              errors: { shippingAddress: response.errors },
               availableShippingMethods: null
             });
           } else {
@@ -158,7 +164,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
               values.billingAddress = shippingAddress;
             }
 
-            const { estimateShippingMethods } = resp.data!;
+            const { estimateShippingMethods } = response.data;
             // if shipping methods has changed then remove already selected shipping method
             if (!isEqual(estimateShippingMethods, this.state.availableShippingMethods)) {
               values.shippingMethod = null;
@@ -185,7 +191,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
     this.setLoading(true, () => {
       // trigger mutation that will return available payment options
       this.props.client
-        .mutate<SetShippingData>({
+        .mutate<SetShippingResponse, OperationInput<SetShippingInput>>({
           mutation: SET_SHIPPING,
           // refetch cart because totals have changed once shipping has been selected
           refetchQueries: ['Cart'],
@@ -197,17 +203,17 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
             }
           }
         })
-        .then((resp: FetchResult) => {
-          if (resp.errors) {
+        .then(response => {
+          if (response.errors) {
             this.setPartialState({
               loading: false,
-              errors: { shippingMethod: resp.errors },
+              errors: { shippingMethod: response.errors },
               availablePaymentMethods: null
             });
           } else {
             const values = { shippingMethod } as CheckoutLogicData;
             // if available payment methods has changed then remove selected payment method
-            if (!isEqual(resp.data!.setShipping.paymentMethods, this.state.availablePaymentMethods)) {
+            if (!isEqual(response.data.setShipping.paymentMethods, this.state.availablePaymentMethods)) {
               values.paymentMethod = null;
             }
 
@@ -215,7 +221,7 @@ class CheckoutLogicImpl extends React.Component<CheckoutLogicProps, CheckoutLogi
               loading: false,
               errors: {},
               values,
-              availablePaymentMethods: resp.data!.setShipping.paymentMethods
+              availablePaymentMethods: response.data!.setShipping.paymentMethods
             });
           }
         })

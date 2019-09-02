@@ -39,7 +39,7 @@
 - CheckoutLogicInjectedProps
 - CheckoutLogicProps
 > - ~~EstimateShippingMethodsMutation~~ - moved to @deity/falcon-shop-data
-- SetShippingMutation
+> - ~~SetShippingMutation~~ - moved to @deity/falcon-shop-data
 - PlaceOrderMutation
 
 ---
@@ -138,7 +138,7 @@
 ---
 
 > - ~~ESTIMATE_SHIPPING_METHODS~~ - moved to @deity/falcon-shop-data
-- SET_SHIPPING
+> - ~~SET_SHIPPING~~ - moved to @deity/falcon-shop-data
 > - ~~PLACE_ORDER~~ - moved to @deity/falcon-shop-data
 
 ---
@@ -237,7 +237,7 @@
 ---
 
 > - ~~EstimateShippingMethodsData~~ - renamed to EstimateShippingMethodsResponse and move to @deity/falcon-shop-data
-- SetShippingData
+> - ~~SetShippingData~~ - renamed to SetShippingResponse and moved to @deity/falcon-shop-data
 - PlaceOrderSuccessfulResult
 - PlaceOrder3dSecureResult
 - PlaceOrder3dSecureField

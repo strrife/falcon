@@ -451,3 +451,24 @@ export type ShippingMethod = {
   priceInclTax: number;
   currency: string;
 };
+
+export type SetShippingInput = {
+  billingAddress: CheckoutAddressInput;
+  shippingAddress: CheckoutAddressInput;
+  shippingCarrierCode: string;
+  shippingMethodCode: string;
+};
+
+export type SetShippingResult = {
+  paymentMethods: PaymentMethod[];
+  totals: CartTotal;
+};
+
+export type PaymentMethod = {
+  /** Internal Payment method code (like "paypal_express") */
+  code: string;
+  /** Translated Payment method title (like "PayPal Express Checkout") */
+  title: string;
+  /** Configuration object for the specific Payment method */
+  config: Object;
+};
