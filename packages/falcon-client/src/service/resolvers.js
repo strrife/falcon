@@ -2,6 +2,7 @@ import { apolloStateToObject } from './apolloStateToObject';
 
 export const resolvers = {
   Query: {
+    // eslint-disable-next-line jsdoc/require-param
     /** TODO: move into @deity/falcon-front-kit */
     clientConfig: (_, { key }, { cache }) => {
       const keyPrefix = '$ROOT_QUERY.config';
