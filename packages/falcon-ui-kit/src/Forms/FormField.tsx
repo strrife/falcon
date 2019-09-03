@@ -1,6 +1,6 @@
 import React from 'react';
 import { FieldProps as FormikFieldProps } from 'formik';
-import { Field, Validator, getInputDefaultValidators } from '@deity/falcon-front-kit';
+import { Field, Validator, getDefaultInputValidators } from '@deity/falcon-front-kit';
 import { Input, extractThemableProps, ThemedComponentProps } from '@deity/falcon-ui';
 import { FormFieldLabel } from './FormFieldLabel';
 import { FormFieldError } from './FormFieldError';
@@ -34,7 +34,7 @@ export const FormField: React.SFC<FormFieldProps> = props => {
   const { themableProps, rest } = extractThemableProps(restProps);
 
   return (
-    <Field name={name} validate={getInputDefaultValidators(props)} {...rest}>
+    <Field name={name} validate={getDefaultInputValidators(props)} {...rest}>
       {({ form, field, label, error }) => (
         <FormFieldLayout {...themableProps}>
           {label && <FormFieldLabel htmlFor={field.id}>{label}</FormFieldLabel>}

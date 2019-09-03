@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field, getInputDefaultValidators } from '@deity/falcon-front-kit';
+import { Field, getDefaultInputValidators } from '@deity/falcon-front-kit';
 import { Box, Label, Checkbox, FlexLayout, extractThemableProps, themed } from '@deity/falcon-ui';
 import { toGridTemplate } from '../helpers';
 import { FormFieldProps } from './FormField';
@@ -27,7 +27,7 @@ export const CheckboxFormField: React.SFC<FormFieldProps> = props => {
   const { themableProps, rest } = extractThemableProps(restProps);
 
   return (
-    <Field name={name} validate={getInputDefaultValidators(props)} {...rest}>
+    <Field name={name} validate={getDefaultInputValidators(props)} {...rest}>
       {({ form, field, label, error }) => (
         <CheckboxFormFieldLayout {...themableProps}>
           <Checkbox

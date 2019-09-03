@@ -1,20 +1,19 @@
 import { inputTypeToDefaultValidatorsMapper } from './inputTypeToDefaultValidatorsMapper';
 import { requiredValidator, Validator } from './validators';
 
-export function getInputDefaultValidators(
+export function getDefaultInputValidators(
   input: Pick<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'required'> & { validate?: Validator[] }
 ): Validator[] {
   const { type, required, validate } = input;
-
   const anyValidatorsDefined = !!validate;
-  let result = anyValidatorsDefined ? validate : [];
 
+  const result = anyValidatorsDefined ? validate : [];
   if (required) {
-    result = [requiredValidator, ...result];
+    result.unshift(requiredValidator);
   }
 
   if (!anyValidatorsDefined) {
-    result = [...result, ...inputTypeToDefaultValidatorsMapper(type)];
+    result.push(...inputTypeToDefaultValidatorsMapper(type));
   }
 
   return result;
