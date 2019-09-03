@@ -10,6 +10,16 @@ const alias = require('rollup-plugin-alias');
 const paths = require('../paths');
 const { getManifestEntries } = require('./workbox');
 
+const getPatternList = (NODE_ENV, buildConfig, manifestEntries) => [
+  { test: 'process.env.NODE_ENV', replace: JSON.stringify(NODE_ENV) },
+  { test: 'const CONFIG = {};', replace: `const CONFIG = ${JSON.stringify(buildConfig, null, 2)};` },
+  { test: 'const ENTRIES = [];', replace: `const ENTRIES = ${JSON.stringify(manifestEntries, null, 2)};` },
+  {
+    test: 'const BLACKLIST_ROUTES = [];',
+    replace: `const BLACKLIST_ROUTES = ${JSON.stringify(buildConfig.blacklistRoutes, null, 2)};`
+  }
+];
+
 /**
  * @param {import('../webpack/tools').FalconSWBuildConfig} buildConfig
  */
@@ -30,13 +40,7 @@ module.exports.build = async buildConfig => {
       plugins: [
         alias({ 'app-path': paths.appPath }),
         resolve(),
-        re({
-          patterns: [
-            { test: 'process.env.NODE_ENV', replace: JSON.stringify(NODE_ENV) },
-            { test: 'const CONFIG = {};', replace: `const CONFIG = ${JSON.stringify(buildConfig, null, 2)};` },
-            { test: 'const ENTRIES = [];', replace: `const ENTRIES = ${JSON.stringify(manifestEntries, null, 2)};` }
-          ]
-        }),
+        re({ patterns: getPatternList(NODE_ENV, buildConfig, manifestEntries) }),
         IS_PROD && terser()
       ].map(x => x),
       treeshake: IS_PROD
@@ -88,13 +92,7 @@ module.exports.watch = async buildConfig => {
       plugins: [
         alias({ 'app-path': paths.appPath }),
         resolve(),
-        re({
-          patterns: [
-            { test: 'process.env.NODE_ENV', replace: JSON.stringify(NODE_ENV) },
-            { test: 'const CONFIG = {};', replace: `const CONFIG = ${JSON.stringify(buildConfig, null, 2)};` },
-            { test: 'const ENTRIES = [];', replace: `const ENTRIES = ${JSON.stringify(manifestEntries, null, 2)};` }
-          ]
-        })
+        re({ patterns: getPatternList(NODE_ENV, buildConfig, manifestEntries) })
       ].map(x => x)
     };
 

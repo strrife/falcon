@@ -3,6 +3,14 @@
   "appName": "falcon-client-demo",
   "port": 3000,
   "serverSideRendering": true,
+  "proxyEndpoints": [
+    "/rest/(.*)/V1/falcon/guest-carts/(.*)/paypal-express-return",
+    "/rest/(.*)/V1/falcon/guest-carts/(.*)/paypal-express-cancel",
+    "/rest/(.*)/V1/falcon/carts/mine/paypal-express-return",
+    "/rest/(.*)/V1/falcon/carts/mine/paypal-express-cancel",
+    "/rest/(.*)/V1/falcon/guest-orders/(.*)/adyen-process-validate3d",
+    "/rest/(.*)/V1/falcon/orders/(.*)/adyen-process-validate3d"
+  ],
   "i18n": {
     "__typename": "I18nConfig",
     "ns": ["translations"],
