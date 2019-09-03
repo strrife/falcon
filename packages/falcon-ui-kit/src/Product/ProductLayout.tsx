@@ -18,7 +18,7 @@ export const ProductLayoutAreas = {
 export const ProductLayout = themed({
   tag: 'article',
   defaultTheme: {
-    ProductLayout: {
+    productLayout: {
       display: 'grid',
       gridGap: 'sm',
 
