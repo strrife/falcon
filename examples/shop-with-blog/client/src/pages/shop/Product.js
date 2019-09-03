@@ -30,7 +30,7 @@ const ProductPage = ({ id, path }) => (
             <AddToCartFormProvider
               quantity={1}
               product={product}
-              onSubmit={() => openSidebar({ variables: { contentType: 'cart' } })}
+              onSuccess={() => openSidebar({ variables: { contentType: 'cart' } })}
             >
               {({ isSubmitting, status }) => (
                 <ProductLayout as={Form} id="add-to-cart" i18nId="product">

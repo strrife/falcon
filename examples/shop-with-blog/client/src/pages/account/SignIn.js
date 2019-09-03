@@ -14,7 +14,7 @@ const SignIn = ({ history, location }) => {
       <H1>
         <T id="signIn.title" />
       </H1>
-      <SignInForm id="sign-in-page" onSubmit={() => history.replace(next)} />
+      <SignInForm id="sign-in-page" onSuccess={() => history.replace(next)} />
     </Box>
   );
 };

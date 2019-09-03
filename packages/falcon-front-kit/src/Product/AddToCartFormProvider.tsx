@@ -18,7 +18,7 @@ export type AddToCartFormProviderProps = FormProviderProps<AddToCartFormValues> 
   };
 };
 export const AddToCartFormProvider: React.SFC<AddToCartFormProviderProps> = props => {
-  const { onSubmit, initialValues, quantity, product, ...formikProps } = props;
+  const { onSuccess, initialValues, quantity, product, ...formikProps } = props;
   const defaultInitialValues = {
     qty: quantity,
     options: productOptionsToForm(product.options),
@@ -43,7 +43,7 @@ export const AddToCartFormProvider: React.SFC<AddToCartFormProviderProps> = prop
             })
               .then(() => {
                 formikActions.setSubmitting(false);
-                return onSubmit && onSubmit();
+                return onSuccess && onSuccess();
               })
               .catch(e => {
                 formikActions.setSubmitting(false);

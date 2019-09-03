@@ -40,7 +40,7 @@ export default ({ contentType }) => {
           <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.account}>
             <SidebarLayout title={t('signIn.title')}>
               <CloseSidebarMutation>
-                {closeSidebar => <SignInForm id="sign-in-sidebar" onSubmit={closeSidebar} />}
+                {closeSidebar => <SignInForm id="sign-in-sidebar" onSuccess={closeSidebar} />}
               </CloseSidebarMutation>
               <Divider my="lg" />
               <NewAccount />
@@ -50,7 +50,7 @@ export default ({ contentType }) => {
             <SidebarLayout title={t('signUp.title')}>
               <OpenSidebarMutation>
                 {openSidebarMutation => (
-                  <SignUpForm onSubmit={() => openSidebarMutation({ variables: { contentType: 'account' } })} />
+                  <SignUpForm onSuccess={() => openSidebarMutation({ variables: { contentType: 'account' } })} />
                 )}
               </OpenSidebarMutation>
             </SidebarLayout>
