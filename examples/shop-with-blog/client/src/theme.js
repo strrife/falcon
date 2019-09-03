@@ -16,7 +16,8 @@ import CheckCircle from 'react-feather/dist/icons/check-circle';
 import Eye from 'react-feather/dist/icons/eye';
 import EyeOff from 'react-feather/dist/icons/eye-off';
 import { createTheme } from '@deity/falcon-ui';
-import { DeityLogo, SignInIcon } from '@deity/falcon-ui-kit';
+import { SignInIcon } from '@deity/falcon-ui-kit';
+import { DeityLogo } from 'src/components/DeityLogo';
 
 export const deityGreenTheme = createTheme({
   colors: {

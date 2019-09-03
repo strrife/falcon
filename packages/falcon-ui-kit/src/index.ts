@@ -8,7 +8,6 @@ export * from './FormattedDate';
 export * from './Forms';
 export * from './Layouts';
 export * from './Locale';
-export * from './Logo';
 export * from './MiniCart';
 export * from './Price';
 export * from './Product';
