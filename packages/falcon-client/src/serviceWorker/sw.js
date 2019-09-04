@@ -13,8 +13,6 @@ const CONFIG = {};
 
 const ENTRIES = [];
 
-const BLACKLIST_ROUTES = [];
-
 /**
  * `message` event handler
  * @param {Event} event event
@@ -102,7 +100,7 @@ router.registerRoute(
       return getFromCacheOrNetwork(cachedUrlKey);
     },
     {
-      blacklist: BLACKLIST_ROUTES.map(route => new RegExp(route))
+      blacklist: CONFIG.blacklistRoutes.map(route => new RegExp(route))
     }
   )
 );
