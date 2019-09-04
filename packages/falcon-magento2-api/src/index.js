@@ -21,6 +21,14 @@ const FALCON_CART_ACTIONS = [
   '/place-order'
 ];
 
+/** Magento visibility settings */
+const ProductVisibility = {
+  notVisible: '1',
+  catalog: '2',
+  search: '3',
+  catalogAndSearch: '4'
+};
+
 /**
  * API for Magento2 store - provides resolvers for shop schema.
  */
@@ -131,15 +139,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   async categoryProducts(obj, params) {
     const query = this.createSearchParams(params);
 
-    /**
-     * Magento visibility settings
-     *
-     * VISIBILITY_NOT_VISIBLE = 1;
-     * VISIBILITY_IN_CATALOG = 2;
-     * VISIBILITY_IN_SEARCH = 3;
-     * VISIBILITY_BOTH = 4;
-     */
-    this.addSearchFilter(params, 'visibility', '4', 'eq');
+    this.addSearchFilter(params, 'visibility', ProductVisibility.catalogAndSearch, 'eq');
 
     if (!this.isFilterSet('status', params)) {
       this.addSearchFilter(params, 'status', '1');
@@ -454,15 +454,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @returns {Promise<Product[]>} - list of product items
    */
   fetchProductList(params = {}) {
-    /**
-     * Magento visibility settings
-     *
-     * VISIBILITY_NOT_VISIBLE = 1;
-     * VISIBILITY_IN_CATALOG = 2;
-     * VISIBILITY_IN_SEARCH = 3;
-     * VISIBILITY_BOTH = 4;
-     */
-    this.addSearchFilter(params, 'visibility', '4', 'eq');
+    this.addSearchFilter(params, 'visibility', ProductVisibility.catalogAndSearch, 'eq');
 
     if (!this.isFilterSet('status', params)) {
       this.addSearchFilter(params, 'status', '1');
