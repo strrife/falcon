@@ -472,7 +472,7 @@ input AddToCartInput {
   sku: String!
   qty: Float!
   options: [ProductOptionInput]
-  bundleOptions: [BundleOptionInput]
+  bundleOptions: [BundleProductOptionInput]
 }
 
 input ProductOptionInput {
@@ -480,10 +480,10 @@ input ProductOptionInput {
   value: Int!
 }
 
-input BundleOptionInput {
-  optionId: Int!
-  optionQty: Float!
-  optionSelections: [Int]
+input BundleProductOptionInput {
+  id: ID!
+  qty: Float!
+  selections: [Int]
 }
 
 input UpdateCartItemInput {
@@ -573,11 +573,11 @@ type Breadcrumb {
 }
 
 type ProductOption {
-  id: String!
+  id: ID!
   attributeId: String!
   label: String
   position: String
-  productId: String!
+  productId: ID!
   values: [ProductOptionValue!]!
 }
 
@@ -588,7 +588,7 @@ type ProductOptionValue {
 }
 
 type BundleProductOption {
-  optionId: Int
+  id: ID!
   position: Int
   productLinks: [BundleProductOptionLink]
   required: Boolean
