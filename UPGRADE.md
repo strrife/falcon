@@ -40,6 +40,8 @@ Next, follow steps 2, 3 and 4 to install required dependencies.
 
 ## Falcon 1.3 to 1.4
 
+### Falcon-Server ApiDataSource
+
 **[Possible upgrade required]** If your API package was previously adding extra resolvers via `addResolveFunctionsToSchema`
 during the runtime - here's upgrade instructions on how to make those changes compatible with the new version of Falcon-Server:
 
@@ -91,6 +93,25 @@ class MyApi extends ApiDataSource {
 
 > `apiGetter` argument helps you to get required ApiDataSource instance from the current context
 > and defined the required field resolver.
+
+### Falcon-Client
+
+`client/falcon-client.build.config.js`:
+
+```diff
+  serviceWorker: {
+-    precache: process.env.NODE_ENV === 'production'
++    precache: process.env.NODE_ENV === 'production',
++    blacklistRoutes: config.proxyEndpoints || []
+  },
+```
+
+`client/bootstrap.js`:
+
+```diff
+-    onRouterCreated: async router => configureProxy(router, serverUrl, serverConfig.endpoints, redirects)
++    onRouterCreated: async router => configureProxy(router, serverUrl, config.proxyEndpoints, redirects)
+```
 
 ## Falcon 1.0 to 1.1
 
