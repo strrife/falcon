@@ -1,6 +1,7 @@
 const url = require('url');
 const qs = require('qs');
 const urlJoin = require('proper-url-join');
+const snakeCase = require('lodash/snakeCase');
 const isEmpty = require('lodash/isEmpty');
 const pick = require('lodash/pick');
 const has = require('lodash/has');
@@ -134,7 +135,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * Fetch products for fetched category
    * @param {object} obj fetched category
    * @param {object} params query params
-   * @returns {Promise<ProductList>} - fetched list of products
+   * @returns {Promise<CategoryProductList>} - fetched list of products
    */
   async categoryProducts(obj, params) {
     const query = this.createSearchParams(params);
@@ -275,35 +276,27 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {string[]} params.skus skus of products that search should be narrowed to
    * @returns {Promise<Product[]>}  response with list of products
    */
-  async productList(obj, params) {
-    const { filters: simpleFilters = [], categoryId, skus } = params;
-    // params.filters =  contains "simple" key-value filters (will be transpiled to Magento-like filters)
-    const filtersToCheck = {};
+  async productList(obj, { input }) {
+    const { withAttributeFilters = [] } = input;
+    const { searchCriteria } = this.createSearchParams(input);
 
-    if (simpleFilters.length) {
-      simpleFilters.forEach(item => {
-        filtersToCheck[item.field] = item.value;
-      });
+    this.addSearchFilter(searchCriteria, 'visibility', ProductVisibility.catalogAndSearch, 'eq');
+    if (!this.isFilterSet('status', searchCriteria)) {
+      this.addSearchFilter(searchCriteria, 'status', '1');
     }
+    // removed virtual products as we're not supporting it - feature request: RG-1086
+    this.addSearchFilter(searchCriteria, 'type_id', 'simple,configurable,bundle', 'in');
 
-    if (categoryId) {
-      filtersToCheck.category_id = categoryId;
-    }
-
-    // remove filters which are not in format acceptable by Magento
-    params.filters = [];
-
-    Object.keys(filtersToCheck).forEach(key => {
-      if (filtersToCheck[key]) {
-        this.addSearchFilter(params, key, filtersToCheck[key]);
-      }
+    const response = await this.getForIntegration('/products', {
+      includeSubcategories: true,
+      withAttributeFilters,
+      searchCriteria
     });
 
-    if (skus) {
-      this.addSearchFilter(params, 'sku', skus.join(','), 'in');
-    }
-
-    return this.fetchProductList(params);
+    return {
+      items: response.items.map(x => this.reduceProduct(x, this.session.currency)),
+      pagination: this.processPagination(response.total_count, searchCriteria.currentPage, searchCriteria.pageSize)
+    };
   }
 
   /**
@@ -313,31 +306,23 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   createSearchParams(params) {
     const { filters = [], pagination, sort = {} } = params;
-    const processedFilters = {};
 
-    if (filters.length) {
-      filters.forEach(item => {
-        if (item.value) {
-          this.addSearchFilter(processedFilters, item.field, item.value, item.operator);
-        }
-      });
-    }
-
-    const searchCriteria = {
-      filterGroups: processedFilters.filterGroups,
-      sortOrders: [sort]
+    const processedFilters = {
+      filterGroups: params.filterGroups
     };
-
-    searchCriteria.currentPage = parseInt(pagination && pagination.page, 10) || 0;
-
-    if (pagination && pagination.perPage) {
-      searchCriteria.pageSize = pagination.perPage;
-    } else {
-      searchCriteria.pageSize = this.perPage;
-    }
+    filters.forEach(item => {
+      if (item.value) {
+        this.addSearchFilter(processedFilters, snakeCase(item.field), item.value, item.operator);
+      }
+    });
 
     return {
-      searchCriteria
+      searchCriteria: {
+        filterGroups: processedFilters.filterGroups,
+        sortOrders: [sort],
+        currentPage: parseInt(pagination && pagination.page, 10) || 0,
+        pageSize: parseInt(pagination && pagination.perPage, 10) || this.perPage
+      }
     };
   }
 
@@ -449,24 +434,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
-   * Fetch list of the products based on passed criteria
-   * @param {object} params search criteria
-   * @returns {Promise<Product[]>} - list of product items
-   */
-  fetchProductList(params = {}) {
-    this.addSearchFilter(params, 'visibility', ProductVisibility.catalogAndSearch, 'eq');
-
-    if (!this.isFilterSet('status', params)) {
-      this.addSearchFilter(params, 'status', '1');
-    }
-
-    // removed virtual products as we're not supporting it - feature request: RG-1086
-    this.addSearchFilter(params, 'type_id', 'simple,configurable,bundle', 'in');
-
-    return this.fetchList('/products', params);
-  }
-
-  /**
    * Check if given filter is set in params
    * @param {string} filterName name of the filter
    * @param {object} params params with filters
@@ -481,79 +448,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
-   * Generic method for endpoints handling category and product listing
-   * @param {string} path path to magento api endpoint
-   * @param {object} params request params
-   * @param {Array<object>} [params.filters] filters for the collection
-   * @param {boolean} [params.includeSubcategories] use subcategories in the search flag
-   * @param {object} [params.query] request query params
-   * @param {number} [params.query.page] pagination page
-   * @param {number} [params.query.perPage] number of items per page
-   * @param {Array<object>} [params.sortOrders] list of sorting parameters
-   * @param {string[]} [params.withAttributeFilters] list of attributes for layout navigation
-   * @returns {Promise<Product[] | Category[]>} - response from endpoint
-   */
-  async fetchList(path, params) {
-    const {
-      query: { page = 1, perPage } = {},
-      filterGroups = [],
-      includeSubcategories = false,
-      withAttributeFilters = [],
-      sortOrders = {}
-    } = params;
-    const searchCriteria = {
-      sortOrders,
-      currentPage: Number(page),
-      filterGroups
-    };
-
-    if (perPage) {
-      // most list endpoints require int or no param in the request; null will not work
-      searchCriteria.pageSize = perPage;
-    }
-
-    if (sortOrders.length) {
-      searchCriteria.sortOrders = sortOrders;
-    }
-
-    const response = await this.getForIntegration(path, {
-      includeSubcategories,
-      withAttributeFilters,
-      searchCriteria
-    });
-
-    return this.convertList(response, this.session.currency);
-  }
-
-  /**
-   * Process data from listing endpoint
-   * @param {object} response response from Magento2 backend
-   * @param {string} currency selected currency
-   * @returns {object} - processed response
-   */
-  convertList(response = {}, currency = null) {
-    const { items = [], custom_attributes: attributes } = response;
-
-    if (attributes) {
-      this.reduceProduct(response, currency);
-    }
-
-    items.forEach(element => {
-      // If product
-      if (element.sku) {
-        this.reduceProduct(element, currency);
-      }
-
-      // If category
-      if (element.level) {
-        this.convertCategory(element);
-      }
-    });
-
-    return response;
-  }
-
-  /**
    * Reduce product data to what is needed.
    * @param {object} data API response from Magento2 backend
    * @param {string} currency currency code
@@ -563,8 +457,6 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     this.convertAttributesSet(data);
     data = this.convertKeys(data);
 
-    const { customAttributes = {} } = data;
-
     const resolveGallery = product => {
       const { extensionAttributes: attrs, mediaGallerySizes } = product;
       if (attrs && attrs.mediaGallerySizes) {
@@ -573,16 +465,16 @@ module.exports = class Magento2Api extends Magento2ApiBase {
 
       return mediaGallerySizes || [];
     };
-
+    const { customAttributes = {} } = data;
     const result = {
       ...data,
       id: data.id || data.sku, // temporary workaround until Magento returns product id correctly
       sku: data.sku,
-      urlPath: this.convertPathToUrl(data.urlPath),
+      urlPath: this.convertPathToUrl(data.urlPath || customAttributes.urlKey),
       currency,
       name: htmlHelpers.stripHtml(data.name),
       description: customAttributes.description,
-      thumbnail: data.image,
+      thumbnail: data.image || customAttributes.image,
       gallery: resolveGallery(data),
       seo: {
         title: customAttributes.metaTitle,
@@ -629,7 +521,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { price } = parent;
 
     return {
-      regular: tryParseNumber(price.regularPrice) || 0.0,
+      regular: tryParseNumber(price.regularPrice) || tryParseNumber(price) || 0.0,
       special: tryParseNumber(price.specialPrice),
       minTier: tryParseNumber(price.minTierPrice)
     };

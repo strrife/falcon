@@ -2,14 +2,7 @@ extend type Query {
   menu: [MenuItem] @cache(ttl: 15)
   category(id: ID!): Category @cache(ttl: 15)
   product(id: ID!): Product @cache(ttl: 5)
-  productList(
-    categoryId: ID
-    includeSubcategories: Boolean
-    query: ShopPageQuery
-    sortOrders: [SortOrderInput!]
-    filters: [FilterInput!]
-    skus: [String!]
-  ): ProductList!
+  productList(input: ProductListInput): ProductList!
   cart: Cart
   countries: CountryList
   order(id: Int!): Order
@@ -93,13 +86,6 @@ input ShippingInput {
 
 input EstimateShippingInput {
   address: AddressInput
-}
-
-input ShopPageQuery {
-  # simple list of field to get aggregated result count
-  aggregations: [String]
-  perPage: Int
-  page: Int
 }
 
 input FilterInput {
@@ -373,14 +359,26 @@ type Category {
   children: [Category]
   description: String
   breadcrumbs(path: String!): [Breadcrumb]
-  products(pagination: PaginationInput, sort: SortOrderInput, filters: [FilterInput]): ProductList
+  products(pagination: PaginationInput, sort: SortOrderInput, filters: [FilterInput]): CategoryProductList
     @cache(ttl: 15, idPath: ["$parent", "items"])
+}
+
+type CategoryProductList {
+  items: [Product!]!
+  aggregations: [Aggregation!]!
+  pagination: Pagination!
+}
+
+input ProductListInput {
+  term: String
+  filters: [FilterInput!]
+  sortOrders: [SortOrderInput!]
+  pagination: PaginationInput
 }
 
 type ProductList {
   items: [Product!]!
-  aggregations: [Aggregation!]!
-  pagination: Pagination
+  pagination: Pagination!
 }
 
 type Stock {
