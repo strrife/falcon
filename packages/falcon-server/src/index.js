@@ -130,19 +130,22 @@ class FalconServer {
         };
       },
       cache: this.cache,
-      resolvers: {
-        Query: {
-          url: async (...params) => this.dynamicRouteResolver.fetchUrl(...params),
-          backendConfig: async (...params) => this.fetchBackendConfig(...params)
+      resolvers: [
+        {
+          Query: {
+            url: async (...params) => this.dynamicRouteResolver.fetchUrl(...params),
+            backendConfig: async (...params) => this.fetchBackendConfig(...params)
+          },
+          Mutation: {
+            setLocale: (...params) => this.setLocale(...params)
+          },
+          BackendConfig: {
+            activeLocale: (_, __, { session: _session }) => _session.locale
+          },
+          JSON: GraphQLJSON
         },
-        Mutation: {
-          setLocale: (...params) => this.setLocale(...params)
-        },
-        BackendConfig: {
-          activeLocale: (_, __, { session: _session }) => _session.locale
-        },
-        JSON: GraphQLJSON
-      },
+        ...this.apiContainer.resolvers
+      ],
       subscriptions: this.getSubscriptionsOptions(),
       tracing: this.config.debug,
       playground: this.config.debug && {
