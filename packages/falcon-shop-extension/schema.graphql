@@ -476,7 +476,7 @@ input AddToCartInput {
 }
 
 input ProductOptionInput {
-  optionId: Int!
+  id: Int!
   value: Int!
 }
 

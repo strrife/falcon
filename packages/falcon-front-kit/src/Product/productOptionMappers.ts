@@ -9,6 +9,6 @@ export const productOptionsToForm = (options: Pick<ProductOption, 'attributeId'>
 
 export const formProductOptionsToInput = (options: ProductOptionsMap) =>
   Object.entries(options).map<ProductOptionInput>(item => ({
-    optionId: parseInt(item[0], 10),
+    id: parseInt(item[0], 10),
     value: parseInt(item[1], 10)
   }));

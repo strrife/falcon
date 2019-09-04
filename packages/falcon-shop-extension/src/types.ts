@@ -191,7 +191,7 @@ export type AddToCartInput = {
 };
 
 export type ProductOptionInput = {
-  optionId: number;
+  id: number;
   value: number;
 };
 
