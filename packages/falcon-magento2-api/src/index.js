@@ -138,7 +138,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @returns {Promise<CategoryProductList>} - fetched list of products
    */
   async categoryProducts(obj, params) {
-    const query = this.createSearchParams(params);
+    const searchCriteria = this.createSearchCriteria(params);
 
     this.addSearchFilter(params, 'visibility', ProductVisibility.catalogAndSearch, 'eq');
 
@@ -152,9 +152,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { pagination = {} } = params;
     let response;
     try {
-      response = await this.getForIntegration(`/falcon/categories/${obj.id}/products`, query, {
-        context: { pagination }
-      });
+      response = await this.getForIntegration(
+        `/falcon/categories/${obj.id}/products`,
+        { searchCriteria },
+        { context: { pagination } }
+      );
     } catch (ex) {
       // if is_anchor is set to "0" then we cannot fetch category contents (as it doesn't have products)
       // in that case if Magento returns error "Bucked does not exist" we return empty array to avoid displaying errors
@@ -278,7 +280,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    */
   async productList(obj, { input }) {
     const { withAttributeFilters = [] } = input;
-    const { searchCriteria } = this.createSearchParams(input);
+    const searchCriteria = this.createSearchCriteria(input);
 
     this.addSearchFilter(searchCriteria, 'visibility', ProductVisibility.catalogAndSearch, 'eq');
     if (!this.isFilterSet('status', searchCriteria)) {
@@ -304,7 +306,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {object} params parameters passed to the resolver
    * @returns {object} params converted to format acceptable by Magento
    */
-  createSearchParams(params) {
+  createSearchCriteria(params) {
     const { filters = [], pagination, sort = {} } = params;
 
     const processedFilters = {
@@ -317,12 +319,10 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     });
 
     return {
-      searchCriteria: {
-        filterGroups: processedFilters.filterGroups,
-        sortOrders: [sort],
-        currentPage: parseInt(pagination && pagination.page, 10) || 0,
-        pageSize: parseInt(pagination && pagination.perPage, 10) || this.perPage
-      }
+      filterGroups: processedFilters.filterGroups,
+      sortOrders: [sort],
+      currentPage: parseInt(pagination && pagination.page, 10) || 0,
+      pageSize: parseInt(pagination && pagination.perPage, 10) || this.perPage
     };
   }
 
@@ -1039,12 +1039,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   async orders(obj, params) {
     const { pagination = { perPage: this.perPage, page: 1 } } = params;
 
-    const query = this.createSearchParams({
+    const searchCriteria = this.createSearchCriteria({
       pagination,
       sort: { field: 'created_at', direction: 'desc' }
     });
 
-    const response = await this.getForCustomer('/falcon/orders/mine', query, { context: { pagination } });
+    const response = await this.getForCustomer('/falcon/orders/mine', { searchCriteria }, { context: { pagination } });
     const result = this.convertKeys(response);
 
     return result;
