@@ -6,7 +6,8 @@ module.exports = {
   clearConsole: false,
   useWebmanifest: true,
   serviceWorker: {
-    precache: process.env.NODE_ENV === 'production'
+    precache: process.env.NODE_ENV === 'production',
+    blacklistRoutes: config.proxyEndpoints || []
   },
   i18n: {
     resourcePackages: ['@deity/falcon-i18n']
