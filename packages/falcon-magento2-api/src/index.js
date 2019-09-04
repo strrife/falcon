@@ -791,9 +791,9 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       product.cart_item.product_option = {
         extension_attributes: {
           bundle_options: input.bundleOptions.map(x => ({
-            optionId: x.id,
-            optionQty: x.qty,
-            optionSelections: x.selections
+            option_id: x.id,
+            option_qty: x.qty,
+            option_selections: x.selections
           }))
         }
       };
