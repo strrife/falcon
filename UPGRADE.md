@@ -38,6 +38,60 @@ where `xxxxxx` should be changed to a proper name of the patch.
 
 Next, follow steps 2, 3 and 4 to install required dependencies.
 
+## Falcon 1.3 to 1.4
+
+**[Possible upgrade required]** If your API package was previously adding extra resolvers via `addResolveFunctionsToSchema`
+during the runtime - here's upgrade instructions on how to make those changes compatible with the new version of Falcon-Server:
+
+Your current Api Class with `addResolveFunctionsToSchema` call:
+
+```javascript
+class MyApi extends ApiDataSource {
+  constructor() {
+    super();
+    this.addTypeResolvers();
+  }
+
+  addTypeResolvers() {
+    const resolvers = {
+      BackendConfig: {
+        shop: () => this.fetchBackendConfig()
+      },
+      ShopConfig: {
+        weightUnit: () => this.session.weightUnit
+      },
+      Product: {
+        price: (...args) => this.productPrice(...args)
+      }
+    };
+    addResolveFunctionsToSchema({ schema: this.gqlServerConfig.schema, resolvers });
+  }
+}
+```
+
+Your upgraded Api Class with `getExtraResolvers` static method (`ApiDataSource` interface):
+
+```javascript
+class MyApi extends ApiDataSource {
+  static getExtraResolvers(apiGetter) {
+    return {
+      BackendConfig: {
+        shop: apiGetter(api => api.fetchBackendConfig())
+      },
+      ShopConfig: {
+        weightUnit: apiGetter(api => api.session.weightUnit)
+      },
+      Product: {
+        price: apiGetter((api, root, params, context, info) => api.productPrice(root, params, context, info))
+      }
+    };
+  }
+}
+```
+
+> `apiGetter` argument helps you to get required ApiDataSource instance from the current context
+> and defined the required field resolver.
+
 ## Falcon 1.0 to 1.1
 
 API configuration for falcon server
