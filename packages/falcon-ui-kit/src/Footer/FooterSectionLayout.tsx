@@ -4,7 +4,7 @@ import { Box, themed } from '@deity/falcon-ui';
 export const FooterSectionLayout = themed({
   tag: Box,
   defaultTheme: {
-    footerSection: {
+    footerSectionLayout: {
       p: 'md',
       display: 'flex',
       flexDirection: 'column',
