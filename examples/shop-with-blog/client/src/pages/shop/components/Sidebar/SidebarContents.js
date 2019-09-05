@@ -34,7 +34,7 @@ export default ({ contentType }) => {
         <React.Fragment>
           <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.cart}>
             <SidebarLayout title={t('miniCart.title')}>
-              <MiniCartQuery>{data => <MiniCart {...data} />}</MiniCartQuery>
+              <MiniCartQuery>{({ data: { cart } }) => <MiniCart {...cart} />}</MiniCartQuery>
             </SidebarLayout>
           </ContentBox>
           <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.account}>

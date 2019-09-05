@@ -19,7 +19,7 @@ const Order = ({ match }) => {
   return (
     <GridLayout gridGap="md">
       <OrderQuery variables={{ id }}>
-        {({ order }) => (
+        {({ data: { order } }) => (
           <LocaleProvider currency={order.orderCurrencyCode}>
             <H1>
               <T id="order.title" orderId={order.incrementId} />

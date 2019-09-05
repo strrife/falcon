@@ -13,7 +13,7 @@ type ResetPasswordProps = {
 };
 export const ResetPassword: React.SFC<ResetPasswordProps> = ({ resetToken }) => (
   <ValidatePasswordTokenQuery variables={{ token: resetToken }}>
-    {({ validatePasswordToken }) => {
+    {({ data: { validatePasswordToken } }) => {
       const tokenIsInvalid = !validatePasswordToken;
 
       return (

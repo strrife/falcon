@@ -8,7 +8,7 @@ export const SidebarContainer = ({ children }) => (
   <EnsureTTI>
     {({ isReady, forceReady }) => (
       <SidebarQuery onCompleted={({ sidebar }) => sidebar.isOpen && forceReady()}>
-        {({ sidebar }) => (
+        {({ data: { sidebar } }) => (
           <CloseSidebarMutation>
             {closeSidebar =>
               isReady
