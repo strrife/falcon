@@ -19,7 +19,7 @@ const FooterLink = ({ to, children }) => (
   </ListItem>
 );
 
-export const Sitemap = () => (
+const Sitemap = () => (
   <FooterSectionListLayout>
     <FooterSectionLayout>
       <H4 fontWeight="bold">
