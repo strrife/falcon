@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { Query as ApolloQuery, OperationVariables, QueryProps as ApolloQueryProps, QueryResult } from 'react-apollo';
 import { NetworkStatus, ApolloError } from 'apollo-client';
 import { Loader } from './Loader';
+import { Error } from './Error';
 
 export type ApolloFetchMore<TData, TVariables> = QueryResult<TData, TVariables>['fetchMore'];
 export type FetchMore<TData, TVariables> = (data: TData, fetchMore: ApolloFetchMore<TData, TVariables>) => any;
 
 export type QueryRenderProps<TData = any> = TData & {
   loading: boolean;
+  error?: ApolloError;
   networkStatus: NetworkStatus;
   fetchMore: (() => any) | undefined;
 };
@@ -17,6 +19,7 @@ export type QueryProps<TData, TVariables> = Omit<ApolloQueryProps<TData, TVariab
   children: (result: QueryRenderProps<TData>) => React.ReactNode;
   fetchMore?: FetchMore<TData, TVariables>;
   passLoading?: boolean;
+  passError?: boolean;
   variables?: TVariables | any;
 };
 
@@ -25,38 +28,18 @@ export class Query<TData = any, TVariables = OperationVariables> extends React.C
 > {
   static propTypes = {
     ...ApolloQuery.propTypes,
-    loader: PropTypes.bool
+    passLoading: PropTypes.bool,
+    passError: PropTypes.bool
   };
 
-  getErrorCode(error?: ApolloError): string | undefined {
-    if (error) {
-      const { graphQLErrors } = error;
-      if (Array.isArray(graphQLErrors) && graphQLErrors.length > 0) {
-        const { extensions = {} } = graphQLErrors[0];
-        const { code } = extensions;
-
-        return code;
-      }
-    }
-
-    return undefined;
-  }
-
   render() {
-    const { children, fetchMore, passLoading, ...restProps } = this.props;
+    const { children, fetchMore, passLoading, passError, ...restProps } = this.props;
 
     return (
       <ApolloQuery {...restProps}>
-        {({ networkStatus, error, data, loading, fetchMore: apolloFetchMore }) => {
-          if (error) {
-            const errorCode = this.getErrorCode(error);
-            // TODO: add passErrors property or check if errorPolicy === 'all' and pass thru render props all extracted/formated errors with errorcodes instead of inline error message
-            return (
-              <p>
-                {`Error!: ${errorCode}`}
-                <br /> {`${error}`}
-              </p>
-            );
+        {({ networkStatus, error, data, loading, fetchMore: apolloFetchMore }: QueryResult<TData, TVariables>) => {
+          if (!passError && error) {
+            return <Error error={error} />;
           }
 
           loading = networkStatus === NetworkStatus.loading || (networkStatus !== NetworkStatus.fetchMore && loading);
@@ -67,6 +50,7 @@ export class Query<TData = any, TVariables = OperationVariables> extends React.C
           return children({
             ...data!,
             loading,
+            error,
             networkStatus,
             fetchMore: fetchMore ? () => fetchMore(data!, apolloFetchMore) : undefined
           });
