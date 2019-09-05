@@ -1,15 +1,15 @@
 extend type Query {
   menu: [MenuItem] @cache(ttl: 15)
-  category(id: String!): Category @cache(ttl: 15)
-  product(id: String!): Product @cache(ttl: 5)
-  products(
-    categoryId: String
+  category(id: ID!): Category @cache(ttl: 15)
+  product(id: ID!): Product @cache(ttl: 5)
+  productList(
+    categoryId: ID
     includeSubcategories: Boolean
     query: ShopPageQuery
-    sortOrders: [SortOrderInput]
-    filters: [FilterInput]
-    skus: [String]
-  ): ProductList
+    sortOrders: [SortOrderInput!]
+    filters: [FilterInput!]
+    skus: [String!]
+  ): ProductList!
   cart: Cart
   countries: CountryList
   order(id: Int!): Order
@@ -31,9 +31,9 @@ extend type Mutation {
   removeCartItem(input: RemoveCartItemInput!): RemoveCartItemPayload
   applyCoupon(input: CouponInput!): Boolean
   cancelCoupon: Boolean!
-  signUp(input: SignUp!): Boolean
-  signIn(input: SignIn!): Boolean
-  signOut: Boolean
+  signUp(input: SignUpInput!): Boolean!
+  signIn(input: SignInInput!): Boolean!
+  signOut: Boolean!
   editCustomer(input: EditCustomerInput!): Customer
   editAddress(input: EditAddressInput!): Address
   addAddress(input: AddAddressInput!): Address
@@ -316,14 +316,14 @@ type Product {
   # Full url to resized product image
   thumbnail: String
   price: ProductPrice!
-  tierPrices: [ProductTierPrice]
+  tierPrices: [ProductTierPrice!]!
   currency: String
   description: String
   stock: Stock
   type: String
-  configurableOptions: [ConfigurableProductOption]
-  bundleOptions: [BundleProductOption]
-  gallery: [GalleryEntry]
+  options: [ProductOption!]!
+  bundleOptions: [BundleProductOption!]!
+  gallery: [GalleryEntry!]!
   breadcrumbs(path: String!): [Breadcrumb] @cache(ttl: 20, idPath: ["$parent"])
   seo: ProductSeo
 }
@@ -378,8 +378,8 @@ type Category {
 }
 
 type ProductList {
-  items: [Product]!
-  aggregations: [Aggregation]
+  items: [Product!]!
+  aggregations: [Aggregation!]!
   pagination: Pagination
 }
 
@@ -471,8 +471,19 @@ type CartTotal {
 input AddToCartInput {
   sku: String!
   qty: Float!
-  configurableOptions: [ConfigurableOptionInput]
-  bundleOptions: [BundleOptionInput]
+  options: [ProductOptionInput]
+  bundleOptions: [BundleProductOptionInput]
+}
+
+input ProductOptionInput {
+  id: ID!
+  value: Int!
+}
+
+input BundleProductOptionInput {
+  id: ID!
+  qty: Float!
+  selections: [Int]
 }
 
 input UpdateCartItemInput {
@@ -484,17 +495,6 @@ input UpdateCartItemInput {
 
 input RemoveCartItemInput {
   itemId: ID!
-}
-
-input ConfigurableOptionInput {
-  optionId: Int!
-  value: Int!
-}
-
-input BundleOptionInput {
-  optionId: Int!
-  optionQty: Float!
-  optionSelections: [Int]
 }
 
 input CouponInput {
@@ -531,7 +531,7 @@ type Address {
   company: String
   firstname: String!
   lastname: String!
-  street: [String]!
+  street: [String!]!
   city: String!
   postcode: String!
   countryId: String!
@@ -547,49 +547,48 @@ type AddressList {
   items: [Address]!
 }
 
-input SignUp {
-  email: String
-  firstname: String
-  lastname: String
-  password: String
-  address: AddressInput
+input SignUpInput {
+  email: String!
+  firstname: String!
+  lastname: String!
+  password: String!
   autoSignIn: Boolean
 }
 
-input SignIn {
-  email: String
-  password: String
+input SignInInput {
+  email: String!
+  password: String!
 }
 
 type GalleryEntry {
   type: String!
   full: String!
-  thumbnail: String
+  thumbnail: String!
   embedUrl: String
 }
 
 type Breadcrumb {
-  name: String
+  name: String!
   urlPath: String
 }
 
-type ConfigurableProductOption {
-  id: String!
+type ProductOption {
+  id: ID!
   attributeId: String!
   label: String
   position: String
-  productId: String!
-  values: [ConfigurableProductOptionValue]!
+  productId: ID!
+  values: [ProductOptionValue!]!
 }
 
-type ConfigurableProductOptionValue {
-  inStock: [String]!
+type ProductOptionValue {
+  inStock: [String!]!
   label: String
   valueIndex: String!
 }
 
 type BundleProductOption {
-  optionId: Int
+  id: ID!
   position: Int
   productLinks: [BundleProductOptionLink]
   required: Boolean

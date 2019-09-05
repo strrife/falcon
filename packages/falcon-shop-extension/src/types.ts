@@ -1,3 +1,5 @@
+import { Pagination, Aggregation } from '@deity/falcon-data';
+
 export type GraphQLBase = {
   __typename?: string;
 };
@@ -184,19 +186,19 @@ export type CartItemPayload = {
 export type AddToCartInput = {
   sku: string;
   qty: number;
-  configurableOptions?: ConfigurableOptionInput[];
-  bundleOptions: BundleOptionInput[];
+  options?: ProductOptionInput[];
+  bundleOptions?: BundleProductOptionInput[];
 };
 
-export type ConfigurableOptionInput = {
-  optionId: number;
+export type ProductOptionInput = {
+  id: number;
   value: number;
 };
 
-export type BundleOptionInput = {
-  optionId: number;
-  optionQty: number;
-  optionSelections?: number[];
+export type BundleProductOptionInput = {
+  id: number;
+  qty: number;
+  selections?: number[];
 };
 
 export type RemoveCartItemInput = {
@@ -211,4 +213,126 @@ export type UpdateCartItemInput = {
   itemId: number;
   sku: string;
   qty: number;
+};
+
+export type ProductList = {
+  items: Product[];
+  aggregations: Aggregation[];
+  pagination: Pagination;
+};
+
+export type Product = {
+  id: string;
+  sku: string;
+  name: string;
+  image?: string;
+  urlPath: string;
+  thumbnail?: string;
+  price: ProductPrice;
+  tierPrices?: ProductTierPrice[];
+  currency: string;
+  description: string;
+  stock: Stock;
+  type: string;
+  options: ProductOption[];
+  bundleOptions: BundleProductOption[];
+  gallery: GalleryEntry[];
+  seo: ProductSeo;
+  breadcrumbs: Breadcrumb[];
+};
+
+export type ProductPrice = {
+  regular: number;
+  special?: number;
+  minTier?: number;
+};
+
+export type ProductTierPrice = {
+  qty: number;
+  value: number;
+  discount: number;
+};
+
+export type Stock = {
+  isInStock: boolean;
+  qty: number;
+};
+
+export type BundleProductOption = {
+  id: number;
+  position: number;
+  productLinks: BundleProductOptionLink[];
+  required: boolean;
+  sku: string;
+  title: string;
+  type: string;
+};
+
+export type BundleProductOptionLink = {
+  canChangeQuantity: number;
+  name: string;
+  catalogDisplayPrice: string;
+  id: string;
+  isDefault: boolean;
+  optionId: number;
+  position: number;
+  price: string;
+  priceType: string;
+  qty: number;
+  sku: string;
+};
+
+export type GalleryEntry = {
+  type: string;
+  full: string;
+  thumbnail: string;
+  embedUrl?: string;
+};
+
+export type ProductOption = {
+  id: string;
+  attributeId: string;
+  label?: string;
+  position: string;
+  productId: string;
+  values: ConfigurableProductOptionValue[];
+};
+
+export type ConfigurableProductOptionValue = {
+  inStock: string;
+  label: string;
+  valueIndex: string;
+};
+
+export type ProductSeo = {
+  title: string;
+  description: string;
+  keywords: string;
+};
+
+export type Breadcrumb = {
+  name: string;
+  urlPath?: string;
+};
+
+export type Category = {
+  id: string;
+  name: string;
+  children: Category[];
+  description: string;
+  breadcrumbs: Breadcrumb[];
+  products: ProductList;
+};
+
+export type SignUpInput = {
+  email: string;
+  firstname: string;
+  lastname: string;
+  password: string;
+  autoSignIn?: boolean;
+};
+
+export type SignInInput = {
+  email: string;
+  password: string;
 };

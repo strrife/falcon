@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box, Icon, Link, List, ListItem, Button, Text, H2 } from '@deity/falcon-ui';
+import { Box, Icon, Button, Text, H2 } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
+import { SignOutMutation } from '@deity/falcon-shop-data';
 import { MiniAccountData } from './MiniAccountQuery';
 import { SignIn } from './SignIn';
-import { SignOutMutation } from '../SignOut';
 
 export const MiniAccount: React.SFC<MiniAccountData> = ({ customer }) =>
   customer ? (

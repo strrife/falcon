@@ -34,7 +34,7 @@
     "quantity": "Aantal",
     "error": {
       "quantity": "Aantal moet groter zijn dan 0",
-      "configurableOptions": "Selecteer alle vereiste opties"
+      "options": "Selecteer alle vereiste opties"
     },
     "tabs": {
       "description": "Omschrijving",

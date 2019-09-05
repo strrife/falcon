@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { graphql } from 'react-apollo';
 import { Box, Text, Link, Input, Button, Details, DetailsContent } from '@deity/falcon-ui';
-import { SignOutMutation, GET_CUSTOMER } from '@deity/falcon-ecommerce-uikit';
+import { SignOutMutation, GET_CUSTOMER } from '@deity/falcon-shop-data';
 import { OpenSidebarMutation, toGridTemplate } from '@deity/falcon-ui-kit';
 import { I18n, T } from '@deity/falcon-i18n';
 import SectionHeader from './CheckoutSectionHeader';

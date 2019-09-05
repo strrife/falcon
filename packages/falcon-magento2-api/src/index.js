@@ -50,7 +50,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       Product: {
         price: (...args) => this.productPrice(...args),
         tierPrices: (...args) => this.productTierPrices(...args),
-        configurableOptions: (...x) => this.configurableProductOptions(...x),
+        options: (...x) => this.productOptions(...x),
         breadcrumbs: (...args) => this.breadcrumbs(...args)
       },
       Category: {
@@ -275,7 +275,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {string[]} params.skus skus of products that search should be narrowed to
    * @returns {Promise<Product[]>}  response with list of products
    */
-  async products(obj, params) {
+  async productList(obj, params) {
     const { filters: simpleFilters = [], categoryId, skus } = params;
     // params.filters =  contains "simple" key-value filters (will be transpiled to Magento-like filters)
     const filtersToCheck = {};
@@ -609,7 +609,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         result.stock = pick(stockItem, 'qty', 'isInStock');
       }
 
-      result.configurableOptions = configurableProductOptions || [];
+      result.options = configurableProductOptions || [];
 
       if (bundleProductOptions) {
         // remove extension attributes for option product links
@@ -668,14 +668,14 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   }
 
   /**
-   * Resolve Configurable Product Options from Product
+   * Resolve Product Options from Product
    * @param {object} parent parent (MagentoProduct or MagentoProductListItem)
    * @param {object} args arguments
    * @param {object} context context
    * @param {object} info info
-   * @returns {ConfigurableProductOption} configurable product options
+   * @returns {ProductOption} product options
    */
-  async configurableProductOptions(parent, args, context, info) {
+  async productOptions(parent, args, context, info) {
     // a parent could be an item of Magento Product List, which does not contain necessary data, so we need to fetch Product by its id
     const data = typeResolverPathToString(info.path).startsWith('category.products')
       ? await this.fetchProduct(parent.id)
@@ -775,21 +775,26 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       }
     };
 
-    if (input.configurableOptions) {
+    if (input.options) {
       product.cart_item.product_option = {
         extension_attributes: {
-          configurable_item_options: input.configurableOptions.map(item => ({
-            option_id: item.optionId,
+          configurable_item_options: input.options.map(item => ({
+            option_id: item.id,
             option_value: item.value
           }))
         }
       };
     }
 
+    // TODO: I think we should do `Array.isArray(input.bundleOptions) && input.bundleOptions.length` instead
     if (input.bundleOptions) {
       product.cart_item.product_option = {
         extension_attributes: {
-          bundle_options: input.bundleOptions
+          bundle_options: input.bundleOptions.map(x => ({
+            option_id: x.id,
+            option_qty: x.qty,
+            option_selections: x.selections
+          }))
         }
       };
     }

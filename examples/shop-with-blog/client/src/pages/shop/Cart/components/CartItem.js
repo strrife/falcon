@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Box, Text, Image } from '@deity/falcon-ui';
 import { UpdateCartItemMutation, RemoveCartItemMutation } from '@deity/falcon-shop-data';
+import { Box, Text, Image } from '@deity/falcon-ui';
 import { Price, toGridTemplate } from '@deity/falcon-ui-kit';
 import { RemoveItemButton, ChangeItemNumberInput } from './Inputs';
 
@@ -115,11 +115,11 @@ const CartItem = ({ item }) => (
 
 CartItem.propTypes = {
   item: PropTypes.shape({
+    itemId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     thumbnailUrl: PropTypes.string,
     price: PropTypes.number,
     rowTotalInclTax: PropTypes.number,
     name: PropTypes.string,
-    itemId: PropTypes.number,
     sku: PropTypes.string,
     qty: PropTypes.number,
     itemOptions: PropTypes.arrayOf(PropTypes.shape({}))

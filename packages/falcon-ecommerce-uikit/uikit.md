@@ -30,7 +30,7 @@
 
 ---
 
-- CategoryProductsQuery
+> - ~~CategoryProductsQuery~~ renamed to `CategoryWithProductsQuery` moved to @deity/falcon-shop-data
 
 ---
 
@@ -80,8 +80,8 @@
 
 ---
 
-- ProductQuery
-- ProductListQuery
+> - ~~ProductQuery~~ - moved to @deity/falcon-shop-data
+> - ~~ProductListQuery~~ = moved to @deity/falcon-shop-data
 
 ---
 
@@ -90,9 +90,9 @@
 
 ---
 
-- SignInMutation
-- SignOutMutation
-- SignUpMutation
+> - ~~SignInMutation~~ - moved to @deity/falcon-shop-data
+> - ~~SignOutMutation~~ - moved to @deity/falcon-shop-data
+> - ~~SignUpMutation~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -134,7 +134,7 @@
 
 ---
 
-- GET_CATEGORY_PRODUCTS
+> - ~~GET_CATEGORY_PRODUCTS~~ - renamed to `GET_CATEGORY_WITH_PRODUCTS` and moved to @deity/falcon-shop-data
 
 ---
 
@@ -182,8 +182,8 @@
 
 ---
 
-- GET_PRODUCT
-- GET_PRODUCT_LIST
+> - ~~GET_PRODUCT~~ - moved to @deity/falcon-shop-data
+> - ~~GET_PRODUCT_LIST~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -192,9 +192,9 @@
 
 ---
 
-- SIGN_IN_MUTATION
-- SIGN_OUT_MUTATION
-- SIGN_UP_MUTATION
+> - ~~SIGN_IN_MUTATION~~ - moved to @deity/falcon-shop-data
+> - ~~SIGN_OUT_MUTATION~~ - moved to @deity/falcon-shop-data
+> - ~~SIGN_UP_MUTATION~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -292,6 +292,7 @@
 > - ~~FieldProps~~ - moved to @deity/falcon-ui-kit
 > - ~~FormContextValue~~ - moved to @deity/falcon-ui-kit
 > - ~~FormContext~~ - moved to @deity/falcon-ui-kit
+> - ~~formLayout~~ - moved to @deity/falcon-ui-kit and renamed to `form`
 > - ~~FormProps~~ - moved to @deity/falcon-ui-kit
 > - ~~FormFieldRenderProps~~ - moved to @deity/falcon-ui-kit
 > - ~~FormFieldProps~~ - moved to @deity/falcon-ui-kit
@@ -325,7 +326,7 @@
 
 ---
 
-- Products
+> - ~~Products~~ - moved to  moved to @deity/falcon-shop-data and renamed to `ProductList`
 
 ---
 
@@ -337,10 +338,10 @@
 
 ---
 
-- SignInModel
-- SignInData
+- SignInModel ? 
+- SignInData ? 
 - SignOutLogicRenderProps
-- SignUpVariables (Variables?)
+> - ~~SignUpVariables~~ moved to @deity/falcon-shop-extension and renamed to SignUpInput
 
 ---
 
@@ -383,9 +384,9 @@
 
 ---
 
-- CategoryLayout
-- ShowingOutOf
-- ShowMore
+> - ~~CategoryLayout~~ moved to @deity/falcon-ui-kit
+> - ~~ShowingOutOf~~ moved to examples/shop-with-blog
+> - ~~ShowMore~~ moved to examples/shop-with-blog
 > - ~~SortOrderDropdownLayout~~ changed to `SortOrderPickerLayout` and moved to @deity/falcon-ui-kit
 > - ~~SortOrderDropdown~~ changed to `SortOrderPicker` and moved to @deity/falcon-ui-kit
 - TotalRow
@@ -440,7 +441,12 @@
 > - ~~FormFieldLayout~~ - moved to @deity/falcon-ui-kit
 > - ~~FormFieldLabel~~ - moved to @deity/falcon-ui-kit
 > - ~~FormFieldError~~ - moved to @deity/falcon-ui-kit
-> - ~~FormField~~ - moved to @deity/falcon-ui-kit
+> - ~~FormField~~ - moved to @deity/falcon-front-kit
+> - ~~getDefaultInputTypeValidator~~ - moved to @deity/falcon-front-kit and renamed to `inputTypeToDefaultValidatorsMapper`
+> - ~~passwordValidator~~ - moved to @deity/falcon-front-kit
+> - ~~emailValidator~~ - moved to @deity/falcon-front-kit
+
+
 > - ~~CheckboxFormFieldLayout~~ - moved to @deity/falcon-ui-kit
 > - ~~CheckboxFormField~~ - moved to @deity/falcon-ui-kit
 > - ~~RadioFormFieldLayout~~ - moved to @deity/falcon-ui-kit
@@ -490,19 +496,22 @@
 
 ---
 
-- Option
-- ProductConfigurableOptions
-- ProductLayout
-- ProductDetailsLayout
+> - ~~Option~~ - renamed to `ProductOption` and moved to @deity/falcon-ui-kit
+> - ~~ProductConfigurableOptions~~ - renamed to `ProductOptionList` and moved to @deity/falcon-ui-kit
+> - ~~ProductLayout~~ - renamed to `PageLayout` and moved to @deity/falcon-ui-kit
+> - ~~ProductDescriptionLayout~~ - renamed to `ProductLayout` moved to @deity/falcon-ui-kit
+> - ~~Area~~ (product) - renamed to `ProductLayoutAreas` moved to @deity/falcon-ui-kit
+> - ~~ProductDetailsLayout~~ - moved to @deity/falcon-ui-kit
 - Product
-- ProductGallery
-- NoProductImage
-- ProductMeta
-- EmptyProductListLayout
-- EmptyProductList
-- ProductCardLayout
-- ProductCard
-- ProductList
+> - ~~ProductGallery~~ - moved to @deity/falcon-ui-kit
+> - ~~NoProductImage~~ - renamed to `NoProductImagePlaceholder` and moved to @deity/falcon-ui-kit
+> - ~~ProductMeta~~ - moved to @deity/falcon-ui-kit
+> - ~~EmptyProductList~~ - moved to @deity/falcon-ui-kit
+> - ~~EmptyProductListLayout~~ moved to @deity/falcon-ui-kit
+> - ~~ProductCardLayout~~ moved to @deity/falcon-ui-kit
+> - ~~ProductCard~~ moved to @deity/falcon-ui-kit
+> - ~~ProductList~~ moved to @deity/falcon-ui-kit
+> - ~~ProductListLayout~~ - moved to @deity/falcon-ui-kit
 - Loader
 
 ---
@@ -515,18 +524,20 @@
 
 ---
 
-- ForgotPasswordTrigger
-- SignInForm
-- SignInIcon
-- SignUpForm
+> - ~~ForgotPasswordTrigger~~ - moved to @deity/falcon-ui-kit
+> - ~~SignInForm~~ - moved to @deity/falcon-ui-kit and extracted SignInFormProvider to @deity/falcon-front-kit
+> - ~~SignInIcon~~ - moved to @deity/falcon-ui-kit
+> - ~~SignUpForm~~ - moved to @deity/falcon-ui-kit and extracted SignUpFormProvider to @deity/falcon-front-kit
 
 ---
 
-- ~~AppLayout~~ -moved to `@deity/falcon-ui-kit/src/Layouts/AppLayout.tsx`
-- Breadcrumbs
-- ~~FixCenteredLayout~~ moved to `@deity/falcon-ui-kit/src/Layouts/FixCenteredLayout.tsx`
-- TwoColumnsLayout
+> - ~~AppLayout~~ -moved to `@deity/falcon-ui-kit/src/Layouts/AppLayout.tsx`
+> - ~~Breadcrumbs~~ - moved to @deity/falcon-ui-kit
+> - ~~FixCenteredLayout~~ - moved to `@deity/falcon-ui-kit/src/Layouts/FixCenteredLayout.tsx`
+> - ~~TwoColumnsLayout~~ - moved to `@deity/falcon-ui-kit`
 - TwoStepWizard
+
+> - added `DeityLogo` into `@deity/falcon-ui-kit`
 
 ### Existing "business level" components:
 
@@ -538,11 +549,11 @@
 
 > - ~~FiltersDataProvider~~ moved to @deity/falcon-front-kit
 > - ~~LocaleSwitcher~~ moved to @deity/falcon-front-kit
-- Field
-- Form
-  > - ~~LocaleProvider~~ moved to @deity/falcon-front-kit
-- ProductForm (it's not exported outside)
-- ProductConfigurator
+> - ~~Field~~ moved to to @deity/falcon-front-kit
+> - ~~Form~~ moved to to @deity/falcon-front-kit
+> - ~~LocaleProvider~~ moved to @deity/falcon-front-kit
+> - ~~ProductForm ~~ extracted AddToCartFormProvider and moved to @deity/falcon-front-kit
+> - ~~ProductConfigurator~~ moved to @deity/falcon-front-kit but, not used and extracted two functions and moved them into @deity/falcon-front-kit/productConfigurableOptionMappers
 
 > - ~~Query~~ moved to @deity/falcon-data
 > - ~~OnlyUnauthenticatedRoute~~ moved to @deity/falcon-front-kit

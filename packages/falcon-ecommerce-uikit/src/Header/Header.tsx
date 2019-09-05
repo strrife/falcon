@@ -4,7 +4,6 @@ import { Link, Icon, DefaultThemeProps, Box } from '@deity/falcon-ui';
 import { CustomerQuery, CartQuery, CartResponse } from '@deity/falcon-shop-data';
 import { toGridTemplate, OpenSidebarMutation, MiniCartIcon } from '@deity/falcon-ui-kit';
 import { AccountIcon } from '../MiniAccount';
-import { SignInIcon } from '../SignIn';
 import { MenuQuery, MenuNavbar } from '../Menu';
 import { Banner } from './Banner';
 
@@ -46,10 +45,12 @@ export const Searchbar = () => (
                   <AccountIcon />
                 </Link>
               ) : (
-                <SignInIcon
+                <Link
                   gridArea={SearchBarArea.signIn}
                   onClick={() => openSidebar({ variables: { contentType: 'account' } })}
-                />
+                >
+                  <Icon src="signIn" />
+                </Link>
               )
             }
           </CustomerQuery>

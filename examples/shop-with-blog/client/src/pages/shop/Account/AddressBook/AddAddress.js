@@ -3,8 +3,15 @@ import { NavLink } from 'react-router-dom';
 import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
 import { H1, Button, FlexLayout, GridLayout } from '@deity/falcon-ui';
-import { TwoColumnsLayout, TwoColumnsLayoutArea, CountriesQuery, CountrySelector } from '@deity/falcon-ecommerce-uikit';
-import { Form, FormField, CheckboxFormField, FormErrorSummary } from '@deity/falcon-ui-kit';
+import { CountriesQuery, CountrySelector } from '@deity/falcon-ecommerce-uikit';
+import {
+  Form,
+  FormField,
+  CheckboxFormField,
+  FormErrorSummary,
+  TwoColumnsLayout,
+  TwoColumnsLayoutArea
+} from '@deity/falcon-ui-kit';
 import { AddAddressMutation } from '@deity/falcon-shop-data';
 
 const AddAddress = ({ history }) => (

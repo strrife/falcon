@@ -42,6 +42,7 @@
     "@deity/falcon-scripts": "^0.0.3",
     "@deity/falcon-shop-extension": "^0.4.6",
     "@types/history": "4.7.2",
+    "@types/prop-types": "15.7.1",
     "@types/react": "16.8.22",
     "@types/react-router-dom": "4.3.4",
     "apollo-client": "2.5.1",
