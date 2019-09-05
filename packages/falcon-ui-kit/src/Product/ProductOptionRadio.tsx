@@ -4,7 +4,7 @@ import { themed, Radio } from '@deity/falcon-ui';
 export const ProductOptionRadio = themed({
   tag: Radio,
   defaultTheme: {
-    ProductOptionRadio: {
+    productOptionRadio: {
       mr: 'xs',
       css: {
         cursor: 'pointer',

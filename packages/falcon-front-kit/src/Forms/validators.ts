@@ -6,7 +6,7 @@ const validEmailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".
 const validPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
 
 export const requiredValidator: Validator = (value, label) => {
-  if (value === null || value === undefined || value === '' || (Array.isArray(value) && !(value as any[]).length)) {
+  if (!value || (Array.isArray(value) && !(value as any[]).length)) {
     return `${label} is required`;
   }
 

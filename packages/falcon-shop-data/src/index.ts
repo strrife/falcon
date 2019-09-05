@@ -5,6 +5,7 @@ export * from './Category';
 export * from './Checkout';
 export * from './Country';
 export * from './Customer';
+export * from './Filter';
 export * from './Menu';
 export * from './Order';
 export * from './Product';

@@ -194,18 +194,18 @@ export type AddToCartInput = {
   sku: string;
   qty: number;
   options?: ProductOptionInput[];
-  bundleOptions: BundleOptionInput[];
+  bundleOptions?: BundleProductOptionInput[];
 };
 
 export type ProductOptionInput = {
-  optionId: number;
+  id: number;
   value: number;
 };
 
-export type BundleOptionInput = {
-  optionId: number;
-  optionQty: number;
-  optionSelections?: number[];
+export type BundleProductOptionInput = {
+  id: number;
+  qty: number;
+  selections?: number[];
 };
 
 export type RemoveCartItemInput = {
@@ -266,7 +266,7 @@ export type Stock = {
 };
 
 export type BundleProductOption = {
-  optionId: number;
+  id: number;
   position: number;
   productLinks: BundleProductOptionLink[];
   required: boolean;

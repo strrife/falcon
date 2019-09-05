@@ -16,7 +16,6 @@ export * from './InnerHtml';
 export * from './Layouts';
 export * from './Locale';
 export * from './Loader';
-export * from './Logo';
 export * from './Menu';
 export * from './MiniCart';
 export * from './Newsletter';

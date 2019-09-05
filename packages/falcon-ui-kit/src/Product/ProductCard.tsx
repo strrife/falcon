@@ -2,16 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import LazyLoad from 'react-lazyload';
 import { Image, Text, FlexLayout } from '@deity/falcon-ui';
-import { ProductPrice } from './ProductPrice';
+import { ProductPrice, ProductPriceProps } from './ProductPrice';
 import { ProductCardLayout } from './ProductCardLayout';
 
 export type ProductCardProps = {
   name: string;
   urlPath: string;
-  price: {
-    regular: number;
-    special?: number;
-  };
+  price: ProductPriceProps;
   thumbnail: string;
 };
 export const ProductCard: React.SFC<ProductCardProps> = ({ name, thumbnail, urlPath, price }) => {

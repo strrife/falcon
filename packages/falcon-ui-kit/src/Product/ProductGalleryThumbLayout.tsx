@@ -4,7 +4,7 @@ import { Box, themed } from '@deity/falcon-ui';
 export const ProductGalleryThumbLayout = themed({
   tag: Box,
   defaultTheme: {
-    ProductGalleryThumbLayout: {
+    productGalleryThumbLayout: {
       border: 'regular',
       borderRadius: 'medium',
       borderColor: 'secondary',
