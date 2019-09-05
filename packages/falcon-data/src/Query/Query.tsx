@@ -8,19 +8,18 @@ import { Error } from './Error';
 export type ApolloFetchMore<TData, TVariables> = QueryResult<TData, TVariables>['fetchMore'];
 export type FetchMore<TData, TVariables> = (data: TData, fetchMore: ApolloFetchMore<TData, TVariables>) => any;
 
-export type QueryRenderProps<TData = any> = TData & {
-  loading: boolean;
-  error?: ApolloError;
-  networkStatus: NetworkStatus;
+export type QueryRenderProps<TData = any, TVariables = OperationVariables> = Omit<
+  QueryResult<TData, TVariables>,
+  'fetchMore'
+> & {
   fetchMore: (() => any) | undefined;
 };
 
 export type QueryProps<TData, TVariables> = Omit<ApolloQueryProps<TData, TVariables>, 'children'> & {
-  children: (result: QueryRenderProps<TData>) => React.ReactNode;
+  children: (result: QueryRenderProps<TData, TVariables>) => React.ReactNode;
   fetchMore?: FetchMore<TData, TVariables>;
   passLoading?: boolean;
   passError?: boolean;
-  variables?: TVariables | any;
 };
 
 export class Query<TData = any, TVariables = OperationVariables> extends React.Component<
@@ -37,22 +36,22 @@ export class Query<TData = any, TVariables = OperationVariables> extends React.C
 
     return (
       <ApolloQuery {...restProps}>
-        {({ networkStatus, error, data, loading, fetchMore: apolloFetchMore }: QueryResult<TData, TVariables>) => {
+        {(result: QueryResult<TData, TVariables>) => {
+          const { networkStatus, error, data } = result;
+
           if (!passError && error) {
             return <Error error={error} />;
           }
 
-          loading = networkStatus === NetworkStatus.loading || (networkStatus !== NetworkStatus.fetchMore && loading);
+          const loading =
+            networkStatus === NetworkStatus.loading || (networkStatus !== NetworkStatus.fetchMore && result.loading);
           if (!passLoading && loading) {
             return <Loader />;
           }
 
           return children({
-            ...data!,
-            loading,
-            error,
-            networkStatus,
-            fetchMore: fetchMore ? () => fetchMore(data!, apolloFetchMore) : undefined
+            ...result,
+            fetchMore: fetchMore ? () => fetchMore(data!, result.fetchMore) : undefined
           });
         }}
       </ApolloQuery>
