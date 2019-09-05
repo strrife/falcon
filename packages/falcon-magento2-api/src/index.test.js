@@ -162,7 +162,7 @@ describe('Magento2Api', () => {
     expect(resp).toBe(true);
   });
 
-  describe('createSearchParams()', () => {
+  describe('createSearchCriteria()', () => {
     it('Should properly create payload for magento', () => {
       const input = {
         filters: [
@@ -182,24 +182,22 @@ describe('Magento2Api', () => {
         }
       };
       const expectedOutput = {
-        searchCriteria: {
-          pageSize: 10,
-          currentPage: 2,
-          sortOrders: [{ field: 'price', direction: 'asc' }],
-          filterGroups: [
-            {
-              filters: [
-                {
-                  condition_type: 'eq',
-                  field: 'price',
-                  value: '10'
-                }
-              ]
-            }
-          ]
-        }
+        pageSize: 10,
+        currentPage: 2,
+        sortOrders: [{ field: 'price', direction: 'asc' }],
+        filterGroups: [
+          {
+            filters: [
+              {
+                condition_type: 'eq',
+                field: 'price',
+                value: '10'
+              }
+            ]
+          }
+        ]
       };
-      expect(api.createSearchParams(input)).toEqual(expectedOutput);
+      expect(api.createSearchCriteria(input)).toEqual(expectedOutput);
     });
 
     it('Should properly handle case when there is no pagination parameter passed', () => {
@@ -210,13 +208,11 @@ describe('Magento2Api', () => {
         }
       };
       const expectedOutput = {
-        searchCriteria: {
-          pageSize: api.perPage,
-          currentPage: 0,
-          sortOrders: [{ field: 'price', direction: 'asc' }]
-        }
+        pageSize: api.perPage,
+        currentPage: 0,
+        sortOrders: [{ field: 'price', direction: 'asc' }]
       };
-      expect(api.createSearchParams(input)).toEqual(expectedOutput);
+      expect(api.createSearchCriteria(input)).toEqual(expectedOutput);
     });
   });
 
