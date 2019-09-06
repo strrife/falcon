@@ -8,7 +8,7 @@ import { ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 import { PlaceOrderSuccessfulResult } from '@deity/falcon-shop-extension';
 import { wait } from '../../../../test/helpers';
-import { CheckoutLogic, CheckoutLogicInjectedProps } from './CheckoutLogic';
+import { CheckoutLogic, CheckoutLogicRenderProps } from './CheckoutLogic';
 
 const BaseSchema = readFileSync(require.resolve('@deity/falcon-server/schema.graphql'), 'utf8');
 const Schema = readFileSync(require.resolve('@deity/falcon-shop-extension/schema.graphql'), 'utf8');
@@ -121,13 +121,13 @@ describe('CheckoutLogic', () => {
   let wrapper: ReactWrapper<any, any> | null;
   let client: ApolloClient<any>;
 
-  const renderCheckoutLogic = (): { getProps: () => CheckoutLogicInjectedProps; wrapper: ReactWrapper<any, any> } => {
-    let injectedProps: CheckoutLogicInjectedProps;
+  const renderCheckoutLogic = (): { getProps: () => CheckoutLogicRenderProps; wrapper: ReactWrapper<any, any> } => {
+    let renderedProps: CheckoutLogicRenderProps;
     wrapper = mount(
       <ApolloProvider client={client}>
         <CheckoutLogic>
           {logicData => {
-            injectedProps = logicData;
+            renderedProps = logicData;
             return <div />;
           }}
         </CheckoutLogic>
@@ -135,7 +135,7 @@ describe('CheckoutLogic', () => {
     );
 
     return {
-      getProps: () => injectedProps,
+      getProps: () => renderedProps,
       wrapper
     };
   };
@@ -200,8 +200,12 @@ describe('CheckoutLogic', () => {
     it('should properly return available payment options when shipping method is set', async () => {
       const { getProps } = renderCheckoutLogic();
       await wait(0);
+      getProps().setShippingAddress(sampleAddress);
+      getProps().setBillingSameAsShipping(true);
+      await wait(0);
       getProps().setShippingMethod(sampleShippingMethod);
       await wait(0);
+      console.error(getProps().errors.shippingMethod);
       expect(getProps().availablePaymentMethods[0]).toEqual(samplePaymentMethod);
     });
 
