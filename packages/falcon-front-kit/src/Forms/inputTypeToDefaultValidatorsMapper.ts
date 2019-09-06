@@ -1,4 +1,4 @@
-import { emailValidator, passwordValidator } from './validators';
+import { emailValidator, lengthValidator, passwordValidator } from './validators';
 import { IValidator } from './IValidator';
 
 /**
@@ -9,7 +9,7 @@ import { IValidator } from './IValidator';
 export function inputTypeToDefaultValidatorsMapper(inputType?: string): IValidator[] {
   switch (inputType) {
     case 'password':
-      return [passwordValidator];
+      return [lengthValidator(8), passwordValidator];
     case 'email':
       return [emailValidator];
     default:
