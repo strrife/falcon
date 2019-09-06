@@ -5,3 +5,4 @@ export * from './Field';
 export * from './validators';
 export * from './inputTypeToDefaultValidatorsMapper';
 export * from './getDefaultInputValidators';
+export * from './IValidator';
