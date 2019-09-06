@@ -202,7 +202,7 @@ class CheckoutLogicInner extends React.Component<CheckoutLogicProps, CheckoutLog
             this.setPartialState({
               loading: false,
               errors: { shippingMethod: errors },
-              availablePaymentMethods: null
+              availablePaymentMethods: []
             });
           } else {
             const values = { shippingMethod } as CheckoutLogicData;
