@@ -4,12 +4,6 @@ import { I18n } from '@deity/falcon-i18n';
 import { FormContext } from './FormContext';
 import { Validator } from './validators';
 
-const validateSequentially = (validators: Validator[], label: string): FieldConfig['validate'] => value => {
-  const firstInvalid = validators.find(validator => validator(value, label) !== undefined);
-
-  return firstInvalid ? firstInvalid(value, label) : undefined;
-};
-
 const translateIfExists = (t, key?: string) => (key ? (t(key, { defaultValue: '' }) as string) : undefined);
 
 const LABEL_SUFFIX = 'FieldLabel';
@@ -92,4 +86,10 @@ export const Field: React.SFC<FieldProps> = props => {
       )}
     </FormContext.Consumer>
   );
+};
+
+const validateSequentially = (validators: Validator[], label: string): FieldConfig['validate'] => value => {
+  const firstInvalid = validators.find(validator => validator(value, label) !== undefined);
+
+  return firstInvalid ? firstInvalid(value, label) : undefined;
 };
