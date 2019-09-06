@@ -34,7 +34,7 @@ const DEFAULT_TAG_TTL: number = 60 * 60; // 1 hour
 export default class Cache<V = any> implements KeyValueCache<V> {
   protected activeGetRequests: Map<string, Promise<V>> = new Map();
 
-  constructor(protected cacheProvider: KeyValueCache<string>, protected tagTtl: number = DEFAULT_TAG_TTL) {}
+  constructor(public provider: KeyValueCache<string>, protected tagTtl: number = DEFAULT_TAG_TTL) {}
 
   async get(key: string): Promise<V>;
 
@@ -80,7 +80,7 @@ export default class Cache<V = any> implements KeyValueCache<V> {
       cachedValue = JSON.stringify(cachedValue);
     }
 
-    return this.cacheProvider.set(key, cachedValue, options);
+    return this.provider.set(key, cachedValue, options);
   }
 
   async delete(key: string): Promise<boolean>;
@@ -98,7 +98,7 @@ export default class Cache<V = any> implements KeyValueCache<V> {
       await Promise.all(key.map(kKey => this.delete(kKey)));
       return;
     }
-    return this.cacheProvider.delete(key);
+    return this.provider.delete(key);
   }
 
   /**
@@ -159,7 +159,7 @@ export default class Cache<V = any> implements KeyValueCache<V> {
   }
 
   private async createGetRequest(key: string, setOptions?: GetCacheOptions): Promise<V> {
-    let value: GetCacheFetchResult = await this.cacheProvider.get(key);
+    let value: GetCacheFetchResult = await this.provider.get(key);
     try {
       value = JSON.parse(value);
     } catch {

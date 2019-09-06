@@ -101,7 +101,7 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
   initialize(config: DataSourceConfig<TContext>): void {
     super.initialize(config);
     this.cache = config.cache;
-    this.httpCache = new ContextHTTPCache(this.cache);
+    this.httpCache = new ContextHTTPCache(this.cache.provider);
   }
 
   /**
