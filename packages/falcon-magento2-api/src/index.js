@@ -24,10 +24,10 @@ const FALCON_CART_ACTIONS = [
 
 /** Magento visibility settings */
 const ProductVisibility = {
-  notVisible: '1',
-  catalog: '2',
-  search: '3',
-  catalogAndSearch: '4'
+  notVisible: 1,
+  catalog: 2,
+  search: 3,
+  catalogAndSearch: 4
 };
 
 /**
