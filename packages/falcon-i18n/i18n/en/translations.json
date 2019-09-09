@@ -50,6 +50,10 @@
     "reviews_plural": "{{count}} reviews",
     "addToCart": "Add to cart",
     "qtyFieldLabel": "Quantity",
+    "options": {
+      "93FieldRequired": "Please select a {{label}}.",
+      "145FieldRequired": "Please select a {{label}}."
+    },
     "tierPriceDescription": "Buy {{qty}} for {{price}} and safe {{discount}}%",
     "error": {
       "quantity": "Quantity must be greater than 0",
