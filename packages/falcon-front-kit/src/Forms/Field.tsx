@@ -71,10 +71,7 @@ export const Field: React.SFC<FieldProps> = props => {
             const fieldPlaceholder = placeholder || translateIfExists(t, i18nIds.placeholder);
 
             return (
-              <FormikField
-                name={name}
-                validate={validateSequentially(validate, { name, label: fieldLabel, formI18nId, t })}
-              >
+              <FormikField name={name} validate={fieldValidator(validate, { name, label: fieldLabel, formI18nId, t })}>
                 {({ form: formikForm, field: formikField }: FormikFieldProps) => {
                   const touch = getIn(formikForm.touched, name);
                   const error = getIn(formikForm.errors, name);
@@ -102,10 +99,10 @@ export const Field: React.SFC<FieldProps> = props => {
   );
 };
 
-export interface IValidate {
+export interface IFieldValidator {
   (validators: IValidator[], validatorProps: Omit<ValidatorProps, 'value'>): FieldConfig['validate'];
 }
-const validateSequentially: IValidate = (validators = [], { name, label, formI18nId, t }) => value => {
+const fieldValidator: IFieldValidator = (validators = [], { name, label, formI18nId, t }) => value => {
   for (let i = 0; i < validators.length; i++) {
     const result = validators[i]({ name, label, value, formI18nId, t });
 
