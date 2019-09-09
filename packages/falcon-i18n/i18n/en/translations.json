@@ -312,7 +312,7 @@
     "uncomplexPassword": "Please enter a {{label}} with at least one lower, upper case char and digit",
     "toShort": "Please enter a {{label}} with at least {{min}} characters.",
     "toLong": "Please enter a {{label}} with maximum {{max}} characters.",
-    "belowRange": "Please enter a {{label}} greater than ${min}.",
-    "aboveRange": "Please enter a {{label}} lower than ${min}."
+    "belowRange": "Please enter a {{label}} greater than {{min}}.",
+    "aboveRange": "Please enter a {{label}} lower than {{min}}."
   }
 }
