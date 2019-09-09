@@ -209,7 +209,7 @@ describe('Magento2Api', () => {
       };
       const expectedOutput = {
         pageSize: api.perPage,
-        currentPage: 0,
+        currentPage: 1,
         sortOrders: [{ field: 'price', direction: 'asc' }]
       };
       expect(api.createSearchCriteria(input)).toEqual(expectedOutput);
