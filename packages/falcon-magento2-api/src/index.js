@@ -321,7 +321,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     return {
       filterGroups: processedFilters.filterGroups,
       sortOrders: [sort],
-      currentPage: parseInt(pagination && pagination.page, 10) || 0,
+      currentPage: parseInt(pagination && pagination.page, 10) || 1,
       pageSize: parseInt(pagination && pagination.perPage, 10) || this.perPage
     };
   }
