@@ -1,3 +1,4 @@
+import { capitalize } from './string';
 import { IValidator } from './IValidator';
 
 const VALID_EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -5,9 +6,22 @@ const VALID_PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
 
 const isValueProvided = x => (x !== '' && x !== undefined && x !== null) || (Array.isArray(x) && (x as any[]).length);
 
-export const requiredValidator: IValidator = ({ value, label, t }) => {
+const getErrorI18nId: (error: string, props?: { formI18nId?: string; name: string }) => string | string[] = (
+  error,
+  props
+) => {
+  const DEFAULT = `formError.${error}`;
+
+  if (props && props.formI18nId) {
+    return [`${props.formI18nId}.${props.name}Field${capitalize(error)}`, DEFAULT];
+  }
+
+  return DEFAULT;
+};
+
+export const requiredValidator: IValidator = ({ value, name, label, formI18nId, t }) => {
   if (!isValueProvided(value)) {
-    return t('formError.required', { label });
+    return t(getErrorI18nId('required', { formI18nId, name }), { label });
   }
 
   return undefined;
