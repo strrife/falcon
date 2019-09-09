@@ -1,9 +1,8 @@
 import React from 'react';
-import { Field as FormikField, FieldProps as FormikFieldProps, FieldConfig, getIn } from 'formik';
+import { Field as FormikField, FieldProps as FormikFieldProps, getIn } from 'formik';
 import { I18n } from '@deity/falcon-i18n';
-import { capitalize } from './string';
 import { FormContext } from './FormContext';
-import { IValidator, ValidatorProps, isI18nValidationError } from './IValidator';
+import { fieldValidator, IValidator } from './IValidator';
 
 const translateIfExists = (t, key?: string) => (key ? (t(key, { defaultValue: '' }) as string) : undefined);
 
@@ -13,17 +12,6 @@ const PLACEHOLDER_SUFFIX = 'FieldPlaceholder';
 export const getLabelI18nId = (formI18nId: string, fieldName: string) => `${formI18nId}.${fieldName}${LABEL_SUFFIX}`;
 export const getPlaceholderI18nId = (formI18nId: string, fieldName: string) =>
   `${formI18nId}.${fieldName}${PLACEHOLDER_SUFFIX}`;
-
-export const getErrorI18nId: (name: string, formI18nId?: string) => (error: string) => string | string[] = (
-  name,
-  formI18nId
-) => {
-  if (formI18nId) {
-    return error => [`${formI18nId}.${name}Field${capitalize(error)}`, `formError.${error}`];
-  }
-
-  return error => `formError.${error}`;
-};
 
 export type FieldRenderProps<TValue = any> = {
   form: FormikFieldProps<TValue>['form'] & {
@@ -97,30 +85,4 @@ export const Field: React.SFC<FieldProps> = props => {
       )}
     </FormContext.Consumer>
   );
-};
-
-export interface IFieldValidator {
-  (validators: IValidator[], validatorProps: Omit<ValidatorProps, 'value'>): FieldConfig['validate'];
-}
-const fieldValidator: IFieldValidator = (validators = [], { name, label, formI18nId, t }) => value => {
-  for (let i = 0; i < validators.length; i++) {
-    const result = validators[i]({ name, label, value, formI18nId, t });
-
-    if (isI18nValidationError(result)) {
-      const { errorI18nId: error, ...errorProps } = result;
-
-      return t(getErrorI18nId(name, formI18nId)(error), {
-        name,
-        value,
-        ...errorProps,
-        label: label || capitalize(name)
-      });
-    }
-
-    if (result !== undefined) {
-      return result;
-    }
-  }
-
-  return undefined;
 };
