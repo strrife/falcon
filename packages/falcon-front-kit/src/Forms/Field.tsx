@@ -3,7 +3,7 @@ import { Field as FormikField, FieldProps as FormikFieldProps, FieldConfig, getI
 import { I18n } from '@deity/falcon-i18n';
 import { capitalize } from './string';
 import { FormContext } from './FormContext';
-import { IValidator, ValidatorProps } from './IValidator';
+import { IValidator, ValidatorProps, isI18nFieldValidationError } from './IValidator';
 
 const translateIfExists = (t, key?: string) => (key ? (t(key, { defaultValue: '' }) as string) : undefined);
 
@@ -13,6 +13,17 @@ const PLACEHOLDER_SUFFIX = 'FieldPlaceholder';
 export const getLabelI18nId = (formI18nId: string, fieldName: string) => `${formI18nId}.${fieldName}${LABEL_SUFFIX}`;
 export const getPlaceholderI18nId = (formI18nId: string, fieldName: string) =>
   `${formI18nId}.${fieldName}${PLACEHOLDER_SUFFIX}`;
+
+export const getErrorI18nId: (name: string, formI18nId?: string) => (error: string) => string | string[] = (
+  name,
+  formI18nId
+) => {
+  if (formI18nId) {
+    return error => [`${formI18nId}.${name}Field${capitalize(error)}`, `formError.${error}`];
+  }
+
+  return error => `formError.${error}`;
+};
 
 export type FieldRenderProps<TValue = any> = {
   form: FormikFieldProps<TValue>['form'] & {
@@ -96,16 +107,21 @@ export interface IValidate {
 }
 const validateSequentially: IValidate = (validators = [], { name, label, formI18nId, t }) => value => {
   for (let i = 0; i < validators.length; i++) {
-    const error = validators[i]({
-      name,
-      label: label || capitalize(name),
-      value,
-      formI18nId,
-      t
-    });
+    const result = validators[i]({ name, label, value, formI18nId, t });
 
-    if (error !== undefined) {
-      return error;
+    if (isI18nFieldValidationError(result)) {
+      const { errorI18nId: error, ...errorProps } = result;
+
+      return t(getErrorI18nId(name, formI18nId)(error), {
+        name,
+        value,
+        ...errorProps,
+        label: label || capitalize(name)
+      });
+    }
+
+    if (result !== undefined) {
+      return result;
     }
   }
 
