@@ -26,13 +26,10 @@
   "dependencies": {
     "@babel/runtime": "7.5.5",
     "@deity/falcon-data": "^0.0.1",
-    "@deity/falcon-server-env": "^0.1.9",
-    "core-js": "3.1.4",
-    "graphql-tools": "^4.0.0"
+    "core-js": "3.1.4"
   },
   "devDependencies": {
     "@deity/falcon-scripts": "^0.0.3",
-    "@deity/falcon-server": "^0.4.0",
     "regenerator-runtime": "0.13.3"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
