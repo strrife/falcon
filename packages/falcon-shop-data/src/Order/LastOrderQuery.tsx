@@ -15,7 +15,7 @@ export const GET_LAST_ORDER = gql`
 `;
 
 export type LastOrderResponse = {
-  lastOrder: Pick<Order, 'incrementId'>[] & {
+  lastOrder: Pick<Order, 'incrementId'> & {
     items: Pick<OrderItem, 'itemId' | 'name'>[];
   };
 };
