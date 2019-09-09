@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { T } from '@deity/falcon-i18n';
 import { ProductQuery } from '@deity/falcon-shop-data';
 import { Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/falcon-ui';
-import { Field, rangeValidator, requiredValidator, AddToCartFormProvider } from '@deity/falcon-front-kit';
+import { Field, AddToCartFormProvider } from '@deity/falcon-front-kit';
 import {
   ProductLayout,
   ProductLayoutArea,
@@ -53,7 +53,7 @@ const ProductPage = ({ id, path }) => (
                   />
                   <ProductDescription gridArea={ProductLayoutArea.description} html={product.description} />
                   <FlexLayout alignItems="center" gridArea={ProductLayoutArea.cta} mt="md">
-                    <Field name="qty" validate={[requiredValidator, rangeValidator(1)]}>
+                    <Field name="qty" required>
                       {({ field, label, error }) => (
                         <Box mr="md">
                           <NumberInput {...field} min={1} disabled={isSubmitting} aria-label={label} />
