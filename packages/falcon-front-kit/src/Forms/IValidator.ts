@@ -7,16 +7,15 @@ export type ValidatorProps = {
   formI18nId?: string;
   t: TranslationFunction;
 };
-
 export interface IValidator {
-  (props: ValidatorProps): FieldValidationError;
+  (props: ValidatorProps): ValidationError;
 }
 
-export type FieldValidationError = undefined | string | I18nFieldValidationError;
-export type I18nFieldValidationError = {
+export type ValidationError = undefined | string | I18nValidationError;
+export type I18nValidationError = {
   errorI18nId: string;
 } & { [key in string]: any };
 
-export function isI18nFieldValidationError(error: FieldValidationError): error is I18nFieldValidationError {
-  return typeof error === 'object' && (error as I18nFieldValidationError).errorI18nId !== undefined;
+export function isI18nValidationError(error: ValidationError): error is I18nValidationError {
+  return typeof error === 'object' && (error as I18nValidationError).errorI18nId !== undefined;
 }

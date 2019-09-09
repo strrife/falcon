@@ -3,7 +3,7 @@ import { Field as FormikField, FieldProps as FormikFieldProps, FieldConfig, getI
 import { I18n } from '@deity/falcon-i18n';
 import { capitalize } from './string';
 import { FormContext } from './FormContext';
-import { IValidator, ValidatorProps, isI18nFieldValidationError } from './IValidator';
+import { IValidator, ValidatorProps, isI18nValidationError } from './IValidator';
 
 const translateIfExists = (t, key?: string) => (key ? (t(key, { defaultValue: '' }) as string) : undefined);
 
@@ -109,7 +109,7 @@ const validateSequentially: IValidate = (validators = [], { name, label, formI18
   for (let i = 0; i < validators.length; i++) {
     const result = validators[i]({ name, label, value, formI18nId, t });
 
-    if (isI18nFieldValidationError(result)) {
+    if (isI18nValidationError(result)) {
       const { errorI18nId: error, ...errorProps } = result;
 
       return t(getErrorI18nId(name, formI18nId)(error), {
