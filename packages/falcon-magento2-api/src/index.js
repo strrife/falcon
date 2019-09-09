@@ -138,18 +138,16 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @returns {Promise<CategoryProductList>} - fetched list of products
    */
   async categoryProducts(obj, params) {
-    const searchCriteria = this.createSearchCriteria(params);
-
-    this.addSearchFilter(params, 'visibility', ProductVisibility.catalogAndSearch, 'eq');
-
-    if (!this.isFilterSet('status', params)) {
-      this.addSearchFilter(params, 'status', '1');
-    }
-
-    // removed virtual products as we're not supporting it
-    this.addSearchFilter(params, 'type_id', 'simple,configurable,bundle', 'in');
-
     const { pagination = {} } = params;
+
+    const searchCriteria = this.createSearchCriteria(params);
+    this.addSearchFilter(searchCriteria, 'visibility', ProductVisibility.catalogAndSearch, 'eq');
+    if (!this.isFilterSet('status', params)) {
+      this.addSearchFilter(searchCriteria, 'status', '1');
+    }
+    // removed virtual products as we're not supporting it
+    this.addSearchFilter(searchCriteria, 'type_id', 'simple,configurable,bundle', 'in');
+
     let response;
     try {
       response = await this.getForIntegration(
