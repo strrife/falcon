@@ -1,8 +1,9 @@
 import React from 'react';
 import { Field as FormikField, FieldProps as FormikFieldProps, FieldConfig, getIn } from 'formik';
-import { I18n, TranslationFunction } from '@deity/falcon-i18n';
+import { I18n } from '@deity/falcon-i18n';
+import { capitalize } from './string';
 import { FormContext } from './FormContext';
-import { IValidator } from './IValidator';
+import { IValidator, ValidatorProps } from './IValidator';
 
 const translateIfExists = (t, key?: string) => (key ? (t(key, { defaultValue: '' }) as string) : undefined);
 
@@ -38,7 +39,6 @@ export type FieldProps<TValue = any> = {
   validate?: IValidator[];
   children?: (props: FieldRenderProps<TValue>) => React.ReactNode;
 };
-
 export const Field: React.SFC<FieldProps> = props => {
   const { name, label, placeholder, validate, children, ...restProps } = props;
 
@@ -62,7 +62,7 @@ export const Field: React.SFC<FieldProps> = props => {
             return (
               <FormikField
                 name={name}
-                validate={validateSequentially(validate || [], { name, label: fieldLabel || name, t })}
+                validate={validateSequentially(validate, { name, label: fieldLabel, formI18nId, t })}
               >
                 {({ form: formikForm, field: formikField }: FormikFieldProps) => {
                   const touch = getIn(formikForm.touched, name);
@@ -92,18 +92,22 @@ export const Field: React.SFC<FieldProps> = props => {
 };
 
 export interface IValidate {
-  (
-    validators: IValidator[],
-    validatorProps: {
-      name: string;
-      label?: string;
-      formI18nId?: string;
-      t: TranslationFunction;
-    }
-  ): FieldConfig['validate'];
+  (validators: IValidator[], validatorProps: Omit<ValidatorProps, 'value'>): FieldConfig['validate'];
 }
-const validateSequentially: IValidate = (validators, { label, t }) => value => {
-  const firstInvalid = validators.find(validator => validator({ value, label, t }) !== undefined);
+const validateSequentially: IValidate = (validators = [], { name, label, formI18nId, t }) => value => {
+  for (let i = 0; i < validators.length; i++) {
+    const error = validators[i]({
+      name,
+      label: label || capitalize(name),
+      value,
+      formI18nId,
+      t
+    });
 
-  return firstInvalid ? firstInvalid({ value, label, t }) : undefined;
+    if (error !== undefined) {
+      return error;
+    }
+  }
+
+  return undefined;
 };
