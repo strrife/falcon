@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 import { Query, Pagination, PaginationInput, Aggregation, SortOrderInput } from '@deity/falcon-data';
 import { Category, Product, FilterInput } from '@deity/falcon-shop-extension';
 
-export const GET_CATEGORY_WITH_PRODUCTS = gql`
-  query CategoryWithProducts(
+export const GET_CATEGORY_WITH_PRODUCT_LIST = gql`
+  query CategoryWithProductList(
     $categoryId: ID!
     $sort: SortOrderInput
     $pagination: PaginationInput
@@ -12,7 +12,7 @@ export const GET_CATEGORY_WITH_PRODUCTS = gql`
     category(id: $categoryId) {
       id
       name
-      products(sort: $sort, pagination: $pagination, filters: $filters) {
+      productList(sort: $sort, pagination: $pagination, filters: $filters) {
         items {
           id
           name
@@ -44,15 +44,15 @@ export const GET_CATEGORY_WITH_PRODUCTS = gql`
   }
 `;
 
-export type CategoryWithProductsResponse = Pick<Category, 'id' | 'name'> & {
-  products: {
+export type CategoryWithProductListResponse = Pick<Category, 'id' | 'name'> & {
+  productList: {
     items: Pick<Product, 'id' | 'name' | 'price' | 'thumbnail' | 'urlPath'>[];
     pagination: Pick<Pagination, 'currentPage' | 'totalItems' | 'nextPage'>;
     aggregations: Pick<Aggregation, 'field' | 'type' | 'title' | 'buckets'>;
   };
 };
 
-export type CategoryWithProductsVariables = {
+export type CategoryWithProductListVariables = {
   categoryId?: string;
   sort?: SortOrderInput;
   pagination?: PaginationInput;
@@ -63,7 +63,7 @@ const fetchMore = (data: any, apolloFetchMore: any) =>
   apolloFetchMore({
     variables: {
       pagination: {
-        page: data.category.products.pagination.nextPage
+        page: data.category.productList.pagination.nextPage
       }
     },
     updateQuery: (prev: any, { fetchMoreResult }: any) => {
@@ -75,19 +75,22 @@ const fetchMore = (data: any, apolloFetchMore: any) =>
         ...prev,
         category: {
           ...prev.category,
-          products: {
-            ...prev.category.products,
-            items: [...prev.category.products.items, ...fetchMoreResult.category.products.items],
-            pagination: { ...fetchMoreResult.category.products.pagination }
+          productList: {
+            ...prev.category.productList,
+            items: [...prev.category.productList.items, ...fetchMoreResult.category.productList.items],
+            pagination: { ...fetchMoreResult.category.productList.pagination }
           }
         }
       };
     }
   });
 
-export class CategoryWithProductsQuery extends Query<CategoryWithProductsResponse, CategoryWithProductsVariables> {
+export class CategoryWithProductListQuery extends Query<
+  CategoryWithProductListResponse,
+  CategoryWithProductListVariables
+> {
   static defaultProps = {
-    query: GET_CATEGORY_WITH_PRODUCTS,
+    query: GET_CATEGORY_WITH_PRODUCT_LIST,
     fetchPolicy: 'cache-and-network',
     fetchMore,
     notifyOnNetworkStatusChange: true

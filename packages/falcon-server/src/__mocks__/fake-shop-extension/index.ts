@@ -1,7 +1,7 @@
 export default () => ({
   resolvers: {
     Query: {
-      products: () => {}
+      productList: () => {}
     },
     Product: {
       id: () => {},

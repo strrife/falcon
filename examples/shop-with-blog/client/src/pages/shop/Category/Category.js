@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { NetworkStatus } from 'apollo-client';
 import { Toggle } from 'react-powerplug';
 import { H1, H3, GridLayout, Box, FlexLayout, Divider, Button } from '@deity/falcon-ui';
-import { CategoryWithProductsQuery } from '@deity/falcon-shop-data';
+import { CategoryWithProductListQuery } from '@deity/falcon-shop-data';
 import { Loader } from '@deity/falcon-ecommerce-uikit';
 import { SearchConsumer, SortOrderPickerProvider, getFiltersData } from '@deity/falcon-front-kit';
 import {
@@ -24,7 +24,7 @@ const copy = item => item && JSON.parse(JSON.stringify(item));
 const CategoryPage = ({ id }) => (
   <SearchConsumer>
     {({ state }) => (
-      <CategoryWithProductsQuery
+      <CategoryWithProductListQuery
         variables={{
           categoryId: id,
           sort: state.sort,
@@ -37,8 +37,8 @@ const CategoryPage = ({ id }) => (
             return <Loader />;
           }
 
-          const { name, products } = category;
-          const { pagination, items, aggregations } = products;
+          const { name, productList } = category;
+          const { pagination, items, aggregations } = productList;
           const filtersData = getFiltersData(state.filters, aggregations);
 
           return (
@@ -92,7 +92,7 @@ const CategoryPage = ({ id }) => (
             </CategoryLayout>
           );
         }}
-      </CategoryWithProductsQuery>
+      </CategoryWithProductListQuery>
     )}
   </SearchConsumer>
 );

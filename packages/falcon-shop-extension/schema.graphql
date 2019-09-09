@@ -359,7 +359,7 @@ type Category {
   children: [Category]
   description: String
   breadcrumbs(path: String!): [Breadcrumb]
-  products(pagination: PaginationInput, sort: SortOrderInput, filters: [FilterInput]): CategoryProductList
+  productList(pagination: PaginationInput, sort: SortOrderInput, filters: [FilterInput]): CategoryProductList
     @cache(ttl: 15, idPath: ["$parent", "items"])
 }
 

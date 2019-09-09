@@ -1,5 +1,5 @@
 import React from 'react';
-import { CategoryWithProductsQuery } from '@deity/falcon-shop-data';
+import { CategoryWithProductListQuery } from '@deity/falcon-shop-data';
 import { T } from '@deity/falcon-i18n';
 import { H1 } from '@deity/falcon-ui';
 import { PageLayout, ProductList } from '@deity/falcon-ui-kit';
@@ -9,9 +9,9 @@ const Home = () => (
     <H1 css={{ textAlign: 'center' }}>
       <T id="home.hotSellers" />
     </H1>
-    <CategoryWithProductsQuery variables={{ categoryId: '25', query: { perPage: 1, page: 20 } }}>
-      {({ category: { products } }) => <ProductList items={products.items} />}
-    </CategoryWithProductsQuery>
+    <CategoryWithProductListQuery variables={{ categoryId: '25', query: { perPage: 1, page: 20 } }}>
+      {({ category: { productList } }) => <ProductList items={productList.items} />}
+    </CategoryWithProductListQuery>
   </PageLayout>
 );
 

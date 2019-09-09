@@ -64,7 +64,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       },
       Category: {
         breadcrumbs: (...args) => this.breadcrumbs(...args),
-        products: (...args) => this.categoryProducts(...args),
+        productList: (...args) => this.categoryProductList(...args),
         children: (...args) => this.categoryChildren(...args)
       },
       PaymentMethod: {
@@ -137,7 +137,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {object} params query params
    * @returns {Promise<CategoryProductList>} - fetched list of products
    */
-  async categoryProducts(obj, params) {
+  async categoryProductList(obj, params) {
     const { pagination = {} } = params;
 
     const searchCriteria = this.createSearchCriteria(params);

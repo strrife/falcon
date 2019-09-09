@@ -333,7 +333,7 @@ export type Category = {
   children: Category[];
   description: string;
   breadcrumbs: Breadcrumb[];
-  products: CategoryProductList;
+  productList: CategoryProductList;
 };
 
 export type SignUpInput = {
