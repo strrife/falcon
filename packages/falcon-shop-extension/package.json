@@ -2,7 +2,7 @@
   "name": "@deity/falcon-shop-extension",
   "license": "OSL-3.0",
   "main": "src/index.js",
-  "version": "0.4.4",
+  "version": "0.4.6",
   "homepage": "https://falcon.deity.io/docs/falcon-server/extensions#shop-extension",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-shop-extension",
   "publishConfig": {
@@ -13,11 +13,11 @@
     "test:coverage": "jest --ci --coverage"
   },
   "dependencies": {
-    "@deity/falcon-server-env": "^0.1.8",
+    "@deity/falcon-server-env": "^0.1.9",
     "graphql-tools": "^4.0.0"
   },
   "devDependencies": {
-    "@deity/falcon-server": "^0.3.3"
+    "@deity/falcon-server": "^0.4.0"
   },
   "gitHead": "d8cd5eede81220aa29563275dcf35448611cc194"
 }

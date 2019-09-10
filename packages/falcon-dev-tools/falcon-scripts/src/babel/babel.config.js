@@ -21,7 +21,9 @@ module.exports = {
     require.resolve('babel-plugin-graphql-tag'),
     require.resolve('@babel/plugin-proposal-class-properties'),
     [require.resolve('@babel/plugin-transform-runtime'), { useESModules }],
-    [require.resolve('@babel/plugin-proposal-object-rest-spread'), { loose: true, useBuiltIns: true }],
+    [require.resolve('@babel/plugin-proposal-object-rest-spread'), { loose: true }],
+    require.resolve('@babel/plugin-syntax-dynamic-import'),
+    require.resolve('@loadable/babel-plugin'),
     ...(targetNode
       ? [
           require.resolve('babel-plugin-dynamic-import-node'),

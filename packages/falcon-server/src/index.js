@@ -9,9 +9,12 @@ const { ApolloServer } = require('apollo-server-koa');
 const { EventEmitter2 } = require('eventemitter2');
 const GraphQLJSON = require('graphql-type-json');
 const cors = require('@koa/cors');
+const Cookies = require('cookies');
 const Koa = require('koa');
+const compress = require('koa-compress');
 const Router = require('koa-router');
 const session = require('koa-session');
+const SessionContext = require('koa-session/lib/context');
 const body = require('koa-body');
 const get = require('lodash/get');
 const capitalize = require('lodash/capitalize');
@@ -31,6 +34,7 @@ class FalconServer {
     this.loggableErrorCodes = [codes.INTERNAL_SERVER_ERROR, codes.GRAPHQL_PARSE_FAILED];
     this.config = config;
     this.server = null;
+    this.httpServer = null;
     this.cache = null;
     this.backendConfig = {};
     this.components = {};
@@ -103,27 +107,46 @@ class FalconServer {
       schemaDirectives: this.getDefaultSchemaDirectives(),
       formatError: error => this.formatGraphqlError(error),
       // inject session and headers into GraphQL context
-      context: ({ ctx }) => ({
-        cache: this.cache,
-        config: this.config,
-        components: ctx.components,
-        headers: ctx.req.headers,
-        session: ctx.req.session
-      }),
-      cache: this.cache,
-      resolvers: {
-        Query: {
-          url: async (...params) => this.dynamicRouteResolver.fetchUrl(...params),
-          backendConfig: async (...params) => this.fetchBackendConfig(...params)
-        },
-        Mutation: {
-          setLocale: (...params) => this.setLocale(...params)
-        },
-        BackendConfig: {
-          activeLocale: (_, __, { session: _session }) => _session.locale
-        },
-        JSON: GraphQLJSON
+      context: ({ ctx, connection }) => {
+        const context = {
+          cache: this.cache,
+          config: this.config,
+          components: this.componentContainer.components
+        };
+
+        // Subscription request
+        if (connection) {
+          return {
+            ...context,
+            ...connection.context
+          };
+        }
+
+        // Query/Mutation request
+        return {
+          ...context,
+          headers: ctx.req.headers,
+          session: ctx.req.session
+        };
       },
+      cache: this.cache,
+      resolvers: [
+        {
+          Query: {
+            url: async (...params) => this.dynamicRouteResolver.fetchUrl(...params),
+            backendConfig: async (...params) => this.fetchBackendConfig(...params)
+          },
+          Mutation: {
+            setLocale: (...params) => this.setLocale(...params)
+          },
+          BackendConfig: {
+            activeLocale: (_, __, { session: _session }) => _session.locale
+          },
+          JSON: GraphQLJSON
+        },
+        ...this.apiContainer.resolvers
+      ],
+      subscriptions: this.getSubscriptionsOptions(),
       tracing: this.config.debug,
       playground: this.config.debug && {
         settings: {
@@ -150,6 +173,7 @@ class FalconServer {
 
     this.app.context.components = this.componentContainer.components;
     this.app.use(body());
+    this.app.use(compress());
     this.app.use(
       cors({
         credentials: true
@@ -301,6 +325,10 @@ class FalconServer {
     };
   }
 
+  isSubscriptionsServerRequired() {
+    return 'Subscription' in this.apolloServerConfig.schema.getTypeMap();
+  }
+
   start() {
     const handleStartupError = err => {
       this.eventEmitter.emitAsync(Events.ERROR, err).then(() => {
@@ -316,17 +344,78 @@ class FalconServer {
       .then(
         () =>
           new Promise(resolve => {
-            this.app.listen({ port: this.config.port }, () => {
+            this.httpServer = this.app.listen({ port: this.config.port }, () => {
               this.logger.info(`🚀 Server ready at http://localhost:${this.config.port}`);
               this.logger.info(
                 `🌍 GraphQL endpoint ready at http://localhost:${this.config.port}${this.server.graphqlPath}`
               );
+              this.startSubscriptionsServer();
               resolve();
             });
           }, handleStartupError)
       )
       .then(() => this.eventEmitter.emitAsync(Events.AFTER_STARTED, this))
       .catch(handleStartupError);
+  }
+
+  /**
+   * Starts (if needed) the subscriptions server (based on the stitched GraphQL Schema - Subscription type has resolvers)
+   */
+  startSubscriptionsServer() {
+    if (this.isSubscriptionsServerRequired()) {
+      this.server.installSubscriptionHandlers(this.httpServer);
+      this.logger.info(
+        `🔌 GraphQL Subscriptions endpoint ready at ws://localhost:${this.config.port}${this.server.subscriptionsPath}`
+      );
+    }
+  }
+
+  /**
+   * Get default Subscriptions Options with even handlers to properly initialize required context values
+   */
+  getSubscriptionsOptions() {
+    return {
+      onConnect: (connectionParams, websocket, context) => {
+        const { cookie: paramsCookie } = connectionParams;
+        let { request } = context;
+
+        if (paramsCookie) {
+          // Faking `cookie` data passed from `connectionParams` to the request "headers" object
+          request = {
+            headers: {
+              cookie: paramsCookie,
+              ...context.request.headers
+            }
+          };
+        }
+
+        // Checking signed cookies (without a `res` argument, since for Subscriptions there're no traditional "responses")
+        try {
+          const cookies = new Cookies(
+            request,
+            {},
+            {
+              keys: this.config.session.keys
+            }
+          );
+          // Manually decrypting session cookie
+          const sessionContext = new SessionContext(
+            {
+              sessionOptions: {},
+              cookies
+            },
+            this.config.session.options
+          );
+
+          return {
+            headers: context.request.headers,
+            session: sessionContext.get()
+          };
+        } catch (e) {
+          throw new Error('Failed to parse Cookie');
+        }
+      }
+    };
   }
 }
 

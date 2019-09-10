@@ -6,9 +6,38 @@ Versions marked with a number and date (e.g. Falcon Client v0.1.0 (2018-10-05)) 
 
 ## Falcon vNext
 
+### Falcon Client vNext
+
+- changed the way of defining "proxyEndpoints" ([#571](https://github.com/deity-io/falcon/pull/571))
+
 ### Falcon Server vNext
 
+- improved Cache calls by tracking simultaneous requests with the same cache-key ([#557](https://github.com/deity-io/falcon/pull/557))
+
+### Falcon Server Env vNext
+
+- added optional `ApiDataSource.getExtraResolvers` static method to define extra resolvers ([#557](https://github.com/deity-io/falcon/pull/557))
+
+## Falcon v1.3 (2019-08-01)
+
+- required changes were made to make Falcon compatible with Node v12 ([#537](https://github.com/deity-io/falcon/pull/537))
+- updated all dependencies to fix lodash security issues ([528](https://github.com/deity-io/falcon/pull/528))
+- added translations to checkout process ([535](https://github.com/deity-io/falcon/pull/535))
+
+### Falcon Server v0.4.0 (2019-08-01)
+
 - added support of ComponentContainer ([#515](https://github.com/deity-io/falcon/pull/515))
+- added auto-installing of Subscription handlers ([#520](https://github.com/deity-io/falcon/pull/520))
+- improved the way of extracting root fields for partial extension schemas ([#541](https://github.com/deity-io/falcon/pull/541))
+- fixed the usage of CacheProvider when working with non-scalar values ([#543](https://github.com/deity-io/falcon/pull/543))
+
+### Falcon Client v0.5.3 (2019-08-01)
+
+- fixed issues with tests setup ([534](https://github.com/deity-io/falcon/pull/534))
+
+### Falcon E-commerce UI Kit v0.5.3 (2019-08-01)
+
+- fixed issues with product count in MiniCart ([518](https://github.com/deity-io/falcon/pull/518))
 
 ## Falcon v1.2 (2019-06-26)
 
