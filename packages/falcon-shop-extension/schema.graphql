@@ -13,9 +13,9 @@ extend type Query {
   cart: Cart!
   countryList: CountryList!
   lastOrder: Order @cacheInvalidator(idPath: [{ path: "items", type: "Product" }])
-  order(id: Int!): Order
+  order(id: ID!): Order
   orderList(pagination: PaginationInput): OrderList
-  address(id: Int!): Address
+  address(id: ID!): Address
   addressList: AddressList
   customer: Customer
   cmsPage(id: Int, identifier: String): CmsPage
@@ -184,6 +184,8 @@ input CheckoutAddressInput {
   regionId: ID
   street: [String!]!
   telephone: String
+  defaultBilling: Boolean
+  defaultShipping: Boolean
 }
 
 input AddAddressInput {
@@ -231,8 +233,8 @@ type OrderList {
 }
 
 type Order {
+  id: ID!
   incrementId: String!
-  entityId: Int!
   createdAt: String
   customerFirstname: String
   customerLastname: String
@@ -335,7 +337,7 @@ type ShippingMethod {
   amount: Float!
   priceExclTax: Float!
   priceInclTax: Float!
-  currency: String!
+  currency: String
 }
 
 type SetShippingResult {
@@ -526,7 +528,7 @@ type Customer {
 }
 
 type Address {
-  id: Int!
+  id: ID!
   company: String
   firstname: String!
   lastname: String!

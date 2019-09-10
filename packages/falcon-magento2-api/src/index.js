@@ -1160,9 +1160,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     });
 
     const response = await this.getForCustomer('/falcon/orders/mine', query, { context: { pagination } });
-    const result = this.convertKeys(response);
 
-    return result;
+    return {
+      ...response,
+      items: response.items.map(x => this.reduceOrder(x))
+    };
   }
 
   /**
@@ -1180,9 +1182,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       throw new Error('Failed to load an order.');
     }
 
-    const result = await this.getForCustomer(`/falcon/orders/${id}/order-info`);
-
-    return this.convertOrder(result);
+    const response = await this.getForCustomer(`/falcon/orders/${id}/order-info`);
+    return this.reduceOrder(response);
   }
 
   /**
@@ -1190,28 +1191,19 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {object} response response from Magento2 backend
    * @returns {Order} processed order
    */
-  convertOrder(response) {
-    if (!response || isEmpty(response)) {
-      return response;
-    }
-
+  reduceOrder(response) {
     const order = this.convertKeys(response);
-    order.items = this.convertItemsResponse(order.items);
-    response = this.convertTotals(order);
 
-    const { extensionAttributes, payment } = order;
+    const { extensionAttributes = {}, payment = {}, entityId, items, ...orderRest } = order;
+    const result = {
+      ...orderRest,
+      id: entityId,
+      items: this.convertItemsResponse(items),
+      shippingAddress: extensionAttributes.shippingAddress,
+      paymentMethodName: payment.extensionAttributes ? payment.extensionAttributes.methodName : undefined
+    };
 
-    if (extensionAttributes) {
-      order.shippingAddress = extensionAttributes.shippingAddress;
-      delete order.extensionAttributes;
-    }
-
-    if (payment && payment.extensionAttributes) {
-      order.paymentMethodName = payment.extensionAttributes.methodName;
-      delete order.payment;
-    }
-
-    return order;
+    return result;
   }
 
   /**
@@ -1225,41 +1217,19 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     return products.map(item => {
       // If product is configurable ask for parent_item price otherwise price is equal to 0
       const product = item.parentItem || item;
+      const { urlPath, options, extensionAttributes } = product;
 
-      product.itemOptions = product.options ? JSON.parse(product.options) : [];
-      product.qty = product.qtyOrdered;
-      product.rowTotalInclTax = product.basePriceInclTax;
-      product.link = this.convertPathToUrl(product.urlPath);
-      product.thumbnailUrl = product.extensionAttributes.thumbnailUrl;
+      const result = {
+        ...product,
+        itemOptions: options ? JSON.parse(options) : [],
+        qty: product.qtyOrdered,
+        rowTotalInclTax: product.basePriceInclTax,
+        link: this.convertPathToUrl(urlPath),
+        thumbnailUrl: extensionAttributes ? extensionAttributes.thumbnailUrl : undefined
+      };
 
-      return product;
+      return result;
     });
-  }
-
-  /**
-   * Process cart totals data
-   * @param {object} response totals response from Magento2 backend
-   * @returns {object} processed response
-   */
-  convertTotals(response) {
-    let totalsData = response;
-    totalsData = this.convertKeys(totalsData);
-
-    const { totalSegments } = totalsData;
-
-    if (totalSegments) {
-      const discountIndex = totalSegments.findIndex(item => item.code === 'discount');
-
-      // todo: Remove it and manage totals order in m2 admin panel
-      if (discountIndex !== -1) {
-        const discountSegment = totalSegments[discountIndex];
-
-        totalSegments.splice(discountIndex, 1);
-        totalSegments.splice(1, 0, discountSegment);
-      }
-    }
-
-    return totalsData;
   }
 
   /**

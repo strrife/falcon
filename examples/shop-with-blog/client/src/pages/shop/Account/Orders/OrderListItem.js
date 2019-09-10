@@ -28,7 +28,7 @@ export const OrderListItem = props => (
       <OrderListItemCellLabel>
         <T id="orderList.idLabel" />
       </OrderListItemCellLabel>
-      <Link as={RouterLink} to={`/account/orders/${props.entityId}`}>
+      <Link as={RouterLink} to={`/account/orders/${props.id}`}>
         {props.incrementId}
       </Link>
     </Box>
@@ -57,7 +57,7 @@ export const OrderListItem = props => (
       <T id="order.status" context={props.status || 'na'} />
     </Box>
     <Box gridArea={OrderListItemArea.actions} display="flex" alignContent="flex-start">
-      <Link as={RouterLink} to={`/account/orders/${props.entityId}`}>
+      <Link as={RouterLink} to={`/account/orders/${props.id}`}>
         <T id="orderList.viewOrderLink" />
       </Link>
     </Box>

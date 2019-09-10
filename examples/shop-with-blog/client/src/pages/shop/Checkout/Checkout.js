@@ -156,11 +156,11 @@ class CheckoutWizard extends React.Component {
 
     const { customerData } = this.props;
 
-    let addresses;
-    let defaultShippingAddress;
-    let defaultBillingAddress;
-    let orderResult = null;
+    const addresses = customerData && customerData.addresses ? customerData.addresses : [];
+    const defaultShippingAddress = addresses.find(item => item.defaultShipping);
+    const defaultBillingAddress = addresses.find(item => item.defaultBilling);
 
+    let orderResult = null;
     if (!loading && result) {
       if (result.url) {
         orderResult = (
@@ -175,13 +175,6 @@ class CheckoutWizard extends React.Component {
         // order has been placed successfully so we show confirmation
         orderResult = <Redirect to="/checkout/confirmation" />;
       }
-    }
-
-    // detect if user is logged in - if so and he has address list then use it for address sections
-    if (customerData && customerData.addresses && customerData.addresses.length) {
-      ({ addresses } = customerData);
-      defaultShippingAddress = addresses.find(item => item.defaultShipping);
-      defaultBillingAddress = addresses.find(item => item.defaultBilling);
     }
 
     return (

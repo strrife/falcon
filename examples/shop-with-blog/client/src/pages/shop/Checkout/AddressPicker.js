@@ -23,7 +23,7 @@ const AddressPicker = ({ addresses, selectedAddressId, onChange }) => {
 
 AddressPicker.propTypes = {
   addresses: PropTypes.arrayOf(PropTypes.shape({})),
-  selectedAddressId: PropTypes.number,
+  selectedAddressId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onChange: PropTypes.func
 };
 

@@ -370,8 +370,8 @@ export type MenuItem = {
 };
 
 export type Order = {
+  id: number;
   incrementId: string;
-  entityId: number;
   createdAt?: string;
   customerFirstname?: string;
   customerLastname?: string;
@@ -449,7 +449,7 @@ export type ShippingMethod = {
   amount: number;
   priceExclTax: number;
   priceInclTax: number;
-  currency: string;
+  currency?: string;
 };
 
 export type SetShippingInput = {
