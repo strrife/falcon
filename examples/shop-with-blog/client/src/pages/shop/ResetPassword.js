@@ -1,5 +1,5 @@
 import React from 'react';
-import { ResetPassword } from '@deity/falcon-ecommerce-uikit';
+import { ResetPassword } from '@deity/falcon-ui-kit';
 
 export default ({ location }) => {
   const queryParams = new URLSearchParams(location.search);

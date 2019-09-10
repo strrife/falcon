@@ -7,8 +7,9 @@ export type SignInFormValues = {
   email: string;
   password: string;
 };
-export const SignInFormProvider: React.SFC<FormProviderProps<SignInFormValues>> = props => {
-  const { onSubmit, initialValues, ...formikProps } = props;
+export type SignInFormProvider = FormProviderProps<SignInFormValues>;
+export const SignInFormProvider: React.SFC<SignInFormProvider> = props => {
+  const { onSuccess, initialValues, ...formikProps } = props;
   const defaultInitialValues = {
     email: '',
     password: ''
@@ -23,7 +24,7 @@ export const SignInFormProvider: React.SFC<FormProviderProps<SignInFormValues>> 
             signIn({ variables: { input: values } })
               .then(() => {
                 formikActions.setSubmitting(false);
-                return onSubmit && onSubmit();
+                return onSuccess && onSuccess();
               })
               .catch(e => {
                 formikActions.setSubmitting(false);

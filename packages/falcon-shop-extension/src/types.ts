@@ -19,50 +19,43 @@ export type ShopStoreEntry = {
   code: string;
 } & GraphQLBase;
 
-export type Address = {
-  id: number;
+export type AddressBase = {
   firstname: string;
   lastname: string;
   street: string[];
   city: string;
-  postcode?: string;
+  postcode: string;
+  regionId?: number;
   countryId: string;
   company?: string;
-  region?: string;
-  regionId?: number;
   telephone?: string;
+};
+
+export type Address = AddressBase & {
+  id: number;
+  region?: string;
   fax?: string;
   defaultBilling: boolean;
   defaultShipping: boolean;
 } & GraphQLBase;
 
-export type AddAddressInput = {
-  company?: string;
-  firstname: string;
-  lastname: string;
-  telephone: string;
-  street: string[];
-  postcode: string;
-  city: string;
-  countryId: string;
-  defaultBilling?: boolean;
-  defaultShipping?: boolean;
-  regionId?: number;
+export type CheckoutAddressInput = AddressBase & {
+  id?: number;
+  email?: string;
+  saveInAddressBook?: number;
+  sameAsBilling?: number;
 };
 
-export type EditAddressInput = {
-  id: number;
-  company?: string;
-  firstname: string;
-  lastname: string;
-  telephone?: string;
-  street: string;
-  postcode: string;
-  city: string;
-  countryId: string;
+export type AddAddressInput = AddressBase & {
   defaultBilling?: boolean;
   defaultShipping?: boolean;
-  regionId?: number;
+};
+
+export type EditAddressInput = AddressBase & {
+  id: number;
+  telephone?: string;
+  defaultBilling?: boolean;
+  defaultShipping?: boolean;
 };
 
 export type Customer = {
@@ -127,6 +120,20 @@ export enum FilterOperator {
   /** in the range */
   range = 'range'
 }
+
+export type Cart = {
+  active: boolean;
+  /** indicates whether products will be shipped or not */
+  virtual: boolean;
+  items: CartItem[];
+  itemsCount: number;
+  itemsQty: number;
+  totals: CartTotal[];
+  /** @deprecated Use ShopConfig.activeCurrency */
+  quoteCurrency: string;
+  couponCode: string;
+  billingAddress: Address;
+};
 
 export type CartItem = {
   itemId: number;
@@ -335,4 +342,133 @@ export type SignUpInput = {
 export type SignInInput = {
   email: string;
   password: string;
+};
+
+export type CountryList = {
+  items: Country[];
+};
+
+export type Country = {
+  code: string;
+  englishName: string;
+  localName: string;
+  regions: Region[];
+};
+
+export type Region = {
+  id: string;
+  code: string;
+  name: string;
+};
+
+export type MenuItem = {
+  id: string;
+  name: string;
+  urlPath: string;
+  cssClass: string;
+  children: MenuItem[];
+};
+
+export type Order = {
+  id: number;
+  referenceNo: string;
+  createdAt?: string;
+  customerFirstname?: string;
+  customerLastname?: string;
+  status?: string; // list of possible statuses?
+  baseGrandTotal: number;
+  subtotal: number;
+  grandTotal: number;
+  shippingAmount: number;
+  taxAmount: number;
+  discountAmount: number;
+  orderCurrencyCode?: string;
+  items: OrderItem[];
+  paymentMethodName?: string;
+  billingAddress?: Address;
+  shippingDescription?: string;
+  shippingAddress?: Address;
+  couponCode?: string;
+};
+
+export type OrderItem = {
+  itemId: string;
+  sku: string;
+  name: string;
+  availableQty: number;
+  qty: number;
+  price: number;
+  productType?: String;
+  rowTotalInclTax: number;
+  basePrice?: number;
+  basePriceInclTax?: number;
+  thumbnailUrl?: string;
+  urlKey?: string;
+  link?: string;
+  parentItem?: OrderItem;
+};
+
+export type PlaceOrderInput = {
+  billingAddress?: CheckoutAddressInput;
+  email?: string;
+  paymentMethod: PaymentMethodInput;
+};
+
+export type PaymentMethodInput = {
+  method: string;
+  additionalData: object;
+};
+
+export type PlaceOrderResult = PlaceOrderSuccessfulResult | PlaceOrder3dSecureResult;
+
+export type PlaceOrderSuccessfulResult = {
+  orderId: string;
+  orderRealId: string;
+};
+
+export type PlaceOrder3dSecureResult = {
+  url: string;
+  method: string;
+  fields: PlaceOrder3dSecureField[];
+};
+
+export type PlaceOrder3dSecureField = {
+  name: string;
+  value?: string;
+};
+
+export type EstimateShippingMethodsInput = {
+  address: CheckoutAddressInput;
+};
+
+export type ShippingMethod = {
+  carrierTitle: string;
+  carrierCode: string;
+  methodCode: string;
+  methodTitle: string;
+  amount: number;
+  priceExclTax: number;
+  priceInclTax: number;
+  currency?: string;
+};
+
+export type SetShippingInput = {
+  billingAddress: CheckoutAddressInput;
+  shippingAddress: CheckoutAddressInput;
+  shippingCarrierCode: string;
+  shippingMethodCode: string;
+};
+
+export type SetShippingResult = {
+  paymentMethods: PaymentMethod[];
+  totals: CartTotal;
+};
+
+export type PaymentMethod = {
+  /** Internal Payment method code (like "paypal_express") */
+  code: string;
+  /** Translated Payment method title (like "PayPal Express Checkout") */
+  title: string;
+  /** Configuration object for the specific Payment method */
+  config: Object;
 };

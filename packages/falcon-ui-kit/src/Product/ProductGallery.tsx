@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Image, Swipeable, SwipeableItem } from '@deity/falcon-ui';
 import { I18n } from '@deity/falcon-i18n';
-import { ProductGalleryLayout, productGalleryLayoutAreas } from './ProductGalleryLayout';
+import { ProductGalleryLayout, productGalleryLayoutArea } from './ProductGalleryLayout';
 import { NoProductImagePlaceholder } from './NoProductImagePlaceholder';
 import { ProductGalleryThumbLayout } from './ProductGalleryThumbLayout';
 
@@ -50,7 +50,7 @@ export class ProductGallery extends React.Component<ProductGalleryProps, Product
 
     return (
       <ProductGalleryLayout>
-        <Box gridArea={productGalleryLayoutAreas.thumbs}>
+        <Box gridArea={productGalleryLayoutArea.thumbs}>
           {items.map((item, index) => (
             <ProductGalleryThumbLayout
               onClick={this.scrollToItem(index)}
@@ -62,7 +62,7 @@ export class ProductGallery extends React.Component<ProductGalleryProps, Product
           ))}
         </Box>
 
-        <Swipeable gridArea={productGalleryLayoutAreas.full} ref={this.scrollableElement} alignItems="center">
+        <Swipeable gridArea={productGalleryLayoutArea.full} ref={this.scrollableElement} alignItems="center">
           {items.map(item => (
             <I18n key={item.thumbnail}>
               {t => <SwipeableItem key={item.full} as={Image} src={item.full} alt={t('productGallery.imageAlt')} />}

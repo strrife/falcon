@@ -1,5 +1,5 @@
 {
-  "welcome": "Welcome to @deity",
+  "name": "Deity",
   "copyright": "© Copyright {{year}}",
   "continue": "Continue",
   "edit": "Edit",
@@ -142,7 +142,8 @@
   },
   "forgotPassword": {
     "title": "Forgot Password",
-    "emailFieldLabel": "Email"
+    "emailFieldLabel": "Email",
+    "successMessage": "If there is an account associated with {{values.email}} you will receive an email with a link to reset your password."
   },
   "resetPassword": {
     "title": "Reset Password",
@@ -163,7 +164,7 @@
     "passwordFieldLabel": "Password",
     "passwordFieldPlaceholder": "At least 8 characters"
   },
-  "newCustomer": {
+  "newAccount": {
     "title": "New Customers",
     "benefitsHeader": "Creating an account has many benefits:",
     "benefitList": ["check out faster", "keep more than one address", "track orders and more"],

@@ -6,7 +6,7 @@ import { Box, Text, H1, NumberInput, Button, Icon, FlexLayout } from '@deity/fal
 import { Field, rangeValidator, requiredValidator, AddToCartFormProvider } from '@deity/falcon-front-kit';
 import {
   ProductLayout,
-  ProductLayoutAreas,
+  ProductLayoutArea,
   ProductDescription,
   OpenSidebarMutation,
   ProductPrice,
@@ -30,29 +30,29 @@ const ProductPage = ({ id, path }) => (
             <AddToCartFormProvider
               quantity={1}
               product={product}
-              onSubmit={() => openSidebar({ variables: { contentType: 'cart' } })}
+              onSuccess={() => openSidebar({ variables: { contentType: 'cart' } })}
             >
               {({ isSubmitting, status }) => (
                 <ProductLayout as={Form} id="add-to-cart" i18nId="product">
-                  <FlexLayout gridArea={ProductLayoutAreas.gallery} alignItems="center" justifyContent="center">
+                  <FlexLayout gridArea={ProductLayoutArea.gallery} alignItems="center" justifyContent="center">
                     <ProductGallery items={product.gallery} />
                   </FlexLayout>
-                  <Text fontSize="sm" gridArea={ProductLayoutAreas.sku}>
+                  <Text fontSize="sm" gridArea={ProductLayoutArea.sku}>
                     <T id="product.sku" sku={product.sku} />
                   </Text>
-                  <H1 gridArea={ProductLayoutAreas.title}>{product.name}</H1>
-                  <Box gridArea={ProductLayoutAreas.price}>
+                  <H1 gridArea={ProductLayoutArea.title}>{product.name}</H1>
+                  <Box gridArea={ProductLayoutArea.price}>
                     <ProductPrice {...product.price} fontSize="xl" />
                     <ProductTierPrices items={product.tierPrices} />
                   </Box>
                   <ProductOptionList
-                    gridArea={ProductLayoutAreas.options}
+                    gridArea={ProductLayoutArea.options}
                     name="options"
                     items={product.options}
                     disabled={isSubmitting}
                   />
-                  <ProductDescription gridArea={ProductLayoutAreas.description} value={product.description} />
-                  <FlexLayout alignItems="center" gridArea={ProductLayoutAreas.cta} mt="md">
+                  <ProductDescription gridArea={ProductLayoutArea.description} html={product.description} />
+                  <FlexLayout alignItems="center" gridArea={ProductLayoutArea.cta} mt="md">
                     <Field name="qty" validate={[requiredValidator, rangeValidator(1)]}>
                       {({ field, label, error }) => (
                         <Box mr="md">
@@ -66,7 +66,7 @@ const ProductPage = ({ id, path }) => (
                       <T id="product.addToCart" />
                     </Button>
                   </FlexLayout>
-                  <Box gridArea={ProductLayoutAreas.error}>
+                  <Box gridArea={ProductLayoutArea.error}>
                     <FormErrorSummary errors={status && status.error} />
                   </Box>
                 </ProductLayout>

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { Box, H2, H4, Button, Divider } from '@deity/falcon-ui';
-import { CheckoutLogic, CountriesQuery, Loader } from '@deity/falcon-ecommerce-uikit';
-import { toGridTemplate } from '@deity/falcon-ui-kit';
-import { CustomerQuery, GET_CUSTOMER_WITH_ADDRESSES, CartQuery } from '@deity/falcon-shop-data';
+import { CheckoutLogic } from '@deity/falcon-front-kit';
+import { toGridTemplate, Loader } from '@deity/falcon-ui-kit';
+import { CustomerQuery, GET_CUSTOMER_WITH_ADDRESSES, CartQuery, CountryListQuery } from '@deity/falcon-shop-data';
 import { T, I18n } from '@deity/falcon-i18n';
 import { Test3dSecure } from '@deity/falcon-payment-plugin';
 import ErrorList from '../components/ErrorList';
@@ -156,11 +156,11 @@ class CheckoutWizard extends React.Component {
 
     const { customerData } = this.props;
 
-    let addresses;
-    let defaultShippingAddress;
-    let defaultBillingAddress;
-    let orderResult = null;
+    const addresses = customerData && customerData.addresses ? customerData.addresses : [];
+    const defaultShippingAddress = addresses.find(item => item.defaultShipping);
+    const defaultBillingAddress = addresses.find(item => item.defaultBilling);
 
+    let orderResult = null;
     if (!loading && result) {
       if (result.url) {
         orderResult = (
@@ -177,16 +177,9 @@ class CheckoutWizard extends React.Component {
       }
     }
 
-    // detect if user is logged in - if so and he has address list then use it for address sections
-    if (customerData && customerData.addresses && customerData.addresses.length) {
-      ({ addresses } = customerData);
-      defaultShippingAddress = addresses.find(item => item.defaultShipping);
-      defaultBillingAddress = addresses.find(item => item.defaultBilling);
-    }
-
     return (
-      <CountriesQuery>
-        {({ countries }) => (
+      <CountryListQuery>
+        {({ countryList }) => (
           <CartQuery>
             {({ cart }) => {
               // cart is empty and it's not a "placeOrder" result so redirect user to the homepage
@@ -222,7 +215,7 @@ class CheckoutWizard extends React.Component {
                         <AddressSection
                           id="shipping-address"
                           open={currentStep === CHECKOUT_STEPS.SHIPPING_ADDRESS}
-                          countries={countries.items}
+                          countries={countryList.items}
                           onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.SHIPPING_ADDRESS)}
                           title={t('checkout.shippingAddress')}
                           submitLabel={t('checkout.nextStep')}
@@ -241,7 +234,7 @@ class CheckoutWizard extends React.Component {
                           onEditRequested={() => this.setCurrentStep(CHECKOUT_STEPS.BILLING_ADDRESS)}
                           title={t('checkout.billingAddress')}
                           submitLabel={t('checkout.nextStep')}
-                          countries={countries.items}
+                          countries={countryList.items}
                           selectedAddress={values.billingAddress}
                           setAddress={setBillingAddress}
                           setUseTheSame={setBillingSameAsShipping}
@@ -292,7 +285,7 @@ class CheckoutWizard extends React.Component {
             }}
           </CartQuery>
         )}
-      </CountriesQuery>
+      </CountryListQuery>
     );
   }
 }

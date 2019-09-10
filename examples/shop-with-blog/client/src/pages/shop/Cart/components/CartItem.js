@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { UpdateCartItemMutation, RemoveCartItemMutation } from '@deity/falcon-shop-data';
 import { Box, Text, Image } from '@deity/falcon-ui';
-import { Price, toGridTemplate } from '@deity/falcon-ui-kit';
+import { Price, toGridTemplate, PropertyRowLayout } from '@deity/falcon-ui-kit';
 import { RemoveItemButton, ChangeItemNumberInput } from './Inputs';
 
 export const CartItemArea = {
@@ -42,14 +42,10 @@ const CartItemDetails = ({ options = [], ...props }) =>
   options.length ? (
     <Box {...props}>
       {options.map(option => (
-        <Box display="flex" key={option.label}>
-          <Text flex="1" fontSize="xs">
-            {option.label}:
-          </Text>
-          <Text flex="3" fontSize="xs">
-            {option.value}
-          </Text>
-        </Box>
+        <PropertyRowLayout key={option.label}>
+          <Text>{option.label}:</Text>
+          <Text>{option.value}</Text>
+        </PropertyRowLayout>
       ))}
     </Box>
   ) : null;
@@ -62,11 +58,10 @@ const CartItem = ({ item }) => (
   <Box defaultTheme={cartItemLayout}>
     <Image
       gridArea={CartItemArea.thumb}
-      mr="lg"
       src={item.thumbnailUrl}
       css={{ maxWidth: MAX_THUMB_SIZE, maxHeight: MAX_THUMB_SIZE }}
     />
-    <Text gridArea={CartItemArea.name} fontSize="sm" fontWeight="bold">
+    <Text gridArea={CartItemArea.name} fontSize="md" fontWeight="bold">
       {item.name}
     </Text>
     <Box gridArea={CartItemArea.remove}>

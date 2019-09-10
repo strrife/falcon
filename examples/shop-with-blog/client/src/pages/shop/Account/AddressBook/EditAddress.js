@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom';
 import { Formik } from 'formik';
 import { T } from '@deity/falcon-i18n';
 import { H1, Text, Button, FlexLayout, GridLayout } from '@deity/falcon-ui';
-import { CountriesQuery, CountrySelector } from '@deity/falcon-ecommerce-uikit';
 import {
   getAddressType,
   Form,
@@ -11,9 +10,10 @@ import {
   CheckboxFormField,
   FormErrorSummary,
   TwoColumnsLayout,
-  TwoColumnsLayoutArea
+  TwoColumnsLayoutArea,
+  CountryPicker
 } from '@deity/falcon-ui-kit';
-import { GET_ADDRESS, AddressQuery, EditAddressMutation } from '@deity/falcon-shop-data';
+import { GET_ADDRESS, AddressQuery, EditAddressMutation, CountryListQuery } from '@deity/falcon-shop-data';
 
 const EditAddress = ({ match, history }) => {
   const id = parseInt(match.params.id, 10);
@@ -76,16 +76,12 @@ const EditAddress = ({ match, history }) => {
                         <FormField name="postcode" required />
                         <FormField name="city" required />
                         <FormField name="countryId" required>
-                          {({ form, field }) => (
-                            <CountriesQuery passLoading>
-                              {({ countries = { items: [] } }) => (
-                                <CountrySelector
-                                  {...field}
-                                  onChange={x => form.setFieldValue(field.name, x)}
-                                  items={countries.items}
-                                />
+                          {({ field }) => (
+                            <CountryListQuery passLoading>
+                              {({ countryList = { items: [] } }) => (
+                                <CountryPicker {...field} options={countryList.items} />
                               )}
-                            </CountriesQuery>
+                            </CountryListQuery>
                           )}
                         </FormField>
                       </GridLayout>

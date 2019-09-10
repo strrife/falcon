@@ -1,20 +1,26 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
-import { H4, List } from '@deity/falcon-ui';
-import { LocalePicker } from '@deity/falcon-ui-kit';
+import { GridLayout, H4, List, ListItem } from '@deity/falcon-ui';
 import { LocaleSwitcher } from '@deity/falcon-front-kit';
 import {
-  FooterSectionsLayout,
-  FooterSectionLayout,
-  FooterLink,
-  FooterLayout,
-  LanguageSection,
+  Footer,
+  LocalePicker,
   Newsletter,
-  Copyright
-} from '@deity/falcon-ecommerce-uikit';
+  Copyright,
+  FooterBanner,
+  RouterLink,
+  FooterSectionListLayout,
+  FooterSectionLayout
+} from '@deity/falcon-ui-kit';
 
-export const Sitemap = () => (
-  <FooterSectionsLayout>
+const FooterLink = ({ to, children }) => (
+  <ListItem p="xs">
+    <RouterLink to={to}>{children}</RouterLink>
+  </ListItem>
+);
+
+const Sitemap = () => (
+  <FooterSectionListLayout>
     <FooterSectionLayout>
       <H4 fontWeight="bold">
         <T id="sitemap.customerService" />
@@ -60,16 +66,16 @@ export const Sitemap = () => (
         </FooterLink>
       </List>
     </FooterSectionLayout>
-  </FooterSectionsLayout>
+  </FooterSectionListLayout>
 );
 
-export const Footer = () => (
-  <FooterLayout as="footer">
+export const PageFooter = () => (
+  <GridLayout as={Footer} gridGap="md">
     <Newsletter />
     <Sitemap />
-    <LanguageSection>
-      <LocaleSwitcher>{({ ...props }) => <LocalePicker {...props} />}</LocaleSwitcher>
-    </LanguageSection>
-    <Copyright />
-  </FooterLayout>
+    <LocaleSwitcher>{({ ...props }) => <LocalePicker {...props} />}</LocaleSwitcher>
+    <FooterBanner>
+      <Copyright />
+    </FooterBanner>
+  </GridLayout>
 );

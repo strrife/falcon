@@ -1,17 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Sidebar as SidebarLayout, Portal, Backdrop, Icon, Box } from '@deity/falcon-ui';
 
 export type SidebarProps = {
   isOpen: boolean;
-  side: 'left' | 'right';
+  side: SidebarSide;
   close: Function;
 };
-
 export const Sidebar: React.SFC<SidebarProps> = ({ close, isOpen, side, children }) => {
-  const position = {
-    top: 0,
-    ...(side === 'left' ? { left: 0 } : { right: 0 })
-  };
+  const position = sidebarSideToPosition(side);
 
   return (
     <React.Fragment>
@@ -24,4 +21,24 @@ export const Sidebar: React.SFC<SidebarProps> = ({ close, isOpen, side, children
       <Backdrop as={Portal} visible={isOpen} onClick={() => close && close()} />
     </React.Fragment>
   );
+};
+Sidebar.propTypes = {
+  isOpen: PropTypes.bool,
+  close: PropTypes.func,
+  side: PropTypes.oneOf(['left', 'right'])
+};
+Sidebar.defaultProps = {
+  side: 'right'
+};
+
+export type SidebarSide = 'left' | 'right';
+const sidebarSideToPosition = (side: SidebarSide) => {
+  if (side === 'left' || side === 'right') {
+    return {
+      top: 4,
+      right: 0
+    };
+  }
+
+  throw new Error(`Unsupported Sidebar position !`);
 };

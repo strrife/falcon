@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, themed } from '@deity/falcon-ui';
 import { toGridTemplate } from '../helpers';
 
-export const productGalleryLayoutAreas = {
+export const productGalleryLayoutArea = {
   full: 'full',
   thumbs: 'thumbs'
 };
@@ -17,12 +17,12 @@ export const ProductGalleryLayout = themed({
         // prettier-ignore
         xs: toGridTemplate([
           ['1fr'],
-          [productGalleryLayoutAreas.full],
-          [productGalleryLayoutAreas.thumbs]]),
+          [productGalleryLayoutArea.full],
+          [productGalleryLayoutArea.thumbs]]),
         // prettier-ignore
         md: toGridTemplate([
           ['100px', '1fr'],
-          [productGalleryLayoutAreas.thumbs, productGalleryLayoutAreas.full]])
+          [productGalleryLayoutArea.thumbs, productGalleryLayoutArea.full]])
       }
     }
   }

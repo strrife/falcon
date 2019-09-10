@@ -131,9 +131,9 @@ module.exports = class WordpressApi extends ApiDataSource {
    * @param {object} args arguments
    * @param {object} args.query Query object
    * @param {object} args.pagination Pagination
-   * @returns {object[]} posts data
+   * @returns {object[]} blog post list
    */
-  async blogPosts(_, { query, pagination }) {
+  async blogPostList(_, { query, pagination }) {
     const payload = {
       ...query
     };

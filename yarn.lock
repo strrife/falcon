@@ -15415,10 +15415,10 @@ react-codemirror2@^5.1.0:
   resolved "https://registry.npmjs.org/react-codemirror2/-/react-codemirror2-5.1.0.tgz#62de4460178adea40eb52eabf7491669bf3794b8"
   integrity sha512-Cksbgbviuf2mJfMyrKmcu7ycK6zX/ukuQO8dvRZdFWqATf5joalhjFc6etnBdGCcPA2LbhIwz+OPnQxLN/j1Fw==
 
-react-credit-card-input@1.1.1:
-  version "1.1.1"
-  resolved "https://registry.npmjs.org/react-credit-card-input/-/react-credit-card-input-1.1.1.tgz#009c664d242e3b8cee7e44776648d10f4e741224"
-  integrity sha512-tNwxbW0pztiOLMJUOo/bE8IUyA3jZ9qs7t2JhSqgcAmchNxM50m3jpkcQT+psj5QH5g/sNBx/4nhWY0qpK1ZgQ==
+react-credit-card-input@1.1.5:
+  version "1.1.5"
+  resolved "https://registry.npmjs.org/react-credit-card-input/-/react-credit-card-input-1.1.5.tgz#6aa83fc881b57c958c9b00b50e698f76f211214f"
+  integrity sha512-G157pMMrh8CZ4Xi2ICoXrOuI9Xpl3i8AwVTZNgRWehQ8VfTwu5/TxaqlFQTbZQv3XI+g6AMCiIlgITQNDP8Jig==
   dependencies:
     credit-card-type "6.3.0"
     payment "2.3.0"
