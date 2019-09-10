@@ -12,7 +12,7 @@ export const GET_CATEGORY_WITH_PRODUCT_LIST = gql`
     category(id: $categoryId) {
       id
       name
-      productList(sort: $sort, pagination: $pagination, filters: $filters) {
+      productList(input: { sort: $sort, pagination: $pagination, filters: $filters }) {
         items {
           id
           name

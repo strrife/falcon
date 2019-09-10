@@ -216,10 +216,10 @@ export type UpdateCartItemInput = {
 };
 
 export type ProductListInput = {
-  term: string;
-  filters: FilterInput[];
-  pagination: PaginationInput;
-  sortOrders: SortOrderInput[];
+  term?: string;
+  filters?: FilterInput[];
+  sort?: SortOrderInput;
+  pagination?: PaginationInput;
 };
 
 export type ProductList = {
