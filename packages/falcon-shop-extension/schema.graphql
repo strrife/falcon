@@ -234,7 +234,7 @@ type OrderList {
 
 type Order {
   id: ID!
-  incrementId: String!
+  referenceNo: String!
   createdAt: String
   customerFirstname: String
   customerLastname: String

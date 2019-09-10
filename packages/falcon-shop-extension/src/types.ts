@@ -371,7 +371,7 @@ export type MenuItem = {
 
 export type Order = {
   id: number;
-  incrementId: string;
+  referenceNo: string;
   createdAt?: string;
   customerFirstname?: string;
   customerLastname?: string;

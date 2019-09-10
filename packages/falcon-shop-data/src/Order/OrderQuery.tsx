@@ -6,7 +6,7 @@ export const GET_ORDER = gql`
   query Order($id: ID!) {
     order(id: $id) {
       id
-      incrementId
+      referenceNo
       createdAt
       customerFirstname
       customerLastname
@@ -54,7 +54,7 @@ export type OrderResponse = {
   order: Pick<
     Order,
     | 'id'
-    | 'incrementId'
+    | 'referenceNo'
     | 'createdAt'
     | 'customerFirstname'
     | 'customerLastname'

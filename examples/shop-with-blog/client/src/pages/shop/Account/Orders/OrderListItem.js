@@ -29,7 +29,7 @@ export const OrderListItem = props => (
         <T id="orderList.idLabel" />
       </OrderListItemCellLabel>
       <Link as={RouterLink} to={`/account/orders/${props.id}`}>
-        {props.incrementId}
+        {props.referenceNo}
       </Link>
     </Box>
     <Box gridArea={OrderListItemArea.createdAt} display="flex" alignContent="flex-start">

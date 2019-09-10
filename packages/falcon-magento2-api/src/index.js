@@ -1194,10 +1194,11 @@ module.exports = class Magento2Api extends Magento2ApiBase {
   reduceOrder(response) {
     const order = this.convertKeys(response);
 
-    const { extensionAttributes = {}, payment = {}, entityId, items, ...orderRest } = order;
+    const { extensionAttributes = {}, payment = {}, entityId, incrementId, items, ...orderRest } = order;
     const result = {
       ...orderRest,
       id: entityId,
+      referenceNo: incrementId,
       items: this.convertItemsResponse(items),
       shippingAddress: extensionAttributes.shippingAddress,
       paymentMethodName: payment.extensionAttributes ? payment.extensionAttributes.methodName : undefined

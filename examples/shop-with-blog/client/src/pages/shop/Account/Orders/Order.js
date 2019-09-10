@@ -22,7 +22,7 @@ const Order = ({ match }) => {
         {({ order }) => (
           <LocaleProvider currency={order.orderCurrencyCode}>
             <H1>
-              <T id="order.title" orderId={order.incrementId} />
+              <T id="order.title" orderId={order.referenceNo} />
             </H1>
             <OrderLayout>
               <FlexLayout gridArea={OrderLayoutArea.status}>
