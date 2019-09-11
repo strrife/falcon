@@ -34,53 +34,59 @@ export default ({ contentType }) => {
       {({ history }) => (
         <CloseSidebarMutation>
           {closeSidebar => (
-            <I18n>
-              {t => (
-                <React.Fragment>
-                  <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.cart}>
-                    <SidebarLayout title={t('miniCart.title')}>
-                      <MiniCartQuery>
-                        {({ cart = { items: [] } }) =>
-                          cart.items.length > 0 ? (
-                            <MiniCart
-                              items={cart.items}
-                              onCheckout={() => closeSidebar().then(() => history.push('/checkout'))}
-                            />
-                          ) : (
-                            <EmptyMiniCart
-                              onGoShopping={() => closeSidebar().then(() => history.push('/what-is-new.html'))}
-                            />
-                          )
-                        }
-                      </MiniCartQuery>
-                    </SidebarLayout>
-                  </ContentBox>
-                  <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.account}>
-                    <SidebarLayout title={t('signIn.title')}>
-                      <SignInForm id="sign-in-sidebar" onSuccess={closeSidebar} />
-                      <Divider my="lg" />
-                      <NewAccount />
-                    </SidebarLayout>
-                  </ContentBox>
-                  <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.signUp}>
-                    <SidebarLayout title={t('signUp.title')}>
-                      <OpenSidebarMutation>
-                        {openSidebarMutation => (
-                          <SignUpForm
-                            onSuccess={() => openSidebarMutation({ variables: { contentType: 'account' } })}
+            <OpenSidebarMutation>
+              {openSidebar => (
+                <I18n>
+                  {t => (
+                    <React.Fragment>
+                      <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.cart}>
+                        <SidebarLayout title={t('miniCart.title')}>
+                          <MiniCartQuery>
+                            {({ cart = { items: [] } }) =>
+                              cart.items.length > 0 ? (
+                                <MiniCart
+                                  items={cart.items}
+                                  onCheckout={() => closeSidebar().then(() => history.push('/checkout'))}
+                                />
+                              ) : (
+                                <EmptyMiniCart
+                                  onGoShopping={() => closeSidebar().then(() => history.push('/what-is-new.html'))}
+                                />
+                              )
+                            }
+                          </MiniCartQuery>
+                        </SidebarLayout>
+                      </ContentBox>
+                      <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.account}>
+                        <SidebarLayout title={t('signIn.title')}>
+                          <SignInForm id="sign-in-sidebar" onSuccess={closeSidebar} />
+                          <Divider my="lg" />
+                          <NewAccount
+                            onCreateNewAccount={() => openSidebar({ variables: { contentType: 'signUp' } })}
                           />
-                        )}
-                      </OpenSidebarMutation>
-                    </SidebarLayout>
-                  </ContentBox>
-                  <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.forgotPassword}>
-                    <SidebarLayout title={t('forgotPassword.title')}>
-                      <ForgotPasswordForm />
-                    </SidebarLayout>
-                  </ContentBox>
-                </React.Fragment>
+                        </SidebarLayout>
+                      </ContentBox>
+                      <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.signUp}>
+                        <SidebarLayout title={t('signUp.title')}>
+                          <OpenSidebarMutation>
+                            {openSidebarMutation => (
+                              <SignUpForm
+                                onSuccess={() => openSidebarMutation({ variables: { contentType: 'account' } })}
+                              />
+                            )}
+                          </OpenSidebarMutation>
+                        </SidebarLayout>
+                      </ContentBox>
+                      <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.forgotPassword}>
+                        <SidebarLayout title={t('forgotPassword.title')}>
+                          <ForgotPasswordForm />
+                        </SidebarLayout>
+                      </ContentBox>
+                    </React.Fragment>
+                  )}
+                </I18n>
               )}
-            </I18n>
+            </OpenSidebarMutation>
           )}
         </CloseSidebarMutation>
       )}
