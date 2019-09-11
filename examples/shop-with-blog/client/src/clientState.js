@@ -1,4 +1,4 @@
-import { GET_SIDEBAR_STATE } from './pages/shop/components/Sidebar';
+import { GET_SIDEBAR_STATE } from 'src/components/Sidebar';
 /**
  * Defines client-side state resolvers
  */

@@ -18,7 +18,7 @@ import { ErrorBoundary } from 'src/components/ErrorBoundary';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
 import DynamicRoute from 'src/pages/DynamicRoute';
-import { SidebarContainer } from 'src/pages/shop/components/Sidebar';
+import { SidebarContainer } from 'src/components/Sidebar';
 import { Header, PageFooter } from './components';
 import { deityGreenTheme, globalCss } from './theme';
 

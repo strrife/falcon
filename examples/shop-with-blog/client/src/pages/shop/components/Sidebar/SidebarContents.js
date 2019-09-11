@@ -12,8 +12,7 @@ import {
   MiniCart,
   ForgotPasswordForm
 } from '@deity/falcon-ui-kit';
-import { CloseSidebarMutation, OpenSidebarMutation } from 'src/components/Sidebar';
-import { SIDEBAR_CONTENT_TYPES } from './SidebarQuery';
+import { CloseSidebarMutation, OpenSidebarMutation, SIDEBAR_CONTENT_TYPES } from 'src/components/Sidebar';
 
 export default ({ contentType }) => {
   // if there is no content type provided it means that sidebar contents should be rendered as hidden
