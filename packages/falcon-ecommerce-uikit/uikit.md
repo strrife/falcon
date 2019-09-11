@@ -85,8 +85,8 @@
 
 ---
 
-> - ~~CloseSidebarMutation~~ - moved to @deity/falcon-ui-kit
-> - ~~OpenSidebarMutation~~ - moved to @deity/falcon-ui-kit
+> - ~~CloseSidebarMutation~~ - moved to examples/shop-with-blog
+> - ~~OpenSidebarMutation~~ - moved to examples/shop-with-blog
 
 ---
 
