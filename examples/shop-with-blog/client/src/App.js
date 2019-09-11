@@ -101,7 +101,7 @@ const App = () => (
                   <SidebarContainer>
                     {sidebarProps => (
                       <Sidebar {...sidebarProps}>
-                        <SidebarContents contentType={sidebarProps.contentType} />
+                        <SidebarContents {...sidebarProps} />
                       </Sidebar>
                     )}
                   </SidebarContainer>
