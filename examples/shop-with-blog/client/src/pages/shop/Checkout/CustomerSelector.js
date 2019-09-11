@@ -6,7 +6,7 @@ import { Box, Text, Link, Input, Button, Details, DetailsContent } from '@deity/
 import { SignOutMutation, GET_CUSTOMER } from '@deity/falcon-shop-data';
 import { toGridTemplate } from '@deity/falcon-ui-kit';
 import { I18n, T } from '@deity/falcon-i18n';
-import { OpenSidebarMutation } from 'src/components/Sidebar';
+import { OpenSidebarMutation, SIDEBAR_CONTENT_TYPE } from 'src/components/Sidebar';
 import SectionHeader from './CheckoutSectionHeader';
 
 const customerEmailFormLayout = {
@@ -158,13 +158,7 @@ class EmailSection extends React.Component {
               <Link
                 mx="xs"
                 color="primary"
-                onClick={() =>
-                  openSidebar({
-                    variables: {
-                      contentType: 'account'
-                    }
-                  })
-                }
+                onClick={() => openSidebar({ variables: { contentType: SIDEBAR_CONTENT_TYPE.account } })}
               >
                 <T id="customerSelector.signInLink" />
               </Link>
