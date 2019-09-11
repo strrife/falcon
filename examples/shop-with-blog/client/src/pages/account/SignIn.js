@@ -1,8 +1,8 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
-import { Box, H1, Divider } from '@deity/falcon-ui';
-import { PageLayout, SignInForm, NewAccount } from '@deity/falcon-ui-kit';
-import { OpenSidebarMutation } from 'src/components/Sidebar';
+import { H1, Divider } from '@deity/falcon-ui';
+import { PageLayout, FixCenteredLayout, SignInForm, NewAccount } from '@deity/falcon-ui-kit';
+import { OpenSidebarMutation, SIDEBAR_CONTENT_TYPE } from 'src/components/Sidebar';
 
 const SignIn = ({ history, location }) => {
   const { search } = location;
@@ -17,15 +17,17 @@ const SignIn = ({ history, location }) => {
       </H1>
       <OpenSidebarMutation>
         {openSidebar => (
-          <Box>
+          <FixCenteredLayout maxWidth={400}>
             <SignInForm
               id="sign-in-page"
               onSuccess={() => history.replace(next)}
-              onForgotPassword={() => openSidebar({ variables: { contentType: 'forgotPassword' } })}
+              onForgotPassword={() => openSidebar({ variables: { contentType: SIDEBAR_CONTENT_TYPE.forgotPassword } })}
             />
             <Divider my="lg" />
-            <NewAccount onCreateNewAccount={() => openSidebar({ variables: { contentType: 'signUp' } })} />
-          </Box>
+            <NewAccount
+              onCreateNewAccount={() => openSidebar({ variables: { contentType: SIDEBAR_CONTENT_TYPE.signUp } })}
+            />
+          </FixCenteredLayout>
         )}
       </OpenSidebarMutation>
     </PageLayout>
