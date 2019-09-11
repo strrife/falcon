@@ -1,9 +1,41 @@
 import React from 'react';
-import { ResetPassword } from '@deity/falcon-ui-kit';
+import { T } from '@deity/falcon-i18n';
+import { ValidatePasswordTokenQuery } from '@deity/falcon-shop-data';
+import { H1 } from '@deity/falcon-ui';
+import { PageLayout, FixCenteredLayout, InvalidResetPasswordToken, ResetPasswordForm } from '@deity/falcon-ui-kit';
+import { OpenSidebarMutation, SIDEBAR_CONTENT_TYPE } from 'src/components/Sidebar';
 
 export default ({ location }) => {
   const queryParams = new URLSearchParams(location.search);
   const resetToken = queryParams.get('token') || '';
 
-  return <ResetPassword resetToken={resetToken} />;
+  return (
+    <PageLayout>
+      <H1>
+        <T id="resetPassword.title" />
+      </H1>
+      <FixCenteredLayout maxWidth={400} gridGap="md">
+        <OpenSidebarMutation>
+          {openSidebar => (
+            <ValidatePasswordTokenQuery variables={{ token: resetToken }}>
+              {({ validatePasswordToken: isTokenValid }) =>
+                isTokenValid ? (
+                  <ResetPasswordForm
+                    resetToken={resetToken}
+                    onSuccess={() => openSidebar({ variables: { contentType: SIDEBAR_CONTENT_TYPE.account } })}
+                  />
+                ) : (
+                  <InvalidResetPasswordToken
+                    onRequestAnotherToken={() =>
+                      openSidebar({ variables: { contentType: SIDEBAR_CONTENT_TYPE.forgotPassword } })
+                    }
+                  />
+                )
+              }
+            </ValidatePasswordTokenQuery>
+          )}
+        </OpenSidebarMutation>
+      </FixCenteredLayout>
+    </PageLayout>
+  );
 };
