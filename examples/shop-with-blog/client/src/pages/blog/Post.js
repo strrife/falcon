@@ -6,7 +6,7 @@ import { BlogPostLayout, FormattedDate, CMSContent, PageLayout, BreadcrumbLink }
 
 const Post = ({ path }) => (
   <BlogPostQuery variables={{ path }}>
-    {({ blogPost }) => (
+    {({ data: { blogPost } }) => (
       <PageLayout>
         <Breadcrumbs alignSelf="flex-start">
           <BreadcrumbLink to="/">

@@ -13,7 +13,7 @@ export type SignOutProviderProps = {
 };
 export const SignOutProvider: React.SFC<SignOutProviderProps> = ({ children }) => (
   <IsAuthenticatedQuery>
-    {({ customer }) => (
+    {({ data: { customer } }) => (
       <SignOutMutation>{(signOut, result) => children({ isSignedIn: !!customer, signOut, result })}</SignOutMutation>
     )}
   </IsAuthenticatedQuery>

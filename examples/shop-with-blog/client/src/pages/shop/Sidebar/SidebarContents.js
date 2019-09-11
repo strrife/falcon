@@ -37,7 +37,7 @@ export default ({ contentType, open, close }) => {
               <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPE.cart}>
                 <SidebarLayout title={t('miniCart.title')}>
                   <MiniCartQuery>
-                    {({ cart = { items: [] } }) =>
+                    {({ data: { cart = { items: [] } } }) =>
                       cart.items.length > 0 ? (
                         <MiniCart items={cart.items} onCheckout={() => close().then(() => history.push('/checkout'))} />
                       ) : (

@@ -40,13 +40,13 @@ const checkoutLayout = {
     // prettier-ignore
     gridTemplate: {
       xs: toGridTemplate([
-        ['1fr'                ],
+        ['1fr'],
         [CheckoutArea.checkout],
-        [CheckoutArea.divider ],
-        [CheckoutArea.cart    ]
+        [CheckoutArea.divider],
+        [CheckoutArea.cart]
       ]),
       md: toGridTemplate([
-        ['2fr',                 '1px',               '1fr'             ],
+        ['2fr', '1px', '1fr'],
         [CheckoutArea.checkout, CheckoutArea.divider, CheckoutArea.cart]
       ])
     },
@@ -179,9 +179,9 @@ class CheckoutWizard extends React.Component {
 
     return (
       <CountryListQuery>
-        {({ countryList }) => (
+        {({ data: { countryList } }) => (
           <CartQuery>
-            {({ cart }) => {
+            {({ data: { cart } }) => {
               // cart is empty and it's not a "placeOrder" result so redirect user to the homepage
               if (!loading && !orderResult && cart.itemsQty === 0) {
                 return <Redirect to="/" />;
@@ -294,7 +294,7 @@ const CheckoutPage = () => (
   <CheckoutLogic>
     {checkoutData => (
       <CustomerQuery query={GET_CUSTOMER_WITH_ADDRESSES}>
-        {({ customer }) => <CheckoutWizard checkoutData={checkoutData} customerData={customer} />}
+        {({ data: { customer } }) => <CheckoutWizard checkoutData={checkoutData} customerData={customer} />}
       </CustomerQuery>
     )}
   </CheckoutLogic>

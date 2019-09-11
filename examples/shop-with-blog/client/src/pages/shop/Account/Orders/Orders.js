@@ -12,12 +12,12 @@ const Orders = () => (
       <T id="orderList.title" />
     </H1>
     <OrderListQuery>
-      {({ orderList: { items, pagination }, fetchMore, networkStatus }) =>
-        items.length ? (
+      {({ data: { orderList }, fetchMore, networkStatus }) =>
+        orderList.items.length ? (
           <OrderListLayout>
             <OrderListHeader />
-            <OrderList items={items} />
-            {pagination.nextPage && (
+            <OrderList items={orderList.items} />
+            {orderList.pagination.nextPage && (
               <FlexLayout justifyContent="center">
                 <Button
                   onClick={fetchMore}

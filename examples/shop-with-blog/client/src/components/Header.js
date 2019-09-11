@@ -8,7 +8,7 @@ import { OpenSidebarMutation, SIDEBAR_CONTENT_TYPE } from 'src/components/Sideba
 
 export const Header = withRouter(({ history }) => (
   <CustomerQuery>
-    {({ customer }) => (
+    {({ data: { customer } }) => (
       <header>
         <HeaderBanner>
           {customer && (
@@ -55,13 +55,13 @@ export const Header = withRouter(({ history }) => (
                 gridArea={HeaderBarArea.cart}
                 onClick={() => openSidebar({ variables: { contentType: SIDEBAR_CONTENT_TYPE.cart } })}
               >
-                <CartQuery>{({ cart }) => <CartIcon itemsQty={cart && cart.itemsQty} />}</CartQuery>
+                <CartQuery>{({ data: { cart } }) => <CartIcon itemsQty={cart && cart.itemsQty} />}</CartQuery>
               </Link>
             </HeaderBarLayout>
           )}
         </OpenSidebarMutation>
         <nav>
-          <MenuQuery>{({ menu }) => <MenuNavbar items={menu} />}</MenuQuery>
+          <MenuQuery>{({ data: { menu } }) => <MenuNavbar items={menu} />}</MenuQuery>
         </nav>
       </header>
     )}

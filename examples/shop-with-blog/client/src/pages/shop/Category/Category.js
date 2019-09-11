@@ -33,7 +33,7 @@ const CategoryPage = ({ id }) => (
         }}
         passLoading
       >
-        {({ category, fetchMore, networkStatus, loading }) => {
+        {({ data: { category }, fetchMore, networkStatus, loading }) => {
           if (!category && loading) {
             return <Loader />;
           }

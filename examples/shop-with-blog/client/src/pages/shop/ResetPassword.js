@@ -18,7 +18,7 @@ export default ({ location }) => {
         <OpenSidebarMutation>
           {openSidebar => (
             <ValidatePasswordTokenQuery variables={{ token: resetToken }}>
-              {({ validatePasswordToken: isTokenValid }) =>
+              {({ data: { validatePasswordToken: isTokenValid } }) =>
                 isTokenValid ? (
                   <ResetPasswordForm
                     resetToken={resetToken}

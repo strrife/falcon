@@ -13,22 +13,22 @@ const Dashboard = () => (
     </H1>
     <Box>
       <OrderListQuery variables={{ pagination: { perPage: 1, page: 1 } }}>
-        {({ orderList: { items } }) => (
+        {({ data: { orderList } }) => (
           <React.Fragment>
             <FlexLayout justifyContent="flex-start" alignItems="baseline">
               <H2>
                 <T id="dashboard.recentOrder" />
               </H2>
-              {!!items.length && (
+              {!!orderList.items.length && (
                 <Link as={RouterLink} to="/account/orders" ml="md">
                   <T id="dashboard.viewAllOrders" />
                 </Link>
               )}
             </FlexLayout>
-            {items.length ? (
+            {orderList.items.length ? (
               <OrderListLayout>
                 <OrderListHeader />
-                <OrderList items={items} />
+                <OrderList items={orderList.items} />
               </OrderListLayout>
             ) : (
               <EmptyOrderList />
@@ -52,7 +52,7 @@ const Dashboard = () => (
         <T id="dashboard.personalInformation" />
       </H2>
       <CustomerQuery>
-        {({ customer }) => (
+        {({ data: { customer } }) => (
           <React.Fragment>
             <Text>{`${customer.firstname} ${customer.lastname}`}</Text>
             <Text>{customer.email}</Text>

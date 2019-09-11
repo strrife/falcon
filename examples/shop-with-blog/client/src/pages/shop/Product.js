@@ -22,7 +22,7 @@ import { OpenSidebarMutation, SIDEBAR_CONTENT_TYPE } from 'src/components/Sideba
 
 const ProductPage = ({ id, path }) => (
   <ProductQuery variables={{ id, path }}>
-    {({ product }) => (
+    {({ data: { product } }) => (
       <PageLayout>
         <Breadcrumbs items={product.breadcrumbs} />
         <OpenSidebarMutation>
