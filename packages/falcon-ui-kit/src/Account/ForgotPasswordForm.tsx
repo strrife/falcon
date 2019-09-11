@@ -1,7 +1,7 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
 import { Text } from '@deity/falcon-ui';
-import { ResetPasswordFormProvider } from '@deity/falcon-front-kit';
+import { ForgotPasswordFormProvider } from '@deity/falcon-front-kit';
 import { FormField, Form, FormSubmit, FormProps, FormErrorSummary } from '../Forms';
 
 export type ForgetPasswordFormProps = Partial<FormProps> & {
@@ -9,7 +9,7 @@ export type ForgetPasswordFormProps = Partial<FormProps> & {
 };
 
 export const ForgotPasswordForm: React.SFC<ForgetPasswordFormProps> = () => (
-  <ResetPasswordFormProvider>
+  <ForgotPasswordFormProvider>
     {({ isSubmitting, status, values, submitCount, isValid }) => {
       const error = (status && status.error) || undefined;
       const submitSucceed = isValid && !isSubmitting && submitCount > 0 && !error;
@@ -28,5 +28,5 @@ export const ForgotPasswordForm: React.SFC<ForgetPasswordFormProps> = () => (
         </Form>
       );
     }}
-  </ResetPasswordFormProvider>
+  </ForgotPasswordFormProvider>
 );

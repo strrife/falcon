@@ -4,11 +4,11 @@ import { RequestPasswordResetInput } from '@deity/falcon-shop-extension';
 import { RequestPasswordResetMutation } from '@deity/falcon-shop-data';
 import { FormProviderProps } from '../Forms';
 
-export type ResetPasswordFormValues = RequestPasswordResetInput;
-export type ResetPasswordFormProviderProps = FormProviderProps<ResetPasswordFormValues>;
-export const ResetPasswordFormProvider: React.SFC<ResetPasswordFormProviderProps> = props => {
+export type ForgotPasswordFormValues = RequestPasswordResetInput;
+export type ForgotPasswordFormProviderProps = FormProviderProps<ForgotPasswordFormValues>;
+export const ForgotPasswordFormProvider: React.SFC<ForgotPasswordFormProviderProps> = props => {
   const { onSuccess, initialValues, ...formikProps } = props;
-  const defaultInitialValues: ResetPasswordFormValues = {
+  const defaultInitialValues: ForgotPasswordFormValues = {
     email: ''
   };
 
