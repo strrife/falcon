@@ -3,15 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { MenuQuery, CustomerQuery, CartQuery, SignOutMutation } from '@deity/falcon-shop-data';
 import { T } from '@deity/falcon-i18n';
 import { Link, ListItem, Icon } from '@deity/falcon-ui';
-import {
-  RouterLink,
-  MenuNavbar,
-  HeaderBanner,
-  OpenSidebarMutation,
-  CartIcon,
-  HeaderBarLayout,
-  HeaderBarArea
-} from '@deity/falcon-ui-kit';
+import { RouterLink, MenuNavbar, HeaderBanner, CartIcon, HeaderBarLayout, HeaderBarArea } from '@deity/falcon-ui-kit';
+import { OpenSidebarMutation } from 'src/components/Sidebar';
 
 export const Header = withRouter(({ history }) => (
   <CustomerQuery>

@@ -8,7 +8,6 @@ import {
   ProductLayout,
   ProductLayoutArea,
   ProductDescription,
-  OpenSidebarMutation,
   ProductPrice,
   ProductTierPrices,
   ProductGallery,
@@ -19,6 +18,7 @@ import {
   PageLayout,
   Breadcrumbs
 } from '@deity/falcon-ui-kit';
+import { OpenSidebarMutation } from 'src/components/Sidebar';
 
 const ProductPage = ({ id, path }) => (
   <ProductQuery variables={{ id, path }}>
