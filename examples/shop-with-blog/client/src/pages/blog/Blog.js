@@ -26,29 +26,32 @@ const Blog = ({ match }) => {
       </Breadcrumbs>
 
       <BlogPostListQuery variables={{ pagination: { perPage: 2, page: +params.page || 1 } }}>
-        {({ blogPostList: { items, pagination } }) => (
-          <React.Fragment>
-            <BlogPostListLayout>
-              {items.map((x, index) => (
-                <ListItem key={x.slug} gridColumn={index < 2 ? 'span 3' : 'span 2'}>
-                  <BlogPostExcerpt title={x.title} slug={x.slug} date={x.date} image={x.image} excerpt={x.excerpt} />
-                </ListItem>
-              ))}
-            </BlogPostListLayout>
-            <BlogPostListPaginationLayout isPrevPage={pagination.prevPage}>
-              {pagination.prevPage && (
-                <RouterLink display="flex" lineHeight="small" fontSize="md" to={`/blog/${pagination.prevPage}`}>
-                  <Icon size="md" mr="xs" src="prevPage" /> <T id="blog.newerEntries" />
-                </RouterLink>
-              )}
-              {pagination.nextPage && (
-                <RouterLink display="flex" lineHeight="small" fontSize="md" to={`/blog/${pagination.nextPage}`}>
-                  <T id="blog.olderEntries" /> <Icon ml="xs" size="md" src="nextPage" />
-                </RouterLink>
-              )}
-            </BlogPostListPaginationLayout>
-          </React.Fragment>
-        )}
+        {({ data: { blogPostList } }) => {
+          const { items, pagination } = blogPostList;
+          return (
+            <React.Fragment>
+              <BlogPostListLayout>
+                {items.map((x, index) => (
+                  <ListItem key={x.slug} gridColumn={index < 2 ? 'span 3' : 'span 2'}>
+                    <BlogPostExcerpt title={x.title} slug={x.slug} date={x.date} image={x.image} excerpt={x.excerpt} />
+                  </ListItem>
+                ))}
+              </BlogPostListLayout>
+              <BlogPostListPaginationLayout isPrevPage={pagination.prevPage}>
+                {pagination.prevPage && (
+                  <RouterLink display="flex" lineHeight="small" fontSize="md" to={`/blog/${pagination.prevPage}`}>
+                    <Icon size="md" mr="xs" src="prevPage" /> <T id="blog.newerEntries" />
+                  </RouterLink>
+                )}
+                {pagination.nextPage && (
+                  <RouterLink display="flex" lineHeight="small" fontSize="md" to={`/blog/${pagination.nextPage}`}>
+                    <T id="blog.olderEntries" /> <Icon ml="xs" size="md" src="nextPage" />
+                  </RouterLink>
+                )}
+              </BlogPostListPaginationLayout>
+            </React.Fragment>
+          );
+        }}
       </BlogPostListQuery>
     </PageLayout>
   );

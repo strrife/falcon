@@ -14,7 +14,7 @@ const OrderSummary = ({ order }) => (
 
 const CheckoutConfirmation = () => (
   <LastOrderQuery>
-    {({ lastOrder }) => (
+    {({ data: { lastOrder } }) => (
       <FlexLayout my="xxl" flexDirection="column" alignItems="center">
         <H1 mb="xl">THANK YOU FOR SHOPPING!</H1>
         <Text>{`We have received your order (id: ${lastOrder.referenceNo}) with the following items:`}</Text>

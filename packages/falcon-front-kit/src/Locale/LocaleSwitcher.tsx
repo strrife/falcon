@@ -34,9 +34,15 @@ export const LocaleSwitcher: React.SFC<LocaleSwitcherProps> = ({ children }) => 
       <SetLocaleMutation>
         {setLocale => (
           <BackendConfigQuery passLoading>
-            {({ backendConfig: { locales, activeLocale } }) => {
-              const items = addCimodeLocale(locales).map(x => ({ code: x, name: t(`languages.${x}`) }));
-              const value = { code: activeLocale, name: t(`languages.${activeLocale}`) };
+            {({ data: { backendConfig } }) => {
+              const { activeLocale } = backendConfig;
+
+              const items = addCimodeLocale(backendConfig.locales).map(x => ({ code: x, name: t(`languages.${x}`) }));
+              const value = {
+                code: activeLocale,
+                name: t(`languages.${activeLocale}`)
+              };
+
               const onChange = (x: LocaleItem) =>
                 setLocale({ variables: { locale: x.code } }).then(({ data }: FetchResult<SetLocaleResponse>) => {
                   i18n.changeLanguage(data.setLocale.activeLocale);

@@ -15,7 +15,7 @@ import {
 
 export const Header = withRouter(({ history }) => (
   <CustomerQuery>
-    {({ customer }) => (
+    {({ data: { customer } }) => (
       <header>
         <HeaderBanner>
           {customer && (
@@ -59,13 +59,13 @@ export const Header = withRouter(({ history }) => (
                 </Link>
               )}
               <Link gridArea={HeaderBarArea.cart} onClick={() => openSidebar({ variables: { contentType: 'cart' } })}>
-                <CartQuery>{({ cart }) => <CartIcon itemsQty={cart && cart.itemsQty} />}</CartQuery>
+                <CartQuery>{({ data: { cart } }) => <CartIcon itemsQty={cart && cart.itemsQty} />}</CartQuery>
               </Link>
             </HeaderBarLayout>
           )}
         </OpenSidebarMutation>
         <nav>
-          <MenuQuery>{({ menu }) => <MenuNavbar items={menu} />}</MenuQuery>
+          <MenuQuery>{({ data: { menu } }) => <MenuNavbar items={menu} />}</MenuQuery>
         </nav>
       </header>
     )}

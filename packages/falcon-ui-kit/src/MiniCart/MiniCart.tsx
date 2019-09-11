@@ -42,7 +42,7 @@ const MiniCartProducts: React.SFC<any> = ({ products }) => (
   </List>
 );
 
-export const MiniCart: React.SFC<MiniCartResponse> = ({ cart: { quoteCurrency, items } }) => (
+export const MiniCart: React.SFC<MiniCartResponse['cart']> = ({ quoteCurrency, items }) => (
   <CloseSidebarMutation>
     {closeSidebar => (
       <LocaleProvider currency={quoteCurrency}>

@@ -22,7 +22,7 @@ import {
 
 const ProductPage = ({ id, path }) => (
   <ProductQuery variables={{ id, path }}>
-    {({ product }) => (
+    {({ data: { product } }) => (
       <PageLayout>
         <Breadcrumbs items={product.breadcrumbs} />
         <OpenSidebarMutation>
