@@ -1,5 +1,5 @@
 export * from './ForgotPasswordForm';
-export * from './ResetPassword';
+export * from './ResetPasswordForm';
 export * from './InvalidResetPasswordToken';
 export * from './SignInIcon';
 export * from './SignInForm';
