@@ -4,7 +4,7 @@ import { MenuQuery, CustomerQuery, CartQuery, SignOutMutation } from '@deity/fal
 import { T } from '@deity/falcon-i18n';
 import { Link, ListItem, Icon } from '@deity/falcon-ui';
 import { RouterLink, MenuNavbar, HeaderBanner, CartIcon, HeaderBarLayout, HeaderBarArea } from '@deity/falcon-ui-kit';
-import { OpenSidebarMutation } from 'src/components/Sidebar';
+import { OpenSidebarMutation, SIDEBAR_CONTENT_TYPE } from 'src/components/Sidebar';
 
 export const Header = withRouter(({ history }) => (
   <CustomerQuery>
@@ -46,12 +46,15 @@ export const Header = withRouter(({ history }) => (
               ) : (
                 <Link
                   gridArea={HeaderBarArea.signIn}
-                  onClick={() => openSidebar({ variables: { contentType: 'account' } })}
+                  onClick={() => openSidebar({ variables: { contentType: SIDEBAR_CONTENT_TYPE.account } })}
                 >
                   <Icon src="signIn" />
                 </Link>
               )}
-              <Link gridArea={HeaderBarArea.cart} onClick={() => openSidebar({ variables: { contentType: 'cart' } })}>
+              <Link
+                gridArea={HeaderBarArea.cart}
+                onClick={() => openSidebar({ variables: { contentType: SIDEBAR_CONTENT_TYPE.cart } })}
+              >
                 <CartQuery>{({ cart }) => <CartIcon itemsQty={cart && cart.itemsQty} />}</CartQuery>
               </Link>
             </HeaderBarLayout>
