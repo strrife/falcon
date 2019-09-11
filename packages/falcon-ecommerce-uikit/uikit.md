@@ -532,7 +532,7 @@
 
 ---
 
-> - ~~ForgotPasswordTrigger~~ - moved to @deity/falcon-ui-kit
+> - ~~ForgotPasswordTrigger~~ - merged with SignInForm
 > - ~~SignInForm~~ - moved to @deity/falcon-ui-kit and extracted SignInFormProvider to @deity/falcon-front-kit
 > - ~~SignInIcon~~ - moved to @deity/falcon-ui-kit
 > - ~~SignUpForm~~ - moved to @deity/falcon-ui-kit and extracted SignUpFormProvider to @deity/falcon-front-kit

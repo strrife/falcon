@@ -1,7 +1,8 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
-import { Box, H1 } from '@deity/falcon-ui';
-import { SignInForm } from '@deity/falcon-ui-kit';
+import { Box, H1, Divider } from '@deity/falcon-ui';
+import { PageLayout, SignInForm, NewAccount } from '@deity/falcon-ui-kit';
+import { OpenSidebarMutation } from 'src/components/Sidebar';
 
 const SignIn = ({ history, location }) => {
   const { search } = location;
@@ -10,12 +11,24 @@ const SignIn = ({ history, location }) => {
   const next = queryParams.get('next') || '/';
 
   return (
-    <Box>
+    <PageLayout>
       <H1>
         <T id="signIn.title" />
       </H1>
-      <SignInForm id="sign-in-page" onSuccess={() => history.replace(next)} />
-    </Box>
+      <OpenSidebarMutation>
+        {openSidebar => (
+          <Box>
+            <SignInForm
+              id="sign-in-page"
+              onSuccess={() => history.replace(next)}
+              onForgotPassword={() => openSidebar({ variables: { contentType: 'forgotPassword' } })}
+            />
+            <Divider my="lg" />
+            <NewAccount onCreateNewAccount={() => openSidebar({ variables: { contentType: 'signUp' } })} />
+          </Box>
+        )}
+      </OpenSidebarMutation>
+    </PageLayout>
   );
 };
 

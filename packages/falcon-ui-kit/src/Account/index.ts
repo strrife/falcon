@@ -1,4 +1,3 @@
-export * from './ForgotPasswordTrigger';
 export * from './ForgotPasswordForm';
 export * from './ResetPassword';
 export * from './SignInIcon';

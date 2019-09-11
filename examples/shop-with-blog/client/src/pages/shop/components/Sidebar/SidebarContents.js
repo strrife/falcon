@@ -59,7 +59,11 @@ export default ({ contentType }) => {
                       </ContentBox>
                       <ContentBox current={contentType} contentType={SIDEBAR_CONTENT_TYPES.account}>
                         <SidebarLayout title={t('signIn.title')}>
-                          <SignInForm id="sign-in-sidebar" onSuccess={closeSidebar} />
+                          <SignInForm
+                            id="sign-in-sidebar"
+                            onSuccess={closeSidebar}
+                            onForgotPassword={() => openSidebar({ variables: { contentType: 'forgotPassword' } })}
+                          />
                           <Divider my="lg" />
                           <NewAccount
                             onCreateNewAccount={() => openSidebar({ variables: { contentType: 'signUp' } })}
