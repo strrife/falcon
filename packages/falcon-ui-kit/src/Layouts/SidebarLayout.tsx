@@ -1,6 +1,5 @@
 import React from 'react';
 import { themed, Box, H3 } from '@deity/falcon-ui';
-import { FixCenteredLayout } from './FixCenteredLayout';
 
 const SidebarLayoutInnerDOM: React.SFC<SidebarLayoutProps> = ({ title, children, ...rest }) => (
   <Box {...rest}>
@@ -27,12 +26,17 @@ export const SidebarLayout = themed<SidebarLayoutProps, any>({
 });
 
 export const SidebarContentLayout = themed({
-  tag: FixCenteredLayout,
+  tag: Box,
+  defaultProps: {
+    maxWidth: '70%'
+  },
   defaultTheme: {
     sidebarContentLayout: {
-      css: {
-        maxWidth: '70%'
-      }
+      css: ({ maxWidth }) => ({
+        maxWidth,
+        width: '100%',
+        margin: '0 auto'
+      })
     }
   }
 });
