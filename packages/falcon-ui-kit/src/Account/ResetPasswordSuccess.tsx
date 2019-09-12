@@ -12,7 +12,7 @@ export const ResetPasswordSuccess: React.SFC<ResetPasswordSuccessProps> = ({ onS
     </Text>
     <Box justifySelf="center">
       <Button onClick={() => onSignIn()}>
-        <T id="signIn.button" />
+        <T id="signIn.submitButton" />
       </Button>
     </Box>
   </React.Fragment>
