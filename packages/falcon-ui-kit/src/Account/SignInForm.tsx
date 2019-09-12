@@ -6,11 +6,11 @@ import { FormField, Form, FormProps, PasswordRevealInput, FormErrorSummary } fro
 import { ForgotPasswordTrigger } from './ForgotPasswordTrigger';
 
 export type SignInFormProps = Partial<FormProps> & {
-  onSubmit?: () => void;
+  onSuccess?: () => Promise<void>;
 };
 
-export const SignInForm: React.SFC<SignInFormProps> = ({ onSubmit, ...formProps }) => (
-  <SignInFormProvider onSubmit={onSubmit}>
+export const SignInForm: React.SFC<SignInFormProps> = ({ onSuccess, ...formProps }) => (
+  <SignInFormProvider onSuccess={onSuccess}>
     {({ isSubmitting, status }) => (
       <Form i18nId="signIn" {...formProps}>
         <FormField name="email" type="email" required autoComplete="email" />

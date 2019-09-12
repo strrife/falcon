@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
-import { Query, Pagination } from '@deity/falcon-data';
+import { Query, Pagination, OperationInput } from '@deity/falcon-data';
 import { Product, ProductListInput } from '@deity/falcon-shop-extension';
-import { OperationInput } from '../types';
 
 export const GET_PRODUCT_LIST = gql`
   query ProductList($input: ProductListInput) {

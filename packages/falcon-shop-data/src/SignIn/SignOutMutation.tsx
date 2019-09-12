@@ -12,6 +12,6 @@ export type SignOutResponse = { signOut: boolean };
 export class SignOutMutation extends Mutation<SignOutResponse> {
   static defaultProps = {
     mutation: SIGN_OUT_MUTATION,
-    refetchQueries: ['Customer', 'MiniAccount', 'Cart']
+    refetchQueries: ['Customer', 'Cart']
   };
 }

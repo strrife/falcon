@@ -3,12 +3,12 @@ extend type Query {
   category(id: ID!): Category @cache(ttl: 15)
   product(id: ID!): Product @cache(ttl: 5)
   productList(input: ProductListInput): ProductList!
-  cart: Cart
-  countries: CountryList
-  order(id: Int!): Order
+  cart: Cart!
+  countryList: CountryList!
   lastOrder: Order @cacheInvalidator(idPath: [{ path: "items", type: "Product" }])
-  orders(pagination: PaginationInput): Orders
-  address(id: Int!): Address
+  order(id: ID!): Order
+  orderList(pagination: PaginationInput): OrderList
+  address(id: ID!): Address
   addressList: AddressList
   customer: Customer
   cmsPage(id: Int, identifier: String): CmsPage
@@ -28,16 +28,16 @@ extend type Mutation {
   signIn(input: SignInInput!): Boolean!
   signOut: Boolean!
   editCustomer(input: EditCustomerInput!): Customer
+  changePassword(input: ChangePasswordInput!): Boolean
+  requestPasswordReset(input: RequestPasswordResetInput!): Boolean
+  resetPassword(input: ResetPasswordInput!): Boolean
   editAddress(input: EditAddressInput!): Address
   addAddress(input: AddAddressInput!): Address
-  estimateShippingMethods(input: EstimateShippingInput!): [ShippingMethod]
   removeAddress(id: Int!): Boolean
-  requestPasswordReset(input: RequestPasswordResetInput!): Boolean
-  changePassword(input: ChangePasswordInput!): Boolean
-  resetPassword(input: ResetPasswordInput!): Boolean
+  estimateShippingMethods(input: EstimateShippingMethodsInput!): [ShippingMethod!]!
   # set current customer order shipping information
-  setShipping(input: ShippingInput): ShippingInformation
-  placeOrder(input: PlaceOrderInput!): PlaceOrderResult
+  setShipping(input: SetShippingInput): SetShippingResult!
+  placeOrder(input: PlaceOrderInput!): PlaceOrderResult!
 }
 
 extend type BackendConfig {
@@ -45,13 +45,13 @@ extend type BackendConfig {
 }
 
 type ShopConfig {
-  activeCurrency: String
-  activeStore: String
-  currencies: [String]
-  baseCurrency: String
-  stores: [ShopStoreEntry]
-  timezone: String
-  weightUnit: String
+  activeCurrency: String!
+  activeStore: String!
+  currencies: [String!]!
+  baseCurrency: String!
+  stores: [ShopStoreEntry!]!
+  timezone: String!
+  weightUnit: String!
 }
 
 type ShopStoreEntry {
@@ -64,9 +64,9 @@ input RequestPasswordResetInput {
 }
 
 input PlaceOrderInput {
-  billingAddress: AddressInput
+  billingAddress: CheckoutAddressInput
   email: String
-  paymentMethod: PaymentMethodInput
+  paymentMethod: PaymentMethodInput!
 }
 
 input PaymentMethodInput {
@@ -77,15 +77,15 @@ input PaymentMethodInput {
   additionalData: JSON
 }
 
-input ShippingInput {
-  billingAddress: AddressInput
-  shippingAddress: AddressInput
-  shippingCarrierCode: String
-  shippingMethodCode: String
+input SetShippingInput {
+  billingAddress: CheckoutAddressInput!
+  shippingAddress: CheckoutAddressInput!
+  shippingCarrierCode: String!
+  shippingMethodCode: String!
 }
 
-input EstimateShippingInput {
-  address: AddressInput
+input EstimateShippingMethodsInput {
+  address: CheckoutAddressInput!
 }
 
 input FilterInput {
@@ -150,12 +150,13 @@ input EditCustomerInput {
   defaultShipping: Boolean
 }
 
-input AddressInput {
-  id: Int
+input CheckoutAddressInput {
+  id: ID
   # legacy from Magento 2 for placeOrder billingAddress input field
   terms: Boolean
-  firstname: String
-  lastname: String
+
+  firstname: String!
+  lastname: String!
   city: String
   customerId: Int
   customerAddressId: Int
@@ -164,24 +165,24 @@ input AddressInput {
   saveInAddressBook: Int
   email: String
   company: String
-  countryId: String
+  countryId: ID!
+  region: String
+  regionId: ID
+  street: [String!]!
+  telephone: String
   defaultBilling: Boolean
   defaultShipping: Boolean
-  region: String
-  regionId: Int
-  street: [String]
-  telephone: String
 }
 
 input AddAddressInput {
   company: String
   firstname: String!
   lastname: String!
-  telephone: String!
+  telephone: String
   street: [String]
   postcode: String!
   city: String!
-  countryId: String!
+  countryId: ID!
   defaultBilling: Boolean
   defaultShipping: Boolean
   regionId: Int
@@ -193,10 +194,10 @@ input EditAddressInput {
   firstname: String!
   lastname: String!
   telephone: String
-  street: [String]
+  street: [String!]!
   postcode: String!
   city: String!
-  countryId: String!
+  countryId: ID!
   defaultBilling: Boolean
   defaultShipping: Boolean
   regionId: Int
@@ -212,18 +213,18 @@ input ResetPasswordInput {
   password: String!
 }
 
-type Orders {
+type OrderList {
   items: [Order]!
   pagination: Pagination
 }
 
 type Order {
-  incrementId: String!
-  entityId: Int
+  id: ID!
+  referenceNo: String!
   createdAt: String
   customerFirstname: String
   customerLastname: String
-  status: String
+  status: String!
   orderCurrencyCode: String
   baseGrandTotal: Float!
   subtotal: Float!
@@ -231,7 +232,7 @@ type Order {
   taxAmount: Float!
   discountAmount: Float!
   grandTotal: Float!
-  items: [OrderItem]
+  items: [OrderItem!]!
   shippingDescription: String
   paymentMethodName: String
   shippingAddress: Address
@@ -246,11 +247,11 @@ type PlaceOrderSuccessfulResult {
   """
   Increment order id
   """
-  orderId: String
+  orderId: ID!
   """
   like 0000001 - used for reference by customer
   """
-  orderRealId: String
+  orderRealId: ID!
 }
 
 """
@@ -264,11 +265,11 @@ type PlaceOrder3dSecureResult {
   """
   HTTP method (GET or POST)
   """
-  method: String
+  method: String!
   """
   List of fields to pass to the issuer page
   """
-  fields: [PlaceOrder3dSecureField]
+  fields: [PlaceOrder3dSecureField!]!
 }
 
 type PlaceOrder3dSecureField {
@@ -315,19 +316,19 @@ type Product {
 }
 
 type ShippingMethod {
-  carrierTitle: String
-  amount: Float
-  carrierCode: String
-  methodCode: String
-  methodTitle: String
-  priceExclTax: Float
-  priceInclTax: Float
+  carrierTitle: String!
+  carrierCode: String!
+  methodCode: String!
+  methodTitle: String!
+  amount: Float!
+  priceExclTax: Float!
+  priceInclTax: Float!
   currency: String
 }
 
-type ShippingInformation {
-  paymentMethods: [PaymentMethod]
-  totals: [CartTotal]
+type SetShippingResult {
+  paymentMethods: [PaymentMethod!]!
+  totals: [CartTotal!]!
 }
 
 type PaymentMethod {
@@ -346,11 +347,11 @@ type PaymentMethod {
 }
 
 type MenuItem {
-  id: String!
+  id: ID!
   name: String!
   urlPath: String!
   cssClass: String
-  children: [MenuItem]!
+  children: [MenuItem!]!
 }
 
 type Category {
@@ -392,15 +393,15 @@ type ProductSeo {
 }
 
 type Cart {
-  active: Boolean
+  active: Boolean!
   """
-  State wheather products will be shipped or not
+  indicates whether products will be shipped or not
   """
-  virtual: Boolean
-  items: [CartItem]
-  itemsCount: Int
-  itemsQty: Int
-  totals: [CartTotal]
+  virtual: Boolean!
+  items: [CartItem!]!
+  itemsCount: Int!
+  itemsQty: Int!
+  totals: [CartTotal!]!
   quoteCurrency: String @deprecated(reason: "Use ShopConfig.activeCurrency")
   couponCode: String
   billingAddress: Address
@@ -408,7 +409,7 @@ type Cart {
 
 type CartItem {
   itemId: ID!
-  sku: String!
+  sku: ID!
   qty: Float!
   name: String
   availableQty: Float
@@ -416,7 +417,7 @@ type CartItem {
   productType: String
   priceInclTax: Float
   rowTotal: Float
-  rowTotalInclTax: Float
+  rowTotalInclTax: Float!
   rowTotalWithDiscount: Float
   taxAmount: Float
   taxPercent: Float
@@ -446,9 +447,9 @@ type OrderItem {
   itemId: ID!
   sku: ID!
   qty: Float!
-  name: String
-  availableQty: Float
-  price: Float
+  name: String!
+  availableQty: Float!
+  price: Float!
   productType: String
   rowTotalInclTax: Float
   basePrice: Float
@@ -466,7 +467,7 @@ type CartTotal {
 }
 
 input AddToCartInput {
-  sku: String!
+  sku: ID!
   qty: Float!
   options: [ProductOptionInput]
   bundleOptions: [BundleProductOptionInput]
@@ -486,7 +487,7 @@ input BundleProductOptionInput {
 input UpdateCartItemInput {
   itemId: ID!
   # Magento 2 legacy both itemId and sku need to be provided for rest endpoint to work
-  sku: String!
+  sku: ID!
   qty: Float!
 }
 
@@ -524,7 +525,7 @@ type Customer {
 }
 
 type Address {
-  id: Int!
+  id: ID!
   company: String
   firstname: String!
   lastname: String!
@@ -589,7 +590,7 @@ type BundleProductOption {
   position: Int
   productLinks: [BundleProductOptionLink]
   required: Boolean
-  sku: String
+  sku: ID
   title: String
   type: String
 }
@@ -605,24 +606,24 @@ type BundleProductOptionLink {
   price: String
   priceType: String
   qty: Int
-  sku: String
+  sku: ID
 }
 
 type Region {
-  id: Int
-  name: String
+  id: ID!
   code: String!
+  name: String
 }
 
 type Country {
+  code: String!
   englishName: String
   localName: String
-  code: String!
-  regions: [Region]
+  regions: [Region!]!
 }
 
 type CountryList {
-  items: [Country]
+  items: [Country!]!
 }
 
 type CmsBlock {

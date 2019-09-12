@@ -3,11 +3,10 @@ import { SignUpFormProvider } from '@deity/falcon-front-kit';
 import { FormField, Form, FormProps, FormSubmit, FormErrorSummary, PasswordRevealInput } from '../Forms';
 
 export type SignUpFormProps = Partial<FormProps> & {
-  onSubmit?: () => void;
+  onSuccess?: Function;
 };
-
-export const SignUpForm: React.SFC<SignUpFormProps> = ({ onSubmit, ...formProps }) => (
-  <SignUpFormProvider onSubmit={onSubmit}>
+export const SignUpForm: React.SFC<SignUpFormProps> = ({ onSuccess, ...formProps }) => (
+  <SignUpFormProvider onSuccess={onSuccess}>
     {({ isSubmitting, status }) => (
       <Form id="sign-up" i18nId="signUp" {...formProps}>
         <FormField name="firstname" type="text" required autoComplete="given-name" />

@@ -1,16 +1,9 @@
 import React from 'react';
 import { T } from '@deity/falcon-i18n';
-import { Box, Icon, Text, IconRenderer } from '@deity/falcon-ui';
+import { Box, Icon, Text } from '@deity/falcon-ui';
+import { UserIconFallback } from './SignInIcon';
 
-/* eslint-disable */
-export const UserIconFallback = () => (
-  <IconRenderer as={Text} style={{ textAlign: 'center' }}>
-    👤
-  </IconRenderer>
-);
-/* eslint-enable */
-
-export const SignInIcon: React.SFC = () => (
+export const AccountIcon: React.SFC = () => (
   <Box css={{ position: 'relative' }}>
     <Icon src="user" fallback={<UserIconFallback />} />
     <Text
@@ -25,7 +18,7 @@ export const SignInIcon: React.SFC = () => (
         transform: 'translate(-50%, 0)'
       }}
     >
-      <T id="signIn.link" />
+      <T id="account.link" />
     </Text>
   </Box>
 );
