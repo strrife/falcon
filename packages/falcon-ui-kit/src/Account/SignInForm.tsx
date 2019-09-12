@@ -26,10 +26,10 @@ export const SignInForm: React.SFC<SignInFormProps> = ({ onSuccess, onForgotPass
         </FormField>
         <FlexLayout justifyContent="space-between" alignItems="center" mt="md">
           <Link fontSize="xs" onClick={() => onForgotPassword()}>
-            <T id="signIn.forgotPasswordQuestion" />
+            <T id="signIn.forgotPasswordLink" />
           </Link>
           <Button type="submit" variant={isSubmitting ? 'loader' : undefined}>
-            <T id="signIn.button" />
+            <T id="signIn.submitButton" />
           </Button>
         </FlexLayout>
 

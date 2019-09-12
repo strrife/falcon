@@ -137,8 +137,8 @@
     "emailFieldPlaceholder": "Email",
     "passwordFieldLabel": "Password",
     "passwordFieldPlaceholder": "Password",
-    "button": "Sign in",
-    "forgotPasswordQuestion": "Forgot password?"
+    "submitButton": "Sign in",
+    "forgotPasswordLink": "Forgot password?"
   },
   "forgotPassword": {
     "title": "Forgot Password",
