@@ -1,6 +1,7 @@
 export * from './ForgotPasswordForm';
 export * from './ResetPasswordForm';
 export * from './InvalidResetPasswordToken';
+export * from './ResetPasswordSuccess';
 export * from './SignInIcon';
 export * from './SignInForm';
 export * from './AccountIcon';
