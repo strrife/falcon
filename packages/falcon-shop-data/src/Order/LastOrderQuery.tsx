@@ -5,7 +5,7 @@ import { Query } from '@deity/falcon-data';
 export const GET_LAST_ORDER = gql`
   query LastOrder {
     lastOrder {
-      incrementId
+      referenceNo
       items {
         itemId
         name
@@ -15,7 +15,7 @@ export const GET_LAST_ORDER = gql`
 `;
 
 export type LastOrderResponse = {
-  lastOrder: Pick<Order, 'incrementId'>[] & {
+  lastOrder: Pick<Order, 'referenceNo'> & {
     items: Pick<OrderItem, 'itemId' | 'name'>[];
   };
 };

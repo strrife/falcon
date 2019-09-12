@@ -2,20 +2,13 @@ extend type Query {
   menu: [MenuItem] @cache(ttl: 15)
   category(id: ID!): Category @cache(ttl: 15)
   product(id: ID!): Product @cache(ttl: 5)
-  productList(
-    categoryId: ID
-    includeSubcategories: Boolean
-    query: ShopPageQuery
-    sortOrders: [SortOrderInput!]
-    filters: [FilterInput!]
-    skus: [ID!]
-  ): ProductList!
+  productList(input: ProductListInput): ProductList!
   cart: Cart!
   countryList: CountryList!
   lastOrder: Order @cacheInvalidator(idPath: [{ path: "items", type: "Product" }])
-  order(id: Int!): Order
+  order(id: ID!): Order
   orderList(pagination: PaginationInput): OrderList
-  address(id: Int!): Address
+  address(id: ID!): Address
   addressList: AddressList
   customer: Customer
   cmsPage(id: Int, identifier: String): CmsPage
@@ -93,13 +86,6 @@ input SetShippingInput {
 
 input EstimateShippingMethodsInput {
   address: CheckoutAddressInput!
-}
-
-input ShopPageQuery {
-  # simple list of field to get aggregated result count
-  aggregations: [String]
-  perPage: Int
-  page: Int
 }
 
 input FilterInput {
@@ -184,6 +170,8 @@ input CheckoutAddressInput {
   regionId: ID
   street: [String!]!
   telephone: String
+  defaultBilling: Boolean
+  defaultShipping: Boolean
 }
 
 input AddAddressInput {
@@ -231,8 +219,8 @@ type OrderList {
 }
 
 type Order {
-  incrementId: String!
-  entityId: Int!
+  id: ID!
+  referenceNo: String!
   createdAt: String
   customerFirstname: String
   customerLastname: String
@@ -335,7 +323,7 @@ type ShippingMethod {
   amount: Float!
   priceExclTax: Float!
   priceInclTax: Float!
-  currency: String!
+  currency: String
 }
 
 type SetShippingResult {
@@ -372,14 +360,25 @@ type Category {
   children: [Category]
   description: String
   breadcrumbs(path: String!): [Breadcrumb]
-  products(pagination: PaginationInput, sort: SortOrderInput, filters: [FilterInput]): ProductList
-    @cache(ttl: 15, idPath: ["$parent", "items"])
+  productList(input: ProductListInput): CategoryProductList @cache(ttl: 15, idPath: ["$parent", "items"])
+}
+
+type CategoryProductList {
+  items: [Product!]!
+  aggregations: [Aggregation!]!
+  pagination: Pagination!
+}
+
+input ProductListInput {
+  term: String
+  filters: [FilterInput!]
+  sort: SortOrderInput
+  pagination: PaginationInput
 }
 
 type ProductList {
   items: [Product!]!
-  aggregations: [Aggregation!]!
-  pagination: Pagination
+  pagination: Pagination!
 }
 
 type Stock {
@@ -526,7 +525,7 @@ type Customer {
 }
 
 type Address {
-  id: Int!
+  id: ID!
   company: String
   firstname: String!
   lastname: String!

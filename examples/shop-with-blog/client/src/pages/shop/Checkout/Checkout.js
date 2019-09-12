@@ -40,13 +40,13 @@ const checkoutLayout = {
     // prettier-ignore
     gridTemplate: {
       xs: toGridTemplate([
-        ['1fr'                ],
+        ['1fr'],
         [CheckoutArea.checkout],
-        [CheckoutArea.divider ],
-        [CheckoutArea.cart    ]
+        [CheckoutArea.divider],
+        [CheckoutArea.cart]
       ]),
       md: toGridTemplate([
-        ['2fr',                 '1px',               '1fr'             ],
+        ['2fr', '1px', '1fr'],
         [CheckoutArea.checkout, CheckoutArea.divider, CheckoutArea.cart]
       ])
     },
@@ -156,11 +156,11 @@ class CheckoutWizard extends React.Component {
 
     const { customerData } = this.props;
 
-    let addresses;
-    let defaultShippingAddress;
-    let defaultBillingAddress;
-    let orderResult = null;
+    const addresses = customerData && customerData.addresses ? customerData.addresses : [];
+    const defaultShippingAddress = addresses.find(item => item.defaultShipping);
+    const defaultBillingAddress = addresses.find(item => item.defaultBilling);
 
+    let orderResult = null;
     if (!loading && result) {
       if (result.url) {
         orderResult = (
@@ -177,18 +177,11 @@ class CheckoutWizard extends React.Component {
       }
     }
 
-    // detect if user is logged in - if so and he has address list then use it for address sections
-    if (customerData && customerData.addresses && customerData.addresses.length) {
-      ({ addresses } = customerData);
-      defaultShippingAddress = addresses.find(item => item.defaultShipping);
-      defaultBillingAddress = addresses.find(item => item.defaultBilling);
-    }
-
     return (
       <CountryListQuery>
-        {({ countryList }) => (
+        {({ data: { countryList } }) => (
           <CartQuery>
-            {({ cart }) => {
+            {({ data: { cart } }) => {
               // cart is empty and it's not a "placeOrder" result so redirect user to the homepage
               if (!loading && !orderResult && cart.itemsQty === 0) {
                 return <Redirect to="/" />;
@@ -301,7 +294,7 @@ const CheckoutPage = () => (
   <CheckoutLogic>
     {checkoutData => (
       <CustomerQuery query={GET_CUSTOMER_WITH_ADDRESSES}>
-        {({ customer }) => <CheckoutWizard checkoutData={checkoutData} customerData={customer} />}
+        {({ data: { customer } }) => <CheckoutWizard checkoutData={checkoutData} customerData={customer} />}
       </CustomerQuery>
     )}
   </CheckoutLogic>

@@ -30,7 +30,7 @@
 
 ---
 
-> - ~~CategoryProductsQuery~~ renamed to `CategoryWithProductsQuery` moved to @deity/falcon-shop-data
+> - ~~CategoryProductsQuery~~ renamed to `CategoryWithProductListQuery` moved to @deity/falcon-shop-data
 
 ---
 

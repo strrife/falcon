@@ -3,10 +3,10 @@ import { Order, OrderItem, Address } from '@deity/falcon-shop-extension';
 import { Query } from '@deity/falcon-data';
 
 export const GET_ORDER = gql`
-  query Order($id: Int!) {
+  query Order($id: ID!) {
     order(id: $id) {
-      entityId
-      incrementId
+      id
+      referenceNo
       createdAt
       customerFirstname
       customerLastname
@@ -53,8 +53,8 @@ export const GET_ORDER = gql`
 export type OrderResponse = {
   order: Pick<
     Order,
-    | 'entityId'
-    | 'incrementId'
+    | 'id'
+    | 'referenceNo'
     | 'createdAt'
     | 'customerFirstname'
     | 'customerLastname'

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NetworkStatus } from 'apollo-client';
 import { Toggle } from 'react-powerplug';
-import { CategoryWithProductsQuery } from '@deity/falcon-shop-data';
+import { CategoryWithProductListQuery } from '@deity/falcon-shop-data';
 import { H1, Box, FlexLayout, Divider, Button } from '@deity/falcon-ui';
 import { SearchConsumer, SortOrderPickerProvider, getFiltersData } from '@deity/falcon-front-kit';
 import {
@@ -25,7 +25,7 @@ const copy = item => item && JSON.parse(JSON.stringify(item));
 const CategoryPage = ({ id }) => (
   <SearchConsumer>
     {({ state }) => (
-      <CategoryWithProductsQuery
+      <CategoryWithProductListQuery
         variables={{
           categoryId: id,
           sort: state.sort,
@@ -33,13 +33,13 @@ const CategoryPage = ({ id }) => (
         }}
         passLoading
       >
-        {({ category, fetchMore, networkStatus, loading }) => {
+        {({ data: { category }, fetchMore, networkStatus, loading }) => {
           if (!category && loading) {
             return <Loader />;
           }
 
-          const { name, products } = category;
-          const { pagination, items, aggregations } = products;
+          const { name, productList } = category;
+          const { pagination, items, aggregations } = productList;
           const filtersData = getFiltersData(state.filters, aggregations);
 
           return (
@@ -92,7 +92,7 @@ const CategoryPage = ({ id }) => (
             </CategoryLayout>
           );
         }}
-      </CategoryWithProductsQuery>
+      </CategoryWithProductListQuery>
     )}
   </SearchConsumer>
 );

@@ -146,7 +146,8 @@
   },
   "forgotPassword": {
     "title": "Forgot Password",
-    "emailFieldLabel": "Email"
+    "emailFieldLabel": "Email",
+    "successMessage": "If there is an account associated with {{values.email}} you will receive an email with a link to reset your password."
   },
   "resetPassword": {
     "title": "Reset Password",

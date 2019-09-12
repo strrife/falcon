@@ -19,10 +19,10 @@ const Order = ({ match }) => {
   return (
     <GridLayout gridGap="md">
       <OrderQuery variables={{ id }}>
-        {({ order }) => (
+        {({ data: { order } }) => (
           <LocaleProvider currency={order.orderCurrencyCode}>
             <H1>
-              <T id="order.title" orderId={order.incrementId} />
+              <T id="order.title" orderId={order.referenceNo} />
             </H1>
             <OrderLayout>
               <FlexLayout gridArea={OrderLayoutArea.status}>

@@ -14,7 +14,7 @@ export type SortOrderPickerProviderProps = {
 };
 export const SortOrderPickerProvider: React.SFC<SortOrderPickerProviderProps> = ({ children }) => (
   <SortOrderListQuery>
-    {({ sortOrderList }) => (
+    {({ data: { sortOrderList } }) => (
       <SearchConsumer>
         {({ state: { sort }, setSortOrder }) =>
           children({

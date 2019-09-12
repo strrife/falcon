@@ -20,7 +20,7 @@ const EditAddress = ({ match, history }) => {
 
   return (
     <AddressQuery variables={{ id }}>
-      {({ address }) => (
+      {({ data: { address } }) => (
         <GridLayout mb="md" gridGap="md">
           <H1>
             <T id="editAddress.title" />
@@ -78,7 +78,7 @@ const EditAddress = ({ match, history }) => {
                         <FormField name="countryId" required>
                           {({ field }) => (
                             <CountryListQuery passLoading>
-                              {({ countryList = { items: [] } }) => (
+                              {({ data: { countryList = { items: [] } } }) => (
                                 <CountryPicker {...field} options={countryList.items} />
                               )}
                             </CountryListQuery>

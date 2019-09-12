@@ -205,7 +205,6 @@ describe('CheckoutLogic', () => {
       await wait(0);
       getProps().setShippingMethod(sampleShippingMethod);
       await wait(0);
-      console.error(getProps().errors.shippingMethod);
       expect(getProps().availablePaymentMethods[0]).toEqual(samplePaymentMethod);
     });
 

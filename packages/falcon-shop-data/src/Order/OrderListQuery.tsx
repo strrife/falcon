@@ -6,8 +6,8 @@ export const GET_ORDER_LIST = gql`
   query OrderList($pagination: PaginationInput) {
     orderList(pagination: $pagination) {
       items {
-        entityId
-        incrementId
+        id
+        referenceNo
         createdAt
         customerFirstname
         customerLastname
@@ -28,8 +28,8 @@ export type OrderListResponse = {
   orderList: {
     items: Pick<
       Order,
-      | 'entityId'
-      | 'incrementId'
+      | 'id'
+      | 'referenceNo'
       | 'createdAt'
       | 'customerFirstname'
       | 'customerLastname'

@@ -136,7 +136,7 @@ export type SearchProviderProps = {
 };
 const SearchProviderWithSortOrders: React.SFC<SearchProviderProps & RouteComponentProps> = ({ ...rest }) => (
   <SortOrderListQuery>
-    {({ sortOrderList }) => <SearchProviderInner {...rest} sortOrders={sortOrderList.map(x => x.value)} />}
+    {({ data: { sortOrderList } }) => <SearchProviderInner {...rest} sortOrders={sortOrderList.map(x => x.value)} />}
   </SortOrderListQuery>
 );
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { T } from '@deity/falcon-i18n';
 import { Text } from '@deity/falcon-ui';
 import { ResetPasswordFormProvider } from '@deity/falcon-front-kit';
 import { FormField, Form, FormSubmit, FormProps, FormErrorSummary } from '../Forms';
@@ -21,8 +22,7 @@ export const ForgotPasswordForm: React.SFC<ForgetPasswordFormProps> = () => (
 
           {submitSucceed && (
             <Text mt="md" fontSize="md">
-              If there is an account associated with <b>{values.email}</b> you will receive an email with a link to
-              reset your password.
+              <T id="forgotPassword.successMessage" email={values.email} />
             </Text>
           )}
         </Form>

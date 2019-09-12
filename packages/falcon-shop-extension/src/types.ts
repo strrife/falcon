@@ -1,4 +1,4 @@
-import { Pagination, Aggregation } from '@deity/falcon-data';
+import { Pagination, PaginationInput, SortOrderInput, Aggregation } from '@deity/falcon-data';
 
 export type GraphQLBase = {
   __typename?: string;
@@ -222,7 +222,19 @@ export type UpdateCartItemInput = {
   qty: number;
 };
 
+export type ProductListInput = {
+  term?: string;
+  filters?: FilterInput[];
+  sort?: SortOrderInput;
+  pagination?: PaginationInput;
+};
+
 export type ProductList = {
+  items: Product[];
+  pagination: Pagination;
+};
+
+export type CategoryProductList = {
   items: Product[];
   aggregations: Aggregation[];
   pagination: Pagination;
@@ -328,7 +340,7 @@ export type Category = {
   children: Category[];
   description: string;
   breadcrumbs: Breadcrumb[];
-  products: ProductList;
+  productList: CategoryProductList;
 };
 
 export type SignUpInput = {
@@ -370,8 +382,8 @@ export type MenuItem = {
 };
 
 export type Order = {
-  incrementId: string;
-  entityId: number;
+  id: number;
+  referenceNo: string;
   createdAt?: string;
   customerFirstname?: string;
   customerLastname?: string;
@@ -449,7 +461,7 @@ export type ShippingMethod = {
   amount: number;
   priceExclTax: number;
   priceInclTax: number;
-  currency: string;
+  currency?: string;
 };
 
 export type SetShippingInput = {
