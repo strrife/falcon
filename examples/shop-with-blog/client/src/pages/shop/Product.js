@@ -18,7 +18,7 @@ import {
   PageLayout,
   Breadcrumbs
 } from '@deity/falcon-ui-kit';
-import { OpenSidebarMutation, SIDEBAR_CONTENT_TYPE } from 'src/components/Sidebar';
+import { OpenSidebarMutation, SIDEBAR_TYPE } from 'src/components/Sidebar';
 
 const ProductPage = ({ id, path }) => (
   <ProductQuery variables={{ id, path }}>
@@ -30,7 +30,7 @@ const ProductPage = ({ id, path }) => (
             <AddToCartFormProvider
               quantity={1}
               product={product}
-              onSuccess={() => openSidebar({ variables: { contentType: SIDEBAR_CONTENT_TYPE.cart } })}
+              onSuccess={() => openSidebar({ variables: { contentType: SIDEBAR_TYPE.cart } })}
             >
               {({ isSubmitting, status }) => (
                 <ProductLayout as={Form} id="add-to-cart" i18nId="product">

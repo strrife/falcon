@@ -3,7 +3,7 @@ import { T } from '@deity/falcon-i18n';
 import { ValidatePasswordTokenQuery } from '@deity/falcon-shop-data';
 import { H1 } from '@deity/falcon-ui';
 import { PageLayout, FixCenteredLayout, InvalidResetPasswordToken, ResetPasswordForm } from '@deity/falcon-ui-kit';
-import { OpenSidebarMutation, SIDEBAR_CONTENT_TYPE } from 'src/components/Sidebar';
+import { OpenSidebarMutation, SIDEBAR_TYPE } from 'src/components/Sidebar';
 
 export default ({ location }) => {
   const queryParams = new URLSearchParams(location.search);
@@ -22,12 +22,12 @@ export default ({ location }) => {
                 isTokenValid ? (
                   <ResetPasswordForm
                     resetToken={resetToken}
-                    onSuccess={() => openSidebar({ variables: { contentType: SIDEBAR_CONTENT_TYPE.account } })}
+                    onSuccess={() => openSidebar({ variables: { contentType: SIDEBAR_TYPE.account } })}
                   />
                 ) : (
                   <InvalidResetPasswordToken
                     onRequestAnotherToken={() =>
-                      openSidebar({ variables: { contentType: SIDEBAR_CONTENT_TYPE.forgotPassword } })
+                      openSidebar({ variables: { contentType: SIDEBAR_TYPE.forgotPassword } })
                     }
                   />
                 )

@@ -11,7 +11,7 @@ export const GET_SIDEBAR_STATE = gql`
   }
 `;
 
-export const SIDEBAR_CONTENT_TYPE = {
+export const SIDEBAR_TYPE = {
   cart: 'cart',
   account: 'account',
   signUp: 'signUp',
