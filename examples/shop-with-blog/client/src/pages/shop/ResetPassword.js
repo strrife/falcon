@@ -1,8 +1,15 @@
 import React from 'react';
+import { Value } from 'react-powerplug';
 import { T } from '@deity/falcon-i18n';
 import { ValidatePasswordTokenQuery } from '@deity/falcon-shop-data';
 import { H1 } from '@deity/falcon-ui';
-import { PageLayout, FixCenteredLayout, InvalidResetPasswordToken, ResetPasswordForm } from '@deity/falcon-ui-kit';
+import {
+  PageLayout,
+  FixCenteredLayout,
+  ResetPasswordForm,
+  InvalidResetPasswordToken,
+  ResetPasswordSuccess
+} from '@deity/falcon-ui-kit';
 import { OpenSidebarMutation, SIDEBAR_TYPE } from 'src/components/Sidebar';
 
 export default ({ location }) => {
@@ -17,22 +24,29 @@ export default ({ location }) => {
       <FixCenteredLayout maxWidth={400} gridGap="md">
         <OpenSidebarMutation>
           {openSidebar => (
-            <ValidatePasswordTokenQuery variables={{ token: resetToken }}>
-              {({ data: { validatePasswordToken: isTokenValid } }) =>
-                isTokenValid ? (
-                  <ResetPasswordForm
-                    resetToken={resetToken}
-                    onSuccess={() => openSidebar({ variables: { contentType: SIDEBAR_TYPE.account } })}
+            <Value initial={false}>
+              {({ set, value }) =>
+                value ? (
+                  <ResetPasswordSuccess
+                    onSignIn={() => openSidebar({ variables: { contentType: SIDEBAR_TYPE.account } })}
                   />
                 ) : (
-                  <InvalidResetPasswordToken
-                    onRequestAnotherToken={() =>
-                      openSidebar({ variables: { contentType: SIDEBAR_TYPE.forgotPassword } })
+                  <ValidatePasswordTokenQuery variables={{ token: resetToken }}>
+                    {({ data: { validatePasswordToken: isTokenValid } }) =>
+                      isTokenValid ? (
+                        <ResetPasswordForm resetToken={resetToken} onSuccess={() => set(true)} />
+                      ) : (
+                        <InvalidResetPasswordToken
+                          onRequestAnotherToken={() =>
+                            openSidebar({ variables: { contentType: SIDEBAR_TYPE.forgotPassword } })
+                          }
+                        />
+                      )
                     }
-                  />
+                  </ValidatePasswordTokenQuery>
                 )
               }
-            </ValidatePasswordTokenQuery>
+            </Value>
           )}
         </OpenSidebarMutation>
       </FixCenteredLayout>
