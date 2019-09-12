@@ -30,18 +30,18 @@ export function getDefaultInputValidators(
     case 'email':
       result.push(validators.emailValidator);
       break;
-    case 'number': {
-      const { min, max } = input;
-      if (min) {
-        result.push(validators.rangeValidator(parseInt(min.toString(), 10)));
-      } else if (min && max) {
-        result.push(validators.rangeValidator(parseInt(min.toString(), 10), parseInt(max.toString(), 10)));
+    case 'number':
+      {
+        const { min, max } = input;
+        if (min) {
+          result.push(validators.rangeValidator(parseInt(min.toString(), 10)));
+        } else if (min && max) {
+          result.push(validators.rangeValidator(parseInt(min.toString(), 10), parseInt(max.toString(), 10)));
+        }
       }
       break;
-    }
-    default: {
+    default:
       break;
-    }
   }
 
   return result;
