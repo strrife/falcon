@@ -10,8 +10,9 @@ export type SignUpFormValues = {
   password: string;
   autoSignIn: boolean;
 };
-export const SignUpFormProvider: React.SFC<FormProviderProps<SignUpFormValues>> = props => {
-  const { onSubmit, initialValues, ...formikProps } = props;
+export type SignUpFormProviderProps = FormProviderProps<SignUpFormValues>;
+export const SignUpFormProvider: React.SFC<SignUpFormProviderProps> = props => {
+  const { onSuccess, initialValues, ...formikProps } = props;
   const defaultInitialValues: SignUpFormValues = {
     firstname: '',
     lastname: '',
@@ -29,7 +30,7 @@ export const SignUpFormProvider: React.SFC<FormProviderProps<SignUpFormValues>> 
             signUp({ variables: { input: values } })
               .then(() => {
                 formikActions.setSubmitting(false);
-                return onSubmit && onSubmit();
+                return onSuccess && onSuccess();
               })
               .catch(e => {
                 formikActions.setSubmitting(false);
