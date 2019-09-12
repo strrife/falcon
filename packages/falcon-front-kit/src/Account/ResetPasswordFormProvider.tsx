@@ -17,7 +17,7 @@ export const ResetPasswordFormProvider: React.SFC<ResetPasswordFormProviderProps
     <ResetPasswordMutation>
       {resetPassword => (
         <Formik
-          initialValues={defaultInitialValues || initialValues}
+          initialValues={initialValues || defaultInitialValues}
           onSubmit={(values, formikActions) =>
             resetPassword({ variables: { input: values } })
               .then(() => {
