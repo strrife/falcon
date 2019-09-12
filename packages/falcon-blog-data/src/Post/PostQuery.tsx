@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
-import { Query } from '../Query/Query';
+import { Query } from '@deity/falcon-data';
+import { BlogPost } from '@deity/falcon-blog-extension';
 
 const GET_BLOG_POST = gql`
   query BlogPost($path: String!) {
@@ -11,19 +12,15 @@ const GET_BLOG_POST = gql`
   }
 `;
 
-export type BlogPostType = {
-  blogPost: {
-    title: string;
-    date: string;
-    content: string;
-  };
+export type BlogPostResponse = {
+  blogPost: Pick<BlogPost, 'title' | 'date' | 'content'>;
 };
 
 export type BlogPostQueryVariables = {
   path: string;
 };
 
-export class BlogPostQuery extends Query<BlogPostType, BlogPostQueryVariables> {
+export class BlogPostQuery extends Query<BlogPostResponse, BlogPostQueryVariables> {
   static defaultProps = {
     query: GET_BLOG_POST
   };

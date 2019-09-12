@@ -17,7 +17,7 @@
 
 ---
 
-- BlogPostQuery
+> - ~~BlogPostQuery~~ - moved to @deity/falcon-blog-data
 
 ---
 
@@ -34,21 +34,21 @@
 
 ---
 
-- CheckoutShippingMethod
-- CheckoutPaymentMethod
-- CheckoutLogicInjectedProps
-- CheckoutLogicProps
-- EstimateShippingMethodsMutation
-- SetShippingMutation
-- PlaceOrderMutation
+> - ~~CheckoutShippingMethod~~ - renamed to `ShippingMethod` moved to @deity/falcon-shop-extension
+> - ~~CheckoutPaymentMethod~~ - renamed to `PaymentMethod` moved to @deity/falcon-shop-extension
+> - ~~CheckoutLogicInjectedProps~~ renamed to `CheckoutLogicRenderProps` and moved to @deity/falcon-front-kit
+> - ~~CheckoutLogicProps~~ - moved to @deity/falcon-front-kit
+> - ~~EstimateShippingMethodsMutation~~ - moved to @deity/falcon-shop-data
+> - ~~SetShippingMutation~~ - moved to @deity/falcon-shop-data
+> - ~~PlaceOrderMutation~~- moved to @deity/falcon-shop-data
 
 ---
 
-- CountriesQuery
+> - ~~CountriesQuery~~ - renamed to `CountryListQuery` and moved to @deity/falcon-shop-data
 
 ---
 
-- ChangePasswordMutation
+> - ~~ChangePasswordMutation~~ moved to @deity/falcon-shop-data
 
 ---
 
@@ -62,21 +62,21 @@
 
 ---
 
-- MenuQuery
+> - ~~MenuQuery~~ - moved to '@deity/falcon-shop-data'
 
 ---
 
-- MiniAccountQuery
+> - ~~MiniAccountQuery~~ renamed to `MiniCustomerQuery` and moved to @deity/falcon-shop-data
 
 ---
 
-> - ~~MiniCartQuery~~ - moved to @deity/falcon-ui-kit
+> - ~~MiniCartQuery~~ - moved to @deity/falcon-shop-data
 
 ---
 
-- GetOrderQuery
-- LastOrderQuery
-- OrderListQuery
+> - ~~GetOrderQuery~~ - renamed to OrderQuery, moved to @deity/falcon-shop-data
+> - ~~OrderListQuery~~ - moved to @deity/falcon-shop-data
+> - ~~LastOrderQuery~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -96,13 +96,13 @@
 
 ---
 
-> - ~~SortOrdersQuery~~ changed to `SortOrderListQuery` and moved to  @deity/falcon-data
+> - ~~SortOrdersQuery~~ changed to `SortOrderListQuery` and moved to @deity/falcon-data
 
 ### Existing constants:
 
-- REQUEST_CUSTOMER_PASSWORD_RESET_TOKEN_MUTATION
-- RESET_CUSTOMER_PASSWORD_MUTATION
-- VALIDATE_PASSWORD_TOKEN_QUERY
+> - ~~REQUEST_CUSTOMER_PASSWORD_RESET_TOKEN_MUTATION~~ - changed to `REQUEST_PASSWORD_RESET_TOKEN_MUTATION` and moved to @deity/falcon-shop-data
+> - ~~RESET_CUSTOMER_PASSWORD_MUTATION~~ - changed to `RESET_PASSWORD_MUTATION` and moved to @deity/falcon-shop-data
+> - ~~VALIDATE_PASSWORD_TOKEN_QUERY~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -117,11 +117,10 @@
 > - ~~GET_BACKEND_CONFIG~~ - moved to @deity/falcon-data and @deity/falcon-shop-data
 > - ~~SET_LOCALE~~ - moved to @deity/falcon-data
 
-
 ---
 
-- GET_BLOG_POST
-- GET_BLOG_POSTS
+> - ~~GET_BLOG_POST~~ - moved to @deity/falcon-blog-data
+> - ~~GET_BLOG_POSTS~~ - renamed to GET_BLOG_POST_LIST, moved to @deity/falcon-blog-data
 
 ---
 
@@ -138,17 +137,17 @@
 
 ---
 
-- ESTIMATE_SHIPPING_METHODS
-- SET_SHIPPING
-- PLACE_ORDER
+> - ~~ESTIMATE_SHIPPING_METHODS~~ - moved to @deity/falcon-shop-data
+> - ~~SET_SHIPPING~~ - moved to @deity/falcon-shop-data
+> - ~~PLACE_ORDER~~ - moved to @deity/falcon-shop-data
 
 ---
 
-- GET_CONFIG (-> GET_CLIENT_CONFIG)
+> - ~~GET_CONFIG~~ - renamed to GET_CLIENT_CONFIG and moved to @deity/falcon-front-kit
 
 ---
 
-- GET_COUNTRIES
+> - ~~GET_COUNTRIES~~ - renamed to `GET_COUNTRY_LIST` and moved to @deity/falcon-shop-data
 
 ---
 
@@ -164,21 +163,21 @@
 
 ---
 
-- GET_MENU
+> - ~~GET_MENU~~ - moved to @deity/falcon-data
 
 ---
 
-- GET_MINI_ACCOUNT
+> - ~~GET_MINI_ACCOUNT~~ - renamed to `GET_MINI_CUSTOMER` and moved to @deity/falcon-shop-data
 
 ---
 
-> - ~~GET_MINI_CART~~ - moved to @deity/falcon-ui-kit
+> - ~~GET_MINI_CART~~ - moved to @deity/falcon-shop-data
 
 ---
 
-- GET_ORDER
-- GET_LAST_ORDER
-- GET_ORDER_LIST
+> - ~~GET_ORDER~~ - moved to @deity/falcon-shop-data
+> - ~~GET_LAST_ORDER~~ - moved to @deity/falcon-shop-data
+> - ~~GET_ORDER_LIST~~ - moved to @deity/falcon-shop-data
 
 ---
 
@@ -187,8 +186,8 @@
 
 ---
 
-- OPEN_SIDEBAR_MUTATION
-- CLOSE_SIDEBAR_MUTATION
+> - ~~OPEN_SIDEBAR_MUTATION~~ - moved to @deity/falcon-ui-kit
+> - ~~CLOSE_SIDEBAR_MUTATION~~ - moved to @deity/falcon-ui-kit
 
 ---
 
@@ -217,12 +216,13 @@
 
 ---
 
-- BlogPostType
-- BlogPostQueryVariables
-- BlogPostExcerptType
-- BlogPagination
-- BlogPosts (-> BlogPostList)
-- BlogPostsQueryVariables (-> BlogPostListQueryVariables)
+> - ~~BlogPostType~~ - renamed to BlogPostResponse, moved to @deity/falcon-blog-data
+> - ~~BlogPostQueryVariables~~ - moved to @deity/falcon-blog-data
+
+> - ~~BlogPostExcerptType~~ - renamed to `BlogPost` and moved to @deity/falcon-blog-data
+> - ~~BlogPagination~~ - removed, used `Pagination` instead
+> - ~~BlogPosts~~ - renamed to BlogPostList, moved to @deity/falcon-blog-data
+> - ~~BlogPostsQueryVariables~~ renamed to BlogPostListQueryVariables, moved to @deity/falcon-blog-data
 
 ---
 
@@ -236,25 +236,25 @@
 
 ---
 
-- EstimateShippingMethodsData
-- SetShippingData
-- PlaceOrderSuccessfulResult
-- PlaceOrder3dSecureResult
-- PlaceOrder3dSecureField
-- PlaceOrderResult
+> - ~~EstimateShippingMethodsData~~ - renamed to EstimateShippingMethodsResponse and move to @deity/falcon-shop-data
+> - ~~SetShippingData~~ - renamed to SetShippingResponse and moved to @deity/falcon-shop-data
+> - ~~PlaceOrderSuccessfulResult~~ - moved to @deity/falcon-shop-extension
+> - ~~PlaceOrder3dSecureResult~~ - moved to @deity/falcon-shop-extension
+> - ~~PlaceOrder3dSecureField~~ - moved to @deity/falcon-shop-extension
+> - ~~PlaceOrderResult~~ - moved to @deity/falcon-shop-extension
 
 ---
 
-- ConfigQuery (-> ClientConfigQuery)
+> - ~~ConfigQuery~~ renamed to ClientConfigQuery and moved to @deity/falcon-front-kit
 
 ---
 
-- Country
-- CountriesData
+> - ~~Country~~ - moved to @deity/falcon-shop-extension
+> - ~~CountriesData~~ renamed to `CountryList` moved to  @deity/falcon-shop-extension
 
 ---
 
-- CreditCardState
+> - ~~CreditCardState~~ hide, I think we should not export any component state
 
 ---
 
@@ -278,7 +278,7 @@
 > - ~~FilterOperator~~ moved to @deity/falcon-shop-extension
 > - ~~FilterData~~ moved to @deity/falcon-front-kit
 > - ~~FilterOption~~ moved to @deity/falcon-front-kit
-> - ~~FilterDataProviderRenderProps~~ changed to `FiltersDataProviderRenderProps` and moved to @deity/falcon-front-kit 
+> - ~~FilterDataProviderRenderProps~~ changed to `FiltersDataProviderRenderProps` and moved to @deity/falcon-front-kit
 > - ~~MultipleFilterProps~~ moved to @deity/falcon-ui-kit
 > - ~~SingleFilterProps~~ moved to @deity/falcon-ui-kit
 
@@ -304,29 +304,29 @@
 
 ---
 
-- Menu
-- MenuItem
+> - ~~Menu~~ - renamed to `MenuResponse` and moved to @deity/falcon-shop-data
+> - ~~MenuItem~~ moved to @deity/falcon-shop-extension
 
 ---
 
-- MiniAccountData
+> - ~~MiniAccountData~~ renamed to `MiniCustomerResponse` and moved to @deity/falcon-shop-data
 
 ---
 
-- MiniCartData
+> - ~~MiniCartData~~ -renamed to `MiniCartResponse` and moved to @deity/falcon-shop-data
 
 ---
 
-- Order
-- OrderItem
+> - ~~Order~~ - moved to @deity/falcon-shop-data
+> - ~~OrderItem~~ - moved to @deity/falcon-shop-data
 
 ---
 
-- OrdersData
+> - ~~OrdersData~~ - renamed to OrderList, moved to @deity/falcon-shop-data
 
 ---
 
-> - ~~Products~~ - moved to  moved to @deity/falcon-shop-data and renamed to `ProductList`
+> - ~~Products~~ - moved to @deity/falcon-shop-data and renamed to `ProductList`
 
 ---
 
@@ -338,17 +338,18 @@
 
 ---
 
-- SignInModel ? 
-- SignInData ? 
-- SignOutLogicRenderProps
+> - ~~SignInModel~~ - renamed to `SignInInput` and moved to @deity/falcon-shop-extension
+> - ~~SignInData~~ - renamed to `SignInResponse` and moved to @deity/falcon-shop-data
+> - ~~SignOutLogicRenderProps~~ - renamed to SignOutProviderRenderProps, moved to @deity/falcon-ui-kit
 > - ~~SignUpVariables~~ moved to @deity/falcon-shop-extension and renamed to SignUpInput
 
 ---
 
 > - ~~SortOrderDirection~~ - moved to @deity/falcon-data
 > - ~~SortOrderInput~~ - moved to @deity/falcon-data
-- SortOrders ?
-> - ~~SortOrdersData~~ changed to `SortOrderListResponse` and moved to @deity/falcon-dat
+
+> - ~~SortOrders~~ changed to `SortOrderList` and moved to @deity/falcon-data
+> - ~~SortOrdersData~~ changed to `SortOrderListResponse` and moved to @deity/falcon-data
 
 > - ~~Pagination~~ - moved to @deity/falcon-data
 > - ~~PaginationQuery~~ - moved to @deity/falcon-data
@@ -356,15 +357,17 @@
 
 ### Existing UI components:
 
-- ForgotPasswordForm
-- ResetPassword
-- InvalidToken
-- ResetPasswordForm
-- ResetPasswordSuccess
+> - ~~ForgotPasswordForm~~ - moved to @deity/falcon-ui-kit
+> - ~~ResetPassword~~ - moved to @deity/falcon-ui-kit
+> - ~~InvalidToken~~ - moved to @deity/falcon-ui-kit
+> - ~~ResetPasswordForm~~ - moved to @deity/falcon-ui-kit
+> - ~~ResetPasswordSuccess~~ - moved to @deity/falcon-ui-kit
+> - ~~ResetPasswordSuccess~~ - moved to @deity/falcon-ui-kit
 
 ---
 
-> - ~~AddressDetails~~ - moved to @deity/falcon-ui-kit/src/Address/AddressDetails.tsx
+> - ~~AddressDetails~~ - moved to @deity/falcon-ui-kit/src/Address/AddressDetails.tsx (extracted AddressDetailsLayout)
+> - ~~addressToString~~ - moved to @deity/falcon-front-kit
 > - ~~AddressCardLayout~~ - moved to @deity/falcon-ui-kit/src/Address/AddressCard.tsx
 > - ~~AddressCard~~ - moved to @deity/falcon-ui-kit/src/Address/AddressCard.tsx
 > - ~~AddressListLayout~~ - moved to @deity/falcon-ui-kit/src/AddressListLayout.tsx
@@ -376,11 +379,11 @@
 
 ---
 
-- BlogPost
-- BlogPostExcerpt
-- BlogPostsLayout
-- BlogPostsPaginator
-- CMSContent
+> - ~~BlogPost~~ - moved to examples/shop-with-blog
+> - ~~BlogPostExcerpt~~ moved to @deity/falcon-ui-kit
+> - ~~BlogPostsLayout~~ - renamed to BlogPostListLayout and moved to @deity/falcon-ui-kit
+> - ~~BlogPostsPaginator~~ moved to examples/shop-with-blog
+> - ~~CMSContent~~ - moved to @deity/falcon-ui-kit
 
 ---
 
@@ -389,19 +392,20 @@
 > - ~~ShowMore~~ moved to examples/shop-with-blog
 > - ~~SortOrderDropdownLayout~~ changed to `SortOrderPickerLayout` and moved to @deity/falcon-ui-kit
 > - ~~SortOrderDropdown~~ changed to `SortOrderPicker` and moved to @deity/falcon-ui-kit
-- TotalRow
+
+> - ~~TotalRow~~ - removed, (introduced PropertyRowLayout in @deity/falcon-ui-kit)
 
 ---
 
-- CountrySelector
+> - ~~CountrySelector~~ renamed to CountryPicker and moved to @deity/falcon-ui-kit
 
 ---
 
-- CreditCard
+> - ~~CreditCard~~ renamed to CreditCardInput, and moved to @deity/falcon-ui-kit
 
 ---
 
-- NotFound
+> - ~~NotFound~~ moved to @deity/falcon-ui-kit
 
 ---
 
@@ -421,19 +425,19 @@
 
 ---
 
-- CopyrightLayout
-- Copyright
-- FooterLayout
-- FooterSectionsLayout
-- FooterSectionLayout
-- FooterLink
-- LanguageSection
+> - ~~CopyrightLayout~~ renamed to FooterBanner, moved to @deity/falcon-ui-kit
+> - ~~Copyright~~ moved to @deity/falcon-ui-kit
+> - ~~FooterLayout~~ renamed to Footer, moved to @deity/falcon-ui-kit
+> - ~~FooterSectionsLayout~~ renamed to FooterSectionListLayout moved to @deity/falcon-ui-kit
+> - ~~FooterSectionLayout~~ moved to @deity/falcon-ui-kit
+> - ~~FooterLink~~ moved to examples/shop-with-blog
+> - ~~LanguageSection~~ - removed
 
 > - ~~LocaleSwitcherDropdown~~ - moved to @deity/falcon-ui-kit and renamed to `LocalePicker`
 > - ~~LocaleSwitcherRenderProps~~ moved to @deity/falcon-ui-kit and renamed to `LocalePickerProps`
 
-- NewsletterLayout
-- Newsletter
+> - ~~NewsletterLayout~~ - moved to @deity/falcon-ui-kit
+> - ~~Newsletter~~ - moved to @deity/falcon-ui-kit
 
 ---
 
@@ -446,7 +450,6 @@
 > - ~~passwordValidator~~ - moved to @deity/falcon-front-kit
 > - ~~emailValidator~~ - moved to @deity/falcon-front-kit
 
-
 > - ~~CheckboxFormFieldLayout~~ - moved to @deity/falcon-ui-kit
 > - ~~CheckboxFormField~~ - moved to @deity/falcon-ui-kit
 > - ~~RadioFormFieldLayout~~ - moved to @deity/falcon-ui-kit
@@ -456,43 +459,47 @@
 
 ---
 
-- BannerLayout
-- Banner
-- Searchbar
-- Header
+> - ~~BannerLayout~~ - renamed to HeaderBannerLayout moved to @deity/falcon-ui-kit
+> - ~~Banner~~ - moved to examples/shop-with-blog
+
+> - ~~Searchbar~~ - removed
+> - ~~Header~~ - moved to examples/shop-with-blog
 
 ---
 
-- DateFormat
-- Price
+> - ~~DateFormat~~ - moved to @deity/falcon-ui-kit
+> - ~~Price~~ - moved to @deity/falcon-ui-kit
 
 ---
 
-- MenuNavbar
+> - ~~MenuNavbar~~ - moved to @deity/falcon-ui-kit
 
 ---
 
-- AccountIcon
-- ForgotPassword
-- MiniAccount
-  > - ~~MiniFormLayout~~ - renamed to SidebarLayout and moved to @deity/falcon-ui-kit
-- SignIn
-- SignUp
+> - ~~AccountIcon~~ - moved to @deity/falcon-ui-kit
+> - ~~ForgotPassword~~ - moved to @deity/falcon-ui-kit
+> - ~~ResetPasswordFormProvider~~ extracted from `ForgotPassword` and moved to @deity/falcon-front-kit
+> - ~~MiniAccount~~ - removed - because it should be located in example project, but it is not used anymore
+> - ~~MiniFormLayout~~ - renamed to SidebarLayout and moved to @deity/falcon-ui-kit
+> - ~~NewAccount~~ - extracted and moved to @deity/falcon-ui-kit
+
+> - ~~SignIn~~ - removed, use `SignInForm` from @deity/falcon-ui-kit instead 
+> - ~~SignUp~~ - removed, use `SignUpForm` from @deity/falcon-ui-kit instead 
 
 ---
 
-- MiniCart
-- MiniCartIcon
+> - ~~MiniCart~~ - moved to @deity/falcon-ui-kit
+> - ~~MiniCartIcon~~ - renamed to CartIcon moved to @deity/falcon-ui-kit
 
-- OrderItemSummary
+> - ~~OrderItemSummary~~ - moved to @deity/falcon-ui-kit
 
 ---
 
-- NoOrders
-- OrderList
-- OrderListLayout
-- OrderListItem
-- OrderListHeader
+> - ~~NoOrders~~ - renamed to EmptyOrderList and moved to @deity/falcon-ui-kit
+> - ~~OrderList~~ - moved to examples/shop-with-blog
+> - ~~OrderListLayout~~ moved to @deity/falcon-ui-kit
+> - ~~OrderListItem~~ - moved to examples/shop-with-blog
+> - ~~OrderListHeader~~ moved to @deity/falcon-ui-kit (not sure if correct)
 
 ---
 
@@ -502,7 +509,8 @@
 > - ~~ProductDescriptionLayout~~ - renamed to `ProductLayout` moved to @deity/falcon-ui-kit
 > - ~~Area~~ (product) - renamed to `ProductLayoutAreas` moved to @deity/falcon-ui-kit
 > - ~~ProductDetailsLayout~~ - moved to @deity/falcon-ui-kit
-- Product
+
+> - ~~Product~~ - moved to examples/shop-with-blog
 > - ~~ProductGallery~~ - moved to @deity/falcon-ui-kit
 > - ~~NoProductImage~~ - renamed to `NoProductImagePlaceholder` and moved to @deity/falcon-ui-kit
 > - ~~ProductMeta~~ - moved to @deity/falcon-ui-kit
@@ -512,7 +520,7 @@
 > - ~~ProductCard~~ moved to @deity/falcon-ui-kit
 > - ~~ProductList~~ moved to @deity/falcon-ui-kit
 > - ~~ProductListLayout~~ - moved to @deity/falcon-ui-kit
-- Loader
+> - ~~Loader~~ - moved to to @deity/falcon-ui-kit
 
 ---
 
@@ -520,7 +528,7 @@
 
 ---
 
-- Sidebar
+> - ~~Sidebar~~ - moved to @deity/falcon-ui-kit
 
 ---
 
@@ -535,13 +543,13 @@
 > - ~~Breadcrumbs~~ - moved to @deity/falcon-ui-kit
 > - ~~FixCenteredLayout~~ - moved to `@deity/falcon-ui-kit/src/Layouts/FixCenteredLayout.tsx`
 > - ~~TwoColumnsLayout~~ - moved to `@deity/falcon-ui-kit`
-- TwoStepWizard
+> - ~~TwoStepWizard~~ - moved to `@deity/falcon-ui-kit`
 
 > - added `DeityLogo` into `@deity/falcon-ui-kit`
 
 ### Existing "business level" components:
 
-- CheckoutLogic
+> - ~~CheckoutLogic~~ moved to @deity/falcon-front-kit
 
 > - ~~DynamicRoute~~ moved to @deity/falcon-front-kit
 > - ~~EnsureTTI~~ moved to @deity/falcon-front-kit
@@ -561,7 +569,7 @@
 > - ~~Router~~ moved to @deity/falcon-front-kit
 
 > - ~~SearchProvider~~ moved to @deity/falcon-front-kit
-- SignOutLogic
+> - ~~SignOutLogic~~ - renamed to SignOutProvider and moved to @deity/falcon-front-kit - but not using it
 > - ~~SortOrdersProvider~~ change to `SortOrderPickerProvider` and moved to @deity/falcon-front-kit
 > - ~~AreSortOrderInputsEqual~~ changed to `areSortOrderInputsEqual` and moved to @deity/falcon-front-kit
 > - ~~OnlineStatus~~ changed to `NetworkStatus` and moved to @deity/falcon-front-kit
