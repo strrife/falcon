@@ -1,15 +1,11 @@
 import React from 'react';
-import { themed, Box } from '@deity/falcon-ui';
+import { themed } from '@deity/falcon-ui';
+import { InnerHTML, InnerHtmlProps } from '../InnerHtml';
 
-const ProductDescriptionInnerHTML = ({ value, ...rest }) => (
-  <Box {...rest} dangerouslySetInnerHTML={{ __html: value }} />
-);
+export type ProductDescriptionProps = InnerHtmlProps;
 
-export type ProductDescriptionProps = {
-  value: string;
-};
 export const ProductDescription = themed<ProductDescriptionProps, any>({
-  tag: ProductDescriptionInnerHTML,
+  tag: InnerHTML,
   defaultTheme: {
     productDescription: {
       css: {

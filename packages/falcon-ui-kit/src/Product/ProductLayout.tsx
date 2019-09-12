@@ -2,7 +2,7 @@ import React from 'react';
 import { themed } from '@deity/falcon-ui';
 import { toGridTemplate } from '../helpers';
 
-export const ProductLayoutAreas = {
+export const ProductLayoutArea = {
   gallery: 'gallery',
   sku: 'sku',
   title: 'title',
@@ -26,27 +26,27 @@ export const ProductLayout = themed({
         // prettier-ignore
         xs: toGridTemplate([
           ['1fr'],
-          [ProductLayoutAreas.title],
-          [ProductLayoutAreas.sku],
-          [ProductLayoutAreas.gallery],
-          [ProductLayoutAreas.price],
-          [ProductLayoutAreas.error],
-          [ProductLayoutAreas.options],
-          [ProductLayoutAreas.cta],
-          [ProductLayoutAreas.description],
-          [ProductLayoutAreas.meta]
+          [ProductLayoutArea.title],
+          [ProductLayoutArea.sku],
+          [ProductLayoutArea.gallery],
+          [ProductLayoutArea.price],
+          [ProductLayoutArea.error],
+          [ProductLayoutArea.options],
+          [ProductLayoutArea.cta],
+          [ProductLayoutArea.description],
+          [ProductLayoutArea.meta]
         ]),
         // prettier-ignore
         md: toGridTemplate([
           ['1.5fr', '1fr'],
-          [ProductLayoutAreas.gallery, ProductLayoutAreas.sku],
-          [ProductLayoutAreas.gallery, ProductLayoutAreas.title],
-          [ProductLayoutAreas.gallery, ProductLayoutAreas.price],
-          [ProductLayoutAreas.gallery, ProductLayoutAreas.options],
-          [ProductLayoutAreas.gallery, ProductLayoutAreas.cta],
-          [ProductLayoutAreas.gallery, ProductLayoutAreas.error],
-          [ProductLayoutAreas.gallery, ProductLayoutAreas.description, '1fr'],
-          [ProductLayoutAreas.gallery, ProductLayoutAreas.meta]
+          [ProductLayoutArea.gallery, ProductLayoutArea.sku],
+          [ProductLayoutArea.gallery, ProductLayoutArea.title],
+          [ProductLayoutArea.gallery, ProductLayoutArea.price],
+          [ProductLayoutArea.gallery, ProductLayoutArea.options],
+          [ProductLayoutArea.gallery, ProductLayoutArea.cta],
+          [ProductLayoutArea.gallery, ProductLayoutArea.error],
+          [ProductLayoutArea.gallery, ProductLayoutArea.description, '1fr'],
+          [ProductLayoutArea.gallery, ProductLayoutArea.meta]
         ])
       }
     }

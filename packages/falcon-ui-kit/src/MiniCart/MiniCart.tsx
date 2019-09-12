@@ -3,13 +3,12 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Icon, List, ListItem, Box, H3, DefaultThemeProps, Text, Divider, Button, FlexLayout } from '@deity/falcon-ui';
 import { LocaleProvider } from '@deity/falcon-front-kit';
 import { T } from '@deity/falcon-i18n';
+import { MiniCartResponse } from '@deity/falcon-shop-data';
 import { CloseSidebarMutation } from '../Sidebar';
 import { toGridTemplate, prettyScrollbars } from '../helpers';
-import { MiniCartData } from './MiniCartQuery';
 import { MiniCartProduct } from './MiniCartProduct';
 
 export const MiniCartLayoutArea = {
-  title: 'title',
   items: 'items',
   cta: 'cta'
 };
@@ -22,7 +21,6 @@ const miniCartTheme: DefaultThemeProps = {
     // prettier-ignore
     gridTemplate: toGridTemplate([
       ['1fr'                          ],
-      [MiniCartLayoutArea.title       ],
       [MiniCartLayoutArea.items, '1fr'],
       [MiniCartLayoutArea.cta         ]
     ]),
@@ -44,15 +42,11 @@ const MiniCartProducts: React.SFC<any> = ({ products }) => (
   </List>
 );
 
-export const MiniCart: React.SFC<MiniCartData> = ({ cart: { quoteCurrency, items } }) => (
+export const MiniCart: React.SFC<MiniCartResponse['cart']> = ({ quoteCurrency, items }) => (
   <CloseSidebarMutation>
     {closeSidebar => (
       <LocaleProvider currency={quoteCurrency}>
         <Box defaultTheme={miniCartTheme}>
-          <H3 gridArea={MiniCartLayoutArea.title}>
-            <T id="miniCart.title" />
-          </H3>
-
           <Box gridArea={MiniCartLayoutArea.items} css={props => ({ ...prettyScrollbars(props.theme) })}>
             <MiniCartProducts products={items} />
             {!items.length && (
