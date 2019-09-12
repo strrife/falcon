@@ -2,14 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NetworkStatus } from 'apollo-client';
 import { Toggle } from 'react-powerplug';
-import { H1, H3, GridLayout, Box, FlexLayout, Divider, Button } from '@deity/falcon-ui';
 import { CategoryWithProductListQuery } from '@deity/falcon-shop-data';
-import { Loader } from '@deity/falcon-ecommerce-uikit';
+import { H1, Box, FlexLayout, Divider, Button } from '@deity/falcon-ui';
 import { SearchConsumer, SortOrderPickerProvider, getFiltersData } from '@deity/falcon-front-kit';
 import {
+  Loader,
   CategoryLayout,
   CategoryArea,
   Sidebar,
+  SidebarLayout,
   Responsive,
   SortOrderPicker,
   FiltersSummary,
@@ -32,7 +33,7 @@ const CategoryPage = ({ id }) => (
         }}
         passLoading
       >
-        {({ category, fetchMore, networkStatus, loading }) => {
+        {({ data: { category }, fetchMore, networkStatus, loading }) => {
           if (!category && loading) {
             return <Loader />;
           }
@@ -66,10 +67,9 @@ const CategoryPage = ({ id }) => (
                             <React.Fragment>
                               <Button onClick={toggle}>Filters</Button>
                               <Sidebar isOpen={on} side="left" close={toggle}>
-                                <GridLayout gridRowGap="md">
-                                  <H3 ml="xl">Filters</H3>
+                                <SidebarLayout title="Filters">
                                   <Filters data={filtersData} px="md" />
-                                </GridLayout>
+                                </SidebarLayout>
                               </Sidebar>
                             </React.Fragment>
                           )}

@@ -13,7 +13,7 @@ const PersonalInformation = () => (
     </H1>
     <TwoColumnsLayout my="md">
       <CustomerQuery>
-        {({ customer }) => (
+        {({ data: { customer } }) => (
           <EditCustomerMutation>
             {(editCustomer, { loading, error }) => (
               <Formik

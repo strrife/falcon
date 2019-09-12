@@ -16,7 +16,7 @@ import CheckCircle from 'react-feather/dist/icons/check-circle';
 import Eye from 'react-feather/dist/icons/eye';
 import EyeOff from 'react-feather/dist/icons/eye-off';
 import { createTheme } from '@deity/falcon-ui';
-import { SignInIcon } from '@deity/falcon-ui-kit';
+import { SignInIcon, AccountIcon } from '@deity/falcon-ui-kit';
 import { DeityLogo } from 'src/components/DeityLogo';
 
 export const deityGreenTheme = createTheme({
@@ -33,13 +33,10 @@ export const deityGreenTheme = createTheme({
   icons: {
     logo: {
       icon: DeityLogo,
-      stroke: 'none',
-      css: {
-        width: 'auto',
-        height: '100%'
-      }
+      stroke: 'none'
     },
     signIn: { icon: SignInIcon },
+    account: { icon: AccountIcon },
     loader: {
       icon: props => (
         <svg viewBox="0 0 50 50" {...props}>
@@ -198,10 +195,18 @@ export const deityGreenTheme = createTheme({
     select: {
       height: 'xl'
     },
-
     label: {
       fontSize: 'xs',
       fontWeight: 'bold'
+    },
+    footer: {
+      mt: 'md'
+    },
+    localePicker: {
+      css: {
+        margin: '0 auto',
+        zIndex: 2
+      }
     }
   }
 });

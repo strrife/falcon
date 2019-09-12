@@ -31,7 +31,7 @@ CartItemList.propTypes = {
 
 const CartPage = () => (
   <CartQuery>
-    {({ cart }) => (
+    {({ data: { cart } }) => (
       <Box mt="xxl" defaultTheme={cartLayout}>
         <H1 fontSize="xl">
           <T id="cart.title" />

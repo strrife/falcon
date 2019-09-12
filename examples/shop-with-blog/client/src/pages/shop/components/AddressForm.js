@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CountrySelector } from '@deity/falcon-ecommerce-uikit';
-import { toGridTemplate, Form, FormField } from '@deity/falcon-ui-kit';
+import { toGridTemplate, Form, FormField, CountryPicker } from '@deity/falcon-ui-kit';
 import { Box, Button } from '@deity/falcon-ui';
 
 const AddressFormArea = {
@@ -69,9 +68,7 @@ const AddressForm = ({ countries = [], submitLabel = 'Save', id = '', autoComple
       />
       <FormField name="street2" autoComplete={getAutoComplete('address-line2')} gridArea={AddressFormArea.street2} />
       <FormField name="countryId" required autoComplete={getAutoComplete('country')} gridArea={AddressForm.country}>
-        {({ form, field }) => (
-          <CountrySelector {...field} items={countries} onChange={x => form.setFieldValue(field.name, x)} />
-        )}
+        {({ field }) => <CountryPicker {...field} options={countries} />}
       </FormField>
       <FormField
         name="postcode"

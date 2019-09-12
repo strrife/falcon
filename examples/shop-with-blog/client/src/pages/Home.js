@@ -10,7 +10,11 @@ const Home = () => (
       <T id="home.hotSellers" />
     </H1>
     <CategoryWithProductListQuery variables={{ categoryId: '25', query: { perPage: 1, page: 20 } }}>
-      {({ category: { productList } }) => <ProductList items={productList.items} />}
+      {({
+        data: {
+          category: { productList }
+        }
+      }) => <ProductList items={productList.items} />}
     </CategoryWithProductListQuery>
   </PageLayout>
 );
