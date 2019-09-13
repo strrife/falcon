@@ -31,7 +31,7 @@ export const passwordValidator: IValidator = ({ value }) => {
 
 export function lengthValidator(min: number, max?: number): IValidator {
   if (max && max < min) {
-    throw new Error(`value of 'min' can not be grater that 'max'!`);
+    throw new Error(`value of 'min' can not be greater than 'max'!`);
   }
 
   return ({ value }) => {
