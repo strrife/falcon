@@ -8,7 +8,7 @@ export const GET_CLIENT_CONFIG = gql`
 `;
 
 export type ClientConfigVariables = {
-  key: string;
+  key?: string;
 };
 export type ClientConfigResponse = {
   [key: string]: any;
