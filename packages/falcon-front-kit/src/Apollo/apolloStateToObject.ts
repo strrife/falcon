@@ -4,8 +4,9 @@
  * @param {string} key Apollo state key
  * @returns {object} Expanded object
  */
-export const apolloStateToObject = (state, key) => {
+export function apolloStateToObject(state: Object, key: string): Object {
   const value = Object.assign({}, state[key]);
+
   Object.keys(value).forEach(vKey => {
     const vValue = value[vKey];
     if (!vValue) {
@@ -26,5 +27,6 @@ export const apolloStateToObject = (state, key) => {
       }
     }
   });
+
   return value;
-};
+}

@@ -1,4 +1,4 @@
-import { apolloStateToObject } from './apolloStateToObject';
+import { apolloStateToObject } from '@deity/falcon-front-kit';
 
 export const resolvers = {
   Query: {
