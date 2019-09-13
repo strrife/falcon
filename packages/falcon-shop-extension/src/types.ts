@@ -1,4 +1,4 @@
-import { Pagination, PaginationInput, SortOrderInput, Aggregation } from '@deity/falcon-data';
+import { Pagination, PaginationInput, Aggregation, SortOrderInput, SortOrder } from '@deity/falcon-data';
 
 export type GraphQLBase = {
   __typename?: string;
@@ -12,6 +12,7 @@ export type ShopConfig = {
   stores: ShopStoreEntry[];
   timezone: string;
   weightUnit: string;
+  sortOrderList: SortOrder[];
 } & GraphQLBase;
 
 export type ShopStoreEntry = {
