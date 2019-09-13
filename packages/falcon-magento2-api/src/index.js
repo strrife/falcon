@@ -184,12 +184,12 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {object} params query params
    * @returns {Promise<CategoryProductList>} - fetched list of products
    */
-  async categoryProductList(obj, params) {
-    const { pagination = {} } = params;
+  async categoryProductList(obj, { input }) {
+    const { pagination = {} } = input;
 
-    const searchCriteria = this.createSearchCriteria(params);
+    const searchCriteria = this.createSearchCriteria(input);
     this.addSearchFilter(searchCriteria, 'visibility', ProductVisibility.catalogAndSearch, 'eq');
-    if (!this.isFilterSet('status', params)) {
+    if (!this.isFilterSet('status', input)) {
       this.addSearchFilter(searchCriteria, 'status', '1');
     }
     // removed virtual products as we're not supporting it
