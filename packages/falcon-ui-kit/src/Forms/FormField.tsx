@@ -1,6 +1,6 @@
 import React from 'react';
 import { FieldProps as FormikFieldProps } from 'formik';
-import { Field, Validator, getDefaultInputValidators } from '@deity/falcon-front-kit';
+import { Field, IValidator, getDefaultInputValidators } from '@deity/falcon-front-kit';
 import { Input, extractThemableProps, ThemedComponentProps } from '@deity/falcon-ui';
 import { FormFieldLabel } from './FormFieldLabel';
 import { FormFieldError } from './FormFieldError';
@@ -24,7 +24,7 @@ export type FormFieldProps<TValue = any> = {
   name: string;
   label?: string;
   placeholder?: string;
-  validate?: Validator[];
+  validate?: IValidator[];
   children?: (props: FormFieldRenderProps<TValue>) => React.ReactNode;
 } & React.InputHTMLAttributes<HTMLInputElement> &
   ThemedComponentProps;
