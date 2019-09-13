@@ -1,49 +1,68 @@
-export type Validator = (value: string, label: string) => string | undefined;
+import { IValidator } from './IValidator';
 
-// TODO: when new i18n support is ready use it to translate validation messages
+const VALID_EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const VALID_PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
 
-const validEmailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const validPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/;
+const isValueProvided = x => (x !== '' && x !== undefined && x !== null) || (Array.isArray(x) && (x as any[]).length);
 
-export const requiredValidator: Validator = (value, label) => {
-  if (!value || (Array.isArray(value) && !(value as any[]).length)) {
-    return `${label} is required`;
+export const requiredValidator: IValidator = ({ value }) => {
+  if (!isValueProvided(value)) {
+    return { errorI18nId: 'required' };
   }
 
   return undefined;
 };
 
-export const emailValidator: Validator = value => {
-  if (!value || !validEmailRegex.test(value.toLowerCase())) {
-    return ' Email is invalid';
+export const emailValidator: IValidator = ({ value }) => {
+  if (isValueProvided(value) && !VALID_EMAIL_REGEX.test(value.toLowerCase())) {
+    return { errorI18nId: 'invalid' };
   }
 
   return undefined;
 };
 
-export const passwordValidator: Validator = value => {
-  if (!value || value.length < 8) {
-    return 'Please enter a password with at least 8 characters';
+export const passwordValidator: IValidator = ({ value }) => {
+  if (isValueProvided(value) && !VALID_PASSWORD_REGEX.test(value)) {
+    return { errorI18nId: 'uncomplexPassword' };
   }
 
-  if (!validPasswordRegex.test(value)) {
-    return 'Please use at least one lower, upper case char and digit';
-  }
   return undefined;
 };
 
-export function rangeValidator(min: number, max?: number): Validator {
+export function lengthValidator(min: number, max?: number): IValidator {
   if (max && max < min) {
-    throw new Error(`value of 'min' can not be grater that 'max'!`);
+    throw new Error(`value of 'min' can not be greater than 'max'!`);
   }
 
-  return value => {
-    if (parseInt(value, 10) < min) {
-      return `Value must be greater than ${min}`;
+  return ({ value }) => {
+    if (isValueProvided(value) && typeof value === 'string') {
+      if (value.length < min) {
+        return { errorI18nId: 'toShort', min, ...(max ? { max } : {}) };
+      }
+
+      if (max && value.length > max) {
+        return { errorI18nId: 'toLong', min, max };
+      }
     }
 
-    if (max && parseInt(value, 10) > max) {
-      return `Value must be lower than ${max}`;
+    return undefined;
+  };
+}
+
+export function rangeValidator(min: number, max?: number): IValidator {
+  if (max && max < min) {
+    throw new Error(`value of 'min' can not be greater than 'max'!`);
+  }
+
+  return ({ value }) => {
+    if (isValueProvided(value) && typeof value === 'number') {
+      if (value < min) {
+        return { errorI18nId: 'belowRange', min, ...(max ? { max } : {}) };
+      }
+
+      if (max && value > max) {
+        return { errorI18nId: 'aboveRange', min, max };
+      }
     }
 
     return undefined;
