@@ -54,7 +54,8 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         timezone: () => this.session.timezone,
         weightUnit: () => this.session.weightUnit,
         activeCurrency: () => this.session.currency,
-        activeStore: () => this.session.storeCode
+        activeStore: () => this.session.storeCode,
+        sortOrderList: () => this.getSortOrderList()
       },
       Product: {
         price: (...args) => this.productPrice(...args),
@@ -91,6 +92,52 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       }
     });
     return currencies;
+  }
+
+  getSortOrderList() {
+    return [
+      {
+        name: 'Position',
+        value: undefined,
+        __typename: 'SortOrder'
+      },
+      {
+        name: 'Price ascending',
+        value: {
+          field: 'price',
+          direction: 'asc',
+          __typename: 'SortOrderValue'
+        },
+        __typename: 'SortOrder'
+      },
+      {
+        name: 'Price descending',
+        value: {
+          field: 'price',
+          direction: 'desc',
+          __typename: 'SortOrderValue'
+        },
+        __typename: 'SortOrder'
+      },
+      {
+        name: 'Name ascending',
+        value: {
+          field: 'name',
+          direction: 'asc',
+          __typename: 'SortOrderValue'
+        },
+        __typename: 'SortOrder'
+      },
+      {
+        name: 'Name descending',
+        value: {
+          field: 'name',
+          direction: 'desc',
+          __typename: 'SortOrderValue'
+        },
+        __typename: 'SortOrder'
+      }
+    ];
   }
 
   /**
