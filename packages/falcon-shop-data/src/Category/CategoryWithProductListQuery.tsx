@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { Query, Pagination, PaginationInput, Aggregation, SortOrderInput } from '@deity/falcon-data';
+import { Query, Pagination, PaginationInput, Aggregation, SortOrderValue } from '@deity/falcon-data';
 import { Category, Product, FilterInput } from '@deity/falcon-shop-extension';
 
 export const GET_CATEGORY_WITH_PRODUCT_LIST = gql`
@@ -54,7 +54,7 @@ export type CategoryWithProductListResponse = Pick<Category, 'id' | 'name'> & {
 
 export type CategoryWithProductListVariables = {
   categoryId?: string;
-  sort?: SortOrderInput;
+  sort?: SortOrderValue;
   pagination?: PaginationInput;
   filters?: FilterInput[];
 };

@@ -1,9 +1,9 @@
 export type SortOrder = {
   name: string;
-  value?: SortOrderInput;
+  value?: SortOrderValue;
 };
 
-export type SortOrderInput = {
+export type SortOrderValue = {
   field: string;
   direction: SortOrderDirection;
 };

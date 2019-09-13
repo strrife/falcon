@@ -1,4 +1,4 @@
-import { Pagination, PaginationInput, Aggregation, SortOrderInput, SortOrder } from '@deity/falcon-data';
+import { Pagination, PaginationInput, Aggregation, SortOrderValue, SortOrder } from '@deity/falcon-data';
 
 export type GraphQLBase = {
   __typename?: string;
@@ -226,7 +226,7 @@ export type UpdateCartItemInput = {
 export type ProductListInput = {
   term?: string;
   filters?: FilterInput[];
-  sort?: SortOrderInput;
+  sort?: SortOrderValue;
   pagination?: PaginationInput;
 };
 

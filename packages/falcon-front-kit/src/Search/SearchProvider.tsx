@@ -9,8 +9,8 @@ import { SearchState, searchStateFromURL, searchStateToURL } from './searchState
 
 type SearchProviderInnerProps = SearchProviderProps &
   RouteComponentProps & {
-    sortOrders: (SortOrderInput | undefined)[];
-    defaultSortOrder?: SortOrderInput;
+    sortOrders: (SortOrderValue | undefined)[];
+    defaultSortOrder?: SortOrderValue;
   };
 export class SearchProviderInner extends React.Component<SearchProviderInnerProps, SearchState> {
   static defaultProps = {
@@ -33,7 +33,7 @@ export class SearchProviderInner extends React.Component<SearchProviderInnerProp
     this.historyUnlisten();
   }
 
-  get defaultSortOrder(): SortOrderInput | undefined {
+  get defaultSortOrder(): SortOrderValue | undefined {
     const { defaultSortOrder, sortOrders } = this.props;
     if (defaultSortOrder) {
       return defaultSortOrder;
@@ -72,7 +72,7 @@ export class SearchProviderInner extends React.Component<SearchProviderInnerProp
     this.updateURL({ ...this.state, filters });
   };
 
-  setSortOrder = (sort?: SortOrderInput) => {
+  setSortOrder = (sort?: SortOrderValue) => {
     this.updateURL({ ...this.state, sort: this.sortOrderExists(sort) ? sort : this.defaultSortOrder });
   };
 
@@ -80,7 +80,7 @@ export class SearchProviderInner extends React.Component<SearchProviderInnerProp
 
   setTerm = (term: string) => this.updateURL({ ...this.state, term });
 
-  sortOrderExists = (sort?: SortOrderInput): boolean =>
+  sortOrderExists = (sort?: SortOrderValue): boolean =>
     this.props.sortOrders.some(x => (!x && !sort) || areSortOrderInputsEqual(x, sort));
 
   removeFilters = () => this.updateURL({ ...this.state, filters: [] });
