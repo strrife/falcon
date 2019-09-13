@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { Query } from '@deity/falcon-data';
 
 export const GET_CLIENT_CONFIG = gql`
-  query ClientConfig($key: String!) {
+  query ClientConfig($key: String) {
     clientConfig(key: $key) @client
   }
 `;
