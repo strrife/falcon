@@ -3,50 +3,6 @@ import { GET_SIDEBAR_STATE } from './pages/shop/components/Sidebar';
  * Defines client-side state resolvers
  */
 
-const sortOrders = [
-  {
-    name: 'Position',
-    value: undefined,
-    __typename: 'SortOrder'
-  },
-  {
-    name: 'Price ascending',
-    value: {
-      field: 'price',
-      direction: 'asc',
-      __typename: 'SortOrderValue'
-    },
-    __typename: 'SortOrder'
-  },
-  {
-    name: 'Price descending',
-    value: {
-      field: 'price',
-      direction: 'desc',
-      __typename: 'SortOrderValue'
-    },
-    __typename: 'SortOrder'
-  },
-  {
-    name: 'Name ascending',
-    value: {
-      field: 'name',
-      direction: 'asc',
-      __typename: 'SortOrderValue'
-    },
-    __typename: 'SortOrder'
-  },
-  {
-    name: 'Name descending',
-    value: {
-      field: 'name',
-      direction: 'desc',
-      __typename: 'SortOrderValue'
-    },
-    __typename: 'SortOrder'
-  }
-];
-
 export default {
   data: {
     sidebar: {
@@ -58,9 +14,7 @@ export default {
   },
 
   resolvers: {
-    Query: {
-      sortOrderList: () => sortOrders
-    },
+    Query: {},
 
     Mutation: {
       openSidebar: (_, { contentType, side }, { cache }) => {
