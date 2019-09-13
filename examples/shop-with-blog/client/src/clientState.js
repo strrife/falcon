@@ -1,4 +1,6 @@
+import { getClientConfigResolver } from '@deity/falcon-front-kit';
 import { GET_SIDEBAR_STATE } from './pages/shop/components/Sidebar';
+
 /**
  * Defines client-side state resolvers
  */
@@ -59,6 +61,7 @@ export default {
 
   resolvers: {
     Query: {
+      clientConfig: getClientConfigResolver,
       sortOrderList: () => sortOrders
     },
 
