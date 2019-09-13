@@ -1,32 +1,31 @@
 /**
  * This method expands flatten Apollo cache value into a nested object
  * @param {object} state Apollo state object
- * @param {string} key Apollo state key
+ * @param {string} stateKey Apollo state key
  * @returns {object} Expanded object
  */
-export function apolloStateToObject(state: object, key: string): object {
-  const value = Object.assign({}, state[key]);
+export function apolloStateToObject(state: object, stateKey: string): object {
+  const result = { ...state[stateKey] };
 
-  Object.keys(value).forEach(vKey => {
-    const vValue = value[vKey];
-    if (!vValue) {
+  Object.keys(result).forEach(key => {
+    const value = result[key];
+
+    if (!value) {
       return;
     }
-    if (Array.isArray(vValue)) {
-      value[vKey] = [];
-      vValue.forEach((vv, vi) => {
-        if (vv && typeof vv === 'object' && vv.generated && vv.id) {
-          value[vKey][vi] = apolloStateToObject(state, vv.id);
-        }
-      });
-    } else if (typeof vValue === 'object') {
-      if (vValue.generated && vValue.id) {
-        value[vKey] = apolloStateToObject(state, vValue.id);
-      } else if (vValue.type === 'json') {
-        value[vKey] = vValue.json;
+
+    if (Array.isArray(value)) {
+      result[key] = value
+        .filter(item => item && typeof item === 'object' && item.generated && item.id)
+        .map(item => apolloStateToObject(state, item.id));
+    } else if (typeof value === 'object') {
+      if (value.generated && value.id) {
+        result[key] = apolloStateToObject(state, value.id);
+      } else if (value.type === 'json') {
+        result[key] = value.json;
       }
     }
   });
 
-  return value;
+  return result;
 }
