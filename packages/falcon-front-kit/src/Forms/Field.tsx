@@ -1,14 +1,8 @@
 import React from 'react';
-import { Field as FormikField, FieldProps as FormikFieldProps, FieldConfig, getIn } from 'formik';
+import { Field as FormikField, FieldProps as FormikFieldProps, getIn } from 'formik';
 import { I18n } from '@deity/falcon-i18n';
 import { FormContext } from './FormContext';
-import { Validator } from './validators';
-
-const validateSequentially = (validators: Validator[], label: string): FieldConfig['validate'] => value => {
-  const firstInvalid = validators.find(validator => validator(value, label) !== undefined);
-
-  return firstInvalid ? firstInvalid(value, label) : undefined;
-};
+import { fieldValidator, IValidator } from './IValidator';
 
 const translateIfExists = (t, key?: string) => (key ? (t(key, { defaultValue: '' }) as string) : undefined);
 
@@ -41,10 +35,9 @@ export type FieldProps<TValue = any> = {
   name: string;
   label?: string;
   placeholder?: string;
-  validate?: Validator[];
+  validate?: IValidator[];
   children?: (props: FieldRenderProps<TValue>) => React.ReactNode;
 };
-
 export const Field: React.SFC<FieldProps> = props => {
   const { name, label, placeholder, validate, children, ...restProps } = props;
 
@@ -66,7 +59,7 @@ export const Field: React.SFC<FieldProps> = props => {
             const fieldPlaceholder = placeholder || translateIfExists(t, i18nIds.placeholder);
 
             return (
-              <FormikField name={name} validate={validateSequentially(validate || [], fieldLabel || name)}>
+              <FormikField name={name} validate={fieldValidator(validate, { name, label: fieldLabel, formI18nId, t })}>
                 {({ form: formikForm, field: formikField }: FormikFieldProps) => {
                   const touch = getIn(formikForm.touched, name);
                   const error = getIn(formikForm.errors, name);

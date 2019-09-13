@@ -1,1 +1,1 @@
-export * from './CategoryWithProductsQuery';
+export * from './CategoryWithProductListQuery';
