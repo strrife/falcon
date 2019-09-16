@@ -184,7 +184,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
    * @param {object} params query params
    * @returns {Promise<CategoryProductList>} - fetched list of products
    */
-  async categoryProductList(obj, { input }) {
+  async categoryProductList(obj, { input = {} }) {
     const { pagination = {} } = input;
 
     const searchCriteria = this.createSearchCriteria(input);
