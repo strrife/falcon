@@ -1,15 +1,15 @@
 import React from 'react';
-import { Button, FlexLayout } from '@deity/falcon-ui';
+import { Button, FlexLayout, Link } from '@deity/falcon-ui';
 import { T } from '@deity/falcon-i18n';
 import { SignInFormProvider } from '@deity/falcon-front-kit';
 import { FormField, Form, FormProps, PasswordRevealInput, FormErrorSummary } from '../Forms';
-import { ForgotPasswordTrigger } from './ForgotPasswordTrigger';
 
 export type SignInFormProps = Partial<FormProps> & {
   onSuccess?: () => Promise<void>;
+  onForgotPassword: Function;
 };
 
-export const SignInForm: React.SFC<SignInFormProps> = ({ onSuccess, ...formProps }) => (
+export const SignInForm: React.SFC<SignInFormProps> = ({ onSuccess, onForgotPassword, ...formProps }) => (
   <SignInFormProvider onSuccess={onSuccess}>
     {({ isSubmitting, status }) => (
       <Form i18nId="signIn" {...formProps}>
@@ -25,9 +25,11 @@ export const SignInForm: React.SFC<SignInFormProps> = ({ onSuccess, ...formProps
           {({ field }) => <PasswordRevealInput {...field} />}
         </FormField>
         <FlexLayout justifyContent="space-between" alignItems="center" mt="md">
-          <ForgotPasswordTrigger />
+          <Link fontSize="xs" onClick={() => onForgotPassword()}>
+            <T id="signIn.forgotPasswordLink" />
+          </Link>
           <Button type="submit" variant={isSubmitting ? 'loader' : undefined}>
-            <T id="signIn.button" />
+            <T id="signIn.submitButton" />
           </Button>
         </FlexLayout>
 

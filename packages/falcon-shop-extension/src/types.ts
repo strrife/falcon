@@ -483,5 +483,5 @@ export type PaymentMethod = {
   /** Translated Payment method title (like "PayPal Express Checkout") */
   title: string;
   /** Configuration object for the specific Payment method */
-  config: Object;
+  config: object;
 };

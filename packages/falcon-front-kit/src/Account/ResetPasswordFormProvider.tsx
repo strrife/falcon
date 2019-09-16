@@ -1,24 +1,25 @@
 import React from 'react';
 import { Formik } from 'formik';
-import { RequestPasswordResetInput } from '@deity/falcon-shop-extension';
-import { RequestPasswordResetMutation } from '@deity/falcon-shop-data';
+import { ResetPasswordInput } from '@deity/falcon-shop-extension';
+import { ResetPasswordMutation } from '@deity/falcon-shop-data';
 import { FormProviderProps } from '../Forms';
 
-export type ResetPasswordFormValues = RequestPasswordResetInput;
+export type ResetPasswordFormValues = ResetPasswordInput;
 export type ResetPasswordFormProviderProps = FormProviderProps<ResetPasswordFormValues>;
 export const ResetPasswordFormProvider: React.SFC<ResetPasswordFormProviderProps> = props => {
   const { onSuccess, initialValues, ...formikProps } = props;
   const defaultInitialValues: ResetPasswordFormValues = {
-    email: ''
+    resetToken: '',
+    password: ''
   };
 
   return (
-    <RequestPasswordResetMutation>
-      {requestPasswordReset => (
+    <ResetPasswordMutation>
+      {resetPassword => (
         <Formik
-          initialValues={defaultInitialValues || initialValues}
+          initialValues={initialValues || defaultInitialValues}
           onSubmit={(values, formikActions) =>
-            requestPasswordReset({ variables: { input: values } })
+            resetPassword({ variables: { input: values } })
               .then(() => {
                 formikActions.setSubmitting(false);
                 return onSuccess && onSuccess();
@@ -31,6 +32,6 @@ export const ResetPasswordFormProvider: React.SFC<ResetPasswordFormProviderProps
           {...formikProps}
         />
       )}
-    </RequestPasswordResetMutation>
+    </ResetPasswordMutation>
   );
 };

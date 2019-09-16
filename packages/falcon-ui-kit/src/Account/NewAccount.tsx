@@ -1,9 +1,11 @@
 import React from 'react';
 import { H4, Text, List, ListItem, Icon, Button, GridLayout } from '@deity/falcon-ui';
 import { I18n, T } from '@deity/falcon-i18n';
-import { OpenSidebarMutation } from '../Sidebar';
 
-export const NewAccount = () => (
+export type NewAccountProps = {
+  onCreateNewAccount: Function;
+};
+export const NewAccount: React.SFC<NewAccountProps> = ({ onCreateNewAccount }) => (
   <GridLayout>
     <H4 mb="xs">
       <T id="newAccount.title" />
@@ -23,16 +25,8 @@ export const NewAccount = () => (
         }
       </I18n>
     </List>
-    <OpenSidebarMutation>
-      {openSidebar => (
-        <Button
-          justifySelf="end"
-          variant="secondary"
-          onClick={() => openSidebar({ variables: { contentType: 'signUp' } })}
-        >
-          <T id="newAccount.createAnAccount" />
-        </Button>
-      )}
-    </OpenSidebarMutation>
+    <Button justifySelf="end" variant="secondary" onClick={() => onCreateNewAccount()}>
+      <T id="newAccount.createAnAccount" />
+    </Button>
   </GridLayout>
 );
