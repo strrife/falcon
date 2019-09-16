@@ -1,5 +1,6 @@
 export * from './Account';
 export * from './Address';
+export * from './Apollo';
 export * from './Checkout';
 export * from './ClientConfig';
 export * from './DynamicRoute';

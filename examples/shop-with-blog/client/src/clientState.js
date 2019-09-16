@@ -1,3 +1,4 @@
+import { getClientConfigResolver } from '@deity/falcon-front-kit';
 import { openSidebarResolver, closeSidebarResolver } from 'src/components/Sidebar';
 
 /**
@@ -60,6 +61,7 @@ export default {
 
   resolvers: {
     Query: {
+      clientConfig: getClientConfigResolver,
       sortOrderList: () => sortOrders
     },
 
