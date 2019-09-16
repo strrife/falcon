@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Sidebar as SidebarLayout, Portal, Backdrop, Icon, Box } from '@deity/falcon-ui';
+import { Sidebar as FalconSidebar, Portal, Backdrop, Icon, Box } from '@deity/falcon-ui';
 
 export type SidebarProps = {
   isOpen: boolean;
@@ -12,12 +12,12 @@ export const Sidebar: React.SFC<SidebarProps> = ({ close, isOpen, side, children
 
   return (
     <React.Fragment>
-      <SidebarLayout as={Portal} visible={isOpen} side={side}>
+      <FalconSidebar as={Portal} visible={isOpen} side={side}>
         <Box position="relative" flex={1}>
           <Icon src="close" stroke="black" position="absolute" {...position} onClick={() => close && close()} />
           {children}
         </Box>
-      </SidebarLayout>
+      </FalconSidebar>
       <Backdrop as={Portal} visible={isOpen} onClick={() => close && close()} />
     </React.Fragment>
   );

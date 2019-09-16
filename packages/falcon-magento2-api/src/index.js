@@ -1257,13 +1257,13 @@ module.exports = class Magento2Api extends Magento2ApiBase {
     const { token } = params;
 
     try {
-      return this.getAuth(`/falcon/customers/0/password/resetLinkToken/${token}`);
+      // TODO: we need to get customer ID by its email and pass it instead of `0`
+      return this.getForIntegration(`/customers/0/password/resetLinkToken/${token}`);
     } catch (e) {
-      // todo: use new version of error handler
+      // TODO: use new version of error handler
       e.userMessage = true;
       e.noLogging = true;
-
-      // todo check why there's no throw here
+      // TODO: check why there's no throw here
     }
   }
 

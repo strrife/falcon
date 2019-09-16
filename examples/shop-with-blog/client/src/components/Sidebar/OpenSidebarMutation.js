@@ -7,12 +7,7 @@ const OPEN_SIDEBAR_MUTATION = gql`
   }
 `;
 
-type OpenSidebarVariables = {
-  contentType: string;
-  side?: 'left' | 'right';
-};
-
-export class OpenSidebarMutation extends Mutation<{}, OpenSidebarVariables> {
+export class OpenSidebarMutation extends Mutation {
   static defaultProps = {
     mutation: OPEN_SIDEBAR_MUTATION
   };

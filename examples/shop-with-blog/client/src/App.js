@@ -18,7 +18,7 @@ import { ErrorBoundary } from 'src/components/ErrorBoundary';
 import Home from 'src/pages/Home';
 import logo from 'src/assets/logo.png';
 import DynamicRoute from 'src/pages/DynamicRoute';
-import { SidebarContainer } from 'src/pages/shop/components/Sidebar';
+import { SidebarContainer } from 'src/components/Sidebar';
 import { Header, PageFooter } from './components';
 import { deityGreenTheme, globalCss } from './theme';
 
@@ -49,9 +49,7 @@ const CheckoutConfirmation = loadable(() =>
 );
 const CheckoutFailure = loadable(() => import(/* webpackChunkName: "shop/checkout" */ './pages/shop/CheckoutFailure'));
 const SidebarContents = loadable(() =>
-  import(
-    /* webpackPrefetch: true, webpackChunkName: "shop/SidebarContents" */ './pages/shop/components/Sidebar/SidebarContents'
-  )
+  import(/* webpackPrefetch: true, webpackChunkName: "shop/sidebar" */ './pages/shop/Sidebar/SidebarContents')
 );
 
 let ThemeEditorComponent;
@@ -103,7 +101,7 @@ const App = () => (
                   <SidebarContainer>
                     {sidebarProps => (
                       <Sidebar {...sidebarProps}>
-                        <SidebarContents contentType={sidebarProps.contentType} />
+                        <SidebarContents {...sidebarProps} />
                       </Sidebar>
                     )}
                   </SidebarContainer>

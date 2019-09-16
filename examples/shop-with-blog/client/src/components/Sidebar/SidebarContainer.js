@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EnsureTTI } from '@deity/falcon-front-kit';
-import { CloseSidebarMutation } from '@deity/falcon-ui-kit';
+import { CloseSidebarMutation } from './CloseSidebarMutation';
+import { OpenSidebarMutation } from './OpenSidebarMutation';
 import { SidebarQuery } from './SidebarQuery';
 
 export const SidebarContainer = ({ children }) => (
@@ -9,18 +10,13 @@ export const SidebarContainer = ({ children }) => (
     {({ isReady, forceReady }) => (
       <SidebarQuery onCompleted={({ sidebar }) => sidebar.isOpen && forceReady()}>
         {({ data: { sidebar } }) => (
-          <CloseSidebarMutation>
-            {closeSidebar =>
-              isReady
-                ? children({
-                    side: sidebar.side,
-                    isOpen: sidebar.isOpen,
-                    contentType: sidebar.contentType,
-                    close: closeSidebar
-                  })
-                : null
-            }
-          </CloseSidebarMutation>
+          <OpenSidebarMutation>
+            {open => (
+              <CloseSidebarMutation>
+                {close => (isReady ? children({ ...sidebar, open, close }) : null)}
+              </CloseSidebarMutation>
+            )}
+          </OpenSidebarMutation>
         )}
       </SidebarQuery>
     )}

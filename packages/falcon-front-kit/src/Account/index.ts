@@ -1,4 +1,5 @@
 export * from './SignInFormProvider';
 export * from './SignOutProvider';
 export * from './SignUpFormProvider';
-export * from './PasswordResetFormProvider';
+export * from './ForgotPasswordFormProvider';
+export * from './ResetPasswordFormProvider';

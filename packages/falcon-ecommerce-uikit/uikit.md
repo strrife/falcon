@@ -85,8 +85,8 @@
 
 ---
 
-> - ~~CloseSidebarMutation~~ - moved to @deity/falcon-ui-kit
-> - ~~OpenSidebarMutation~~ - moved to @deity/falcon-ui-kit
+> - ~~CloseSidebarMutation~~ - moved to examples/shop-with-blog
+> - ~~OpenSidebarMutation~~ - moved to examples/shop-with-blog
 
 ---
 
@@ -478,7 +478,7 @@
 
 > - ~~AccountIcon~~ - moved to @deity/falcon-ui-kit
 > - ~~ForgotPassword~~ - moved to @deity/falcon-ui-kit
-> - ~~ResetPasswordFormProvider~~ extracted from `ForgotPassword` and moved to @deity/falcon-front-kit
+> - ~~ForgotPasswordFormProvider~~ extracted from `ForgotPassword` and moved to @deity/falcon-front-kit
 > - ~~MiniAccount~~ - removed - because it should be located in example project, but it is not used anymore
 > - ~~MiniFormLayout~~ - renamed to SidebarLayout and moved to @deity/falcon-ui-kit
 > - ~~NewAccount~~ - extracted and moved to @deity/falcon-ui-kit
@@ -532,7 +532,7 @@
 
 ---
 
-> - ~~ForgotPasswordTrigger~~ - moved to @deity/falcon-ui-kit
+> - ~~ForgotPasswordTrigger~~ - merged with SignInForm
 > - ~~SignInForm~~ - moved to @deity/falcon-ui-kit and extracted SignInFormProvider to @deity/falcon-front-kit
 > - ~~SignInIcon~~ - moved to @deity/falcon-ui-kit
 > - ~~SignUpForm~~ - moved to @deity/falcon-ui-kit and extracted SignUpFormProvider to @deity/falcon-front-kit
