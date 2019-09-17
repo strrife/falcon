@@ -24,7 +24,7 @@ describe('DynamicRoute', () => {
     ];
 
     const App = renderer.create(
-      <FalconClientMock apollo={{ mocks }} router={{ initialEntries: ['/test'] }}>
+      <FalconClientMock apollo={{ mocks }} router={{ initialEntries: ['test'] }}>
         <Switch>
           <DynamicRoute
             loaderComponent={() => <span>Loading...</span>}
