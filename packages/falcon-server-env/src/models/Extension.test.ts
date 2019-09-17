@@ -1,9 +1,14 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'jest-extended';
+import { InMemoryLRUCache } from 'apollo-server-caching';
 import { GraphQLResolveInfo } from 'graphql';
+import { FetchUrlResult, GraphQLContext } from '../types';
 import { Extension } from './Extension';
 import { ApiDataSource } from './ApiDataSource';
-import { FetchUrlResult, GraphQLContext } from '../types';
+
+const cache = {
+  provider: new InMemoryLRUCache()
+};
 
 class CustomExtension extends Extension {
   getFetchUrlPriority(context: GraphQLContext, path: string): number {
@@ -53,7 +58,7 @@ describe('Extension', () => {
     const api: CustomApiDataSource = new CustomApiDataSource({} as any);
     (api as any).foo = jest.fn(() => 'foo');
     (api as any).bar = jest.fn(() => 'bar');
-    api.initialize({ context: {} } as any);
+    api.initialize({ context: {}, cache } as any);
 
     const context: GraphQLContext = {
       dataSources: {

@@ -1,8 +1,8 @@
 import React from 'react';
 import { MutationFn, OperationVariables, MutationResult } from 'react-apollo';
-import { Router } from './../Router';
+import { Router } from '../Router';
+import { IsAuthenticatedQuery } from '../Customer';
 import { SignOutMutation } from './SignOutMutation';
-import { IsAuthenticatedQuery } from './../Customer';
 
 export type SignOutLogicRenderProps = {
   isSignedIn: boolean;
@@ -11,10 +11,10 @@ export type SignOutLogicRenderProps = {
 };
 
 export const SignOutLogic = (props: { children: (renderProps: SignOutLogicRenderProps) => any }) => (
-  <Router>
-    {({ history }) => (
-      <IsAuthenticatedQuery>
-        {({ customer }) => (
+  <IsAuthenticatedQuery>
+    {({ customer }) => (
+      <Router>
+        {({ history }) => (
           <SignOutMutation
             update={(_cache, result) => {
               if (!result.errors && result.data.signOut) {
@@ -25,7 +25,7 @@ export const SignOutLogic = (props: { children: (renderProps: SignOutLogicRender
             {(signOut, result) => props.children({ isSignedIn: !!customer, signOut, result })}
           </SignOutMutation>
         )}
-      </IsAuthenticatedQuery>
+      </Router>
     )}
-  </Router>
+  </IsAuthenticatedQuery>
 );

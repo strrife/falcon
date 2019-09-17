@@ -25,8 +25,8 @@ const cartSummaryLayout = {
     gridTemplate: {
       xs: toGridTemplate([
         ['1fr'                    ],
-        [CartSummaryArea.coupon   ], 
-        [CartSummaryArea.divider  ], 
+        [CartSummaryArea.coupon   ],
+        [CartSummaryArea.divider  ],
         [CartSummaryArea.totals   ]
       ]),
       md: toGridTemplate([
@@ -99,7 +99,7 @@ const CartSummary = ({ totals, couponCode }) => (
                     name="couponCode"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    defaultValue={couponCode}
+                    defaultValue={couponCode || ''}
                   />
                   <Button
                     type="submit"

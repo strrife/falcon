@@ -118,7 +118,7 @@ CartItem.propTypes = {
     price: PropTypes.number,
     rowTotalInclTax: PropTypes.number,
     name: PropTypes.string,
-    itemId: PropTypes.number,
+    itemId: PropTypes.string,
     sku: PropTypes.string,
     qty: PropTypes.number,
     itemOptions: PropTypes.arrayOf(PropTypes.shape({}))
