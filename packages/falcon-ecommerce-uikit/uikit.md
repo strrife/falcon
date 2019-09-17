@@ -96,7 +96,7 @@
 
 ---
 
-> - ~~SortOrdersQuery~~ changed to `SortOrderListQuery` and moved to @deity/falcon-data
+> - ~~SortOrdersQuery~~ removed, use `BackendConfigQuery` from  @deity/falcon-shop-data instead
 
 ### Existing constants:
 
@@ -346,7 +346,7 @@
 ---
 
 > - ~~SortOrderDirection~~ - moved to @deity/falcon-data
-> - ~~SortOrderInput~~ - moved to @deity/falcon-data
+> - ~~SortOrderInput~~ - changed to `SortOrderValue` moved to @deity/falcon-data
 
 > - ~~SortOrders~~ changed to `SortOrderList` and moved to @deity/falcon-data
 > - ~~SortOrdersData~~ changed to `SortOrderListResponse` and moved to @deity/falcon-data

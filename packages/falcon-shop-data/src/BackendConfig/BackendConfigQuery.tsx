@@ -9,13 +9,20 @@ export const GET_BACKEND_CONFIG = gql`
       activeLocale
       shop {
         activeCurrency
+        sortOrderList {
+          name
+          value {
+            field
+            direction
+          }
+        }
       }
     }
   }
 `;
 
 export type ShopBackendConfig = BackendConfig & {
-  shop: Pick<ShopConfig, 'activeCurrency'>;
+  shop: Pick<ShopConfig, 'activeCurrency' | 'sortOrderList'>;
 };
 
 export type BackendConfigResponse = {

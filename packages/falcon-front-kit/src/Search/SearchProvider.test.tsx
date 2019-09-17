@@ -1,10 +1,8 @@
 import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { MemoryRouter, Route, RouteComponentProps } from 'react-router-dom';
-import { mockSingleLink } from 'react-apollo/test-utils';
-import { ApolloProvider } from 'react-apollo';
-import ApolloClient from 'apollo-client';
-import { InMemoryCache as Cache } from 'apollo-cache-inmemory';
+import { MockedProvider } from 'react-apollo/test-utils';
+import { GET_BACKEND_CONFIG } from '@deity/falcon-shop-data';
 import { wait } from '../../../../test/helpers';
 import { SearchProvider, SearchProviderInner } from './SearchProvider';
 import { SearchContextValue } from './SearchContextValue';
@@ -26,29 +24,35 @@ const sortOrders = [
   }
 ];
 
+const mocks = [
+  {
+    request: {
+      query: GET_BACKEND_CONFIG
+    },
+    result: {
+      data: {
+        backendConfig: {
+          locales: ['en-US'],
+          activeLocale: 'en-US',
+          shop: {
+            activeCurrency: 'USD',
+            sortOrderList: sortOrders
+          }
+        }
+      }
+    }
+  }
+];
+
 describe('SearchProvider', () => {
   let wrapper: ReactWrapper<any, any> | null;
   let searchInfo: SearchContextValue;
 
   // mounts all the required pieces (router, route, mocked apollo and search provider) and returns wrapper with all elements
   const renderSearchProvider = async (ContentComponent: any = null) => {
-    const client = new ApolloClient({
-      link: mockSingleLink(),
-      resolvers: {
-        Query: {
-          sortOrderList: () => sortOrders
-        }
-      },
-      cache: new Cache({ addTypename: false }).restore({
-        ROOT_QUERY: {
-          sortOrders
-        }
-      })
-    });
-
     wrapper = mount(
       <MemoryRouter initialEntries={['/']}>
-        <ApolloProvider client={client}>
+        <MockedProvider mocks={mocks} addTypename={false}>
           <Route>
             <SearchProvider searchStateFromURL={stateFromUrl} searchStateToURL={stateToUrl}>
               <SearchContext.Consumer>
@@ -59,7 +63,7 @@ describe('SearchProvider', () => {
               </SearchContext.Consumer>
             </SearchProvider>
           </Route>
-        </ApolloProvider>
+        </MockedProvider>
       </MemoryRouter>
     );
 

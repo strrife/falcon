@@ -1,11 +1,11 @@
 import qs from 'qs';
-import { SortOrderInput, PaginationInput } from '@deity/falcon-data';
+import { SortOrderValue, PaginationInput } from '@deity/falcon-data';
 import { FilterInput, FilterOperator } from '@deity/falcon-shop-extension';
 
 export type SearchState = {
   term?: string;
   filters: FilterInput[];
-  sort?: SortOrderInput;
+  sort?: SortOrderValue;
   pagination?: PaginationInput;
 };
 

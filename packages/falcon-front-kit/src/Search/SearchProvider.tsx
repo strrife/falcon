@@ -1,7 +1,8 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Location } from 'history';
-import { SortOrderListQuery, SortOrderInput, PaginationInput } from '@deity/falcon-data';
+import { SortOrderValue, PaginationInput } from '@deity/falcon-data';
+import { BackendConfigQuery } from '@deity/falcon-shop-data';
 import { FilterOperator } from '@deity/falcon-shop-extension';
 import { areSortOrderInputsEqual } from '../SortOrder/areSortOrderInputsEqual';
 import { SearchContext } from './SearchContext';
@@ -9,8 +10,8 @@ import { SearchState, searchStateFromURL, searchStateToURL } from './searchState
 
 type SearchProviderInnerProps = SearchProviderProps &
   RouteComponentProps & {
-    sortOrders: (SortOrderInput | undefined)[];
-    defaultSortOrder?: SortOrderInput;
+    sortOrders: (SortOrderValue | undefined)[];
+    defaultSortOrder?: SortOrderValue;
   };
 export class SearchProviderInner extends React.Component<SearchProviderInnerProps, SearchState> {
   static defaultProps = {
@@ -33,7 +34,7 @@ export class SearchProviderInner extends React.Component<SearchProviderInnerProp
     this.historyUnlisten();
   }
 
-  get defaultSortOrder(): SortOrderInput | undefined {
+  get defaultSortOrder(): SortOrderValue | undefined {
     const { defaultSortOrder, sortOrders } = this.props;
     if (defaultSortOrder) {
       return defaultSortOrder;
@@ -72,7 +73,7 @@ export class SearchProviderInner extends React.Component<SearchProviderInnerProp
     this.updateURL({ ...this.state, filters });
   };
 
-  setSortOrder = (sort?: SortOrderInput) => {
+  setSortOrder = (sort?: SortOrderValue) => {
     this.updateURL({ ...this.state, sort: this.sortOrderExists(sort) ? sort : this.defaultSortOrder });
   };
 
@@ -80,7 +81,7 @@ export class SearchProviderInner extends React.Component<SearchProviderInnerProp
 
   setTerm = (term: string) => this.updateURL({ ...this.state, term });
 
-  sortOrderExists = (sort?: SortOrderInput): boolean =>
+  sortOrderExists = (sort?: SortOrderValue): boolean =>
     this.props.sortOrders.some(x => (!x && !sort) || areSortOrderInputsEqual(x, sort));
 
   removeFilters = () => this.updateURL({ ...this.state, filters: [] });
@@ -135,9 +136,11 @@ export type SearchProviderProps = {
   searchStateToURL?(state: Partial<SearchState>): string;
 };
 const SearchProviderWithSortOrders: React.SFC<SearchProviderProps & RouteComponentProps> = ({ ...rest }) => (
-  <SortOrderListQuery>
-    {({ data: { sortOrderList } }) => <SearchProviderInner {...rest} sortOrders={sortOrderList.map(x => x.value)} />}
-  </SortOrderListQuery>
+  <BackendConfigQuery>
+    {({ data: { backendConfig } }) => (
+      <SearchProviderInner {...rest} sortOrders={backendConfig.shop.sortOrderList.map(x => x.value)} />
+    )}
+  </BackendConfigQuery>
 );
 
 // wrap everything in router so SearchProviderImpl has access to history and location

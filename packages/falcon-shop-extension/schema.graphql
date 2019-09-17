@@ -52,6 +52,7 @@ type ShopConfig {
   stores: [ShopStoreEntry!]!
   timezone: String!
   weightUnit: String!
+  sortOrderList: [SortOrder!]!
 }
 
 type ShopStoreEntry {
