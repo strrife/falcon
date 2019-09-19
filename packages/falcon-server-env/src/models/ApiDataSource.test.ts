@@ -1,8 +1,13 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop, import/no-extraneous-dependencies */
 import 'jest-extended';
 import nock from 'nock';
+import { InMemoryLRUCache } from 'apollo-server-caching';
 import { ContextRequestOptions, ContextData } from '../types';
 import { ApiDataSource } from './ApiDataSource';
+
+const cache = {
+  provider: new InMemoryLRUCache()
+};
 
 class CustomApiDataSource extends ApiDataSource {
   async getInfo(): Promise<object> {
@@ -120,7 +125,8 @@ describe('ApiDataSource', () => {
       const didReceiveResponseSpy: jest.SpyInstance = jest.spyOn(customApi, 'didReceiveResponse');
 
       await customApi.initialize({
-        context: {}
+        context: {},
+        cache
       } as any);
 
       for (const method of [
@@ -173,7 +179,8 @@ describe('ApiDataSource', () => {
         config: { protocol: 'http', host: 'example.com' }
       });
       await customApi.initialize({
-        context: {}
+        context: {},
+        cache
       } as any);
 
       const result: any = await customApi.getCustomEntry();
@@ -193,7 +200,8 @@ describe('ApiDataSource', () => {
       const didReceiveResponseSpy: jest.SpyInstance = jest.spyOn(customApi, 'didReceiveResponse');
 
       await customApi.initialize({
-        context: {}
+        context: {},
+        cache
       } as any);
 
       const result: any = await customApi.getCustomEntry();
@@ -232,7 +240,7 @@ describe('ApiDataSource', () => {
       const resolveURLSpy: jest.SpyInstance = jest.spyOn(customApi, 'resolveURL');
       const didReceiveResponseSpy: jest.SpyInstance = jest.spyOn(customApi, 'didReceiveResponse');
 
-      customApi.initialize({ context: {} });
+      customApi.initialize({ context: {}, cache });
       await customApi.getEntry();
 
       expect(resolveURLSpy.mock.calls[0][0].path).toBe('/api/info');
@@ -248,17 +256,17 @@ describe('ApiDataSource', () => {
       );
     });
 
-    it('Should skip "memoizedResults" map for GET requests', async () => {
+    it('Should not skip "memoizedResults" map for GET requests', async () => {
       const customApi: CustomApiDataSource = new CustomApiDataSource({
         config: { protocol: 'http', host: 'example.com' }
       });
       const didReceiveResponseSpy: jest.SpyInstance = jest.spyOn(customApi, 'didReceiveResponse');
 
-      await customApi.initialize({ context: {} });
+      await customApi.initialize({ context: {}, cache });
       await customApi.getInfo();
       expect(didReceiveResponseSpy).toHaveBeenCalledTimes(1);
       await customApi.getInfo();
-      expect(didReceiveResponseSpy).toHaveBeenCalledTimes(2);
+      expect(didReceiveResponseSpy).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -266,7 +274,7 @@ describe('ApiDataSource', () => {
     it('Should return an empty object if context.session does not exist', async () => {
       const customApiDataSource: CustomApiDataSource = new CustomApiDataSource({});
       const context: ContextData = {};
-      await customApiDataSource.initialize({ context } as any);
+      await customApiDataSource.initialize({ context, cache } as any);
       expect(customApiDataSource.session).toEqual({});
       expect(context).toEqual({});
     });
@@ -274,7 +282,7 @@ describe('ApiDataSource', () => {
     it('Should work with a named object in context.session', async () => {
       const customApiDataSource: CustomApiDataSource = new CustomApiDataSource({});
       const context: ContextData = { session: {} };
-      await customApiDataSource.initialize({ context } as any);
+      await customApiDataSource.initialize({ context, cache } as any);
       expect(customApiDataSource.session).toEqual({});
       expect(context.session).toEqual({ CustomApiDataSource: {} });
 

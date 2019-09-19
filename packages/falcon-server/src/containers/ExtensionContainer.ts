@@ -22,7 +22,6 @@ import { BaseContainer } from './BaseContainer';
 export type GraphQLConfigDefaults = Partial<ApolloServerConfig> & {
   schemas?: Array<string>;
   contextModifiers?: ApolloServerConfig['context'][];
-  rootResolvers?: IExecutableSchemaDefinition['resolvers'];
 };
 
 /**
@@ -77,20 +76,16 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
    * @returns Merged config
    */
   fetchBackendConfig: GraphQLResolver<BackendConfig, null, null, T> = async (obj, args, context, info) => {
-    const configs: Array<RemoteBackendConfig> = [];
-
-    // initialization of extensions cannot be done in parallel because of race condition
-    for (const [apiName, api] of Object.entries(context.dataSources)) {
-      if (typeof api.fetchBackendConfig !== 'function') {
-        // Processing only supported APIs
-        continue;
-      }
-      this.logger.debug(`Fetching "${apiName}" API backend config`);
-      const apiConfig = await api.fetchBackendConfig(obj, args, context, info);
-      if (apiConfig) {
-        configs.push(apiConfig);
-      }
-    }
+    const configs = await Promise.all(
+      Array.from(Object.entries(context.dataSources), ([apiName, api]) => {
+        if (typeof api.fetchBackendConfig !== 'function') {
+          // Processing only supported APIs
+          return null;
+        }
+        this.logger.debug(`Fetching "${apiName}" API backend config`);
+        return api.fetchBackendConfig(obj, args, context, info);
+      })
+    );
 
     return this.mergeBackendConfigs(configs);
   };
@@ -136,17 +131,12 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
     const config = Object.assign(
       {
         schemas: [],
+        resolvers: [],
         // contextModifiers will be used as helpers - it will gather all the context functions and we'll invoke
         // all of them when context will be created. All the results will be merged to produce final context
         contextModifiers: defaultConfig.context ? [defaultConfig.context] : []
       },
-      defaultConfig,
-      {
-        resolvers:
-          defaultConfig.rootResolvers && !Array.isArray(defaultConfig.rootResolvers)
-            ? [defaultConfig.rootResolvers]
-            : []
-      }
+      defaultConfig
     );
 
     for (const [extName, extConfig] of this.entries) {

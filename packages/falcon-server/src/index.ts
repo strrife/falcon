@@ -170,19 +170,22 @@ export class FalconServer {
         };
       },
       cache: this.cache,
-      rootResolvers: {
-        Query: {
-          url: this.urlResolver(dynamicRouteResolver),
-          backendConfig: this.backendConfigResolver()
+      resolvers: [
+        {
+          Query: {
+            url: this.urlResolver(dynamicRouteResolver),
+            backendConfig: this.backendConfigResolver()
+          },
+          Mutation: {
+            setLocale: this.setLocaleMutation()
+          },
+          BackendConfig: {
+            activeLocale: this.activeLocaleResolver()
+          },
+          JSON: GraphQLJSON
         },
-        Mutation: {
-          setLocale: this.setLocaleMutation()
-        },
-        BackendConfig: {
-          activeLocale: this.activeLocaleResolver()
-        },
-        JSON: GraphQLJSON
-      },
+        ...this.apiContainer.resolvers
+      ] as any,
       subscriptions: this.getSubscriptionsOptions(),
       tracing: this.config.debug,
       playground: this.config.debug && {

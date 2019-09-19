@@ -3,7 +3,6 @@ import { GetCacheFetchResult } from '@deity/falcon-server-env';
 import {
   defaultFieldResolver,
   GraphQLNamedType,
-  GraphQLFieldResolver,
   GraphQLField,
   GraphQLResolveInfo
 } from 'graphql';
@@ -34,30 +33,20 @@ export type GraphQLCacheDirectiveParams = {
 export class GraphQLCacheDirective extends SchemaDirectiveVisitor {
   visitFieldDefinition(field: FieldType): void {
     const { ttl = DEFAULT_TTL } = this.args;
-    let { resolve = defaultFieldResolver } = field;
-    const defaultValue: GraphQLCacheDirectiveParams = {
+    const { resolve = defaultFieldResolver } = field;
+    const defaultCacheConfig = {
       ttl
     };
 
-    // Some APIDataSources may provide extra type-resolvers during the runtime via "addResolveFunctionsToSchema"
-    // which will override "wrapped" resolve functions during Falcon-Server startup. By providing getter/setter
-    // methods - we can ensure such such calls will be handled properly.
-    Object.defineProperty(field, 'resolve', {
-      get: () => this.getResolverWithCache(resolve as FieldTypeResolver, field, defaultValue),
-      // Handling potential "addResolveFunctionsToSchema" calls that define dynamic resolvers
-      set: (newResolve: GraphQLFieldResolver<any, any>) => {
-        resolve = newResolve;
-      },
-      configurable: true
-    });
+    field.resolve = this.getResolverWithCache(resolve, field, defaultCacheConfig);
   }
 
   /**
    * Get a resolver function with caching capabilities (depends on the provided config)
-   * @param resolve Native GQL resolver function
-   * @param field Field info object
-   * @param defaultCacheConfig Default cache config
-   * @returns Resolver function with caching
+   * @param {FieldTypeResolver} resolve Native GQL resolver function
+   * @param {FieldType} field Field info object
+   * @param {GraphQLCacheDirectiveParams} defaultCacheConfig Default cache config
+   * @returns {FieldTypeResolver} Resolver function with caching
    */
   getResolverWithCache(
     resolve: FieldTypeResolver,
@@ -106,10 +95,10 @@ export class GraphQLCacheDirective extends SchemaDirectiveVisitor {
 
   /**
    * Execute the actual GraphQL resolver and generate cache tags
-   * @param result Resolver result
-   * @param parent GraphQL parent object
-   * @param info GraphQL Info object
-   * @returns Final resolver result
+   * @param {GetCacheFetchResult} result Resolver result
+   * @param {object} parent GraphQL parent object
+   * @param {GraphQLResolveInfo} info GraphQL Info object
+   * @returns {GetCacheFetchResult} Final resolver result
    */
   handleCacheCallbackResponse(
     result: GetCacheFetchResult,
@@ -143,10 +132,10 @@ export class GraphQLCacheDirective extends SchemaDirectiveVisitor {
    * - default cache config provided from `context.config`
    * - cache config provided in `@cache(...)` directive
    * - cache config for a specific operation via `context.config`
-   * @param info GraphQL Request info object
-   * @param resolversCacheConfig Cache object provided via `context.config`
-   * @param defaultDirectiveValue Default options defined in cache directive for the specific type
-   * @returns Final cache options object
+   * @param {GraphQLResolveInfo} info GraphQL Request info object
+   * @param {CacheResolversConfig} resolversCacheConfig Cache object provided via `context.config`
+   * @param {GraphQLCacheDirectiveParams} defaultDirectiveValue Default options defined in cache directive for the specific type
+   * @returns {GraphQLCacheDirectiveParams} Final cache options object
    */
   getCacheConfigForField(
     info: GraphQLResolveInfo,
