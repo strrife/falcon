@@ -143,7 +143,7 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
         resolvers:
           defaultConfig.rootResolvers && !Array.isArray(defaultConfig.rootResolvers)
             ? [defaultConfig.rootResolvers]
-            : defaultConfig.rootResolvers
+            : defaultConfig.rootResolvers || []
       }
     );
 
