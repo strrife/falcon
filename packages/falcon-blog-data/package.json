@@ -3,6 +3,9 @@
   "license": "OSL-3.0",
   "version": "0.0.1",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-blog-data",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/falcon-blog-data.cjs.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
