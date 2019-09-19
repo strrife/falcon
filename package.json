@@ -17,7 +17,7 @@
     "lint": "eslint ./"
   },
   "devDependencies": {
-    "@deity/eslint-config-falcon": "^0.1.4",
+    "@deity/eslint-config-falcon": "^1.0.0",
     "chalk": "2.4.1",
     "codecov": "3.1.0",
     "commander": "2.19.0",
