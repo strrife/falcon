@@ -60,7 +60,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
       },
       Category: {
         breadcrumbs: apiGetter((api, ...args) => api.breadcrumbs(...args)),
-        products: apiGetter((api, ...args) => api.categoryProducts(...args)),
+        productList: apiGetter((api, ...args) => api.categoryProductList(...args)),
         children: apiGetter((api, ...args) => api.categoryChildren(...args))
       },
       PaymentMethod: {
