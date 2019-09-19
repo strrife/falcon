@@ -170,7 +170,7 @@ export class FalconServer {
         };
       },
       cache: this.cache,
-      resolvers: [
+      rootResolvers: [
         {
           Query: {
             url: this.urlResolver(dynamicRouteResolver),
@@ -185,7 +185,7 @@ export class FalconServer {
           JSON: GraphQLJSON
         },
         ...this.apiContainer.resolvers
-      ] as any,
+      ],
       subscriptions: this.getSubscriptionsOptions(),
       tracing: this.config.debug,
       playground: this.config.debug && {

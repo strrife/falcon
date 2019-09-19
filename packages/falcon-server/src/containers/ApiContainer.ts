@@ -6,6 +6,7 @@ import {
   ApolloServerConfig,
   Events
 } from '@deity/falcon-server-env';
+import { IResolvers } from 'apollo-server-koa';
 import { ApiEntryMap } from '../types';
 import { BaseContainer } from './BaseContainer';
 
@@ -19,7 +20,7 @@ export type ApiDataSourceInitializer = (gqlServerConfig: ApolloServerConfig) => 
 export class ApiContainer extends BaseContainer {
   public dataSources: Map<string, ApiDataSourceInitializer> = new Map();
 
-  public resolvers: object[] = [];
+  public resolvers: IResolvers<any, any>[] = [];
 
   /**
    * Instantiates apis based on passed configuration

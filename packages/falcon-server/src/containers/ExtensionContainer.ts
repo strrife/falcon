@@ -12,8 +12,9 @@ import {
   GraphQLResolverMap,
   RemoteBackendConfig
 } from '@deity/falcon-server-env';
+import { IResolvers } from 'apollo-server-koa';
 import { GraphQLResolveInfo } from 'graphql';
-import { mergeSchemas, makeExecutableSchema, IExecutableSchemaDefinition } from 'graphql-tools';
+import { mergeSchemas, makeExecutableSchema } from 'graphql-tools';
 import deepMerge from 'deepmerge';
 import { getRootTypeFields, RootFieldTypes } from '../graphqlUtils/schema';
 import { BackendConfig, ExtensionGraphQLConfig, ExtensionEntryMap } from '../types';
@@ -22,6 +23,7 @@ import { BaseContainer } from './BaseContainer';
 export type GraphQLConfigDefaults = Partial<ApolloServerConfig> & {
   schemas?: Array<string>;
   contextModifiers?: ApolloServerConfig['context'][];
+  rootResolvers?: IResolvers<any, any>[];
 };
 
 /**
@@ -136,7 +138,13 @@ export class ExtensionContainer<T extends GraphQLContext = GraphQLContext> exten
         // all of them when context will be created. All the results will be merged to produce final context
         contextModifiers: defaultConfig.context ? [defaultConfig.context] : []
       },
-      defaultConfig
+      defaultConfig,
+      {
+        resolvers:
+          defaultConfig.rootResolvers && !Array.isArray(defaultConfig.rootResolvers)
+            ? [defaultConfig.rootResolvers]
+            : defaultConfig.rootResolvers
+      }
     );
 
     for (const [extName, extConfig] of this.entries) {

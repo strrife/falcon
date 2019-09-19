@@ -1,4 +1,5 @@
 import Logger from '@deity/falcon-logger';
+import { IResolvers } from 'apollo-server-koa';
 import { Body, Request, RESTDataSource } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
 import { EventEmitter2 } from 'eventemitter2';
@@ -42,7 +43,7 @@ export type ApiDataSourceConstructorParams = IConfigurableConstructorParams<ApiD
 
 export interface ApiDataSourceConstructor<T extends ApiDataSource = ApiDataSource> {
   new (params: ApiDataSourceConstructorParams): T;
-  getExtraResolvers?(apiGetter: ApiGetter): object;
+  getExtraResolvers?(apiGetter: ApiGetter): IResolvers<any, any>;
 }
 
 export interface ApiDataSource<TContext extends GraphQLContext = GraphQLContext> {
@@ -123,7 +124,7 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
     this['trace'] = this.traceLog.bind(this);
   }
 
-  static getExtraResolvers?(apiGetter: ApiGetter): object;
+  static getExtraResolvers?(apiGetter: ApiGetter): IResolvers<any, any>;
 
   initialize(config: DataSourceConfig<TContext>): void {
     super.initialize(config);
