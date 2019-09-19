@@ -35,6 +35,7 @@ const ProductVisibility = {
 module.exports = class Magento2Api extends Magento2ApiBase {
   /**
    * Adds additional resolve functions to the stitched GQL schema for the sake of data-splitting
+   * @param {Function} apiGetter
    */
   static getExtraResolvers(apiGetter) {
     return {
