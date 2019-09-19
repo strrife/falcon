@@ -31,27 +31,19 @@ export type IdPathEntry = {
 export class GraphQLCacheInvalidatorDirective extends SchemaDirectiveVisitor {
   /**
    * @param field GraphQL Field
-   * @returns
    */
   visitFieldDefinition(field: FieldType): void {
-    let { resolve = defaultFieldResolver } = field;
+    const { resolve = defaultFieldResolver } = field;
     const { idPath } = this.args;
 
-    Object.defineProperty(field, 'resolve', {
-      get: () => this.getResolverWithCacheInvalidator(resolve, idPath),
-      // Handling potential "addResolveFunctionsToSchema" calls that define dynamic resolvers
-      set: newResolve => {
-        resolve = newResolve;
-      },
-      configurable: true
-    });
+    field.resolve = this.getResolverWithCacheInvalidator(resolve, idPath);
   }
 
   /**
    * Get a resolver function with cache invalidation capabilities
    * @param resolve Native GQL resolver function
    * @param idPath List of idPath entries to invalidate
-   * @returns Resolver function
+   * @returns {FieldTypeResolver} Resolver function
    */
   getResolverWithCacheInvalidator(resolve: FieldTypeResolver, idPath: IdPathEntry[] = []): FieldTypeResolver {
     const thisDirective = this;
@@ -76,12 +68,12 @@ export class GraphQLCacheInvalidatorDirective extends SchemaDirectiveVisitor {
 
   /**
    * Invalidate cache from the result using the provided idPath entry
-   * @param result Resolver result
-   * @param idPathEntry ID Path entry
-   * @param parent GraphQL Resolver parent value
-   * @param context GraphQL context object
-   * @param info GraphQL Info object
-   * @returns
+   * @param {mixed} result Resolver result
+   * @param {IdPathEntry} idPathEntry ID Path entry
+   * @param {object} parent GraphQL Resolver parent value
+   * @param {GraphQLContext} context GraphQL context object
+   * @param {GraphQLResolveInfo} info GraphQL Info object
+   * @returns {Promise<void>}
    */
   async invalidateCacheByResult(
     result: object,

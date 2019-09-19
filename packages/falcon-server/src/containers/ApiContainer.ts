@@ -1,5 +1,12 @@
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
-import { ApiDataSource, ApiDataSourceConstructor, ApolloServerConfig, Events } from '@deity/falcon-server-env';
+import {
+  ApiDataSource,
+  ApiGetter,
+  ApiDataSourceConstructor,
+  ApolloServerConfig,
+  Events
+} from '@deity/falcon-server-env';
+import { IResolvers } from 'apollo-server-koa';
 import { ApiEntryMap } from '../types';
 import { BaseContainer } from './BaseContainer';
 
@@ -12,6 +19,8 @@ export type ApiDataSourceInitializer = (gqlServerConfig: ApolloServerConfig) => 
  */
 export class ApiContainer extends BaseContainer {
   public dataSources: Map<string, ApiDataSourceInitializer> = new Map();
+
+  public resolvers: IResolvers<any, any>[] = [];
 
   /**
    * Instantiates apis based on passed configuration
@@ -26,6 +35,17 @@ export class ApiContainer extends BaseContainer {
         const ApiClass = this.importModule<ApiDataSourceConstructor>(pkg);
         if (!ApiClass) {
           return;
+        }
+
+        // If imported ApiClass has a defined "getExtraResolvers" static method
+        if (ApiClass.getExtraResolvers) {
+          const apiGetter = (resolve): ApiGetter => async (root, params, context, info) => {
+            if (!(apiKey in context.dataSources)) {
+              throw new Error(`"${apiKey}" API not found `);
+            }
+            return resolve(context.dataSources[apiKey], root, params, context, info);
+          };
+          this.resolvers.push(ApiClass.getExtraResolvers(apiGetter));
         }
 
         const apiInstanceCb: ApiDataSourceInitializer = gqlServerConfig => {

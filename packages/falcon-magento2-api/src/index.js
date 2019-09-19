@@ -8,7 +8,6 @@ const has = require('lodash/has');
 const forEach = require('lodash/forEach');
 const isPlainObject = require('lodash/isPlainObject');
 const addMinutes = require('date-fns/add_minutes');
-const { addResolveFunctionsToSchema } = require('graphql-tools');
 const { ApiUrlPriority, htmlHelpers } = require('@deity/falcon-server-env');
 const { Magento2ApiBase } = require('./Magento2ApiBase');
 const { tryParseNumber } = require('./utils/number');
@@ -34,46 +33,40 @@ const ProductVisibility = {
  * API for Magento2 store - provides resolvers for shop schema.
  */
 module.exports = class Magento2Api extends Magento2ApiBase {
-  constructor(params) {
-    super(params);
-    this.addTypeResolvers();
-  }
-
   /**
    * Adds additional resolve functions to the stitched GQL schema for the sake of data-splitting
+   * @param {Function} apiGetter
    */
-  async addTypeResolvers() {
-    const resolvers = {
+  static getExtraResolvers(apiGetter) {
+    return {
       BackendConfig: {
-        shop: () => this.fetchBackendConfig()
+        shop: apiGetter(api => api.fetchBackendConfig())
       },
       ShopConfig: {
-        stores: () => this.getActiveStores(),
-        currencies: () => this.getActiveCurrencies(),
-        baseCurrency: () => this.session.baseCurrency,
-        timezone: () => this.session.timezone,
-        weightUnit: () => this.session.weightUnit,
-        activeCurrency: () => this.session.currency,
-        activeStore: () => this.session.storeCode,
-        sortOrderList: () => this.getSortOrderList()
+        stores: apiGetter(api => api.getActiveStores()),
+        currencies: apiGetter(api => api.getActiveCurrencies()),
+        baseCurrency: apiGetter(api => api.session.baseCurrency),
+        timezone: apiGetter(api => api.session.timezone),
+        weightUnit: apiGetter(api => api.session.weightUnit),
+        activeCurrency: apiGetter(api => api.session.currency),
+        activeStore: apiGetter(api => api.session.storeCode),
+        sortOrderList: apiGetter(api => api.getSortOrderList())
       },
       Product: {
-        price: (...args) => this.productPrice(...args),
-        tierPrices: (...args) => this.productTierPrices(...args),
-        options: (...x) => this.productOptions(...x),
-        breadcrumbs: (...args) => this.breadcrumbs(...args)
+        price: apiGetter((api, ...args) => api.productPrice(...args)),
+        tierPrices: apiGetter((api, ...args) => api.productTierPrices(...args)),
+        options: apiGetter((api, ...args) => api.productOptions(...args)),
+        breadcrumbs: apiGetter((api, ...args) => api.breadcrumbs(...args))
       },
       Category: {
-        breadcrumbs: (...args) => this.breadcrumbs(...args),
-        productList: (...args) => this.categoryProductList(...args),
-        children: (...args) => this.categoryChildren(...args)
+        breadcrumbs: apiGetter((api, ...args) => api.breadcrumbs(...args)),
+        productList: apiGetter((api, ...args) => api.categoryProductList(...args)),
+        children: apiGetter((api, ...args) => api.categoryChildren(...args))
       },
       PaymentMethod: {
-        config: (...args) => this.getPaymentMethodConfig(...args)
+        config: apiGetter((api, ...args) => api.getPaymentMethodConfig(...args))
       }
     };
-    this.logger.debug(`Adding additional resolve functions`);
-    addResolveFunctionsToSchema({ schema: this.gqlServerConfig.schema, resolvers });
   }
 
   async getActiveStores() {

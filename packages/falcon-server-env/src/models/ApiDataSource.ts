@@ -1,4 +1,5 @@
 import Logger from '@deity/falcon-logger';
+import { IResolvers } from 'apollo-server-koa';
 import { Body, Request, RESTDataSource } from 'apollo-datasource-rest/dist/RESTDataSource';
 import { URLSearchParams, URLSearchParamsInit } from 'apollo-server-env';
 import { EventEmitter2 } from 'eventemitter2';
@@ -27,6 +28,14 @@ import {
 
 export type PaginationValue = number | string | null;
 
+export type ApiGetter = (
+  api: ApiDataSource,
+  root: any,
+  params: any,
+  context: GraphQLContext,
+  info: GraphQLResolveInfo
+) => any;
+
 export type ApiDataSourceConstructorParams = IConfigurableConstructorParams<ApiDataSourceConfig> & {
   apiContainer: ApiContainer;
   gqlServerConfig: ApolloServerConfig;
@@ -34,6 +43,7 @@ export type ApiDataSourceConstructorParams = IConfigurableConstructorParams<ApiD
 
 export interface ApiDataSourceConstructor<T extends ApiDataSource = ApiDataSource> {
   new (params: ApiDataSourceConstructorParams): T;
+  getExtraResolvers?(apiGetter: ApiGetter): IResolvers<any, any>;
 }
 
 export interface ApiDataSource<TContext extends GraphQLContext = GraphQLContext> {
@@ -114,15 +124,17 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
     this['trace'] = this.traceLog.bind(this);
   }
 
+  static getExtraResolvers?(apiGetter: ApiGetter): IResolvers<any, any>;
+
   initialize(config: DataSourceConfig<TContext>): void {
     super.initialize(config);
     this.cache = config.cache;
-    this.httpCache = new ContextHTTPCache(this.cache);
+    this.httpCache = new ContextHTTPCache(this.cache.provider);
   }
 
   /**
    * Wrapper-method to get an API-scoped session data
-   * @returns API-scoped session data
+   * @returns {any} API-scoped session data
    */
   get session(): any {
     if (!this.context.session) {
@@ -151,7 +163,7 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
   /**
    * Hook that is going to be executed for every REST request before calling `resolveURL` method
    * @param request request
-   * @returns promise
+   * @returns {Promise<void>} promise
    */
   protected async willSendRequest(request: ContextRequestOptions): Promise<void> {
     const { context } = request;
@@ -230,14 +242,6 @@ export abstract class ApiDataSource<TContext extends GraphQLContext = GraphQLCon
       return context.didReceiveResult(result, res);
     }
     return result;
-  }
-
-  protected cacheKeyFor(request: Request): string {
-    const cacheKey: string = super.cacheKeyFor(request);
-    // Note: temporary disabling "memoized" map due to issues with GraphQL resolvers,
-    // GET-requests in particular ("fetchUrl" query)
-    this.memoizedResults.delete(cacheKey);
-    return cacheKey;
   }
 
   private ensureContextPassed(init?: ContextRequestInit): ContextRequestInit {
