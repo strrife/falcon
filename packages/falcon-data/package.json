@@ -1,7 +1,7 @@
 {
   "name": "@deity/falcon-data",
   "license": "OSL-3.0",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "repository": "https://github.com/deity-io/falcon/tree/master/packages/falcon-data",
   "publishConfig": {
     "access": "public"
@@ -26,7 +26,7 @@
     "core-js": "3.1.4"
   },
   "devDependencies": {
-    "@deity/falcon-scripts": "^0.0.3",
+    "@deity/falcon-scripts": "^1.0.0",
     "@types/prop-types": "15.7.1",
     "@types/react": "16.8.22",
     "apollo-client": "2.5.1",
