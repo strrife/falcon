@@ -38,7 +38,7 @@
     "@loadable/webpack-plugin": "5.7.1",
     "apollo-cache-inmemory": "1.5.1",
     "apollo-cache-persist": "^0.1.1",
-    "apollo-client": "2.5.1",
+    "apollo-client": "2.6.4",
     "apollo-link": "^1.2.3",
     "apollo-link-error": "^1.1.1",
     "apollo-link-http": "^1.5.5",
@@ -113,6 +113,7 @@
     "workbox-routing": "4.3.1"
   },
   "devDependencies": {
+    "@apollo/react-testing": "^3.1.1",
     "@deity/falcon-front-kit": "^0.0.1",
     "@deity/falcon-server": "^2.0.0",
     "@types/fs-extra": "8.0.0",

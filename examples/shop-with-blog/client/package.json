@@ -37,7 +37,7 @@
     "@deity/falcon-ui": "^1.0.0",
     "@deity/falcon-ui-kit": "^1.0.0",
     "@loadable/component": "5.7.0",
-    "apollo-client": "2.5.1",
+    "apollo-client": "2.6.4",
     "config": "^2.0.1",
     "cross-env": "5.2.0",
     "formik": "^1.5.8",

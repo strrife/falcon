@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { MemoryRouter, Switch } from 'react-router-dom';
-import { MockedProvider } from 'react-apollo/test-utils';
+import { MockedProvider } from '@apollo/react-testing';
 import { GET_URL } from '@deity/falcon-data';
 import { wait } from '../../../../test/helpers';
 import { DynamicRoute } from './DynamicRoute';
