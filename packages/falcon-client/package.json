@@ -21,6 +21,7 @@
     ]
   },
   "dependencies": {
+    "@apollo/react-ssr": "^3.1.1",
     "@babel/code-frame": "7.5.5",
     "@babel/core": "7.5.5",
     "@babel/preset-env": "7.5.5",
@@ -121,7 +122,7 @@
     "i18next": "^12.1.0",
     "prop-types": "15.7.2",
     "react": "16.8.6",
-    "react-apollo": "2.5.8",
+    "react-apollo": "3.1.1",
     "react-dom": "16.8.6",
     "react-router-dom": "5.0.1",
     "react-test-renderer": "16.8.6",
@@ -134,7 +135,7 @@
     "i18next": "^12.1.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-apollo": "^2.5.8",
+    "react-apollo": "^3.1.1",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1"
   },

@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { Mutation } from 'react-apollo';
+import { Mutation } from '@deity/falcon-data';
 
 const CLOSE_SIDEBAR_MUTATION = gql`
   mutation CloseSidebarMutation {
