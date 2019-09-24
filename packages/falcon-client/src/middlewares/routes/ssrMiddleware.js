@@ -1,6 +1,6 @@
 import React from 'react';
 import { StaticRouter } from 'react-router-dom';
-import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider } from '@apollo/react-common';
 import { getDataFromTree } from '@apollo/react-ssr';
 import Helmet from 'react-helmet';
 import { ChunkExtractorManager } from '@loadable/server';

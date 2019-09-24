@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Form, ErrorMessage } from 'formik';
-import { graphql } from 'react-apollo';
+import { graphql } from '@apollo/react-hoc';
 import { Box, Text, Link, Input, Button, Details, DetailsContent } from '@deity/falcon-ui';
 import { SignOutMutation, GET_CUSTOMER } from '@deity/falcon-shop-data';
 import { toGridTemplate } from '@deity/falcon-ui-kit';
