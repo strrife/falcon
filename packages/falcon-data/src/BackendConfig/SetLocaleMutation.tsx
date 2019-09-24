@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-// import { Mutation } from '@deity/falcon-data';
 import { Mutation } from '../Mutation';
 import { BackendConfig } from './BackendConfigQuery';
 

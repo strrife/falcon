@@ -1,5 +1,5 @@
 import React from 'react';
-import { MutationFunction, MutationResult } from 'react-apollo';
+import { MutationFunction, MutationResult } from '@apollo/react-common';
 import { SignOutMutation, SignOutResponse, IsAuthenticatedQuery } from '@deity/falcon-shop-data';
 
 export type SignOutProviderRenderProps = {

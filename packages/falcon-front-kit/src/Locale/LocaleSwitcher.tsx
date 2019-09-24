@@ -1,5 +1,5 @@
 import React from 'react';
-import { MutationFetchResult } from 'react-apollo';
+import { MutationFetchResult } from '@apollo/react-common';
 import { I18n } from '@deity/falcon-i18n';
 import { SetLocaleMutation, SetLocaleResponse, BackendConfigQuery } from '@deity/falcon-data';
 

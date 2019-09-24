@@ -1,5 +1,6 @@
 import React from 'react';
-import { withApollo, WithApolloClient, MutationFetchResult } from 'react-apollo';
+import { MutationFetchResult } from '@apollo/react-common';
+import { withApollo, WithApolloClient } from '@apollo/react-hoc';
 import isEqual from 'lodash.isequal';
 import { OperationInput } from '@deity/falcon-data';
 import {

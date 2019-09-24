@@ -29,6 +29,8 @@
     "test:coverage": "falcon-scripts test:coverage"
   },
   "dependencies": {
+    "@apollo/react-common": "3.1.1",
+    "@apollo/react-hoc": "3.1.1",
     "@babel/runtime": "7.5.5",
     "@deity/falcon-data": "^1.0.0",
     "@deity/falcon-shop-data": "^1.0.0",
@@ -57,16 +59,14 @@
     "graphql-tools": "^4.0.0",
     "prop-types": "15.7.2",
     "react": "16.8.6",
-    "react-apollo": "3.1.1",
     "react-router-dom": "5.0.1"
   },
   "peerDependencies": {
     "@deity/falcon-i18n": "^1.0.0",
     "apollo-client": "^2.6.4",
-    "graphql-tag": "2.10.1",
+    "graphql-tag": "^2.10.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-apollo": "3.1.1",
     "react-router-dom": "^5.0.1"
   }
 }

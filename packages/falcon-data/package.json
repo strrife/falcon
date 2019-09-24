@@ -37,11 +37,10 @@
     "react": "16.8.6"
   },
   "peerDependencies": {
-    "@apollo/react-common": "3.1.1",
-    "@apollo/react-components": "3.1.1",
-    "apollo-client": "2.6.4",
+    "@apollo/react-common": "^3.1.1",
+    "@apollo/react-components": "^3.1.1",
+    "apollo-client": "^2.6.4",
     "graphql-tag": "^2.10.1",
-    "react": "^16.8.6",
-    "react-apollo": "^3.1.1"
+    "react": "^16.8.6"
   }
 }
