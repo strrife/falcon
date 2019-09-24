@@ -54,7 +54,7 @@ declare interface GetFieldValueFn {
  * @returns Value or list of values (in case of `sourceValue` is an array)
  */
 export const getFieldValue: GetFieldValueFn = (sourceValue: object | Array<object>, fieldName: string) => {
-  if (typeof sourceValue === 'undefined' || typeof fieldName === 'undefined') {
+  if (!sourceValue || !fieldName) {
     return undefined;
   }
   if (Array.isArray(sourceValue)) {
