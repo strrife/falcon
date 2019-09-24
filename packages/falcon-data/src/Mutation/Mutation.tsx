@@ -1,12 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Mutation as ApolloMutation,
-  MutationFunction,
-  OperationVariables,
-  MutationComponentOptions,
-  MutationResult
-} from 'react-apollo';
+import { OperationVariables, MutationResult, MutationFunction } from '@apollo/react-common';
+import { Mutation as ApolloMutation, MutationComponentOptions } from '@apollo/react-components';
 import { Loader, Error } from '../Query';
 
 export type MutationProps<TData, TVariables> = MutationComponentOptions<TData, TVariables> & {

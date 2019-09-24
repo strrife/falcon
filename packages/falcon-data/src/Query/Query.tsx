@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Query as ApolloQuery, OperationVariables, QueryComponentOptions, QueryResult } from 'react-apollo';
+import { OperationVariables, QueryResult } from '@apollo/react-common';
+import { Query as ApolloQuery, QueryComponentOptions } from '@apollo/react-components';
 import { NetworkStatus } from 'apollo-client';
 import { Loader } from './Loader';
 import { Error } from './Error';
