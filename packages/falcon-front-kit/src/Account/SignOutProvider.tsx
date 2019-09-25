@@ -1,10 +1,10 @@
 import React from 'react';
-import { MutationFn, MutationResult } from 'react-apollo';
+import { MutationFunction, MutationResult } from '@apollo/react-common';
 import { SignOutMutation, SignOutResponse, IsAuthenticatedQuery } from '@deity/falcon-shop-data';
 
 export type SignOutProviderRenderProps = {
   isSignedIn: boolean;
-  signOut: MutationFn<SignOutResponse, {}>;
+  signOut: MutationFunction<SignOutResponse, {}>;
   result: MutationResult<SignOutResponse>;
 };
 

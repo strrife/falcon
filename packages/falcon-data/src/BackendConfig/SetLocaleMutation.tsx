@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { Mutation } from 'react-apollo';
+import { Mutation } from '../Mutation';
 import { BackendConfig } from './BackendConfigQuery';
 
 export const SET_LOCALE = gql`

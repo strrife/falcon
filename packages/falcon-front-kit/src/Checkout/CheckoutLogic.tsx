@@ -1,5 +1,6 @@
 import React from 'react';
-import { withApollo, WithApolloClient, FetchResult } from 'react-apollo';
+import { MutationFetchResult } from '@apollo/react-common';
+import { withApollo, WithApolloClient } from '@apollo/react-hoc';
 import isEqual from 'lodash.isequal';
 import { OperationInput } from '@deity/falcon-data';
 import {
@@ -232,7 +233,7 @@ class CheckoutLogicInner extends React.Component<CheckoutLogicProps, CheckoutLog
     const handleResponse = ({
       data,
       errors
-    }: FetchResult<PlaceOrderResponse, Record<string, any>, Record<string, any>>) => {
+    }: MutationFetchResult<PlaceOrderResponse, Record<string, any>, Record<string, any>>) => {
       if (errors) {
         this.setPartialState({
           loading: false,
