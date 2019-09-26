@@ -4,7 +4,10 @@ import { addResolveFunctionsToSchema } from 'graphql-tools';
 import { runQuery, buildSchema, buildSchemaAndRunQuery } from '../utils/testing';
 import { GraphQLCacheDirective } from './GraphQLCacheDirective';
 
-const directiveDefinition: string = `directive @cache(ttl: Int, idPath: [String]) on FIELD_DEFINITION`;
+const directiveDefinition: string = `
+directive @cache(ttl: Int, idPath: [String]) on FIELD_DEFINITION
+directive @cacheId on FIELD_DEFINITION
+`;
 
 const config = {
   cache: {
@@ -122,7 +125,7 @@ describe('@cache directive', () => {
         foo: Foo @cache
       }
       type Foo {
-        id: ID!
+        id: ID! @cacheId
         name: String
       }
     `;
@@ -132,7 +135,7 @@ describe('@cache directive', () => {
         foo: Foo @cache(ttl: 0)
       }
       type Foo {
-        id: ID!
+        id: ID! @cacheId
         name: String
       }
     `;
@@ -180,7 +183,7 @@ describe('@cache directive', () => {
           foo: Foo @cache
         }
         type Foo {
-          id: ID!
+          id: ID! @cacheId
           name: String
         }
       `;
@@ -213,7 +216,7 @@ describe('@cache directive', () => {
           foo: Foo @cache
         }
         type Foo {
-          id: ID!
+          id: ID! @cacheId
           name: String
         }
       `;
@@ -259,13 +262,13 @@ describe('@cache directive', () => {
           foo: Foo
         }
         type Foo {
-          id: ID!
+          id: ID! @cacheId
           name: String
           list: [Bar]! @cache(ttl: 1, idPath: ["$parent"])
           barList: BarList @cache(ttl: 1, idPath: ["$parent", "items"])
         }
         type Bar {
-          id: ID!
+          id: ID! @cacheId
           name: String
         }
         type BarList {
