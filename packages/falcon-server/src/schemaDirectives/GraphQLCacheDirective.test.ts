@@ -340,5 +340,45 @@ describe('@cache directive', () => {
         ttl: 60
       });
     });
+
+    it('Should not allow using multiple @cacheId directives within the same Type', async () => {
+      const typeDefs = `
+        ${directiveDefinition}
+        type Query {
+          foo: Foo @cache
+        }
+        type Foo {
+          id: ID! @cacheId
+          name: String @cacheId
+        }
+      `;
+      const resolvers = {
+        Query: {
+          foo: () => ({
+            id: '1',
+            name: 'foo'
+          })
+        }
+      };
+      const query = `query {
+        foo {
+          id
+          name
+        }
+      }`;
+
+      const { data, errors } = await buildSchemaAndRunQuery(
+        typeDefs,
+        resolvers,
+        query,
+        { cache, config },
+        schemaDirectives
+      );
+      expect(data.foo).toBeNull();
+      expect(errors).toHaveLength(1);
+      expect(errors[0].message).toBe(
+        'Misuse of "@cacheId" directive, only 1 field in Foo type can have this directive, currently being used by: id, name'
+      );
+    });
   });
 });
