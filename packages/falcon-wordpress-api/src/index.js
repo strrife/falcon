@@ -160,7 +160,7 @@ module.exports = class WordpressApi extends ApiDataSource {
     if (!post) {
       return post;
     }
-    const image = post && post.featured_image;
+    const image = post.featured_image;
 
     if (image) {
       post.image = this.reduceFeaturedImage(image);
