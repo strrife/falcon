@@ -116,6 +116,9 @@
     "billingAddress": "Billing address",
     "useTheSameAddress": "My billing address is the same as shipping"
   },
+  "checkoutSuccessful": {
+    "title": "THANK YOU FOR SHOPPING!"
+  },
   "creditCard": {
     "namePlaceholder": "Name on card",
     "numberPlaceholder": "Card number",
