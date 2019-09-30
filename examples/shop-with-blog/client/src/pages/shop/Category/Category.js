@@ -33,12 +33,12 @@ const CategoryPage = ({ id }) => (
         }}
         passLoading
       >
-        {({ data: { category }, fetchMore, networkStatus, loading }) => {
-          if (!category && loading) {
+        {({ data, fetchMore, networkStatus, loading }) => {
+          if (!data && loading) {
             return <Loader />;
           }
 
-          const { name, productList } = category;
+          const { name, productList } = data.category;
           const { pagination, items, aggregations } = productList;
           const filtersData = getFiltersData(state.filters, aggregations);
 
