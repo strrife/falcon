@@ -78,7 +78,7 @@ const EditAddress = ({ match, history }) => {
                         <FormField name="countryId" required>
                           {({ field }) => (
                             <CountryListQuery passLoading>
-                              {({ data: { countryList = { items: [] } } }) => (
+                              {({ data: { countryList } = { countryList: { items: [] } } }) => (
                                 <CountryPicker {...field} options={countryList.items} />
                               )}
                             </CountryListQuery>
