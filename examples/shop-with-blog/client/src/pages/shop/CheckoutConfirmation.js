@@ -21,11 +21,17 @@ const CheckoutConfirmation = () => (
     </H1>
     <LastOrderQuery>
       {({ data: { lastOrder } }) => (
-        <FlexLayout my="xl" flexDirection="column" alignItems="center">
-          <Text>{`We have received your order (No.: ${lastOrder.referenceNo}) with the following items:`}</Text>
+        <FlexLayout my="lg" flexDirection="column" alignItems="center">
+          <Text>
+            <T id="checkoutSuccessful.orderReceived" referenceNo={lastOrder.referenceNo} />
+          </Text>
           <OrderSummary my="sm" order={lastOrder} />
-          <Text my="sm">We are working hard on getting your items to you as soon as possible.</Text>
-          <Text>We will send you a shipping confirmation email once your order is on the way.</Text>
+          <Text my="sm">
+            <T id="checkoutSuccessful.realizationNotice" />
+          </Text>
+          <Text>
+            <T id="checkoutSuccessful.shippingNotice" />
+          </Text>
         </FlexLayout>
       )}
     </LastOrderQuery>
