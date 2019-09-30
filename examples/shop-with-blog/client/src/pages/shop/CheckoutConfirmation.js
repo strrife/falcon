@@ -17,20 +17,20 @@ const OrderSummary = ({ order }) => (
 const CheckoutConfirmation = () => (
   <PageLayout>
     <H1 css={{ textAlign: 'center' }}>
-      <T id="checkoutSuccessful.title" />
+      <T id="checkoutConfirmation.title" />
     </H1>
     <LastOrderQuery>
       {({ data: { lastOrder } }) => (
         <FlexLayout my="lg" flexDirection="column" alignItems="center">
           <Text>
-            <T id="checkoutSuccessful.orderReceived" referenceNo={lastOrder.referenceNo} />
+            <T id="checkoutConfirmation.orderReceived" referenceNo={lastOrder.referenceNo} />
           </Text>
           <OrderSummary my="sm" order={lastOrder} />
           <Text my="sm">
-            <T id="checkoutSuccessful.realizationNotice" />
+            <T id="checkoutConfirmation.realizationNotice" />
           </Text>
           <Text>
-            <T id="checkoutSuccessful.shippingNotice" />
+            <T id="checkoutConfirmation.shippingNotice" />
           </Text>
         </FlexLayout>
       )}
