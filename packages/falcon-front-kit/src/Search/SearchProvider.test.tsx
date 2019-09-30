@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { MemoryRouter, Route, RouteComponentProps } from 'react-router-dom';
-import { MockedProvider } from 'react-apollo/test-utils';
+import { MockedProvider } from '@apollo/react-testing';
 import { GET_BACKEND_CONFIG } from '@deity/falcon-shop-data';
 import { wait } from '../../../../test/helpers';
 import { SearchProvider, SearchProviderInner } from './SearchProvider';

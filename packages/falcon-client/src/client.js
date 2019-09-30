@@ -5,7 +5,7 @@ import 'app-webmanifest';
 import React from 'react';
 import { hydrate, render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider } from '@apollo/react-common';
 import { loadableReady } from '@loadable/component';
 import { I18nProvider } from '@deity/falcon-i18n';
 import { getClientConfig } from '@deity/falcon-front-kit';

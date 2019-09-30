@@ -1,5 +1,5 @@
 import React from 'react';
-import { FetchResult } from 'react-apollo';
+import { MutationFetchResult } from '@apollo/react-common';
 import { I18n } from '@deity/falcon-i18n';
 import { SetLocaleMutation, SetLocaleResponse, BackendConfigQuery } from '@deity/falcon-data';
 
@@ -25,7 +25,7 @@ export type LocaleSwitcherRenderProps = {
 };
 
 export type LocaleSwitcherProps = {
-  children: (props: LocaleSwitcherRenderProps) => React.ReactNode;
+  children: (props: LocaleSwitcherRenderProps) => JSX.Element;
 };
 
 export const LocaleSwitcher: React.SFC<LocaleSwitcherProps> = ({ children }) => (
@@ -33,7 +33,7 @@ export const LocaleSwitcher: React.SFC<LocaleSwitcherProps> = ({ children }) => 
     {(t, i18n) => (
       <SetLocaleMutation>
         {setLocale => (
-          <BackendConfigQuery passLoading>
+          <BackendConfigQuery>
             {({ data: { backendConfig } }) => {
               const { activeLocale } = backendConfig;
 
@@ -44,9 +44,11 @@ export const LocaleSwitcher: React.SFC<LocaleSwitcherProps> = ({ children }) => 
               };
 
               const onChange = (x: LocaleItem) =>
-                setLocale({ variables: { locale: x.code } }).then(({ data }: FetchResult<SetLocaleResponse>) => {
-                  i18n.changeLanguage(data.setLocale.activeLocale);
-                });
+                setLocale({ variables: { locale: x.code } }).then(
+                  ({ data }: MutationFetchResult<SetLocaleResponse>) => {
+                    i18n.changeLanguage(data.setLocale.activeLocale);
+                  }
+                );
 
               return children && children({ items, value, onChange });
             }}

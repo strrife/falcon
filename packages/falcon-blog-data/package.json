@@ -31,16 +31,14 @@
     "@deity/falcon-scripts": "^1.0.0",
     "@types/prop-types": "15.7.1",
     "@types/react": "16.8.22",
-    "apollo-client": "2.5.1",
+    "apollo-client": "2.6.4",
     "graphql-tag": "2.10.1",
     "prop-types": "15.7.2",
-    "react": "16.8.6",
-    "react-apollo": "2.5.8"
+    "react": "16.8.6"
   },
   "peerDependencies": {
-    "apollo-client": "2.5.1",
+    "apollo-client": "^2.6.4",
     "graphql-tag": "^2.10.1",
-    "react": "^16.8.6",
-    "react-apollo": "^2.5.8"
+    "react": "^16.8.6"
   }
 }

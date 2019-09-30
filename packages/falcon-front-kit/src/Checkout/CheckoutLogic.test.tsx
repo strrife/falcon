@@ -5,7 +5,7 @@ import { makeExecutableSchema, mergeSchemas } from 'graphql-tools';
 import { SchemaLink } from 'apollo-link-schema';
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
-import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider } from '@apollo/react-common';
 import { PlaceOrderSuccessfulResult } from '@deity/falcon-shop-extension';
 import { wait } from '../../../../test/helpers';
 import { CheckoutLogic, CheckoutLogicRenderProps } from './CheckoutLogic';

@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Query as ApolloQuery, OperationVariables, QueryProps as ApolloQueryProps, QueryResult } from 'react-apollo';
-import { NetworkStatus, ApolloError } from 'apollo-client';
+import { OperationVariables, QueryResult } from '@apollo/react-common';
+import { Query as ApolloQuery, QueryComponentOptions } from '@apollo/react-components';
+import { NetworkStatus } from 'apollo-client';
 import { Loader } from './Loader';
 import { Error } from './Error';
 
@@ -15,8 +16,7 @@ export type QueryRenderProps<TData = any, TVariables = OperationVariables> = Omi
   fetchMore: (() => any) | undefined;
 };
 
-export type QueryProps<TData, TVariables> = Omit<ApolloQueryProps<TData, TVariables>, 'children'> & {
-  children: (result: QueryRenderProps<TData, TVariables>) => React.ReactNode;
+export type QueryProps<TData, TVariables> = QueryComponentOptions<TData, TVariables> & {
   fetchMore?: FetchMore<TData, TVariables>;
   passLoading?: boolean;
   passError?: boolean;
