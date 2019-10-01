@@ -650,7 +650,7 @@ module.exports = class Magento2Api extends Magento2ApiBase {
         context: {
           didReceiveResult: result => ({
             id: result.entity_id,
-            path: result.canonical_url,
+            path: `/${result.canonical_url.replace(/^\//, '')}`,
             type: `shop-${result.entity_type.toLowerCase().replace('cms-', '')}`
           })
         }

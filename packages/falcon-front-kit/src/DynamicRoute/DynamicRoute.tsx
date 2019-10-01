@@ -35,7 +35,7 @@ export const DynamicRoute: React.SFC<DynamicRouteProps> = props => {
               }
 
               if (url.redirect) {
-                return <Redirect to={`/${url.path}`} />;
+                return <Redirect to={url.path} />;
               }
 
               const Component = components[url.type];
