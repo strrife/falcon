@@ -65,7 +65,7 @@ const AddAddress = ({ history }) => (
                   <FormField name="countryId" required>
                     {({ field }) => (
                       <CountryListQuery passLoading>
-                        {({ data: { countryList } = { countryList: { items: [] } } }) => (
+                        {({ data: { countryList = { items: [] } } }) => (
                           <CountryPicker {...field} options={countryList.items} />
                         )}
                       </CountryListQuery>
