@@ -27,7 +27,7 @@ export const AddressDetails: React.SFC<AddressDetailsProps> = ({
     {company && <Text fontWeight="bold" color="secondaryText">{`${company}`}</Text>}
     <Text fontWeight="bold" color="secondaryText" mb="xs">{`${firstname} ${lastname}`}</Text>
     {street.map((x, i) => (
-      // using array index as key is OK because the order of elements will never change
+      // because `street` can contain non unique values
       // eslint-disable-next-line react/no-array-index-key
       <Text key={i}>{x}</Text>
     ))}
