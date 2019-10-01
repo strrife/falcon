@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { Query } from '@deity/falcon-ecommerce-uikit';
+import { Query } from '@deity/falcon-data';
 
 export const GET_SIDEBAR_STATE = gql`
   query Sidebar {
@@ -10,13 +10,6 @@ export const GET_SIDEBAR_STATE = gql`
     }
   }
 `;
-
-export const SIDEBAR_CONTENT_TYPES = {
-  cart: 'cart',
-  account: 'account',
-  signUp: 'signUp',
-  forgotPassword: 'forgotPassword'
-};
 
 export class SidebarQuery extends Query {
   static defaultProps = {
