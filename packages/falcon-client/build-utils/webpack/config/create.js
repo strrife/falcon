@@ -379,6 +379,7 @@ module.exports = (target = 'web', options) => {
               'apollo-client',
               'apollo-link',
               'apollo-link-http',
+              'apollo-link-http-common',
               'apollo-utilities',
               'graphql',
               'graphql-tag',
@@ -390,6 +391,7 @@ module.exports = (target = 'web', options) => {
               'react-dom',
               'react-router',
               'react-router-dom',
+              'tslib',
               'history'
             ])
           }
