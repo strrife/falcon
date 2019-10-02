@@ -356,7 +356,7 @@ module.exports = (target = 'web', options) => {
     config.optimization = {
       splitChunks: {
         chunks: 'all',
-        automaticNameDelimiter: '\\',
+        automaticNameDelimiter: '-',
         maxInitialRequests: 4,
         cacheGroups: {
           polyfills: {
