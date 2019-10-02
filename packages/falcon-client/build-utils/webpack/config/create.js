@@ -355,18 +355,17 @@ module.exports = (target = 'web', options) => {
 
     config.optimization = {
       splitChunks: {
+        chunks: 'all',
         cacheGroups: {
           polyfills: {
             name: 'polyfills',
             enforce: true,
             priority: 100,
-            chunks: 'initial',
             test: moduleFilter(['core-js', 'whatwg-fetch', 'pwacompat'])
           },
           vendor: {
             name: 'vendors',
             enforce: true,
-            chunks: 'initial',
             test: moduleFilter([
               '@apollo/react-common',
               '@apollo/react-hoc',
