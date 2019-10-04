@@ -1,41 +1,33 @@
 import React from 'react';
 import { ApolloError } from 'apollo-client';
+import { ErrorModel, apolloErrorToErrorModelList } from './apolloErrorToErrorModelList';
 
 export type ErrorProps = ApolloError;
-export const Error: React.SFC<ErrorProps> = ({ networkError, graphQLErrors, ...main }) => {
-  if (graphQLErrors) {
-    return (
-      <div className="error">
-        {graphQLErrors.length === 1 ? (
-          <p key={name} title={`[${graphQLErrors[0].extensions && graphQLErrors[0].extensions.code}] ${name}`}>
-            {graphQLErrors[0].message}
-          </p>
-        ) : (
-          <ul>
-            {graphQLErrors.map(({ name, message, extensions }) => {
-              return (
-                <li key={name} title={`[${extensions && extensions.code}] ${name}`}>
-                  {message}
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
-    );
-  }
+export const Error: React.SFC<ErrorProps> = props => {
+  const errors = apolloErrorToErrorModelList(props);
 
-  if (networkError) {
-    return (
-      <div className="error">
-        <p title={networkError.name}>{networkError.message}</p>
-      </div>
-    );
-  }
+  const errorInsight = ({ message, ...rest }: ErrorModel) => {
+    if (process.env.NODE_ENV !== 'production') {
+      return JSON.stringify({ ...rest }, null, 2);
+    }
+    return '';
+  };
 
   return (
     <div className="error">
-      <p title={main.name}>{main.message}</p>
+      {errors.length <= 1 ? (
+        <p title={errorInsight(errors[0])}>{errors[0].message}</p>
+      ) : (
+        <ul>
+          {errors.map(error => {
+            return (
+              <li key={error.name} title={errorInsight(error)}>
+                {error.message}
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 };
