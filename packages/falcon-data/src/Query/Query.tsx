@@ -40,7 +40,7 @@ export class Query<TData = any, TVariables = OperationVariables> extends React.C
           const { networkStatus, error, data } = result;
 
           if (!passError && error) {
-            return <Error error={error} />;
+            return <Error {...error} />;
           }
 
           const loading =
