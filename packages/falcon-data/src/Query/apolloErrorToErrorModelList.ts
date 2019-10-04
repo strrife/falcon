@@ -1,4 +1,5 @@
 import { ApolloError } from 'apollo-client';
+import { codes } from '@deity/falcon-errors';
 
 export type ErrorModel = {
   name: string;
