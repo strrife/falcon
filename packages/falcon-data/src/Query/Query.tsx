@@ -60,14 +60,14 @@ export class Query<TData = any, TVariables = OperationVariables> extends React.C
   }
 }
 
-export type QueryOptions<TData, TVariables> = QueryHookOptions<TData, TVariables> & {
+export type UseQueryOptions<TData, TVariables> = QueryHookOptions<TData, TVariables> & {
   fetchMore?: FetchMore<TData, TVariables>;
 };
 export function useQuery<TData = any, TVariables = OperationVariables>(
   query: DocumentNode,
-  options?: QueryOptions<TData, TVariables>
+  options?: UseQueryOptions<TData, TVariables>
 ) {
-  const { fetchMore, ...restOptions } = options || ({} as QueryOptions<TData, TVariables>);
+  const { fetchMore, ...restOptions } = options || ({} as UseQueryOptions<TData, TVariables>);
   const result = useApolloQuery<TData, TVariables>(query, restOptions);
   const { data, fetchMore: apolloFetchMore } = result;
 
