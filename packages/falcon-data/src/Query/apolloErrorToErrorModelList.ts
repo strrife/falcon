@@ -2,7 +2,6 @@ import { ApolloError } from 'apollo-client';
 import { codes } from '@deity/falcon-errors';
 
 export type ErrorModel = {
-  name: string;
   message: string;
   code?: string;
   /** path to property (on operation input or operation output) on which error occurs */
@@ -15,17 +14,15 @@ export const apolloErrorToErrorModelList = (error: ApolloError): ErrorModel[] =>
   if (networkError) {
     return [
       {
-        name: networkError.name,
         message: networkError.message
       }
     ];
   }
 
   if (graphQLErrors) {
-    return graphQLErrors.reduce<ErrorModel[]>((result, { name, message, extensions = {} }) => {
+    return graphQLErrors.reduce<ErrorModel[]>((result, { message, extensions = {} }) => {
       if (extensions.code === codes.BAD_USER_INPUT && extensions.exception) {
         const userInputErrors = Object.keys(extensions.exception).map(x => ({
-          name,
           message: extensions.exception[x],
           code: extensions.code,
           path: x
@@ -34,13 +31,12 @@ export const apolloErrorToErrorModelList = (error: ApolloError): ErrorModel[] =>
         return [...result, ...userInputErrors];
       }
 
-      return [...result, { name, message, code: extensions.code }];
+      return [...result, { message, code: extensions.code }];
     }, []);
   }
 
   return [
     {
-      name: error.name,
       message: error.message
     }
   ];
