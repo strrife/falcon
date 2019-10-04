@@ -19,7 +19,7 @@ export class SignInMutation extends Mutation<SignInResponse, OperationInput<Sign
 }
 
 export const useSignMutation = (options: MutationHookOptions<SignInResponse, OperationInput<SignInInput>> = {}) =>
-  useMutation<SignInResponse, OperationInput<SignInInput>>(SIGN_IN_MUTATION, {
+  useMutation(SIGN_IN_MUTATION, {
     refetchQueries: ['Cart', 'CustomerWithAddresses', 'Customer'],
     ...options
   });
