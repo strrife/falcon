@@ -7,7 +7,6 @@ export const Error = themed<ErrorProps, any>({
   tag: Text,
   defaultTheme: {
     error: {
-      my: 'md',
       color: 'error'
     }
   }
