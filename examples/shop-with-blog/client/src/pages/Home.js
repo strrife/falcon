@@ -1,6 +1,6 @@
 import React from 'react';
 import { GET_CATEGORY_WITH_PRODUCT_LIST } from '@deity/falcon-shop-data';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@deity/falcon-data';
 import { T } from '@deity/falcon-i18n';
 import { H1 } from '@deity/falcon-ui';
 import { PageLayout, ProductList, Loader, OperationError } from '@deity/falcon-ui-kit';
