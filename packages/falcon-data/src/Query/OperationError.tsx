@@ -2,11 +2,11 @@ import React from 'react';
 import { ApolloError } from 'apollo-client';
 import { ErrorModel, apolloErrorToErrorModelList } from './apolloErrorToErrorModelList';
 
-export type ErrorProps = ApolloError;
-export const Error: React.SFC<ErrorProps> = props => {
+export type OperationErrorProps = ApolloError;
+export const OperationError: React.SFC<OperationErrorProps> = props => {
   const errors = apolloErrorToErrorModelList(props);
 
-  const errorInsight = ({ message, ...rest }: ErrorModel) => {
+  const errorInsights = ({ message, ...rest }: ErrorModel) => {
     if (process.env.NODE_ENV !== 'production') {
       return JSON.stringify({ ...rest }, null, 2);
     }
@@ -16,12 +16,12 @@ export const Error: React.SFC<ErrorProps> = props => {
   return (
     <div className="error">
       {errors.length <= 1 ? (
-        <p title={errorInsight(errors[0])}>{errors[0].message}</p>
+        <p title={errorInsights(errors[0])}>{errors[0].message}</p>
       ) : (
         <ul>
           {errors.map(error => {
             return (
-              <li key={error.name} title={errorInsight(error)}>
+              <li key={error.name} title={errorInsights(error)}>
                 {error.message}
               </li>
             );
