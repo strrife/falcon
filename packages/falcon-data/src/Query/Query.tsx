@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { DocumentNode } from 'graphql';
 import { OperationVariables, QueryResult } from '@apollo/react-common';
 import { Query as ApolloQuery, QueryComponentOptions } from '@apollo/react-components';
+import { useQuery as useApolloQuery, QueryHookOptions } from '@apollo/react-hooks';
 import { NetworkStatus } from 'apollo-client';
 import { Loader } from './Loader';
 import { OperationError } from './OperationError';
@@ -56,4 +58,21 @@ export class Query<TData = any, TVariables = OperationVariables> extends React.C
       </ApolloQuery>
     );
   }
+}
+
+export type QueryOptions<TData, TVariables> = QueryHookOptions<TData, TVariables> & {
+  fetchMore?: FetchMore<TData, TVariables>;
+};
+export function useQuery<TData = any, TVariables = OperationVariables>(
+  query: DocumentNode,
+  options?: QueryOptions<TData, TVariables>
+) {
+  const { fetchMore, ...restOptions } = options || ({} as QueryOptions<TData, TVariables>);
+  const result = useApolloQuery<TData, TVariables>(query, restOptions);
+  const { data, fetchMore: apolloFetchMore } = result;
+
+  return {
+    ...result,
+    fetchMore: fetchMore ? () => fetchMore(data!, result.fetchMore) : apolloFetchMore
+  };
 }
