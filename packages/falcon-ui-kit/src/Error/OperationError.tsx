@@ -1,7 +1,9 @@
 import React from 'react';
 import { ApolloError } from 'apollo-client';
 import { ErrorModel, apolloErrorToErrorModelList } from '@deity/falcon-data';
-import { List, ListItem } from '@deity/falcon-ui';
+import { ListItem } from '@deity/falcon-ui';
+import { ErrorListLayout } from './ErrorListLayout';
+import { Error } from './Error';
 
 export type OperationErrorProps = ApolloError;
 export const OperationError: React.SFC<OperationErrorProps> = props => {
@@ -19,12 +21,12 @@ export const OperationError: React.SFC<OperationErrorProps> = props => {
   };
 
   return (
-    <List className="error">
+    <ErrorListLayout>
       {errors.map(error => (
-        <ListItem key={error.name} title={errorInsights(error)} my="md" color="error">
+        <Error as={ListItem} key={error.message} title={errorInsights(error)}>
           {error.message}
-        </ListItem>
+        </Error>
       ))}
-    </List>
+    </ErrorListLayout>
   );
 };
