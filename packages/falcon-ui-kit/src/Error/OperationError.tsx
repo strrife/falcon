@@ -1,9 +1,7 @@
 import React from 'react';
 import { ApolloError } from 'apollo-client';
 import { apolloErrorToErrorModelList } from '@deity/falcon-data';
-import { ListItem } from '@deity/falcon-ui';
-import { ErrorListLayout } from './ErrorListLayout';
-import { Error } from './Error';
+import { ErrorSummary } from './ErrorSummary';
 
 export type OperationErrorProps = ApolloError;
 export const OperationError: React.SFC<OperationErrorProps> = props => {
@@ -13,13 +11,8 @@ export const OperationError: React.SFC<OperationErrorProps> = props => {
     return null;
   }
 
-  return (
-    <ErrorListLayout>
-      {errors.map(error => (
-        <Error as={ListItem} key={error.message} insights={error}>
-          {error.message}
-        </Error>
-      ))}
-    </ErrorListLayout>
-  );
+  // TODO: probably we need to better analyse `errors`
+  // in order to show errors like "disconnected from falcon-server" in ErrorBoundary
+
+  return <ErrorSummary errors={errors} />;
 };
