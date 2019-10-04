@@ -4,6 +4,6 @@ import { themed, List } from '@deity/falcon-ui';
 export const ErrorListLayout = themed({
   tag: List,
   defaultTheme: {
-    ErrorListLayout: {}
+    errorListLayout: {}
   }
 });
