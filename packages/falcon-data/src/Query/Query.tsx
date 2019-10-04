@@ -4,7 +4,7 @@ import { OperationVariables, QueryResult } from '@apollo/react-common';
 import { Query as ApolloQuery, QueryComponentOptions } from '@apollo/react-components';
 import { NetworkStatus } from 'apollo-client';
 import { Loader } from './Loader';
-import { Error } from './Error';
+import { OperationError } from './OperationError';
 
 export type ApolloFetchMore<TData, TVariables> = QueryResult<TData, TVariables>['fetchMore'];
 export type FetchMore<TData, TVariables> = (data: TData, fetchMore: ApolloFetchMore<TData, TVariables>) => any;
@@ -40,7 +40,7 @@ export class Query<TData = any, TVariables = OperationVariables> extends React.C
           const { networkStatus, error, data } = result;
 
           if (!passError && error) {
-            return <Error {...error} />;
+            return <OperationError {...error} />;
           }
 
           const loading =
