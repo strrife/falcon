@@ -13,21 +13,19 @@ export const OperationError: React.SFC<OperationErrorProps> = props => {
     return '';
   };
 
-  return (
-    <div className="error">
-      {errors.length <= 1 ? (
-        <p title={errorInsights(errors[0])}>{errors[0].message}</p>
-      ) : (
-        <ul>
-          {errors.map(error => {
-            return (
-              <li key={error.name} title={errorInsights(error)}>
-                {error.message}
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </div>
+  return errors.length <= 1 ? (
+    <p title={errorInsights(errors[0])} className="error">
+      {errors[0].message}
+    </p>
+  ) : (
+    <ul className="error">
+      {errors.map(error => {
+        return (
+          <li key={error.message} title={errorInsights(error)}>
+            {error.message}
+          </li>
+        );
+      })}
+    </ul>
   );
 };
