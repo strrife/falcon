@@ -14,7 +14,7 @@ import {
   ProductOptionList,
   Form,
   FormFieldError,
-  FormErrorSummary,
+  ErrorSummary,
   PageLayout,
   Breadcrumbs
 } from '@deity/falcon-ui-kit';
@@ -32,7 +32,7 @@ const ProductPage = ({ id, path }) => (
               product={product}
               onSuccess={() => openSidebar({ variables: { contentType: SIDEBAR_TYPE.cart } })}
             >
-              {({ isSubmitting, status }) => (
+              {({ isSubmitting, status = {} }) => (
                 <ProductLayout as={Form} id="add-to-cart" i18nId="product">
                   <FlexLayout gridArea={ProductLayoutArea.gallery} alignItems="center" justifyContent="center">
                     <ProductGallery items={product.gallery} />
@@ -66,9 +66,7 @@ const ProductPage = ({ id, path }) => (
                       <T id="product.addToCart" />
                     </Button>
                   </FlexLayout>
-                  <Box gridArea={ProductLayoutArea.error}>
-                    <FormErrorSummary errors={status && status.error} />
-                  </Box>
+                  <Box gridArea={ProductLayoutArea.error}>{status.error && <ErrorSummary errors={status.error} />}</Box>
                 </ProductLayout>
               )}
             </AddToCartFormProvider>

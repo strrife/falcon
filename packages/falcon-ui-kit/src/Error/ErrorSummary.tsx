@@ -22,7 +22,7 @@ export const ErrorSummary: React.SFC<ErrorSummaryProps & ThemedComponentPropsWit
   );
 };
 ErrorSummary.propTypes = {
-  errors: PropTypes.oneOf([
+  errors: PropTypes.oneOfType([
     PropTypes.shape({
       message: PropTypes.string.isRequired,
       code: PropTypes.string.isRequired

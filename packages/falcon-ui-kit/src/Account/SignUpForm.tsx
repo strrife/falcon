@@ -19,7 +19,7 @@ export const SignUpForm: React.SFC<SignUpFormProps> = ({ onSuccess, ...formProps
         </FormField>
 
         <FormSubmit submitting={isSubmitting} value="Create an account" />
-        <ErrorSummary errors={status.error} />
+        {status.error && <ErrorSummary errors={status.error} />}
       </Form>
     )}
   </SignUpFormProvider>
