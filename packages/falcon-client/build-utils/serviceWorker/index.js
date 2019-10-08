@@ -10,16 +10,11 @@ const alias = require('rollup-plugin-alias');
 const paths = require('../paths');
 const { getManifestEntries } = require('./workbox');
 
-const ensureIgnoreItself = buildConfig => ({
-  ...buildConfig,
-  blacklistRoutes: [...(Array.isArray(buildConfig.blacklistRoutes) ? buildConfig.blacklistRoutes : []), '/sw.js(.*)']
-});
-
 const getRePatternList = (NODE_ENV, buildConfig, manifestEntries) => [
   { test: 'process.env.NODE_ENV', replace: JSON.stringify(NODE_ENV) },
   {
     test: 'const CONFIG = {};',
-    replace: `const CONFIG = ${JSON.stringify(ensureIgnoreItself(buildConfig), null, 2)};`
+    replace: `const CONFIG = ${JSON.stringify(buildConfig, null, 2)};`
   },
   { test: 'const ENTRIES = [];', replace: `const ENTRIES = ${JSON.stringify(manifestEntries, null, 2)};` }
 ];
