@@ -44,10 +44,14 @@
   },
   "dependencies": {
     "@babel/runtime": "7.6.3",
+    "@emotion/cache": "10.0.19",
+    "@emotion/core": "10.0.21",
+    "@emotion/is-prop-valid": "0.8.3",
+    "@emotion/serialize": "0.11.11",
+    "@emotion/styled-base": "10.0.19",
     "core-js": "3.2.1",
-    "csstype": "^2.5.7",
     "deepmerge": "^2.2.1",
-    "emotion-theming": "^10.0.5",
+    "emotion-theming": "10.0.19",
     "is-plain-object": "^2.0.4",
     "react-powerplug": "1.0.0"
   },
