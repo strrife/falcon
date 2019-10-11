@@ -44,25 +44,21 @@ type ThemedPropMapping = {
   themeProp: keyof Theme;
 };
 
-type CssPropsKeys = keyof CSS.PropertiesFallback<number | string>;
 type CssProps = CSS.PropertiesFallback<number | string>;
 
 type ResponsivePropMapping = {
-  cssProp: CssPropsKeys;
+  cssProp: keyof CssProps;
 };
 
 export type RecursivePartial<T> = { [key in keyof T]?: RecursivePartial<T[key]> };
 
 type CSSPseudoObject = { [key in CSS.SimplePseudos]?: CSSObject };
-
 type CssOtherProps = undefined | number | string | CSSObject;
-
 type CSSOthersObject = {
   [propertiesName: string]: CssOtherProps | CssOtherProps[];
 };
-
 type CssResponsiveProps = {
-  [key in CssPropsKeys]?: { [Breakpoint in keyof Theme['breakpoints']]?: CssProps[key] } | CssProps[key];
+  [key in keyof CssProps]?: { [Breakpoint in keyof Theme['breakpoints']]?: CssProps[key] } | CssProps[key];
 };
 
 export interface CSSObject extends CssResponsiveProps, CSSPseudoObject, CSSOthersObject {}
