@@ -53,7 +53,7 @@ type ResponsivePropMapping = {
 
 export type RecursivePartial<T> = { [key in keyof T]?: RecursivePartial<T[key]> };
 
-type CSSPseudoObject = { [K in CSS.SimplePseudos]?: CSSObject };
+type CSSPseudoObject = { [key in CSS.SimplePseudos]?: CSSObject };
 
 type CssOtherProps = undefined | number | string | CSSObject;
 
