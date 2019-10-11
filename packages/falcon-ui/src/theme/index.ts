@@ -51,7 +51,7 @@ type ResponsivePropMapping = {
   cssProp: CssPropsKeys;
 };
 
-export type RecursivePartial<T> = { [P in keyof T]?: RecursivePartial<T[P]> };
+export type RecursivePartial<T> = { [key in keyof T]?: RecursivePartial<T[key]> };
 
 type CSSPseudoObject = { [K in CSS.SimplePseudos]?: CSSObject };
 
