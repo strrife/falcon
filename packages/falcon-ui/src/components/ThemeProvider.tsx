@@ -9,9 +9,8 @@ import { Root } from './Root';
 export { withTheme } from 'emotion-theming';
 
 // IMPORTANT: those styles get injected as global styles
-// every other reset style can be applied on Root component
-// but not body margin
-const tinyNormalizeStyles = {
+// every other reset style can be applied on Root component but not body margin
+const tinyNormalizeStyles: CSSObject = {
   body: {
     margin: 0
   }
