@@ -21,6 +21,6 @@ jobs:
         run: yarn lint
       - name: run tests
         run: yarn test
-      - uses: actions/checkout@v1
+      - uses: codecov/codecov-action@v1.0.2
         with:
           token: ${{secrets.CODECOV_TOKEN}}
