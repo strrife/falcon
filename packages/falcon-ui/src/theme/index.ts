@@ -55,7 +55,7 @@ export type RecursivePartial<T> = { [P in keyof T]?: RecursivePartial<T[P]> };
 
 type CSSPseudoObject = { [K in CSS.SimplePseudos]?: CSSObject };
 
-type CssOtherProps = undefined | string | number | CSSObject;
+type CssOtherProps = undefined | number | string | CSSObject;
 
 type CSSOthersObject = {
   [propertiesName: string]: CssOtherProps | CssOtherProps[];
