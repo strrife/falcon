@@ -18,7 +18,10 @@ export const IconRenderer = themed({
   }
 });
 
-type IconProps = { src: string; fallback?: any } & ThemedComponentProps & BaseProps<'svg'>;
+export type IconProps = BaseProps<'svg'> & {
+  src: string;
+  fallback?: any;
+} & ThemedComponentProps;
 
 const IconComponent: React.SFC<IconProps & PropsWithTheme> = props => {
   if (!props.theme || !props.theme.icons) return null;
@@ -32,7 +35,7 @@ const IconComponent: React.SFC<IconProps & PropsWithTheme> = props => {
 
   const { icon, ...otherProps } = icons[src];
 
-  return <IconRenderer as={icon} {...otherProps as any} {...rest} />;
+  return <IconRenderer as={icon} {...(otherProps as any)} {...rest} />;
 };
 
 export const Icon = withTheme(IconComponent) as React.SFC<IconProps>;
