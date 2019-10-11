@@ -22,12 +22,11 @@ const tinyNormalizeStyles: CSSObject = {
 const isServer = typeof document === 'undefined';
 const cache = createCache();
 
-type ThemeProviderProps = {
+export type ThemeProviderProps = {
   theme?: Theme;
   globalCss?: CSSObject;
   withoutRoot?: boolean;
 };
-
 export const ThemeProvider: React.SFC<ThemeProviderProps> = ({
   theme = createTheme(),
   globalCss = tinyNormalizeStyles,
