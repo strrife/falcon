@@ -2,7 +2,7 @@ import React from 'react';
 import { ThemeProvider as Provider } from 'emotion-theming';
 import { Global, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
-import { createTheme, PropsWithTheme, CSSObject } from '../theme';
+import { createTheme, Theme, CSSObject } from '../theme';
 import { Root } from './Root';
 
 // re-export withTheme from emotion so theme can be accessed from code
@@ -22,7 +22,8 @@ const tinyNormalizeStyles: CSSObject = {
 const isServer = typeof document === 'undefined';
 const cache = createCache();
 
-type ThemeProviderProps = Partial<PropsWithTheme> & {
+type ThemeProviderProps = {
+  theme?: Theme;
   globalCss?: CSSObject;
   withoutRoot?: boolean;
 };
