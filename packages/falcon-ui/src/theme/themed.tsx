@@ -13,6 +13,7 @@ import {
   InlineCss
 } from './index';
 
+const NESTED_CSS_OBJECT_SELECTORS = [':', '&', '*', '>', '@'];
 const propsMappingKeys = Object.keys(mappings) as (keyof PropsMappings)[];
 
 const convertPropToCss = (
@@ -98,8 +99,6 @@ const convertThemedPropsToCss = (props: ThemedComponentProps, theme: Theme): CSS
   return targetCss;
 };
 
-const nestedCssObjectSelectors = [':', '&', '*', '>', '@'];
-
 function convertResponsivePropsToMediaQueries(css: CSSObject, theme: Theme) {
   const target: any = {};
   const mediaQueries: any = {};
@@ -112,7 +111,7 @@ function convertResponsivePropsToMediaQueries(css: CSSObject, theme: Theme) {
     }
     // we need to look for responsive props in nested css as well
     // for example in :hover object
-    else if (nestedCssObjectSelectors.indexOf(cssProp[0]) !== -1) {
+    else if (NESTED_CSS_OBJECT_SELECTORS.indexOf(cssProp[0]) !== -1) {
       target[cssProp] = convertResponsivePropsToMediaQueries(cssValue as CSSObject, theme);
     } else {
       // eslint-disable-next-line
