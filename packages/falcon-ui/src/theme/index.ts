@@ -35,6 +35,8 @@ export interface Theme {
   components: ThemedComponents;
   icons: ThemedIcons;
 }
+type s = keyof Theme;
+
 export type ThemedIcons = {
   [name: string]: {
     icon: React.ComponentType | ((props: any) => JSX.Element);
@@ -70,9 +72,7 @@ export interface PropsWithTheme {
   theme: Theme;
 }
 
-export type InlineCss<TProps = {}> = ((props: PropsWithTheme & TProps) => CSSObject) | CSSObject;
-
-export type ThemedComponentPropsWithCss<TProps = {}> = {
+export type BaseThemedComponentProps = {
   [ComponentProp in keyof PropsMappings]?:
     | (PropsMappings[ComponentProp] extends ThemedPropMapping
         ? Extract<keyof Theme[PropsMappings[ComponentProp]['themeProp']], string>
@@ -86,9 +86,13 @@ export type ThemedComponentPropsWithCss<TProps = {}> = {
           ? CssProps[PropsMappings[ComponentProp]['cssProp']]
           : (string | number);
       };
-} & { css?: InlineCss<TProps> };
+};
 
-export interface ThemedComponentProps<TProps = {}> extends ThemedComponentPropsWithCss<TProps> {}
+export type InlineCss<TProps> = ((props: PropsWithTheme & TProps) => CSSObject) | CSSObject;
+
+export interface ThemedComponentProps<TProps = {}> extends BaseThemedComponentProps {
+  css?: InlineCss<TProps>;
+}
 
 export type ThemedComponentPropsWithVariants<TProps = {}> = ThemedComponentProps<TProps> & {
   variants?: {

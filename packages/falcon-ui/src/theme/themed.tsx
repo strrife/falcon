@@ -151,7 +151,7 @@ function convertResponsivePropsToMediaQueries(css: CSSObject, theme: Theme) {
   return target;
 }
 
-function getCss(css: InlineCss, props: ThemedProps) {
+function getCss(css: InlineCss<ThemedProps>, props: ThemedProps) {
   return typeof css === 'function' ? css(props) : css;
 }
 
