@@ -42,7 +42,7 @@ LocalePickerInnerDOM.propTypes = {
   onChange: PropTypes.func
 };
 
-export const LocalePicker = themed<LocalePickerProps, {}>({
+export const LocalePicker = themed<LocalePickerProps>({
   tag: LocalePickerInnerDOM,
   defaultTheme: {
     localePicker: {}
