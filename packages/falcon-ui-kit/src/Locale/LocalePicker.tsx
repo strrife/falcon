@@ -17,7 +17,7 @@ export type LocalePickerProps = ThemedComponentProps & {
 };
 
 export const LocalePickerInnerDOM: React.SFC<LocalePickerProps> = ({ items, value, ...rest }) => (
-  <Dropdown {...(rest as any)}>
+  <Dropdown {...rest}>
     <DropdownLabel>{value.name}</DropdownLabel>
     <DropdownMenu variant="above">
       {items.map(x => (
