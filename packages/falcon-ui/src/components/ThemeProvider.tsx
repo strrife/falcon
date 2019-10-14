@@ -1,7 +1,6 @@
 import React from 'react';
 import { ThemeProvider as Provider } from 'emotion-theming';
-import { Global } from '@emotion/core/src/global';
-import { CacheProvider } from '@emotion/core/src/context';
+import { Global, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
 import { createTheme, Theme, CSSObject } from '../theme';
 import { Root } from './Root';

@@ -1,3 +1,4 @@
+declare module '@emotion/core';
 declare module '@emotion/provider';
 declare module '@emotion/is-prop-valid';
 declare module '@emotion/styled-base';

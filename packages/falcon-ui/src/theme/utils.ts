@@ -27,16 +27,16 @@ export function extractThemableProps(props: any) {
 
 /**
  * Determines if object is `@emotion`'s keyframe definition,
- * it sets `anim=1` to keyframes processed by `@emotion/core/keyframes` function
+ * they sets `anim=1` to keyframes processed by `@emotion/core/keyframes` function
  * @param {*} object
  */
 function isEmotionKeyframe(object: any) {
-  return isPlainObject(object) && object.anim === 1;
+  return object && object.anim === 1;
 }
 
 export function mergeThemes(theme: Theme, themeOverride: RecursivePartial<Theme>): Theme {
   const newTheme = merge(theme, themeOverride as Theme, {
-    isMergeableObject: x => !isEmotionKeyframe(x)
+    isMergeableObject: x => isPlainObject(x) && !isEmotionKeyframe(x)
   });
 
   // keyframes merging needs to be handled in very special way
