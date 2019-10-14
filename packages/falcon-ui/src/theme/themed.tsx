@@ -286,20 +286,19 @@ const DynamicHtmlTag = React.forwardRef<{}, DynamicHtmlTagProps>((props, ref) =>
   return React.createElement(Base, nextProps);
 });
 
-export type BaseProps<TTag extends HtmlTag> = {
-  as?: TTag;
-} & (TTag extends keyof JSX.IntrinsicElements ? JSX.IntrinsicElements[TTag] : {}) &
-  (TTag extends React.ComponentType<infer TExtendProps> ? Partial<TExtendProps> : {});
-
-type ThemedDefaultProps<TTag extends HtmlTag> = (TTag extends keyof JSX.IntrinsicElements
+export type TagProps<TTag extends HtmlTag> = (TTag extends keyof JSX.IntrinsicElements
   ? JSX.IntrinsicElements[TTag]
   : {}) &
   (TTag extends React.ComponentType<infer TExtendProps> ? Partial<TExtendProps> : {});
 
+export type BaseProps<TTag extends HtmlTag> = {
+  as?: TTag;
+} & TagProps<TTag>;
+
 type ThemedOptions<TTag extends HtmlTag, TProps> = {
   tag?: TTag;
   defaultTheme?: { [name: string]: ThemedComponentPropsWithVariants<TProps> };
-  defaultProps?: ThemedDefaultProps<TTag> & TProps;
+  defaultProps?: TagProps<TTag> & TProps;
 };
 
 export type DefaultThemeProps = { [name: string]: ThemedComponentPropsWithVariants };
