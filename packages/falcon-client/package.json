@@ -85,7 +85,7 @@
     "react-dev-utils": "8.0.0",
     "react-error-overlay": "5.1.4",
     "react-google-tag-manager": "2.2.1",
-    "react-helmet": "^5.2.0",
+    "react-helmet-async": "^1.0.3",
     "react-test-renderer": "^16.10.2",
     "regenerator-runtime": "0.13.3",
     "resolve": "^1.8.1",
