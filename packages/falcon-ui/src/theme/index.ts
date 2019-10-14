@@ -1,4 +1,5 @@
 import CSS from 'csstype';
+import { Keyframes } from '@emotion/serialize';
 import { defaultBaseTheme } from './theme';
 import { PropsMappings } from './responsiveprops';
 import { mergeThemes } from './utils';
@@ -52,7 +53,9 @@ type ResponsivePropMapping = {
 
 export type RecursivePartial<T> = { [key in keyof T]?: RecursivePartial<T[key]> };
 
-type CSSPseudoObject = { [key in CSS.SimplePseudos]?: CSSObject };
+type CSSPseudoObject = {
+  [key in CSS.SimplePseudos]?: CSSObject;
+};
 type CssOtherProps = undefined | number | string | CSSObject;
 type CSSOthersObject = {
   [propertiesName: string]: CssOtherProps | CssOtherProps[];
@@ -94,12 +97,11 @@ export type ThemedComponentPropsWithVariants<TProps = {}> = ThemedComponentProps
 };
 
 export interface ThemedComponents {
-  [themeKey: string]: ThemedComponentPropsWithVariants;
+  [key: string]: ThemedComponentPropsWithVariants;
 }
 type NumberOrStringValues<T> = { readonly [P in keyof T]: number | string };
 
 type Colors = typeof defaultBaseTheme.colors;
-
 export interface ThemeColors extends Colors {}
 
 type Breakpoints = NumberOrStringValues<typeof defaultBaseTheme.breakpoints>;
@@ -139,7 +141,7 @@ type TransitionDurations = typeof defaultBaseTheme.transitionDurations;
 export interface ThemeTransitionDurations extends TransitionDurations {}
 
 export interface ThemeKeyframes {
-  [key: string]: CSSObject;
+  [key: string]: CSSObject | Keyframes;
 }
 
 type ZIndex = typeof defaultBaseTheme.zIndex;
