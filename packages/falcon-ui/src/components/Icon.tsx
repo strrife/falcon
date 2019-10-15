@@ -1,7 +1,8 @@
 import React from 'react';
 import { withTheme } from 'emotion-theming';
-import { themed, PropsWithTheme, BaseProps, ThemedComponentProps } from '../theme';
+import { themed, PropsWithTheme } from '../theme';
 
+export type IconRendererProps = Parameters<typeof IconRenderer>[0];
 export const IconRenderer = themed({
   tag: 'svg',
 
@@ -18,12 +19,11 @@ export const IconRenderer = themed({
   }
 });
 
-export type IconProps = BaseProps<'svg'> & {
+export type IconProps = IconRendererProps & {
   src: string;
   fallback?: any;
-} & ThemedComponentProps;
-
-const IconComponent: React.SFC<IconProps & PropsWithTheme> = props => {
+};
+const IconImpl: React.SFC<IconProps & PropsWithTheme> = props => {
   if (!props.theme || !props.theme.icons) return null;
 
   const { icons } = props.theme;
@@ -38,4 +38,4 @@ const IconComponent: React.SFC<IconProps & PropsWithTheme> = props => {
   return <IconRenderer as={icon} {...(otherProps as any)} {...rest} />;
 };
 
-export const Icon = withTheme(IconComponent) as React.SFC<IconProps>;
+export const Icon = withTheme(IconImpl) as React.SFC<IconProps>;
