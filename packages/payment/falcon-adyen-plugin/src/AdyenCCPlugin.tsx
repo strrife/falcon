@@ -1,4 +1,5 @@
 import React from 'react';
+// eslint-disable-next-line import/order
 import { PaymentPluginModel, PaymentPluginComponentProps } from '@deity/falcon-payment-plugin';
 
 const adyen = require('adyen-cse-web');
