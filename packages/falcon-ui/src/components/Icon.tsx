@@ -32,7 +32,7 @@ const IconComponent: React.SFC<IconProps & PropsWithTheme> = props => {
 
   const { icon, ...otherProps } = icons[src];
 
-  return <IconRenderer as={icon} {...otherProps as any} {...rest} />;
+  return <IconRenderer as={icon} {...(otherProps as any)} {...rest} />;
 };
 
 export const Icon = withTheme(IconComponent) as React.SFC<IconProps>;

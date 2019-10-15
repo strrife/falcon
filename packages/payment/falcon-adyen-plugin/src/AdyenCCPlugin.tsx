@@ -20,6 +20,7 @@ export interface CreditCardData {
 export class AdyenCCPlugin extends PaymentPluginModel<AdyenProps> {
   static icon: string =
     'https://raw.githubusercontent.com/Adyen/adyen-magento2/develop/view/base/web/images/logos/creditcard.png';
+
   private cseInstance: any;
 
   constructor(props: AdyenProps) {
