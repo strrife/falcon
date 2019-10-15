@@ -270,19 +270,18 @@ const filterPropsToForward = (baseComponent: any, props: any, ref: any) => {
   return filteredProps;
 };
 
-type HtmlTag = string | {}; // TODO: it should be `keyof (JSX.IntrinsicElements) | React.ComponentType;`
+type HtmlTag = string | {}; // TODO: it should be `React.ComponentType | Extract<keyof JSX.IntrinsicElements, string>;`
 
 type DynamicHtmlTagProps = {
-  tag: any;
-  as: any;
+  tag: React.ComponentType | Extract<keyof JSX.IntrinsicElements, string>;
+  as?: React.ComponentType | Extract<keyof JSX.IntrinsicElements, string>;
 };
 /**
- * Handles dynamic html tag rendering via and `as` prop as well as forwards `ref`
- *  and only allowed html props to DOM element
+ * Handles dynamic html tag rendering via and `as` prop as well as forwards `ref` and only allowed html props to DOM element
  */
 const DynamicHtmlTag = React.forwardRef<{}, DynamicHtmlTagProps>((props, ref) => {
-  const Base = props.as || props.tag || 'div';
-  const nextProps = filterPropsToForward(Base, props as any, ref);
+  const Base = props.as || props.tag;
+  const nextProps = filterPropsToForward(Base, props, ref);
 
   return React.createElement(Base, nextProps);
 });
