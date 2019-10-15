@@ -120,6 +120,7 @@ export const deityGreenTheme = createTheme({
     gridLayout: {
       gridGap: 'md'
     },
+
     breadcrumb: {
       css: ({ theme }) => ({
         ':last-child': {
