@@ -336,11 +336,13 @@ export function themed<TProps, TTag extends HtmlTag = HtmlTag>(options: ThemedOp
   };
 
   return styledComponentWithThemeProps as <TTagOverride extends HtmlTag = TTag>(
-    props: BaseProps<TTagOverride> &
-      Partial<typeof options['defaultProps']> &
-      ThemedComponentProps &
-      PropsWithVariant & {
-        defaultTheme?: DefaultThemeProps;
-      }
+    props: React.PropsWithChildren<
+      BaseProps<TTagOverride> &
+        Partial<typeof options['defaultProps']> &
+        ThemedComponentProps & {
+          defaultTheme?: DefaultThemeProps;
+          variant?: string;
+        }
+    >
   ) => JSX.Element;
 }
