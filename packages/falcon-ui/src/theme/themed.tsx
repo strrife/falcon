@@ -287,14 +287,8 @@ const DynamicHtmlTag = React.forwardRef<{}, DynamicHtmlTagProps>((props, ref) =>
   return React.createElement(Base, nextProps);
 });
 
-export type TagProps<TTag extends HtmlTag> = (TTag extends keyof JSX.IntrinsicElements
-  ? JSX.IntrinsicElements[TTag]
-  : {}) &
+type TagProps<TTag extends HtmlTag> = (TTag extends keyof JSX.IntrinsicElements ? JSX.IntrinsicElements[TTag] : {}) &
   (TTag extends React.ComponentType<infer TExtendProps> ? Partial<TExtendProps> : {});
-
-export type BaseProps<TTag extends HtmlTag> = {
-  as?: TTag;
-} & TagProps<TTag>;
 
 type ThemedOptions<TTag extends HtmlTag, TProps> = {
   tag?: TTag;
@@ -335,14 +329,15 @@ export function themed<TProps, TTag extends HtmlTag = HtmlTag>(options: ThemedOp
     tag: options.tag
   };
 
-  return styledComponentWithThemeProps as <TTagOverride extends HtmlTag = TTag>(
+  return styledComponentWithThemeProps as <TAs extends HtmlTag = TTag>(
     props: React.PropsWithChildren<
-      BaseProps<TTagOverride> &
-        Partial<typeof options['defaultProps']> &
-        ThemedComponentProps & {
-          defaultTheme?: DefaultThemeProps;
-          variant?: string;
-        }
+      {
+        as?: TAs;
+        defaultTheme?: DefaultThemeProps;
+        variant?: string;
+      } & Partial<typeof options['defaultProps']> &
+        TagProps<TAs> &
+        ThemedComponentProps
     >
   ) => JSX.Element;
 }
