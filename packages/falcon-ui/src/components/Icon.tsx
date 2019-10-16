@@ -23,7 +23,7 @@ export type IconProps = IconRendererProps & {
   src: string;
   fallback?: any;
 };
-const IconImpl: React.SFC<IconProps & PropsWithTheme> = props => {
+const IconInner: React.SFC<IconProps & PropsWithTheme> = props => {
   if (!props.theme || !props.theme.icons) return null;
 
   const { icons } = props.theme;
@@ -38,4 +38,4 @@ const IconImpl: React.SFC<IconProps & PropsWithTheme> = props => {
   return <IconRenderer as={icon} {...(otherProps as any)} {...rest} />;
 };
 
-export const Icon = withTheme(IconImpl) as React.SFC<IconProps>;
+export const Icon = withTheme(IconInner) as React.SFC<IconProps>;
