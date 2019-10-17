@@ -270,7 +270,7 @@ const filterPropsToForward = (baseComponent: any, props: any, ref: any) => {
   return filteredProps;
 };
 
-type HtmlTag = string | {}; // TODO: it should be `React.ComponentType | Extract<keyof JSX.IntrinsicElements, string>;`
+type Tag = React.ComponentType | Extract<keyof JSX.IntrinsicElements, string>; // TODO: it should be `React.ComponentType | Extract<keyof JSX.IntrinsicElements, string>;`
 
 type DynamicHtmlTagProps = {
   tag: React.ComponentType | Extract<keyof JSX.IntrinsicElements, string>;
@@ -286,10 +286,10 @@ const DynamicHtmlTag = React.forwardRef<{}, DynamicHtmlTagProps>((props, ref) =>
   return React.createElement(Base, nextProps);
 });
 
-type TagProps<TTag extends HtmlTag> = (TTag extends keyof JSX.IntrinsicElements ? JSX.IntrinsicElements[TTag] : {}) &
+type TagProps<TTag extends Tag> = (TTag extends keyof JSX.IntrinsicElements ? JSX.IntrinsicElements[TTag] : {}) &
   (TTag extends React.ComponentType<infer TExtendProps> ? Partial<TExtendProps> : {});
 
-type ThemedOptions<TTag extends HtmlTag, TProps> = {
+type ThemedOptions<TTag extends Tag, TProps> = {
   tag: TTag;
   defaultTheme?: { [name: string]: ThemedComponentPropsWithVariants<TProps> };
   defaultProps?: TagProps<TTag> & TProps;
@@ -297,7 +297,7 @@ type ThemedOptions<TTag extends HtmlTag, TProps> = {
 
 export type DefaultThemeProps = { [name: string]: ThemedComponentPropsWithVariants };
 
-export function themed<TProps, TTag extends HtmlTag = HtmlTag>(options: ThemedOptions<TTag, TProps>) {
+export function themed<TProps, TTag extends Tag = Tag>(options: ThemedOptions<TTag, TProps>) {
   let label = '';
 
   if (options.defaultTheme) {
@@ -328,14 +328,14 @@ export function themed<TProps, TTag extends HtmlTag = HtmlTag>(options: ThemedOp
     tag: options.tag
   };
 
-  return styledComponentWithThemeProps as <TAs extends HtmlTag = TTag>(
+  return styledComponentWithThemeProps as <TAsTag extends Tag = TTag>(
     props: React.PropsWithChildren<
       {
-        as?: TAs;
+        as?: TAsTag;
         defaultTheme?: DefaultThemeProps;
         variant?: string;
       } & Partial<typeof options['defaultProps']> &
-        TagProps<TAs> &
+        TagProps<TAsTag> &
         ThemedComponentProps
     >
   ) => JSX.Element;
