@@ -1,4 +1,3 @@
-import React from 'react';
 import { themed, ThemedComponentProps } from '@deity/falcon-ui';
 import { Form as FrontKitForm, FormProps as FrontKitFormProps } from '@deity/falcon-front-kit';
 
