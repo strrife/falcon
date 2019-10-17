@@ -3,7 +3,7 @@ import { themed, Box } from '@deity/falcon-ui';
 export type BlogPostListPaginationLayoutProps = {
   isPrevPage?: boolean;
 };
-export const BlogPostListPaginationLayout = themed<BlogPostListPaginationLayoutProps, {}>({
+export const BlogPostListPaginationLayout = themed<BlogPostListPaginationLayoutProps>({
   tag: Box,
   defaultProps: {
     isPrevPage: false

@@ -1,5 +1,6 @@
 import { themed } from '@deity/falcon-ui';
 
+export type AddressListLayoutProps = Parameters<typeof AddressListLayout>[0];
 export const AddressListLayout = themed({
   tag: 'ul',
   defaultTheme: {

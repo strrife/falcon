@@ -3,7 +3,7 @@ import { Form as FrontKitForm, FormProps as FrontKitFormProps } from '@deity/fal
 
 export type FormProps = FrontKitFormProps & ThemedComponentProps;
 
-export const Form = themed<FormProps, {}>({
+export const Form = themed<FormProps>({
   tag: FrontKitForm,
   defaultTheme: {
     form: {
