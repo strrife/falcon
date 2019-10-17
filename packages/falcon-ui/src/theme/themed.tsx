@@ -270,7 +270,7 @@ const filterPropsToForward = (baseComponent: any, props: any, ref: any) => {
   return filteredProps;
 };
 
-type Tag = keyof JSX.IntrinsicElements | {}; // TODO: it should be `keyof JSX.IntrinsicElements | React.ComponentType ;`
+type Tag = string | {}; // TODO: it should be `keyof JSX.IntrinsicElements | React.ComponentType ;`
 
 type DynamicHtmlTagProps = {
   tag: keyof JSX.IntrinsicElements | React.ComponentType;
